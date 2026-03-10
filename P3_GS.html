@@ -89,10 +89,11 @@
         .question-text { font-size: 1.5em; font-weight: bold; background: #FFF; padding: 15px; border: 4px solid #B0BEC5; border-radius: 8px; line-height: 1.5; width: 90%; box-sizing: border-box; }
         .status-msg { font-size: 1.3em; font-weight: bold; min-height: 55px; margin-bottom: 5px; }
         
-        /* 新增：選擇題選項樣式 */
+        /* 選擇題選項樣式 */
         .quiz-options { display: grid; grid-template-columns: 1fr; gap: 10px; width: 90%; margin-bottom: 15px; }
         .quiz-btn { background-color: #2196F3; border: 4px solid #1565C0; box-shadow: 0 5px 0 #0D47A1; color: white; padding: 15px; font-size: 1.3em; border-radius: 10px; cursor: pointer; font-weight: bold; transition: all 0.1s; }
-        .quiz-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #0D47A1; }
+        .quiz-btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 #0D47A1; }
+        .quiz-btn:disabled { background-color: #90CAF9; cursor: not-allowed; box-shadow: none; border-color: #90CAF9;}
 
         /* 突發事件 Modal */
         #event-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; display:flex; justify-content:center; align-items:center; }
@@ -130,10 +131,10 @@
     </div>
 
     <div id="element-nav" class="element-bar hidden">
-        <span>💧 水元素: <span id="elem-water">0</span></span>
-        <span>🔥 火元素: <span id="elem-fire">0</span></span>
-        <span>🌿 地元素: <span id="elem-earth">0</span></span>
-        <span>💨 風元素: <span id="elem-wind">0</span></span>
+        <span>💧 水: <span id="elem-water">0</span></span>
+        <span>🔥 火: <span id="elem-fire">0</span></span>
+        <span>🌿 地: <span id="elem-earth">0</span></span>
+        <span>💨 風: <span id="elem-wind">0</span></span>
     </div>
 
     <div id="save-indicator" class="save-indicator hidden">💾 遊戲進度已自動讀取</div>
@@ -141,7 +142,7 @@
     <div id="main-container" class="container">
         <div id="login-screen" class="screen">
             <h2>🏕️ 創建你的角色</h2>
-            <p>設定你的冒險者資訊：</p>
+            <p>請輸入冒險者的名稱：</p>
             <input type="text" id="input-name" maxlength="10" placeholder="輸入名字...">
             <button class="btn-green" onclick="setPlayerName()">🚀 開始遊戲</button>
         </div>
@@ -256,26 +257,49 @@
         
         <div id="boss-zone" class="screen hidden">
             <h2 style="color:#9C27B0;">🗺️ 終極 Boss 挑戰</h2>
-            <p>戰勝強大的 Boss 以獲得無上光榮！</p>
+            <p>戰鬥中<span style="color:red; font-weight:bold;">答錯或超時將會扣除背包裡的資源</span>！</p>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
                 <div class="boss-card">
                     <h3>🌳 森林樹妖</h3>
-                    <p>建議：30 攻 / 20 防</p>
-                    <button class="btn-green" onclick="fightBoss(1)">挑戰 Boss 1</button>
+                    <p style="color:#D32F2F; font-size:0.9em; font-weight:bold;">⏱️ 15秒/題 | 🎯 需答對 7 題</p>
+                    <p>門檻：30 攻 / 20 防</p>
+                    <button class="btn-green" onclick="startBossBattle(1)">挑戰 Boss 1</button>
                 </div>
                 <div class="boss-card">
                     <h3>🗿 遠古石魔</h3>
-                    <p>建議：60 攻 / 50 防</p>
-                    <button class="btn-grey" onclick="fightBoss(2)">挑戰 Boss 2</button>
+                    <p style="color:#D32F2F; font-size:0.9em; font-weight:bold;">⏱️ 10秒/題 | 🎯 需答對 7 題</p>
+                    <p>門檻：60 攻 / 50 防</p>
+                    <button class="btn-grey" onclick="startBossBattle(2)">挑戰 Boss 2</button>
                 </div>
                 <div class="boss-card">
                     <h3>👿 深淵魔王</h3>
-                    <p>建議：100 攻 / 100 防</p>
-                    <button class="btn-black" onclick="fightBoss(3)">挑戰 Boss 3</button>
+                    <p style="color:#D32F2F; font-size:0.9em; font-weight:bold;">⏱️ 5秒/題 | 🎯 需答對 5 題</p>
+                    <p>門檻：100 攻 / 100 防</p>
+                    <button class="btn-black" onclick="startBossBattle(3)">挑戰 Boss 3</button>
                 </div>
             </div>
             <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
+
+        <div id="game-boss-battle" class="screen hidden" style="border-color: #B71C1C; background-color: #FFEBEE; box-shadow: 0 12px 0 #7F0000;">
+            <h2 id="boss-battle-title" style="margin-bottom: 5px; color: #B71C1C;">⚔️ 迎戰 Boss</h2>
+            
+            <div style="width: 90%; background: #ccc; border-radius: 10px; border: 3px solid #333; margin-bottom: 5px;">
+                <div id="boss-hp-bar" style="width: 100%; height: 25px; background: #D32F2F; border-radius: 7px; transition: width 0.3s;"></div>
+            </div>
+            <p style="font-size:1.2em; font-weight:bold; margin-top:0;">你需要擊中：<span id="boss-target-text">0/7</span> 次</p>
+            
+            <div style="font-size: 3em; font-weight: bold; color: #D32F2F; text-shadow: 2px 2px 0px #FFF; animation: blink 1s infinite;">
+                ⏳ <span id="boss-timer">15</span>
+            </div>
+
+            <div class="status-msg" id="boss-battle-msg">準備好你的答案...</div>
+            <div class="question-text" id="boss-battle-question" style="border-color: #f44336;">題目加載中...</div>
+            <div class="quiz-options" id="boss-battle-options"></div>
+
+            <button class="btn-grey" onclick="fleeBoss()">🏃 逃跑 (中止挑戰)</button>
+        </div>
+
     </div>
 
     <div id="event-modal" class="hidden">
@@ -312,12 +336,8 @@
                     gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
                     osc.start(); osc.stop(audioCtx.currentTime + 0.4);
                 } else if (type === 'error') {
-                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.2);
-                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.2);
-                } else if (type === 'drop') {
-                    osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.2);
-                    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.3);
+                    gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
                     osc.start(); osc.stop(audioCtx.currentTime + 0.3);
                 } else if (type === 'levelUp') {
                     osc.type = 'square'; osc.frequency.setValueAtTime(500, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(1000, audioCtx.currentTime + 0.5);
@@ -402,7 +422,6 @@
             for(let i=0; i<inventory.castles; i++) grid.innerHTML += `<div class="building-item"><span class="emoji">🏰</span>大城堡</div>`;
         }
 
-        // --- 經驗值與升級系統 ---
         function gainXP(amount) {
             inventory.xp += amount;
             let needXP = inventory.level * 20;
@@ -417,7 +436,7 @@
         function checkRandomElement() {
             const elements = ['water', 'fire', 'earth', 'wind'];
             const icons = { water: '💧', fire: '🔥', earth: '🌿', wind: '💨' };
-            if (Math.random() < 0.6) { // 60% 機率掉落元素
+            if (Math.random() < 0.6) { 
                 let el = elements[Math.floor(Math.random() * elements.length)];
                 inventory.elements[el]++;
                 return ` <span style='color:#00E5FF;'>${icons[el]} 獲得新元素！</span>`;
@@ -452,7 +471,7 @@
         // --- 隨機怪物事件 ---
         let currentMonster = null;
         function triggerRandomEvent() {
-            if (Math.random() > 0.25) return; // 25% 出現怪物
+            if (Math.random() > 0.25) return; 
             
             const monsters = [
                 { name: "🟢 黏液史萊姆", atk: 15, def: 5, drop: "wood", icon: "🪵" },
@@ -473,13 +492,11 @@
             
             if (action === 'fight') {
                 if (stats.atk >= currentMonster.def && stats.def >= (currentMonster.atk * 0.5)) {
-                    // 戰鬥勝利
                     inventory[currentMonster.drop]++;
                     gainXP(15);
                     playSound('win');
                     alert(`⚔️ 戰鬥勝利！你擊敗了 ${currentMonster.name}！\n獲得戰利品：${currentMonster.icon} x 1`);
                 } else {
-                    // 戰鬥失敗
                     breakStreak();
                     playSound('error');
                     alert(`💀 戰力不足，你被 ${currentMonster.name} 打敗了！逃跑時弄丟了資源...\n(連對歸零)`);
@@ -497,7 +514,6 @@
         }
 
         // --- P3 題庫 ---
-        // 1. 鋪木板 (句子重組)
         const allReorderTasks = [
             { words: ["中國的", "首都", "位於", "北京。"], ans: "中國的首都位於北京。" },
             { words: ["金屬", "是", "優良的", "導熱體。"], ans: "金屬是優良的導熱體。" },
@@ -509,7 +525,6 @@
             { words: ["空氣", "遇熱時", "體積會", "產生膨脹。"], ans: "空氣遇熱時體積會產生膨脹。" }
         ];
         
-        // 2. 礦洞尋寶 (填充題)
         const allMiningTasks = [
             { q: "把凹陷的乒乓球放進熱水會回復原狀，是因為球內空氣受熱 [？]。", ans: "膨脹", options: ["收縮", "膨脹", "結冰"] },
             { q: "中國總共有 [？] 個民族。", ans: "56", options: ["50", "55", "56"] },
@@ -521,7 +536,6 @@
             { q: "洗衣店主要為顧客提供 [？]。", ans: "服務", options: ["貨品", "服務", "免費衣服"] }
         ];
 
-        // 3. 知識大考驗 (選擇題)
         const allQuizTasks = [
             { q: "廣州有甚麼著名景點？", options: ["天安門廣場", "鎮海樓", "外灘"], ans: "鎮海樓" },
             { q: "對待珍貴的自然和文化遺產，我們應該怎樣做？", options: ["好好愛護", "隨意破壞", "不用理會"], ans: "好好愛護" },
@@ -536,6 +550,7 @@
         ];
 
         let currentReorderTasks = [], currentMiningTasks = [], currentQuizTasks = [];
+        let allBossTasks = []; // 新增 Boss 專用題庫
         let currentReorderIdx = 0, currentMiningIdx = 0, currentQuizIdx = 0;
         let selectedWords = [];
 
@@ -550,6 +565,12 @@
             currentReorderTasks = shuffle(allReorderTasks); 
             currentMiningTasks = shuffle(allMiningTasks);
             currentQuizTasks = shuffle(allQuizTasks);
+            
+            // 組合 Boss 題庫 (將選擇題和填充題轉換為選項作答)
+            allBossTasks = [
+                ...allQuizTasks,
+                ...allMiningTasks.map(m => ({ q: m.q.replace("[？]", "____"), options: m.options, ans: m.ans }))
+            ];
         };
 
         // 計算屬性
@@ -623,7 +644,7 @@
         function openForgeZone() { initAudio(); playSound('click'); updateUI(false); document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); document.getElementById('forge-zone').classList.remove('hidden'); }
         function openSuperForge() { initAudio(); playSound('click'); updateUI(false); document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); document.getElementById('super-forge-zone').classList.remove('hidden'); }
         function openBossZone() { initAudio(); playSound('click'); updateUI(false); document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); document.getElementById('boss-zone').classList.remove('hidden'); }
-        function goHome() { playSound('click'); updateUI(false); document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); document.getElementById('start-screen').classList.remove('hidden'); }
+        function goHome() { playSound('click'); updateUI(false); clearInterval(bossTimerId); document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); document.getElementById('start-screen').classList.remove('hidden'); }
 
         // --- 鍛造邏輯 ---
         function craft(item) {
@@ -697,7 +718,7 @@
             updateUI();
         }
 
-        // --- 小遊戲 1：鋪木板 (Reorder) ---
+        // --- 小遊戲 1：鋪木板 ---
         function loadReorder() {
             selectedWords = [];
             const task = currentReorderTasks[currentReorderIdx];
@@ -725,7 +746,6 @@
             newChunk.textContent = word;
             answerArea.appendChild(newChunk);
         }
-
         function resetReorder() { playSound('click'); loadReorder(); }
 
         function checkReorder() {
@@ -741,7 +761,7 @@
 
             if (currentSentence === task.ans) {
                 playSound('win');
-                inventory.wood += 2; // 贏木材
+                inventory.wood += 2; 
                 let rewardMsg = handleWinRewards();
                 msgArea.innerHTML = `<span style='color:green;'>✅ 排列正確！獲得 木材 x 2 ${rewardMsg}</span>`;
                 document.getElementById('btn-submit-reorder').classList.add('hidden');
@@ -755,14 +775,9 @@
                 setTimeout(resetReorder, 1500);
             }
         }
+        function nextReorder() { playSound('click'); currentReorderIdx = (currentReorderIdx + 1) % currentReorderTasks.length; loadReorder(); }
 
-        function nextReorder() {
-            playSound('click');
-            currentReorderIdx = (currentReorderIdx + 1) % currentReorderTasks.length;
-            loadReorder();
-        }
-
-        // --- 小遊戲 2：礦洞 (Mining) ---
+        // --- 小遊戲 2：礦洞 ---
         function loadMining() {
             const task = currentMiningTasks[currentMiningIdx];
             document.getElementById('mining-msg').innerHTML = "請點擊正確的礦石...";
@@ -776,14 +791,12 @@
             document.getElementById('mining-options').innerHTML = optionsHtml;
             document.getElementById('btn-next-mining').classList.add('hidden');
         }
-
         function checkMining(selected) {
             const task = currentMiningTasks[currentMiningIdx];
             const msgArea = document.getElementById('mining-msg');
-            
             if (selected === task.ans) {
                 playSound('win');
-                inventory.stone += 2; // 贏石頭
+                inventory.stone += 2; 
                 let rewardMsg = handleWinRewards();
                 document.getElementById('mining-question').textContent = task.q.replace("[？]", `[${task.ans}]`);
                 msgArea.innerHTML = `<span style='color:green;'>✅ 填寫正確！獲得 石頭 x 2 ${rewardMsg}</span>`;
@@ -797,14 +810,9 @@
                 msgArea.innerHTML = "<span style='color:red;'>❌ 答錯了，連對已重置！</span>";
             }
         }
+        function nextMining() { playSound('click'); currentMiningIdx = (currentMiningIdx + 1) % currentMiningTasks.length; loadMining(); }
 
-        function nextMining() {
-            playSound('click');
-            currentMiningIdx = (currentMiningIdx + 1) % currentMiningTasks.length;
-            loadMining();
-        }
-
-        // --- 小遊戲 3：選擇題 (Quiz) ---
+        // --- 小遊戲 3：選擇題 ---
         function loadQuiz() {
             const task = currentQuizTasks[currentQuizIdx];
             document.getElementById('quiz-msg').innerHTML = "請選出正確的答案...";
@@ -818,18 +826,15 @@
             document.getElementById('quiz-options-container').innerHTML = optionsHtml;
             document.getElementById('btn-next-quiz').classList.add('hidden');
         }
-
         function checkQuiz(selected) {
             const task = currentQuizTasks[currentQuizIdx];
             const msgArea = document.getElementById('quiz-msg');
-            
-            // 鎖定所有按鈕
             const buttons = document.getElementById('quiz-options-container').querySelectorAll('button');
             buttons.forEach(btn => btn.disabled = true);
             
             if (selected === task.ans) {
                 playSound('win');
-                inventory.gem += 1; // 選擇題贏寶石
+                inventory.gem += 1; 
                 let rewardMsg = handleWinRewards();
                 msgArea.innerHTML = `<span style='color:green;'>✅ 答對了！獲得 寶石 x 1 ${rewardMsg}</span>`;
                 document.getElementById('btn-next-quiz').classList.remove('hidden');
@@ -842,30 +847,164 @@
                 document.getElementById('btn-next-quiz').classList.remove('hidden');
             }
         }
+        function nextQuiz() { playSound('click'); currentQuizIdx = (currentQuizIdx + 1) % currentQuizTasks.length; loadQuiz(); }
 
-        function nextQuiz() {
-            playSound('click');
-            currentQuizIdx = (currentQuizIdx + 1) % currentQuizTasks.length;
-            loadQuiz();
-        }
+        // ============================================
+        // 全新限時 Boss 戰鬥系統
+        // ============================================
+        const bossConfig = {
+            1: { name: "🌳 森林樹妖", time: 15, target: 7, reqAtk: 30, reqDef: 20 },
+            2: { name: "🗿 遠古石魔", time: 10, target: 7, reqAtk: 60, reqDef: 50 },
+            3: { name: "👿 深淵魔王", time: 5,  target: 5, reqAtk: 100, reqDef: 100 }
+        };
 
-        // --- Boss 戰鬥邏輯 ---
-        function fightBoss(bossId) {
+        let currentBossId = null;
+        let bossCorrectCount = 0;
+        let bossTimeLeft = 0;
+        let bossTimerId = null;
+        let currentBossTask = null;
+
+        function startBossBattle(bossId) {
             playSound('click');
             const stats = calculateStats();
-            let reqAtk = bossId === 1 ? 30 : bossId === 2 ? 60 : 100;
-            let reqDef = bossId === 1 ? 20 : bossId === 2 ? 50 : 100;
+            const config = bossConfig[bossId];
 
-            if (stats.atk < reqAtk || stats.def < reqDef) {
+            // 戰力門檻檢查
+            if (stats.atk < config.reqAtk || stats.def < config.reqDef) {
                 playSound('error');
-                return alert(`⚠️ 戰鬥力不足！Boss ${bossId} 需要至少 ${reqAtk} 攻和 ${reqDef} 防！請先升級裝備！`);
+                return alert(`⚠️ 戰鬥力不足！挑戰 ${config.name} 需要至少 ${config.reqAtk} 攻和 ${config.reqDef} 防！\n請先去鍛造坊或神器祭壇升級！`);
             }
 
-            playSound('win');
-            gainXP(50 * bossId);
-            inventory.gem += bossId * 2;
-            alert(`🏆 恭喜你憑藉強大的實力擊敗了 Boss ${bossId}！\n獲得 寶石 x ${bossId * 2}，大量經驗值！`);
+            // 初始化戰鬥畫面
+            currentBossId = bossId;
+            bossCorrectCount = 0;
+            
+            document.getElementById('boss-battle-title').textContent = `⚔️ 迎戰 ${config.name}`;
+            document.getElementById('boss-target-text').textContent = `0/${config.target}`;
+            document.getElementById('boss-hp-bar').style.width = '100%';
+
+            // 切換畫面
+            document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden'));
+            document.getElementById('game-boss-battle').classList.remove('hidden');
+
+            loadBossQuestion();
+        }
+
+        function loadBossQuestion() {
+            document.getElementById('boss-battle-msg').innerHTML = "<span style='color:#333;'>注意時間，請盡快作答！</span>";
+            
+            // 隨機抽取 Boss 題庫
+            currentBossTask = allBossTasks[Math.floor(Math.random() * allBossTasks.length)];
+            document.getElementById('boss-battle-question').textContent = "❓ " + currentBossTask.q;
+            
+            // 渲染選項按鈕
+            let optionsHtml = '';
+            let shuffledOptions = shuffle(currentBossTask.options);
+            shuffledOptions.forEach((opt) => {
+                optionsHtml += `<button class="quiz-btn" onclick="checkBossAnswer('${opt}')">${opt}</button>`;
+            });
+            document.getElementById('boss-battle-options').innerHTML = optionsHtml;
+
+            // 啟動倒數計時器
+            bossTimeLeft = bossConfig[currentBossId].time;
+            document.getElementById('boss-timer').textContent = bossTimeLeft;
+            
+            clearInterval(bossTimerId);
+            bossTimerId = setInterval(() => {
+                bossTimeLeft--;
+                document.getElementById('boss-timer').textContent = bossTimeLeft;
+                if (bossTimeLeft <= 0) {
+                    checkBossAnswer(null); // 觸發超時
+                }
+            }, 1000);
+        }
+
+        // 懲罰機制：扣除玩家身上隨機一種資源
+        function deductBossPenalty() {
+            const types = [
+                { key: 'wood', name: '🪵木材', loc: inventory },
+                { key: 'stone', name: '🧱石頭', loc: inventory },
+                { key: 'gem', name: '💎寶石', loc: inventory },
+                { key: 'star', name: '🌟星星', loc: inventory },
+                { key: 'water', name: '💧水元素', loc: inventory.elements },
+                { key: 'fire', name: '🔥火元素', loc: inventory.elements },
+                { key: 'earth', name: '🌿地元素', loc: inventory.elements },
+                { key: 'wind', name: '💨風元素', loc: inventory.elements }
+            ];
+            // 過濾出大於 0 的資源
+            let available = types.filter(t => t.loc[t.key] > 0);
+            
+            if(available.length > 0) {
+                let loss = available[Math.floor(Math.random() * available.length)];
+                loss.loc[loss.key]--;
+                updateUI();
+                return loss.name;
+            }
+            return ""; // 如果窮到什麼都沒了
+        }
+
+        function checkBossAnswer(selected) {
+            clearInterval(bossTimerId); // 停止計時
+            const msgArea = document.getElementById('boss-battle-msg');
+            const config = bossConfig[currentBossId];
+            
+            // 鎖定所有選項按鈕防連點
+            const buttons = document.getElementById('boss-battle-options').querySelectorAll('button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            // 判斷答案
+            if (selected === currentBossTask.ans) {
+                playSound('win');
+                bossCorrectCount++;
+                
+                // 更新 Boss 血量條與進度
+                document.getElementById('boss-target-text').textContent = `${bossCorrectCount}/${config.target}`;
+                let hpPct = Math.max(0, 100 - (bossCorrectCount / config.target * 100));
+                document.getElementById('boss-hp-bar').style.width = hpPct + '%';
+
+                if (bossCorrectCount >= config.target) {
+                    msgArea.innerHTML = `<span style='color:green;'>✅ 漂亮！Boss 被你擊倒了！</span>`;
+                    setTimeout(() => winBossBattle(), 1000);
+                } else {
+                    msgArea.innerHTML = `<span style='color:green;'>✅ 擊中了！繼續乘勝追擊！</span>`;
+                    setTimeout(loadBossQuestion, 1200); // 準備下一題
+                }
+
+            } else {
+                playSound('error');
+                breakStreak(); // 答錯中斷連對
+                
+                let lostItem = deductBossPenalty();
+                let penaltyText = lostItem ? `受到了 Boss 攻擊，失去了 ${lostItem}` : "你已經沒有東西可以失去了";
+
+                if (selected === null) {
+                    msgArea.innerHTML = `<span style='color:red; font-size:1.1em;'>⏰ 超時！${penaltyText}！</span>`;
+                } else {
+                    msgArea.innerHTML = `<span style='color:red; font-size:1.1em;'>❌ 答錯了！${penaltyText}！</span>`;
+                }
+                
+                setTimeout(loadBossQuestion, 2000); // 準備下一題
+            }
+        }
+
+        function winBossBattle() {
+            playSound('levelUp');
+            let bId = currentBossId;
+            gainXP(100 * bId); // 大量經驗值
+            inventory.gem += bId * 3;
+            inventory.star += bId * 2;
+            
+            alert(`🏆 戰鬥勝利！\n你憑藉強大的實力與常識，完美擊退了 ${bossConfig[bId].name}！\n\n獲得戰利品：\n💎 寶石 x ${bId * 3}\n🌟 星星 x ${bId * 2}\n⭐ 大量經驗值！`);
+            
             updateUI();
+            goHome();
+        }
+
+        function fleeBoss() {
+            playSound('click');
+            clearInterval(bossTimerId);
+            alert("🏃 面對強大的力量，你急忙逃離了戰場... 下次準備好再來吧！");
+            goHome();
         }
 
     </script>
