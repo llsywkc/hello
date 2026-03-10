@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (P.4 終極Boss版)</title>
+    <title>Roblox：森林大冒險 (P.4 勳章成就版)</title>
     <style>
         /* 核心風格與之前保持一致 */
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
@@ -20,6 +20,11 @@
 
         .player-info { background: #FFEB3B; color: #333; font-size: 1.2em; font-weight: bold; padding: 5px 20px; border-radius: 20px; border: 4px solid #FBC02D; margin-bottom: 10px; box-shadow: 0 4px 0 #F57F17; }
         .inventory-bar { background-color: #333; color: white; border: 4px solid #222; border-radius: 8px; padding: 10px 20px; font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; margin-bottom: 5px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; }
+        
+        /* 勳章展示區特殊樣式 */
+        #medal-bar { background-color: #2E7D32; border-color: #1B5E20; box-shadow: 0 6px 0 #004D40; font-size: 1.4em; gap: 8px; }
+        .medal-icon { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); animation: pulse 2s infinite; cursor: help; }
+
         .gem-text { color: #E040FB; text-shadow: 1px 1px 2px #000; }
         .star-text { color: #FFC107; text-shadow: 1px 1px 2px #000; animation: blink 2s infinite; }
         .super-text { color: #00E5FF; text-shadow: 1px 1px 2px #000; }
@@ -82,6 +87,11 @@
 
     <div id="player-tag" class="player-info hidden">冒險者：<span id="display-name"></span> <span id="streak-counter" style="color:#E65100; margin-left: 10px;">🔥 連對: 0</span></div>
 
+    <div id="medal-bar" class="inventory-bar hidden">
+        <span style="color:#FFEB3B;">🎖️ 榮譽勳章牆：</span>
+        <span id="medal-container"></span>
+    </div>
+
     <div id="top-nav" class="inventory-bar hidden">
         <span>🪵 木材: <span id="inv-wood">0</span></span>
         <span>🧱 石頭: <span id="inv-stone">0</span></span>
@@ -110,37 +120,32 @@
             <h2>🏕️ 選擇冒險地圖</h2>
             <button class="btn-green" onclick="startGame('reorder')">🌉 鋪木板過河 (贏木材與手稿)</button>
             <button class="btn-grey" onclick="startGame('mining')">⛏️ 礦洞尋寶 (贏石頭與手稿)</button>
-            <p style="font-size: 0.9em; font-weight: bold; color: #FF9800;">(多勞多得：連對3題必得「頓悟碎片」！)</p>
+            <p style="font-size: 0.9em; font-weight: bold; color: #FF9800;">(連續答對累積連勝，每100連勝可解鎖專屬勳章！)</p>
             
             <hr style="width: 80%; border-top: 4px dashed #006064;">
             
             <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇 (無限戰力)</button>
             <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊 (基礎防具)</button>
-            <button class="btn-blue" onclick="openBuildZone()">🔨 進入建築工坊</button>
+            <button class="btn-blue" onclick="openBuildZone()">🔨 進入建築工坊 (解鎖高級建築)</button>
             <button class="btn-black" id="btn-boss-menu" onclick="openBossSelect()" disabled>🔒 終極 Boss 挑戰 (需建大城堡)</button>
         </div>
 
         <div id="instruction-screen" class="screen hidden">
             <h2>📖 冒險者指南</h2>
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #4CAF50; max-height: 400px; overflow-y: auto;">
-                <h3 style="color:#2E7D32; margin-top:0;">1. 如何獲得元素與材料？</h3>
+                <h3 style="color:#2E7D32; margin-top:0;">1. 如何獲得元素與勳章？</h3>
                 <p>🪵 <b>木材 / 🧱 石頭</b>：透過「鋪木板過河」和「礦洞尋寶」100% 獲得。</p>
-                <p>📜 <b>勤奮手稿</b>：只要勤力練習，每次答對題目都會獲得 1 張。</p>
-                <p>🔮 <b>頓悟碎片</b>：極需實力！必須<b>連續答對 3 題</b>才會掉落 1 個碎片。</p>
+                <p>📜 <b>勤奮手稿</b>：每次答對題目都會獲得 1 張。</p>
+                <p>🔮 <b>頓悟碎片</b>：連續答對 3 題掉落 1 個碎片。</p>
                 <p>💎 <b>寶石 / 🌟 星星</b>：打敗突發野獸，或在過關時機率(25%)掉落。</p>
+                <p>🎖️ <b>榮譽勳章</b>：累積 <b>100 連勝</b> 起，每 100 連勝解鎖一枚！即使連勝中斷，已獲得的勳章也會永久保留。</p>
                 
                 <h3 style="color:#B71C1C;">2. 戰鬥力 (攻/防) 有什麼用？</h3>
-                <p>⚔️ <b>攻擊力 (攻)</b>：遇到「突發野獸」時，總戰力(攻+防)必須大於野獸才能獲勝並奪取寶石。</p>
-                <p>🛡️ <b>防禦力 (防)</b>：在「Boss 挑戰關卡」中，你的防禦力會直接轉化為你的<b>額外生命值 (HP)</b>！防禦越高，容錯率越高！</p>
+                <p>⚔️ <b>攻擊力 (攻)</b>：遇到「突發野獸」時，總戰力大於野獸才能獲勝並奪取寶石。</p>
+                <p>🛡️ <b>防禦力 (防)</b>：在「Boss 挑戰關卡」中，防禦力會直接轉化為你的額外生命值 (HP)。</p>
                 
                 <h3 style="color:#6A1B9A;">3. Boss 挑戰怎麼打？</h3>
-                <p>當你在建築工坊建成 <b>1 座大城堡</b>，就能解鎖終極挑戰。</p>
-                <p>Boss 戰為<b>限時多項選擇題</b>。答錯或超時不僅會扣除 HP，還會被 Boss 吸走你辛苦收集的元素！</p>
-                <ul>
-                    <li><b>Boss 1 元素吞噬者</b>：15秒/題，累積答對 5 題過關。</li>
-                    <li><b>Boss 2 混沌智者</b>：10秒/題，必須<b>連續</b>答對 3 題！</li>
-                    <li><b>Boss 3 幻影魔王</b>：5秒/題，極限難度，累積答對 10 題！</li>
-                </ul>
+                <p>在建築工坊建成 <b>1 座大城堡</b>解鎖。為限時多項選擇題，答錯會扣 HP 並被吸走元素！</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
@@ -204,10 +209,15 @@
 
         <div id="build-zone" class="screen hidden">
             <h2>🔨 森林建築工坊</h2>
-            <div>
+            <div style="margin-bottom: 15px;">
                 <button class="btn-orange" onclick="buildItem('hut')">🛖 建木屋 (-2木)</button>
                 <button class="btn-grey" onclick="buildItem('tower')">🗼 建石塔 (-2石)</button>
                 <button class="btn-blue" onclick="buildItem('castle')">🏰 合成大城堡 (-2木屋, -2石塔)</button>
+            </div>
+            <div style="background: rgba(255,255,255,0.5); padding: 10px; border-radius: 8px; border: 2px dashed #333; margin-bottom: 15px;">
+                <h3 style="margin-top:0; color: #6A1B9A;">✨ 奇蹟建築 (消耗稀有資源)</h3>
+                <button class="btn-purple" onclick="buildItem('flyingCastle')">🛸 飛天城堡 <br><small>(-5寶石, -1大城堡)</small></button>
+                <button class="btn-gold" onclick="buildItem('ferrisWheel')">🎡 摩天輪 <br><small>(-5星星, -5木材, -5石頭)</small></button>
             </div>
             <div class="world-grid" id="world-grid"></div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
@@ -271,13 +281,22 @@
                 else if (type === 'error') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.2); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2); osc.start(); osc.stop(audioCtx.currentTime + 0.2); }
                 else if (type === 'drop') { osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.2); gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3); osc.start(); osc.stop(audioCtx.currentTime + 0.3); }
                 else if (type === 'boss_win') { osc.type = 'triangle'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 1); gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.5); osc.start(); osc.stop(audioCtx.currentTime + 1.5); }
+                else if (type === 'medal') { osc.type = 'square'; osc.frequency.setValueAtTime(600, audioCtx.currentTime); osc.frequency.setValueAtTime(900, audioCtx.currentTime + 0.2); osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.4); gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.0); osc.start(); osc.stop(audioCtx.currentTime + 1.0); }
             } catch (e) {}
         }
 
+        // 定義勳章設定
+        const medalsConfig = {
+            100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎',
+            600: '🌠', 700: '👑', 800: '🐉', 900: '🌌', 1000: '🏆'
+        };
+
         const defaultInv = { 
             playerName: "", wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, 
-            superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0,
-            equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }
+            superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, 
+            hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0,
+            equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false },
+            medals: [] // 儲存已解鎖的勳章分數
         };
         let inventory = { ...defaultInv };
         
@@ -290,11 +309,11 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_v2');
+            const savedData = localStorage.getItem('roblox_p4_save_v4');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
-                    inventory = { ...defaultInv, ...parsed, equip: { ...defaultInv.equip, ...(parsed.equip || {}) } };
+                    inventory = { ...defaultInv, ...parsed, equip: { ...defaultInv.equip, ...(parsed.equip || {}) }, medals: parsed.medals || [] };
                     if(inventory.playerName) { document.getElementById('display-name').textContent = inventory.playerName; goHome(); }
                 } catch (e) { inventory = { ...defaultInv }; }
             }
@@ -303,15 +322,9 @@
 
         function saveGame() {
             if(!inventory.playerName) return;
-            localStorage.setItem('roblox_p4_save_v2', JSON.stringify(inventory));
+            localStorage.setItem('roblox_p4_save_v4', JSON.stringify(inventory));
             const ind = document.getElementById('save-indicator'); ind.textContent = "💾 已儲存"; ind.style.color = "#FFEB3B";
             setTimeout(() => { ind.style.color = "#81C784"; }, 1000);
-        }
-
-        function resetGameSave() {
-            if (confirm("⚠️ 警告：這會刪除所有進度！確定嗎？")) {
-                localStorage.removeItem('roblox_p4_save_v2'); location.reload();
-            }
         }
 
         function restoreBuildings() {
@@ -319,6 +332,8 @@
             for(let i=0; i<inventory.hut; i++) grid.innerHTML += `<div class="building-item"><span class="emoji">🛖</span>木屋</div>`;
             for(let i=0; i<inventory.tower; i++) grid.innerHTML += `<div class="building-item"><span class="emoji">🗼</span>石塔</div>`;
             for(let i=0; i<inventory.castles; i++) grid.innerHTML += `<div class="building-item"><span class="emoji">🏰</span>大城堡</div>`;
+            for(let i=0; i<inventory.flyingCastle; i++) grid.innerHTML += `<div class="building-item"><span class="emoji">🛸</span>飛天城堡</div>`;
+            for(let i=0; i<inventory.ferrisWheel; i++) grid.innerHTML += `<div class="building-item"><span class="emoji">🎡</span>摩天輪</div>`;
         }
 
         function calculateStats() {
@@ -359,10 +374,20 @@
             document.getElementById('sg-a-cost-f').textContent = Math.floor(inventory.superStoneLv / 3) + 1;
 
             const bossBtn = document.getElementById('btn-boss-menu');
-            if (inventory.castles >= 1) {
+            if (inventory.castles >= 1 || inventory.flyingCastle >= 1) {
                 bossBtn.classList.remove('btn-black'); bossBtn.classList.add('btn-purple');
                 bossBtn.innerHTML = '🗺️ 終極 Boss 挑戰 (已解鎖)'; bossBtn.disabled = false;
             }
+
+            // 更新勳章顯示
+            let medalStr = '';
+            if (inventory.medals && inventory.medals.length > 0) {
+                inventory.medals.sort((a,b)=>a-b).forEach(m => {
+                    medalStr += `<span class="medal-icon" title="${m} 連勝勳章">${medalsConfig[m]}</span> `;
+                });
+                document.getElementById('medal-container').innerHTML = medalStr;
+            }
+
             if(doSave) saveGame(); 
         }
 
@@ -370,13 +395,16 @@
         function hideAll() { document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); }
         function goHome() { 
             playSound('click'); updateUI(); hideAll(); 
-            clearInterval(bossTimerInterval); // 確保定時器停止
+            clearInterval(bossTimerInterval);
             if(!inventory.playerName) document.getElementById('login-screen').classList.remove('hidden');
             else {
                 document.getElementById('start-screen').classList.remove('hidden');
                 document.getElementById('player-tag').classList.remove('hidden');
                 document.getElementById('top-nav').classList.remove('hidden');
                 document.getElementById('save-indicator').classList.remove('hidden');
+                if (inventory.medals && inventory.medals.length > 0) {
+                    document.getElementById('medal-bar').classList.remove('hidden');
+                }
             }
         }
         function openInstructions() { hideAll(); playSound('click'); document.getElementById('instruction-screen').classList.remove('hidden'); }
@@ -393,94 +421,9 @@
         // ==========================================
         // 📚 擴充題庫 (80 題完整版)
         // ==========================================
-        
-        // 🌊 鋪木板過河 (重組句子) - 40 題
-        const allReorderTasks = [
-            ["在一個", "風和日麗的早上，", "我和家人", "來到公園。"],
-            ["太陽下山了，", "我們只好", "依依不捨地", "回家去。"],
-            ["經過這件事，", "我明白了", "互相幫助的", "重要性。"],
-            ["突然，", "天空", "烏雲密佈，", "下起了一場", "傾盆大雨。"],
-            ["我們", "玩得", "滿頭大汗，", "到處都充滿了", "歡笑聲。"],
-            ["我", "嚇了一跳，", "連忙", "跑到", "樹下避雨。"],
-            ["今天", "放學後，", "我和同學", "發生了一件", "難忘的事。"],
-            ["弟弟", "考試", "得到滿分，", "他", "開心地", "跳了起來。"],
-            ["我", "小心翼翼地", "捧着", "媽媽", "最心愛的", "花瓶。"],
-            ["雖然", "這次比賽", "輸了，", "但是", "我們", "獲益良多。"],
-            ["看着", "眼前", "美麗的風景，", "我們", "都", "捨不得離開。"],
-            ["只要", "我們", "齊心協力，", "就一定能", "克服", "困難。"],
-            ["妹妹", "不小心", "摔倒了，", "痛得", "哇哇大哭", "起來。"],
-            ["老師", "常常", "鼓勵我們，", "遇到困難", "不要", "輕易放棄。"],
-            ["經過", "這次教訓，", "我決定", "以後", "做事", "要認真仔細。"],
-            ["小明", "是一個", "樂於助人的", "好孩子，", "大家都", "很喜歡他。"],
-            ["春天到了，", "花園裏的", "花兒", "開得", "十分燦爛。"],
-            ["這本書", "的內容", "非常豐富，", "讓我", "愛不釋手。"],
-            ["不管", "天氣有多熱，", "清潔工人", "依然", "辛勤地工作。"],
-            ["海灘上", "佈滿了", "五顏六色的", "貝殼，", "真漂亮！"],
-            ["爸爸", "每天", "早出晚歸，", "為了", "照顧這個家", "而奔波。"],
-            ["聽到", "這個好消息，", "全班同學", "都", "歡呼雀躍。"],
-            ["夜幕降臨，", "繁星", "點綴着", "寧靜的", "夜空。"],
-            ["一陣", "微風吹過，", "樹葉", "發出", "沙沙的響聲。"],
-            ["為了", "準備考試，", "姐姐", "每天都", "溫習到深夜。"],
-            ["公園裏", "有的人散步，", "有的人做操，", "十分熱鬧。"],
-            ["如果", "明天下雨，", "我們的", "旅行計劃", "就會取消。"],
-            ["小貓", "懶洋洋地", "趴在窗台上，", "享受着", "溫暖的陽光。"],
-            ["只要", "平時", "多閱讀，", "寫作能力", "自然會", "提高。"],
-            ["這是一場", "勢均力敵的", "精彩比賽，", "觀眾都", "看得入迷。"],
-            ["大火", "被消防員", "撲滅了，", "大家都", "鬆了一口氣。"],
-            ["在博物館裏，", "我們", "看到了", "許多", "珍貴的文物。"],
-            ["因為", "遲到了，", "所以", "他急得", "像熱鍋上的螞蟻。"],
-            ["這間", "新開的餐廳", "不僅食物美味，", "而且", "服務態度很好。"],
-            ["看着", "滿桌的美味佳餚，", "我不禁", "垂涎三尺。"],
-            ["我們", "應該", "養成", "早睡早起的", "良好習慣。"],
-            ["一條", "清澈的", "小溪", "在山谷間", "緩緩流過。"],
-            ["他", "毫不猶豫地", "跳進水裏，", "救起了", "遇溺的小孩。"],
-            ["運動會上，", "健兒們", "都在田徑場上", "奮力拼搏。"],
-            ["這座山", "高聳入雲，", "從山頂", "俯瞰，", "景色十分壯觀。"]
-        ];
-
-        // ⛏️ 礦洞尋寶 (詞語填充) - 40 題
-        const allMiningTasks = [
-            { q: "我們一到達目的地，就 [？] 地跑去玩耍。", ans: "迫不及待", options: ["手忙腳亂", "迫不及待", "依依不捨"] },
-            { q: "幸好有大家的幫忙，最後我們 [？] 解決了問題。", ans: "順利", options: ["不知所措", "滿頭大汗", "順利"] },
-            { q: "天空 [？] 下起大雨，路上的行人都紛紛走避。", ans: "忽然", options: ["依然", "忽然", "果然"] },
-            { q: "弟弟找不到心愛的玩具，急得像熱鍋上的螞蟻，[？]。", ans: "不知所措", options: ["滿載而歸", "井井有條", "不知所措"] },
-            { q: "聽到學校要舉辦旅行，全班同學都感到十分 [？]。", ans: "雀躍", options: ["雀躍", "難過", "憤怒"] },
-            { q: "小狗把媽媽最愛的鞋子咬壞了，媽媽氣得 [？]。", ans: "火冒三丈", options: ["火冒三丈", "眉開眼笑", "愁眉苦臉"] },
-            { q: "考試前沒有好好溫習，現在看到試卷，我感到很 [？]。", ans: "後悔", options: ["興奮", "後悔", "期待"] },
-            { q: "經過一整天的遠足，大家都感到 [？]，只想快點回家休息。", ans: "筋疲力盡", options: ["精神百倍", "筋疲力盡", "輕鬆自在"] },
-            { q: "只要我們 [？]，就一定能完成這個艱難的任務。", ans: "團結一致", options: ["團結一致", "各顧各的", "半途而廢"] },
-            { q: "看到老婆婆提着重物，小明 [？] 走上前幫忙。", ans: "立刻", options: ["遲遲", "立刻", "慢吞吞"] },
-            { q: "這次參觀博物館讓我 [？]，學到了很多課本以外的知識。", ans: "獲益良多", options: ["獲益良多", "一無所獲", "悶悶不樂"] },
-            { q: "表哥快要出國留學了，我們在機場 [？] 地向他道別。", ans: "依依不捨", options: ["迫不及待", "依依不捨", "興高采烈"] },
-            { q: "舞台上的魔術表演十分精彩，台下觀眾看得 [？]。", ans: "津津有味", options: ["津津有味", "昏昏欲睡", "提心吊膽"] },
-            { q: "他做事總是 [？]，經常犯下一些低級錯誤。", ans: "粗心大意", options: ["一絲不苟", "粗心大意", "聚精會神"] },
-            { q: "這篇文章寫得 [？]，讓人讀起來十分感動。", ans: "情真意切", options: ["枯燥無味", "情真意切", "胡言亂語"] },
-            { q: "看見小女孩跌倒，途人紛紛 [？] 伸出援手。", ans: "主動", options: ["被迫", "主動", "拒絕"] },
-            { q: "大雨過後，空氣變得十分 [？]，讓人感到心曠神怡。", ans: "清新", options: ["污濁", "清新", "乾燥"] },
-            { q: "她聽到自己獲獎的消息，立刻 [？] 地跑去告訴媽媽。", ans: "喜出望外", options: ["垂頭喪氣", "喜出望外", "火冒三丈"] },
-            { q: "這道數學題實在太難了，我想了半天還是 [？]。", ans: "百思不解", options: ["恍然大悟", "百思不解", "迎刃而解"] },
-            { q: "原本 [？] 的天空，突然烏雲密佈，下起大雨。", ans: "晴空萬里", options: ["愁雲慘霧", "晴空萬里", "風雨交加"] },
-            { q: "大家 [？] 地合作，很快就把課室打掃得乾乾淨淨。", ans: "同心協力", options: ["各懷鬼胎", "同心協力", "袖手旁觀"] },
-            { q: "中秋節的晚上，一輪 [？] 的明月高掛在天空中。", ans: "皎潔", options: ["昏暗", "皎潔", "刺眼"] },
-            { q: "他為了準備這次的比賽，每天都練習到 [？] 才肯休息。", ans: "夜深", options: ["清晨", "夜深", "中午"] },
-            { q: "面對突如其來的意外，大家都顯得 [？]，不知道該怎麼辦。", ans: "手足無措", options: ["手足無措", "理直氣壯", "從容不迫"] },
-            { q: "老師的教導猶如 [？]，照亮了我們前進的道路。", ans: "明燈", options: ["烏雲", "明燈", "迷霧"] },
-            { q: "這件精美的藝術品，展現了工匠 [？] 的手藝。", ans: "巧奪天工", options: ["粗製濫造", "巧奪天工", "平平無奇"] },
-            { q: "假日的商場裏 [？]，到處都是購物的人群。", ans: "人山人海", options: ["冷冷清清", "人山人海", "寥寥可數"] },
-            { q: "經過大家的努力，這片荒地終於變成了 [？] 的果園。", ans: "碩果累累", options: ["寸草不生", "碩果累累", "枯木朽株"] },
-            { q: "我們做事要有 [？]，不能遇到一點困難就退縮。", ans: "毅力", options: ["膽怯", "毅力", "懶惰"] },
-            { q: "弟弟 [？] 地把房間收拾乾淨，希望能得到媽媽的稱讚。", ans: "滿懷希望", options: ["滿懷希望", "灰心喪氣", "怒氣沖沖"] },
-            { q: "只要我們平時多加 [？]，考試時自然能得心應手。", ans: "溫習", options: ["玩耍", "溫習", "睡覺"] },
-            { q: "這條山路十分 [？]，大家行走時一定要小心。", ans: "崎嶇", options: ["平坦", "崎嶇", "寬闊"] },
-            { q: "那隻受傷的小狗在角落裏瑟瑟發抖，看起來十分 [？]。", ans: "可憐", options: ["兇猛", "可憐", "可愛"] },
-            { q: "他不僅成績優異，而且品行 [？]，是大家的榜樣。", ans: "端正", options: ["惡劣", "端正", "頑劣"] },
-            { q: "這場精彩絕倫的魔術表演，讓台下的觀眾 [？]。", ans: "目瞪口呆", options: ["昏昏欲睡", "目瞪口呆", "大發雷霆"] },
-            { q: "弟弟把原本 [？] 的房間，弄得亂七八糟。", ans: "井井有條", options: ["井井有條", "雜亂無章", "烏煙瘴氣"] },
-            { q: "看見朋友遇到困難，我們應該 [？] 相助。", ans: "拔刀", options: ["袖手", "拔刀", "落井"] },
-            { q: "這件事情十分複雜，一時間也很難 [？] 得清楚。", ans: "解釋", options: ["掩飾", "解釋", "忽略"] },
-            { q: "我們在果園裏摘了很多新鮮的水果，大家都 [？]。", ans: "滿載而歸", options: ["空手而回", "滿載而歸", "兩手空空"] },
-            { q: "看着這張舊照片，小時候的美好回憶立刻 [？]。", ans: "浮現腦海", options: ["煙消雲散", "浮現腦海", "拋諸腦後"] }
-        ];
+        // (此處省略題庫，代碼維持原本 40+40 題的設定)
+        const allReorderTasks = [ ["在一個", "風和日麗的早上，", "我和家人", "來到公園。"], ["太陽下山了，", "我們只好", "依依不捨地", "回家去。"], ["經過這件事，", "我明白了", "互相幫助的", "重要性。"], ["突然，", "天空", "烏雲密佈，", "下起了一場", "傾盆大雨。"], ["我們", "玩得", "滿頭大汗，", "到處都充滿了", "歡笑聲。"], ["我", "嚇了一跳，", "連忙", "跑到", "樹下避雨。"], ["今天", "放學後，", "我和同學", "發生了一件", "難忘的事。"], ["弟弟", "考試", "得到滿分，", "他", "開心地", "跳了起來。"], ["我", "小心翼翼地", "捧着", "媽媽", "最心愛的", "花瓶。"], ["雖然", "這次比賽", "輸了，", "但是", "我們", "獲益良多。"], ["看着", "眼前", "美麗的風景，", "我們", "都", "捨不得離開。"], ["只要", "我們", "齊心協力，", "就一定能", "克服", "困難。"], ["妹妹", "不小心", "摔倒了，", "痛得", "哇哇大哭", "起來。"], ["老師", "常常", "鼓勵我們，", "遇到困難", "不要", "輕易放棄。"], ["經過", "這次教訓，", "我決定", "以後", "做事", "要認真仔細。"], ["小明", "是一個", "樂於助人的", "好孩子，", "大家都", "很喜歡他。"], ["春天到了，", "花園裏的", "花兒", "開得", "十分燦爛。"], ["這本書", "的內容", "非常豐富，", "讓我", "愛不釋手。"], ["不管", "天氣有多熱，", "清潔工人", "依然", "辛勤地工作。"], ["海灘上", "佈滿了", "五顏幼色的", "貝殼，", "真漂亮！"], ["爸爸", "每天", "早出晚歸，", "為了", "照顧這個家", "而奔波。"], ["聽到", "這個好消息，", "全班同學", "都", "歡呼雀躍。"], ["夜幕降臨，", "繁星", "點綴着", "寧靜的", "夜空。"], ["一陣", "微風吹過，", "樹葉", "發出", "沙沙的響聲。"], ["為了", "準備考試，", "姐姐", "每天都", "溫習到深夜。"], ["公園裏", "有的人散步，", "有的人做操，", "十分熱鬧。"], ["如果", "明天下雨，", "我們的", "旅行計劃", "就會取消。"], ["小貓", "懶洋洋地", "趴在窗台上，", "享受着", "溫暖的陽光。"], ["只要", "平時", "多閱讀，", "寫作能力", "自然會", "提高。"], ["這是一場", "勢均力敵的", "精彩比賽，", "觀眾都", "看得入迷。"], ["大火", "被消防員", "撲滅了，", "大家都", "鬆了一口氣。"], ["在博物館裏，", "我們", "看到了", "許多", "珍貴的文物。"], ["因為", "遲到了，", "所以", "他急得", "像熱鍋上的螞蟻。"], ["這間", "新開的餐廳", "不僅食物美味，", "而且", "服務態度很好。"], ["看着", "滿桌的美味佳餚，", "我不禁", "垂涎三尺。"], ["我們", "應該", "養成", "早睡早起的", "良好習慣。"], ["一條", "清澈的", "小溪", "在山谷間", "緩緩流過。"], ["他", "毫不猶豫地", "跳進水裏，", "救起了", "遇溺的小孩。"], ["運動會上，", "健兒們", "都在田徑場上", "奮力拼搏。"], ["這座山", "高聳入雲，", "從山頂", "俯瞰，", "景色十分壯觀。"] ];
+        const allMiningTasks = [ { q: "我們一到達目的地，就 [？] 地跑去玩耍。", ans: "迫不及待", options: ["手忙腳亂", "迫不及待", "依依不捨"] }, { q: "幸好有大家的幫忙，最後我們 [？] 解決了問題。", ans: "順利", options: ["不知所措", "滿頭大汗", "順利"] }, { q: "天空 [？] 下起大雨，路上的行人都紛紛走避。", ans: "忽然", options: ["依然", "忽然", "果然"] }, { q: "弟弟找不到心愛的玩具，急得像熱鍋上的螞蟻，[？]。", ans: "不知所措", options: ["滿載而歸", "井井有條", "不知所措"] }, { q: "聽到學校要舉辦旅行，全班同學都感到十分 [？]。", ans: "雀躍", options: ["雀躍", "難過", "憤怒"] }, { q: "小狗把媽媽最愛的鞋子咬壞了，媽媽氣得 [？]。", ans: "火冒三丈", options: ["火冒三丈", "眉開眼笑", "愁眉苦臉"] }, { q: "考試前沒有好好溫習，現在看到試卷，我感到很 [？]。", ans: "後悔", options: ["興奮", "後悔", "期待"] }, { q: "經過一整天的遠足，大家都感到 [？]，只想快點回家休息。", ans: "筋疲力盡", options: ["精神百倍", "筋疲力盡", "輕鬆自在"] }, { q: "只要我們 [？]，就一定能完成這個艱難的任務。", ans: "團結一致", options: ["團結一致", "各顧各的", "半途而廢"] }, { q: "看到老婆婆提着重物，小明 [？] 走上前幫忙。", ans: "立刻", options: ["遲遲", "立刻", "慢吞吞"] }, { q: "這次參觀博物館讓我 [？]，學到了很多課本以外的知識。", ans: "獲益良多", options: ["獲益良多", "一無所獲", "悶悶不樂"] }, { q: "表哥快要出國留學了，我們在機場 [？] 地向他道別。", ans: "依依不捨", options: ["迫不及待", "依依不捨", "興高采烈"] }, { q: "舞台上的魔術表演十分精彩，台下觀眾看得 [？]。", ans: "津津有味", options: ["津津有味", "昏昏欲睡", "提心吊膽"] }, { q: "他做事總是 [？]，經常犯下一些低級錯誤。", ans: "粗心大意", options: ["一絲不苟", "粗心大意", "聚精會神"] }, { q: "這篇文章寫得 [？]，讓人讀起來十分感動。", ans: "情真意切", options: ["枯燥無味", "情真意切", "胡言亂語"] }, { q: "看見小女孩跌倒，途人紛紛 [？] 伸出援手。", ans: "主動", options: ["被迫", "主動", "拒絕"] }, { q: "大雨過後，空氣變得十分 [？]，讓人感到心曠神怡。", ans: "清新", options: ["污濁", "清新", "乾燥"] }, { q: "她聽到自己獲獎的消息，立刻 [？] 地跑去告訴媽媽。", ans: "喜出望外", options: ["垂頭喪氣", "喜出望外", "火冒三丈"] }, { q: "這道數學題實在太難了，我想了半天還是 [？]。", ans: "百思不解", options: ["恍然大悟", "百思不解", "迎刃而解"] }, { q: "原本 [？] 的天空，突然烏雲密佈，下起大雨。", ans: "晴空萬里", options: ["愁雲慘霧", "晴空萬里", "風雨交加"] }, { q: "大家 [？] 地合作，很快就把課室打掃得乾乾淨淨。", ans: "同心協力", options: ["各懷鬼胎", "同心協力", "袖手旁觀"] }, { q: "中秋節的晚上，一輪 [？] 的明月高掛在天空中。", ans: "皎潔", options: ["昏暗", "皎潔", "刺眼"] }, { q: "他為了準備這次的比賽，每天都練習到 [？] 才肯休息。", ans: "夜深", options: ["清晨", "夜深", "中午"] }, { q: "面對突如其來的意外，大家都顯得 [？]，不知道該怎麼辦。", ans: "手足無措", options: ["手足無措", "理直氣壯", "從容不迫"] }, { q: "老師的教導猶如 [？]，照亮了我們前進的道路。", ans: "明燈", options: ["烏雲", "明燈", "迷霧"] }, { q: "這件精美的藝術品，展現了工匠 [？] 的手藝。", ans: "巧奪天工", options: ["粗製濫造", "巧奪天工", "平平無奇"] }, { q: "假日的商場裏 [？]，到處都是購物的人群。", ans: "人山人海", options: ["冷冷清清", "人山人海", "寥寥可數"] }, { q: "經過大家的努力，這片荒地終於變成了 [？] 的果園。", ans: "碩果累累", options: ["寸草不生", "碩果累累", "枯木朽株"] }, { q: "我們做事要有 [？]，不能遇到一點困難就退縮。", ans: "毅力", options: ["膽怯", "毅力", "懶惰"] }, { q: "弟弟 [？] 地把房間收拾乾淨，希望能得到媽媽的稱讚。", ans: "滿懷希望", options: ["滿懷希望", "灰心喪氣", "怒氣沖沖"] }, { q: "只要我們平時多加 [？]，考試時自然能得心應手。", ans: "溫習", options: ["玩耍", "溫習", "睡覺"] }, { q: "這條山路十分 [？]，大家行走時一定要小心。", ans: "崎嶇", options: ["平坦", "崎嶇", "寬闊"] }, { q: "那隻受傷的小狗在角落裏瑟瑟發抖，看起來十分 [？]。", ans: "可憐", options: ["兇猛", "可憐", "可愛"] }, { q: "他不僅成績優異，而且品行 [？]，是大家的榜樣。", ans: "端正", options: ["惡劣", "端正", "頑劣"] }, { q: "這場精彩絕倫的魔術表演，讓台下的觀眾 [？]。", ans: "目瞪口呆", options: ["昏昏欲睡", "目瞪口呆", "大發雷霆"] }, { q: "弟弟把原本 [？] 的房間，弄得亂七八糟。", ans: "井井有條", options: ["井井有條", "雜亂無章", "烏煙瘴氣"] }, { q: "看見朋友遇到困難，我們應該 [？] 相助。", ans: "拔刀", options: ["袖手", "拔刀", "落井"] }, { q: "這件事情十分複雜，一時間也很難 [？] 得清楚。", ans: "解釋", options: ["掩飾", "解釋", "忽略"] }, { q: "我們在果園裏摘了很多新鮮的水果，大家都 [？]。", ans: "滿載而歸", options: ["空手而回", "滿載而歸", "兩手空空"] }, { q: "看着這張舊照片，小時候的美好回憶立刻 [？]。", ans: "浮現腦海", options: ["煙消雲散", "浮現腦海", "拋諸腦後"] } ];
 
         // 隨機打亂陣列順序的輔助函數
         function shuffle(array) { let arr = array.slice(); for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
@@ -493,6 +436,18 @@
             let msg = "<br><span style='color:#00E5FF;'>📜 獲得 勤奮手稿x1</span>";
             if (inventory.streak % 3 === 0) { inventory.fragment++; msg += " <span style='color:#E040FB;'>🔮 連對獎勵！頓悟碎片x1</span>"; playSound('drop'); }
             if (Math.random() < 0.25) { inventory.star++; msg += " <span style='color:#FF9800;'>🌟 幸運掉落 星星x1</span>"; }
+            
+            // 🏅 勳章解鎖邏輯
+            if (inventory.streak >= 100 && inventory.streak % 100 === 0 && inventory.streak <= 1000) {
+                const medalLvl = inventory.streak;
+                if (!inventory.medals.includes(medalLvl)) {
+                    inventory.medals.push(medalLvl);
+                    playSound('medal');
+                    msg += `<br><span style='color:#FFEB3B; font-weight:bold; font-size:1.2em;'>🎉 解鎖專屬勳章：${medalsConfig[medalLvl]}</span>`;
+                    alert(`🎉 太神了！你達成了 ${medalLvl} 連勝，榮獲專屬勳章 ${medalsConfig[medalLvl]}！已收錄至榮譽牆！`);
+                    document.getElementById('medal-bar').classList.remove('hidden');
+                }
+            }
             return msg;
         }
 
@@ -552,7 +507,9 @@
             if(type === 'hut' && inventory.wood >= 2) { inventory.wood -= 2; inventory.hut++; alert("建造了木屋！"); } 
             else if (type === 'tower' && inventory.stone >= 2) { inventory.stone -= 2; inventory.tower++; alert("建造了石塔！"); } 
             else if (type === 'castle' && inventory.hut >= 2 && inventory.tower >= 2) { inventory.hut -= 2; inventory.tower -= 2; inventory.castles++; alert("合成大城堡！解鎖Boss！"); } 
-            else { playSound('error'); return alert("❌ 資源不足！"); }
+            else if (type === 'flyingCastle' && inventory.gem >= 5 && inventory.castles >= 1) { inventory.gem -= 5; inventory.castles -= 1; inventory.flyingCastle++; alert("奇蹟！建造了飛天城堡！"); }
+            else if (type === 'ferrisWheel' && inventory.star >= 5 && inventory.wood >= 5 && inventory.stone >= 5) { inventory.star -= 5; inventory.wood -= 5; inventory.stone -= 5; inventory.ferrisWheel++; alert("奇蹟！建造了摩天輪！"); }
+            else { playSound('error'); return alert("❌ 資源不足或前置條件未達成！"); }
             playSound('win'); updateUI(); restoreBuildings();
         }
 
