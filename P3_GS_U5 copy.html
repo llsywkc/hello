@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (P.3 勳章成就版)</title>
+    <title>Roblox：森林大冒險 (P.3 逃跑機制版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -135,11 +135,11 @@
                 <p>🎖️ <b>榮譽勳章</b>：累積 <b>100 連勝</b> 起，每 100 連勝解鎖一枚！即使連勝中斷，已獲得的勳章也會永久保留。</p>
                 
                 <h3 style="color:#B71C1C;">2. 戰鬥力 (攻/防) 有什麼用？</h3>
-                <p>⚔️ <b>攻擊力 (攻)</b>：遇到「突發野獸」時，總戰力大於野獸才能獲勝並奪取寶石。</p>
+                <p>⚔️ <b>攻擊力 (攻)</b>：遇到「突發野獸」時，總戰力大於野獸才能獲勝並奪取寶石。戰力不足時也可選擇【逃跑】！</p>
                 <p>🛡️ <b>防禦力 (防)</b>：在「Boss 挑戰關卡」中，防禦力會直接轉化為你的額外生命值 (HP)。</p>
                 
                 <h3 style="color:#6A1B9A;">3. Boss 挑戰怎麼打？</h3>
-                <p>在建築工坊建成 <b>1 座大城堡</b>解鎖。為限時多項選擇題，答錯會扣 HP 並被吸走元素！</p>
+                <p>在建築工坊建成 <b>1 座大城堡</b>解鎖。為限時多項選擇題，答錯會扣 HP 並被吸走元素！如果發覺不妙，可以使用【逃跑】按鈕保全性命！</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
@@ -241,7 +241,7 @@
             <div class="status-msg" id="boss-msg"></div>
             <div>
                 <button class="btn-green hidden" id="btn-next-boss-q" onclick="nextBossQuestion()">➡️ 下一題</button>
-                <button class="btn-red" id="btn-boss-flee" onclick="goHome()">🏠 逃跑 (返回主頁)</button>
+                <button class="btn-grey" id="btn-boss-flee" onclick="fleeBoss()">🏃 逃跑 (掉落部分資源)</button>
             </div>
         </div>
 
@@ -251,7 +251,10 @@
         <div class="event-box">
             <h2 id="event-title">事件</h2>
             <p id="event-desc" style="font-size: 1.3em; font-weight: bold;"></p>
-            <button class="btn-red" id="btn-event-fight">應戰 / 確認</button>
+            <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                <button class="btn-red" id="btn-event-fight">⚔️ 應戰</button>
+                <button class="btn-grey" id="btn-event-flee">🏃 逃跑</button>
+            </div>
         </div>
     </div>
 
@@ -291,9 +294,7 @@
         const defaultInv = { playerName: "", wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [] };
         let inventory = { ...defaultInv };
 
-        // ==========================================
-        // 礦洞尋寶：40題 選擇題 (MC Questions)
-        // ==========================================
+        // 題庫資料 (已為您保留 40題MC, 30題重組, 20題排序)
         const allMiningTasks = [
             { q: "1953年，石硤尾木屋區發生了甚麼災難？", ans: "大火", options: ["地震", "大火", "山泥傾瀉"] },
             { q: "政府在哪一年開始興建徙置大廈以安置災民？", ans: "1954年", options: ["1950年", "1953年", "1954年"] },
@@ -337,9 +338,6 @@
             { q: "香港房屋主要分為公營房屋和甚麼房屋？", ans: "私營房屋", options: ["私營房屋", "過渡性房屋", "鄉村房屋"] }
         ];
 
-        // ==========================================
-        // 鋪木板過河：合共 50 題 (30題重組句子 + 20題邏輯排序)
-        // ==========================================
         const allReorderTasks = [
             ["1950年代，", "大量內地居民湧入香港，", "私人搭建的木屋", "急劇增加。"],
             ["1953年，", "石硤尾木屋區", "發生大火，", "使很多居民失去家園。"],
@@ -501,13 +499,15 @@
         function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
         function openBossSelect() { playSound('click'); hideAll(); document.getElementById('boss-select-screen').classList.remove('hidden'); }
 
+        // --- 全新逃跑與事件邏輯 ---
         function checkInvasion() {
             let r = Math.random();
             if (r < 0.15) {
                 let beastPower = 20 + Math.floor(Math.random() * 50);
                 document.getElementById('event-title').textContent = "⚠️ 突發野獸襲擊！";
                 document.getElementById('event-desc').textContent = `一隻戰鬥力 ${beastPower} 的野獸出現了！你的總戰力：${calculateStats().atk + calculateStats().def}`;
-                document.getElementById('btn-event-fight').onclick = () => resolveEvent('beast', beastPower);
+                document.getElementById('btn-event-fight').onclick = () => resolveEvent('fight', beastPower);
+                document.getElementById('btn-event-flee').onclick = () => resolveEvent('flee', beastPower);
                 document.getElementById('event-modal').classList.remove('hidden');
             } else if (r < 0.25) {
                 inventory.gem++; playSound('medal');
@@ -518,19 +518,29 @@
             }
         }
 
-        function resolveEvent(type, power) {
-            if (type === 'beast') {
-                let myPower = calculateStats().atk + calculateStats().def;
+        function resolveEvent(action, power) {
+            let myPower = calculateStats().atk + calculateStats().def;
+            if (action === 'fight') {
                 if (myPower >= power) {
                     playSound('win'); inventory.gem += 2; alert("✅ 戰勝野獸！獲得 2 顆寶石！");
                 } else {
                     playSound('error');
                     inventory.wood = Math.max(0, inventory.wood - 5); inventory.stone = Math.max(0, inventory.stone - 5);
-                    alert("❌ 不敵野獸！逃跑時丟失了 5 木材和 5 石頭！");
+                    alert("❌ 戰鬥失敗！受到重創，丟失了 5 木材和 5 石頭！");
                 }
-                document.getElementById('event-modal').classList.add('hidden');
-                updateUI();
+            } else if (action === 'flee') {
+                let escapeChance = Math.random();
+                if (escapeChance > 0.4) { // 60% 機率成功逃跑
+                    playSound('click'); 
+                    alert("💨 你靈活地逃跑了！沒有損失任何物品。");
+                } else {
+                    playSound('error');
+                    inventory.wood = Math.max(0, inventory.wood - 2); inventory.stone = Math.max(0, inventory.stone - 2);
+                    alert("🏃 逃跑時不小心絆倒！慌忙中掉落了 2 木材和 2 石頭！");
+                }
             }
+            document.getElementById('event-modal').classList.add('hidden');
+            updateUI();
         }
 
         function startGame(type) {
@@ -744,6 +754,9 @@
             let timeLeft = bossConfig[currentBoss].time;
             document.getElementById('boss-timer-bar').style.width = '100%';
             
+            // 每次載入新題目時顯示逃跑按鈕
+            document.getElementById('btn-boss-flee').classList.remove('hidden');
+
             bossTimerInterval = setInterval(() => {
                 timeLeft--; document.getElementById('boss-timer-bar').style.width = (timeLeft / bossConfig[currentBoss].time * 100) + '%';
                 if (timeLeft <= 0) { clearInterval(bossTimerInterval); handleBossFail(true); }
@@ -782,7 +795,20 @@
             
             if (playerHP <= 0) { setTimeout(() => bossDefeat(), 1000); return; }
             document.getElementById('btn-next-boss-q').classList.remove('hidden');
-            document.getElementById('btn-boss-flee').classList.remove('hidden');
+        }
+
+        // 新增 Boss 戰逃跑功能
+        function fleeBoss() {
+            playSound('click');
+            let confirmFlee = confirm("⚠️ 確定要逃跑嗎？逃跑將會直接結束挑戰，並掉落 5 個木材與 5 個石頭作為代價！");
+            if(confirmFlee) {
+                clearInterval(bossTimerInterval);
+                inventory.wood = Math.max(0, inventory.wood - 5);
+                inventory.stone = Math.max(0, inventory.stone - 5);
+                updateUI();
+                alert("💨 你匆忙逃離了 Boss 的領地！");
+                goHome();
+            }
         }
 
         function bossVictory() {
