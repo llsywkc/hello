@@ -596,7 +596,7 @@
             let stats = calculateStats();
             let r = Math.random();
 
-            // 傳說怪：必須攻、防雙雙大於 200
+            // 傳說怪：必須攻、防雙雙大於 70
             if (stats.atk >= 70 && stats.def >= 70 && r < 0.12) {
                 let isDragon = Math.random() > 0.5;
                 currentEvent = { type: isDragon ? 'dragon' : 'unicorn', name: isDragon ? '遠古碧炎巨龍' : '幽影星光獨角獸', reqAtk: 200, reqDef: 200 };
@@ -667,8 +667,8 @@
                         inventory.wood = Math.max(0, inventory.wood - 1);
                         inventory.gem += 1;
                     } else {
-                        alert("💀 你的攻擊力太低，無法突破怪獸的防禦！被怪獸打傷並搶走了 2 個木材和 2 個石頭！");
-                        inventory.wood = Math.max(0, inventory.wood - 2);
+                        alert("💀 你的攻擊力太低，無法突破怪獸的防禦！被怪獸打傷並搶走了 1 個木材和 2 個石頭！");
+                        inventory.wood = Math.max(0, inventory.wood - 1);
                         inventory.stone = Math.max(0, inventory.stone - 2);
                     }
                     
@@ -795,7 +795,7 @@
                 if(correct) {
                     playSound('win'); addStreak();
                     inventory.wood++; updateUI();
-                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+1, 手稿+1)</span>";
+                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+5, 手稿+10)</span>";
                     document.getElementById('btn-next-reorder').classList.remove('hidden');
                     Array.from(document.getElementById('answer-area').children).forEach(c => c.onclick = null);
                     checkInvasion();
@@ -853,7 +853,7 @@
                 element.style.backgroundColor = '#4CAF50';
                 element.style.boxShadow = '0 6px 0 #2E7D32';
                 inventory.stone++; updateUI();
-                document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>✅ 解答正確！(石頭+1, 手稿+1)</span>";
+                document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>✅ 解答正確！(石頭+5, 手稿+10)</span>";
                 document.getElementById('btn-next-mc').classList.remove('hidden');
                 checkInvasion();
             } else {
@@ -1040,11 +1040,11 @@
                 if(combatCorrectCount >= combatTarget) {
                     playSound('boss_win');
                     if(combatType === 'legendary') {
-                        inventory.gem += 20; inventory.star += 20; inventory.manuscript += 50;
+                        inventory.gem += 20; inventory.star += 20; inventory.manuscript += 100;
                         let code = currentEvent.name.includes('龍') ? 1001 : 1002;
                         if(!inventory.medals.includes(code)) inventory.medals.push(code);
                         updateUI();
-                        alert(`🌟 奇蹟！你成功收服了傳說怪【${currentEvent.name}】！\n🎁 獲得 20 寶石、20 星星、50 手稿，及專屬傳說勳章！`);
+                        alert(`🌟 奇蹟！你成功收服了傳說怪【${currentEvent.name}】！\n🎁 獲得 20 寶石、20 星星、100 手稿，及專屬傳說勳章！`);
                     } else {
                         inventory.gem += 5; inventory.star += 5; updateUI();
                         alert("🏆 恭喜你擊敗了 Boss！獲得 5 顆寶石和 5 顆星星！");
@@ -1066,8 +1066,8 @@
             if(combatType === 'legendary') {
                 alert("🏃 你急忙逃出傳說怪的視線，安然無恙。");
             } else {
-                inventory.wood = Math.max(0, inventory.wood - 5);
-                alert("🏃 你急忙逃出 Boss 的巢穴，但在路上弄丟了 5 個木材！");
+                inventory.wood = Math.max(0, inventory.stone - 5);
+                alert("🏃 你急忙逃出 Boss 的巢穴，但在路上弄丟了 5 個石頭！");
             }
             updateUI(); goHome();
         };
