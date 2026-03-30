@@ -625,7 +625,7 @@
                         document.getElementById('event-modal').classList.add('hidden');
                         startCombat('legendary');
                     } else {
-                        alert(`❌ 你的戰力不達標 (需要 攻${currentEvent.reqAtk} 防${currentEvent.reqDef})，巨龍的怒吼把你震飛了，物資掉落！`);
+                        alert(`❌ 你的戰力不達標 (需要 攻${currentEvent.reqAtk} 防${currentEvent.reqDef})，神獸的怒吼把你震飛了，物資掉落！`);
                         inventory.wood = Math.max(0, inventory.wood - 5); inventory.stone = Math.max(0, inventory.stone - 5);
                         document.getElementById('event-modal').classList.add('hidden');
                         updateUI();
