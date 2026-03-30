@@ -794,7 +794,7 @@
                 }
                 if(correct) {
                     playSound('win'); addStreak();
-                    inventory.wood++; updateUI();
+                    inventory.wood += 5;inventory.manuscript += 10; updateUI();
                     document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+5, 手稿+10)</span>";
                     document.getElementById('btn-next-reorder').classList.remove('hidden');
                     Array.from(document.getElementById('answer-area').children).forEach(c => c.onclick = null);
