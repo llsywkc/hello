@@ -80,7 +80,7 @@
 </head>
 <body>
 
-    <h1>🟪 森林大冒險：終極特訓 🟪</h1>
+    <h1>🟪 森林大冒險：4A寶寶 🟪</h1>
 
     <div id="player-tag" class="player-info hidden">冒險者：<span id="display-name"></span> <span id="streak-counter" style="color:#6A1B9A; margin-left: 10px;">🔥 連對: 0</span></div>
 
@@ -150,7 +150,7 @@
                 </ul>
 
                 <h3 style="color:#FF9800;">3. 傳說級挑戰</h3>
-                <p>當你的<b>攻擊力與防禦力「雙雙達到 40 以上」</b>時，有機率在答題後遭遇極罕見的「傳說怪」！戰勝牠們可獲得海量資源與傳說勳章。</p>
+                <p>當你的<b>攻擊力與防禦力「雙雙達到 70 以上」</b>時，有機率在答題後遭遇極罕見的「傳說怪」！戰勝牠們可獲得海量資源與傳說勳章。</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
@@ -597,7 +597,7 @@
             let r = Math.random();
 
             // 傳說怪：必須攻、防雙雙大於 200
-            if (stats.atk >= 200 && stats.def >= 200 && r < 0.12) {
+            if (stats.atk >= 70 && stats.def >= 70 && r < 0.12) {
                 let isDragon = Math.random() > 0.5;
                 currentEvent = { type: isDragon ? 'dragon' : 'unicorn', name: isDragon ? '遠古碧炎巨龍' : '幽影星光獨角獸', reqAtk: 200, reqDef: 200 };
                 let imgIcon = isDragon ? '🐉' : '🦄';
