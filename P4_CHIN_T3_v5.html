@@ -852,7 +852,7 @@
                 playSound('win'); addStreak();
                 element.style.backgroundColor = '#4CAF50';
                 element.style.boxShadow = '0 6px 0 #2E7D32';
-                inventory.stone += 5;inventory.manuscript += 10 updateUI();
+                inventory.stone += 5;inventory.manuscript += 10; updateUI();
                 document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>✅ 解答正確！(石頭+5, 手稿+10)</span>";
                 document.getElementById('btn-next-mc').classList.remove('hidden');
                 checkInvasion();
