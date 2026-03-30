@@ -137,7 +137,7 @@
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #6A1B9A; max-height: 400px; overflow-y: auto;">
                 <h3 style="color:#4A148C; margin-top:0;">1. 如何獲得元素與勳章？</h3>
                 <p>🪵 <b>木材 / 🧱 石頭</b>：透過各個基礎關卡答題 100% 獲得。</p>
-                <p>📜 <b>勤奮手稿</b>：每次答對題目都會獲得 1 張。</p>
+                <p>📜 <b>勤奮手稿</b>：每次答對題目都會獲得 10 張。</p>
                 <p>🔮 <b>頓悟碎片</b>：連續答對 3 題掉落 1 個碎片。</p>
                 <p>💎 <b>寶石 / 🌟 星星</b>：打敗突發野獸，或在過關時機率掉落。</p>
                 
@@ -852,7 +852,7 @@
                 playSound('win'); addStreak();
                 element.style.backgroundColor = '#4CAF50';
                 element.style.boxShadow = '0 6px 0 #2E7D32';
-                inventory.stone++; updateUI();
+                inventory.stone += 5;inventory.manuscript += 10 updateUI();
                 document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>✅ 解答正確！(石頭+5, 手稿+10)</span>";
                 document.getElementById('btn-next-mc').classList.remove('hidden');
                 checkInvasion();
