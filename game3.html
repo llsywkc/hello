@@ -3,445 +3,561 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>常識科大冒險 - 打怪獸溫習篇</title>
+    <title>因為……所以……。 - 課堂挑戰</title>
     <style>
-        /* --- 卡通 RPG 風格 CSS 設計 --- */
-        body { background-color: #2c3e50; background-image: radial-gradient(#34495e 15%, transparent 16%), radial-gradient(#34495e 15%, transparent 16%); background-size: 60px 60px; background-position: 0 0, 30px 30px; font-family: 'Comic Sans MS', 'Chalkboard SE', '微軟正黑體', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; color: #333; }
-        #game-container { background-color: #ecf0f1; width: 95%; max-width: 650px; border: 6px solid #2c3e50; border-radius: 20px; box-shadow: 10px 10px 0px #1a252f; padding: 20px; text-align: center; position: relative; max-height: 95vh; overflow-y: auto; }
-        h1 { color: #e74c3c; text-shadow: 2px 2px 0px #fff, -2px -2px 0px #fff, 2px -2px 0px #fff, -2px 2px 0px #fff, 4px 4px 0px #c0392b; font-size: 2.2em; margin: 10px 0 20px 0; }
-        
-        /* 按鈕設計 */
-        .btn { background-color: #3498db; color: white; font-size: 1.2em; font-weight: bold; padding: 12px; margin: 8px 0; border: 4px solid #2980b9; border-radius: 12px; cursor: pointer; box-shadow: 0px 5px 0px #1f618d; transition: all 0.1s ease; width: 100%; font-family: inherit;}
-        .btn:hover { transform: translateY(-2px); box-shadow: 0px 7px 0px #1f618d; }
-        .btn:active { transform: translateY(3px); box-shadow: 0px 2px 0px #1f618d; }
-        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: 0px 5px 0px #1f618d; }
-        
-        .btn-start { background-color: #e67e22; border-color: #d35400; box-shadow: 0px 5px 0px #a04000; font-size: 1.5em; margin-top: 20px;}
-        .btn-option { background-color: #f1c40f; border-color: #f39c12; color: #333; box-shadow: 0px 5px 0px #d68910; min-height: 60px; display: flex; align-items: center; justify-content: center;}
-        .btn-hint { background-color: #9b59b6; border-color: #8e44ad; box-shadow: 0px 5px 0px #71368a; width: auto; padding: 10px 20px;}
+        /* 修正排版溢出問題：確保所有元素的邊距都計算在總寬度內 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        /* --- 戰鬥區域 UI --- */
-        #battle-arena { display: flex; justify-content: space-between; align-items: flex-end; background-color: #a2d9ce; border: 4px solid #1abc9c; border-radius: 15px; padding: 15px; margin-bottom: 20px; height: 110px; position: relative; overflow: hidden; }
-        .character-box { text-align: center; z-index: 2; width: 40%;}
-        .emoji { font-size: 60px; display: inline-block; transition: transform 0.2s; text-shadow: 2px 2px 0px #333;}
+        /* 全新綠底黑字主題 */
+        body {
+            background-color: #E8F5E9; 
+            color: #000000; 
+            font-family: 'Comic Sans MS', '微軟正黑體', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
         
-        /* 血條設計 */
-        .status-text { font-weight: bold; font-size: 1.1em; margin-bottom: 5px; background: rgba(255,255,255,0.7); border-radius: 10px; padding: 2px;}
-        .hearts { color: #e74c3c; font-size: 1.2em; text-shadow: 1px 1px 0px #333;}
-        .hp-bar-bg { background-color: #bdc3c7; border: 3px solid #7f8c8d; border-radius: 10px; height: 15px; width: 100%; overflow: hidden; margin: 0 auto;}
-        .hp-bar-fill { background-color: #e74c3c; height: 100%; width: 100%; transition: width 0.3s ease; }
-
-        /* --- 動畫 --- */
-        .attack-right { animation: dashRight 0.3s ease-in-out; }
-        .attack-left { animation: dashLeft 0.3s ease-in-out; }
-        .shake { animation: shakeHurt 0.4s; }
-        @keyframes dashRight { 0% { transform: translateX(0); } 50% { transform: translateX(60px) scale(1.2); } 100% { transform: translateX(0); } }
-        @keyframes dashLeft { 0% { transform: translateX(0); } 50% { transform: translateX(-60px) scale(1.2); } 100% { transform: translateX(0); } }
-        @keyframes shakeHurt { 0%, 100% { transform: translateX(0); filter: brightness(1); } 25%, 75% { transform: translateX(-10px); filter: brightness(0.5) sepia(1) hue-rotate(-50deg) saturate(5); } 50% { transform: translateX(10px); } }
-        .fade-in { animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-        /* --- 問題與回饋 --- */
-        .question-text { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; line-height: 1.4; text-align: left; background: #fff; padding: 15px; border-radius: 10px; border: 3px dashed #bdc3c7;}
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        @media (max-width: 480px) { .options-grid { grid-template-columns: 1fr; } }
+        #game-container {
+            background-color: #C8E6C9; 
+            border: 8px solid #81C784; 
+            border-radius: 30px;
+            padding: 40px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
         
-        #feedback { font-size: 1.1em; font-weight: bold; margin-top: 15px; padding: 10px; border-radius: 10px; display: none; text-align: left;}
-        .correct-text { background-color: #d5f5e3; color: #1e8449; border: 3px solid #2ecc71; }
-        .wrong-text { background-color: #fadbd8; color: #b03a2e; border: 3px solid #e74c3c; }
-
-        /* 畫面切換 */
+        h1 {
+            color: #1B5E20; 
+            font-size: 2.6em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+        }
+        
+        p {
+            font-size: 1.4em;
+            color: #000000;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            background-color: #4CAF50; 
+            color: white; 
+            border: none;
+            border-radius: 15px;
+            padding: 15px 25px;
+            font-size: 1.4em;
+            margin: 10px auto; 
+            cursor: pointer;
+            box-shadow: 0 5px 0 #388E3C;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-weight: bold;
+            width: 80%; 
+            max-width: 500px;
+            display: block; 
+        }
+        
+        .btn:hover {
+            background-color: #45A049;
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #2E7D32;
+        }
+        
+        .btn:active {
+            transform: translateY(5px);
+            box-shadow: none;
+        }
+        
+        .option-btn {
+            display: block;
+            width: 100%; 
+            background-color: #A5D6A7; 
+            color: #000000; 
+            box-shadow: 0 5px 0 #66BB6A;
+            margin: 15px 0;
+            border: 4px solid transparent;
+            font-size: 1.5em;
+            transition: transform 0.1s;
+            border-radius: 15px;
+            padding: 15px 20px;
+        }
+        
+        .option-btn:hover {
+            background-color: #81C784;
+            transform: scale(1.02);
+        }
+        
+        .option-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* 選中狀態 */
+        .option-btn.selected {
+            border: 4px solid #1B5E20;
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 5px 0 #1B5E20;
+        }
+        
+        /* 答錯狀態 */
+        .option-btn.wrong-anim {
+            background-color: #BDBDBD !important;
+            box-shadow: 0 5px 0 #9E9E9E !important;
+            cursor: not-allowed;
+            color: #424242 !important;
+            transform: none !important;
+            border: 4px solid transparent;
+        }
+        
+        /* 答對狀態 */
+        .option-btn.correct-anim {
+            background-color: #FFEB3B !important; 
+            color: #000000 !important;
+            box-shadow: 0 5px 0 #FBC02D !important;
+            border: 4px solid #F57F17 !important;
+            transform: none !important;
+        }
+        
+        #question-text {
+            font-size: 2em;
+            font-weight: bold;
+            color: #000000;
+            margin: 20px 0;
+            background: #FFFFFF;
+            padding: 30px 20px;
+            border-radius: 15px;
+            border: 4px dashed #4CAF50;
+            line-height: 1.4;
+        }
+        
+        /* 倒數計時條 */
+        #timer-container {
+            width: 100%;
+            background-color: #FFFFFF;
+            border: 2px solid #388E3C;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            overflow: hidden;
+        }
+        
+        #timer-bar {
+            width: 100%;
+            height: 25px;
+            background-color: #4CAF50;
+            transition: width 0.1s linear, background-color 0.2s;
+        }
+        
+        /* 控制區塊：提交、回饋、下一題 */
+        #controls-container {
+            min-height: 80px;
+            margin-top: 25px;
+        }
+        
+        #feedback-msg {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 15px 0;
+            display: none;
+        }
+        
         .screen { display: none; }
-        .active-screen { display: block; }
+        .active { display: block; }
+
+        /* 讓提交/下一題按鈕不要佔滿全寬，保持美觀 */
+        #submit-btn, #next-btn {
+            width: 50%;
+            min-width: 200px;
+        }
     </style>
 </head>
 <body>
 
 <div id="game-container">
-    
-    <div id="start-screen" class="screen active-screen fade-in">
-        <h1>🌟 魔法常識大冒險 🌟</h1>
-        <p style="font-size: 1.2em; line-height: 1.5;">常識王國受到了怪獸的襲擊！<br>身為魔法師的你，請用你的「常識力量」打敗牠們！</p>
-        <div style="font-size: 60px; margin: 20px 0;">🧙‍♂️ VS 🐉</div>
-        <button class="btn btn-start" onclick="initAudio(); switchScreen('level-screen');">進入遊戲</button>
+    <div id="start-screen" class="screen active">
+        <h1>🔍 「因為所以」 句式大挑戰 🔍</h1>
+        <p>請選擇課堂挑戰模式：</p>
+        <button class="btn" onclick="startGame('findSo')">▶️ 關卡一：尋找「所以」(結果)</button>
+        <button class="btn" onclick="startGame('findBecause')">▶️ 關卡二：尋找「因為」(原因)</button>
+        <button class="btn" style="background-color: #D32F2F; box-shadow: 0 5px 0 #B71C1C; margin-top: 30px;" onclick="startGame('challenge')">👑 關卡三：終極挑戰 (限時)</button>
     </div>
 
-    <div id="level-screen" class="screen fade-in">
-        <h1>挑選你的對手</h1>
-        <p style="margin-bottom: 20px; font-weight:bold; color:#2c3e50;">答對發動攻擊 💥 答錯被扣愛心 💔</p>
-        <button class="btn" style="background-color: #2ecc71; border-color: #27ae60; box-shadow: 0px 5px 0px #1e8449;" onclick="startGame('easy')">🟢 簡單 (史萊姆小怪 👾)</button>
-        <button class="btn" style="background-color: #f1c40f; border-color: #f39c12; box-shadow: 0px 5px 0px #d68910; color: #333;" onclick="startGame('medium')">🟡 中等 (裝甲暴龍 🦖)</button>
-        <button class="btn" style="background-color: #e74c3c; border-color: #c0392b; box-shadow: 0px 5px 0px #922b21;" onclick="startGame('hard')">🔴 困難 (烈焰魔王 🐉)</button>
-    </div>
-
-    <div id="battle-screen" class="screen">
-        <div id="battle-arena">
-            <div class="character-box">
-                <div class="status-text">魔法師 🧙‍♂️</div>
-                <div class="hearts" id="player-hearts">❤️❤️❤️</div>
-                <div id="player-emoji" class="emoji">🧙‍♂️</div>
-            </div>
-            <div style="font-size: 1.5em; font-weight: bold; color: #e74c3c; padding-bottom: 15px;">VS</div>
-            <div class="character-box">
-                <div class="status-text" id="monster-name">怪獸 🐉</div>
-                <div class="hp-bar-bg"><div id="monster-hp-fill" class="hp-bar-fill"></div></div>
-                <div id="monster-emoji" class="emoji">🐉</div>
-            </div>
+    <div id="play-screen" class="screen">
+        <h2 id="level-title" style="color: #1B5E20; font-size: 2em; margin-bottom: 10px;"></h2>
+        <p>✅ 分數: <span id="score">0</span> / <span id="total-q">0</span></p>
+        
+        <div id="timer-container">
+            <div id="timer-bar"></div>
         </div>
 
-        <div style="text-align: right; font-weight: bold; color: #7f8c8d; margin-bottom: 5px;">題目: <span id="q-progress">1/10</span></div>
-        <div class="question-text" id="question-text">問題載入中...</div>
+        <div id="question-text"></div>
+        <div id="options-container"></div>
         
-        <div class="options-grid" id="options-container">
-            </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-            <button class="btn btn-hint" onclick="showHint()">💡 提示</button>
-            <button id="next-btn" class="btn" style="display: none; width: 60%; background-color: #e67e22; border-color:#d35400; box-shadow:0px 5px 0px #a04000;" onclick="nextQuestion()">繼續戰鬥 ➔</button>
+        <div id="controls-container">
+            <button id="submit-btn" class="btn" style="display:none; background-color: #1976D2; box-shadow: 0 5px 0 #0D47A1;" onclick="submitAnswer()">📝 提交答案</button>
+            <div id="feedback-msg"></div>
+            <button id="next-btn" class="btn" style="display:none; background-color: #F57C00; box-shadow: 0 5px 0 #E65100;" onclick="nextQuestion()">➡️ 下一題</button>
         </div>
-        
-        <div id="feedback"></div>
     </div>
 
     <div id="end-screen" class="screen">
-        <h1 id="end-title">🎉 戰鬥結束 🎉</h1>
-        <div id="end-emoji" style="font-size: 80px; margin: 10px;">🏆</div>
-        <p id="end-message" style="font-size: 1.3em; line-height: 1.5; font-weight: bold;"></p>
-        <button class="btn btn-start" onclick="location.reload()">🔄 回到主畫面</button>
+        <h1 style="font-size: 3em;">🎉 挑戰結束 🎉</h1>
+        <p id="final-score-text" style="font-size: 2em; margin: 30px 0;"></p>
+        <button class="btn" style="width: 50%;" onclick="playSound('click'); setTimeout(() => location.reload(), 200);">🏠 回到主選單</button>
     </div>
-
 </div>
 
 <script>
-    // --- 題庫資料 ---
-    // q=題目, o=選項陣列(t=文字, c=是否正確), h=提示, r=解釋
-    const quizDatabase = {
-        "easy": {
-            icon: "👾", name: "史萊姆小怪",
-            qList: [
-                { q: "以下哪一項為地球帶來温暖？", o: [{t:"太陽", c:true}, {t:"月亮", c:false}, {t:"星星", c:false}, {t:"街燈", c:false}], h: "白天天上最光的星體。", r:"太陽是地球最主要的熱源。" },
-                { q: "以下哪種物質是優良的導熱體？", o: [{t:"木材", c:false}, {t:"金屬", c:true}, {t:"塑膠", c:false}, {t:"玻璃", c:false}], h: "煮食鍋的底部通常是用這材料製成。", r:"金屬能快速傳導熱能。" },
-                { q: "空氣受熱時會產生甚麼變化？", o: [{t:"膨脹", c:true}, {t:"收縮", c:false}, {t:"結冰", c:false}, {t:"變重", c:false}], h: "熱氣球升空的原理。", r:"根據熱脹冷縮原理，空氣受熱體積會變大。" },
-                { q: "當水遇冷時，温度會有甚麼變化？", o: [{t:"上升", c:false}, {t:"下降", c:true}, {t:"不變", c:false}, {t:"沸騰", c:false}], h: "放進雪櫃會怎樣？", r:"失去熱能，溫度就會下降。" },
-                { q: "中國的首都位於哪個城市？", o: [{t:"上海", c:false}, {t:"廣州", c:false}, {t:"北京", c:true}, {t:"香港", c:false}], h: "有天安門廣場的地方。", r:"北京是中國的政治和文化中心。" },
-                { q: "中國總共有多少個民族？", o: [{t:"50個", c:false}, {t:"55個", c:false}, {t:"56個", c:true}, {t:"60個", c:false}], h: "五十六個星座，五十六枝花。", r:"中國由漢族和55個少數民族組成。" },
-                { q: "中國哪一個民族的人口最多？", o: [{t:"壯族", c:false}, {t:"漢族", c:true}, {t:"滿族", c:false}, {t:"苗族", c:false}], h: "我們平時寫的中文字也叫__字。", r:"漢族佔全國人口絕大多數。" },
-                { q: "洗衣店主要為顧客提供甚麼？", o: [{t:"售賣貨品", c:false}, {t:"提供服務", c:true}, {t:"免費衣服", c:false}, {t:"賣文具", c:false}], h: "幫你完成一項工作。", r:"洗衣店提供清洗衣物服務，不賣實體貨品。" },
-                { q: "以下哪一項是香港常用的電子貨幣？", o: [{t:"人民幣", c:false}, {t:"支票", c:false}, {t:"八達通", c:true}, {t:"黃金", c:false}], h: "搭車常用的「嘟嘟」卡。", r:"八達通是最普及的電子支付工具。" },
-                { q: "乘搭公共交通工具時，我們應該遵守甚麼安全規則？", o: [{t:"車內奔跑", c:false}, {t:"緊握扶手", c:true}, {t:"大聲播音樂", c:false}, {t:"車廂飲食", c:false}], h: "防止車輛搖晃時跌倒。", r:"緊握扶手能保障自身安全。" }
-            ]
-        },
-        "medium": {
-            icon: "🦖", name: "裝甲暴龍",
-            qList: [
-                { q: "把烤盤從高溫焗爐拿出來，必須使用甚麼？", o: [{t:"保鮮紙", c:false}, {t:"隔熱手套", c:true}, {t:"金屬夾子", c:false}, {t:"濕毛巾", c:false}], h: "需要不良導熱體保護雙手。", r:"隔熱手套能阻擋熱力傳到手上。" },
-                { q: "把凹陷的乒乓球放進熱水會回復原狀，為甚麼？", o: [{t:"球內空氣受熱膨脹", c:true}, {t:"膠殼遇熱收縮", c:false}, {t:"熱水進入球內", c:false}, {t:"水壓把球擠平", c:false}], h: "與空氣的特性有關。", r:"熱水令球內空氣膨脹，撐起凹陷處。" },
-                { q: "把温度計放進冰水中，液柱頂端會怎樣？", o: [{t:"快速上升", c:false}, {t:"漸漸下降", c:true}, {t:"保持不變", c:false}, {t:"液體結冰", c:false}], h: "遇冷會發生甚麼事？", r:"溫度計內液體遇冷收縮，液柱下降。" },
-                { q: "來回搓着雙手是通過哪種方式產生熱？", o: [{t:"燃燒", c:false}, {t:"電力", c:false}, {t:"摩擦", c:true}, {t:"吸收太陽能", c:false}], h: "兩個表面互相磨刷。", r:"摩擦會將動能轉化為熱能。" },
-                { q: "上海的簡稱是甚麼？", o: [{t:"京", c:false}, {t:"粵", c:false}, {t:"深", c:false}, {t:"滬", c:true}], h: "一個有水字部的字。", r:"上海簡稱為「滬」。" },
-                { q: "廣州位於哪條河流的入海口？", o: [{t:"長江", c:false}, {t:"黃河", c:false}, {t:"珠江", c:true}, {t:"湄公河", c:false}], h: "與香港和澳門形成著名的三角洲。", r:"廣州是珠江三角洲的重要城市。" },
-                { q: "購買預先包裝食品前，精明消費者最應留意甚麼？", o: [{t:"包裝圖案", c:false}, {t:"有效期限", c:true}, {t:"廣告代言人", c:false}, {t:"特價標語", c:false}], h: "確保食物安全不變質的資訊。", r:"留意有效期限能避免買到過期食品。" },
-                { q: "在超市買了破損的罐頭，正確處理方法是？", o: [{t:"直接丟掉", c:false}, {t:"照常打開吃", c:false}, {t:"帶收據要求更換", c:true}, {t:"立刻報警", c:false}], h: "你需要消費憑證。", r:"保留收據並要求退換是保障消費者權益。" },
-                { q: "哪種交通工具可直接往返香港和澳門？", o: [{t:"港鐵", c:false}, {t:"電車", c:false}, {t:"噴射船", c:true}, {t:"天星小輪", c:false}], h: "在海上高速航行的交通工具。", r:"噴射船是往返港澳的主要水路交通。" },
-                { q: "小巴司機提醒乘客扣好「安全設備」，是指甚麼？", o: [{t:"扶手", c:false}, {t:"車窗", c:false}, {t:"八達通機", c:false}, {t:"安全帶", c:true}], h: "綁在座位上的帶子。", r:"法例規定小巴乘客必須扣上安全帶保命。" }
-            ]
-        },
-        "hard": {
-            icon: "🐉", name: "烈焰魔王",
-            qList: [
-                { q: "溫度單位「°F」代表甚麼？", o: [{t:"攝氏", c:false}, {t:"華氏", c:true}, {t:"體積", c:false}, {t:"風速", c:false}], h: "外國常用的溫度單位。", r:"°F是華氏（Fahrenheit）的符號。" },
-                { q: "以下哪個不屬於大館（前中區警署）的法定古蹟？", o: [{t:"前域多利監獄", c:false}, {t:"前中區警署", c:false}, {t:"舊最高法院大樓", c:true}, {t:"前中央裁判司署", c:false}], h: "現為終審法院的建築。", r:"舊最高法院大樓不屬於大館建築群。" },
-                { q: "米埔自然保護區的哪種植物為動植物提供棲息地？", o: [{t:"松樹林", c:false}, {t:"紅樹林", c:true}, {t:"仙人掌", c:false}, {t:"玫瑰花", c:false}], h: "生長在鹹淡水交界的植物。", r:"紅樹林為候鳥和濕地生物提供棲息地。" },
-                { q: "「望夫石」位於以下哪個郊野公園內？", o: [{t:"大潭郊野公園", c:false}, {t:"西貢郊野公園", c:false}, {t:"城門郊野公園", c:false}, {t:"獅子山郊野公園", c:true}], h: "公園名字與貓科猛獸有關。", r:"望夫石是獅子山郊野公園內的著名岩石。" },
-                { q: "香港的東平洲屬於哪種類型的景點？", o: [{t:"歷史古蹟", c:false}, {t:"主題樂園", c:false}, {t:"自然風景", c:true}, {t:"購物中心", c:false}], h: "看沉積岩和海洋生態的地方。", r:"東平洲以奇特的地貌聞名，屬自然風景。" },
-                { q: "「象鼻山」位於中國哪個地方？", o: [{t:"北京", c:false}, {t:"上海", c:false}, {t:"雲南", c:false}, {t:"桂林", c:true}], h: "廣西的著名地標。", r:"象鼻山是桂林的著名自然景觀。" },
-                { q: "福建以甚麼特色建築聞名？", o: [{t:"四合院", c:false}, {t:"蒙古包", c:false}, {t:"土樓", c:true}, {t:"窯洞", c:false}], h: "客家人防禦用的巨大建築。", r:"土樓是福建獨特的傳統民居。" },
-                { q: "2026年（丙午年）的生肖是甚麼？", o: [{t:"蛇", c:false}, {t:"馬", c:true}, {t:"羊", c:false}, {t:"猴", c:false}], h: "地支「午」對應善於奔跑的動物。", r:"2025是蛇年，2026年是馬年。" },
-                { q: "「粵車南下」的車輛可以經哪條跨海大橋進入香港？", o: [{t:"青馬大橋", c:false}, {t:"紅磡海底隧道", c:false}, {t:"港珠澳大橋", c:true}, {t:"昂船洲大橋", c:false}], h: "連接香港、珠海和澳門的大橋。", r:"港珠澳大橋是內地車輛南下的重要通道。" },
-                { q: "2026年1月1日起，香港公立醫院急症室費用增加至多少？", o: [{t:"120元", c:false}, {t:"180元", c:false}, {t:"280元", c:true}, {t:"400元", c:false}], h: "接近三百元。", r:"根據資料，急症室費用將增至280元。" }
-            ]
+    // --- 音效系統 ---
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+    
+    function initAudio() {
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playSound(type) {
+        if (!audioCtx) return; 
+        
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        const now = audioCtx.currentTime;
+
+        switch(type) {
+            case 'click': 
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(800, now);
+                oscillator.frequency.exponentialRampToValueAtTime(400, now + 0.05);
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                oscillator.start(now);
+                oscillator.stop(now + 0.05);
+                break;
+                
+            case 'start': 
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(440, now); 
+                oscillator.frequency.setValueAtTime(554, now + 0.1); 
+                oscillator.frequency.setValueAtTime(659, now + 0.2); 
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.4);
+                oscillator.start(now);
+                oscillator.stop(now + 0.4);
+                break;
+                
+            case 'next': 
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(400, now);
+                oscillator.frequency.linearRampToValueAtTime(800, now + 0.1);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.1);
+                oscillator.start(now);
+                oscillator.stop(now + 0.1);
+                break;
+
+            case 'correct': 
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(600, now); 
+                oscillator.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+                gainNode.gain.setValueAtTime(0.4, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                oscillator.start(now);
+                oscillator.stop(now + 0.3);
+                break;
+                
+            case 'wrong': 
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(250, now); 
+                oscillator.frequency.exponentialRampToValueAtTime(100, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                oscillator.start(now);
+                oscillator.stop(now + 0.3);
+                break;
+                
+            case 'tick': 
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(1000, now);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                oscillator.start(now);
+                oscillator.stop(now + 0.05);
+                break;
+
+            case 'win': 
+                oscillator.type = 'sine';
+                const notes = [523.25, 659.25, 783.99, 1046.50]; 
+                notes.forEach((freq, i) => {
+                    oscillator.frequency.setValueAtTime(freq, now + i * 0.1);
+                });
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.5);
+                oscillator.start(now);
+                oscillator.stop(now + 0.5);
+                break;
         }
+    }
+
+    // --- 題目數據庫 ---
+    const questionBank = {
+        findSo: [
+            { q: "因為外面正在下雨，________。", options: ["所以我撐起雨傘", "所以我去操場跑步", "所以今天天氣很好"], ans: 0 },
+            { q: "因為弟弟肚子很餓，________。", options: ["所以我給他蓋被子", "所以他吃了一隻大雞腿", "所以他學會了騎自行車"], ans: 1 },
+            { q: "因為我昨天很晚才睡覺，________。", options: ["所以今天下雨了", "所以今天覺得很疲倦", "所以鬧鐘壞了"], ans: 1 },
+            { q: "因為他不小心跌倒，________。", options: ["所以他很高興", "所以他的腳受傷流血了", "所以他跑得很快"], ans: 1 },
+            { q: "因為今天天氣很冷，________。", options: ["所以我多穿了一件厚外套", "所以我開了空調", "所以我去游泳"], ans: 0 }
+        ],
+        findBecause: [
+            { q: "________，所以我們不用上學。", options: ["因為我忘記帶書包", "因為八號颱風信號現正懸掛", "因為今天是星期一"], ans: 1 },
+            { q: "________，所以我開了空調。", options: ["因為天氣很熱", "因為天氣很冷", "因為外面下雨"], ans: 0 },
+            { q: "________，所以我今天遲到了。", options: ["因為我今天很早起床", "因為我吃了午餐", "因為家裏的鬧鐘壞了"], ans: 2 },
+            { q: "________，所以我去看醫生。", options: ["因為我生病發燒了", "因為我肚子很餓", "因為我希望不勞而獲"], ans: 0 },
+            { q: "________，所以小狗高興地搖尾巴。", options: ["因為牠找不到玩具", "因為主人給了牠一根骨頭", "因為牠在睡覺"], ans: 1 }
+        ],
+        // 挑戰題庫擴充至 15 題，難度更適合小二學生
+        challenge: [
+            { q: "因為我十分口渴，________。", options: ["所以我喝了一大杯水", "所以我去睡覺", "所以我不吃飯"], ans: 0 },
+            { q: "________，所以弟弟大哭起來。", options: ["因為他的玩具破掉了", "因為他吃了一顆糖果", "因為聽了一個笑話"], ans: 0 },
+            { q: "哪一句的標點符號用得正確？", options: ["因為天冷，所以我穿外套。", "因為天冷。所以我穿外套，", "因為天冷，所以我穿外套，"], ans: 0 },
+            { q: "________，所以表哥去了看牙醫。", options: ["因為肚子痛", "因為牙齒痛", "因為頭痛"], ans: 1 },
+            { q: "因為妹妹每天都做運動，________。", options: ["所以她的身體很健康", "所以她每天都會遲到", "所以她很容易生病"], ans: 0 },
+            { q: "排排看：所以 地上濕了 外面下雨 因為", options: ["因為所以地上濕了，外面下雨。", "所以，地上濕了，因為外面下雨。", "因為外面下雨，所以地上濕了。"], ans: 2 },
+            { q: "因為小貓肚子餓了，________。", options: ["所以牠在玩耍", "所以我給牠吃貓糧", "所以牠去洗澡"], ans: 1 },
+            { q: "________，所以我們穿上雨衣。", options: ["因為陽光普照", "因為正在下大雨", "因為天黑了"], ans: 1 },
+            { q: "（　　）太陽下山了，（　　）天黑了。", options: ["如果……就", "雖然……但是", "因為……所以"], ans: 2 },
+            { q: "因為我每天準時起床，________。", options: ["所以我上學沒有遲到", "所以我的功課做完了", "所以我忘記帶書包"], ans: 0 },
+            { q: "________，所以大家都很開心。", options: ["因為默書不合格", "因為今天是學校旅行日", "因為遊戲機壞了"], ans: 1 },
+            { q: "因為我不小心打破了水杯，________。", options: ["所以我向媽媽道歉", "所以我很高興", "所以媽媽稱讚我"], ans: 0 },
+            { q: "因為天氣實在太熱了，________。", options: ["所以我穿上厚外套", "所以我滿頭大汗", "所以我蓋上厚被子"], ans: 1 },
+            { q: "哪一句的標點符號用得正確？", options: ["因為，老師説了一個笑話，所以，全班哄堂大笑。", "因為老師説了一個笑話，所以全班哄堂大笑。", "因為老師説了一個笑話。所以全班哄堂大笑，"], ans: 1 },
+            { q: "________，所以我的雙手很乾淨。", options: ["因為我剛剛洗了手", "因為我剛剛玩了泥沙", "因為我剛剛拍皮球"], ans: 0 }
+        ]
     };
 
-    // --- 遊戲變數 ---
+    let currentLevel = '';
     let currentQuestions = [];
     let currentQIndex = 0;
-    let playerLives = 3;
-    let monsterHP = 100;
-    let hasAnswered = false;
+    let score = 0;
+    let selectedOptionIndex = -1;
+    let isFirstAttempt = true; 
+    
+    let timerInterval;
+    // 延長時間為 15 秒
+    let timeLeft = 15;
+    const maxTime = 15;
+    let lastTickTime = 4;
 
-    // --- 洗牌演算法 (Fisher-Yates) ---
-    function shuffleArray(array) {
-        let arr = [...array]; // 複製陣列避免修改原資料
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function startGame(level) {
+        initAudio(); 
+        playSound('start'); 
+        
+        currentLevel = level;
+        
+        // 打亂題庫順序
+        let shuffledQuestions = [...questionBank[level]].sort(() => Math.random() - 0.5);
+        
+        // 如果是活動四（終極挑戰），則隨機抽出 5 題
+        if (level === 'challenge') {
+            currentQuestions = shuffledQuestions.slice(0, 5);
+        } else {
+            currentQuestions = shuffledQuestions;
         }
-        return arr;
-    }
 
-    // --- 畫面切換 ---
-    function switchScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
-        const screen = document.getElementById(screenId);
-        screen.classList.add('active-screen');
-        if(screenId === 'battle-screen') screen.classList.add('fade-in');
-    }
-
-    // --- 遊戲流程 ---
-    function startGame(levelStr) {
-        const levelData = quizDatabase[levelStr];
-        
-        // **重要：每次開始遊戲時，隨機打亂題目的次序**
-        currentQuestions = shuffleArray(levelData.qList);
-        
         currentQIndex = 0;
-        playerLives = 3;
-        monsterHP = 100;
+        score = 0;
         
-        // 更新 UI
-        document.getElementById('monster-emoji').innerText = levelData.icon;
-        document.getElementById('monster-name').innerText = levelData.name;
-        updateStatus();
+        document.getElementById('total-q').innerText = currentQuestions.length;
         
-        switchScreen('battle-screen');
-        loadQuestion();
+        let titleObj = {
+            'findSo': '▶️ 活動一：尋找「所以」',
+            'findBecause': '▶️ 活動二：尋找「因為」',
+            'challenge': '👑 活動四：終極挑戰'
+        };
+        document.getElementById('level-title').innerText = titleObj[level];
+        
+        if (level === 'challenge') {
+            document.getElementById('timer-container').style.display = 'block';
+        } else {
+            document.getElementById('timer-container').style.display = 'none';
+        }
+
+        setTimeout(() => {
+            showScreen('play-screen');
+            loadQuestion();
+        }, 400); 
     }
 
     function loadQuestion() {
-        hasAnswered = false;
-        
-        // 隱藏回饋與下一題按鈕
-        const feedback = document.getElementById('feedback');
-        feedback.style.display = 'none';
-        feedback.className = '';
+        if (currentQIndex >= currentQuestions.length) {
+            endGame();
+            return;
+        }
+
+        selectedOptionIndex = -1;
+        isFirstAttempt = true;
+        document.getElementById('submit-btn').style.display = 'none';
         document.getElementById('next-btn').style.display = 'none';
         
-        // 載入題目
+        let feedbackMsg = document.getElementById('feedback-msg');
+        feedbackMsg.style.display = 'none';
+        feedbackMsg.innerText = '';
+        
+        document.getElementById('score').innerText = score;
         const qData = currentQuestions[currentQIndex];
-        document.getElementById('q-progress').innerText = `${currentQIndex + 1} / ${currentQuestions.length}`;
-        document.getElementById('question-text').innerText = qData.q;
         
-        // **重要：每次載入題目時，隨機打亂 ABCD 選項的次序**
-        const shuffledOptions = shuffleArray(qData.o);
-        
-        // 生成選項按鈕
+        let typeLabel = qData.type ? `<span style="font-size: 0.7em; color: #1B5E20; background: #C8E6C9; padding: 5px 10px; border-radius: 8px; display:inline-block; margin-bottom:10px;">[${qData.type}題]</span><br>` : "";
+        document.getElementById('question-text').innerHTML = typeLabel + qData.q;
+
         const optionsContainer = document.getElementById('options-container');
         optionsContainer.innerHTML = '';
-        shuffledOptions.forEach(opt => {
+        
+        qData.options.forEach((opt, index) => {
             const btn = document.createElement('button');
-            btn.className = 'btn btn-option';
-            btn.innerText = opt.t;
-            btn.onclick = () => checkAnswer(opt, btn);
+            btn.className = 'btn option-btn';
+            btn.innerHTML = opt;
+            btn.onclick = () => selectOption(index, btn);
             optionsContainer.appendChild(btn);
         });
+
+        if (currentLevel === 'challenge') {
+            startTimer();
+        }
     }
 
-    function checkAnswer(opt, selectedBtn) {
-        if (hasAnswered) return;
-        hasAnswered = true;
+    function selectOption(index, btnElement) {
+        if (document.getElementById('next-btn').style.display === 'inline-block') return;
+        if (btnElement.classList.contains('wrong-anim')) return;
+
+        playSound('click'); 
+
+        selectedOptionIndex = index;
+        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+        btnElement.classList.add('selected');
         
-        // 鎖定所有按鈕並標示顏色
-        const allBtns = document.getElementById('options-container').getElementsByTagName('button');
-        const currentQ = currentQuestions[currentQIndex];
-        
-        for (let btn of allBtns) {
-            btn.disabled = true;
-            // 找出正確答案按鈕變綠色
-            const thisOptData = currentQ.o.find(o => o.t === btn.innerText);
-            if (thisOptData && thisOptData.c) {
-                btn.style.backgroundColor = '#2ecc71';
-                btn.style.color = '#fff';
+        document.getElementById('submit-btn').style.display = 'inline-block';
+        document.getElementById('feedback-msg').style.display = 'none'; 
+    }
+
+    function submitAnswer() {
+        if (selectedOptionIndex === -1) return;
+
+        const qData = currentQuestions[currentQIndex];
+        let feedbackMsg = document.getElementById('feedback-msg');
+        let options = document.querySelectorAll('.option-btn');
+
+        if (selectedOptionIndex === qData.ans) {
+            playSound('correct'); 
+            if (currentLevel === 'challenge') clearInterval(timerInterval);
+            
+            if (isFirstAttempt) {
+                score++;
+                document.getElementById('score').innerText = score;
             }
-        }
 
-        const feedback = document.getElementById('feedback');
-        feedback.style.display = 'block';
+            options.forEach(b => {
+                b.disabled = true;
+                b.classList.remove('selected');
+            });
+            options[selectedOptionIndex].classList.add('correct-anim');
 
-        if (opt.c) {
-            // 答對邏輯：攻擊怪獸
-            playSound('correct');
-            setTimeout(() => playSound('attack'), 200);
+            feedbackMsg.innerHTML = "🎉 答對了！做得好！";
+            feedbackMsg.style.color = "#1B5E20";
+            feedbackMsg.style.display = "block";
             
-            // 動畫
-            const pEmoji = document.getElementById('player-emoji');
-            pEmoji.classList.add('attack-right');
-            setTimeout(() => pEmoji.classList.remove('attack-right'), 300);
-            
-            setTimeout(() => {
-                const mEmoji = document.getElementById('monster-emoji');
-                mEmoji.classList.add('shake');
-                setTimeout(() => mEmoji.classList.remove('shake'), 400);
-                
-                // 扣血 (10題打死怪獸，每題扣10%)
-                monsterHP -= 10;
-                updateStatus();
-            }, 150);
+            document.getElementById('submit-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'inline-block';
 
-            feedback.className = 'correct-text fade-in';
-            feedback.innerHTML = `✅ <b>魔法命中！</b><br>${currentQ.r}`;
         } else {
-            // 答錯邏輯：怪獸反擊
-            playSound('wrong');
-            setTimeout(() => playSound('hurt'), 200);
-            selectedBtn.style.backgroundColor = '#e74c3c';
-            selectedBtn.style.color = '#fff';
+            playSound('wrong'); 
+            isFirstAttempt = false; 
             
-            // 動畫
-            const mEmoji = document.getElementById('monster-emoji');
-            mEmoji.classList.add('attack-left');
-            setTimeout(() => mEmoji.classList.remove('attack-left'), 300);
+            let wrongBtn = options[selectedOptionIndex];
+            wrongBtn.classList.remove('selected');
+            wrongBtn.classList.add('wrong-anim');
+            wrongBtn.disabled = true;
             
-            setTimeout(() => {
-                const pEmoji = document.getElementById('player-emoji');
-                pEmoji.classList.add('shake');
-                setTimeout(() => pEmoji.classList.remove('shake'), 400);
-                
-                // 扣愛心
-                playerLives -= 1;
-                updateStatus();
-            }, 150);
+            document.getElementById('submit-btn').style.display = 'none';
+            selectedOptionIndex = -1;
 
-            feedback.className = 'wrong-text fade-in';
-            feedback.innerHTML = `❌ <b>怪獸反擊！</b><br>${currentQ.r}`;
+            feedbackMsg.innerHTML = "❌ 答錯了，請重新選擇！";
+            feedbackMsg.style.color = "#D32F2F";
+            feedbackMsg.style.display = "block";
         }
+    }
 
-        // 檢查勝負或顯示下一題
-        setTimeout(() => {
-            if (playerLives <= 0) {
-                endGame(false);
-            } else if (currentQIndex === currentQuestions.length - 1 || monsterHP <= 0) {
-                endGame(true);
-            } else {
-                document.getElementById('next-btn').style.display = 'block';
-                document.getElementById('next-btn').classList.add('fade-in');
+    function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = maxTime;
+        lastTickTime = 4; 
+        const timerBar = document.getElementById('timer-bar');
+        timerBar.style.width = '100%';
+        timerBar.style.backgroundColor = '#4CAF50';
+
+        timerInterval = setInterval(() => {
+            timeLeft -= 0.1;
+            let percentage = (timeLeft / maxTime) * 100;
+            timerBar.style.width = percentage + '%';
+
+            if (timeLeft <= 3.0 && timeLeft > 0) {
+                timerBar.style.backgroundColor = '#D32F2F';
+                let currentSec = Math.ceil(timeLeft);
+                if (currentSec !== lastTickTime) {
+                    playSound('tick');
+                    lastTickTime = currentSec;
+                }
             }
-        }, 800);
-    }
 
-    function updateStatus() {
-        // 更新愛心
-        let heartsStr = "";
-        for(let i=0; i<playerLives; i++) heartsStr += "❤️";
-        for(let i=playerLives; i<3; i++) heartsStr += "🖤";
-        document.getElementById('player-hearts').innerText = heartsStr;
-        
-        // 更新血條
-        document.getElementById('monster-hp-fill').style.width = `${Math.max(0, monsterHP)}%`;
-    }
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                playSound('wrong');
+                
+                let options = document.querySelectorAll('.option-btn');
+                options.forEach(b => b.disabled = true);
+                options[currentQuestions[currentQIndex].ans].classList.add('correct-anim');
 
-    function showHint() {
-        if(hasAnswered) return;
-        const feedback = document.getElementById('feedback');
-        feedback.style.display = 'block';
-        feedback.className = 'hint-text fade-in';
-        feedback.innerHTML = `💡 <b>小提示：</b> ${currentQuestions[currentQIndex].h}`;
-        playSound('hint');
+                let feedbackMsg = document.getElementById('feedback-msg');
+                feedbackMsg.innerHTML = "⏰ 時間到！";
+                feedbackMsg.style.color = "#D32F2F";
+                feedbackMsg.style.display = "block";
+                
+                document.getElementById('submit-btn').style.display = 'none';
+                document.getElementById('next-btn').style.display = 'inline-block';
+            }
+        }, 100);
     }
 
     function nextQuestion() {
+        playSound('next'); 
         currentQIndex++;
         loadQuestion();
     }
 
-    function endGame(isWin) {
-        switchScreen('end-screen');
-        const title = document.getElementById('end-title');
-        const emoji = document.getElementById('end-emoji');
-        const msg = document.getElementById('end-message');
-
-        if(isWin) {
-            playSound('win');
-            title.innerText = "🎉 戰鬥勝利 🎉";
-            title.style.color = "#2ecc71";
-            emoji.innerText = "🏆🧙‍♂️";
-            msg.innerText = `太棒了！你用豐富的常識知識打敗了怪獸，成功保衛了王國！\n\n剩餘生命：${playerLives} ❤️`;
-        } else {
-            playSound('lose');
-            title.innerText = "☠️ 戰鬥失敗 ☠️";
-            title.style.color = "#e74c3c";
-            emoji.innerText = "💀🐉";
-            msg.innerText = "哎呀！魔法師的生命值歸零了，怪獸太強大了。\n請再多溫習一下常識，重新挑戰吧！";
-        }
-    }
-
-    // --- Web Audio API 音效生成器 (無須下載聲音檔) ---
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    let audioCtx;
-
-    function initAudio() {
-        if (!audioCtx) {
-            audioCtx = new AudioContext();
-            // iOS 解鎖音效
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            gain.gain.value = 0; osc.start(); osc.stop(audioCtx.currentTime + 0.001);
-        }
-    }
-
-    function playSound(type) {
-        if (!audioCtx || audioCtx.state === 'suspended') return;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        const now = audioCtx.currentTime;
-
-        if (type === 'correct') { // 叮鈴
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(880, now);
-            osc.frequency.setValueAtTime(1108.73, now + 0.1);
-            gain.gain.setValueAtTime(0.8, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-            osc.start(now); osc.stop(now + 0.4);
-        } else if (type === 'wrong') { // 錯誤砵聲
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(150, now);
-            osc.frequency.linearRampToValueAtTime(100, now + 0.3);
-            gain.gain.setValueAtTime(0.5, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-            osc.start(now); osc.stop(now + 0.3);
-        } else if (type === 'attack') { // 魔法揮擊
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(600, now);
-            osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
-            gain.gain.setValueAtTime(0.3, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-            osc.start(now); osc.stop(now + 0.1);
-        } else if (type === 'hurt') { // 受傷悶哼
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(100, now);
-            osc.frequency.exponentialRampToValueAtTime(50, now + 0.2);
-            gain.gain.setValueAtTime(0.8, now);
-            gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
-            osc.start(now); osc.stop(now + 0.2);
-        } else if (type === 'hint') { // 提示音
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(600, now);
-            gain.gain.setValueAtTime(0.3, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-            osc.start(now); osc.stop(now + 0.3);
-        } else if (type === 'win') { // 勝利旋律
-            osc.type = 'sine';
-            [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
-                const o = audioCtx.createOscillator();
-                const g = audioCtx.createGain();
-                o.type = 'sine'; o.connect(g); g.connect(audioCtx.destination);
-                o.frequency.value = freq;
-                g.gain.setValueAtTime(0, now + i*0.15);
-                g.gain.linearRampToValueAtTime(0.5, now + i*0.15 + 0.05);
-                g.gain.exponentialRampToValueAtTime(0.01, now + i*0.15 + 0.4);
-                o.start(now + i*0.15); o.stop(now + i*0.15 + 0.4);
-            });
-        } else if (type === 'lose') { // 失敗低音
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(200, now);
-            osc.frequency.linearRampToValueAtTime(50, now + 1);
-            gain.gain.setValueAtTime(0.5, now);
-            gain.gain.linearRampToValueAtTime(0.01, now + 1);
-            osc.start(now); osc.stop(now + 1);
-        }
+    function endGame() {
+        playSound('win'); 
+        showScreen('end-screen');
+        document.getElementById('final-score-text').innerText = 
+            `你得到了 ${score} / ${currentQuestions.length} 分！\n` + 
+            (score === currentQuestions.length ? "太棒了！全對！" : "繼續努力！");
     }
 </script>
 
