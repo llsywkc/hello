@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文具特工隊：寫作訓練基地 2.0</title>
+    <title>文具特工隊：寫作訓練基地 3.0</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Microsoft JhengHei';
@@ -30,7 +30,7 @@
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             padding: 30px;
             margin-bottom: 20px;
             box-sizing: border-box;
@@ -101,15 +101,26 @@
             display: none;
             line-height: 1.6;
         }
-        .rewrite-tip strong {
+        .rewrite-tip h4 {
+            margin: 0 0 10px 0;
             color: #d35400;
+        }
+        .rewrite-tip ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .rewrite-tip li {
+            margin-bottom: 5px;
+        }
+        .rewrite-tip strong {
+            color: #c0392b;
         }
         #essay-container {
             background-color: #fffaf0;
             border: 3px dashed #f39c12;
             border-radius: 15px;
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             padding: 25px;
             box-sizing: border-box;
         }
@@ -147,7 +158,6 @@
         #next-btn:hover {
             background-color: #27ae60;
         }
-        /* Clearfix for floating button */
         .clearfix::after {
             content: "";
             clear: both;
@@ -157,8 +167,8 @@
 </head>
 <body>
 
-    <h1>📝 文具特工隊：寫作訓練基地 2.0</h1>
-    <div class="subtitle">提示：寫作有很多種可能！這裡有多個正確答案，選出你最喜歡的一句，並根據提示加入自己的創意吧！</div>
+    <h1>📝 文具特工隊：寫作訓練基地 3.0</h1>
+    <div class="subtitle">提示：這裡有很多個正確答案！選出你最喜歡的一句，並細看黃色框的「改寫錦囊」，加入你的專屬創意！</div>
 
     <div id="game-container" class="clearfix">
         <div id="step-indicator" class="step-badge">第一段：開頭</div>
@@ -183,20 +193,26 @@
             // ================= 段落 1：開頭 =================
             {
                 step: "第一段：文章開頭 (總)",
-                question: "要介紹文具特工隊出場，並預告下文。請選出一個合適的開頭：（有兩個正確答案喔！）",
+                question: "要介紹文具特工隊出場，並預告下文。請選出一個合適的開頭：",
                 paragraph: 0,
                 options: [
                     { 
                         text: "在文具王國裏，有一支特別的文具特工隊，各有所長。下文將介紹幾位重要的文具成員和它們的特色與功用。", 
                         isCorrect: true, 
-                        feedback: "答對了！這句清楚「點題」並「預告」了下文。",
-                        rewriteTip: "💡 創意改寫：你可以把「幾位重要的文具成員」改成 <strong>「我最喜歡的三位特工」</strong> 或 <strong>「陪伴我讀書的好拍檔」</strong>。"
+                        feedback: "答對了！這句最經典，清楚「點題」並「預告」了下文。",
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>把「幾位重要的文具成員」改成 <strong>「我最喜歡的三位特工」</strong> 或 <strong>「勞苦功高的三位大將」</strong>。</li><li>把「文具王國」改成你的專屬場地，例如 <strong>「在我的百寶袋裏」</strong>。</li></ul>"
                     },
                     { 
                         text: "在我的書桌上，住着一群默默守護我的文具特工。以下會說明不同特工的本領，讓大家知道它們怎樣幫助我。", 
                         isCorrect: true, 
                         feedback: "很好！這句很有想像力，而且也具備預告下文的功能！",
-                        rewriteTip: "💡 創意改寫：你可以把「書桌上」改成 <strong>「筆袋裏」</strong>、<strong>「書包深處」</strong>，讓場景更貼近你的真實情況。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>地點可以更具體：<strong>「在那個裝滿筆記本的沉重書包深處」</strong> 或 <strong>「在亂七八糟的書桌抽屜中」</strong>。</li><li>形容詞可替換：把「默默守護」改為 <strong>「各懷絕技」</strong> 或 <strong>「身手敏捷」</strong>。</li></ul>"
+                    },
+                    { 
+                        text: "每天陪伴我上學的，除了老師和同學，還有一支本領高強的「文具特工隊」。接下來，我會逐一介紹這幾位特工的厲害之處。", 
+                        isCorrect: true, 
+                        feedback: "太棒了！用老師和同學作對比，讓特工隊的形象更生動，預告也很清晰！",
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>試着加入你的感受：<strong>「他們是我學習路上不可缺少的得力助手」</strong>。</li><li>改變預告方式：<strong>「你想知道它們有什麼隱藏技能嗎？請看下文的介紹。」</strong></li></ul>"
                     },
                     { 
                         text: "我有很多文具，有鉛筆、橡皮擦和直尺，它們都很漂亮，我每天都帶它們上學。", 
@@ -208,20 +224,26 @@
             // ================= 段落 2：鉛筆 =================
             {
                 step: "第二段：鉛筆 (中心句)",
-                question: "現在介紹第一位特工「鉛筆」。請選出合適的「中心句」：（有兩個正確答案！）",
+                question: "現在介紹第一位特工「鉛筆」。請選出合適的「中心句」：",
                 paragraph: 1,
                 options: [
                     { 
                         text: "首先，鉛筆是特工隊裏負責書寫的「記錄專家」。", 
                         isCorrect: true, 
                         feedback: "答對了！正確運用了標示語「首先」和特工名稱。",
-                        rewriteTip: "💡 創意改寫：你可以自己幫鉛筆改個酷炫的名字，例如 <strong>「黑墨水忍者」</strong> 或 <strong>「文字魔法師」</strong>。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>替換特工代號：<strong>「文字魔術師」</strong>、<strong>「黑墨水忍者」</strong> 或 <strong>「抄寫小能手」</strong>。</li></ul>"
                     },
                     { 
                         text: "第一位出場的特工是鉛筆，它是文具盒裏不可或缺的「書寫大師」。", 
                         isCorrect: true, 
                         feedback: "很好！「第一位出場的」也是一種很好的段落開頭銜接方法。",
-                        rewriteTip: "💡 創意改寫：把「書寫大師」換成你喜歡的稱呼，例如 <strong>「抄寫小能手」</strong>。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>加入誇張手法：<strong>「它是文具盒裡最勤勞的『工作狂』」</strong>。</li></ul>"
+                    },
+                    { 
+                        text: "打頭陣的是鉛筆，它在特工隊中擔任「神筆馬良」的角色，專門負責文字記錄。", 
+                        isCorrect: true, 
+                        feedback: "「打頭陣」這詞用得很生動！借用「神筆馬良」也很有創意！",
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>可以改為其他比喻：<strong>「它是特工隊裡的前鋒」</strong> 或 <strong>「專門負責前線作戰的文字兵」</strong>。</li></ul>"
                     },
                     { 
                         text: "鉛筆很好用，可以幫我寫很多字。", 
@@ -232,20 +254,26 @@
             },
             {
                 step: "第二段：鉛筆 (特色 + 功用)",
-                question: "接着，把鉛筆的「外形特色」和「具體功用」寫出來：（選一個合適的組合）",
+                question: "接着，把鉛筆的「外形特色」和「具體功用」寫出來：",
                 paragraph: 1,
                 options: [
                     { 
                         text: "這枝鉛筆外形纖幼，筆身印有柔和的圖案。例如，在做中文作業時，我用它工整地寫下每一個生字。", 
                         isCorrect: true, 
                         feedback: "非常通順！包含了外形描寫和「例如」的具體情境。",
-                        rewriteTip: "💡 創意改寫：試着把外形換成你真實擁有的鉛筆，如 <strong>「印有角落生物的圖案」</strong>；「中文作業」也可以改成 <strong>「數學練習」</strong> 或 <strong>「英文默書」</strong>。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>外形改為你真實擁有的：<strong>「筆身印有角落生物的圖案」</strong> 或 <strong>「頂部有一頂小巧的皇冠」</strong>。</li><li>更改功用情境：<strong>「在做英文默書時，它幫我迅速寫下答案」</strong>。</li></ul>"
                     },
                     { 
                         text: "它穿着一件帶有卡通圖案的黃色外衣，筆芯硬度適中。譬如計算數學題時，我會用它寫草稿，方便修改。", 
                         isCorrect: true, 
                         feedback: "寫得很生動！用「黃色外衣」來比喻筆身，並配上「譬如」舉例。",
-                        rewriteTip: "💡 創意改寫：大膽修改顏色吧！把它改成 <strong>「藍色星空外衣」</strong> 或 <strong>「粉紅色的戰衣」</strong>。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>衣服顏色任你換：<strong>「藍色星空外衣」</strong>、<strong>「閃閃發光的粉紅戰衣」</strong>。</li><li>數學題可以寫得更難：<strong>「譬如計算複雜的乘數題時...」</strong>。</li></ul>"
+                    },
+                    { 
+                        text: "這枝鉛筆帶有淡淡的木香，筆桿呈六角形，握起來很舒服。例如抄寫課文時，它能幫我迅速寫下一行行整齊的字體。", 
+                        isCorrect: true, 
+                        feedback: "加入了「嗅覺（木香）」和「觸覺（握起來舒服）」，描寫非常細膩！",
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>加入其他的感官：<strong>「寫字時會發出沙沙的聲音」</strong>。</li><li>形容字體：<strong>「寫下一行行像螞蟻般大小卻十分整齊的字體」</strong>。</li></ul>"
                     }
                 ]
             },
@@ -259,13 +287,19 @@
                         text: "其次，橡皮擦是負責修正錯誤的「細心修改師」。這塊橡皮體積雖小，但質地柔軟，不容易弄破紙張。", 
                         isCorrect: true, 
                         feedback: "結構非常完整！有「其次」、有身分，還有具體的質地描寫。",
-                        rewriteTip: "💡 創意改寫：可以加入形狀的描寫，例如 <strong>「這塊長方形的橡皮」</strong> 或 <strong>「這塊散發着草莓香味的橡皮」</strong>。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>形容形狀：<strong>「這塊長方形的橡皮」</strong>、<strong>「這塊像車輪形狀的橡皮」</strong>。</li><li>形容質地：<strong>「雖然捏起來軟綿綿的，但擦除能力極強」</strong>。</li></ul>"
                     },
                     { 
                         text: "接着，文具盒裏的「白衣天使」——橡皮擦登場了。它的身體白白胖胖的，拿在手裏十分輕巧。", 
                         isCorrect: true, 
                         feedback: "「白衣天使」這個比喻太棒了！「接着」也能很好地承接上一段。",
-                        rewriteTip: "💡 創意改寫：你可以把橡皮擦的顏色改掉，如果是黑色的橡皮擦，可以叫它 <strong>「黑衣護衛」</strong>！"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>更改顏色代號：如果是黑色的，可以叫 <strong>「黑衣護衛」</strong>；如果色彩繽紛，叫 <strong>「彩虹戰士」</strong>。</li><li>替換身形：<strong>「隨着時間過去，它已經變得越來越瘦小」</strong>。</li></ul>"
+                    },
+                    { 
+                        text: "然後，輪到負責消除污跡的「清潔特警」出動了。這塊橡皮四四方方，帶着一股清新的薄荷味。", 
+                        isCorrect: true, 
+                        feedback: "加入了「嗅覺」描寫（薄荷味），令物品更立體！「清潔特警」也很酷！",
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>改變氣味：<strong>「香甜的草莓味」</strong>、<strong>「淡淡的牛奶香」</strong>。</li><li>改變稱號：<strong>「去污專家」</strong>、<strong>「錯字剋星」</strong>。</li></ul>"
                     }
                 ]
             },
@@ -278,17 +312,23 @@
                         text: "例如，當我把筆劃寫錯時，它可以輕輕把錯字擦掉。一塊橡皮擦大概能幫我改正幾百個錯誤，讓我敢於多試。", 
                         isCorrect: true, 
                         feedback: "運用了「例如」和「幾百個」數字說明，小結很有深度！",
-                        rewriteTip: "💡 創意改寫：試着具體寫出寫錯什麼字，例如 <strong>「當我把『遊』寫成『游』時」</strong>，文章會更生動！"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>具體寫出錯甚麼字：<strong>「當我把『遊』寫成『游』時」</strong>。</li><li>修改數字：<strong>「它一生中大概消滅了上千個錯字」</strong>。</li></ul>"
                     },
                     { 
                         text: "譬如做數學算錯了答案，它可以讓紙面瞬間回復乾淨。有了這位好幫手，我做功課時就更加安心了。", 
                         isCorrect: true, 
                         feedback: "「回復乾淨」形容得很貼切！小結也表達了安心的感受。",
-                        rewriteTip: "💡 創意改寫：把「做數學」改成另一個容易犯錯的情境，例如 <strong>「畫視藝科的草圖時」</strong>。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>改變情境：<strong>「畫視藝科的草圖畫出界時」</strong>。</li><li>加入動作描寫：<strong>「只要在紙上來回摩擦幾下，紙面就瞬間回復白淨」</strong>。</li></ul>"
+                    },
+                    { 
+                        text: "例如畫畫時不小心畫歪了線條，只要用它輕輕擦拭，畫紙又會變得一塵不染。這位特工就像我的定心丸，讓我不再害怕犯錯。", 
+                        isCorrect: true, 
+                        feedback: "「定心丸」這個比喻非常高級，點出了橡皮擦帶來的安全感！",
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>改變形容詞：<strong>「畫紙又會變得像新的一樣」</strong>、<strong>「不留半點痕跡」</strong>。</li><li>「定心丸」可替換：<strong>「它就像我的後援部隊」</strong>。</li></ul>"
                     }
                 ]
             },
-            // ================= 段落 4：螢光筆 (新增) =================
+            // ================= 段落 4：螢光筆 =================
             {
                 step: "第四段：螢光筆 (中心句 + 特色)",
                 question: "我們來加添一位新特工「螢光筆」。請選出合適的開頭：",
@@ -298,13 +338,19 @@
                         text: "然後，螢光筆是特工隊裏負責畫重點的「重點標記員」。這套螢光筆顏色鮮明，筆頭粗幼適中。", 
                         isCorrect: true, 
                         feedback: "很好！使用了「然後」作標示語，清楚交代了螢光筆的特色。",
-                        rewriteTip: "💡 創意改寫：加上具體的顏色數量吧！例如 <strong>「這套六色螢光筆」</strong> 或 <strong>「這支雙頭螢光筆」</strong>。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>加上具體的數字：<strong>「這套六色螢光筆」</strong> 或 <strong>「這支雙頭螢光筆」</strong>。</li><li>詳細描寫筆頭：<strong>「它擁有柔軟的刷頭，畫出來的線條十分平滑」</strong>。</li></ul>"
                     },
                     { 
                         text: "另外，特工隊中還有一位「色彩魔術師」，那就是螢光筆。它身形修長，帶有奪目的螢光色彩。", 
                         isCorrect: true, 
                         feedback: "「色彩魔術師」這個名字很有創意！外形的描寫也很精確。",
-                        rewriteTip: "💡 創意改寫：可以形容它的筆尖，例如 <strong>「它有着斜斜的筆尖，能畫出粗細不同的線條」</strong>。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>具體形容顏色：<strong>「帶有奪目的螢光黃、螢光粉紅和螢光綠」</strong>。</li><li>筆尖形狀：<strong>「它有着斜斜的斧頭形筆尖，能畫出粗細不同的線條」</strong>。</li></ul>"
+                    },
+                    { 
+                        text: "緊接着，螢光筆這位「發光導航員」也來幫忙了。它的筆身印有閃亮的星星圖案，十分搶眼。", 
+                        isCorrect: true, 
+                        feedback: "「發光導航員」意思是引導讀書方向，非常有深度！",
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>改寫圖案：<strong>「筆身透明，能看見裡面的彩色墨水」</strong>。</li><li>代號替換：<strong>「尋寶雷達」</strong> (用來尋找重點)。</li></ul>"
                     },
                     { 
                         text: "螢光筆有黃色、綠色和粉紅色，很漂亮。", 
@@ -322,13 +368,19 @@
                         text: "例如，溫習常識科時，我會用黃色畫出關鍵詞語。有了這位重點標記員，我的筆記變得色彩分明，更容易記憶。", 
                         isCorrect: true, 
                         feedback: "例子十分具體（常識科、黃色），小結也點出了對記憶的幫助！",
-                        rewriteTip: "💡 創意改寫：嘗試加入另一種顏色的功用，例如 <strong>「另外，我會用粉紅色標示我不明白的生字」</strong>。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>多加一種顏色說明：<strong>「另外，我會用粉紅色標示我不明白的生字」</strong>。</li><li>更換科目：<strong>「溫習歷史時，我會把重要的年份塗上黃色」</strong>。</li></ul>"
                     },
                     { 
                         text: "譬如在預習課文時，它能幫我把老師說必考的句子標示出來。多虧了它，我考試前溫習起來一目了然。", 
                         isCorrect: true, 
                         feedback: "「一目了然」用得很精準！這是一個非常實用的功用說明。",
-                        rewriteTip: "💡 創意改寫：把「預習課文」改成 <strong>「閱讀英文故事書」</strong> 或 <strong>「整理歷史筆記」</strong>。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>替換溫習材料：<strong>「閱讀英文故事書時，畫下優美的句子」</strong> 或 <strong>「整理繁複的科學筆記」</strong>。</li><li>加入感受：<strong>「大大節省了我溫習的時間」</strong>。</li></ul>"
+                    },
+                    { 
+                        text: "例如，我會用橙色畫出重點標題，用綠色間出不懂的詞語。有了它，我的筆記就像一幅色彩豐富的地圖，溫習時事半功倍。", 
+                        isCorrect: true, 
+                        feedback: "用「地圖」來比喻筆記非常出色！「事半功倍」也是很棒的高級詞彙！",
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>改變顏色組合：<strong>「用紫色畫出標題，藍色標示日期」</strong>。</li><li>改變比喻：<strong>「筆記就像一道美麗的彩虹」</strong>。</li></ul>"
                     }
                 ]
             },
@@ -342,13 +394,19 @@
                         text: "總括而言，這支文具特工隊是我學習路上不可缺少的好夥伴。今後，我會好好愛護這些文具，讓它們繼續發揮所長，陪伴我進步。", 
                         isCorrect: true, 
                         feedback: "恭喜你！成功使用了「總括而言」作總結，並帶出愛護文具的期望，首尾呼應！",
-                        rewriteTip: "💡 創意改寫：你可以加入具體的愛護行動，例如 <strong>「我會定期替它們清潔」</strong> 或 <strong>「把它們整齊地放回筆袋裏」</strong>。"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>具體的愛護行動：<strong>「我會定期替它們清潔筆盒」</strong> 或 <strong>「用完後必定把它們整齊地放回原位」</strong>。</li></ul>"
                     },
                     { 
                         text: "總而言之，每一件文具特工都有它獨特的本領。我非常感謝它們每天的協助，承諾以後絕不會亂丟文具，會珍惜這班小戰友。", 
                         isCorrect: true, 
                         feedback: "這句帶出了「感謝」的情感，把文具當成「小戰友」，非常擬人化！",
-                        rewriteTip: "💡 創意改寫：試着向讀者發出呼籲，例如 <strong>「大家也一起好好愛護自己的文具特工隊吧！」</strong>"
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>向讀者發出呼籲：<strong>「大家也一起好好愛護自己的文具特工隊吧！」</strong></li><li>承諾部分改寫：<strong>「我不會再讓它們無故失蹤或受傷了」</strong>。</li></ul>"
+                    },
+                    { 
+                        text: "總的來說，沒有了這支文具特工隊，我的學習一定會大受影響。我承諾會成為一個稱職的「特工隊長」，好好指揮並珍惜它們。", 
+                        isCorrect: true, 
+                        feedback: "自稱「特工隊長」非常有代入感，讓整篇特工主題的文章完美落幕！",
+                        rewriteTip: "<h4>💡 創意改寫錦囊：</h4><ul><li>加入未來期望：<strong>「希望我們能一起努力，在期末考打勝仗！」</strong>。</li><li>總結感受：<strong>「雖然它們只是一件件死物，但在我心中卻是有生命的戰友」</strong>。</li></ul>"
                     },
                     { 
                         text: "這就是我的文具特工隊，希望大家喜歡我的介紹。拜拜！", 
@@ -421,7 +479,7 @@
                 if (currentQuestionIndex < questions.length - 1) {
                     nextBtn.style.display = 'inline-block';
                 } else {
-                    feedbackText.innerHTML += "<br><br>🎉 <strong>大功告成！你已經拼砌出一篇五個段落的完整文章！</strong><br>現在，請看着下方的「草稿區」，試着根據剛才的「💡改寫小提示」，把藍色標記的地方換成你自己的想法，寫在原稿紙上吧！";
+                    feedbackText.innerHTML += "<br><br>🎉 <strong>大功告成！你已經拼砌出一篇五個段落的完整文章！</strong><br>現在，請看着下方的「草稿區」，試着根據黃色框的「改寫錦囊」，發揮創意，把文章改寫成你的專屬版本吧！";
                     nextBtn.style.display = 'none';
                     updateEssayDisplay(true); 
                 }
