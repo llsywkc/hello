@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文具特工隊：寫作訓練基地</title>
+    <title>文具特工隊：寫作訓練基地 2.0</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Microsoft JhengHei';
-            background-color: #f0f8ff;
+            background-color: #f4f9f4;
             color: #333;
             margin: 0;
             padding: 20px;
@@ -30,28 +30,27 @@
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
             padding: 30px;
             margin-bottom: 20px;
-        }
-        #question-box {
-            margin-bottom: 20px;
+            box-sizing: border-box;
         }
         .step-badge {
             display: inline-block;
             background-color: #e74c3c;
             color: white;
-            padding: 5px 12px;
+            padding: 5px 15px;
             border-radius: 20px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         #question-text {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
             color: #2980b9;
+            line-height: 1.5;
         }
         .option-btn {
             display: block;
@@ -60,16 +59,18 @@
             background-color: #f8f9fa;
             border: 2px solid #bdc3c7;
             padding: 15px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border-radius: 10px;
             font-size: 16px;
+            line-height: 1.5;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
         .option-btn:hover {
             background-color: #e8f4fd;
             border-color: #3498db;
-            transform: translateX(5px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
         .option-btn.correct {
             background-color: #d4edda;
@@ -81,19 +82,35 @@
             border-color: #dc3545;
             color: #721c24;
         }
-        #feedback {
+        #feedback-area {
+            margin-top: 20px;
+            min-height: 60px;
+        }
+        .feedback-text {
             font-size: 16px;
             font-weight: bold;
-            margin-top: 15px;
-            min-height: 24px;
+            margin-bottom: 10px;
+        }
+        .rewrite-tip {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 15px;
+            color: #856404;
+            display: none;
+            line-height: 1.6;
+        }
+        .rewrite-tip strong {
+            color: #d35400;
         }
         #essay-container {
             background-color: #fffaf0;
-            border: 2px dashed #f39c12;
+            border: 3px dashed #f39c12;
             border-radius: 15px;
             width: 100%;
-            max-width: 800px;
-            padding: 20px;
+            max-width: 850px;
+            padding: 25px;
             box-sizing: border-box;
         }
         #essay-container h2 {
@@ -104,15 +121,15 @@
         }
         #essay-content {
             font-size: 18px;
-            line-height: 1.8;
+            line-height: 2;
             white-space: pre-wrap;
+            color: #2c3e50;
         }
         .highlight {
-            background-color: #fff3cd;
+            background-color: #d1ecf1;
             font-weight: bold;
-        }
-        .hidden {
-            display: none;
+            padding: 0 5px;
+            border-radius: 3px;
         }
         #next-btn {
             background-color: #2ecc71;
@@ -123,127 +140,233 @@
             border-radius: 8px;
             cursor: pointer;
             float: right;
-            margin-top: 10px;
+            margin-top: 15px;
             display: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         #next-btn:hover {
             background-color: #27ae60;
+        }
+        /* Clearfix for floating button */
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
         }
     </style>
 </head>
 <body>
 
-    <h1>📝 文具特工隊：寫作訓練基地</h1>
-    <div class="subtitle">請選出最適合的句子，一步步組裝出滿分文章！</div>
+    <h1>📝 文具特工隊：寫作訓練基地 2.0</h1>
+    <div class="subtitle">提示：寫作有很多種可能！這裡有多個正確答案，選出你最喜歡的一句，並根據提示加入自己的創意吧！</div>
 
-    <div id="game-container">
-        <div id="question-box">
-            <div id="step-indicator" class="step-badge">第一段：開頭</div>
-            <div id="question-text">載入中...</div>
-            <div id="options-container"></div>
-            <div id="feedback"></div>
-            <button id="next-btn">下一題 ➡️</button>
+    <div id="game-container" class="clearfix">
+        <div id="step-indicator" class="step-badge">第一段：開頭</div>
+        <div id="question-text">載入中...</div>
+        <div id="options-container"></div>
+        
+        <div id="feedback-area">
+            <div id="feedback-text" class="feedback-text"></div>
+            <div id="rewrite-tip" class="rewrite-tip"></div>
         </div>
+        
+        <button id="next-btn">下一題 ➡️</button>
     </div>
 
     <div id="essay-container">
-        <h2>📄 我的特工任務報告書 (文章預覽)</h2>
+        <h2>📄 我的特工任務報告書 (草稿區)</h2>
         <div id="essay-content"></div>
     </div>
 
     <script>
         const questions = [
+            // ================= 段落 1：開頭 =================
             {
                 step: "第一段：文章開頭 (總)",
-                question: "要介紹文具特工隊出場，並預告下文，哪一句最適合做文章的開頭？",
+                question: "要介紹文具特工隊出場，並預告下文。請選出一個合適的開頭：（有兩個正確答案喔！）",
+                paragraph: 0,
                 options: [
-                    { text: "在文具王國裏，有一支特別的文具特工隊，各有所長。下文將介紹幾位重要的文具成員和它們的特色與功用。", isCorrect: true, feedback: "答對了！這句清楚「點題」並「預告」了下文。" },
-                    { text: "我有很多文具，有鉛筆、橡皮擦和直尺，它們都很漂亮，我每天都帶它們上學。", isCorrect: false, feedback: "這句比較像流水帳，沒有扣緊「特工隊」和說明文的「預告」結構喔！" }
-                ],
-                paragraph: 0
+                    { 
+                        text: "在文具王國裏，有一支特別的文具特工隊，各有所長。下文將介紹幾位重要的文具成員和它們的特色與功用。", 
+                        isCorrect: true, 
+                        feedback: "答對了！這句清楚「點題」並「預告」了下文。",
+                        rewriteTip: "💡 創意改寫：你可以把「幾位重要的文具成員」改成 <strong>「我最喜歡的三位特工」</strong> 或 <strong>「陪伴我讀書的好拍檔」</strong>。"
+                    },
+                    { 
+                        text: "在我的書桌上，住着一群默默守護我的文具特工。以下會說明不同特工的本領，讓大家知道它們怎樣幫助我。", 
+                        isCorrect: true, 
+                        feedback: "很好！這句很有想像力，而且也具備預告下文的功能！",
+                        rewriteTip: "💡 創意改寫：你可以把「書桌上」改成 <strong>「筆袋裏」</strong>、<strong>「書包深處」</strong>，讓場景更貼近你的真實情況。"
+                    },
+                    { 
+                        text: "我有很多文具，有鉛筆、橡皮擦和直尺，它們都很漂亮，我每天都帶它們上學。", 
+                        isCorrect: false, 
+                        feedback: "這比較像記敘文的寫法，沒有扣緊「特工隊」主題，也沒有預告下文的結構喔！" 
+                    }
+                ]
             },
+            // ================= 段落 2：鉛筆 =================
             {
                 step: "第二段：鉛筆 (中心句)",
-                question: "現在要介紹第一位特工「鉛筆」。請選出合適的「中心句」放在段落開頭：",
+                question: "現在介紹第一位特工「鉛筆」。請選出合適的「中心句」：（有兩個正確答案！）",
+                paragraph: 1,
                 options: [
-                    { text: "鉛筆是黑色的，可以寫字。", isCorrect: false, feedback: "太簡單了！沒有運用到「標示語」和「特工名稱」。" },
-                    { text: "首先，鉛筆是特工隊裏負責書寫的「記錄專家」。", isCorrect: true, feedback: "答對了！運用了標示語「首先」，並清楚點出鉛筆的特工身分。" }
-                ],
-                paragraph: 1
+                    { 
+                        text: "首先，鉛筆是特工隊裏負責書寫的「記錄專家」。", 
+                        isCorrect: true, 
+                        feedback: "答對了！正確運用了標示語「首先」和特工名稱。",
+                        rewriteTip: "💡 創意改寫：你可以自己幫鉛筆改個酷炫的名字，例如 <strong>「黑墨水忍者」</strong> 或 <strong>「文字魔法師」</strong>。"
+                    },
+                    { 
+                        text: "第一位出場的特工是鉛筆，它是文具盒裏不可或缺的「書寫大師」。", 
+                        isCorrect: true, 
+                        feedback: "很好！「第一位出場的」也是一種很好的段落開頭銜接方法。",
+                        rewriteTip: "💡 創意改寫：把「書寫大師」換成你喜歡的稱呼，例如 <strong>「抄寫小能手」</strong>。"
+                    },
+                    { 
+                        text: "鉛筆很好用，可以幫我寫很多字。", 
+                        isCorrect: false, 
+                        feedback: "太簡單了！忘記運用「標示語」（如首先）和明確的「中心句」結構。" 
+                    }
+                ]
             },
             {
-                step: "第二段：鉛筆 (特色句)",
-                question: "接着，我們要說明這位「記錄專家」的外形特色：",
+                step: "第二段：鉛筆 (特色 + 功用)",
+                question: "接着，把鉛筆的「外形特色」和「具體功用」寫出來：（選一個合適的組合）",
+                paragraph: 1,
                 options: [
-                    { text: "這枝鉛筆外形纖幼，筆芯硬度適中，寫出來的字深淺剛好。", isCorrect: true, feedback: "很棒！清楚描寫了外形和筆芯的特點。" },
-                    { text: "這枝鉛筆是我昨天在文具店買的，花了我十元。", isCorrect: false, feedback: "這是記敘文的寫法，說明文應該集中描寫事物的「客觀特點」喔！" }
-                ],
-                paragraph: 1
+                    { 
+                        text: "這枝鉛筆外形纖幼，筆身印有柔和的圖案。例如，在做中文作業時，我用它工整地寫下每一個生字。", 
+                        isCorrect: true, 
+                        feedback: "非常通順！包含了外形描寫和「例如」的具體情境。",
+                        rewriteTip: "💡 創意改寫：試着把外形換成你真實擁有的鉛筆，如 <strong>「印有角落生物的圖案」</strong>；「中文作業」也可以改成 <strong>「數學練習」</strong> 或 <strong>「英文默書」</strong>。"
+                    },
+                    { 
+                        text: "它穿着一件帶有卡通圖案的黃色外衣，筆芯硬度適中。譬如計算數學題時，我會用它寫草稿，方便修改。", 
+                        isCorrect: true, 
+                        feedback: "寫得很生動！用「黃色外衣」來比喻筆身，並配上「譬如」舉例。",
+                        rewriteTip: "💡 創意改寫：大膽修改顏色吧！把它改成 <strong>「藍色星空外衣」</strong> 或 <strong>「粉紅色的戰衣」</strong>。"
+                    }
+                ]
+            },
+            // ================= 段落 3：橡皮擦 =================
+            {
+                step: "第三段：橡皮擦 (中心句 + 特色)",
+                question: "介紹第二位特工「橡皮擦」。請選出合適的銜接與特色描寫：",
+                paragraph: 2,
+                options: [
+                    { 
+                        text: "其次，橡皮擦是負責修正錯誤的「細心修改師」。這塊橡皮體積雖小，但質地柔軟，不容易弄破紙張。", 
+                        isCorrect: true, 
+                        feedback: "結構非常完整！有「其次」、有身分，還有具體的質地描寫。",
+                        rewriteTip: "💡 創意改寫：可以加入形狀的描寫，例如 <strong>「這塊長方形的橡皮」</strong> 或 <strong>「這塊散發着草莓香味的橡皮」</strong>。"
+                    },
+                    { 
+                        text: "接着，文具盒裏的「白衣天使」——橡皮擦登場了。它的身體白白胖胖的，拿在手裏十分輕巧。", 
+                        isCorrect: true, 
+                        feedback: "「白衣天使」這個比喻太棒了！「接着」也能很好地承接上一段。",
+                        rewriteTip: "💡 創意改寫：你可以把橡皮擦的顏色改掉，如果是黑色的橡皮擦，可以叫它 <strong>「黑衣護衛」</strong>！"
+                    }
+                ]
             },
             {
-                step: "第二段：鉛筆 (功用句)",
-                question: "它有甚麼功用呢？請選出一個帶有「舉例說明」的句子：",
+                step: "第三段：橡皮擦 (功用 + 小結)",
+                question: "橡皮擦有什麼實際幫助呢？請選出含有「例子/數字」的功用與小結：",
+                paragraph: 2,
                 options: [
-                    { text: "例如，在做中文作業時，我用鉛筆工整地寫下生字；又譬如計算數學題時，我也會用它寫草稿，方便修改。", isCorrect: true, feedback: "完美！正確運用了「例如」和「譬如」來舉例說明功用。" },
-                    { text: "它可以寫字，也可以畫畫，非常有用。", isCorrect: false, feedback: "雖然正確，但缺乏具體的情境和標示語（例如）。" }
-                ],
-                paragraph: 1
+                    { 
+                        text: "例如，當我把筆劃寫錯時，它可以輕輕把錯字擦掉。一塊橡皮擦大概能幫我改正幾百個錯誤，讓我敢於多試。", 
+                        isCorrect: true, 
+                        feedback: "運用了「例如」和「幾百個」數字說明，小結很有深度！",
+                        rewriteTip: "💡 創意改寫：試着具體寫出寫錯什麼字，例如 <strong>「當我把『遊』寫成『游』時」</strong>，文章會更生動！"
+                    },
+                    { 
+                        text: "譬如做數學算錯了答案，它可以讓紙面瞬間回復乾淨。有了這位好幫手，我做功課時就更加安心了。", 
+                        isCorrect: true, 
+                        feedback: "「回復乾淨」形容得很貼切！小結也表達了安心的感受。",
+                        rewriteTip: "💡 創意改寫：把「做數學」改成另一個容易犯錯的情境，例如 <strong>「畫視藝科的草圖時」</strong>。"
+                    }
+                ]
+            },
+            // ================= 段落 4：螢光筆 (新增) =================
+            {
+                step: "第四段：螢光筆 (中心句 + 特色)",
+                question: "我們來加添一位新特工「螢光筆」。請選出合適的開頭：",
+                paragraph: 3,
+                options: [
+                    { 
+                        text: "然後，螢光筆是特工隊裏負責畫重點的「重點標記員」。這套螢光筆顏色鮮明，筆頭粗幼適中。", 
+                        isCorrect: true, 
+                        feedback: "很好！使用了「然後」作標示語，清楚交代了螢光筆的特色。",
+                        rewriteTip: "💡 創意改寫：加上具體的顏色數量吧！例如 <strong>「這套六色螢光筆」</strong> 或 <strong>「這支雙頭螢光筆」</strong>。"
+                    },
+                    { 
+                        text: "另外，特工隊中還有一位「色彩魔術師」，那就是螢光筆。它身形修長，帶有奪目的螢光色彩。", 
+                        isCorrect: true, 
+                        feedback: "「色彩魔術師」這個名字很有創意！外形的描寫也很精確。",
+                        rewriteTip: "💡 創意改寫：可以形容它的筆尖，例如 <strong>「它有着斜斜的筆尖，能畫出粗細不同的線條」</strong>。"
+                    },
+                    { 
+                        text: "螢光筆有黃色、綠色和粉紅色，很漂亮。", 
+                        isCorrect: false, 
+                        feedback: "這句缺少了與上文的「銜接詞」（如然後、另外），也沒有寫出特工的「功用」角色。" 
+                    }
+                ]
             },
             {
-                step: "第二段：鉛筆 (小結)",
-                question: "最後，為鉛筆這段加上一個小總結：",
+                step: "第四段：螢光筆 (功用 + 小結)",
+                question: "螢光筆在學習上怎樣幫助你？",
+                paragraph: 3,
                 options: [
-                    { text: "有了這位記錄專家，我在學習時能清楚寫下重點，不易遺漏內容。", isCorrect: true, feedback: "答對了！完美總結了鉛筆帶給你的幫助。" },
-                    { text: "我非常喜歡這枝鉛筆。", isCorrect: false, feedback: "這句太過口語，未能總結出文具的「功用價值」。" }
-                ],
-                paragraph: 1
+                    { 
+                        text: "例如，溫習常識科時，我會用黃色畫出關鍵詞語。有了這位重點標記員，我的筆記變得色彩分明，更容易記憶。", 
+                        isCorrect: true, 
+                        feedback: "例子十分具體（常識科、黃色），小結也點出了對記憶的幫助！",
+                        rewriteTip: "💡 創意改寫：嘗試加入另一種顏色的功用，例如 <strong>「另外，我會用粉紅色標示我不明白的生字」</strong>。"
+                    },
+                    { 
+                        text: "譬如在預習課文時，它能幫我把老師說必考的句子標示出來。多虧了它，我考試前溫習起來一目了然。", 
+                        isCorrect: true, 
+                        feedback: "「一目了然」用得很精準！這是一個非常實用的功用說明。",
+                        rewriteTip: "💡 創意改寫：把「預習課文」改成 <strong>「閱讀英文故事書」</strong> 或 <strong>「整理歷史筆記」</strong>。"
+                    }
+                ]
             },
+            // ================= 段落 5：結尾 =================
             {
-                step: "第三段：橡皮擦 (中心句)",
-                question: "現在介紹第二位特工「橡皮擦」。請選出正確的中心句：",
-                options: [
-                    { text: "橡皮擦可以把錯字擦掉。", isCorrect: false, feedback: "忘記使用標示語（如：其次、接着）來連接段落了！" },
-                    { text: "其次，橡皮擦是特工隊裏負責修正錯誤的「細心修改師」。", isCorrect: true, feedback: "正確！「其次」能很好地承接上一段。" }
-                ],
-                paragraph: 2
-            },
-            {
-                step: "第三段：橡皮擦 (特色 + 功用)",
-                question: "試着把橡皮擦的特色和功用連在一起選出來：",
-                options: [
-                    { text: "這塊橡皮體積雖小，但質地柔軟。例如，當我把筆劃寫錯時，它可以輕輕把錯字擦掉，不弄破紙張。", isCorrect: true, feedback: "很好！包含了特色（體積小、柔軟）和舉例（擦錯字）。" },
-                    { text: "它白白的，十分柔軟。我每次寫錯字都會用到它。", isCorrect: false, feedback: "缺少了「例如」等標示語來引導具體情境。" }
-                ],
-                paragraph: 2
-            },
-            {
-                step: "第三段：橡皮擦 (數字說明 + 小結)",
-                question: "為橡皮擦加入「數字說明」並作小結：",
-                options: [
-                    { text: "一塊橡皮擦大概可以幫我改正幾百個錯誤。有了這位修改師，我就不再害怕犯錯，敢於多寫、多試。", isCorrect: true, feedback: "太棒了！運用了「幾百個」作數字說明，小結也很有意思。" },
-                    { text: "它可以用很久。有了它我很高興。", isCorrect: false, feedback: "內容過於空泛，缺乏具體數字和深刻的總結。" }
-                ],
-                paragraph: 2
-            },
-            {
-                step: "第四段：結尾 (總結全文)",
+                step: "第五段：結尾 (總結全文)",
                 question: "最後一段，我們要呼應開頭，總結全文並表達期望：",
+                paragraph: 4,
                 options: [
-                    { text: "總括而言，這支文具特工隊是我學習路上不可缺少的好夥伴。今後，我會好好愛護這些文具，讓它們繼續發揮所長，陪伴我努力學習。", isCorrect: true, feedback: "恭喜你！成功使用了「總括而言」作總結，並帶出愛護文具的期望，首尾呼應！" },
-                    { text: "這就是我的文具特工隊，希望大家喜歡我的介紹。拜拜！", isCorrect: false, feedback: "這比較像演講的結尾，說明文結尾應該重申文章主題和表達感受/期望。" }
-                ],
-                paragraph: 3
+                    { 
+                        text: "總括而言，這支文具特工隊是我學習路上不可缺少的好夥伴。今後，我會好好愛護這些文具，讓它們繼續發揮所長，陪伴我進步。", 
+                        isCorrect: true, 
+                        feedback: "恭喜你！成功使用了「總括而言」作總結，並帶出愛護文具的期望，首尾呼應！",
+                        rewriteTip: "💡 創意改寫：你可以加入具體的愛護行動，例如 <strong>「我會定期替它們清潔」</strong> 或 <strong>「把它們整齊地放回筆袋裏」</strong>。"
+                    },
+                    { 
+                        text: "總而言之，每一件文具特工都有它獨特的本領。我非常感謝它們每天的協助，承諾以後絕不會亂丟文具，會珍惜這班小戰友。", 
+                        isCorrect: true, 
+                        feedback: "這句帶出了「感謝」的情感，把文具當成「小戰友」，非常擬人化！",
+                        rewriteTip: "💡 創意改寫：試着向讀者發出呼籲，例如 <strong>「大家也一起好好愛護自己的文具特工隊吧！」</strong>"
+                    },
+                    { 
+                        text: "這就是我的文具特工隊，希望大家喜歡我的介紹。拜拜！", 
+                        isCorrect: false, 
+                        feedback: "這比較像口頭演講的結尾，說明文結尾應該重申文章主題（特工的重要）和表達感受喔。" 
+                    }
+                ]
             }
         ];
 
         let currentQuestionIndex = 0;
-        let essayParagraphs = ["", "", "", ""]; 
-        let currentSpan = null;
+        let essayParagraphs = ["", "", "", "", ""]; 
 
         const stepIndicator = document.getElementById('step-indicator');
         const questionText = document.getElementById('question-text');
         const optionsContainer = document.getElementById('options-container');
-        const feedbackDisplay = document.getElementById('feedback');
+        const feedbackText = document.getElementById('feedback-text');
+        const rewriteTipBox = document.getElementById('rewrite-tip');
         const nextBtn = document.getElementById('next-btn');
         const essayContent = document.getElementById('essay-content');
 
@@ -252,11 +375,12 @@
             stepIndicator.textContent = q.step;
             questionText.textContent = q.question;
             optionsContainer.innerHTML = '';
-            feedbackDisplay.textContent = '';
-            feedbackDisplay.style.color = '#333';
+            
+            feedbackText.textContent = '';
+            rewriteTipBox.style.display = 'none';
             nextBtn.style.display = 'none';
 
-            // Shuffle options for fun
+            // Shuffle options
             const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
 
             shuffledOptions.forEach((opt) => {
@@ -271,40 +395,55 @@
         }
 
         function selectOption(clickedBtn, optionData, pIndex) {
-            // Disable all buttons
+            // Disable all buttons to prevent multiple clicks
             const allBtns = document.querySelectorAll('.option-btn');
-            allBtns.forEach(btn => btn.disabled = true);
+            allBtns.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+            });
+            clickedBtn.style.opacity = '1';
 
             if (optionData.isCorrect) {
                 clickedBtn.classList.add('correct');
-                feedbackDisplay.textContent = "✅ " + optionData.feedback;
-                feedbackDisplay.style.color = "#28a745";
+                feedbackText.textContent = "✅ " + optionData.feedback;
+                feedbackText.style.color = "#28a745";
                 
-                // Add text to paragraph
+                // Show rewrite tip if available
+                if (optionData.rewriteTip) {
+                    rewriteTipBox.innerHTML = optionData.rewriteTip;
+                    rewriteTipBox.style.display = 'block';
+                }
+                
+                // Add text to the current paragraph
                 essayParagraphs[pIndex] += optionData.text;
                 
-                // Show next button or finish game
+                // Show next button or finish
                 if (currentQuestionIndex < questions.length - 1) {
-                    nextBtn.style.display = 'block';
+                    nextBtn.style.display = 'inline-block';
                 } else {
-                    feedbackDisplay.innerHTML += "<br>🎉 恭喜你！你已經完成了一篇結構完整的說明文！";
-                    updateEssayDisplay(true); // Final render
+                    feedbackText.innerHTML += "<br><br>🎉 <strong>大功告成！你已經拼砌出一篇五個段落的完整文章！</strong><br>現在，請看着下方的「草稿區」，試着根據剛才的「💡改寫小提示」，把藍色標記的地方換成你自己的想法，寫在原稿紙上吧！";
+                    nextBtn.style.display = 'none';
+                    updateEssayDisplay(true); 
                 }
             } else {
                 clickedBtn.classList.add('wrong');
-                feedbackDisplay.textContent = "❌ " + optionData.feedback + " 請再試一次！";
-                feedbackDisplay.style.color = "#dc3545";
+                feedbackText.textContent = "❌ " + optionData.feedback + " 請嘗試另一個答案！";
+                feedbackText.style.color = "#dc3545";
                 
-                // Re-enable buttons after a short delay so they can try again
+                // Re-enable after delay
                 setTimeout(() => {
                     allBtns.forEach(btn => {
                         btn.disabled = false;
+                        btn.style.opacity = '1';
                         btn.classList.remove('wrong');
                     });
-                    feedbackDisplay.textContent = "";
-                }, 2000);
+                    feedbackText.textContent = "";
+                }, 2500);
             }
-            updateEssayDisplay();
+            
+            if (optionData.isCorrect) {
+                updateEssayDisplay();
+            }
         }
 
         nextBtn.onclick = () => {
@@ -313,13 +452,12 @@
         };
 
         function updateEssayDisplay(isComplete = false) {
-            // Format paragraphs with indents
             let formattedEssay = "";
             essayParagraphs.forEach((p, index) => {
                 if (p.trim() !== "") {
-                    // Highlight the newly added part if not complete
                     if (!isComplete && index === questions[currentQuestionIndex]?.paragraph) {
-                         formattedEssay += "　　" + p + "<span class='highlight'>... (寫作中)</span>\n\n";
+                         // Show typing indicator for current paragraph
+                         formattedEssay += "　　" + p + "<span class='highlight'>... (撰寫中)</span>\n\n";
                     } else {
                          formattedEssay += "　　" + p + "\n\n";
                     }
@@ -327,7 +465,7 @@
             });
             
             if (formattedEssay === "") {
-                essayContent.innerHTML = "<span style='color:#bdc3c7;'>請回答上方問題，你的文章會在這裏慢慢成形...</span>";
+                essayContent.innerHTML = "<span style='color:#bdc3c7;'>你的文章草稿會在這裏出現... 試着選出正確句子吧！</span>";
             } else {
                 essayContent.innerHTML = formattedEssay;
             }
