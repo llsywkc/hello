@@ -98,15 +98,15 @@
 <div id="game-container">
     <div id="start-screen">
         <h1>🕵️‍♂️ 能源小偵探大挑戰 ⚡</h1>
-        <p>歡迎來到能源世界！這裡有電力、煤氣、石油氣、汽油和柴油 5 位能量小精靈。<br><br>請完成 30 條挑戰題，看看你能否成為滿分的最強偵探！</p>
+        <p>歡迎來到能源世界！這裡有電力、煤氣、石油氣、汽油、柴油和天然氣等能量小精靈。<br><br>請完成 35 條挑戰題，看看你能否成為滿分的最強偵探！</p>
         <button class="btn" onclick="startGame()">開始挑戰 🚀</button>
     </div>
 
     <div id="quiz-screen" style="display: none;">
-        <div id="progress">題數: 1 / 30</div>
+        <div id="progress">題數: 1 / 35</div>
         <div id="question-text">題目會在這裡顯示</div>
         <div id="options-container">
-            </div>
+        </div>
         <div id="feedback"></div>
         <button id="next-btn" class="btn" onclick="nextQuestion()">下一題 ➡️</button>
     </div>
@@ -159,8 +159,9 @@
         { q: "27. 我們家裡用來照明的電燈，是將哪種能源轉換成光能？", options: ["煤氣", "石油氣", "電力"], answer: 2, exp: "答對了！開關一按燈就亮，靠的就是電力。" },
         { q: "28. 哪一種氣體能源是「住在地底下，不用自己搬」的？", options: ["煤氣", "石油氣", "柴油"], answer: 0, exp: "答對了！煤氣公司會鋪設喉管，把煤氣直接送到我們家。" },
         { q: "29. 哪一種氣體能源是「被壓縮在鐵罐或大鋼樽裡，可以搬來搬去」的？", options: ["煤氣", "石油氣", "汽油"], answer: 1, exp: "答對了！這就是石油氣的特色，方便靈活。" },
-        { q: "30. 作為一位優秀的「能源小偵探」，請選出正確的配對：", options: ["大貨車 - 汽油", "港鐵 - 柴油", "打邊爐手提爐 - 石油氣"], answer: 2, exp: "完全正確！大貨車應配柴油，港鐵應配電力，只有手提爐配石油氣是完全正確的！" }
-// 類別：天然氣 (Natural Gas) 新增挑戰！
+        { q: "30. 作為一位優秀的「能源小偵探」，請選出正確的配對：", options: ["大貨車 - 汽油", "港鐵 - 柴油", "打邊爐手提爐 - 石油氣"], answer: 2, exp: "完全正確！大貨車應配柴油，港鐵應配電力，只有手提爐配石油氣是完全正確的！" }, // <--- 就是這裡原本少了一個逗號！
+        
+        // 類別：天然氣 (Natural Gas) 新增挑戰！
         { 
             q: "31. 「天然氣」這位精靈的名字裡有「天然」兩個字，你猜猜它通常住在哪裡？", 
             options: ["地底深處或海底", "工廠裡的機器製造出來的", "天空的雲朵裡"], 
@@ -275,7 +276,7 @@
         document.getElementById('score-board').innerText = `你的分數：${score} / ${allQuestions.length}`;
         
         let message = '';
-        if (score === 30) {
+        if (score === allQuestions.length) { // 這裡改成抓取總題數，就不怕以後再加題目了
             message = "🌟 哇！你是滿分的超級能源大偵探！太厲害了！🌟";
         } else if (score >= 20) {
             message = "👍 很棒喔！你已經認識大部分的能源小精靈了！";
