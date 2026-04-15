@@ -1,3 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕵️‍♂️ 能源小偵探大挑戰</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS", "Microsoft JhengHei", sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        #game-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #ff6b6b;
+        }
+        .btn {
+            background-color: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s, background-color 0.2s;
+            font-weight: bold;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            background-color: #45b7d1;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            margin: 15px 0;
+            background-color: #f7d794;
+            color: #333;
+            text-align: left;
+            padding: 15px;
+        }
+        .option-btn:hover {
+            background-color: #f5cd79;
+        }
+        #progress {
+            font-size: 16px;
+            color: #777;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        #question-text {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            line-height: 1.5;
+        }
+        #feedback {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        #next-btn {
+            display: none;
+            background-color: #ff9f43;
+            width: 100%;
+        }
+        #score-board {
+            font-size: 24px;
+            color: #ff6b6b;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="start-screen">
+        <h1>🕵️‍♂️ 能源小偵探大挑戰 ⚡</h1>
+        <p>歡迎來到能源世界！這裡有電力、煤氣、石油氣、汽油和柴油 5 位能量小精靈。<br><br>請完成 30 條挑戰題，看看你能否成為滿分的最強偵探！</p>
+        <button class="btn" onclick="startGame()">開始挑戰 🚀</button>
+    </div>
+
+    <div id="quiz-screen" style="display: none;">
+        <div id="progress">題數: 1 / 30</div>
+        <div id="question-text">題目會在這裡顯示</div>
+        <div id="options-container">
+            </div>
+        <div id="feedback"></div>
+        <button id="next-btn" class="btn" onclick="nextQuestion()">下一題 ➡️</button>
+    </div>
+
+    <div id="end-screen" style="display: none;">
+        <h1>🎉 挑戰完成！ 🎉</h1>
+        <div id="score-board"></div>
+        <p id="final-message"></p>
+        <button class="btn" onclick="location.reload()">再玩一次 🔄</button>
+    </div>
+</div>
+
+<script>
+    const allQuestions = [
+        // 類別：電力
+        { q: "1. 每天接載我們上學的「港鐵 (MTR)」是靠哪種能源推動的？", options: ["汽油", "柴油", "電力"], answer: 2, exp: "答對了！港鐵是電氣化火車，靠電力這位『隱形萬能俠』推動。" },
+        { q: "2. 夏天很熱，媽媽開冷氣機，需要用到哪種能源？", options: ["電力", "煤氣", "石油氣"], answer: 0, exp: "答對了！冷氣機插上插頭，用的是電力。" },
+        { q: "3. 你的平板電腦 (iPad) 沒電了，需要插線充電，這是補充哪種能源？", options: ["電力", "汽油", "石油氣"], answer: 0, exp: "答對了！電子產品都是喝『電』長大的。" },
+        { q: "4. 香港島獨有的「叮叮」電車，車頂有一根長長的桿連接電纜，它是用甚麼能源的？", options: ["柴油", "電力", "汽油"], answer: 1, exp: "答對了！電車（叮叮）顧名思義就是用電力開動的車。" },
+        { q: "5. 家裡的雪櫃日夜運作保持食物新鮮，它吃的是甚麼？", options: ["煤氣", "電力", "石油氣"], answer: 1, exp: "答對了！雪櫃是大型家電，需要持續的電力。" },
+        { q: "6. 哪一種能源是「看不見、摸不到」，但可以藏在乾電池裡面的？", options: ["電力", "煤氣", "柴油"], answer: 0, exp: "答對了！電力可以儲存在電池裡，讓玩具車或電筒運作。" },
+        
+        // 類別：煤氣 vs 石油氣
+        { q: "7. 媽媽在廚房用的固定煮食爐，連接著地底長長的喉管，這是哪種能源？", options: ["石油氣", "煤氣", "電力"], answer: 1, exp: "答對了！煤氣是透過地底喉管直接輸送到家中的。" },
+        { q: "8. 冬天一家人去酒樓「打邊爐」，桌上那個可以搬來搬去的手提小火爐裡面裝的是甚麼？", options: ["煤氣", "石油氣", "柴油"], answer: 1, exp: "答對了！可以壓縮在小氣罐裡帶出門的是石油氣。" },
+        { q: "9. 村屋外面常見的灰色大氣樽，裡面裝的是哪位氣體精靈？", options: ["煤氣", "石油氣", "汽油"], answer: 1, exp: "答對了！沒有鋪設煤氣管的村屋，通常會購買一樽樽的石油氣來煮飯和洗澡。" },
+        { q: "10. 冬天洗澡時，能把水加熱的「熱水爐」（有連接入牆喉管的），通常是用哪種氣體？", options: ["煤氣", "石油氣", "汽油"], answer: 0, exp: "答對了！市區家裡連接著喉管的氣體通常是煤氣。" },
+        { q: "11. 哪兩種能源被稱為「氣體雙胞胎」，點燃後都會產生火焰？", options: ["汽油和柴油", "煤氣和石油氣", "電力和煤氣"], answer: 1, exp: "答對了！煤氣和石油氣都是氣體燃料。" },
+        
+        // 類別：交通工具 (的士、小巴)
+        { q: "12. 香港街頭到處跑的「紅色的士」，最常用的燃料是甚麼？", options: ["汽油", "石油氣", "柴油"], answer: 1, exp: "答對了！為了減少空氣污染，香港大部分的士都已經轉用石油氣 (LPG) 了！" },
+        { q: "13. 我們常搭的「綠色專線小巴」，很多也是喝哪一種氣體能源的？", options: ["煤氣", "石油氣", "汽油"], answer: 1, exp: "答對了！和的士一樣，很多小巴也是使用石油氣作為燃料的。" },
+        
+        // 類別：汽油 vs 柴油
+        { q: "14. 爸爸媽媽駕駛的「私家車」，車體比較輕巧，去油站通常加甚麼油？", options: ["汽油", "柴油", "煤氣"], answer: 0, exp: "答對了！汽油是輕巧的快跑手，專門給私家車喝的。" },
+        { q: "15. 送外賣的哥哥騎著「電單車」，需要哪種能源才能在馬路上飛馳？", options: ["柴油", "石油氣", "汽油"], answer: 2, exp: "答對了！電單車體積小，也是喝汽油的。" },
+        { q: "16. 每天載著很多乘客的「雙層巴士」，非常笨重，需要哪位超級大力士幫忙？", options: ["汽油", "柴油", "石油氣"], answer: 1, exp: "答對了！柴油能提供很大的動力，適合大型重型車輛。" },
+        { q: "17. 地盤裡的「泥頭車」和馬路上的「大貨車」，去油站時要加甚麼油？", options: ["汽油", "柴油", "煤氣"], answer: 1, exp: "答對了！大貨車要搬運重物，必須喝力氣最大的柴油。" },
+        { q: "18. 在維多利亞港航行的「天星小輪」或其他大船，通常使用哪種燃料？", options: ["柴油", "汽油", "石油氣"], answer: 0, exp: "答對了！船隻體積龐大，也是依靠柴油引擎來推動的。" },
+        
+        // 綜合分辨與情境題
+        { q: "19. 哪兩種能源被稱為「液體兄弟」，都住在加油站裡？", options: ["汽油和柴油", "煤氣和石油氣", "汽油和煤氣"], answer: 0, exp: "答對了！汽油和柴油都是液體，由加油站提供。" },
+        { q: "20. 遙控車用的是「電力」（電池），那馬路上的真私家車通常用甚麼？", options: ["電力", "汽油", "柴油"], answer: 1, exp: "答對了！雖然現在也有電動車，但最傳統和常見的真私家車是喝汽油的。" },
+        { q: "21. 如果你想去郊野公園露營燒烤，帶上一個手提爐，你應該準備哪種燃料？", options: ["煤氣", "汽油", "石油氣"], answer: 2, exp: "答對了！石油氣可以裝在小氣罐裡，最適合戶外活動攜帶。" },
+        { q: "22. 以下哪一種交通工具「不是」吃液體燃料（汽油/柴油）的？", options: ["泥頭車", "港鐵", "私家車"], answer: 1, exp: "答對了！港鐵是用電力的，不是用液體燃料。" },
+        { q: "23. 垃圾車每天運送很重的垃圾，它和雙層巴士一樣，都需要哪種力氣大的能源？", options: ["柴油", "汽油", "煤氣"], answer: 0, exp: "答對了！重型車輛的好朋友就是柴油！" },
+        { q: "24. 加油站裡，除了賣給私家車的「汽油」外，最常見還有哪種燃料賣給大貨車？", options: ["煤氣", "柴油", "石油氣"], answer: 1, exp: "答對了！油站主要供應汽油和柴油這兩兄弟。" },
+        { q: "25. 哪一種能源最神奇，既能讓巨大的港鐵移動，又能縮小藏在手錶裡讓指針轉動？", options: ["電力", "汽油", "柴油"], answer: 0, exp: "答對了！電力真是名副其實的「隱形萬能俠」！" },
+        { q: "26. 爸爸的私家車和旁邊的大泥頭車一起去加油站，它們加的油一樣嗎？", options: ["一樣，都加汽油", "一樣，都加柴油", "不一樣，私家車加汽油，泥頭車加柴油"], answer: 2, exp: "答對了！小車喝汽油，大車喝柴油，分工合作！" },
+        { q: "27. 我們家裡用來照明的電燈，是將哪種能源轉換成光能？", options: ["煤氣", "石油氣", "電力"], answer: 2, exp: "答對了！開關一按燈就亮，靠的就是電力。" },
+        { q: "28. 哪一種氣體能源是「住在地底下，不用自己搬」的？", options: ["煤氣", "石油氣", "柴油"], answer: 0, exp: "答對了！煤氣公司會鋪設喉管，把煤氣直接送到我們家。" },
+        { q: "29. 哪一種氣體能源是「被壓縮在鐵罐或大鋼樽裡，可以搬來搬去」的？", options: ["煤氣", "石油氣", "汽油"], answer: 1, exp: "答對了！這就是石油氣的特色，方便靈活。" },
+        { q: "30. 作為一位優秀的「能源小偵探」，請選出正確的配對：", options: ["大貨車 - 汽油", "港鐵 - 柴油", "打邊爐手提爐 - 石油氣"], answer: 2, exp: "完全正確！大貨車應配柴油，港鐵應配電力，只有手提爐配石油氣是完全正確的！" }
 // 類別：天然氣 (Natural Gas) 新增挑戰！
         { 
             q: "31. 「天然氣」這位精靈的名字裡有「天然」兩個字，你猜猜它通常住在哪裡？", 
@@ -29,3 +191,100 @@
             answer: 1, 
             exp: "答對了！加入特別的臭味（像臭雞蛋味）是為了發出警告信號，萬一漏氣了我們就能立刻發現，保護大家的安全！" 
         }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const startScreen = document.getElementById('start-screen');
+    const quizScreen = document.getElementById('quiz-screen');
+    const endScreen = document.getElementById('end-screen');
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const feedback = document.getElementById('feedback');
+    const nextBtn = document.getElementById('next-btn');
+    const progress = document.getElementById('progress');
+
+    function startGame() {
+        startScreen.style.display = 'none';
+        quizScreen.style.display = 'block';
+        currentQuestionIndex = 0;
+        score = 0;
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        feedback.style.display = 'none';
+        nextBtn.style.display = 'none';
+        optionsContainer.innerHTML = '';
+        
+        const currentQ = allQuestions[currentQuestionIndex];
+        progress.innerText = `題數: ${currentQuestionIndex + 1} / ${allQuestions.length}`;
+        questionText.innerText = currentQ.q;
+
+        currentQ.options.forEach((option, index) => {
+            const button = document.createElement('button');
+            button.className = 'btn option-btn';
+            button.innerText = option;
+            button.onclick = () => checkAnswer(index, button);
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    function checkAnswer(selectedIndex, buttonClicked) {
+        const currentQ = allQuestions[currentQuestionIndex];
+        const allButtons = optionsContainer.querySelectorAll('.option-btn');
+        
+        // 鎖定所有按鈕
+        allButtons.forEach(btn => btn.disabled = true);
+
+        feedback.style.display = 'block';
+
+        if (selectedIndex === currentQ.answer) {
+            buttonClicked.style.backgroundColor = '#2ecc71'; // Green for correct
+            buttonClicked.style.color = 'white';
+            feedback.className = 'correct';
+            feedback.innerHTML = `✅ 答對啦！<br><span style="font-size:16px; font-weight:normal;">${currentQ.exp}</span>`;
+            score++;
+        } else {
+            buttonClicked.style.backgroundColor = '#e74c3c'; // Red for incorrect
+            buttonClicked.style.color = 'white';
+            allButtons[currentQ.answer].style.backgroundColor = '#2ecc71'; // Highlight correct answer
+            allButtons[currentQ.answer].style.color = 'white';
+            
+            feedback.className = 'incorrect';
+            feedback.innerHTML = `❌ 哎呀，答錯了！<br><span style="font-size:16px; font-weight:normal;">${currentQ.exp}</span>`;
+        }
+
+        nextBtn.style.display = 'block';
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < allQuestions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        quizScreen.style.display = 'none';
+        endScreen.style.display = 'block';
+        
+        document.getElementById('score-board').innerText = `你的分數：${score} / ${allQuestions.length}`;
+        
+        let message = '';
+        if (score === 30) {
+            message = "🌟 哇！你是滿分的超級能源大偵探！太厲害了！🌟";
+        } else if (score >= 20) {
+            message = "👍 很棒喔！你已經認識大部分的能源小精靈了！";
+        } else {
+            message = "💪 繼續加油！多觀察生活四周，你會越來越厲害的！";
+        }
+        document.getElementById('final-message').innerText = message;
+    }
+</script>
+
+</body>
+</html>
