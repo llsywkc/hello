@@ -122,8 +122,8 @@
                 <button class="btn-grey" onclick="startGame('punct')">📜 古卷修復 (標點題)</button>
                 <button class="btn-purple" onclick="startGame('reorder')">🌉 鋪木板過河 (重組句子)</button>
                 
-                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (綜合題)</button>
-                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (課文重組)</button>
+                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA温習 (綜合題)</button>
+                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA温習 (課文重組)</button>
             </div>
             <p style="font-size: 0.9em; font-weight: bold; color: #8E24AA;">(連續答題提升攻防值，有機率遇到隱藏的「傳說怪」！)</p>
             
@@ -836,8 +836,8 @@
                 }
                 if(correct) {
                     playSound('win'); addStreak();
-                    inventory.wood++; updateUI();
-                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+1, 手稿+1)</span>";
+                    inventory.wood+＝5; inventory.manuscript+＝5; updateUI();
+                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+5, 手稿+5)</span>";
                     document.getElementById('btn-next-reorder').classList.remove('hidden');
                     Array.from(document.getElementById('answer-area').children).forEach(c => c.onclick = null);
                     checkInvasion();
