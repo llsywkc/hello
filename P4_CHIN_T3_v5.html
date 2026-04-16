@@ -516,7 +516,7 @@
             if (!name) return alert("請輸入名字！");
 
             // ===== 「老玩家補償大禮包」密技 (防作弊限制版) =====
-            if (name === "P4大禮包") {
+            if (name === "iloveP4A") {
                 // 檢查是否已經領取過
                 if (inventory.giftClaimed) {
                     alert("❌ 你已經領取過老玩家補償大禮包了，不能重複領取喔！\n請輸入你的真實名字進入遊戲。");
@@ -525,11 +525,11 @@
                 }
 
                 // 發放物資
-                inventory.wood += 50;         
-                inventory.stone += 50;        
-                inventory.star += 20;         
-                inventory.gem += 20;          
-                inventory.manuscript += 300;  
+                inventory.wood += 500;         
+                inventory.stone += 500;        
+                inventory.star += 300;         
+                inventory.gem += 300;          
+                inventory.manuscript += 400;  
                 
                 // 標記為「已領取」並立即強制存檔
                 inventory.giftClaimed = true; 
