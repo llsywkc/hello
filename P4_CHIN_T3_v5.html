@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：4A森林大冒險 (終極修復版)</title>
+    <title>Roblox：4A森林大冒險 (終極完美版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -17,7 +17,7 @@
         
         h1 { color: #FFF; text-transform: uppercase; letter-spacing: 2px; text-shadow: 4px 4px 0 #311B92, -2px -2px 0 #311B92, 2px -2px 0 #311B92, -2px 2px 0 #311B92; font-size: 2.8em; text-align: center; margin: 10px 0; }
         .player-info { background: #E1BEE7; color: #333; font-size: 1.2em; font-weight: bold; padding: 5px 20px; border-radius: 20px; border: 4px solid #AB47BC; margin-bottom: 10px; box-shadow: 0 4px 0 #8E24AA; }
-        .inventory-bar { background-color: #212121; color: white; border: 4px solid #000; border-radius: 8px; padding: 10px 20px; font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; margin-bottom: 5px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; }
+        .inventory-bar { background-color: #212121; color: white; border: 4px solid #000; border-radius: 8px; padding: 10px 20px; font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; margin-bottom: 5px; box-shadow: 0 6px 0 #111; flex-wrap: justify-content: center; width: 90%; max-width: 1000px; }
         
         #medal-bar { background-color: #311B92; border-color: #1A237E; box-shadow: 0 6px 0 #000051; font-size: 1.4em; gap: 8px; }
         .medal-icon { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); animation: pulse 2s infinite; cursor: help; }
@@ -108,6 +108,8 @@
             <p>請輸入冒險者名稱：</p>
             <input type="text" id="input-name" maxlength="10" placeholder="輸入名字...">
             <button class="btn-purple" onclick="setPlayerName()">🚀 開始遊戲</button>
+            <hr style="width: 80%; border-top: 4px dashed #AB47BC; margin-top: 20px;">
+            <button class="btn-gold" onclick="claimGift()" style="font-size: 0.9em;">🎁 老玩家恢復進度 (輸入密碼)</button>
         </div>
 
         <div id="start-screen" class="screen hidden">
@@ -140,9 +142,9 @@
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #6A1B9A; max-height: 400px; overflow-y: auto;">
                 <h3 style="color:#4A148C; margin-top:0;">1. 如何獲得元素與勳章？</h3>
                 <p>🪵 <b>木材 / 🧱 石頭</b>：透過各個基礎關卡答題獲得。</p>
-                <p>📜 <b>勤奮手稿</b>：每次答對題目都會獲得大量手稿。</p>
-                <p>🔮 <b>頓悟碎片</b>：連續答對 2 題掉落 2 個碎片。</p>
-                <p>💎 <b>寶石 / 🌟 星星</b>：過關時高機率掉落，或透過打敗怪獸獲得。</p>
+                <p>📜 <b>勤奮手稿</b>：每次答對題目都會獲得 10 張。</p>
+                <p>🔮 <b>頓悟碎片</b>：連續答對 3 題掉落 1 個碎片。</p>
+                <p>💎 <b>寶石 / 🌟 星星</b>：打敗突發野獸，或在過關時機率掉落。</p>
                 
                 <h3 style="color:#B71C1C;">2. 全新攻防戰鬥系統</h3>
                 <p>遇到怪獸時，你必須謹慎評估雙方實力。點擊應戰需消耗 <b>1 顆星星</b>：</p>
@@ -274,8 +276,10 @@
     </div>
 
     <script>
-        // ================== 音效與全域變數 ==================
+        // ================== 音效與存檔鍵 ==================
+        const SAVE_KEY = 'roblox_p4_chi_combat_v7_ext'; // 保持這個不變，讓舊進度可以回來
         let audioCtx = null;
+
         function initAudio() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -427,7 +431,7 @@
         ];
 
         const reorderTasks = [
-            ["因為", "臨近考試", "，", "所以", "各類", "課外活動", "會暫停", "直至", "考試結束", "。"],
+            ["因為", "臨近考試", "，", "各類", "課外活動", "會暫停", "直至", "考試結束", "。"],
             ["因為", "弟弟", "上課時", "沒有記住", "老師的提醒", "，", "所以", "考試時", "答錯題目", "。"],
             ["因為", "咖啡豆", "含有咖啡因", "，", "所以", "飲用大量咖啡", "會引致", "心悸", "、", "失眠等症狀", "。"],
             ["弟弟", "搞不懂", "這道題", "如何計算", "，", "所以", "被老師", "留下來補課", "。"],
@@ -437,7 +441,7 @@
             ["政府", "為了", "進一步", "減輕", "堆填區的壓力", "，", "所以推行", "固體廢物收費計劃", "。"],
             ["我們", "凌晨時分", "便乘旅遊車", "上合歡山", "，", "所以", "趕得及", "看到", "美麗的日出", "。"],
             ["巿民", "知道今天晚上", "會懸掛", "八號烈風信號", "，", "於是", "爭相到超巿", "購買糧食", "。"],
-            ["他", "當義工", "不是要獲得", "大家的稱許", "，", "而是希望", "幫助", "有需要的人", "。"],
+            ["他", "當義工", "不是要獲得", "大家的稱許", "，", "而是想", "幫助", "有需要的人", "。"],
             ["由於", "天氣影響", "，", "所以", "明天的陸運會", "要", "延期舉行", "。"],
             ["意大利人", "製作薄餅時", "不會使用菠蘿", "，", "而是以", "番茄", "和羅勒葉", "作為主要材料", "。"],
             ["由於", "港鐵已告知", "觀塘線", "出現故障", "，", "爸爸於是", "提早出門上班", "。"],
@@ -451,10 +455,10 @@
             ["父親的愛", "像", "冬日的太陽", "，", "微微", "温暖", "我和媽媽的心", "。"],
             ["卸妝後的她", "不像", "平時看到般", "美豔動人", "，", "而像", "一個鄰家女孩般", "樸素", "。"],
             ["爸爸不像", "一些父母", "只會溺愛孩子", "，", "而是", "鼓勵孩子", "自發學習", "。"],
-            ["這家快餐店", "售賣的食物", "不像", "其他快餐店", "，", "他們", "售賣", "特別的三明治", "。"]
+            ["這家快餐店", "售賣的食物", "不像", "其他快餐店", "，", "而是", "售賣", "特別的三明治", "。"]
         ];
 
-        // ================== FA溫習 專屬題庫 (共 20 題) ==================
+        // ================== FA溫習 專屬題庫 ==================
         const faMCTasks = [
             { q: "醫生說只要我按時服藥，多休息，身體很快就能 ______。", ans: "康復", options: ["康復", "准許", "退出", "生效"] },
             { q: "得到校長的 ______，我們終於可以在草地上野餐了。", ans: "准許", options: ["准許", "支持", "宣佈", "集合"] },
@@ -499,56 +503,48 @@
             'match-word': { title: "🔮 符文解密 (配詞題)", subtitle: "找出最適合句子語境的詞語！", tasks: matchTasks },
             'connect': { title: "🔗 魔法連線 (連線題)", subtitle: "找出與題目匹配的另一半詞語！", tasks: connectTasks },
             'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
-            'fa-mc': { title: "📝 FA溫習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks }
+            'fa-mc': { title: "📝 FA温習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks }
         };
 
         const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🌌', 900: '🏆', 1001: '🐉', 1002: '🦄' };
-        const defaultInv = { playerName: "", wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [] };
+        const defaultInv = { playerName: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [] };
         let inventory = { ...defaultInv };
 
-        function shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+        // ================== 遊戲核心邏輯 ==================
 
-        // ================== 遊戲邏輯 ==================
-
-       function setPlayerName() {
+        function setPlayerName() {
             initAudio(); playSound('click');
             const name = document.getElementById('input-name').value.trim();
             if (!name) return alert("請輸入名字！");
-
-            // ===== 「老玩家補償大禮包」密技 (防作弊限制版) =====
-            if (name === "iloveP4A") {
-                // 檢查是否已經領取過
-                if (inventory.giftClaimed) {
-                    alert("❌ 你已經領取過老玩家補償大禮包了，不能重複領取喔！\n請輸入你的真實名字進入遊戲。");
-                    document.getElementById('input-name').value = "";
-                    return;
-                }
-
-                // 發放物資
-                inventory.wood += 500;         
-                inventory.stone += 500;        
-                inventory.star += 300;         
-                inventory.gem += 300;          
-                inventory.manuscript += 400;  
-                
-                // 標記為「已領取」並立即強制存檔
-                inventory.giftClaimed = true; 
-                saveGame();
-
-                alert("🎁 密技啟動！已為你發放老玩家補償物資！\n請清空密碼，並重新輸入你的真實名字進入遊戲。");
-                document.getElementById('input-name').value = ""; // 清空輸入框讓他們重新輸入真名
-                return; // 中斷執行，等他們輸入真名再進遊戲
-            }
-            // =====================================
-
             inventory.playerName = name;
             document.getElementById('display-name').textContent = name;
             goHome();
         }
 
+        // 老玩家補償機制 (按鈕觸發)
+        function claimGift() {
+            playSound('click');
+            if (inventory.giftClaimed) {
+                alert("❌ 你已經領取過老玩家補償大禮包了，不能重複領取喔！");
+                return;
+            }
+            let code = prompt("請輸入老玩家專屬密碼：\n(提示：P4大禮包)");
+            if (code === "P4大禮包") {
+                inventory.wood += 500;         
+                inventory.stone += 500;        
+                inventory.star += 200;         
+                inventory.gem += 200;          
+                inventory.manuscript += 300;  
+                inventory.giftClaimed = true; 
+                saveGame();
+                alert("🎁 密技啟動！已為你發放 500木材、500石頭、200星星、200寶石、300手稿！\n現在請輸入你的名字開始遊戲吧！");
+            } else if (code !== null) {
+                alert("❌ 密碼錯誤！");
+            }
+        }
+
         function loadGame() {
-            // 這裡使用了 v7 的存檔名稱，確保舊進度可以回來！
-            const savedData = localStorage.getItem('roblox_p4_chi_combat_v9_ext');
+            const savedData = localStorage.getItem(SAVE_KEY);
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -563,7 +559,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_chi_combat_v9_ext', JSON.stringify(inventory));
+                localStorage.setItem(SAVE_KEY, JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -717,7 +713,7 @@
 
                     if (stats.atk >= mDef && stats.def >= mAtk) {
                         alert("🎉 攻守兼備！你完美擊敗了怪獸，毫髮無傷地獲得了 5 顆寶石！");
-                        inventory.gem += 5; // 增加寶石數量
+                        inventory.gem += 5;
                     } else if (stats.atk >= mDef && stats.def < mAtk) {
                         alert("⚠️ 你成功擊敗了怪獸，但因為防禦力不足受了點傷，掉落了 1 個木材，勉強獲得 2 顆寶石！");
                         inventory.wood = Math.max(0, inventory.wood - 1);
@@ -755,14 +751,11 @@
             }
         }
 
-        // 大幅增加每次答對及連勝的獎勵
         function addStreak() {
             inventory.streak++;
-            inventory.manuscript += 3; // 每次答對加3個手稿
-            if(inventory.streak % 2 === 0) inventory.fragment += 2; // 每2連對加2個碎片
-            if(Math.random() < 0.50) { 
-                if(Math.random() > 0.5) inventory.gem += 2; else inventory.star += 2; 
-            } // 50%機率掉落寶石或星星
+            inventory.manuscript += 3; 
+            if(inventory.streak % 2 === 0) inventory.fragment += 2; 
+            if(Math.random() < 0.50) { if(Math.random() > 0.5) inventory.gem += 2; else inventory.star += 2; }
             checkMedals();
         }
 
@@ -863,7 +856,7 @@
                 }
                 if(correct) {
                     playSound('win'); addStreak();
-                    inventory.wood += 5; updateUI(); // 增加木材掉落
+                    inventory.wood += 5; updateUI(); 
                     document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+5, 手稿+3)</span>";
                     document.getElementById('btn-next-reorder').classList.remove('hidden');
                     Array.from(document.getElementById('answer-area').children).forEach(c => c.onclick = null);
@@ -921,7 +914,7 @@
                 playSound('win'); addStreak();
                 element.style.backgroundColor = '#4CAF50';
                 element.style.boxShadow = '0 6px 0 #2E7D32';
-                inventory.stone += 5; updateUI(); // 增加石頭掉落
+                inventory.stone += 5; updateUI(); 
                 document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>✅ 解答正確！(石頭+5, 手稿+3)</span>";
                 document.getElementById('btn-next-mc').classList.remove('hidden');
                 checkInvasion();
@@ -1135,7 +1128,7 @@
                             updateUI();
                             alert(`🌟 奇蹟！你成功收服了傳說怪【${currentEvent.name}】！\n🎁 獲得 20 寶石、20 星星、100 手稿，及專屬傳說勳章！`);
                         } else {
-                            inventory.gem += 10; inventory.star += 10; updateUI(); // Boss獎勵增加
+                            inventory.gem += 10; inventory.star += 10; updateUI(); 
                             alert("🏆 恭喜你擊敗了 Boss！獲得 10 顆寶石和 10 顆星星！");
                         }
                         goHome();
