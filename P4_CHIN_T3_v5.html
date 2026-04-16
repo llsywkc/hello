@@ -510,10 +510,37 @@
 
         // ================== 遊戲邏輯 ==================
 
-        function setPlayerName() {
+       function setPlayerName() {
             initAudio(); playSound('click');
             const name = document.getElementById('input-name').value.trim();
             if (!name) return alert("請輸入名字！");
+
+            // ===== 「老玩家補償大禮包」密技 (防作弊限制版) =====
+            if (name === "P4大禮包") {
+                // 檢查是否已經領取過
+                if (inventory.giftClaimed) {
+                    alert("❌ 你已經領取過老玩家補償大禮包了，不能重複領取喔！\n請輸入你的真實名字進入遊戲。");
+                    document.getElementById('input-name').value = "";
+                    return;
+                }
+
+                // 發放物資
+                inventory.wood += 50;         
+                inventory.stone += 50;        
+                inventory.star += 20;         
+                inventory.gem += 20;          
+                inventory.manuscript += 300;  
+                
+                // 標記為「已領取」並立即強制存檔
+                inventory.giftClaimed = true; 
+                saveGame();
+
+                alert("🎁 密技啟動！已為你發放老玩家補償物資！\n請清空密碼，並重新輸入你的真實名字進入遊戲。");
+                document.getElementById('input-name').value = ""; // 清空輸入框讓他們重新輸入真名
+                return; // 中斷執行，等他們輸入真名再進遊戲
+            }
+            // =====================================
+
             inventory.playerName = name;
             document.getElementById('display-name').textContent = name;
             goHome();
