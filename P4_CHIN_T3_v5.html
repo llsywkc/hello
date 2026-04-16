@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：4A森林大冒險 </title>
+    <title>Roblox：4A森林大冒險 (進展性評估最終版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -121,6 +121,9 @@
                 <button class="btn-orange" onclick="startGame('connect')">🔗 魔法連線 (連線題)</button>
                 <button class="btn-grey" onclick="startGame('punct')">📜 古卷修復 (標點題)</button>
                 <button class="btn-purple" onclick="startGame('reorder')">🌉 鋪木板過河 (重組句子)</button>
+                
+                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (綜合題)</button>
+                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (課文重組)</button>
             </div>
             <p style="font-size: 0.9em; font-weight: bold; color: #8E24AA;">(連續答題提升攻防值，有機率遇到隱藏的「傳說怪」！)</p>
             
@@ -310,7 +313,7 @@
             } catch(e) {}
         }
 
-        // ================== 題庫與設定 (選項大翻新) ==================
+        // ================== 題庫與設定 ==================
         const fillTasks = [
             { q: "媽媽突然收到外祖母的消息，匆匆留下一張 ______ 交待家中事宜便外出了。", ans: "便條", options: ["便條", "報紙", "雜誌", "課本"] },
             { q: "以前的科技不發達，人們的溝通多依靠 ______ 作媒介。", ans: "書信", options: ["書信", "食物", "交通", "天氣"] },
@@ -364,7 +367,7 @@
             { q: "弟弟 ______ 地拆開生日禮物，想看看裏面是甚麼。", ans: "迫不及待", options: ["迫不及待", "慢條斯理", "拖泥帶水", "猶豫不決"] },
             { q: "導遊一路上 ______ 地為我們介紹當地的歷史故事。", ans: "滔滔不絕", options: ["滔滔不絕", "沉默寡言", "啞口無言", "支支吾吾"] },
             { q: "畢業時，同學們都 ______ 地向老師道別。", ans: "依依不捨", options: ["依依不捨", "揚長而去", "迫不及待", "冷酷無情"] },
-            { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧鬧", "喧囂蔽天"] }
+            { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧闹", "喧囂蔽天"] }
         ];
 
         const connectTasks = [
@@ -375,7 +378,7 @@
             { q: "找出正確的配對：【 衛生 】______", ans: "惡劣", options: ["惡劣", "淵博", "發達", "穩重"] },
             { q: "找出正確的配對：【 歸納 】______", ans: "主旨", options: ["主旨", "段意", "結論", "大意"] },
             { q: "找出正確的配對：【 確保 】______", ans: "安全", options: ["安全", "安穩", "安心", "安寧"] },
-            { q: "找出正確的配對：【 粗獷的 】______", ans: "聲線", options: ["聲線", "心思", "鼻樑", "秀髮"] }, // 移除"外表"
+            { q: "找出正確的配對：【 粗獷的 】______", ans: "聲線", options: ["聲線", "心思", "鼻樑", "秀髮"] }, 
             { q: "找出正確的配對：【 温柔的 】______", ans: "外表", options: ["外表", "聲線", "鼻樑", "洋娃娃"] },
             { q: "找出正確的配對：【 體會到 】______", ans: "善良", options: ["善良", "精神", "痕跡", "氣氛"] },
             { q: "找出正確的配對：【 互助的 】______", ans: "精神", options: ["精神", "力量", "善良", "光陰"] },
@@ -424,31 +427,31 @@
         ];
 
         const reorderTasks = [
-            ["因為", "臨近考試", "，", "所以","各類", "課外活動", "會暫停", "直至", "考試結束", "。"],
+            ["因為", "臨近考試", "，", "各類", "課外活動", "會暫停", "直至", "考試結束", "。"],
             ["因為", "弟弟", "上課時", "沒有記住", "老師的提醒", "，", "所以", "考試時", "答錯題目", "。"],
             ["因為", "咖啡豆", "含有咖啡因", "，", "所以", "飲用大量咖啡", "會引致", "心悸", "、", "失眠等症狀", "。"],
             ["弟弟", "搞不懂", "這道題", "如何計算", "，", "所以", "被老師", "留下來補課", "。"],
             ["因為", "爸爸明天", "要回公司工作", "，", "我們的", "主題公園一天遊", "要", "被逼取消了", "。"],
             ["由於", "哥哥", "想打破", "一百米短跑的紀錄", "，", "所以", "他最近", "加強練習", "。"],
-            ["錦茵", "發現自己", "最近", "學習疏懶了", "，", "於是", "制訂了", "温習時間表", "。"],
+            ["錦茵", "發現自己", "最近", "學習疏懶了", "，", "於是", "制訂了", "作息時間表", "。"],
             ["政府", "為了", "進一步", "減輕", "堆填區的壓力", "，", "所以推行", "固體廢物收費計劃", "。"],
-            ["我們", "凌晨時分", "便乘旅遊車", "到山頂廣場", "，", "所以", "趕得及", "看到", "美麗的日出", "。"],
+            ["我們", "凌晨時分", "便乘旅遊車", "上合歡山", "，", "所以", "趕得及", "看到", "美麗的日出", "。"],
             ["巿民", "知道今天晚上", "會懸掛", "八號烈風信號", "，", "於是", "爭相到超巿", "購買糧食", "。"],
-            ["表哥", "當義工", "不是要獲得", "大家的稱許", "，", "而是想", "幫助", "有需要的人", "。"],
+            ["他", "當義工", "不是要獲得", "大家的稱許", "，", "而是希望", "幫助", "有需要的人", "。"],
             ["由於", "天氣影響", "，", "所以", "明天的陸運會", "要", "延期舉行", "。"],
             ["意大利人", "製作薄餅時", "不會使用菠蘿", "，", "而是以", "番茄", "和羅勒葉", "作為主要材料", "。"],
-            ["由於", "港鐵已告知", "觀塘線", "出現故障", "，", "於是", "爸爸提早出門上班", "。"],
-            ["銀行職員", "會", "向客戶", "詢問個人資料", "以核實身份", "。"],
+            ["由於", "港鐵已告知", "觀塘線", "出現故障", "，", "於是爸爸", "提早出門上班", "。"],
+            ["銀行職員", "不會", "向客戶", "詢問銀行卡的密碼", "，", "而是會", "詢問個人資料", "以核實身份", "。"],
             ["如果", "你因為", "貪小便宜", "而", "提供資料給陌生人", "，", "將會", "因小失大", "。"],
             ["因為", "我知道", "你喜歡酸菜魚", "，", "才買回來", "給你吃", "。"],
-            ["如果", "你繼續", "吃不健康的食物", "，", "將有機會", "患心臟病", "。"],
+            ["如果", "你繼續", "吃高脂肪的食物", "，", "將有機會", "患心臟病", "。"],
             ["因為", "父母悉心的栽培", "，", "我才可以", "成功入讀", "這所", "音樂學院", "。"],
             ["如果", "你繼續", "不節制地飲食", "，", "你的身體", "將會", "出現", "很大的問題", "。"],
             ["因為", "你性格固執", "，", "不肯", "輕易受人幫助", "，", "我才會決定", "暗中幫助你", "。"],
-            ["父親的愛", "像", "冬日的太陽", "，", "每天都", "温暖着", "我和媽媽的心", "。"],
-            ["生病的姊姊", "面色", "顯得", "有點蒼白", "，", "我和媽媽", "都有點兒", "擔心她", "。"],
-            ["爸爸不像", "一些父母", "只會溺愛孩子", "，", "而是", "鼓勵孩子", "自發學習", "。"],
-            ["這家快餐店", "售賣的", "跟其他快餐店", "不一樣", "，", "他們", "售賣", "特製的三明治", "。"]
+            ["父親的愛", "像", "冬日的太陽", "，", "微微", "温暖", "我和媽媽的心", "。"],
+            ["卸妝後的她", "不像", "平時看到般", "美豔動人", "，", "而像", "一個鄰家女孩般", "樸素", "。"],
+            ["爸爸不像", "那些", "只會溺愛孩子的父母", "，", "而是", "鼓勵孩子", "自發學習", "。"],
+            ["這家快餐店", "售賣的食物", "不像", "其他快餐店", "，", "他們", "售賣", "特別的韓式三明治", "。"]
         ];
 
         const legendaryTasks = [
@@ -464,11 +467,39 @@
             { q: "「畫蛇添足」比喻甚麼？", ans: "多此一舉", options: ["多此一舉", "畫工精湛", "非常可怕", "行動迅速"] }
         ];
 
+        // ================== FA溫習 專屬題庫 (共 20 題) ==================
+        const faMCTasks = [
+            { q: "醫生說只要我按時服藥，多休息，身體很快就能 ______。", ans: "康復", options: ["康復", "准許", "退出", "生效"] },
+            { q: "得到校長的 ______，我們終於可以在草地上野餐了。", ans: "准許", options: ["准許", "支持", "宣佈", "集合"] },
+            { q: "因為腳傷未癒，他只能無奈地 ______ 這場足球比賽。", ans: "退出", options: ["退出", "支持", "康復", "集合"] },
+            { q: "無論你做甚麼決定，作為你的好朋友，我都會全力 ______ 你。", ans: "支持", options: ["支持", "准許", "宣佈", "鬥志"] },
+            { q: "雖然落後了兩球，但隊員們依然保持高昂的 ______，沒有放棄。", ans: "鬥志", options: ["鬥志", "勇氣", "心情", "精神"] },
+            { q: "老師宣佈，新的圖書館借閱規則將於下星期一正式 ______。", ans: "生效", options: ["生效", "宣佈", "准許", "集合"] },
+            { q: "校長在早會上 ______ 了一個好消息，全校同學都歡呼起來。", ans: "宣佈", options: ["宣佈", "生效", "集合", "支持"] },
+            { q: "老師請各位同學到操場 ______，準備開始運動會。", ans: "集合", options: ["集合", "退出", "康復", "宣佈"] },
+            { q: "______ 你還不知道明天要舉行中文科進展性評估嗎？", ans: "難道", options: ["難道", "當然", "其實", "難怪"] },
+            { q: "找出便條格式的配對：【 寫信人 】______", ans: "姓名", options: ["姓名", "時間", "正文", "標題"] },
+            { q: "找出便條格式的配對：【 收信人 】______", ans: "姓名", options: ["姓名", "時間", "正文", "標題"] },
+            { q: "找出便條格式的配對：【 寫信人 】______", ans: "自稱", options: ["自稱", "姓名", "時間", "正文"] },
+            { q: "找出便條格式的配對：【 書寫 】______", ans: "時間", options: ["時間", "地點", "姓名", "正文"] },
+            { q: "找出便條格式的配對：【 便條的內容 】______", ans: "正文", options: ["正文", "標題", "時間", "姓名"] },
+            { q: "在便條格式中，通常寫在第一行「頂格」的是甚麼？", ans: "收信人姓名", options: ["收信人姓名", "寫信人姓名", "正文", "書寫時間"] },
+            { q: "這麼簡單的問題，難道你都不會回答嗎 ___", ans: "？", options: ["？", "！", "。", "……"] },
+            { q: "你是多麼期待這次比賽啊 ___", ans: "！", options: ["！", "？", "。", "，"] }
+        ];
+
+        const faReorderTasks = [
+            ["我", "當然理解", "你", "現在的", "心情", "。"],
+            ["為了", "參加這次", "朗誦比賽", "，", "你一直", "努力地練習", "。"],
+            ["你是", "多麼", "期待", "這次比賽啊", "！"]
+        ];
+
         const mcConfigs = {
             'fill': { title: "⛏️ 礦洞尋寶 (填充題)", subtitle: "敲碎正確的字詞礦石，填補句子！", tasks: fillTasks },
             'match-word': { title: "🔮 符文解密 (配詞題)", subtitle: "找出最適合句子語境的詞語！", tasks: matchTasks },
             'connect': { title: "🔗 魔法連線 (連線題)", subtitle: "找出與題目匹配的另一半詞語！", tasks: connectTasks },
-            'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks }
+            'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
+            'fa-mc': { title: "📝 FA溫習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks }
         };
 
         const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🌌', 900: '🏆', 1001: '🐉', 1002: '🦄' };
@@ -489,7 +520,7 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_chi_combat_v3');
+            const savedData = localStorage.getItem('roblox_p4_chi_final_ext_v8');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -504,7 +535,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_chi_combat_v3', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_chi_final_ext_v8', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -597,9 +628,9 @@
             let r = Math.random();
 
             // 傳說怪：必須攻、防雙雙大於 70
-            if (stats.atk >= 70 && stats.def >= 70 && r < 0.12) {
+            if (stats.atk >= 70 && stats.def >= 70 && r < 0.15) {
                 let isDragon = Math.random() > 0.5;
-                currentEvent = { type: isDragon ? 'dragon' : 'unicorn', name: isDragon ? '遠古碧炎巨龍' : '幽影星光獨角獸', reqAtk: 200, reqDef: 200 };
+                currentEvent = { type: isDragon ? 'dragon' : 'unicorn', name: isDragon ? '遠古碧炎巨龍' : '幽影星光獨角獸', reqAtk: 70, reqDef: 70 };
                 let imgIcon = isDragon ? '🐉' : '🦄';
                 
                 playSound('legendary');
@@ -625,7 +656,7 @@
                         document.getElementById('event-modal').classList.add('hidden');
                         startCombat('legendary');
                     } else {
-                        alert(`❌ 你的戰力不達標 (需要 攻${currentEvent.reqAtk} 防${currentEvent.reqDef})，神獸的怒吼把你震飛了，物資掉落！`);
+                        alert(`❌ 你的戰力不達標 (需要 攻${currentEvent.reqAtk} 防${currentEvent.reqDef})，巨龍的怒吼把你震飛了，物資掉落！`);
                         inventory.wood = Math.max(0, inventory.wood - 5); inventory.stone = Math.max(0, inventory.stone - 5);
                         document.getElementById('event-modal').classList.add('hidden');
                         updateUI();
@@ -667,8 +698,8 @@
                         inventory.wood = Math.max(0, inventory.wood - 1);
                         inventory.gem += 1;
                     } else {
-                        alert("💀 你的攻擊力太低，無法突破怪獸的防禦！被怪獸打傷並搶走了 1 個木材和 2 個石頭！");
-                        inventory.wood = Math.max(0, inventory.wood - 1);
+                        alert("💀 你的攻擊力太低，無法突破怪獸的防禦！被怪獸打傷並搶走了 2 個木材和 2 個石頭！");
+                        inventory.wood = Math.max(0, inventory.wood - 2);
                         inventory.stone = Math.max(0, inventory.stone - 2);
                     }
                     
@@ -708,6 +739,7 @@
         }
 
         let currentLevelType = '';
+        let currentReorderType = 'reorder'; // 區分普通重組還是FA重組
         
         window.startGame = function(type) {
             initAudio(); playSound('click'); hideAll();
@@ -715,7 +747,15 @@
             document.getElementById('top-nav').classList.remove('hidden');
             if(inventory.medals.length > 0) document.getElementById('medal-bar').classList.remove('hidden');
             
-            if(type === 'reorder') {
+            if(type === 'reorder' || type === 'fa-reorder') {
+                currentReorderType = type;
+                
+                if(type === 'fa-reorder') {
+                    document.getElementById('reorder-title').innerHTML = "📝 FA溫習 (課文重組) <br><small style='color: #4A148C;'>進展性評估專屬特訓！</small>";
+                } else {
+                    document.getElementById('reorder-title').innerHTML = "🌉 鋪木板過河 (重組句子) <br><small style='color: #4A148C;'>請按正確順序排列句子（注意獨立的標點符號！）</small>";
+                }
+
                 document.getElementById('game-reorder').classList.remove('hidden');
                 nextReorder();
             } else {
@@ -740,7 +780,9 @@
             document.getElementById('answer-area').innerHTML = "";
             document.getElementById('word-bank').innerHTML = "";
             
-            let t = reorderTasks[Math.floor(Math.random() * reorderTasks.length)];
+            // 決定題庫來源
+            let targetTasks = (currentReorderType === 'fa-reorder') ? faReorderTasks : reorderTasks;
+            let t = targetTasks[Math.floor(Math.random() * targetTasks.length)];
             currentReorderAns = [...t];
             let reorderWords = shuffle([...t]);
 
@@ -794,8 +836,8 @@
                 }
                 if(correct) {
                     playSound('win'); addStreak();
-                    inventory.wood += 5;inventory.manuscript += 10; updateUI();
-                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+5, 手稿+10)</span>";
+                    inventory.wood++; updateUI();
+                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+1, 手稿+1)</span>";
                     document.getElementById('btn-next-reorder').classList.remove('hidden');
                     Array.from(document.getElementById('answer-area').children).forEach(c => c.onclick = null);
                     checkInvasion();
@@ -852,8 +894,8 @@
                 playSound('win'); addStreak();
                 element.style.backgroundColor = '#4CAF50';
                 element.style.boxShadow = '0 6px 0 #2E7D32';
-                inventory.stone += 5; inventory.manuscript += 10; updateUI();
-                document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>✅ 解答正確！(石頭+5, 手稿+10)</span>";
+                inventory.stone++; updateUI();
+                document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>✅ 解答正確！(石頭+1, 手稿+1)</span>";
                 document.getElementById('btn-next-mc').classList.remove('hidden');
                 checkInvasion();
             } else {
@@ -924,6 +966,7 @@
             for(let i=0; i<inventory.ferrisWheel; i++) add("🎡", "摩天輪");
         }
 
+        // --- 共用戰鬥系統 (終極 Boss & 傳說怪) ---
         let combatType = 'normal_boss';
         let currentCombatQ = {};
         let combatHP = 100;
@@ -996,20 +1039,35 @@
                 document.getElementById('boss-options').appendChild(chunk);
             });
             
+            // 每次載入新題目，重新設定並啟動時間條動畫
             let timeLeft = combatTimeLimit;
-            document.getElementById('boss-timer-bar').style.width = '100%';
-            document.getElementById('boss-timer-bar').style.transition = `width ${combatTimeLimit}s linear`;
-            setTimeout(() => { document.getElementById('boss-timer-bar').style.width = '0%'; }, 50);
+            let timerBar = document.getElementById('boss-timer-bar');
+            timerBar.style.transition = 'none';
+            timerBar.style.width = '100%';
+            
+            setTimeout(() => { 
+                timerBar.style.transition = `width ${combatTimeLimit}s linear`;
+                timerBar.style.width = '0%'; 
+            }, 50);
             
             combatTimerInterval = setInterval(() => {
                 timeLeft--;
-                if(timeLeft <= 0) { clearInterval(combatTimerInterval); combatFail("超時！"); }
+                if(timeLeft <= 0) { 
+                    clearInterval(combatTimerInterval);
+                    timerBar.style.transition = 'none';
+                    timerBar.style.width = '0%';
+                    combatFail("超時！"); 
+                }
             }, 1000);
         }
         window.nextCombatQuestion = nextCombatQuestion;
 
         function combatFail(reason) {
             playSound('error');
+            let timerBar = document.getElementById('boss-timer-bar');
+            timerBar.style.transition = 'none';
+            timerBar.style.width = timerBar.offsetWidth + 'px';
+
             let opts = document.querySelectorAll('#boss-options .stone-chunk');
             opts.forEach(o => o.onclick = null);
             
@@ -1027,6 +1085,11 @@
 
         function checkCombat(selected, element) {
             clearInterval(combatTimerInterval);
+            // 答對/答錯時立即凍結時間條
+            let timerBar = document.getElementById('boss-timer-bar');
+            timerBar.style.transition = 'none';
+            timerBar.style.width = timerBar.offsetWidth + 'px';
+
             let opts = document.querySelectorAll('#boss-options .stone-chunk');
             opts.forEach(o => o.onclick = null);
 
@@ -1039,20 +1102,25 @@
                 
                 if(combatCorrectCount >= combatTarget) {
                     playSound('boss_win');
-                    if(combatType === 'legendary') {
-                        inventory.gem += 20; inventory.star += 20; inventory.manuscript += 100;
-                        let code = currentEvent.name.includes('龍') ? 1001 : 1002;
-                        if(!inventory.medals.includes(code)) inventory.medals.push(code);
-                        updateUI();
-                        alert(`🌟 奇蹟！你成功收服了傳說怪【${currentEvent.name}】！\n🎁 獲得 20 寶石、20 星星、100 手稿，及專屬傳說勳章！`);
-                    } else {
-                        inventory.gem += 5; inventory.star += 5; updateUI();
-                        alert("🏆 恭喜你擊敗了 Boss！獲得 5 顆寶石和 5 顆星星！");
-                    }
-                    goHome();
+                    setTimeout(() => {
+                        if(combatType === 'legendary') {
+                            inventory.gem += 20; inventory.star += 20; inventory.manuscript += 100;
+                            let code = currentEvent.name.includes('龍') ? 1001 : 1002;
+                            if(!inventory.medals.includes(code)) inventory.medals.push(code);
+                            updateUI();
+                            alert(`🌟 奇蹟！你成功收服了傳說怪【${currentEvent.name}】！\n🎁 獲得 20 寶石、20 星星、100 手稿，及專屬傳說勳章！`);
+                        } else {
+                            inventory.gem += 5; inventory.star += 5; updateUI();
+                            alert("🏆 恭喜你擊敗了 Boss！獲得 5 顆寶石和 5 顆星星！");
+                        }
+                        goHome();
+                    }, 1000);
                 } else {
-                    document.getElementById('btn-next-boss-q').classList.remove('hidden');
+                    // 答對後自動切換下一題 (延遲1.5秒讓玩家看清楚結果)
                     document.getElementById('btn-boss-flee').classList.add('hidden');
+                    setTimeout(() => {
+                        nextCombatQuestion();
+                    }, 1500);
                 }
             } else {
                 element.style.backgroundColor = '#F44336';
@@ -1066,8 +1134,8 @@
             if(combatType === 'legendary') {
                 alert("🏃 你急忙逃出傳說怪的視線，安然無恙。");
             } else {
-                inventory.wood = Math.max(0, inventory.stone - 5);
-                alert("🏃 你急忙逃出 Boss 的巢穴，但在路上弄丟了 5 個石頭！");
+                inventory.wood = Math.max(0, inventory.wood - 5);
+                alert("🏃 你急忙逃出 Boss 的巢穴，但在路上弄丟了 5 個木材！");
             }
             updateUI(); goHome();
         };
