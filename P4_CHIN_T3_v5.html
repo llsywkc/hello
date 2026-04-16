@@ -548,7 +548,7 @@
 
         function loadGame() {
             // 這裡使用了 v7 的存檔名稱，確保舊進度可以回來！
-            const savedData = localStorage.getItem('roblox_p4_chi_combat_v7_ext');
+            const savedData = localStorage.getItem('roblox_p4_chi_combat_v9_ext');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -563,7 +563,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_chi_combat_v7_ext', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_chi_combat_v9_ext', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
