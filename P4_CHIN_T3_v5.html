@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：4A森林大冒險 (進展性評估最終版)</title>
+    <title>Roblox：4A森林大冒險 (終極修復版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -122,8 +122,8 @@
                 <button class="btn-grey" onclick="startGame('punct')">📜 古卷修復 (標點題)</button>
                 <button class="btn-purple" onclick="startGame('reorder')">🌉 鋪木板過河 (重組句子)</button>
                 
-                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA温習 (綜合題)</button>
-                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA温習 (課文重組)</button>
+                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (綜合題)</button>
+                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (課文重組)</button>
             </div>
             <p style="font-size: 0.9em; font-weight: bold; color: #8E24AA;">(連續答題提升攻防值，有機率遇到隱藏的「傳說怪」！)</p>
             
@@ -139,10 +139,10 @@
             <h2>📖 冒險者指南</h2>
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #6A1B9A; max-height: 400px; overflow-y: auto;">
                 <h3 style="color:#4A148C; margin-top:0;">1. 如何獲得元素與勳章？</h3>
-                <p>🪵 <b>木材 / 🧱 石頭</b>：透過各個基礎關卡答題 100% 獲得。</p>
-                <p>📜 <b>勤奮手稿</b>：每次答對題目都會獲得 10 張。</p>
-                <p>🔮 <b>頓悟碎片</b>：連續答對 3 題掉落 1 個碎片。</p>
-                <p>💎 <b>寶石 / 🌟 星星</b>：打敗突發野獸，或在過關時機率掉落。</p>
+                <p>🪵 <b>木材 / 🧱 石頭</b>：透過各個基礎關卡答題獲得。</p>
+                <p>📜 <b>勤奮手稿</b>：每次答對題目都會獲得大量手稿。</p>
+                <p>🔮 <b>頓悟碎片</b>：連續答對 2 題掉落 2 個碎片。</p>
+                <p>💎 <b>寶石 / 🌟 星星</b>：過關時高機率掉落，或透過打敗怪獸獲得。</p>
                 
                 <h3 style="color:#B71C1C;">2. 全新攻防戰鬥系統</h3>
                 <p>遇到怪獸時，你必須謹慎評估雙方實力。點擊應戰需消耗 <b>1 顆星星</b>：</p>
@@ -367,7 +367,7 @@
             { q: "弟弟 ______ 地拆開生日禮物，想看看裏面是甚麼。", ans: "迫不及待", options: ["迫不及待", "慢條斯理", "拖泥帶水", "猶豫不決"] },
             { q: "導遊一路上 ______ 地為我們介紹當地的歷史故事。", ans: "滔滔不絕", options: ["滔滔不絕", "沉默寡言", "啞口無言", "支支吾吾"] },
             { q: "畢業時，同學們都 ______ 地向老師道別。", ans: "依依不捨", options: ["依依不捨", "揚長而去", "迫不及待", "冷酷無情"] },
-            { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧闹", "喧囂蔽天"] }
+            { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧鬧", "喧囂蔽天"] }
         ];
 
         const connectTasks = [
@@ -437,10 +437,10 @@
             ["政府", "為了", "進一步", "減輕", "堆填區的壓力", "，", "所以推行", "固體廢物收費計劃", "。"],
             ["我們", "凌晨時分", "便乘旅遊車", "上合歡山", "，", "所以", "趕得及", "看到", "美麗的日出", "。"],
             ["巿民", "知道今天晚上", "會懸掛", "八號烈風信號", "，", "於是", "爭相到超巿", "購買糧食", "。"],
-            ["他", "當義工", "不是要獲得", "大家的稱許", "，", "而是希望", "幫助", "有需要的人", "。"],
+            ["他", "當義工", "不是要獲得", "大家的稱許", "，", "而是想", "幫助", "有需要的人", "。"],
             ["由於", "天氣影響", "，", "所以", "明天的陸運會", "要", "延期舉行", "。"],
-            ["意大利人", "製作薄餅時", "不會使用菠蘿", "，", "而是以", "番茄", "和羅勒葉", "作為主要材料", "。"],
-            ["由於", "港鐵已告知", "觀塘線", "出現故障", "，", "於是爸爸", "提早出門上班", "。"],
+            ["意大利人", "製作薄餅時", "不會使用菠蘿", "，", "而是以", "番茄", "和", "羅勒葉", "作材料的", "。"],
+            ["由於", "港鐵已告知", "觀塘線", "出現故障", "，", "爸爸於是", "提早出門上班", "。"],
             ["銀行職員", "不會", "向客戶", "詢問銀行卡的密碼", "，", "而是會", "詢問個人資料", "以核實身份", "。"],
             ["如果", "你因為", "貪小便宜", "而", "提供資料給陌生人", "，", "將會", "因小失大", "。"],
             ["因為", "我知道", "你喜歡酸菜魚", "，", "才買回來", "給你吃", "。"],
@@ -450,21 +450,8 @@
             ["因為", "你性格固執", "，", "不肯", "輕易受人幫助", "，", "我才會決定", "暗中幫助你", "。"],
             ["父親的愛", "像", "冬日的太陽", "，", "微微", "温暖", "我和媽媽的心", "。"],
             ["卸妝後的她", "不像", "平時看到般", "美豔動人", "，", "而像", "一個鄰家女孩般", "樸素", "。"],
-            ["爸爸不像", "那些", "只會溺愛孩子的父母", "，", "而是", "鼓勵孩子", "自發學習", "。"],
-            ["這家快餐店", "售賣的食物", "不像", "其他快餐店", "，", "他們", "售賣", "特別的韓式三明治", "。"]
-        ];
-
-        const legendaryTasks = [
-            { q: "「完璧歸趙」這個成語的主角是誰？", ans: "藺相如", options: ["藺相如", "廉頗", "曹操", "劉備"] },
-            { q: "下列哪一個詞語沒有錯別字？", ans: "迫不及待", options: ["迫不及待", "迫不急待", "破不及待", "破不急待"] },
-            { q: "下列哪一個句子是「擬人句」？", ans: "小鳥在枝頭上高興地唱歌。", options: ["小鳥在枝頭上高興地唱歌。", "他的臉紅得像一個蘋果。", "天上的星星亮晶晶的。", "這座山高得快要碰到天了。"] },
-            { q: "在「媽媽雖然很累，＿＿堅持為我們做晚飯。」中，應填入甚麼關聯詞？", ans: "但是", options: ["但是", "所以", "如果", "因為"] },
-            { q: "「草船借箭」是出自哪一部中國古典名著？", ans: "《三國演義》", options: ["《三國演義》", "《水滸傳》", "《西遊記》", "《紅樓夢》"] },
-            { q: "「李白」被後人尊稱為甚麼？", ans: "詩仙", options: ["詩仙", "詩聖", "詩鬼", "詩魔"] },
-            { q: "下列哪一個標點符號的運用是絕對正確的？", ans: "我問：「今天天氣好嗎？」", options: ["我問：「今天天氣好嗎？」", "我問，今天天氣好嗎？", "我問：「今天天氣好嗎」？", "我問：今天天氣好嗎？"] },
-            { q: "「一日不見，如隔三秋」中的「三秋」通常指多久？", ans: "三年", options: ["三年", "三十天", "三個月", "三百年"] },
-            { q: "選出結構完全不同的詞語：", ans: "東西", options: ["東西", "左右", "上下", "美好"] },
-            { q: "「畫蛇添足」比喻甚麼？", ans: "多此一舉", options: ["多此一舉", "畫工精湛", "非常可怕", "行動迅速"] }
+            ["爸爸不像", "一些父母", "只會溺愛孩子", "，", "而是", "鼓勵孩子", "自發學習", "。"],
+            ["這家快餐店", "售賣的", "不像", "其他快餐店", "，", "而是", "售賣", "韓式三明治", "。"]
         ];
 
         // ================== FA溫習 專屬題庫 (共 20 題) ==================
@@ -494,6 +481,19 @@
             ["你是", "多麼", "期待", "這次比賽啊", "！"]
         ];
 
+        const legendaryTasks = [
+            { q: "「完璧歸趙」這個成語的主角是誰？", ans: "藺相如", options: ["藺相如", "廉頗", "曹操", "劉備"] },
+            { q: "下列哪一個詞語沒有錯別字？", ans: "迫不及待", options: ["迫不及待", "迫不急待", "破不及待", "破不急待"] },
+            { q: "下列哪一個句子是「擬人句」？", ans: "小鳥在枝頭上高興地唱歌。", options: ["小鳥在枝頭上高興地唱歌。", "他的臉紅得像一個蘋果。", "天上的星星亮晶晶的。", "這座山高得快要碰到天了。"] },
+            { q: "在「媽媽雖然很累，＿＿堅持為我們做晚飯。」中，應填入甚麼關聯詞？", ans: "但是", options: ["但是", "所以", "如果", "因為"] },
+            { q: "「草船借箭」是出自哪一部中國古典名著？", ans: "《三國演義》", options: ["《三國演義》", "《水滸傳》", "《西遊記》", "《紅樓夢》"] },
+            { q: "「李白」被後人尊稱為甚麼？", ans: "詩仙", options: ["詩仙", "詩聖", "詩鬼", "詩魔"] },
+            { q: "下列哪一個標點符號的運用是絕對正確的？", ans: "我問：「今天天氣好嗎？」", options: ["我問：「今天天氣好嗎？」", "我問，今天天氣好嗎？", "我問：「今天天氣好嗎」？", "我問：今天天氣好嗎？"] },
+            { q: "「一日不見，如隔三秋」中的「三秋」通常指多久？", ans: "三年", options: ["三年", "三十天", "三個月", "三百年"] },
+            { q: "選出結構完全不同的詞語：", ans: "東西", options: ["東西", "左右", "上下", "美好"] },
+            { q: "「畫蛇添足」比喻甚麼？", ans: "多此一舉", options: ["多此一舉", "畫工精湛", "非常可怕", "行動迅速"] }
+        ];
+
         const mcConfigs = {
             'fill': { title: "⛏️ 礦洞尋寶 (填充題)", subtitle: "敲碎正確的字詞礦石，填補句子！", tasks: fillTasks },
             'match-word': { title: "🔮 符文解密 (配詞題)", subtitle: "找出最適合句子語境的詞語！", tasks: matchTasks },
@@ -520,7 +520,8 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_chi_final_ext_v7');
+            // 這裡使用了 v7 的存檔名稱，確保舊進度可以回來！
+            const savedData = localStorage.getItem('roblox_p4_chi_combat_v7_ext');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -535,7 +536,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_chi_final_ext_v7', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_chi_combat_v7_ext', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -620,14 +621,13 @@
         function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
         function openBossSelect() { playSound('click'); hideAll(); document.getElementById('boss-select-screen').classList.remove('hidden'); }
 
-        // --- 全新攻防戰鬥系統 (突發遭遇與傳說怪) ---
+        // --- 突發遭遇與傳說怪 ---
         let currentEvent = null;
 
         function checkInvasion() {
             let stats = calculateStats();
             let r = Math.random();
 
-            // 傳說怪：必須攻、防雙雙大於 70
             if (stats.atk >= 70 && stats.def >= 70 && r < 0.15) {
                 let isDragon = Math.random() > 0.5;
                 currentEvent = { type: isDragon ? 'dragon' : 'unicorn', name: isDragon ? '遠古碧炎巨龍' : '幽影星光獨角獸', reqAtk: 70, reqDef: 70 };
@@ -663,7 +663,6 @@
                     }
                 };
             } 
-            // 普通怪獸
             else if (r < 0.3) {
                 document.getElementById('event-box-inner').classList.remove('legendary-border');
                 
@@ -689,14 +688,13 @@
                     playSound('click');
                     inventory.star -= 1; 
 
-                    // 攻守判定邏輯
                     if (stats.atk >= mDef && stats.def >= mAtk) {
-                        alert("🎉 攻守兼備！你完美擊敗了怪獸，毫髮無傷地獲得了 2 顆寶石！");
-                        inventory.gem += 2;
+                        alert("🎉 攻守兼備！你完美擊敗了怪獸，毫髮無傷地獲得了 5 顆寶石！");
+                        inventory.gem += 5; // 增加寶石數量
                     } else if (stats.atk >= mDef && stats.def < mAtk) {
-                        alert("⚠️ 你成功擊敗了怪獸，但因為防禦力不足受了點傷，掉落了 1 個木材，勉強獲得 1 顆寶石！");
+                        alert("⚠️ 你成功擊敗了怪獸，但因為防禦力不足受了點傷，掉落了 1 個木材，勉強獲得 2 顆寶石！");
                         inventory.wood = Math.max(0, inventory.wood - 1);
-                        inventory.gem += 1;
+                        inventory.gem += 2;
                     } else {
                         alert("💀 你的攻擊力太低，無法突破怪獸的防禦！被怪獸打傷並搶走了 2 個木材和 2 個石頭！");
                         inventory.wood = Math.max(0, inventory.wood - 2);
@@ -730,16 +728,19 @@
             }
         }
 
+        // 大幅增加每次答對及連勝的獎勵
         function addStreak() {
             inventory.streak++;
-            inventory.manuscript++;
-            if(inventory.streak % 3 === 0) inventory.fragment++;
-            if(Math.random() < 0.25) { if(Math.random() > 0.5) inventory.gem++; else inventory.star++; }
+            inventory.manuscript += 3; // 每次答對加3個手稿
+            if(inventory.streak % 2 === 0) inventory.fragment += 2; // 每2連對加2個碎片
+            if(Math.random() < 0.50) { 
+                if(Math.random() > 0.5) inventory.gem += 2; else inventory.star += 2; 
+            } // 50%機率掉落寶石或星星
             checkMedals();
         }
 
         let currentLevelType = '';
-        let currentReorderType = 'reorder'; // 區分普通重組還是FA重組
+        let currentReorderType = 'reorder';
         
         window.startGame = function(type) {
             initAudio(); playSound('click'); hideAll();
@@ -780,7 +781,6 @@
             document.getElementById('answer-area').innerHTML = "";
             document.getElementById('word-bank').innerHTML = "";
             
-            // 決定題庫來源
             let targetTasks = (currentReorderType === 'fa-reorder') ? faReorderTasks : reorderTasks;
             let t = targetTasks[Math.floor(Math.random() * targetTasks.length)];
             currentReorderAns = [...t];
@@ -836,8 +836,8 @@
                 }
                 if(correct) {
                     playSound('win'); addStreak();
-                    inventory.wood+＝5; inventory.manuscript+＝5; updateUI();
-                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+5, 手稿+5)</span>";
+                    inventory.wood += 5; updateUI(); // 增加木材掉落
+                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+5, 手稿+3)</span>";
                     document.getElementById('btn-next-reorder').classList.remove('hidden');
                     Array.from(document.getElementById('answer-area').children).forEach(c => c.onclick = null);
                     checkInvasion();
@@ -894,8 +894,8 @@
                 playSound('win'); addStreak();
                 element.style.backgroundColor = '#4CAF50';
                 element.style.boxShadow = '0 6px 0 #2E7D32';
-                inventory.stone++; updateUI();
-                document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>✅ 解答正確！(石頭+1, 手稿+1)</span>";
+                inventory.stone += 5; updateUI(); // 增加石頭掉落
+                document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>✅ 解答正確！(石頭+5, 手稿+3)</span>";
                 document.getElementById('btn-next-mc').classList.remove('hidden');
                 checkInvasion();
             } else {
@@ -1027,7 +1027,7 @@
             document.getElementById('boss-msg').textContent = "";
             document.getElementById('boss-options').innerHTML = "";
             
-            let qPool = (combatType === 'legendary') ? legendaryTasks : [...fillTasks, ...matchTasks, ...connectTasks, ...punctTasks];
+            let qPool = (combatType === 'legendary') ? legendaryTasks : [...fillTasks, ...matchTasks, ...connectTasks, ...punctTasks, ...faMCTasks];
             currentCombatQ = qPool[Math.floor(Math.random() * qPool.length)];
             document.getElementById('boss-question').textContent = currentCombatQ.q;
             
@@ -1039,7 +1039,6 @@
                 document.getElementById('boss-options').appendChild(chunk);
             });
             
-            // 每次載入新題目，重新設定並啟動時間條動畫
             let timeLeft = combatTimeLimit;
             let timerBar = document.getElementById('boss-timer-bar');
             timerBar.style.transition = 'none';
@@ -1085,7 +1084,6 @@
 
         function checkCombat(selected, element) {
             clearInterval(combatTimerInterval);
-            // 答對/答錯時立即凍結時間條
             let timerBar = document.getElementById('boss-timer-bar');
             timerBar.style.transition = 'none';
             timerBar.style.width = timerBar.offsetWidth + 'px';
@@ -1110,13 +1108,12 @@
                             updateUI();
                             alert(`🌟 奇蹟！你成功收服了傳說怪【${currentEvent.name}】！\n🎁 獲得 20 寶石、20 星星、100 手稿，及專屬傳說勳章！`);
                         } else {
-                            inventory.gem += 5; inventory.star += 5; updateUI();
-                            alert("🏆 恭喜你擊敗了 Boss！獲得 5 顆寶石和 5 顆星星！");
+                            inventory.gem += 10; inventory.star += 10; updateUI(); // Boss獎勵增加
+                            alert("🏆 恭喜你擊敗了 Boss！獲得 10 顆寶石和 10 顆星星！");
                         }
                         goHome();
                     }, 1000);
                 } else {
-                    // 答對後自動切換下一題 (延遲1.5秒讓玩家看清楚結果)
                     document.getElementById('btn-boss-flee').classList.add('hidden');
                     setTimeout(() => {
                         nextCombatQuestion();
