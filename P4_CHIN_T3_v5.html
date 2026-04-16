@@ -520,7 +520,7 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_chi_final_ext_v8');
+            const savedData = localStorage.getItem('roblox_p4_chi_final_ext_v7');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -535,7 +535,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_chi_final_ext_v8', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_chi_final_ext_v7', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
