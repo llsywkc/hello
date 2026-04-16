@@ -117,6 +117,47 @@
         <div id="start-screen" class="screen hidden">
             <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#607D8B;">📖 遊戲說明 (新手必看)</button>
             <hr style="width: 80%; border-top: 4px dashed #006064;">
+
+            <button id="btn-gift" onclick="claimGift()" style="background: linear-gradient(45deg, #FF9800, #FF5722); color: white; border: none; padding: 12px 20px; font-size: 18px; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); margin: 15px 0; font-weight: bold; width: 100%; max-width: 300px;">
+    🎁 領取限定禮品包 (只限一次) </button> 
+            let isGiftClaimed = false; // 紀錄禮品包是否已領取
+            // --- 領取禮品包功能 ---
+function claimGift() {
+    if (isGiftClaimed) {
+        alert("❌ 你已經領取過這個禮品包了！");
+        return;
+    }
+
+    // 各種材料 +50
+    inventory.wood += 50;
+    inventory.stone += 50;
+    inventory.gem += 50;
+    inventory.star += 50;
+    
+    // 如果你的遊戲有金幣 (coin)，也可以選擇一起加
+    if (inventory.coin !== undefined) {
+        inventory.coin += 50;
+    }
+
+    isGiftClaimed = true; // 標記為已領取
+
+    // 更新畫面顯示
+    updateUI();
+
+    // 播放音效 (可選，如果你有這個音效的話)
+    if (typeof playSound === "function") {
+        playSound('boss_win'); 
+    }
+
+    // 隱藏按鈕或讓它變成灰色不可按
+    let giftBtn = document.getElementById('btn-gift');
+    giftBtn.innerHTML = "✅ 已領取禮品包";
+    giftBtn.style.background = "#9E9E9E";
+    giftBtn.style.cursor = "not-allowed";
+    giftBtn.onclick = null; // 移除點擊功能
+
+    alert("🎉 恭喜！成功領取限定禮品包！\n獲得 木材 +50, 石頭 +50, 寶石 +50, 星星 +50！");
+}
             
             <h2>🏕️ 選擇主題關卡</h2>
             <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
@@ -164,7 +205,7 @@
                 <button class="btn-orange" onclick="buyItem('atkPotion')">💪 力量藥水 <br><small>永久+2攻擊力 | 40 金幣</small></button>
                 <button class="btn-blue" onclick="buyItem('defPotion')">🛡️ 鐵壁藥水 <br><small>永久+2防禦力 | 40 金幣</small></button>
             </div>
-            <button class="btn-grey" onclick="goHome()">🏠 離開商店</button>
+            <button class="btn-grey" onclick="goHome()">🏠 離開</button>
         </div>
 
         <div id="super-forge-zone" class="screen hidden">
