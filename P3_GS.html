@@ -1,12 +1,9 @@
-
-
-
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 </title>
+    <title>Roblox：森林大冒險 (極致完全版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -79,6 +76,15 @@
         .building-item span.emoji { font-size: 3.5em; margin-bottom: 5px; }
         .super-gear-card { border: 4px solid #FF9800; background: #FFF3E0; width: 200px; }
         .super-gear-card h3 { margin: 5px 0; color: #E65100; font-size: 1.3em; }
+
+        #btn-gift {
+            background: linear-gradient(45deg, #FF9800, #FF5722); color: white; border: none; 
+            padding: 12px 20px; font-size: 1.2em; border-radius: 10px; cursor: pointer; 
+            box-shadow: 0 6px 0 #D84315; margin: 15px 0; font-weight: bold; width: 80%; 
+            text-transform: uppercase; transition: all 0.1s; border: 4px solid #FFE0B2;
+            animation: blink 2s infinite;
+        }
+        #btn-gift:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent; }
     </style>
 </head>
 <body>
@@ -116,48 +122,10 @@
 
         <div id="start-screen" class="screen hidden">
             <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#607D8B;">📖 遊戲說明 (新手必看)</button>
+            
+            <button id="btn-gift" onclick="claimGift()">🎁 領取限定新手禮品包 (只限一次)</button>
+
             <hr style="width: 80%; border-top: 4px dashed #006064;">
-
-            <button id="btn-gift" onclick="claimGift()" style="background: linear-gradient(45deg, #FF9800, #FF5722); color: white; border: none; padding: 12px 20px; font-size: 18px; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); margin: 15px 0; font-weight: bold; width: 100%; max-width: 300px;">
-    🎁 領取限定禮品包 (只限一次) </button> 
-            let isGiftClaimed = false; // 紀錄禮品包是否已領取
-            // --- 領取禮品包功能 ---
-function claimGift() {
-    if (isGiftClaimed) {
-        alert("❌ 你已經領取過這個禮品包了！");
-        return;
-    }
-
-    // 各種材料 +50
-    inventory.wood += 50;
-    inventory.stone += 50;
-    inventory.gem += 50;
-    inventory.star += 50;
-    
-    // 如果你的遊戲有金幣 (coin)，也可以選擇一起加
-    if (inventory.coin !== undefined) {
-        inventory.coin += 50;
-    }
-
-    isGiftClaimed = true; // 標記為已領取
-
-    // 更新畫面顯示
-    updateUI();
-
-    // 播放音效 (可選，如果你有這個音效的話)
-    if (typeof playSound === "function") {
-        playSound('boss_win'); 
-    }
-
-    // 隱藏按鈕或讓它變成灰色不可按
-    let giftBtn = document.getElementById('btn-gift');
-    giftBtn.innerHTML = "✅ 已領取禮品包";
-    giftBtn.style.background = "#9E9E9E";
-    giftBtn.style.cursor = "not-allowed";
-    giftBtn.onclick = null; // 移除點擊功能
-
-    alert("🎉 恭喜！成功領取限定禮品包！\n獲得 木材 +50, 石頭 +50, 寶石 +50, 星星 +50！");
-}
             
             <h2>🏕️ 選擇主題關卡</h2>
             <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
@@ -205,7 +173,7 @@ function claimGift() {
                 <button class="btn-orange" onclick="buyItem('atkPotion')">💪 力量藥水 <br><small>永久+2攻擊力 | 40 金幣</small></button>
                 <button class="btn-blue" onclick="buyItem('defPotion')">🛡️ 鐵壁藥水 <br><small>永久+2防禦力 | 40 金幣</small></button>
             </div>
-            <button class="btn-grey" onclick="goHome()">🏠 離開</button>
+            <button class="btn-grey" onclick="goHome()">🏠 離開商店</button>
         </div>
 
         <div id="super-forge-zone" class="screen hidden">
@@ -353,7 +321,8 @@ function claimGift() {
             playerName: "", coin: 0, hpPotion: 0, potionAtk: 0, potionDef: 0,
             wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, 
             superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
-            equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [] 
+            equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [],
+            giftClaimed: false // 記錄是否已領取禮品包
         };
         let inventory = { ...defaultInv };
 
@@ -398,7 +367,23 @@ function claimGift() {
             { q: "[選擇題] 政府為了減低車輛行駛時發出的噪音，會在高速公路旁加建甚麼？", ans: "隔音屏障", options: ["減速帶", "隔音屏障", "交通燈"] },
             { q: "[選擇題] 在斜坡上種植樹木，其根部能抓緊泥土，這有甚麼主要作用？", ans: "防止山泥傾瀉", options: ["增加房屋供應", "防止山泥傾瀉", "預防鼠患"] },
             { q: "[選擇題] 綠化社區除了美化環境，還能帶來甚麼好處？", ans: "使空氣清新", options: ["使空氣清新", "增加泊車位", "減少垃圾"] },
-            { q: "[排序題] 公屋發展歷史：", ans: "木屋急增 ➔ 石硤尾大火 ➔ 建徙置大廈", options: ["木屋急增 ➔ 石硤尾大火 ➔ 建徙置大廈", "石硤尾大火 ➔ 木屋急增 ➔ 建徙置大廈", "建徙置大廈 ➔ 木屋急增 ➔ 石硤尾大火"] }
+            { q: "[排序題] 公屋發展歷史：", ans: "木屋急增 ➔ 石硤尾大火 ➔ 建徙置大廈", options: ["木屋急增 ➔ 石硤尾大火 ➔ 建徙置大廈", "石硤尾大火 ➔ 木屋急增 ➔ 建徙置大廈", "建徙置大廈 ➔ 木屋急增 ➔ 石硤尾大火"] },
+            { q: "[選擇題] 香港房屋委員會主要負責甚麼工作？", ans: "制定和推行公共房屋計劃", options: ["清洗街道及滅蚊", "制定和推行公共房屋計劃", "管理公園及種植植物"] },
+            { q: "[選擇題] 1954年政府興建第一代公共房屋的最主要起因是甚麼？", ans: "為石硤尾大火災民提供居所", options: ["為了綠化社區", "為石硤尾大火災民提供居所", "為了解決噪音問題"] },
+            { q: "[選擇題] 政府在哪個年代開始興建第一代公共房屋（徙置大廈）？", ans: "1950年代", options: ["1950年代", "1970年代", "1990年代"] },
+            { q: "[選擇題] 以下哪一項是1950年代美荷樓居住環境的特點？", ans: "居住環境較擠迫", options: ["設有大型商場", "居住環境較擠迫", "擁有獨立花園"] },
+            { q: "[選擇題] 1950年代的徙置大廈居民，一般鄰里關係是怎樣的？", ans: "較為親密", options: ["非常冷漠", "互不相識", "較為親密"] },
+            { q: "[選擇題] 香港不少1980年代至今興建的公共屋邨附近，通常會增設哪些設施？", ans: "學校和商場", options: ["農田和果園", "學校和商場", "大型主題樂園"] },
+            { q: "[選擇題] 現時香港哪一類房屋的樓價非常高昂，令一般家庭難以負擔？", ans: "私營房屋", options: ["過渡性房屋", "公營房屋", "私營房屋"] },
+            { q: "[選擇題] 為了解決居住面積細小帶來的問題，人們可以使用甚麼來改善生活空間？", ans: "新穎的家具設計", options: ["購買更多雜物", "新穎的家具設計", "拆除大廈外牆"] },
+            { q: "[選擇題] 為了預防蚊患和鼠患，作為社區一分子的我們應該怎樣做？", ans: "同心協力保持環境衞生", options: ["同心協力保持環境衞生", "在深夜大聲播放音樂", "多使用即棄餐具"] },
+            { q: "[選擇題] 哪一個政府部門負責的工程，有助保持溝渠正常運作？", ans: "渠務署", options: ["渠務署", "地政總署", "環境保護署"] },
+            { q: "[選擇題] 渠務署保持溝渠正常運作，對社區有甚麼幫助？", ans: "改善環境衞生情況", options: ["提供更多房屋", "改善環境衞生情況", "減低車輛噪音"] },
+            { q: "[選擇題] 政府在部分路面鋪設甚麼物料，來減低汽車行駛時造成的滋擾？", ans: "低噪音物料", options: ["低噪音物料", "反光玻璃物料", "防水塑膠物料"] },
+            { q: "[選擇題] 政府如何從法律途徑管制建築工程和車輛發出的噪音？", ans: "立法管制", options: ["立法管制", "鼓勵市民投訴", "派發耳塞"] },
+            { q: "[選擇題] 綠化社區的樹木可以阻隔空氣中的甚麼，使空氣更清新？", ans: "灰塵", options: ["灰塵", "陽光", "雨水"] },
+            { q: "[選擇題] 樹木的樹冠為社區的市民提供了甚麼好處？", ans: "遮蔭休憩的地方", options: ["遮蔭休憩的地方", "防禦野獸的襲擊", "提供大量木材"] },
+            { q: "[選擇題] 以下哪一項「不是」綠化社區所帶來的好處？", ans: "增加房屋供應", options: ["美化環境", "增加房屋供應", "使空氣清新"] }
         ];
 
         const dbEnergy = [
@@ -452,7 +437,6 @@ function claimGift() {
             { q: "我們把廢紙放進藍色的回收箱，讓回收廠重新製成再生紙，這屬於哪一項？", ans: "循環再用", options: ["減少使用", "廢物利用", "循環再用"] },
             { q: "為甚麼我們應該盡量減少使用即棄餐具（如發泡膠碗）？", ans: "因為會製造難以分解的廢物", options: ["因為顏色通常不夠漂亮", "因為會製造難以分解的廢物", "因為即棄餐具太重"] },
             { q: "以下哪一個行為是「珍惜資源」的最佳榜樣？", ans: "離開時關燈，並回收乾淨鋁罐", options: ["經常買新手機，舊的直接丟掉", "離開時關燈，並回收乾淨鋁罐", "洗手時一直開着水喉讓水長流"] },
-            // --- 根據最新資料新增的 15 條能源與化石燃料題目 ---
             { q: "[選擇題] 常用的化石燃料主要包括煤、天然氣和哪一種？", ans: "石油", options: ["木材", "石油", "太陽能"] },
             { q: "[選擇題] 化石燃料在地底需要經過數百萬年才能形成，它們是由甚麼演變而成的？", ans: "遠古的動植物", options: ["遠古的動植物", "火山的岩漿", "外太空的隕石"] },
             { q: "[選擇題] 如果我們不加節制地大量開採化石燃料，最終會面臨甚麼危機？", ans: "耗盡資源", options: ["資源越來越多", "耗盡資源", "天氣變得更冷"] },
@@ -488,7 +472,7 @@ function claimGift() {
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_v9');
+            const savedData = localStorage.getItem('roblox_p4_save_v10');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -497,6 +481,7 @@ function claimGift() {
                     if(inventory.hpPotion === undefined) inventory.hpPotion = 0;
                     if(inventory.potionAtk === undefined) inventory.potionAtk = 0;
                     if(inventory.potionDef === undefined) inventory.potionDef = 0;
+                    if(inventory.giftClaimed === undefined) inventory.giftClaimed = false;
 
                     if(inventory.playerName) {
                         document.getElementById('display-name').textContent = inventory.playerName;
@@ -508,10 +493,32 @@ function claimGift() {
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_v9', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_v10', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
+        }
+
+        // --- 領取禮品包功能 ---
+        function claimGift() {
+            if (inventory.giftClaimed) {
+                alert("❌ 你已經領取過這個禮品包了！");
+                return;
+            }
+
+            // 各種材料 +50
+            inventory.wood += 50;
+            inventory.stone += 50;
+            inventory.gem += 50;
+            inventory.star += 50;
+            inventory.coin += 50;
+
+            inventory.giftClaimed = true; // 標記為已領取
+
+            playSound('boss_win'); 
+            alert("🎉 恭喜！成功領取限定禮品包！\n獲得 金幣 +50, 木材 +50, 石頭 +50, 寶石 +50, 星星 +50！");
+            
+            updateUI(); // 更新介面並存檔
         }
 
         function calculateStats() {
@@ -564,6 +571,17 @@ function claimGift() {
                 bossBtn.classList.add('btn-purple');
                 bossBtn.innerHTML = '🗺️ 終極 Boss 挑戰 (已解鎖)';
                 bossBtn.disabled = false;
+            }
+
+            // 更新禮品包按鈕狀態
+            let giftBtn = document.getElementById('btn-gift');
+            if (giftBtn && inventory.giftClaimed) {
+                giftBtn.innerHTML = "✅ 已領取新手禮品包";
+                giftBtn.style.background = "#9E9E9E";
+                giftBtn.style.cursor = "not-allowed";
+                giftBtn.style.boxShadow = "none";
+                giftBtn.style.animation = "none";
+                giftBtn.onclick = null;
             }
 
             let medalStr = '';
@@ -998,4 +1016,3 @@ function claimGift() {
     </script>
 </body>
 </html>
-
