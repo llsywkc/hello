@@ -1,61 +1,36 @@
-
-
-
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：2C中文大冒險</title>
+    <title>Roblox：森林大冒險 (2年級中文冒險)</title>
     <style>
-        /* 核心 Roblox 方塊風格 */
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
         body {
             font-family: 'Nunito', "Microsoft JhengHei", sans-serif;
-            background: #4CAE50; 
-            background-image: 
-                linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1)), 
-                linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1));
+            background: #FF9800; 
+            background-image: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.15) 75%, rgba(255,255,255,0.15)), 
+                              linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.15) 75%, rgba(255,255,255,0.15));
             background-size: 40px 40px; background-position: 0 0, 20px 20px;
-            margin: 0; padding: 10px;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; color: #333;
+            margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #333;
         }
         
-        h1 {
-            color: #FFF; text-transform: uppercase; letter-spacing: 2px;
-            text-shadow: 4px 4px 0 #2E7D32, -2px -2px 0 #2E7D32, 2px -2px 0 #2E7D32, -2px 2px 0 #2E7D32;
-            font-size: 2.8em; text-align: center; margin: 10px 0;
-        }
+        h1 { color: #FFF; text-transform: uppercase; letter-spacing: 2px; text-shadow: 4px 4px 0 #E65100, -2px -2px 0 #E65100, 2px -2px 0 #E65100, -2px 2px 0 #E65100; font-size: 2.5em; text-align: center; margin: 10px 0; }
 
-        /* 頂部背包資源欄 */
-        .inventory-bar {
-            background-color: #333; color: white;
-            border: 4px solid #222; border-radius: 8px;
-            padding: 10px 20px; font-size: 1.2em; font-weight: bold;
-            display: flex; gap: 15px; margin-bottom: 5px;
-            box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 900px;
-        }
+        .player-info { background: #FFEB3B; color: #333; font-size: 1.2em; font-weight: bold; padding: 5px 20px; border-radius: 20px; border: 4px solid #FBC02D; margin-bottom: 10px; box-shadow: 0 4px 0 #F57F17; }
+        .inventory-bar { background-color: #333; color: white; border: 4px solid #222; border-radius: 8px; padding: 10px 20px; font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; margin-bottom: 5px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; }
+        
         .gem-text { color: #E040FB; text-shadow: 1px 1px 2px #000; }
-        .star-text { color: #FFC107; text-shadow: 1px 1px 2px #000; animation: blink 2s infinite; }
-        .build-text { color: #FFEB3B; }
-        .save-indicator { font-size: 0.8em; color: #81C784; margin-bottom: 15px; text-shadow: 1px 1px 0 #000; }
+        .star-text { color: #FFC107; text-shadow: 1px 1px 2px #000; }
+        .super-text { color: #00E5FF; text-shadow: 1px 1px 2px #000; }
+        .stat-atk { color: #FF5252; text-shadow: 1px 1px 2px #000;}
+        .stat-def { color: #448AFF; text-shadow: 1px 1px 2px #000;}
 
-        .container {
-            background-color: #E0F7FA;
-            border: 8px solid #006064; border-radius: 12px;
-            padding: 20px; width: 95%; max-width: 800px;
-            box-shadow: 0 12px 0 #00363A; text-align: center;
-        }
+        .container { background-color: #FFF3E0; border: 8px solid #E65100; border-radius: 12px; padding: 20px; width: 95%; max-width: 800px; box-shadow: 0 12px 0 #BF360C; text-align: center; position: relative; }
 
-        /* Roblox 立體按鈕 */
-        button {
-            font-family: inherit; font-size: 1.2em; font-weight: bold;
-            padding: 12px 20px; margin: 10px; border-radius: 8px;
-            cursor: pointer; text-transform: uppercase; transition: all 0.1s;
-            border: 4px solid rgba(0,0,0,0.2);
-        }
+        input[type="text"] { font-size: 1.5em; padding: 10px; border: 4px solid #333; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; margin-bottom: 15px; font-weight: bold; }
+        button { font-family: inherit; font-size: 1.2em; font-weight: bold; padding: 12px 20px; margin: 10px; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: all 0.1s; border: 4px solid rgba(0,0,0,0.2); }
         button:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent !important; }
         button:disabled { cursor: not-allowed; opacity: 0.6; filter: grayscale(100%); }
         
@@ -64,752 +39,882 @@
         .btn-orange { background-color: #FF9800; color: white; box-shadow: 0 6px 0 #E65100; }
         .btn-grey { background-color: #9E9E9E; color: white; box-shadow: 0 6px 0 #616161; }
         .btn-red { background-color: #f44336; color: white; box-shadow: 0 6px 0 #b71c1c; }
-        .btn-purple { background-color: #9C27B0; color: white; box-shadow: 0 6px 0 #6A1B9A; border: 4px solid #EA80FC; }
-        .btn-gold { background-color: #FFB300; color: white; box-shadow: 0 6px 0 #FF8F00; border: 4px solid #FFE082; }
-        .btn-hint { background-color: #FFCA28; color: #333; box-shadow: 0 6px 0 #FF8F00; border: 4px solid #FFF8E1; }
-        .btn-small { font-size: 0.9em; padding: 8px 12px; margin: 5px; }
-
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        .btn-purple { background-color: #9C27B0; color: white; box-shadow: 0 6px 0 #6A1B9A; }
+        .btn-gold { background-color: #FFB300; color: white; box-shadow: 0 6px 0 #FF8F00; }
+        .btn-black { background-color: #212121; color: white; box-shadow: 0 6px 0 #000000; border: 4px solid #757575; }
+        .btn-teal { background-color: #009688; color: white; box-shadow: 0 6px 0 #00695C; }
 
         .hidden { display: none !important; }
         .screen { display: flex; flex-direction: column; align-items: center; gap: 15px; }
         
-        /* 遊戲元素樣式 */
-        .word-bank, .answer-area { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; min-height: 80px; padding: 15px; background: rgba(0,0,0,0.05); border-radius: 10px; border: 4px inset rgba(0,0,0,0.1); box-sizing: border-box; }
-        .word-chunk { background-color: #FFEB3B; border: 4px solid #FBC02D; box-shadow: 0 6px 0 #F57F17; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; user-select: none; color: #333; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; min-height: 80px; padding: 15px; background: rgba(0,0,0,0.05); border-radius: 10px; border: 4px inset rgba(0,0,0,0.1); box-sizing: border-box; }
+        .word-chunk { background-color: #FFEB3B; border: 4px solid #FBC02D; box-shadow: 0 6px 0 #F57F17; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; color: #333; transition: transform 0.1s; }
         .word-chunk:active { transform: translateY(4px); box-shadow: 0 2px 0 #F57F17; }
-        
-        .stone-chunk { background-color: #9E9E9E; border: 4px solid #757575; box-shadow: 0 6px 0 #424242; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; user-select: none; color: #FFF; }
-        .stone-chunk:active { transform: translateY(4px); box-shadow: 0 2px 0 #424242; }
-
-        .paper-chunk { background-color: #FFF59D; border: 4px solid #FBC02D; box-shadow: 0 6px 0 #F57F17; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; user-select: none; color: #333; }
-        .paper-chunk:active { transform: translateY(4px); box-shadow: 0 2px 0 #F57F17; }
-
         .question-text { font-size: 1.5em; font-weight: bold; background: #FFF; padding: 15px; border: 4px solid #B0BEC5; border-radius: 8px; line-height: 1.5; width: 90%; box-sizing: border-box; }
-        .hint-text { background-color: #FFF8E1; color: #E65100; border: 3px dashed #FFCA28; padding: 10px; border-radius: 8px; font-size: 1.2em; font-weight: bold; width: 90%; margin-top: 10px; box-sizing: border-box; }
-        .status-msg { font-size: 1.5em; font-weight: bold; min-height: 55px; margin-bottom: 5px; }
-        .boss-progress { background: #333; color: #FFF; padding: 8px 15px; border-radius: 20px; font-size: 1.2em; font-weight: bold; border: 3px solid #FFC107; }
+        .hint-text { color: #E65100; font-weight: bold; font-size: 1.2em; min-height: 30px; margin: 5px 0; background: #FFF3E0; padding: 10px; border-radius: 8px; border: 2px dashed #FF9800; width: 90%; }
+        
+        .feedback-box { background: #E8F5E9; border: 4px solid #4CAF50; border-radius: 10px; padding: 20px; width: 90%; box-sizing: border-box; }
+        .feedback-box.error { background: #FFEBEE; border-color: #F44336; }
 
-        /* 建築世界 */
-        .world-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; background: #8BC34A; padding: 20px; border: 6px solid #558B2F; border-radius: 10px; min-height: 150px; width: 90%; font-size: 3em; box-sizing: border-box; }
-        .building-item { background: rgba(255,255,255,0.3); padding: 10px; border-radius: 10px; border: 3px dashed #33691E; display: flex; flex-direction: column; align-items: center; font-size: 0.4em; font-weight: bold; color: #1B5E20; text-align: center; }
+        .boss-hp-bar-container { width: 90%; background: #333; border: 4px solid #222; border-radius: 10px; height: 30px; position: relative; overflow: hidden; margin-bottom: 10px; }
+        .boss-hp-bar { background: #4CAF50; height: 100%; width: 100%; transition: width 0.3s; }
+        .boss-hp-text { position: absolute; width: 100%; text-align: center; color: white; font-weight: bold; line-height: 30px; top: 0; left: 0; text-shadow: 1px 1px 2px #000; }
+        .timer-bar-container { width: 90%; background: #E0E0E0; border: 4px solid #9E9E9E; border-radius: 10px; height: 20px; position: relative; overflow: hidden; margin-bottom: 10px; }
+        .timer-bar { background: #FF5252; height: 100%; width: 100%; transition: width 1s linear; }
+
+        .world-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; background: #FFE082; padding: 20px; border: 6px solid #FFA000; border-radius: 10px; min-height: 150px; width: 90%; font-size: 3em; box-sizing: border-box; }
+        .building-item { background: rgba(255,255,255,0.8); padding: 15px; border-radius: 10px; border: 4px dashed #F57F17; display: flex; flex-direction: column; align-items: center; font-size: 1em; font-weight: bold; color: #E65100; text-align: center; }
         .building-item span.emoji { font-size: 3.5em; margin-bottom: 5px; }
+        .super-gear-card { border: 4px solid #FF9800; background: #FFF3E0; width: 200px; padding: 15px; border-radius: 10px; text-align: center;}
     </style>
 </head>
 <body>
 
-    <h1>🟩 Roblox：森林大冒險 🟫</h1>
+    <h1>🟧 Roblox：森林大冒險 🟫</h1>
 
-    <div class="inventory-bar">
-        <span>📜 紙: <span id="inv-paper">0</span></span>
-        <span>🪵 木: <span id="inv-wood">0</span></span>
-        <span>🧱 石: <span id="inv-stone">0</span></span>
-        <span class="build-text">🏕️ 帳篷: <span id="inv-tent">0</span></span>
-        <span class="build-text">🛖 木屋: <span id="inv-hut">0</span></span>
+    <div id="player-tag" class="player-info hidden">冒險者：<span id="display-name"></span> <span id="streak-counter" style="color:#E65100; margin-left: 10px;">🔥 連對: 0</span></div>
+
+    <div id="top-nav" class="inventory-bar hidden">
+        <span>🪵 木材: <span id="inv-wood">0</span></span>
+        <span>🧱 石頭: <span id="inv-stone">0</span></span>
+        <span class="stat-atk">⚔️ 攻: <span id="inv-atk">10</span></span>
+        <span class="stat-def">🛡️ 防: <span id="inv-def">10</span></span>
         <span class="gem-text">💎 寶石: <span id="inv-gem">0</span></span>
         <span class="star-text">🌟 星星: <span id="inv-star">0</span></span>
+        <span class="super-text">📜 手稿: <span id="inv-manu">0</span></span>
+        <span class="super-text">🔮 碎片: <span id="inv-frag">0</span></span>
     </div>
-    <div id="save-indicator" class="save-indicator">💾 遊戲進度已自動讀取</div>
 
-    <div class="container">
-        <div id="start-screen" class="screen">
-            <h2>🏕️ 選擇冒險地圖</h2>
-            <button class="btn-blue" onclick="startGame('card')">💌 感謝卡任務 (贏取 📜 魔法紙)</button>
-            <button class="btn-purple" onclick="startGame('punctuation')">🖋️ 標點尋寶 (贏取 📜 魔法紙)</button>
-            <button class="btn-green" onclick="startGame('reorder')">🌉 擴寫過河 (贏取 🪵 木材)</button>
-            <button class="btn-gold" onclick="startGame('idiom')">🐉 成語神廟 (贏取 🪵 木材)</button>
-            <button class="btn-grey" onclick="startGame('mining')">⛏️ 句式礦洞 (贏取 🧱 石頭)</button>
-            <p style="font-size: 0.9em; font-weight: bold; color: #FF9800;">(答對題目有機會隨機掉落「🌟 星星碎片」！)</p>
+    <div id="main-container" class="container">
+        
+        <div id="login-screen" class="screen">
+            <h2>🏕️ 創建你的角色</h2>
+            <p>請輸入冒險者名稱：</p>
+            <input type="text" id="input-name" maxlength="10" placeholder="輸入名字...">
+            <button class="btn-orange" onclick="setPlayerName()">🚀 開始遊戲</button>
+            <p style="font-size: 0.9em; color: #666; margin-top: 20px;">系統會在背景自動儲存進度 💾</p>
+            <button class="btn-grey" onclick="resetGame()" style="font-size: 0.8em; padding: 5px 10px; margin-top: 30px;">🔄 清除存檔並重新開始</button>
+        </div>
+
+        <div id="start-screen" class="screen hidden">
+            <button class="btn-grey" onclick="openInstructions()" style="width: 80%;">📖 遊戲說明 (新手必看)</button>
+            <hr style="width: 80%; border-top: 4px dashed #E65100;">
             
-            <hr style="width: 80%; border-top: 4px dashed #006064;">
+            <h2>🏕️ 選擇冒險地圖 (每關20題)</h2>
+            <button class="btn-purple" onclick="startGame('dictation')" style="width: 80%; border: 4px solid #FFEB3B; font-size: 1.4em;">📝 默書尋寶 (最新測考範圍)</button>
+            <br>
+            <button class="btn-green" onclick="startGame('reorder')">🌉 聯句過河</button>
+            <button class="btn-grey" onclick="startGame('mining')">⛏️ 礦洞尋寶</button>
+            <button class="btn-blue" onclick="startGame('punctuation')">🖋️ 標點尋寶</button>
+            <button class="btn-orange" onclick="startGame('idiom')">🐉 語文神廟</button>
+            <button class="btn-teal" onclick="startGame('letter')">✉️ 書信神探</button>
             
-            <button class="btn-grey" id="btn-boss" onclick="startGame('boss')" disabled>🔒 隱藏寶藏挑戰 (需建 1 座城堡解鎖)</button>
-            <button class="btn-orange" onclick="openBuildZone()">🔨 進入建築工坊</button>
-
-            <div style="margin-top: 20px;">
-                <button class="btn-red btn-small" onclick="resetGameSave()">⚠️ 刪除進度並重新開始</button>
-            </div>
+            <hr style="width: 80%; border-top: 4px dashed #E65100;">
+            
+            <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇 (無限戰力)</button>
+            <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊 (基礎防具)</button>
+            <button class="btn-purple" onclick="openBuildZone()">🔨 進入建築工坊 (解鎖高級建築)</button>
+            <button class="btn-black" id="btn-boss-menu" onclick="openBossSelect()" disabled>🔒 終極 Boss 挑戰 (需建豪華城堡)</button>
         </div>
 
-        <div id="game-card" class="screen hidden">
-            <h2>💌 感謝卡任務 <br><small>小心分辨「寫給誰」和「誰寫的」！</small></h2>
-            <div class="status-msg" id="card-msg"></div>
-            <div class="question-text" id="card-question">題目加載中...</div>
-            <h3 style="margin-bottom: 0;">選擇答案：</h3>
-            <div class="word-bank" id="card-options"></div>
-            <div>
-                <button class="btn-grey hidden" id="btn-next-card" onclick="nextCard()">➡️ 下一題</button>
-                <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
+        <div id="instruction-screen" class="screen hidden">
+            <h2>📖 冒險者指南</h2>
+            <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #FF9800; max-height: 400px; overflow-y: auto;">
+                <h3 style="color:#E65100; margin-top:0;">1. 戰鬥力 (攻/防) 與怪獸遭遇</h3>
+                <p>在地圖探險時，有機率遇到<b>隨機怪獸</b>！你需要有足夠的「⚔️攻擊力」與「🛡️防禦力」才能迎戰。打贏可獲稀有資源！如果打不過，可以選擇「🏃 逃走」(75% 成功率)。建成「豪華城堡」後，甚至會遇到<b>隱藏神獸</b>！</p>
+                <h3 style="color:#B71C1C;">2. 如何獲得元素？</h3>
+                <p>🪵 <b>木材 / 🧱 石頭</b>：透過一般答題獲得。</p>
+                <p>📜 <b>勤奮手稿</b>：每次答對都會獲得 1 張，用於神器升級。</p>
+                <p>💎 <b>寶石 / 🌟 星星 / 🔮 碎片</b>：打敗怪獸、連續答對或Boss戰獲得。</p>
+                <h3 style="color:#6A1B9A;">3. Boss 挑戰</h3>
+                <p>建成 <b>1 座豪華城堡</b>解鎖。為限時多項選擇題，答錯會扣 HP！</p>
             </div>
+            <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
 
-        <div id="game-punctuation" class="screen hidden">
-            <h2>🖋️ 標點尋寶 <br><small>找出句子中遺失的標點符號！</small></h2>
-            <div class="status-msg" id="punc-msg"></div>
-            <div class="question-text" id="punc-question">題目加載中...</div>
-            <h3 style="margin-bottom: 0;">選擇正確標點：</h3>
-            <div class="word-bank" id="punc-options"></div>
-            <div>
-                <button class="btn-grey hidden" id="btn-next-punc" onclick="nextPunctuation()">➡️ 下一題</button>
-                <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
+        <div id="super-forge-zone" class="screen hidden">
+            <h2 style="color: #FF9800;">👑 神器祭壇</h2>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+                <div class="super-gear-card">
+                    <h3>🗡️ 破題者之刃 <br>Lv.<span id="sg-w-lv">0</span></h3>
+                    <p class="stat-atk">效果: +<span id="sg-w-bonus">0</span> 攻</p>
+                    <button class="btn-gold" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('weapon')">升級 (需 <span id="sg-w-cost-m">5</span>手稿 <span id="sg-w-cost-f">0</span>碎片)</button>
+                </div>
+                <div class="super-gear-card">
+                    <h3>🛡️ 絕對專注之盾 <br>Lv.<span id="sg-s-lv">0</span></h3>
+                    <p class="stat-def">效果: +<span id="sg-s-bonus">0</span> 防</p>
+                    <button class="btn-blue" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('shield')">升級 (需 <span id="sg-s-cost-m">5</span>手稿 <span id="sg-s-cost-f">0</span>碎片)</button>
+                </div>
             </div>
+            <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
 
-        <div id="game-reorder" class="screen hidden">
-            <h2>🌉 擴寫過河 <br><small>將詞語順序排好，搭建正確的句子橋樑！</small></h2>
-            <div class="status-msg" id="reorder-msg"></div>
-            <h3 style="margin-bottom: 0;">你的橋樑：</h3>
-            <div class="answer-area" id="answer-area"></div>
-            <h3 style="margin-bottom: 0;">散落的木板：</h3>
-            <div class="word-bank" id="word-bank"></div>
-            <div>
-                <button class="btn-orange" onclick="resetReorder()">🔄 重新排列</button>
-                <button class="btn-green hidden" id="btn-next-reorder" onclick="nextReorder()">➡️ 下一題</button>
-                <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
-            </div>
-        </div>
-
-        <div id="game-idiom" class="screen hidden">
-            <h2>🐉 成語神廟 <br><small>選出正確的成語，獲得神廟的木材！</small></h2>
-            <div class="status-msg" id="idiom-msg"></div>
-            <div class="question-text" id="idiom-question">題目加載中...</div>
-            <h3 style="margin-bottom: 0;">選擇成語：</h3>
-            <div class="word-bank" id="idiom-options"></div>
-            <div>
-                <button class="btn-grey hidden" id="btn-next-idiom" onclick="nextIdiom()">➡️ 下一題</button>
-                <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
-            </div>
-        </div>
-
-        <div id="game-mining" class="screen hidden">
-            <h2>⛏️ 句式礦洞 <br><small>敲碎正確的詞語礦石，填補句子！</small></h2>
-            <div class="status-msg" id="mining-msg"></div>
-            <div class="question-text" id="mining-question">題目加載中...</div>
-            <h3 style="margin-bottom: 0;">選擇礦石：</h3>
-            <div class="word-bank" id="mining-options"></div>
-            <div>
-                <button class="btn-grey hidden" id="btn-next-mining" onclick="nextMining()">➡️ 下一題</button>
-                <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
-            </div>
-        </div>
-
-        <div id="game-boss" class="screen hidden">
-            <h2 style="color:#9C27B0; text-shadow: 2px 2px #FFF;">🗺️ 隱藏寶藏挑戰 (終極試煉)</h2>
-            <div class="boss-progress" id="boss-progress">進度：1 / 10 &nbsp;|&nbsp; 累積答對：0</div>
-            <div class="status-msg" id="boss-msg"></div>
-
-            <button class="btn-hint" id="btn-hint" onclick="showBossHint()">💡 取得提示</button>
-            <div id="boss-hint-text" class="hint-text hidden"></div>
-
-            <div id="boss-reorder-area" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-                <h3 style="margin-bottom: 0;">進階擴寫：</h3>
-                <div class="answer-area" id="boss-ans-area"></div>
-                <h3 style="margin-bottom: 0;">詞語庫：</h3>
-                <div class="word-bank" id="boss-bank-area"></div>
-                <div>
-                    <button class="btn-orange" id="btn-boss-reset" onclick="resetBossReorder()">🔄 重新排列</button>
-                    <button class="btn-green" id="btn-boss-submit-reorder" onclick="submitBossReorder()">✅ 確定提交</button>
+        <div id="game-screen" class="screen hidden">
+            <h2 id="game-title">遊戲標題</h2>
+            
+            <div id="monster-encounter-panel" class="hidden" style="width: 100%; text-align: center; background: rgba(0,0,0,0.05); border-radius: 10px; padding: 20px; border: 4px dashed #f44336; margin-bottom: 15px;">
+                <h2 style="color:#f44336; margin-top:0;">🚨 遭遇怪獸！</h2>
+                <div style="font-size: 6em;" id="mon-emoji">🐺</div>
+                <h3 id="mon-name" style="font-size: 1.8em; margin: 5px 0;">森林狼</h3>
+                <p style="color:#333; font-size:1.2em; font-weight:bold;">⚔️ 要求攻: <span id="mon-req-atk" class="stat-atk">15</span> | 🛡️ 要求防: <span id="mon-req-def" class="stat-def">15</span></p>
+                <div id="mon-warning-msg" style="color:red; font-weight:bold; height: 25px;"></div>
+                <div style="margin-top: 15px;">
+                    <button id="btn-mon-fight" class="btn-red" onclick="startMonsterFight()">⚔️ 迎戰！</button>
+                    <button class="btn-blue" onclick="tryFlee()">🏃 逃走 (75%成功)</button>
                 </div>
             </div>
 
-            <div id="boss-mining-area" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-                <div class="question-text" id="boss-mining-q"></div>
-                <h3 style="margin-bottom: 0;">選擇正確詞語：</h3>
-                <div class="word-bank" id="boss-mining-options"></div>
+            <div id="question-panel">
+                <div id="monster-fight-status" class="hidden" style="color:#9C27B0; font-weight:bold; font-size:1.2em; margin-bottom:10px;"></div>
+                <div class="question-text" id="question-text">題目加載中...</div>
+                <div class="word-bank" id="options-area"></div>
+            </div>
+            
+            <div id="feedback-area" class="feedback-box hidden">
+                <h3 id="feedback-msg" style="margin-top: 0; color: #2E7D32;">✅ 答對了！</h3>
+                <p id="reward-msg" style="color: #E65100; font-weight: bold;"></p>
+                <button class="btn-green" onclick="handleNextAction()">下一題 ➡️</button>
             </div>
 
-            <div style="margin-top:20px;">
-                <button class="btn-blue hidden" id="btn-next-boss" onclick="nextBoss()">➡️ 下一題</button>
-                <button class="btn-red" onclick="goHome()">🚪 暫停並返回主畫面</button>
+            <div id="hint-area" class="hint-text hidden">💡 提示加載中...</div>
+            <div id="bottom-controls">
+                <button class="btn-gold" onclick="showHint()">💡 顯示提示</button>
+                <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
             </div>
         </div>
 
-        <div id="game-boss-result" class="screen hidden">
-            <h2 style="font-size: 2.5em; color: #E65100;">🏆 挑戰結束 🏆</h2>
-            <div class="question-text" id="boss-result-text" style="font-size: 2em;"></div>
-            <button class="btn-green" onclick="goHome()">🏠 返回基地領賞</button>
+        <div id="forge-zone" class="screen hidden">
+            <h2>⚔️ 裝備鍛造坊</h2>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                <button class="btn-orange" onclick="craft('woodSword')">🗡️ 木劍 (+10攻) <br><small>3 木材</small></button>
+                <button class="btn-grey" onclick="craft('stoneSword')">⚔️ 石劍 (+25攻) <br><small>5 石頭, 2 木材</small></button>
+                <button class="btn-orange" onclick="craft('woodShield')">🛡️ 木盾 (+10防) <br><small>3 木材</small></button>
+                <button class="btn-grey" onclick="craft('stoneArmor')">🛡️ 石甲 (+25防) <br><small>5 石頭</small></button>
+            </div>
+            <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
 
         <div id="build-zone" class="screen hidden">
             <h2>🔨 森林建築工坊</h2>
-            <p style="font-size:1.2em; font-weight:bold; background:#FFF; padding:10px; border-radius:10px; border:2px dashed #006064;">
-                💡 秘訣：先收集材料建「帳篷」和「木屋」，<br>
-                集齊 <span style="color:#E65100;">2 個帳篷 + 2 間木屋</span> 就可以合成 1 座城堡！<br>
-                擁有 1 座城堡即可解鎖「隱藏寶藏挑戰」！
-            </p>
-            <div>
-                <button class="btn-orange" onclick="buildItem('tent')">🏕️ 建溫習帳篷 (-2紙, -1木)</button>
-                <button class="btn-grey" onclick="buildItem('hut')">🛖 建森林木屋 (-2木, -2石)</button>
-                <hr style="width:50%; border: 2px solid #333;">
-                <button class="btn-blue" onclick="buildItem('castle')">🏰 合成大城堡 (-2帳篷, -2木屋)</button>
+            <div style="margin-bottom: 15px;">
+                <button class="btn-orange" onclick="buildItem('tent')">⛺ 建探險帳篷 (-2木)</button>
+                <button class="btn-grey" onclick="buildItem('cabin')">🏠 建溫馨木屋 (-2石)</button>
+                <button class="btn-blue" onclick="buildItem('castle')">🏰 合成豪華城堡 (-2帳篷, -2木屋)</button>
             </div>
-            
-            <div id="div-flying" class="hidden" style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
-                <button class="btn-purple" onclick="buildItem('flying')">☁️🛸 建造飛天基地 <br><small>(-1寶石, -5紙, -5木, -5石)</small></button>
-                <button class="btn-gold" onclick="buildItem('wheel')">🎡 建造星空摩天輪 <br><small>(-3星星碎片, -3紙, -3木, -3石)</small></button>
+            <div style="background: rgba(255,255,255,0.5); padding: 10px; border-radius: 8px; border: 2px dashed #FF9800; margin-bottom: 15px;">
+                <h3 style="margin-top:0; color: #6A1B9A;">✨ 奇蹟建築 (消耗稀有資源)</h3>
+                <button class="btn-purple" onclick="buildItem('base')">🚀 星際基地 <br><small>(-5寶石, -1豪華城堡)</small></button>
+                <button class="btn-gold" onclick="buildItem('park')">🎡 夢幻遊樂園 <br><small>(-5星星, -5木材, -5石頭)</small></button>
             </div>
-            
-            <h3>你的領地：</h3>
             <div class="world-grid" id="world-grid"></div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
+        
+        <div id="boss-select-screen" class="screen hidden">
+            <h2 style="color:#9C27B0;">🗺️ 終極 Boss 挑戰區</h2>
+            <p>警告：答錯或超時將扣除HP與元素！防禦力越高，HP越多！</p>
+            <button class="btn-green" onclick="startBossFight(1)">🟢 Boss 1：元素吞噬者 (限時15秒/題)</button>
+            <button class="btn-orange" onclick="startBossFight(2)">🟡 Boss 2：混沌智者 (限時10秒/題)</button>
+            <button class="btn-red" onclick="startBossFight(3)">🔴 Boss 3：終極幻影魔王 (限時5秒/題)</button>
+            <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 逃跑並返回</button>
+        </div>
+
+        <div id="boss-combat-screen" class="screen hidden">
+            <h2 id="boss-name-title" style="color:#B71C1C; margin-bottom:5px;">Boss Name</h2>
+            <div class="boss-hp-bar-container">
+                <div class="boss-hp-bar" id="player-hp-bar"></div>
+                <div class="boss-hp-text" id="player-hp-text">你的 HP: 100/100</div>
+            </div>
+            <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 5px;" id="boss-progress-text">目標：累積答對 0 / 5</div>
+            <div class="timer-bar-container">
+                <div class="timer-bar" id="boss-timer-bar"></div>
+            </div>
+            <div style="color: #FF5252; font-weight: bold; font-size: 1.5em; margin-bottom: 10px;" id="boss-time-text">15s</div>
+            
+            <div class="question-text" id="boss-question">題目加載中...</div>
+            <div class="word-bank" id="boss-options"></div>
+
+            <div id="boss-feedback-area" class="feedback-box hidden">
+                <h3 id="boss-feedback-msg" style="margin-top: 0;"></h3>
+                <button class="btn-blue" onclick="handleBossNextQuestion()">繼續戰鬥 ➡️</button>
+            </div>
+
+            <div id="boss-hint-area" class="hint-text hidden">💡 提示加載中...</div>
+            
+            <div>
+                <button class="btn-gold" onclick="showBossHint()">💡 顯示提示</button>
+                <button class="btn-red" id="btn-boss-flee" onclick="goHome()">🏃 逃跑 (返回主頁)</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // --- 存檔與音效系統 ---
+        // --- 遊戲音效系統 ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx;
-        function initAudio() { 
-            try {
-                if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) { 
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
-                } 
-            } catch (e) { console.warn("Audio Context not supported"); }
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
         }
+
         function playSound(type) {
-            try {
-                if (!audioCtx) return;
-                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                if (type === 'click') {
-                    osc.type = 'square'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(500, audioCtx.currentTime + 0.1);
-                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-                } else if (type === 'win') {
-                    osc.type = 'sine'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.setValueAtTime(600, audioCtx.currentTime + 0.1); osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.2);
-                    gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.4);
-                } else if (type === 'error') {
-                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.2);
-                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.2);
-                } else if (type === 'epic') {
-                    osc.type = 'triangle'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.5);
-                    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.8);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.8);
-                } else if (type === 'drop') {
-                    osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.2);
-                    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-                }
-            } catch (e) { console.warn("Sound error", e); }
-        }
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
 
-        // --- 全局變數與資源 ---
-        let inventory = { paper: 0, wood: 0, stone: 0, tent: 0, hut: 0, castles: 0, gem: 0, flying: 0, star: 0, wheel: 0 };
-        
-        function loadGame() {
-            const savedData = localStorage.getItem('roblox_p2_save');
-            const defaultInv = { paper: 0, wood: 0, stone: 0, tent: 0, hut: 0, castles: 0, gem: 0, flying: 0, star: 0, wheel: 0 };
-            
-            if (savedData) {
-                try {
-                    let parsed = JSON.parse(savedData);
-                    inventory = { ...defaultInv, ...parsed };
-                    for (let key in defaultInv) { if (typeof inventory[key] !== 'number' || isNaN(inventory[key])) inventory[key] = 0; }
-                } catch (e) { inventory = { ...defaultInv }; }
-            } else { inventory = { ...defaultInv }; }
-            restoreBuildings(); updateUI(false);
-        }
-
-        function saveGame() {
-            localStorage.setItem('roblox_p2_save', JSON.stringify(inventory));
-            const indicator = document.getElementById('save-indicator');
-            indicator.textContent = "💾 遊戲進度已自動儲存：" + new Date().toLocaleTimeString();
-            indicator.style.color = "#FFEB3B";
-            setTimeout(() => { indicator.style.color = "#81C784"; }, 1000);
-        }
-
-        function resetGameSave() {
-            if (confirm("⚠️ 警告：這會刪除你所有的資源和辛苦建造的建築物，重新開始！你確定嗎？")) {
-                localStorage.removeItem('roblox_p2_save');
-                inventory = { paper: 0, wood: 0, stone: 0, tent: 0, hut: 0, castles: 0, gem: 0, flying: 0, star: 0, wheel: 0 };
-                restoreBuildings(); updateUI(false);
-                document.getElementById('save-indicator').textContent = "🗑️ 遊戲已重新開始";
-                alert("🔄 遊戲資料已清空！");
+            if (type === 'click') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(600, now); osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+                gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now); osc.stop(now + 0.1);
+            } else if (type === 'correct') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(400, now); osc.frequency.setValueAtTime(600, now + 0.1);
+                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.3);
+                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            } else if (type === 'craft') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(300, now); osc.frequency.setValueAtTime(500, now + 0.1);
+                gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            } else if (type === 'win') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(400, now); osc.frequency.setValueAtTime(500, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2); osc.frequency.setValueAtTime(800, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.5);
+                osc.start(now); osc.stop(now + 0.5);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, now); osc.frequency.linearRampToValueAtTime(50, now + 0.8);
+                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.8);
+                osc.start(now); osc.stop(now + 0.8);
+            } else if (type === 'monster') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(150, now); osc.frequency.setValueAtTime(250, now + 0.2);
+                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.4);
+                osc.start(now); osc.stop(now + 0.4);
             }
         }
 
-        function restoreBuildings() {
-            const grid = document.getElementById('world-grid'); grid.innerHTML = '';
-            for(let i=0; i<inventory.tent; i++) addBuildingToGrid("🏕️", "溫習帳篷");
-            for(let i=0; i<inventory.hut; i++) addBuildingToGrid("🛖", "森林木屋");
-            for(let i=0; i<inventory.castles; i++) addBuildingToGrid("🏰", "大城堡");
-            for(let i=0; i<inventory.flying; i++) addBuildingToGrid("☁️🛸☁️", "飛天基地");
-            for(let i=0; i<inventory.wheel; i++) addBuildingToGrid("🎡", "星空摩天輪");
-        }
+        document.addEventListener('click', function(e) {
+            initAudio(); 
+            if(e.target.tagName === 'BUTTON' || e.target.classList.contains('word-chunk')) {
+                let oc = e.target.getAttribute('onclick') || '';
+                if(!oc.includes('checkAnswer') && !oc.includes('checkBossAnswer')) { playSound('click'); }
+            }
+        });
 
-        function addBuildingToGrid(emoji, label) {
-            document.getElementById('world-grid').innerHTML += `<div class="building-item"><span class="emoji">${emoji}</span>${label}</div>`;
-        }
-
-        function checkStarDrop() {
-            if (Math.random() < 0.25) {
-                inventory.star++; setTimeout(() => playSound('drop'), 300); 
-                return "<br><span style='color:#FF9800;'>🌟 幸運掉落：星星碎片 x 1！</span>";
-            } return "";
-        }
-
-        // --- 題庫區域 ---
-        
-        // 1. 感謝卡
-        const allCardTasks = [
-            { q: "小明想寫感謝卡感謝陳老師教他數學，這張卡的「上款」應該寫甚麼？", ans: "親愛的陳老師：", options: ["親愛的陳老師：", "親愛的小明：", "老師的學生："] },
-            { q: "媽媽生日了，你想寫一張感謝卡給媽媽，「上款」應該寫？", ans: "親愛的媽媽：", options: ["親愛的媽媽：", "親愛的兒子：", "媽媽的女兒："] },
-            { q: "同學小樂借了圖書給你，你要寫卡片給他，「上款」要寫誰的名字？", ans: "小樂", options: ["小樂", "自己", "圖書館老師"] },
-            { q: "哥哥教你踏單車，這張感謝卡的「上款」應該寫甚麼？", ans: "親愛的哥哥：", options: ["親愛的哥哥：", "親愛的弟弟：", "哥哥的妹妹："] },
-            { q: "表姐送了禮物給你，你在卡片開頭的「上款」應該怎樣稱呼她？", ans: "親愛的表姐：", options: ["親愛的表姐：", "表姐的表妹：", "親愛的禮物："] },
-            { q: "「上款」是寫在感謝卡的哪一個位置？", ans: "最開頭的第一行", options: ["最開頭的第一行", "卡片的最後一行", "正文的中間"] },
-            { q: "稱謂（上款）後面，必須加上甚麼標點符號？", ans: "冒號 (：)", options: ["冒號 (：)", "句號 (。)", "問號 (?)"] },
-            { q: "你寫感謝卡給媽媽，在署名（自己的名字）上方，應該寫甚麼「自稱」？", ans: "兒子 / 女兒", options: ["兒子 / 女兒", "媽媽", "學生"] },
-            { q: "小明寫感謝卡給同班同學小樂，小明應該用甚麼「自稱」？", ans: "同學", options: ["同學", "老師", "哥哥"] },
-            { q: "你寫卡片多謝林老師的教導，在署名（下款）前，應該寫上甚麼「自稱」？", ans: "學生", options: ["學生", "同學", "朋友"] },
-            { q: "寫感謝卡給哥哥，下款上方的「自稱」應該寫甚麼？", ans: "弟弟 / 妹妹", options: ["弟弟 / 妹妹", "哥哥", "朋友"] },
-            { q: "小華寫卡片多謝好朋友志明，小華的「自稱」應該寫甚麼？", ans: "朋友", options: ["朋友", "同學", "弟弟"] },
-            { q: "感謝卡中，寫在最後面、用來表示自己身分（例如「學生」或「兒子」）的詞語，叫做甚麼？", ans: "自稱", options: ["自稱", "上款", "正文"] },
-            { q: "「自稱」和「下款」（自己的名字）通常寫在卡片的哪一個位置？", ans: "右下方", options: ["右下方", "左上方", "正中間"] },
-            { q: "寫卡片多謝圖書館的王管理員，你的「自稱」應該寫甚麼？", ans: "學生", options: ["學生", "管理員", "同學"] }
-        ];
-
-        // 2. 標點符號 (NEW 20題)
-        const allPunctuationTasks = [
-            { q: "今天的天氣真好呢 [？]", ans: "！", options: ["！", "。", "？"] },
-            { q: "你吃過早餐了嗎 [？]", ans: "？", options: ["？", "。", "，"] },
-            { q: "我喜歡吃蘋果 [？] 香蕉和橙。", ans: "、", options: ["、", "，", "。"] },
-            { q: "放學後，我們一起去圖書館 [？]", ans: "。", options: ["。", "？", "！"] },
-            { q: "媽媽說 [？]「快點做功課吧！」", ans: "：", options: ["：", "，", "。"] },
-            { q: "這朵花真漂亮 [？]", ans: "！", options: ["！", "。", "，"] },
-            { q: "請問洗手間在哪裏 [？]", ans: "？", options: ["？", "。", "！"] },
-            { q: "文具袋裏有鉛筆、橡皮擦 [？] 尺子等。", ans: "、", options: ["、", "，", "。"] },
-            { q: "天黑了 [？] 我們回家吧。", ans: "，", options: ["，", "。", "？"] },
-            { q: "爸爸問：「你今天開心嗎 [？]」", ans: "？", options: ["？", "。", "！"] },
-            { q: "太棒了 [？] 我們贏了比賽！", ans: "！", options: ["！", "，", "。"] },
-            { q: "我有一隻可愛的小貓 [？] 牠的名字叫小白。", ans: "，", options: ["，", "、", "？"] },
-            { q: "這是一本很有趣的童話書 [？]", ans: "。", options: ["。", "，", "？"] },
-            { q: "老師說 [？]「同學們，上課了。」", ans: "：", options: ["：", "，", "。"] },
-            { q: "你要喝果汁 [？] 還是喝牛奶？", ans: "，", options: ["，", "、", "。"] },
-            { q: "哇 [？] 好大的一個西瓜！", ans: "！", options: ["！", "，", "。"] },
-            { q: "我的書包裏有中文書、英文書 [？] 數學書。", ans: "、", options: ["、", "，", "。"] },
-            { q: "你在做甚麼 [？]", ans: "？", options: ["？", "。", "！"] },
-            { q: "春天來了，小草綠了 [？] 花兒開了。", ans: "，", options: ["，", "、", "。"] },
-            { q: "我最喜歡的科目是體育 [？]", ans: "。", options: ["。", "，", "？"] }
-        ];
-
-        // 3. 重組句子 (擴充至 35 題)
-        const allReorderTasks = [
-            ["胖胖的", "熊貓", "在竹林裏", "慢慢地", "散步。"],
-            ["鮮艷的", "花朵", "在花園裏", "悄悄地", "綻放。"],
-            ["綠色的", "青蛙", "在池塘邊", "快樂地", "呱呱叫。"],
-            ["勇敢的", "消防員", "在火場中", "迅速地", "救人。"],
-            ["閃亮的", "星星", "在夜空中", "靜靜地", "發光。"],
-            ["頑皮的", "猴子", "在樹上", "靈活地", "跳躍。"],
-            ["藍色的", "汽車", "在公路上", "飛快地", "奔馳。"],
-            ["細小的", "雨滴", "從天空中", "輕輕地", "落下。"],
-            ["兇猛的", "獅子", "在草原上", "大聲地", "吼叫。"],
-            ["溫柔的", "護士", "在醫院裏", "細心地", "照顧病人。"],
-            ["雪白的", "兔子", "在草地上", "開心地", "吃蘿蔔。"],
-            ["高大的", "大象", "在河邊", "悠閒地", "喝水。"],
-            ["聰明的", "班長", "在黑板前", "大聲地", "朗讀。"],
-            ["黃色的", "小鴨", "在湖水中", "自由地", "游水。"],
-            ["熱心的", "警察", "在十字路口", "努力地", "指揮交通。"],
-            // 以下為新增的 20 題
-            ["勤勞的", "蜜蜂", "在花叢中", "忙碌地", "採蜜。"],
-            ["可愛的", "企鵝", "在冰地上", "搖搖晃晃地", "走路。"],
-            ["美麗的", "蝴蝶", "在花園裏", "自由自在地", "飛舞。"],
-            ["粗壯的", "大樹", "在風中", "輕輕地", "搖晃。"],
-            ["清澈的", "河水", "在山谷裏", "嘩啦啦地", "流淌。"],
-            ["圓圓的", "月亮", "在夜空中", "靜靜地", "照耀着大地。"],
-            ["快樂的", "小鳥", "在枝頭上", "清脆地", "唱歌。"],
-            ["調皮的", "弟弟", "在客廳裏", "開心地", "玩玩具。"],
-            ["年邁的", "奶奶", "在公園裏", "慢慢地", "散步。"],
-            ["五顏六色的", "金魚", "在魚缸裏", "快樂地", "游來游去。"],
-            ["威武的", "老虎", "在森林裏", "大聲地", "咆哮。"],
-            ["勤奮的", "學生", "在課室裏", "專心地", "聽課。"],
-            ["辛苦的", "農夫", "在田野裏", "默默地", "耕種。"],
-            ["高大的", "長頸鹿", "在樹下", "慢慢地", "吃樹葉。"],
-            ["潔白的", "雪花", "從天空中", "紛紛揚揚地", "飄落。"],
-            ["熱情的", "太陽", "在天空中", "燦爛地", "微笑。"],
-            ["聰明的", "海豚", "在水族館裏", "精彩地", "表演。"],
-            ["善良的", "女孩", "在路邊", "輕輕地", "撫摸小貓。"],
-            ["淘氣的", "小狗", "在草地上", "興奮地", "奔跑。"],
-            ["辛苦的", "媽媽", "在廚房裏", "用心地", "準備晚餐。"]
-        ];
-
-        // 4. 成語 (NEW 15題)
-        const allIdiomTasks = [
-            { q: "他做事總是 [？]，甚麼都做不好。", ans: "半途而廢", options: ["半途而廢", "一心一意", "全神貫注"] },
-            { q: "這對雙胞胎長得 [？]，很難分辨。", ans: "一模一樣", options: ["一模一樣", "五顏六色", "千奇百怪"] },
-            { q: "上課時，同學們都 [？] 地聽老師講課。", ans: "專心致志", options: ["專心致志", "東張西望", "心不在焉"] },
-            { q: "遊樂場裏 [？]，充滿了孩子們的歡笑聲。", ans: "人山人海", options: ["人山人海", "鴉雀無聲", "冷冷清清"] },
-            { q: "遇到困難時，我們要 [？]，不能輕易放棄。", ans: "堅持不懈", options: ["堅持不懈", "半途而廢", "知難而退"] },
-            { q: "春天到了，花園裏 [？]，非常美麗。", ans: "百花齊放", options: ["百花齊放", "寸草不生", "冰天雪地"] },
-            { q: "他是一個 [？] 的好孩子，從不說謊。", ans: "誠實可靠", options: ["誠實可靠", "狡猾多端", "自私自利"] },
-            { q: "這本書的故事 [？]，吸引了很多人閱讀。", ans: "引人入勝", options: ["引人入勝", "枯燥無味", "平淡無奇"] },
-            { q: "這隻小狗非常可愛，大家都對牠 [？]。", ans: "愛不釋手", options: ["愛不釋手", "棄如敝屣", "視而不見"] },
-            { q: "經過大家的努力，這項任務終於 [？]。", ans: "大功告成", options: ["大功告成", "功敗垂成", "一事無成"] },
-            { q: "考試前要做好準備，不能 [？]。", ans: "臨渴掘井", options: ["臨渴掘井", "未雨綢繆", "防患未然"] },
-            { q: "他幫助了別人，心裏感到 [？]。", ans: "樂不可支", options: ["樂不可支", "愁眉苦臉", "悲痛欲絕"] },
-            { q: "天空下着 [？]，路人們都被弄得全身濕透。", ans: "傾盆大雨", options: ["傾盆大雨", "和風細雨", "牛毛細雨"] },
-            { q: "大家 [？]，一起把這塊大石頭推開了。", ans: "齊心協力", options: ["齊心協力", "四分五裂", "孤軍奮戰"] },
-            { q: "魔術師的表演 [？]，讓觀眾驚嘆不已。", ans: "出神入化", options: ["出神入化", "破綻百出", "笨手笨腳"] }
-        ];
-
-        // 5. 詞語填充 (擴充至 35 題)
-        const allMiningTasks = [
-            { q: "廣場上的遊客真多，[？] 在拍照，[？] 在吃冰淇淋。", ans: "有的... 有的...", options: ["有的... 有的...", "一會兒... 一會兒...", "雖然... 但是..."] },
-            { q: "春天的天氣真奇怪，[？] 出太陽，[？] 下大雨。", ans: "一會兒... 一會兒...", options: ["一會兒... 一會兒...", "有的... 有的...", "只有... 才..."] },
-            { q: "同學把掉在地上的紙屑 [？] 起來，放進垃圾桶。", ans: "撿", options: ["撿", "踢", "扔"] },
-            { q: "我在草地上 [？] 到一塊美麗的紅葉，打算把它夾在書裏。", ans: "拾", options: ["拾", "丟", "剪"] },
-            { q: "農夫在田裏 [？] 地工作，種出美味的蔬菜。", ans: "辛勤", options: ["辛勤", "懶惰", "隨便"] },
-            { q: "妹妹最喜歡吃五顏六色的 [？]，但吃太多會蛀牙。", ans: "糖果", options: ["糖果", "苦瓜", "辣椒"] },
-            { q: "護士姐姐每天在醫院裏細心地 [？] 病人。", ans: "照顧", options: ["照顧", "叫喊", "離開"] },
-            { q: "經過每天的練習，小華的跑步速度有了很大的 [？]。", ans: "進步", options: ["進步", "退步", "疲倦"] },
-            { q: "爸爸工作了一整天，回到家覺得十分 [？]。", ans: "累", options: ["累", "精神", "輕鬆"] },
-            { q: "弟弟 [？] 玩具收好，放在櫃子裏。", ans: "把", options: ["把", "被", "讓"] },
-            { q: "圖書館裏很安靜，同學們 [？] 看故事書，[？] 做功課。", ans: "有的... 有的...", options: ["有的... 有的...", "一會兒... 一會兒...", "除了... 還有..."] },
-            { q: "小狗看見陌生人，[？] 汪汪叫，[？] 躲在門後。", ans: "一會兒... 一會兒...", options: ["一會兒... 一會兒...", "有的... 有的...", "因為... 所以..."] },
-            { q: "突然下起大雨，[？] 我沒有帶雨傘，只好留在學校等媽媽。", ans: "因為", options: ["因為", "所以", "但是"] },
-            { q: "[？] 弟弟年紀小，[？] 他十分懂事。", ans: "雖然... 但是...", options: ["雖然... 但是...", "因為... 所以...", "有的... 有的..."] },
-            { q: "桌子上的蛋糕 [？] 貪吃的花貓偷吃了。", ans: "被", options: ["被", "把", "向"] },
-            // 以下為新增的 20 題
-            { q: "春天到了，花園裏開滿了 [？] 的花朵。", ans: "五顏六色", options: ["五顏六色", "黑黑白白", "奇形怪狀"] },
-            { q: "這道數學題太難了，我 [？] 想不出來。", ans: "怎麼也", options: ["怎麼也", "一下子", "很快就"] },
-            { q: "哥哥 [？] 溫習功課，[？] 聽音樂。", ans: "一邊... 一邊...", options: ["一邊... 一邊...", "雖然... 但是...", "除了... 還有..."] },
-            { q: "我們應該 [？] 愛護小動物。", ans: "好好", options: ["好好", "隨便", "不要"] },
-            { q: "天空烏雲密佈，[？] 快要下雨了。", ans: "似乎", options: ["似乎", "一定", "不是"] },
-            { q: "爸爸竟然沒有生氣，[？] 原諒了我。", ans: "反而", options: ["反而", "而且", "所以"] },
-            { q: "老師 [？] 我們要誠實，不要說謊。", ans: "教導", options: ["教導", "罵", "忘記"] },
-            { q: "小明做事總是 [？]，經常出錯。", ans: "馬馬虎虎", options: ["馬馬虎虎", "認認真真", "仔仔細細"] },
-            { q: "這個蘋果 [？] 大 [？] 甜。", ans: "又... 又...", options: ["又... 又...", "不... 不...", "是... 是..."] },
-            { q: "只要你努力學習，[？] 會取得好成績。", ans: "就", options: ["就", "才", "卻"] },
-            { q: "圖書館裏靜悄悄的，大家都 [？] 地看書。", ans: "專心", options: ["專心", "大聲", "隨便"] },
-            { q: "我 [？] 把功課做完，才能去公園玩。", ans: "必須", options: ["必須", "不用", "可以"] },
-            { q: "媽媽買了一 [？] 新鮮的蔬菜。", ans: "把", options: ["把", "件", "隻"] },
-            { q: "這本書的內容十分 [？]，我很喜歡看。", ans: "豐富", options: ["豐富", "沉悶", "勤奮"] },
-            { q: "大家要 [？] 合作，才能完成這個任務。", ans: "互相", options: ["互相", "自己", "分開"] },
-            { q: "他跑步的速度很快，[？] 一陣風。", ans: "就像", options: ["就像", "不是", "只有"] },
-            { q: "雖然這件事很困難，[？] 我不會放棄。", ans: "但是", options: ["但是", "所以", "因為"] },
-            { q: "弟弟高興得 [？]了起來。", ans: "跳", options: ["跳", "穿", "睡"] },
-            { q: "這件衣服的款式很 [？]，我和媽媽都十分喜歡。", ans: "特別", options: ["特別", "難看", "舊"] },
-            { q: "大家在操場上 [？] 地玩耍。", ans: "盡情", options: ["盡情", "傷心", "生氣"] }
-        ];
-
-        const hardTasks = [
-            { type: 'reorder', target: ["狡猾的", "狐狸", "趁着黑夜", "偷偷地", "溜進了農場。"], hint: "主角是一隻「狐狸」，牠在晚上的時候行動。" },
-            { type: 'reorder', target: ["巨大的", "鯊魚", "在湛藍的海洋中", "自由地", "暢泳。"], hint: "句子是描寫一種非常大的海洋生物在水裏游。" },
-            { type: 'reorder', target: ["善良的", "姐姐", "在房間裏", "用心地", "製作心意卡。"], hint: "這是描寫一位親人在房間做手工。" },
-            { type: 'reorder', target: ["五彩繽紛的", "氣球", "在天空中", "慢慢地", "飄遠了。"], hint: "主角是天上的「氣球」，有很多種顏色。" },
-            { type: 'reorder', target: ["熱鬧的", "夜市裏", "充滿了", "歡笑聲。"], hint: "主角是一個「夜市」，形容那裏有很多聲音。" },
-            { type: 'reorder', target: ["我", "不小心", "把", "新買的", "衣服弄髒了。"], hint: "這是一句運用了「把」字的句子，主角是「我」。" },
-            { type: 'reorder', target: ["大雨", "過後，", "天邊", "出現了一道", "美麗的彩虹。"], hint: "這句描寫天氣，彩虹會在甚麼時候出現呢？" },
-            { type: 'mining', q: "寫信給老師的感謝卡，下款（署名）加上甚麼身分最合適？", ans: "學生", options: ["學生", "同學", "兒子", "老師"], hint: "你和老師的關係是甚麼呢？" },
-            { type: 'mining', q: "感謝卡的正文通常用來寫甚麼？", ans: "具體感謝的事情", options: ["具體感謝的事情", "今天的天氣", "考試的分數", "學校的名字"], hint: "既然是「感謝」卡，內容當然要跟道謝有關。" },
-            { type: 'mining', q: "媽媽每天 [？] 整理家務，我們應該多幫忙減輕她的負擔。", ans: "辛勤地", options: ["辛勤地", "懶惰地", "隨便地", "慢慢地"], hint: "形容媽媽做家務是很努力、很辛苦的。" },
-            { type: 'mining', q: "這份禮物太貴重了，我必須親自 [？] 它交還給主人。", ans: "把", options: ["把", "被", "讓", "向"], hint: "這是一個表示主動處置物品的句式。" },
-            { type: 'mining', q: "小狗生病了，我每天都細心地 [？] 牠，希望牠早日康復。", ans: "照顧", options: ["照顧", "欺負", "叫喊", "拋棄"], hint: "對待生病的小動物，我們應該怎樣做？" },
-            { type: 'mining', q: "如果你寫信給外婆，感謝她帶你去公園，你的「自稱」應該是甚麼？", ans: "孫兒 / 孫女", options: ["孫兒 / 孫女", "兒子 / 女兒", "學生", "同學"], hint: "你和外婆是甚麼親戚關係呢？" },
-            { type: 'mining', q: "同學不小心把糖果掉在地上，我連忙幫他 [？] 起來。", ans: "撿", options: ["撿", "踩", "踢", "扔"], hint: "幫忙把地上的東西拿起來。" },
-            { type: 'mining', q: "如果感謝卡是寫給校長，你的「自稱」寫甚麼最合適？", ans: "學生", options: ["學生", "同學", "兒子", "朋友"], hint: "你在學校裏的身分是甚麼？" }
-        ];
-
-        let currentCardTasks = [], currentPuncTasks = [], currentReorderTasks = [], currentIdiomTasks = [], currentMiningTasks = [];
-        let currentCardIdx = 0, currentPuncIdx = 0, currentReorderIdx = 0, currentIdiomIdx = 0, currentMiningIdx = 0;
-        let currentTargetSentence = [], currentAnswer = [];
-
-        function shuffle(array) { 
-            let arr = array.slice();
-            for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
-            return arr; 
-        }
-
-        window.onload = () => {
-            loadGame(); 
-            currentCardTasks = shuffle(allCardTasks); 
-            currentPuncTasks = shuffle(allPunctuationTasks);
-            currentReorderTasks = shuffle(allReorderTasks); 
-            currentIdiomTasks = shuffle(allIdiomTasks);
-            currentMiningTasks = shuffle(allMiningTasks);
+        // --- 玩家資料與自動儲存 ---
+        let player = {
+            name: "冒險者", streak: 0,
+            inv: { wood: 0, stone: 0, atk: 10, def: 10, gem: 0, star: 0, manu: 0, frag: 0 },
+            gear: { weapon: 0, shield: 0 }, buildings: { tent: 0, cabin: 0, castle: 0, base: 0, park: 0 }
         };
 
-        function updateUI(doSave = true) {
-            document.getElementById('inv-paper').textContent = inventory.paper;
-            document.getElementById('inv-wood').textContent = inventory.wood;
-            document.getElementById('inv-stone').textContent = inventory.stone;
-            document.getElementById('inv-tent').textContent = inventory.tent;
-            document.getElementById('inv-hut').textContent = inventory.hut;
-            document.getElementById('inv-gem').textContent = inventory.gem;
-            document.getElementById('inv-star').textContent = inventory.star;
+        function autoSave() { localStorage.setItem('roblox_p2_save', JSON.stringify(player)); }
+        function resetGame() {
+            if(confirm("確定要刪除存檔並重新開始嗎？所有進度將會消失！")) {
+                localStorage.removeItem('roblox_p2_save'); location.reload();
+            }
+        }
 
-            const bossBtn = document.getElementById('btn-boss');
-            if (inventory.castles >= 1) {
-                bossBtn.classList.remove('btn-grey'); bossBtn.classList.add('btn-purple');
-                bossBtn.innerHTML = '🗺️ 隱藏寶藏挑戰 (已解鎖)'; bossBtn.disabled = false;
-                document.getElementById('div-flying').classList.remove('hidden');
+        window.onload = function() {
+            let data = localStorage.getItem('roblox_p2_save');
+            if (data) {
+                player = JSON.parse(data);
+                document.getElementById("input-name").value = player.name;
+                document.getElementById('sg-w-lv').innerText = player.gear.weapon; 
+                document.getElementById('sg-w-bonus').innerText = player.gear.weapon * 5;
+                document.getElementById('sg-w-cost-m').innerText = 5 + player.gear.weapon * 2; 
+                document.getElementById('sg-w-cost-f').innerText = player.gear.weapon;
+                document.getElementById('sg-s-lv').innerText = player.gear.shield; 
+                document.getElementById('sg-s-bonus').innerText = player.gear.shield * 5;
+                document.getElementById('sg-s-cost-m').innerText = 5 + player.gear.shield * 2; 
+                document.getElementById('sg-s-cost-f').innerText = player.gear.shield;
+            }
+        };
+
+        // --- 遊戲狀態管理 ---
+        let currentMode = ""; let currentQuestion = null;
+        let onNextAction = "normal"; 
+        let isMonsterFight = false; let currentMonster = null;
+        let monsterCorrectCount = 0; let monsterGoal = 1;
+
+        // --- 怪獸圖鑑 ---
+        const monsters = [
+            { name: "史萊姆", emoji: "🟢", atk: 10, def: 10, type: "normal", rewards: "🪵 木材 +2, 🧱 石頭 +2" },
+            { name: "森林狼", emoji: "🐺", atk: 20, def: 15, type: "normal", rewards: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1" },
+            { name: "吸血蝠", emoji: "🦇", atk: 25, def: 20, type: "normal", rewards: "💎 寶石 +1, 🔮 碎片 +1" },
+            { name: "毒蛇", emoji: "🐍", atk: 30, def: 25, type: "normal", rewards: "🌟 星星 +1, 🔮 碎片 +1" },
+            { name: "狂暴熊", emoji: "🐻", atk: 40, def: 35, type: "normal", rewards: "💎 寶石 +2, 🌟 星星 +2" }
+        ];
+        const mythicalBeasts = [
+            { name: "青龍", emoji: "🐉", atk: 100, def: 100, type: "mythical", rewards: "💎 寶石 +10, 🌟 星星 +10, 📜 手稿 +10" },
+            { name: "朱雀", emoji: "🦚", atk: 120, def: 90, type: "mythical", rewards: "💎 寶石 +15, 🌟 星星 +15" }
+        ];
+
+        // --- 題庫 (保留舊有 + 新增 dictation 範圍) ---
+        const questions = {
+            dictation: [ // 20題 新增的默書及語文運用 (二下二冊三十一、三十二課)
+                { q: "遇到不懂的生字，我們可以向老師___。", options: ["請教", "介紹", "欣賞", "連忙"], a: "請教", hint: "虛心向別人詢問和學習。" },
+                { q: "同學們___上台分享自己最喜歡的圖書。", options: ["輪流", "期待", "入神", "介紹"], a: "輪流", hint: "按照次序一個接一個地進行。" },
+                { q: "學校即將舉行陸運會，大家都非常___。", options: ["期待", "有趣", "介紹", "連忙"], a: "期待", hint: "充滿希望地等待。" },
+                { q: "這本童話書的故事十分___，我看了好幾次呢！", options: ["有趣", "輪流", "活動", "介紹"], a: "有趣", hint: "能引起人的好奇心和喜愛。" },
+                { q: "週末，爸爸帶我到博物館參觀，為我___恐龍的歷史。", options: ["介紹", "期待", "連忙", "請教"], a: "介紹", hint: "讓人了解有關的情況。" },
+                { q: "下課鐘聲一響，同學們___收拾書包準備回家。", options: ["連忙", "欣賞", "輪流", "入神"], a: "連忙", hint: "動作迅速、急忙地做某事。" },
+                { q: "我們一家人坐在沙發上，___精彩的電視節目。", options: ["欣賞", "活動", "期待", "請教"], a: "欣賞", hint: "享受美好的事物並感到快樂。" },
+                { q: "弟弟看故事書看得十分___，連媽媽叫他也聽不到。", options: ["入神", "有趣", "介紹", "輪流"], a: "入神", hint: "注意力非常集中。" },
+                { q: "學校舉辦了豐富的課外___，讓同學們參加。", options: ["活動", "期待", "欣賞", "請教"], a: "活動", hint: "為了某種目的而舉辦的行動。" },
+                { q: "哥哥買了一本___，裏面有很多精彩的魔法故事。", options: ["童話集", "字典", "教訓", "睡衣"], a: "童話集", hint: "收錄了很多專為兒童寫的故事書。" },
+                { q: "媽媽先把青菜洗乾淨，___放進鍋裏炒。", options: ["然後", "突然", "可是", "所以"], a: "然後", hint: "表示接着發生的動作（先...___...）。" },
+                { q: "重組配對：我們吃過晚飯後，___", options: ["然後一起到公園散步。", "但是一起到公園散步。", "或者一起到公園散步。", "因為一起到公園散步。"], a: "然後一起到公園散步。", hint: "表示吃完飯接着做的事情。" },
+                { q: "哪一個句子的運用是正確的？", options: ["弟弟先做完功課，然後才去玩耍。", "弟弟然後做完功課，先才去玩耍。", "弟弟先做完功課，但是才去玩耍。", "弟弟因為做完功課，然後才去玩耍。"], a: "弟弟先做完功課，然後才去玩耍。", hint: "表示做事的先後次序，先做A，然後做B。" },
+                { q: "哥哥穿上___，然後上牀睡覺。", options: ["睡衣", "字典", "教訓", "童話集"], a: "睡衣", hint: "睡覺時穿的衣服。" },
+                { q: "出門前，我___穿好襪子，然後穿上鞋子。", options: ["先", "又", "就", "也"], a: "先", hint: "表示最開始做的動作，常與「然後」配對。" },
+                { q: "根據課文內容，遇到不認識的字，我們應該學習利用甚麼？", options: ["字典", "童話集", "教訓", "睡衣"], a: "字典", hint: "用來查閱字詞讀音和意思的工具書。" },
+                { q: "根據課文內容，誰送了一本「童話集」給作者？", options: ["表姐", "媽媽", "老師", "哥哥"], a: "表姐", hint: "親戚中的一位長輩女性（比自己年長）。" },
+                { q: "「我會記住這個___，學習利用字典。」空格內應填上甚麼詞語？", options: ["教訓", "介紹", "期待", "欣賞"], a: "教訓", hint: "從錯誤中得到的經驗。" },
+                { q: "以下哪個字是「刀」部或「刂」部？", options: ["利", "袋", "裙", "褲"], a: "利", hint: "與刀子或切割有關的部首。" },
+                { q: "以下哪個字是「衣」部或「衤」部？", options: ["裙", "切", "刮", "判"], a: "裙", hint: "與衣服有關的部首。" }
+            ],
+            mining: [ 
+                { q: "媽媽提醒我要準時 ___ 表演場地。", options: ["到達", "準備", "欣賞", "精彩"], a: "到達", hint: "與時間和地點有關的動作。" },
+                { q: "爸爸每天清早起牀，為家人 ___ 早餐。", options: ["準備", "到達", "欣賞", "精彩"], a: "準備", hint: "預先安排好的意思。" },
+                { q: "我在山上 ___ 美麗的風景。", options: ["欣賞", "到達", "準備", "精彩"], a: "欣賞", hint: "懷着喜悦的心情觀看。" },
+                { q: "雜技團的表演真是 ___ 啊！", options: ["精彩", "到達", "準備", "欣賞"], a: "精彩", hint: "形容表演十分出色。" },
+                { q: "農曆新年，我向外婆拜年，她給我一個 ___ 。", options: ["紅包", "特別", "新年", "離開"], a: "紅包", hint: "新年長輩給的紅色紙包。" },
+                { q: "在我生日的那天，爸爸送了我一份 ___ 的禮物。", options: ["特別", "紅包", "新年", "離開"], a: "特別", hint: "與眾不同的意思。" },
+                { q: "每年的一月一日，人們都會慶祝 ___ 的到來。", options: ["新年", "紅包", "特別", "期待"], a: "新年", hint: "新一年的開始。" },
+                { q: "我們都捨不得 ___ 這個刺激又好玩的遊樂場。", options: ["離開", "期待", "裝飾", "觀眾"], a: "離開", hint: "走開、離去的意思。" },
+                { q: "明天是學校旅行的日子，我非常 ___ 。", options: ["期待", "離開", "裝飾", "觀眾"], a: "期待", hint: "心中滿懷希望地等待。" },
+                { q: "聖誕樹上掛滿了美麗的 ___ 。", options: ["裝飾", "期待", "離開", "觀眾"], a: "裝飾", hint: "用來點綴使物品變美的東西。" },
+                { q: "妹妹參加話劇比賽時，一看見台下的 ___ ，就感到非常緊張。", options: ["觀眾", "期待", "裝飾", "響亮"], a: "觀眾", hint: "看表演的人。" },
+                { q: "弟弟以 ___ 的聲線朗讀文章。", options: ["響亮", "參加", "興奮", "糕點"], a: "響亮", hint: "聲音非常大且清楚。" },
+                { q: "我決定今年要積極 ___ 學校舉辦的課外活動。", options: ["參加", "響亮", "興奮", "豐富"], a: "參加", hint: "加入某種活動。" },
+                { q: "媽媽答應明天帶我們到主題樂園遊玩，我 ___ 得睡不着覺。", options: ["興奮", "響亮", "參加", "拜年"], a: "興奮", hint: "精神非常激動、高興。" },
+                { q: "今天是大年初一，祖母親手做了很多特色 ___ 給大家享用。", options: ["糕點", "豐富", "拜年", "充滿"], a: "糕點", hint: "用米或麵粉做成的食品。" },
+                { q: "大除夕夜，姨母為家人煮了滿桌飯菜，十分 ___ 。", options: ["豐富", "糕點", "拜年", "容易"], a: "豐富", hint: "數量很多、種類很多。" },
+                { q: "農曆新年期間，父母帶我到親友家 ___ 。", options: ["拜年", "糕點", "豐富", "充滿"], a: "拜年", hint: "新年探望親友並祝賀。" },
+                { q: "我們為弟弟在家中舉辦生日派對，家裏一整天都 ___ 着歡笑聲。", options: ["充滿", "拜年", "容易", "各式各樣"], a: "充滿", hint: "填滿、佈滿的意思。" },
+                { q: "這道題對我來説實在太 ___ 了，不消十秒便可以完成。", options: ["容易", "充滿", "各式各樣", "豐富"], a: "容易", hint: "一點也不困難。" },
+                { q: "桌上放着 ___ 的甜點，真是吸引！", options: ["各式各樣", "容易", "充滿", "拜年"], a: "各式各樣", hint: "形容種類非常多。" }
+            ],
+            punctuation: [
+                { q: "我十分期待農曆新年啊 ___", options: ["！", "。", "，", "？"], a: "！", hint: "表示強烈感情或感嘆。" },
+                { q: "我們在快餐店內吃了薯條、烤雞、漢堡 ___", options: ["……", "。", "！", "？"], a: "……", hint: "表示列舉的省略。" },
+                { q: "這座是世界上最高的大廈呢 ___", options: ["！", "。", "，", "？"], a: "！", hint: "帶有感嘆語氣的結尾。" },
+                { q: "桌上的賀年食品真多，有年糕 ___ 瓜子、糖果……", options: ["、", "。", "，", "！"], a: "、", hint: "並列詞語之間的停頓。" },
+                { q: "很多人前來參加哥哥的生日會，鄰居、同學、球隊隊友……全都來了 ___", options: ["。", "！", "？", "，"], a: "。", hint: "陳述句寫完的結尾符號。" },
+                { q: "我興奮地説：「我最期待上中文課了 ___ 」", options: ["！", "。", "，", "？"], a: "！", hint: "十分興奮的情感表達。" },
+                { q: "弟弟問 ___ 「哥哥，你看見我的筆盒嗎？」", options: ["：", "。", "，", "！"], a: "：", hint: "用在説話或引語之前。" },
+                { q: "你知道這個字的意思嗎 ___", options: ["？", "。", "！", "，"], a: "？", hint: "表示發問、疑問的結尾。" },
+                { q: "爸爸説：「你們快把房間收拾整齊吧 ___ 」", options: ["！", "。", "？", "，"], a: "！", hint: "帶有命令或感嘆的語氣。" },
+                { q: "中國的象形字有很多，你知道多少個 ___", options: ["？", "。", "！", "，"], a: "？", hint: "向人提問的符號。" },
+                { q: "聽老師解釋了一遍，我才知道甚麼是 ___ 擬人法 ___ 。", options: ["「 」", "《 》", "（ ）", "， 。"], a: "「 」", hint: "標示特別強調的詞語。" },
+                { q: "媽媽看見我把玩具收拾好，便笑着對我説 ___ 「你真乖！」", options: ["：", "。", "，", "！"], a: "：", hint: "引出別人説的話。" },
+                { q: "哥哥看到窗外正在下雪，又興奮又期待 ___ 希望能快點到山上去滑雪。", options: ["，", "。", "！", "？"], a: "，", hint: "句子中間未説完的停頓。" },
+                { q: "今天，爸爸帶我到玩具展去。那裏很熱鬧，我真是大開眼界啊 ___", options: ["！", "。", "，", "？"], a: "！", hint: "表達驚嘆和讚美。" },
+                { q: "老師今天問我們：「你們知道天空為甚麼會打雷嗎 ___ 」", options: ["？", "。", "！", "，"], a: "？", hint: "這是一個問題。" },
+                { q: "哥哥從圖書館借了 ___ 醜小鴨 ___ 回家給我看。", options: ["《 》", "「 」", "（ ）", "， 。"], a: "《 》", hint: "用來標示書籍或文章名稱。" },
+                { q: "小鋒最喜歡看的童話故事是 ___ 小紅帽 ___ 。", options: ["《 》", "「 」", "（ ）", "， 。"], a: "《 》", hint: "故事書的名稱要用這符號。" },
+                { q: "星期天是麗麗的生日 ___ 她邀請我參加她的生日派對。", options: ["，", "。", "！", "？"], a: "，", hint: "句子未完的短暫停頓。" },
+                { q: "這件漂亮的毛衣 ___ 是媽媽親手編織的。", options: ["，", "。", "！", "？"], a: "，", hint: "稍微停頓一下繼續説。" },
+                { q: "我愛吃的食物有很多，例如：雞腿 ___ 炒飯、蛋糕和糖果……", options: ["、", "，", "。", "！"], a: "、", hint: "用來分隔並列的名詞。" }
+            ],
+            reorder: [
+                { q: "美華不但會説英文，___", options: ["她更會用英文寫文章。", "反而更努力地嘗試。", "更有着各式各樣的餐廳。", "更經常參與社區服務。"], a: "她更會用英文寫文章。", hint: "與英文技能有關。" },
+                { q: "他不但沒有放棄，___", options: ["反而更努力地嘗試。", "她更會用英文寫文章。", "更在閃電和打雷。", "更喜歡游泳。"], a: "反而更努力地嘗試。", hint: "遇到困難沒有放棄的後續。" },
+                { q: "這裏不但有各種商店，___", options: ["更有着各式各樣的餐廳。", "更要照顧年老的外公外婆。", "她更會用英文寫文章。", "一面叫我們擺放食具。"], a: "更有着各式各樣的餐廳。", hint: "形容地方有很多設施。" },
+                { q: "心兒不但熱愛參加校內活動，___", options: ["更經常參與社區服務。", "更在閃電和打雷。", "更喜歡游泳。", "一面聽音樂。"], a: "更經常參與社區服務。", hint: "參與校外活動。" },
+                { q: "外面不但下着大雨，___", options: ["更在閃電和打雷。", "她更會用英文寫文章。", "卻不敢自己一個睡覺。", "卻很少客人光顧。"], a: "更在閃電和打雷。", hint: "天氣現象。" },
+                { q: "媽媽不但要照顧我和妹妹，___", options: ["更要照顧年老的外公外婆。", "更喜歡游泳。", "更在閃電和打雷。", "卻長得最高。"], a: "更要照顧年老的外公外婆。", hint: "家人的照顧工作。" },
+                { q: "我不但喜愛打籃球，___", options: ["更喜歡游泳。", "更要照顧年老的外公外婆。", "更在閃電和打雷。", "所以取得好成績。"], a: "更喜歡游泳。", hint: "另一項運動。" },
+                { q: "我們一面聽老師解釋，___", options: ["一面記下重點。", "一面叫我們擺放食具。", "一面聽音樂。", "小狗卻一直在家門等待他。"], a: "一面記下重點。", hint: "上課時的動作。" },
+                { q: "媽媽一面煮菜，___", options: ["一面叫我們擺放食具。", "一面記下重點。", "一面聽音樂。", "卻很少客人光顧。"], a: "一面叫我們擺放食具。", hint: "準備晚餐的動作。" },
+                { q: "他一面跑步，___", options: ["一面聽音樂。", "一面叫我們擺放食具。", "一面記下重點。", "所以今天沒有去上學。"], a: "一面聽音樂。", hint: "做運動時常做的娛樂。" },
+                { q: "姐姐已經十六歲了，___", options: ["卻不敢自己一個睡覺。", "小狗卻一直在家門等待他。", "卻長得最高。", "我卻完全睡不着。"], a: "卻不敢自己一個睡覺。", hint: "長大了膽子卻還是很小。" },
+                { q: "主人離家上班，___", options: ["小狗卻一直在家門等待他。", "卻長得最高。", "卻不敢自己一個睡覺。", "他卻還未開始温習。"], a: "小狗卻一直在家門等待他。", hint: "寵物的忠誠行為。" },
+                { q: "他年紀最小，___", options: ["卻長得最高。", "小狗卻一直在家門等待他。", "卻不敢自己一個睡覺。", "所以被老師責備。"], a: "卻長得最高。", hint: "年紀與身高的反差。" },
+                { q: "現在已經是深夜，___", options: ["我卻完全睡不着。", "卻很少客人光顧。", "他卻還未開始温習。", "好像柔軟的棉花。"], a: "我卻完全睡不着。", hint: "很晚了卻沒有睡意。" },
+                { q: "這間餐廳的食物十分美味，___", options: ["卻很少客人光顧。", "我卻完全睡不着。", "他卻還未開始温習。", "所以取得好成績。"], a: "卻很少客人光顧。", hint: "美味卻沒人來的反差。" },
+                { q: "下星期就是考試週了，___", options: ["他卻還未開始温習。", "卻很少客人光顧。", "我卻完全睡不着。", "所以被老師責備。"], a: "他卻還未開始温習。", hint: "快考試了卻沒準備。" },
+                { q: "因為哥哥用功學習，___", options: ["所以取得好成績。", "所以今天沒有去上學。", "所以被老師責備。", "好像柔軟的棉花。"], a: "所以取得好成績。", hint: "努力的成果。" },
+                { q: "因為我發燒了，___", options: ["所以今天沒有去上學。", "所以取得好成績。", "所以被老師責備。", "好像柔軟的棉花。"], a: "所以今天沒有去上學。", hint: "生病的影響。" },
+                { q: "家傑因為忘記帶作業回學校，___", options: ["所以被老師責備。", "所以今天沒有去上學。", "所以取得好成績。", "更喜歡游泳。"], a: "所以被老師責備。", hint: "忘記帶功課的後果。" },
+                { q: "天上的白雲一朵朵，___", options: ["好像柔軟的棉花。", "彷彿是天空在哭泣。", "好像黑夜中的螢火蟲。", "更在閃電和打雷。"], a: "好像柔軟的棉花。", hint: "白雲的形狀和質感。" }
+            ],
+            idiom: [
+                { q: "以下哪個不是農曆新年的祝賀語？", options: ["守株待兔", "萬事如意", "笑口常開", "身體健康"], a: "守株待兔", hint: "這是一個成語，不是祝賀語。" },
+                { q: "以下哪項不是春節的習俗？", options: ["看電影", "吃湯圓", "拜年", "擺放年花"], a: "看電影", hint: "平常日子也可以做的事。" },
+                { q: "以下哪項是中國最早出現的文字？", options: ["象形字", "會意字", "形聲字", "指事字"], a: "象形字", hint: "模仿事物形狀畫出來的字。" },
+                { q: "以下哪項是由「聲符」和「形符」兩部分組成？", options: ["形聲字", "會意字", "象形字", "指事字"], a: "形聲字", hint: "一邊表音，一邊表意的字。" },
+                { q: "以下哪一項是寓言故事的特點？", options: ["故事中有道理", "字數很多", "圖畫很多", "內容艱深"], a: "故事中有道理", hint: "透過小故事教導我們大道理。" },
+                { q: "以下哪一位是《小池》的作者？", options: ["楊萬里", "賀知章", "羅隱", "李白"], a: "楊萬里", hint: "南宋的著名詩人。" },
+                { q: "以下哪一個不是成語？", options: ["好好工作", "一動不動", "忍無可忍", "形影不離"], a: "好好工作", hint: "這只是一般的四個字句子。" },
+                { q: "白居易是哪一個朝代的詩人？", options: ["唐朝", "漢朝", "宋朝", "元朝"], a: "唐朝", hint: "跟李白同一個朝代。" },
+                { q: "同學都穿着 ___ 的校服上學。", options: ["整齊", "健康", "豐富", "觀眾"], a: "整齊", hint: "衣服穿得很端正、不亂。" },
+                { q: "爸爸教我每天做運動，保持身體 ___ 。", options: ["健康", "整齊", "豐富", "觀眾"], a: "健康", hint: "強壯、沒有疾病。" },
+                { q: "奶奶為我們準備的團年飯十分 ___ 。", options: ["豐富", "整齊", "健康", "觀眾"], a: "豐富", hint: "菜式很多、份量充足。" },
+                { q: "電影院裏， ___ 們都聚精會神地看電影。", options: ["觀眾", "整齊", "健康", "豐富"], a: "觀眾", hint: "看表演或電影的人。" },
+                { q: "我們已經把家裏打掃乾淨，收拾 ___ 。", options: ["整齊", "各式各樣", "準備", "拜年"], a: "整齊", hint: "把物品放得有條理。" },
+                { q: "今天我買了 ___ 的賀年食品。", options: ["各式各樣", "整齊", "準備", "拜年"], a: "各式各樣", hint: "種類非常多。" },
+                { q: "小狗一面咬着玩具， ___", options: ["一面跑向主人。", "一面和爸爸説笑。", "一面跟着旋律哼歌。", "一面派發試卷。"], a: "一面跑向主人。", hint: "寵物常見的動作。" },
+                { q: "妹妹 ___ 向爸爸揮手。", options: ["笑呵呵地", "怒氣沖沖地", "傷心地", "害怕地"], a: "笑呵呵地", hint: "十分開心打招呼的樣子。" },
+                { q: "很多親友到我們家拜年，家中一片 ___ 。", options: ["喜氣洋洋", "死氣沉沉", "烏煙瘴氣", "冷冷清清"], a: "喜氣洋洋", hint: "充滿歡樂喜慶的氣氛。" },
+                { q: "做運動不但使身體健康，更令人心情 ___ 。", options: ["暢快", "低落", "傷心", "煩躁"], a: "暢快", hint: "舒暢快樂的意思。" },
+                { q: "哥哥看到窗外正在下雪，又興奮又 ___ 。", options: ["期待", "傷心", "害怕", "討厭"], a: "期待", hint: "很想去玩雪的心情。" },
+                { q: "玩具展裏很熱鬧，我真是 ___ 啊！", options: ["大開眼界", "井底之蛙", "悶悶不樂", "無精打采"], a: "大開眼界", hint: "看到很多新奇事物的感受。" }
+            ],
+            letter: [
+                { q: "小明寫信給婆婆。信的開頭寫着「親愛的婆婆：」，這是書信格式中的哪一部分？", options: ["上款", "下款", "正文", "祝頌語"], a: "上款", hint: "寫在信件最開頭，表示收信人。" },
+                { q: "小明寫信給婆婆。在信的最後寫上「孫兒 小明 敬上」。這裏的「小明」是書信格式中的哪一部分？", options: ["下款", "上款", "自稱", "問候語"], a: "下款", hint: "寫在信件最後，表示寫信人。" },
+                { q: "班長小華代表全班寫信給生病的陳老師。這封信的「上款」應該選擇哪個最適合？", options: ["敬愛的陳老師：", "學生小華：", "親愛的小明：", "陳校長："], a: "敬愛的陳老師：", hint: "上款是收信人，要寫給誰？" },
+                { q: "承上題，班長小華寫信給陳老師，信的最後「下款」應該寫誰的名字？", options: ["小華", "陳老師", "全體同學", "媽媽"], a: "小華", hint: "下款是寫信人，是誰動筆寫的？" },
+                { q: "哥哥大文寫信給弟弟小武，信末的「下款」應該怎樣寫最合適？", options: ["哥哥 大文", "弟弟 小武", "敬愛的大文", "親愛的小武"], a: "哥哥 大文", hint: "寫信的是哥哥，要寫自己的身分。" },
+                { q: "信中寫着「您最近身體好嗎？」。這是書信格式中的哪一部分？", options: ["問候語", "祝頌語", "日期", "正文"], a: "問候語", hint: "關心對方的句子，通常在開頭。" },
+                { q: "信件結尾寫着「祝 身體健康」。這是書信格式中的哪一部分？", options: ["祝頌語", "正文", "上款", "下款"], a: "祝頌語", hint: "在信件結尾給予對方的祝福。" },
+                { q: "小美寫信邀請好朋友小麗來參加生日會。請問這封信的「上款」是誰？", options: ["小麗", "小美", "小美的媽媽", "生日會"], a: "小麗", hint: "上款是收信的人。" },
+                { q: "書信中，寫明寫信那天的年、月、日，這部分叫甚麼？", options: ["日期", "正文", "上款", "下款"], a: "日期", hint: "表示時間的部分。" },
+                { q: "妹妹寫信給遠方的姑媽，信件結尾寫了「二月十八日」，這是書信的哪一部分？", options: ["日期", "祝頌語", "上款", "下款"], a: "日期", hint: "表示幾月幾號。" },
+                { q: "寫給長輩的信，下款除了自己的名字，還應該加上甚麼以示禮貌？", options: ["敬上", "上", "啟", "收"], a: "敬上", hint: "恭敬地呈上的意思。" },
+                { q: "小美寫信給好朋友小麗，下款的名字後面加上甚麼比較適合？", options: ["上", "敬上", "啟", "收"], a: "上", hint: "平輩之間通常用的字。" },
+                { q: "媽媽寫信給在外國讀書的哥哥，上款寫「親愛的兒子：」，下款應該自稱甚麼？", options: ["母親", "兒子", "朋友", "老師"], a: "母親", hint: "媽媽對兒子的自稱。" },
+                { q: "寫信給長輩時，祝頌語通常會寫甚麼？", options: ["身體健康", "學業進步", "快高長大", "青春常駐"], a: "身體健康", hint: "祝長輩沒有疾病。" },
+                { q: "寫信給平輩或同學時，祝頌語可以寫甚麼？", options: ["學業進步", "長命百歲", "壽比南山", "老當益壯"], a: "學業進步", hint: "祝同學讀書聰明。" },
+                { q: "書信的主要內容（例如告訴朋友發生的事），這部分叫甚麼？", options: ["正文", "上款", "下款", "問候語"], a: "正文", hint: "信件中間最長的部分。" },
+                { q: "子軒寫信給老師，正文寫完後，應該接着寫甚麼？", options: ["祝頌語", "上款", "下款", "日期"], a: "祝頌語", hint: "寫完內容後要送上祝福。" },
+                { q: "下款的「自稱」是甚麼意思？", options: ["寫信人對自己的稱呼", "收信人的名字", "收信人的稱呼", "寫信人的心情"], a: "寫信人對自己的稱呼", hint: "例如：學生、孫兒、女兒。" },
+                { q: "如果你是三年級學生，寫信給校長，下款的自稱應該是甚麼？", options: ["學生", "兒子", "朋友", "孫兒"], a: "學生", hint: "你在學校的身分。" },
+                { q: "書信的格式中，哪一部分通常會寫在信件的最右下方（最後一行）？", options: ["日期", "上款", "正文", "問候語"], a: "日期", hint: "記錄寫信的時間。" }
+            ]
+        };
+
+        const titles = { 
+            dictation: "📝 默書尋寶 (二下二冊三十一、三十二課)",
+            reorder: "🌉 聯句過河", 
+            mining: "⛏️ 礦洞尋寶", 
+            punctuation: "🖋️ 標點尋寶", 
+            idiom: "🐉 語文神廟", 
+            letter: "✉️ 書信神探" 
+        };
+
+        function hideAllScreens() { document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden')); }
+        function goHome() { 
+            hideAllScreens(); 
+            document.getElementById("start-screen").classList.remove("hidden"); 
+            clearInterval(bossTimer); 
+            isMonsterFight = false;
+        }
+        function openInstructions() { hideAllScreens(); document.getElementById("instruction-screen").classList.remove("hidden"); }
+        function openSuperForge() { hideAllScreens(); document.getElementById("super-forge-zone").classList.remove("hidden"); }
+        function openForgeZone() { hideAllScreens(); document.getElementById("forge-zone").classList.remove("hidden"); }
+        function openBuildZone() { hideAllScreens(); document.getElementById("build-zone").classList.remove("hidden"); }
+
+        function setPlayerName() {
+            let name = document.getElementById("input-name").value || "小冒險者";
+            player.name = name;
+            document.getElementById("display-name").innerText = name;
+            document.getElementById("player-tag").classList.remove("hidden");
+            document.getElementById("top-nav").classList.remove("hidden");
+            renderStats(); goHome(); autoSave();
+        }
+
+        function renderStats() {
+            document.getElementById("inv-wood").innerText = player.inv.wood;
+            document.getElementById("inv-stone").innerText = player.inv.stone;
+            document.getElementById("inv-atk").innerText = player.inv.atk;
+            document.getElementById("inv-def").innerText = player.inv.def;
+            document.getElementById("inv-gem").innerText = player.inv.gem;
+            document.getElementById("inv-star").innerText = player.inv.star;
+            document.getElementById("inv-manu").innerText = player.inv.manu;
+            document.getElementById("inv-frag").innerText = player.inv.frag;
+            document.getElementById("streak-counter").innerText = "🔥 連對: " + player.streak;
+        }
+
+        function startGame(mode) {
+            currentMode = mode;
+            isMonsterFight = false;
+            hideAllScreens();
+            document.getElementById("game-screen").classList.remove("hidden");
+            document.getElementById("game-title").innerText = titles[mode];
+            loadQuestion();
+        }
+
+        function triggerEncounter() {
+            playSound('monster');
+            document.getElementById("question-panel").classList.add("hidden");
+            document.getElementById("feedback-area").classList.add("hidden");
+            document.getElementById("hint-area").classList.add("hidden");
+            document.getElementById("bottom-controls").classList.add("hidden");
+            document.getElementById("monster-encounter-panel").classList.remove("hidden");
+            document.getElementById("game-title").innerText = "⚠️ 發現不明生物！";
+
+            let isMythical = (player.buildings.castle >= 1 && Math.random() < 0.25); 
+            if (isMythical) {
+                currentMonster = mythicalBeasts[Math.floor(Math.random() * mythicalBeasts.length)];
+                document.getElementById("monster-encounter-panel").style.borderColor = "#9C27B0";
+                document.getElementById("mon-name").style.color = "#9C27B0";
             } else {
-                bossBtn.classList.add('btn-grey'); bossBtn.classList.remove('btn-purple');
-                bossBtn.innerHTML = '🔒 隱藏寶藏挑戰 (需建 1 座城堡解鎖)'; bossBtn.disabled = true;
-                document.getElementById('div-flying').classList.add('hidden');
+                currentMonster = monsters[Math.floor(Math.random() * monsters.length)];
+                document.getElementById("monster-encounter-panel").style.borderColor = "#f44336";
+                document.getElementById("mon-name").style.color = "#333";
             }
 
-            if(doSave) saveGame(); 
+            document.getElementById("mon-emoji").innerText = currentMonster.emoji;
+            document.getElementById("mon-name").innerText = (isMythical ? "【神獸】" : "") + currentMonster.name;
+            document.getElementById("mon-req-atk").innerText = currentMonster.atk;
+            document.getElementById("mon-req-def").innerText = currentMonster.def;
+
+            let canFight = (player.inv.atk >= currentMonster.atk && player.inv.def >= currentMonster.def);
+            let btnFight = document.getElementById("btn-mon-fight");
+            let warnMsg = document.getElementById("mon-warning-msg");
+
+            if (canFight) {
+                btnFight.disabled = false;
+                warnMsg.innerText = "戰力達標，可以迎戰！";
+                warnMsg.style.color = "#2E7D32";
+            } else {
+                btnFight.disabled = true;
+                warnMsg.innerText = `戰力不足！需要 ⚔️${currentMonster.atk} 🛡️${currentMonster.def}，請快逃！`;
+                warnMsg.style.color = "red";
+            }
         }
 
-        function startGame(gameType) {
-            initAudio(); playSound('click');
-            document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden'));
+        function tryFlee() {
+            if (Math.random() < 0.75) {
+                alert("🏃 逃走成功！安全返回冒險路線。");
+                loadQuestion();
+            } else {
+                playSound('wrong');
+                let lostWood = Math.floor(Math.random() * 3);
+                let lostStone = Math.floor(Math.random() * 3);
+                player.inv.wood = Math.max(0, player.inv.wood - lostWood);
+                player.inv.stone = Math.max(0, player.inv.stone - lostStone);
+                renderStats(); autoSave();
+                alert(`💥 逃走失敗！被 ${currentMonster.name} 襲擊，損失了 ${lostWood}木材, ${lostStone}石頭，並匆忙逃離！`);
+                loadQuestion();
+            }
+        }
+
+        function startMonsterFight() {
+            isMonsterFight = true;
+            monsterCorrectCount = 0;
+            monsterGoal = (currentMonster.type === "mythical" ? 3 : 1);
             
-            if (gameType === 'card') { document.getElementById('game-card').classList.remove('hidden'); loadCard(); }
-            else if (gameType === 'punctuation') { document.getElementById('game-punctuation').classList.remove('hidden'); loadPunctuation(); }
-            else if (gameType === 'reorder') { document.getElementById('game-reorder').classList.remove('hidden'); loadReorder(); }
-            else if (gameType === 'idiom') { document.getElementById('game-idiom').classList.remove('hidden'); loadIdiom(); }
-            else if (gameType === 'mining') { document.getElementById('game-mining').classList.remove('hidden'); loadMining(); }
-            else if (gameType === 'boss') { startBoss(); }
+            document.getElementById("monster-encounter-panel").classList.add("hidden");
+            document.getElementById("question-panel").classList.remove("hidden");
+            document.getElementById("bottom-controls").classList.remove("hidden");
+            document.getElementById("game-title").innerText = `⚔️ 戰鬥中：${currentMonster.name} ${currentMonster.emoji}`;
+            
+            loadMonsterQuestion();
         }
 
-        function openBuildZone() { initAudio(); playSound('click'); updateUI(false); document.getElementById('start-screen').classList.add('hidden'); document.getElementById('build-zone').classList.remove('hidden'); }
-        function goHome() { playSound('click'); updateUI(false); document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); document.getElementById('start-screen').classList.remove('hidden'); }
+        function loadMonsterQuestion() {
+            let qList = questions[currentMode];
+            currentQuestion = qList[Math.floor(Math.random() * qList.length)];
+            
+            document.getElementById("question-text").innerText = currentQuestion.q;
+            document.getElementById("hint-area").classList.add("hidden");
+            document.getElementById("feedback-area").classList.add("hidden");
+            document.getElementById("options-area").classList.remove("hidden");
+            
+            let status = document.getElementById("monster-fight-status");
+            status.classList.remove("hidden");
+            status.innerText = `目標：答對 ${monsterCorrectCount} / ${monsterGoal} 題`;
 
-        // --- 遊戲 1: 感謝卡 (紙) ---
-        function loadCard() {
-            if (currentCardIdx >= currentCardTasks.length) { currentCardTasks = shuffle(allCardTasks); currentCardIdx = 0; }
-            const t = currentCardTasks[currentCardIdx];
-            document.getElementById('card-question').textContent = t.q; document.getElementById('card-msg').textContent = ""; document.getElementById('btn-next-card').classList.add('hidden');
-            document.getElementById('card-options').innerHTML = '';
-            shuffle(t.options).forEach(opt => {
-                let c = document.createElement('div'); c.className = 'paper-chunk'; c.textContent = opt;
-                c.onclick = () => {
-                    if (!document.getElementById('btn-next-card').classList.contains('hidden')) return;
-                    if (opt === t.ans) {
-                        c.style.backgroundColor = "#4CAF50"; c.style.color = "white";
-                        let dropMsg = checkStarDrop(); inventory.paper++; updateUI();
-                        document.getElementById('card-msg').innerHTML = "✨ 答對了！獲得 📜 魔法紙 x 1 ✨" + dropMsg; 
-                        document.getElementById('card-msg').style.color = "#2E7D32"; playSound('win');
-                        document.getElementById('btn-next-card').classList.remove('hidden');
+            let optionsHtml = "";
+            let opts = [...currentQuestion.options].sort(() => Math.random() - 0.5);
+            opts.forEach(opt => { optionsHtml += `<button class="word-chunk" onclick="checkAnswer('${opt}')">${opt}</button>`; });
+            document.getElementById("options-area").innerHTML = optionsHtml;
+        }
+
+        function loadQuestion() {
+            isMonsterFight = false;
+            document.getElementById("monster-encounter-panel").classList.add("hidden");
+            document.getElementById("question-panel").classList.remove("hidden");
+            document.getElementById("bottom-controls").classList.remove("hidden");
+            document.getElementById("monster-fight-status").classList.add("hidden");
+            document.getElementById("game-title").innerText = titles[currentMode];
+
+            let qList = questions[currentMode];
+            currentQuestion = qList[Math.floor(Math.random() * qList.length)];
+            
+            document.getElementById("question-text").innerText = currentQuestion.q;
+            document.getElementById("hint-area").classList.add("hidden");
+            document.getElementById("feedback-area").classList.add("hidden");
+            document.getElementById("options-area").classList.remove("hidden");
+            
+            let optionsHtml = "";
+            let opts = [...currentQuestion.options].sort(() => Math.random() - 0.5);
+            opts.forEach(opt => { optionsHtml += `<button class="word-chunk" onclick="checkAnswer('${opt}')">${opt}</button>`; });
+            document.getElementById("options-area").innerHTML = optionsHtml;
+        }
+
+        function showHint() {
+            if (currentQuestion) {
+                let hintEl = document.getElementById("hint-area");
+                hintEl.innerText = "💡 提示：" + currentQuestion.hint;
+                hintEl.classList.remove("hidden");
+            }
+        }
+
+        function checkAnswer(ans) {
+            document.getElementById("options-area").classList.add("hidden");
+            document.getElementById("hint-area").classList.add("hidden");
+            let fbArea = document.getElementById("feedback-area");
+            
+            if (isMonsterFight) {
+                if (ans === currentQuestion.a) {
+                    playSound('correct');
+                    monsterCorrectCount++;
+                    fbArea.classList.remove("hidden", "error");
+                    
+                    if (monsterCorrectCount >= monsterGoal) {
+                        document.getElementById("feedback-msg").innerHTML = `✅ 答對了！正確答案是：<span style="color:#E65100;">${currentQuestion.a}</span><br><span style='color:#9C27B0'>🎉 成功擊敗 ${currentMonster.name}！</span>`;
+                        document.getElementById("reward-msg").innerText = "準備領取戰利品...";
+                        onNextAction = "monster_win";
                     } else {
-                        c.style.backgroundColor = "#f44336"; c.style.color = "white";
-                        document.getElementById('card-msg').textContent = "❌ 答錯了！請再仔細思考身分。"; document.getElementById('card-msg').style.color = "#b71c1c"; playSound('error');
+                        document.getElementById("feedback-msg").innerHTML = `✅ 答對了！正確答案是：<span style="color:#E65100;">${currentQuestion.a}</span><br>還要答對 ${monsterGoal - monsterCorrectCount} 題才能擊敗它！`;
+                        document.getElementById("reward-msg").innerText = "繼續戰鬥！";
+                        onNextAction = "monster_next";
                     }
-                }; document.getElementById('card-options').appendChild(c);
-            });
-        }
-        function nextCard() { playSound('click'); currentCardIdx++; loadCard(); }
-
-        // --- 遊戲 2: 標點符號 (紙) ---
-        function loadPunctuation() {
-            if (currentPuncIdx >= currentPuncTasks.length) { currentPuncTasks = shuffle(allPunctuationTasks); currentPuncIdx = 0; }
-            const t = currentPuncTasks[currentPuncIdx];
-            document.getElementById('punc-question').textContent = t.q; document.getElementById('punc-msg').textContent = ""; document.getElementById('btn-next-punc').classList.add('hidden');
-            document.getElementById('punc-options').innerHTML = '';
-            shuffle(t.options).forEach(opt => {
-                let c = document.createElement('div'); c.className = 'paper-chunk'; c.textContent = opt;
-                c.onclick = () => {
-                    if (!document.getElementById('btn-next-punc').classList.contains('hidden')) return;
-                    if (opt === t.ans) {
-                        c.style.backgroundColor = "#4CAF50"; c.style.color = "white";
-                        document.getElementById('punc-question').innerHTML = t.q.replace("[？]", `<span style="color:#4CAF50;">${t.ans}</span>`);
-                        let dropMsg = checkStarDrop(); inventory.paper++; updateUI();
-                        document.getElementById('punc-msg').innerHTML = "✨ 答對了！獲得 📜 魔法紙 x 1 ✨" + dropMsg; 
-                        document.getElementById('punc-msg').style.color = "#2E7D32"; playSound('win');
-                        document.getElementById('btn-next-punc').classList.remove('hidden');
-                    } else {
-                        c.style.backgroundColor = "#f44336"; c.style.color = "white";
-                        document.getElementById('punc-msg').textContent = "❌ 答錯了！請再仔細思考標點用法。"; document.getElementById('punc-msg').style.color = "#b71c1c"; playSound('error');
-                    }
-                }; document.getElementById('punc-options').appendChild(c);
-            });
-        }
-        function nextPunctuation() { playSound('click'); currentPuncIdx++; loadPunctuation(); }
-
-        // --- 遊戲 3: 重組句子 (木) ---
-        function loadReorder() {
-            if (currentReorderIdx >= currentReorderTasks.length) { currentReorderTasks = shuffle(allReorderTasks); currentReorderIdx = 0; }
-            currentTargetSentence = currentReorderTasks[currentReorderIdx]; currentAnswer = [];
-            renderReorderUI(shuffle(currentTargetSentence));
-            document.getElementById('reorder-msg').textContent = ""; document.getElementById('btn-next-reorder').classList.add('hidden');
-        }
-        function renderReorderUI(bankWords) {
-            document.getElementById('word-bank').innerHTML = ''; document.getElementById('answer-area').innerHTML = '';
-            currentAnswer.forEach((w, i) => { let c = document.createElement('div'); c.className = 'word-chunk'; c.textContent = w; c.onclick = () => { playSound('click'); currentAnswer.splice(i, 1); bankWords.push(w); renderReorderUI(bankWords); document.getElementById('reorder-msg').textContent = ""; }; document.getElementById('answer-area').appendChild(c); });
-            bankWords.forEach((w, i) => { let c = document.createElement('div'); c.className = 'word-chunk'; c.textContent = w; c.onclick = () => { playSound('click'); bankWords.splice(i, 1); currentAnswer.push(w); renderReorderUI(bankWords); checkReorderWin(); }; document.getElementById('word-bank').appendChild(c); });
-        }
-        function checkReorderWin() {
-            if (currentAnswer.length === currentTargetSentence.length) {
-                if (currentAnswer.join("") === currentTargetSentence.join("")) {
-                    let dropMsg = checkStarDrop(); inventory.wood++; updateUI();
-                    document.getElementById('reorder-msg').innerHTML = "✨ 成功搭橋！獲得 🪵 木材 x 1 ✨" + dropMsg;
-                    document.getElementById('reorder-msg').style.color = "#2E7D32"; playSound('win');
-                    document.getElementById('btn-next-reorder').classList.remove('hidden');
                 } else {
-                    document.getElementById('reorder-msg').textContent = "❌ 橋樑不穩固！請點擊退回重排。"; document.getElementById('reorder-msg').style.color = "#b71c1c"; playSound('error');
+                    playSound('wrong');
+                    fbArea.classList.remove("hidden"); fbArea.classList.add("error");
+                    document.getElementById("feedback-msg").innerHTML = `❌ 答錯了！正確答案是：<span style="color:#F44336;">${currentQuestion.a}</span><br>你被 ${currentMonster.name} 擊倒，只能逃跑！`;
+                    document.getElementById("reward-msg").innerText = "遺失了一些資源...";
+                    onNextAction = "monster_lose";
+                }
+            } else {
+                if (ans === currentQuestion.a) {
+                    playSound('correct'); player.streak++;
+                    let rewardType = (currentMode === 'letter') ? (Math.random() > 0.5 ? 'wood' : 'stone') : ((currentMode === 'reorder' || currentMode === 'punctuation') ? 'wood' : 'stone');
+                    let rewardText = rewardType === 'wood' ? '🪵 木材 +1' : '🧱 石頭 +1';
+                    player.inv[rewardType] += 1; player.inv.manu += 1; rewardText += ', 📜 手稿 +1';
+                    
+                    if (player.streak % 3 === 0) { player.inv.frag += 1; rewardText += ', 🔮 碎片 +1'; }
+                    if (Math.random() < 0.25) { 
+                        if (Math.random() < 0.5) { player.inv.gem += 1; rewardText += ', 💎 寶石 +1'; } 
+                        else { player.inv.star += 1; rewardText += ', 🌟 星星 +1'; }
+                    }
+                    
+                    fbArea.classList.remove("hidden", "error");
+                    document.getElementById("feedback-msg").innerHTML = `✅ 答對了！正確答案是：<span style="color:#E65100;">${currentQuestion.a}</span>`;
+                    document.getElementById("reward-msg").innerText = "獲得獎勵: " + rewardText;
+                    onNextAction = "normal";
+                    renderStats(); autoSave();
+                } else {
+                    playSound('wrong'); player.streak = 0; 
+                    fbArea.classList.remove("hidden"); fbArea.classList.add("error");
+                    document.getElementById("feedback-msg").innerHTML = `❌ 答錯了！正確答案是：<span style="color:#F44336;">${currentQuestion.a}</span>`;
+                    document.getElementById("reward-msg").innerText = "連對中斷，請再接再厲！";
+                    onNextAction = "normal_wrong";
+                    renderStats(); autoSave();
                 }
             }
         }
-        function resetReorder() { playSound('click'); loadReorder(); }
-        function nextReorder() { playSound('click'); currentReorderIdx++; loadReorder(); }
 
-        // --- 遊戲 4: 成語神廟 (木) ---
-        function loadIdiom() {
-            if (currentIdiomIdx >= currentIdiomTasks.length) { currentIdiomTasks = shuffle(allIdiomTasks); currentIdiomIdx = 0; }
-            const t = currentIdiomTasks[currentIdiomIdx];
-            document.getElementById('idiom-question').textContent = t.q; document.getElementById('idiom-msg').textContent = ""; document.getElementById('btn-next-idiom').classList.add('hidden');
-            document.getElementById('idiom-options').innerHTML = '';
-            shuffle(t.options).forEach(opt => {
-                let c = document.createElement('div'); c.className = 'word-chunk'; c.textContent = opt;
-                c.onclick = () => {
-                    if (!document.getElementById('btn-next-idiom').classList.contains('hidden')) return;
-                    if (opt === t.ans) {
-                        c.style.backgroundColor = "#4CAF50"; c.style.color = "white";
-                        document.getElementById('idiom-question').innerHTML = t.q.replace("[？]", `<span style="color:#4CAF50;">${t.ans}</span>`);
-                        let dropMsg = checkStarDrop(); inventory.wood++; updateUI();
-                        document.getElementById('idiom-msg').innerHTML = "✨ 答對了！獲得 🪵 木材 x 1 ✨" + dropMsg; 
-                        document.getElementById('idiom-msg').style.color = "#2E7D32"; playSound('win');
-                        document.getElementById('btn-next-idiom').classList.remove('hidden');
-                    } else {
-                        c.style.backgroundColor = "#f44336"; c.style.color = "white";
-                        document.getElementById('idiom-msg').textContent = "❌ 答錯了！請再仔細思考成語的意思。"; document.getElementById('idiom-msg').style.color = "#b71c1c"; playSound('error');
-                    }
-                }; document.getElementById('idiom-options').appendChild(c);
-            });
-        }
-        function nextIdiom() { playSound('click'); currentIdiomIdx++; loadIdiom(); }
-
-        // --- 遊戲 5: 句式礦洞 (石) ---
-        function loadMining() {
-            if (currentMiningIdx >= currentMiningTasks.length) { currentMiningTasks = shuffle(allMiningTasks); currentMiningIdx = 0; }
-            const t = currentMiningTasks[currentMiningIdx];
-            document.getElementById('mining-question').textContent = t.q; document.getElementById('mining-msg').textContent = ""; document.getElementById('btn-next-mining').classList.add('hidden');
-            document.getElementById('mining-options').innerHTML = '';
-            shuffle(t.options).forEach(opt => {
-                let c = document.createElement('div'); c.className = 'stone-chunk'; c.textContent = opt;
-                c.onclick = () => {
-                    if (!document.getElementById('btn-next-mining').classList.contains('hidden')) return;
-                    if (opt === t.ans) {
-                        c.style.backgroundColor = "#4CAF50"; document.getElementById('mining-question').innerHTML = t.q.replace("[？]", `<span style="color:#4CAF50;">[${t.ans}]</span>`);
-                        let dropMsg = checkStarDrop(); inventory.stone++; updateUI();
-                        document.getElementById('mining-msg').innerHTML = "✨ 挖到寶了！獲得 🧱 石頭 x 1 ✨" + dropMsg;
-                        document.getElementById('mining-msg').style.color = "#2E7D32"; playSound('win');
-                        document.getElementById('btn-next-mining').classList.remove('hidden');
-                    } else {
-                        c.style.backgroundColor = "#f44336"; document.getElementById('mining-msg').textContent = "❌ 敲錯礦石了！再試一次。"; document.getElementById('mining-msg').style.color = "#b71c1c"; playSound('error');
-                    }
-                }; document.getElementById('mining-options').appendChild(c);
-            });
-        }
-        function nextMining() { playSound('click'); currentMiningIdx++; loadMining(); }
-
-        // --- 隱藏寶藏挑戰 (Boss戰) ---
-        let bossQuestions = [], bossCurrentIdx = 0, bossCorrectCount = 0, bossAnswered = false, bossTarget = [], bossAnswer = [], bossBankBackup = [];
-        
-        function startBoss() { 
-            document.getElementById('game-boss').classList.remove('hidden'); 
-            bossQuestions = shuffle(hardTasks).slice(0, 10); 
-            bossCurrentIdx = 0; bossCorrectCount = 0; 
-            loadBossTask(); 
-        }
-        function loadBossTask() {
-            bossAnswered = false; document.getElementById('boss-progress').innerHTML = `進度：${bossCurrentIdx + 1} / 10 &nbsp;|&nbsp; 累積答對：${bossCorrectCount}`;
-            document.getElementById('boss-msg').innerHTML = "請完成以下挑戰！"; document.getElementById('boss-msg').style.color = "#333";
-            document.getElementById('btn-next-boss').classList.add('hidden'); document.getElementById('boss-reorder-area').classList.add('hidden'); document.getElementById('boss-mining-area').classList.add('hidden');
-            
-            document.getElementById('boss-hint-text').classList.add('hidden');
-            document.getElementById('boss-hint-text').textContent = "💡 提示：" + bossQuestions[bossCurrentIdx].hint;
-
-            const task = bossQuestions[bossCurrentIdx];
-            if (task.type === 'reorder') {
-                document.getElementById('boss-reorder-area').classList.remove('hidden'); document.getElementById('btn-boss-submit-reorder').classList.remove('hidden');
-                bossTarget = task.target; bossAnswer = []; 
-                bossBankBackup = shuffle(bossTarget); 
-                renderBossReorder([...bossBankBackup]);
-            } else {
-                document.getElementById('boss-mining-area').classList.remove('hidden'); document.getElementById('boss-mining-q').textContent = task.q; document.getElementById('boss-mining-options').innerHTML = '';
-                shuffle(task.options).forEach(opt => { let c = document.createElement('div'); c.className = 'stone-chunk'; c.textContent = opt; c.onclick = () => selectBossMining(opt, task.ans, c, task.q); document.getElementById('boss-mining-options').appendChild(c); });
-            }
-        }
-        
-        function showBossHint() { playSound('click'); document.getElementById('boss-hint-text').classList.remove('hidden'); }
-        
-        function resetBossReorder() {
-            if (bossAnswered) return;
-            playSound('click'); bossAnswer = []; renderBossReorder([...bossBankBackup]);
-        }
-
-        function renderBossReorder(bankWords) {
-            if (bossAnswered) return;
-            document.getElementById('boss-bank-area').innerHTML = ''; document.getElementById('boss-ans-area').innerHTML = '';
-            bossAnswer.forEach((w, i) => { let c = document.createElement('div'); c.className = 'word-chunk'; c.textContent = w; c.onclick = () => { playSound('click'); bossAnswer.splice(i, 1); bankWords.push(w); renderBossReorder(bankWords); }; document.getElementById('boss-ans-area').appendChild(c); });
-            bankWords.forEach((w, i) => { let c = document.createElement('div'); c.className = 'word-chunk'; c.textContent = w; c.onclick = () => { playSound('click'); bankWords.splice(i, 1); bossAnswer.push(w); renderBossReorder(bankWords); }; document.getElementById('boss-bank-area').appendChild(c); });
-        }
-        
-        function submitBossReorder() {
-            if (bossAnswer.length !== bossTarget.length) { alert("⚠️ 請將所有詞語都排上去才能提交！"); return; }
-            bossAnswered = true; document.getElementById('btn-boss-submit-reorder').classList.add('hidden');
-            if (bossAnswer.join("") === bossTarget.join("")) {
-                let dropMsg = checkStarDrop();
-                playSound('win'); bossCorrectCount++; inventory.paper++; inventory.wood++; inventory.stone++; updateUI();
-                document.getElementById('boss-msg').innerHTML = "✨ 完美解答！獲得 1紙 1木 1石 ✨" + dropMsg; document.getElementById('boss-msg').style.color = "#2E7D32";
-            } else {
-                playSound('error'); document.getElementById('boss-msg').innerHTML = `❌ 答錯了！<br><span style='font-size:0.8em; color:#333;'>正確答案應為：${bossTarget.join("")}</span>`; document.getElementById('boss-msg').style.color = "#b71c1c";
-            }
-            document.getElementById('boss-progress').innerHTML = `進度：${bossCurrentIdx + 1} / 10 &nbsp;|&nbsp; 累積答對：${bossCorrectCount}`; document.getElementById('btn-next-boss').classList.remove('hidden');
-        }
-        
-        function selectBossMining(selected, correct, element, qText) {
-            if (bossAnswered) return; bossAnswered = true;
-            if (selected === correct) {
-                let dropMsg = checkStarDrop();
-                playSound('win'); element.style.backgroundColor = "#4CAF50"; document.getElementById('boss-mining-q').innerHTML = qText.replace("[？]", `<span style="color:#4CAF50;">[${correct}]</span>`);
-                bossCorrectCount++; inventory.paper++; inventory.wood++; inventory.stone++; updateUI();
-                document.getElementById('boss-msg').innerHTML = "✨ 精準眼光！獲得 1紙 1木 1石 ✨" + dropMsg; document.getElementById('boss-msg').style.color = "#2E7D32";
-            } else {
-                playSound('error'); element.style.backgroundColor = "#f44336"; document.getElementById('boss-msg').innerHTML = `❌ 答錯了！<br><span style='font-size:0.8em; color:#333;'>正確詞語應為：${correct}</span>`; document.getElementById('boss-msg').style.color = "#b71c1c";
-            }
-            document.getElementById('boss-progress').innerHTML = `進度：${bossCurrentIdx + 1} / 10 &nbsp;|&nbsp; 累積答對：${bossCorrectCount}`; document.getElementById('btn-next-boss').classList.remove('hidden');
-        }
-        
-        function nextBoss() { playSound('click'); bossCurrentIdx++; if (bossCurrentIdx < bossQuestions.length) loadBossTask(); else showBossResult(); }
-        
-        function showBossResult() {
-            document.getElementById('game-boss').classList.add('hidden'); document.getElementById('game-boss-result').classList.remove('hidden');
-            const resultBox = document.getElementById('boss-result-text');
-            if (bossCorrectCount >= 7) { 
-                playSound('epic'); inventory.gem++; updateUI();
-                resultBox.innerHTML = `太不可思議了！你在傳說級挑戰中答對了 <b style='color:#E65100; font-size:1.5em;'>${bossCorrectCount}</b> 題！<br><br><span style='font-size:1.5em;'>🎉 獲得【💎 稀有寶石】x 1 🎉</span><br><br>快去建築工坊看看能蓋什麼吧！`;
-            } else {
-                playSound('error');
-                resultBox.innerHTML = `你答對了 <b style='color:#b71c1c; font-size:1.5em;'>${bossCorrectCount}</b> 題。<br><br>哎呀，距離獲得寶石還差一點！<br>（需要答對 7 題以上）<br><br>有了剛才的提示，下次一定能成功！`;
+        function handleNextAction() {
+            if (onNextAction === "normal" || onNextAction === "normal_wrong") {
+                if (onNextAction === "normal" && Math.random() < 0.2) {
+                    triggerEncounter();
+                } else {
+                    loadQuestion();
+                }
+            } else if (onNextAction === "monster_next") {
+                loadMonsterQuestion();
+            } else if (onNextAction === "monster_win") {
+                playSound('win');
+                alert(`🎉 你獲得了戰利品：${currentMonster.rewards}`);
+                if (currentMonster.rewards.includes("木材 +2")) player.inv.wood += 2;
+                if (currentMonster.rewards.includes("石頭 +2")) player.inv.stone += 2;
+                if (currentMonster.rewards.includes("木材 +3")) player.inv.wood += 3;
+                if (currentMonster.rewards.includes("石頭 +3")) player.inv.stone += 3;
+                if (currentMonster.rewards.includes("碎片 +1")) player.inv.frag += 1;
+                if (currentMonster.rewards.includes("寶石 +1")) player.inv.gem += 1;
+                if (currentMonster.rewards.includes("星星 +1")) player.inv.star += 1;
+                if (currentMonster.rewards.includes("寶石 +2")) player.inv.gem += 2;
+                if (currentMonster.rewards.includes("星星 +2")) player.inv.star += 2;
+                if (currentMonster.rewards.includes("寶石 +10")) player.inv.gem += 10;
+                if (currentMonster.rewards.includes("星星 +10")) player.inv.star += 10;
+                if (currentMonster.rewards.includes("手稿 +10")) player.inv.manu += 10;
+                if (currentMonster.rewards.includes("寶石 +15")) player.inv.gem += 15;
+                if (currentMonster.rewards.includes("星星 +15")) player.inv.star += 15;
+                
+                renderStats(); autoSave(); loadQuestion();
+            } else if (onNextAction === "monster_lose") {
+                let lostWood = Math.floor(Math.random() * 2) + 1;
+                let lostStone = Math.floor(Math.random() * 2) + 1;
+                player.inv.wood = Math.max(0, player.inv.wood - lostWood);
+                player.inv.stone = Math.max(0, player.inv.stone - lostStone);
+                renderStats(); autoSave(); loadQuestion();
             }
         }
 
-        // --- 建築工坊 ---
+        // --- 裝備與建築 ---
+        function craft(type) {
+            if (type === 'woodSword' && player.inv.wood >= 3) { player.inv.wood -= 3; player.inv.atk += 10; alert("鍛造成功！攻擊力 +10"); } 
+            else if (type === 'stoneSword' && player.inv.stone >= 5 && player.inv.wood >= 2) { player.inv.stone -= 5; player.inv.wood -= 2; player.inv.atk += 25; alert("鍛造成功！攻擊力 +25"); } 
+            else if (type === 'woodShield' && player.inv.wood >= 3) { player.inv.wood -= 3; player.inv.def += 10; alert("鍛造成功！防禦力 +10"); } 
+            else if (type === 'stoneArmor' && player.inv.stone >= 5) { player.inv.stone -= 5; player.inv.def += 25; alert("鍛造成功！防禦力 +25"); } 
+            else { alert("資源不足！"); return; }
+            playSound('craft'); renderStats(); autoSave();
+        }
+
+        function upgradeSuperGear(type) {
+            if(type === 'weapon') {
+                let costM = 5 + player.gear.weapon * 2; let costF = player.gear.weapon;
+                if(player.inv.manu >= costM && player.inv.frag >= costF) {
+                    player.inv.manu -= costM; player.inv.frag -= costF; player.gear.weapon++; player.inv.atk += 5;
+                    document.getElementById('sg-w-lv').innerText = player.gear.weapon; document.getElementById('sg-w-bonus').innerText = player.gear.weapon * 5;
+                    document.getElementById('sg-w-cost-m').innerText = 5 + player.gear.weapon * 2; document.getElementById('sg-w-cost-f').innerText = player.gear.weapon;
+                    playSound('craft'); alert("武器升級成功！");
+                } else { alert("材料不足！"); }
+            } else if(type === 'shield') {
+                let costM = 5 + player.gear.shield * 2; let costF = player.gear.shield;
+                if(player.inv.manu >= costM && player.inv.frag >= costF) {
+                    player.inv.manu -= costM; player.inv.frag -= costF; player.gear.shield++; player.inv.def += 5;
+                    document.getElementById('sg-s-lv').innerText = player.gear.shield; document.getElementById('sg-s-bonus').innerText = player.gear.shield * 5;
+                    document.getElementById('sg-s-cost-m').innerText = 5 + player.gear.shield * 2; document.getElementById('sg-s-cost-f').innerText = player.gear.shield;
+                    playSound('craft'); alert("防具升級成功！");
+                } else { alert("材料不足！"); }
+            }
+            renderStats(); autoSave();
+        }
+
         function buildItem(type) {
-            let costPaper = 0, costWood = 0, costStone = 0, costGem = 0, costTent = 0, costHut = 0, costStar = 0, emoji = "", label = "";
-            
-            if (type === 'tent') { costPaper = 2; costWood = 1; emoji = "🏕️"; label = "溫習帳篷"; }
-            if (type === 'hut') { costWood = 2; costStone = 2; emoji = "🛖"; label = "森林木屋"; }
-            if (type === 'castle') { costTent = 2; costHut = 2; emoji = "🏰"; label = "大城堡"; }
-            if (type === 'flying') { costGem = 1; costPaper = 5; costWood = 5; costStone = 5; emoji = "☁️🛸☁️"; label = "飛天基地"; }
-            if (type === 'wheel') { costStar = 3; costPaper = 3; costWood = 3; costStone = 3; emoji = "🎡"; label = "星空摩天輪"; }
+            if (type === 'tent' && player.inv.wood >= 2) { player.inv.wood -= 2; player.buildings.tent++; } 
+            else if (type === 'cabin' && player.inv.stone >= 2) { player.inv.stone -= 2; player.buildings.cabin++; } 
+            else if (type === 'castle' && player.buildings.tent >= 2 && player.buildings.cabin >= 2) { player.buildings.tent -= 2; player.buildings.cabin -= 2; player.buildings.castle++; } 
+            else if (type === 'base' && player.inv.gem >= 5 && player.buildings.castle >= 1) { player.inv.gem -= 5; player.buildings.castle -= 1; player.buildings.base++; } 
+            else if (type === 'park' && player.inv.star >= 5 && player.inv.wood >= 5 && player.inv.stone >= 5) { player.inv.star -= 5; player.inv.wood -= 5; player.inv.stone -= 5; player.buildings.park++; } 
+            else { alert("資源不足或前置建築未達成！"); return; }
+            playSound('craft'); alert("建築成功！"); renderStats(); renderWorld(); checkBossUnlock(); autoSave();
+        }
 
-            if (inventory.paper >= costPaper && inventory.wood >= costWood && inventory.stone >= costStone && inventory.gem >= costGem && inventory.tent >= costTent && inventory.hut >= costHut && inventory.star >= costStar) {
-                
-                inventory.paper -= costPaper; inventory.wood -= costWood; inventory.stone -= costStone; inventory.gem -= costGem;
-                inventory.tent -= costTent; inventory.hut -= costHut; inventory.star -= costStar;
-                
-                if (type === 'tent') inventory.tent++;
-                if (type === 'hut') inventory.hut++;
-                if (type === 'castle') inventory.castles++;
-                if (type === 'flying') inventory.flying++;
-                if (type === 'wheel') inventory.wheel++;
-                
-                updateUI(); restoreBuildings(); 
-                playSound(type === 'flying' || type === 'castle' || type === 'wheel' ? 'epic' : 'win');
-            } else {
-                playSound('error'); 
-                if (type === 'castle') alert("❌ 資源不足！\n合成 1 座城堡需要先擁有：2 個帳篷 + 2 間木屋！");
-                else if (type === 'wheel') alert("❌ 資源不足！\n你需要收集 3 個隨機掉落的「🌟 星星碎片」才能建造摩天輪喔！");
-                else alert("❌ 資源不足！快去玩遊戲收集對應的材料吧！");
+        function renderWorld() {
+            let grid = document.getElementById("world-grid"); grid.innerHTML = "";
+            const icons = { tent: "⛺", cabin: "🏠", castle: "🏰", base: "🚀", park: "🎡" };
+            for (let key in player.buildings) {
+                for (let i = 0; i < player.buildings[key]; i++) { grid.innerHTML += `<div class="building-item"><span class="emoji">${icons[key]}</span></div>`; }
             }
+        }
+
+        function checkBossUnlock() {
+            if (player.buildings.castle >= 1) {
+                let btn = document.getElementById("btn-boss-menu");
+                btn.disabled = false; btn.innerText = "🔓 終極 Boss 挑戰 (已解鎖)";
+            }
+        }
+
+        function openBossSelect() {
+            if (player.buildings.castle >= 1) { hideAllScreens(); document.getElementById("boss-select-screen").classList.remove("hidden"); }
+        }
+
+        // --- Boss 戰邏輯 ---
+        let bossTimer, bossTimeLeft, bossMaxTime;
+        let bossCorrectCount = 0; let bossGoal = 5;
+        let playerHP = 100, playerMaxHP = 100; let currentBoss = 1;
+
+        function startBossFight(level) {
+            currentBoss = level; bossMaxTime = level === 1 ? 15 : (level === 2 ? 10 : 5);
+            playerMaxHP = 50 + player.inv.def * 2; playerHP = playerMaxHP; bossCorrectCount = 0;
+            
+            hideAllScreens(); document.getElementById("boss-combat-screen").classList.remove("hidden");
+            document.getElementById("boss-name-title").innerText = `Boss ${level} 挑戰`;
+            
+            updateBossHP(); nextBossQuestion();
+        }
+
+        function updateBossHP() {
+            let pct = Math.max(0, (playerHP / playerMaxHP) * 100);
+            document.getElementById("player-hp-bar").style.width = pct + "%";
+            document.getElementById("player-hp-text").innerText = `你的 HP: ${playerHP}/${playerMaxHP}`;
+            document.getElementById("boss-progress-text").innerText = `目標：累積答對 ${bossCorrectCount} / ${bossGoal}`;
+        }
+
+        function nextBossQuestion() {
+            let allQs = [...questions.mining, ...questions.punctuation, ...questions.reorder, ...questions.idiom, ...questions.letter, ...questions.dictation];
+            currentQuestion = allQs[Math.floor(Math.random() * allQs.length)];
+            
+            document.getElementById("boss-question").innerText = currentQuestion.q;
+            document.getElementById("boss-hint-area").classList.add("hidden");
+            document.getElementById("boss-feedback-area").classList.add("hidden");
+            document.getElementById("boss-options").classList.remove("hidden");
+            
+            let optionsHtml = "";
+            let opts = [...currentQuestion.options].sort(() => Math.random() - 0.5);
+            opts.forEach(opt => { optionsHtml += `<button class="word-chunk" onclick="checkBossAnswer('${opt}')">${opt}</button>`; });
+            document.getElementById("boss-options").innerHTML = optionsHtml;
+            
+            bossTimeLeft = bossMaxTime; updateBossTimerUI();
+            
+            clearInterval(bossTimer);
+            bossTimer = setInterval(() => {
+                bossTimeLeft--; updateBossTimerUI();
+                if (bossTimeLeft <= 0) { clearInterval(bossTimer); bossDamage("超時！"); }
+            }, 1000);
+        }
+
+        function updateBossTimerUI() {
+            let pct = (bossTimeLeft / bossMaxTime) * 100;
+            document.getElementById("boss-timer-bar").style.width = pct + "%";
+            document.getElementById("boss-time-text").innerText = bossTimeLeft + "s";
+        }
+
+        function showBossHint() {
+            if (currentQuestion) {
+                let hintEl = document.getElementById("boss-hint-area");
+                hintEl.innerText = "💡 提示：" + currentQuestion.hint;
+                hintEl.classList.remove("hidden");
+            }
+        }
+
+        function checkBossAnswer(ans) {
+            clearInterval(bossTimer);
+            document.getElementById("boss-options").classList.add("hidden");
+            document.getElementById("boss-hint-area").classList.add("hidden");
+
+            if (ans === currentQuestion.a) {
+                playSound('correct');
+                bossCorrectCount++; updateBossHP();
+                if (bossCorrectCount >= bossGoal) {
+                    playSound('win');
+                    alert(`🎉 恭喜擊敗 Boss ${currentBoss}！獲得豐厚獎勵！`);
+                    player.inv.gem += 5 * currentBoss; player.inv.star += 5 * currentBoss;
+                    renderStats(); autoSave(); goHome();
+                } else { 
+                    let fbArea = document.getElementById("boss-feedback-area");
+                    fbArea.classList.remove("hidden", "error");
+                    document.getElementById("boss-feedback-msg").innerHTML = `✅ 答對了！正確答案是：<span style="color:#E65100;">${currentQuestion.a}</span>`;
+                }
+            } else { 
+                bossDamage("答錯了！"); 
+            }
+        }
+
+        function bossDamage(reason) {
+            playSound('wrong');
+            let dmg = 10 + currentBoss * 5; playerHP -= dmg;
+            player.inv.wood = Math.max(0, player.inv.wood - 2); player.inv.stone = Math.max(0, player.inv.stone - 2);
+            renderStats(); updateBossHP(); autoSave();
+            
+            if (playerHP <= 0) { 
+                playSound('lose');
+                alert("💀 你被 Boss 擊敗了！請提升防禦力再來挑戰！"); goHome(); 
+            } else { 
+                document.getElementById("boss-options").classList.add("hidden");
+                let fbArea = document.getElementById("boss-feedback-area");
+                fbArea.classList.remove("hidden"); fbArea.classList.add("error");
+                document.getElementById("boss-feedback-msg").innerHTML = `❌ ${reason} 正確答案是：<span style="color:#F44336;">${currentQuestion.a}</span><br><small style="color:#333">扣除 ${dmg} HP，並丟失了一些材料！</small>`;
+            }
+        }
+
+        function handleBossNextQuestion() {
+            nextBossQuestion();
         }
     </script>
 </body>
 </html>
-```
