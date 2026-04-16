@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (極致完全版)</title>
+    <title>Roblox：森林大冒險 (野獸圖鑑版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -85,6 +85,8 @@
             animation: blink 2s infinite;
         }
         #btn-gift:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent; }
+        
+        .beast-img { width: 160px; height: 160px; margin: 10px auto; display: block; background: rgba(0,0,0,0.1); border-radius: 20px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); object-fit: cover; border: 4px solid #FF5252; }
     </style>
 </head>
 <body>
@@ -154,7 +156,7 @@
                 <p>📜 <b>勤奮手稿 / 🔮 頓悟碎片</b>：答題或連勝掉落，用於神器升級。</p>
                 <p>💡 <b>提示系統</b>：答題關卡中可消耗 <b>1 顆星星</b> 獲得系統刪去一個錯誤答案！</p>
                 
-                <h3 style="color:#B71C1C;">2. 戰鬥力與傳說怪獸</h3>
+                <h3 style="color:#B71C1C;">2. 戰鬥力與怪獸</h3>
                 <p>⚔️遇到「突發野獸」時，總戰力(攻+防)大於野獸才能獲勝。</p>
                 <p>🐉 <b>傳說怪獸</b>：當你建好大城堡後，野外將會出現極稀有的「傳說怪獸」！面對牠們，<b>你必須在限時內連續答對 3 條題目才能將其擊敗</b>！</p>
                 
@@ -248,6 +250,9 @@
 
         <div id="boss-combat-screen" class="screen hidden">
             <h2 id="boss-name-title" style="color:#B71C1C; margin-bottom:5px;">Boss Name</h2>
+            
+            <img id="boss-image" class="beast-img" src="" alt="Boss圖片">
+
             <div class="boss-hp-bar-container">
                 <div class="boss-hp-bar" id="player-hp-bar"></div>
                 <div class="boss-hp-text" id="player-hp-text">你的 HP: 100/100</div>
@@ -271,6 +276,9 @@
     <div id="event-modal" class="hidden">
         <div class="event-box" id="event-box-ui">
             <h2 id="event-title">事件</h2>
+            
+            <img id="event-image" class="beast-img" style="display: none;" src="" alt="野獸圖片">
+
             <p id="event-desc" style="font-size: 1.3em; font-weight: bold;"></p>
             <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
                 <button class="btn-red" id="btn-event-fight">⚔️ 應戰</button>
@@ -322,7 +330,7 @@
             wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, 
             superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
             equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [],
-            giftClaimed: false // 記錄是否已領取禮品包
+            giftClaimed: false
         };
         let inventory = { ...defaultInv };
 
@@ -472,7 +480,7 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_v10');
+            const savedData = localStorage.getItem('roblox_p4_save_v11');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -493,7 +501,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_v10', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_v11', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -506,7 +514,6 @@
                 return;
             }
 
-            // 各種材料 +50
             inventory.wood += 50;
             inventory.stone += 50;
             inventory.gem += 50;
@@ -518,7 +525,7 @@
             playSound('boss_win'); 
             alert("🎉 恭喜！成功領取限定禮品包！\n獲得 金幣 +50, 木材 +50, 石頭 +50, 寶石 +50, 星星 +50！");
             
-            updateUI(); // 更新介面並存檔
+            updateUI(); 
         }
 
         function calculateStats() {
@@ -573,7 +580,6 @@
                 bossBtn.disabled = false;
             }
 
-            // 更新禮品包按鈕狀態
             let giftBtn = document.getElementById('btn-gift');
             if (giftBtn && inventory.giftClaimed) {
                 giftBtn.innerHTML = "✅ 已領取新手禮品包";
@@ -636,47 +642,64 @@
             let title = "";
             let desc = "";
             let legendaryName = "";
+            let beastImg = ""; 
 
             let eventBoxUi = document.getElementById('event-box-ui');
             eventBoxUi.classList.remove('legendary-box');
+            document.getElementById('event-image').style.display = "none"; 
 
             if (inventory.castles >= 1 && r < 0.05) {
                 isLegendary = true;
                 let legends = [
-                    { name: "🐉 【傳說】遠古黑龍", min: 100, max: 150 },
-                    { name: "🦅 【傳說】暴風神鷲", min: 120, max: 180 }
+                    { name: "🐉 【傳說】遠古黑龍", min: 150, max: 200, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Dragon&backgroundColor=311B92" },
+                    { name: "🦅 【傳說】暴風神鷲", min: 140, max: 190, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Eagle&backgroundColor=0D47A1" }
                 ];
                 let l = legends[Math.floor(Math.random() * legends.length)];
                 legendaryName = l.name;
                 beastPower = Math.floor(Math.random() * (l.max - l.min)) + l.min;
                 title = "🚨 警告！傳說級怪獸降臨！";
                 desc = `${l.name} 出現了！牠散發著強大的氣場！你必須在限時內連續答對 3 題才能擊敗牠！`;
+                beastImg = l.img;
                 eventBoxUi.classList.add('legendary-box');
                 playSound('legendary');
-            } else if (r < 0.20) {
-                beastPower = 20 + Math.floor(Math.random() * 30) + (inventory.castles * 5); 
+            } else if (r < 0.25) { 
+                let normalBeasts = [
+                    { name: "🟢 搗蛋樹妖", power: 33, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Tree&backgroundColor=C8E6C9" },
+                    { name: "🟡 狂暴野豬", power: 60, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Boar&backgroundColor=FFECB3" },
+                    { name: "🔴 暗影巨蛛", power: 90, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Spider&backgroundColor=FFCDD2" },
+                    { name: "🟣 裝甲巨石魔", power: 120, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Golem&backgroundColor=D1C4E9" }
+                ];
+                let b = normalBeasts[Math.floor(Math.random() * normalBeasts.length)];
+                beastPower = b.power;
                 title = "⚠️ 突發野獸襲擊！";
-                desc = `一隻戰鬥力 ${beastPower} 的野獸出現了！你的總戰力：${calculateStats().atk + calculateStats().def}`;
+                desc = `【${b.name}】出現了！戰鬥力高達 ${beastPower}！\n你的總戰力：${calculateStats().atk + calculateStats().def}`;
+                beastImg = b.img;
             }
 
             if (beastPower > 0) {
                 document.getElementById('event-title').textContent = title;
-                document.getElementById('event-desc').textContent = desc;
-                document.getElementById('btn-event-fight').onclick = () => resolveEvent('fight', beastPower, isLegendary, legendaryName);
-                document.getElementById('btn-event-flee').onclick = () => resolveEvent('flee', beastPower, isLegendary, legendaryName);
+                document.getElementById('event-desc').innerText = desc; 
+                
+                // 顯示圖片
+                let imgElement = document.getElementById('event-image');
+                imgElement.src = beastImg;
+                imgElement.style.display = "block";
+
+                document.getElementById('btn-event-fight').onclick = () => resolveEvent('fight', beastPower, isLegendary, legendaryName, beastImg);
+                document.getElementById('btn-event-flee').onclick = () => resolveEvent('flee', beastPower, isLegendary, legendaryName, beastImg);
                 document.getElementById('event-modal').classList.remove('hidden');
                 return;
             }
 
-            if (r < 0.30) { inventory.gem++; playSound('medal'); alert("💎 運氣真好！你在路上撿到了一顆寶石！"); updateUI(); }
-            else if (r < 0.40) { inventory.star++; playSound('medal'); alert("🌟 幸運！天上掉下了一顆星星！"); updateUI(); }
+            if (r < 0.35) { inventory.gem++; playSound('medal'); alert("💎 運氣真好！你在路上撿到了一顆寶石！"); updateUI(); }
+            else if (r < 0.45) { inventory.star++; playSound('medal'); alert("🌟 幸運！天上掉下了一顆星星！"); updateUI(); }
         }
 
-        function resolveEvent(action, power, isLegendary, legendaryName) {
+        function resolveEvent(action, power, isLegendary, legendaryName, beastImg) {
             if (action === 'fight') {
                 if (isLegendary) {
                     document.getElementById('event-modal').classList.add('hidden');
-                    startLegendaryFight(legendaryName);
+                    startLegendaryFight(legendaryName, beastImg);
                     return;
                 } else {
                     let myPower = calculateStats().atk + calculateStats().def;
@@ -732,7 +755,6 @@
 
         function loadMining() {
             if (currentMiningIdx >= currentMiningTasks.length || currentMiningTasks.length===0) {
-                // 如果該關卡的題目做完了，就重新洗牌
                 if(currentCategory === 'hk') currentMiningTasks = shuffle(dbHK);
                 else if (currentCategory === 'house') currentMiningTasks = shuffle(dbHouse);
                 else if (currentCategory === 'energy') currentMiningTasks = shuffle(dbEnergy);
@@ -850,10 +872,10 @@
 
         // --- Boss 與傳說怪獸 戰鬥系統 ---
         const bossConfig = {
-            1: { name: "🟢 Boss 1：元素吞噬者", time: 15, target: 5, mode: "accumulate", hpPenalty: 10, msg: "扣 10 HP，隨機吸走 2 元素！" },
-            2: { name: "🟡 Boss 2：混沌智者", time: 10, target: 3, mode: "streak", hpPenalty: 20, msg: "扣 20 HP，吸走最多數量的元素 5 個！連對歸零！" },
-            3: { name: "🔴 Boss 3：終極幻影魔王", time: 5, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！" },
-            'legendary': { name: "傳說怪獸", time: 10, target: 3, mode: "accumulate", hpPenalty: 25, msg: "受到傳說級攻擊！扣 25 HP！" }
+            1: { name: "🟢 Boss 1：元素吞噬者", time: 15, target: 5, mode: "accumulate", hpPenalty: 10, msg: "扣 10 HP，隨機吸走 2 元素！", img: "https://api.dicebear.com/9.x/bottts/svg?seed=Boss1&backgroundColor=C8E6C9" },
+            2: { name: "🟡 Boss 2：混沌智者", time: 10, target: 3, mode: "streak", hpPenalty: 20, msg: "扣 20 HP，吸走最多數量的元素 5 個！連對歸零！", img: "https://api.dicebear.com/9.x/bottts/svg?seed=Boss2&backgroundColor=FFECB3" },
+            3: { name: "🔴 Boss 3：終極幻影魔王", time: 5, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！", img: "https://api.dicebear.com/9.x/bottts/svg?seed=Boss3&backgroundColor=FFCDD2" },
+            'legendary': { name: "傳說怪獸", time: 10, target: 3, mode: "accumulate", hpPenalty: 25, msg: "受到傳說級攻擊！扣 25 HP！", img: "" }
         };
         let currentBoss = 1, bossTimerInterval, playerHP = 100, maxHP = 100, bossProgress = 0, bossTaskPool = [], currentBossTask = null;
 
@@ -861,12 +883,22 @@
             playSound('click');
             if (id === 2 && !inventory.medals.includes(100)) return alert("需先獲得 100 連勝勳章才能挑戰 Boss 2！");
             if (id === 3 && !inventory.medals.includes(300)) return alert("需先獲得 300 連勝勳章才能挑戰 Boss 3！");
+            
+            // 設置Boss圖片
+            document.getElementById('boss-image').src = bossConfig[id].img;
+            document.getElementById('boss-image').style.display = "block";
+            
             initCombatSystem(id, bossConfig[id].name);
         }
 
-        function startLegendaryFight(monsterName) {
+        function startLegendaryFight(monsterName, monsterImg) {
             playSound('legendary');
             bossConfig['legendary'].name = monsterName;
+            
+            // 設置傳說怪獸圖片
+            document.getElementById('boss-image').src = monsterImg;
+            document.getElementById('boss-image').style.display = "block";
+            
             initCombatSystem('legendary', monsterName);
         }
 
@@ -875,7 +907,6 @@
             maxHP = 100 + calculateStats().def * 2; 
             playerHP = maxHP; 
             bossProgress = 0;
-            // Boss 戰會從所有題庫 (allMiningTasks) 中隨機抽出挑戰！
             bossTaskPool = shuffle(allMiningTasks);
             
             hideAll();
