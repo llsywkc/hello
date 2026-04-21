@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (P.3 勳章成就版)</title>
+    <title>Roblox：森林大冒險 (T3 Unit 5&6)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -22,12 +22,13 @@
         #medal-bar { background-color: #2E7D32; border-color: #1B5E20; box-shadow: 0 6px 0 #004D40; font-size: 1.4em; gap: 8px; }
         .medal-icon { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); animation: pulse 2s infinite; cursor: help; }
 
+        .coin-text { color: #FFD700; text-shadow: 1px 1px 2px #000; animation: pulse 2s infinite; }
         .gem-text { color: #E040FB; text-shadow: 1px 1px 2px #000; }
         .star-text { color: #FFC107; text-shadow: 1px 1px 2px #000; animation: blink 2s infinite; }
         .super-text { color: #00E5FF; text-shadow: 1px 1px 2px #000; }
         .stat-atk { color: #FF5252; text-shadow: 1px 1px 2px #000;}
         .stat-def { color: #448AFF; text-shadow: 1px 1px 2px #000;}
-        .save-indicator { font-size: 0.8em; color: #81C784; margin-bottom: 15px; text-shadow: 1px 1px 0 #000; }
+        .save-indicator { font-size: 0.8em; color: #81C784; margin-bottom: 15px; text-shadow: 1px 1px 0 #000;}
 
         .container { background-color: #E0F7FA; border: 8px solid #006064; border-radius: 12px; padding: 20px; width: 95%; max-width: 800px; box-shadow: 0 12px 0 #00363A; text-align: center; }
 
@@ -47,13 +48,12 @@
 
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(234, 128, 252, 0.7), 0 6px 0 #6A1B9A; } 70% { box-shadow: 0 0 0 15px rgba(234, 128, 252, 0), 0 6px 0 #6A1B9A; } 100% { box-shadow: 0 0 0 0 rgba(234, 128, 252, 0), 0 6px 0 #6A1B9A; } }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
-
         .hidden { display: none !important; }
         .screen { display: flex; flex-direction: column; align-items: center; gap: 15px; }
         
         .word-bank, .answer-area { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; min-height: 80px; padding: 15px; background: rgba(0,0,0,0.05); border-radius: 10px; border: 4px inset rgba(0,0,0,0.1); box-sizing: border-box; }
         .word-chunk { background-color: #FFEB3B; border: 4px solid #FBC02D; box-shadow: 0 6px 0 #F57F17; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; color: #333; }
-        .stone-chunk { background-color: #9E9E9E; border: 4px solid #757575; box-shadow: 0 6px 0 #424242; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; color: #FFF; }
+        .stone-chunk { background-color: #9E9E9E; border: 4px solid #757575; box-shadow: 0 6px 0 #424242; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; color: #FFF; transition: visibility 0.2s; }
         .question-text { font-size: 1.5em; font-weight: bold; background: #FFF; padding: 15px; border: 4px solid #B0BEC5; border-radius: 8px; line-height: 1.5; width: 90%; box-sizing: border-box; }
         .status-msg { font-size: 1.5em; font-weight: bold; min-height: 55px; margin-bottom: 5px; }
 
@@ -67,12 +67,25 @@
         #event-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; display:flex; justify-content:center; align-items:center; }
         .event-box { background:#FFF; padding:30px; border-radius:15px; text-align:center; border:8px solid #B71C1C; max-width: 85%; width: 450px; }
         .event-box h2 { color:#B71C1C; font-size: 2em; margin-top: 0; }
+        .legendary-box { border:8px solid #9C27B0; background: #311B92; color: #FFF; }
+        .legendary-box h2 { color: #EA80FC; text-shadow: 0 0 10px #EA80FC; }
         
         .world-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; background: #8BC34A; padding: 20px; border: 6px solid #558B2F; border-radius: 10px; min-height: 150px; width: 90%; font-size: 3em; box-sizing: border-box; }
         .building-item, .super-gear-card { background: rgba(255,255,255,0.8); padding: 15px; border-radius: 10px; border: 4px dashed #33691E; display: flex; flex-direction: column; align-items: center; font-size: 1em; font-weight: bold; color: #1B5E20; text-align: center; }
         .building-item span.emoji { font-size: 3.5em; margin-bottom: 5px; }
         .super-gear-card { border: 4px solid #FF9800; background: #FFF3E0; width: 200px; }
         .super-gear-card h3 { margin: 5px 0; color: #E65100; font-size: 1.3em; }
+
+        #btn-gift {
+            background: linear-gradient(45deg, #FF9800, #FF5722); color: white; border: none; 
+            padding: 12px 20px; font-size: 1.2em; border-radius: 10px; cursor: pointer; 
+            box-shadow: 0 6px 0 #D84315; margin: 15px 0; font-weight: bold; width: 80%; 
+            text-transform: uppercase; transition: all 0.1s; border: 4px solid #FFE0B2;
+            animation: blink 2s infinite;
+        }
+        #btn-gift:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent; }
+        
+        .beast-img { width: 160px; height: 160px; margin: 10px auto; display: block; background: rgba(0,0,0,0.1); border-radius: 20px; box-shadow: 0 6px 12px rgba(0,0,0,0.4); object-fit: cover; border: 4px solid #FF5252; }
     </style>
 </head>
 <body>
@@ -87,6 +100,7 @@
     </div>
 
     <div id="top-nav" class="inventory-bar hidden">
+        <span class="coin-text">💰 金幣: <span id="inv-coin">0</span></span>
         <span>🪵 木材: <span id="inv-wood">0</span></span>
         <span>🧱 石頭: <span id="inv-stone">0</span></span>
         <span class="stat-atk">⚔️ 攻: <span id="inv-atk">10</span></span>
@@ -109,44 +123,62 @@
 
         <div id="start-screen" class="screen hidden">
             <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#607D8B;">📖 遊戲說明 (新手必看)</button>
+            
+            <button id="btn-gift" onclick="claimGift()">🎁 領取限定新手禮品包 (只限一次)</button>
             <hr style="width: 80%; border-top: 4px dashed #006064;">
             
-            <h2>🏕️ 選擇冒險地圖</h2>
-            <button class="btn-green" onclick="startGame('reorder')">🌉 鋪木板過河 (贏木材與手稿)</button>
-            <button class="btn-grey" onclick="startGame('mining')">⛏️ 礦洞尋寶 (贏石頭與手稿)</button>
-            <p style="font-size: 0.9em; font-weight: bold; color: #FF9800;">(連續答對累積連勝，每100連勝可解鎖專屬勳章！)</p>
+            <h2>🏕️ 選擇主題關卡</h2>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
+                <button class="btn-blue" onclick="startGame('hk')">🏙️ 關卡一：香港是我家</button>
+                <button class="btn-green" onclick="startGame('house')">🏠 關卡二：安居樂</button>
+                <button class="btn-orange" onclick="startGame('energy')">⚡ 關卡三：能源世界</button>
+                <button class="btn-purple" onclick="startGame('freedom')">🗽 關卡四：自由與守規</button>
+            </div>
             
             <hr style="width: 80%; border-top: 4px dashed #006064;">
             
-            <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇 (無限戰力)</button>
-            <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊 (基礎防具)</button>
-            <button class="btn-blue" onclick="openBuildZone()">🔨 進入建築工坊 (解鎖高級建築)</button>
-            <button class="btn-black" id="btn-boss-menu" onclick="openBossSelect()" disabled>🔒 終極 Boss 挑戰 (需建大城堡)</button>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
+                <button class="btn-gold" onclick="openShop()">🛒 神秘商人 (購買藥水)</button>
+                <button class="btn-purple" onclick="openSuperForge()">👑 神器祭壇 (極限突破)</button>
+                <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊 (基礎防具)</button>
+                <button class="btn-blue" style="background-color: #00796B;" onclick="openBuildZone()">🔨 進入建築工坊</button>
+            </div>
+            <button class="btn-black" id="btn-boss-menu" style="margin-top: 15px; width: 80%;" onclick="openBossSelect()" disabled>🔒 終極 Boss 挑戰 (需建大城堡)</button>
         </div>
 
         <div id="instruction-screen" class="screen hidden">
             <h2>📖 冒險者指南</h2>
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #4CAF50; max-height: 400px; overflow-y: auto;">
-                <h3 style="color:#2E7D32; margin-top:0;">1. 如何獲得元素與勳章？</h3>
-                <p>🪵 <b>木材 / 🧱 石頭</b>：透過「鋪木板過河」和「礦洞尋寶」100% 獲得。</p>
-                <p>📜 <b>勤奮手稿</b>：每次答對題目都會獲得 1 張。</p>
-                <p>🔮 <b>頓悟碎片</b>：連續答對 3 題掉落 1 個碎片。</p>
-                <p>💎 <b>寶石 / 🌟 星星</b>：打敗突發野獸，或在過關時機率(25%)掉落。</p>
-                <p>🎖️ <b>榮譽勳章</b>：累積 <b>100 連勝</b> 起，每 100 連勝解鎖一枚！即使連勝中斷，已獲得的勳章也會永久保留。</p>
+                <h3 style="color:#2E7D32; margin-top:0;">1. 如何獲得資源？</h3>
+                <p>💰 <b>金幣</b>：每次答對題目獲得金幣，打敗野獸也會掉落！可用於神秘商人處購買藥水。</p>
+                <p>🪵 <b>木材 / 🧱 石頭</b>：透過遊戲答題 100% 獲得。</p>
+                <p>📜 <b>勤奮手稿 / 🔮 頓悟碎片</b>：答題或連勝掉落，用於神器升級。</p>
+                <p>💡 <b>提示系統</b>：答題關卡中可消耗 <b>1 顆星星</b> 獲得系統刪去一個錯誤答案！</p>
                 
-                <h3 style="color:#B71C1C;">2. 戰鬥力 (攻/防) 有什麼用？</h3>
-                <p>⚔️ <b>攻擊力 (攻)</b>：遇到「突發野獸」時，總戰力大於野獸才能獲勝並奪取寶石。</p>
-                <p>🛡️ <b>防禦力 (防)</b>：在「Boss 挑戰關卡」中，防禦力會直接轉化為你的額外生命值 (HP)。</p>
+                <h3 style="color:#B71C1C;">2. 戰鬥力與怪獸</h3>
+                <p>⚔️遇到「突發野獸」時，總戰力(攻+防)大於野獸才能獲勝。</p>
+                <p>🐉 <b>傳說怪獸</b>：當你建好大城堡後，野外將會出現極稀有的「傳說怪獸」！面對牠們，<b>你必須在限時內連續答對 3 條題目才能將其擊敗</b>！</p>
                 
-                <h3 style="color:#6A1B9A;">3. Boss 挑戰怎麼打？</h3>
-                <p>在建築工坊建成 <b>1 座大城堡</b>解鎖。為限時多項選擇題，答錯會扣 HP 並被吸走元素！</p>
+                <h3 style="color:#6A1B9A;">3. 藥水系統與Boss戰</h3>
+                <p>在商店購買的<b>恢復藥水</b>，能在挑戰終極 Boss 或傳說怪獸時使用（恢復30HP）。而<b>力量/鐵壁藥水</b>則會永久提升你的戰力！</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
 
+        <div id="shop-zone" class="screen hidden">
+            <h2 style="color: #FFD700; text-shadow: 1px 1px 0 #000;">🛒 神秘森林商人</h2>
+            <p style="font-weight:bold;">我只收閃亮的金幣！你需要甚麼幫助嗎？</p>
+            <p>目前金幣: <span id="shop-coin-display" class="coin-text" style="font-size: 1.5em; font-weight: bold;">0</span></p>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 20px;">
+                <button class="btn-red" onclick="buyItem('hpPotion')">❤️ 恢復藥水 (擁有: <span id="shop-hp-count">0</span>)<br><small>戰鬥中補30血 | 15 金幣</small></button>
+                <button class="btn-orange" onclick="buyItem('atkPotion')">💪 力量藥水 <br><small>永久+2攻擊力 | 40 金幣</small></button>
+                <button class="btn-blue" onclick="buyItem('defPotion')">🛡️ 鐵壁藥水 <br><small>永久+2防禦力 | 40 金幣</small></button>
+            </div>
+            <button class="btn-grey" onclick="goHome()">🏠 離開商店</button>
+        </div>
+
         <div id="super-forge-zone" class="screen hidden">
             <h2 style="color: #FF9800;">👑 神器祭壇</h2>
-            <p style="font-weight:bold; color:#D84315;">努力就有回報！用練習賺來的材料無限進化裝備！</p>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
                 <div class="super-gear-card">
                     <h3>🗡️ 破題者之刃 <br>Lv.<span id="sg-w-lv">0</span></h3>
@@ -167,24 +199,13 @@
             <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
 
-        <div id="game-reorder" class="screen hidden">
-            <h2>🌉 鋪木板過河 <br><small>將詞語順序排好，搭建橋樑！</small></h2>
-            <div class="status-msg" id="reorder-msg"></div>
-            <div class="answer-area" id="answer-area"></div>
-            <div class="word-bank" id="word-bank"></div>
-            <div>
-                <button class="btn-orange" onclick="resetReorder()">🔄 重新排列</button>
-                <button class="btn-green hidden" id="btn-next-reorder" onclick="nextReorder()">➡️ 下一題</button>
-                <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
-            </div>
-        </div>
-
         <div id="game-mining" class="screen hidden">
-            <h2>⛏️ 礦洞尋寶 <br><small>敲碎正確的詞語礦石，填補句子！</small></h2>
+            <h2 id="level-title">⛏️ 礦洞尋寶</h2>
             <div class="status-msg" id="mining-msg"></div>
             <div class="question-text" id="mining-question">題目加載中...</div>
             <div class="word-bank" id="mining-options"></div>
-            <div>
+            <div style="margin-top: 10px;">
+                <button class="btn-gold" id="btn-hint-mining">💡 提示 (-1 🌟)</button>
                 <button class="btn-green hidden" id="btn-next-mining" onclick="nextMining()">➡️ 下一題</button>
                 <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
             </div>
@@ -228,6 +249,9 @@
 
         <div id="boss-combat-screen" class="screen hidden">
             <h2 id="boss-name-title" style="color:#B71C1C; margin-bottom:5px;">Boss Name</h2>
+            
+            <img id="boss-image" class="beast-img" src="" alt="Boss圖片">
+
             <div class="boss-hp-bar-container">
                 <div class="boss-hp-bar" id="player-hp-bar"></div>
                 <div class="boss-hp-text" id="player-hp-text">你的 HP: 100/100</div>
@@ -239,19 +263,26 @@
             <div class="question-text" id="boss-question">題目加載中...</div>
             <div class="word-bank" id="boss-options"></div>
             <div class="status-msg" id="boss-msg"></div>
-            <div>
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                 <button class="btn-green hidden" id="btn-next-boss-q" onclick="nextBossQuestion()">➡️ 下一題</button>
-                <button class="btn-red" id="btn-boss-flee" onclick="goHome()">🏠 逃跑 (返回主頁)</button>
+                <button class="btn-purple" id="btn-boss-potion" onclick="usePotion()">❤️ 飲用藥水 (剩: <span id="boss-potion-count">0</span>)</button>
+                <button class="btn-grey" id="btn-boss-flee" onclick="fleeBoss()">🏃 逃跑 (掉落部分資源)</button>
             </div>
         </div>
 
     </div>
 
     <div id="event-modal" class="hidden">
-        <div class="event-box">
+        <div class="event-box" id="event-box-ui">
             <h2 id="event-title">事件</h2>
+            
+            <img id="event-image" class="beast-img" style="display: none;" src="" alt="野獸圖片">
+
             <p id="event-desc" style="font-size: 1.3em; font-weight: bold;"></p>
-            <button class="btn-red" id="btn-event-fight">應戰 / 確認</button>
+            <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                <button class="btn-red" id="btn-event-fight">⚔️ 應戰</button>
+                <button class="btn-grey" id="btn-event-flee">🏃 逃跑</button>
+            </div>
         </div>
     </div>
 
@@ -283,115 +314,177 @@
                     osc.type = 'square'; osc.frequency.setValueAtTime(600, audioCtx.currentTime); osc.frequency.setValueAtTime(900, audioCtx.currentTime + 0.2);
                     osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.4); gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.0);
                     osc.start(); osc.stop(audioCtx.currentTime + 1.0);
+                } else if (type === 'legendary') {
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(100, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(300, audioCtx.currentTime + 1.5);
+                    gain.gain.setValueAtTime(0.4, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2.0);
+                    osc.start(); osc.stop(audioCtx.currentTime + 2.0);
                 }
             } catch(e) {}
         }
 
         const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🐉', 900: '🌌', 1000: '🏆' };
-        const defaultInv = { playerName: "", wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [] };
+        
+        const defaultInv = { 
+            playerName: "", coin: 0, hpPotion: 0, potionAtk: 0, potionDef: 0,
+            wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, 
+            superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
+            equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [],
+            giftClaimed: false
+        };
         let inventory = { ...defaultInv };
 
-        // ==========================================
-        // 礦洞尋寶：40題 選擇題 (MC Questions)
-        // ==========================================
-        const allMiningTasks = [
-            { q: "1953年，石硤尾木屋區發生了甚麼災難？", ans: "大火", options: ["地震", "大火", "山泥傾瀉"] },
-            { q: "政府在哪一年開始興建徙置大廈以安置災民？", ans: "1954年", options: ["1950年", "1953年", "1954年"] },
-            { q: "徙置大廈主要是為了安置哪個地區的災民？", ans: "石硤尾木屋區", options: ["大埔木屋區", "石硤尾木屋區", "觀塘木屋區"] },
-            { q: "1950年代的徙置大廈一般樓高多少層？", ans: "6至7層", options: ["2至3層", "6至7層", "10至11層"] },
-            { q: "以下哪項屬於香港的公營房屋？", ans: "公共屋邨", options: ["唐樓", "村屋", "公共屋邨"] },
-            { q: "以下哪項屬於香港的私營房屋？", ans: "私人屋苑", options: ["居者有其屋", "公共屋邨", "私人屋苑"] },
-            { q: "香港的公共房屋現時的發展趨勢是甚麼？", ans: "不斷向高空發展", options: ["不斷向地下發展", "不斷向高空發展", "只建兩三層高"] },
-            { q: "現時香港公共房屋的樓層大多超過多少層？", ans: "30層", options: ["10層", "20層", "30層"] },
-            { q: "1950年代的徙置大廈（如美荷樓）缺乏甚麼獨立設備？", ans: "廚房和浴室", options: ["客廳和睡房", "廚房和浴室", "窗戶和大門"] },
-            { q: "昔日公共房屋的居住環境較擠迫，但鄰里關係一般較怎樣？", ans: "親密", options: ["疏離", "親密", "冷漠"] },
-            { q: "現時申請入住公共房屋的居民需要輪候多年，原因是甚麼？", ans: "供應不足", options: ["供應過剩", "租金太高", "供應不足"] },
-            { q: "現時香港私營房屋面對甚麼主要問題？", ans: "樓價高昂", options: ["樓價高昂", "設施太少", "無人購買"] },
-            { q: "蚊子叮咬人類可能會傳播哪種疾病？", ans: "登革熱", options: ["大鼠戊型肝炎", "登革熱", "感冒"] },
-            { q: "老鼠出沒可能會傳播甚麼疾病？", ans: "鼠疫", options: ["日本腦炎", "瘧疾", "鼠疫"] },
-            { q: "以下哪項是預防蚊患的有效方法？", ans: "清除積水", options: ["清除積水", "種植花草", "打開窗戶"] },
-            { q: "花盆底盤積水容易滋生甚麼？", ans: "蚊子", options: ["蒼蠅", "老鼠", "蚊子"] },
-            { q: "以下哪項是預防鼠患的有效方法？", ans: "妥善處理垃圾", options: ["妥善處理垃圾", "清除積水", "多種樹木"] },
-            { q: "負責清洗街道和收集垃圾的政府部門是甚麼？", ans: "食物環境衞生署", options: ["康樂及文化事務署", "食物環境衞生署", "環境保護署"] },
-            { q: "負責管理公園和在公園種植植物的部門是甚麼？", ans: "康樂及文化事務署", options: ["康樂及文化事務署", "房屋署", "地政總署"] },
-            { q: "哪項設施是近年公共屋邨常見的配套？", ans: "室內街市", options: ["大型主題樂園", "室內街市", "私人泳池"] },
-            { q: "遇到街上有老鼠出沒，應該向哪個部門求助？", ans: "食物環境衞生署", options: ["消防處", "食物環境衞生署", "警察局"] },
-            { q: "鄰居在深夜鑽牆會造成甚麼滋擾？", ans: "噪音滋擾", options: ["空氣污染", "噪音滋擾", "光污染"] },
-            { q: "噪音滋擾會對居民造成甚麼影響？", ans: "影響睡眠", options: ["引起腸胃不適", "影響睡眠", "導致視力下降"] },
-            { q: "自己聽音樂時，減少噪音滋擾別人的方法是甚麼？", ans: "戴上耳機", options: ["打開揚聲器", "戴上耳機", "調高音量"] },
-            { q: "政府在哪裡增設隔音屏障以減低噪音？", ans: "道路兩旁", options: ["道路兩旁", "公園中央", "商場內部"] },
-            { q: "在斜坡栽種樹木有甚麼主要好處？", ans: "防止山泥傾瀉", options: ["增加房屋供應", "防止山泥傾瀉", "預防鼠患"] },
-            { q: "樹木的哪個部分能抓緊泥土，防止山泥傾瀉？", ans: "根部", options: ["樹葉", "樹幹", "根部"] },
-            { q: "在社區種植樹木可以帶來甚麼好處？", ans: "使空氣清新", options: ["使空氣清新", "增加泊車位", "減少垃圾"] },
-            { q: "郊遊時發現垃圾箱已滿，我們應該怎樣處理垃圾？", ans: "把垃圾帶走", options: ["把垃圾帶走", "放垃圾箱旁", "隨地丟棄"] },
-            { q: "美荷樓活化後改建成了甚麼？", ans: "青年旅舍", options: ["豪華酒店", "青年旅舍", "大型商場"] },
-            { q: "活化後的美荷樓生活館位於哪一區？", ans: "石硤尾", options: ["中環", "石硤尾", "沙田"] },
-            { q: "2019年香港確診的大鼠戊型肝炎個案，患者居住在哪個邨？", ans: "葵興邨", options: ["蘇屋邨", "葵興邨", "彩虹邨"] },
-            { q: "根據土力工程署資料，引致香港山泥傾瀉的主因通常是甚麼？", ans: "暴雨", options: ["地震", "暴雨", "颱風"] },
-            { q: "漁護署推出新設計垃圾桶，是為了防止哪種動物翻倒垃圾？", ans: "野豬及猴子", options: ["流浪貓狗", "野豬及猴子", "老鼠"] },
-            { q: "港鐵借出大埔員工宿舍營運甚麼類型的房屋？", ans: "過渡性房屋", options: ["豪華住宅", "過渡性房屋", "居者有其屋"] },
-            { q: "過渡性房屋主要為了紓緩甚麼問題？", ans: "輪候公屋時間長", options: ["輪候公屋時間長", "私樓空置率高", "交通擠塞"] },
-            { q: "到叢林活動時，我們應該穿甚麼衣服來預防蚊咬？", ans: "淺色長袖衣服", options: ["深色短袖衣服", "淺色長袖衣服", "厚重防寒衣物"] },
-            { q: "遇到冷氣機滴水問題，我們應該怎樣做？", ans: "請合資格技工修理", options: ["請合資格技工修理", "放水桶接水即可", "不用理會"] },
-            { q: "以下哪項是政府管制噪音的措施？", ans: "管制建築工程時間", options: ["禁止市民晚上外出", "管制建築工程時間", "禁止播放音樂"] },
-            { q: "香港房屋主要分為公營房屋和甚麼房屋？", ans: "私營房屋", options: ["私營房屋", "過渡性房屋", "鄉村房屋"] }
+        const dbHK = [
+            { q: "[選擇題] 中華人民共和國在哪一天對香港恢復行使主權？", ans: "1997年7月1日", options: ["1997年7月1日", "1999年12月20日", "1997年10月1日"] },
+            { q: "[選擇題] 香港特別行政區成立後，實行甚麼方針以保留原有的制度和生活方式？", ans: "一國兩制", options: ["一國兩制", "港人治港", "高度自治"] },
+            { q: "[選擇題] 哪一部法律訂明了中華人民共和國對香港的基本方針政策？", ans: "《基本法》", options: ["《基本法》", "《憲法》", "《人權法》"] },
+            { q: "[選擇題] 香港特別行政區區旗的紅色背景代表甚麼？", ans: "祖國", options: ["祖國", "香港", "自由"] },
+            { q: "[選擇題] 香港特別行政區區旗上的紫荊花圖案代表甚麼？", ans: "香港", options: ["祖國", "香港", "和平"] },
+            { q: "[選擇題] 區旗上紅、白兩色互相映襯，象徵着甚麼？", ans: "一國兩制", options: ["一國兩制", "繁榮安定", "自由平等"] },
+            { q: "[選擇題] 每年7月1日是甚麼紀念日？", ans: "香港特別行政區成立紀念日", options: ["國慶日", "香港特別行政區成立紀念日", "勞動節"] },
+            { q: "[選擇題] 《基本法》除了訂明基本方針外，還保障了香港居民的甚麼？", ans: "權利和自由", options: ["權利和自由", "絕對權力", "免交稅款"] },
+            { q: "[選擇題] 我們在享有權利和自由的同時，也應該怎樣對待他人？", ans: "尊重他人的權利", options: ["尊重他人的權利", "忽略他人的感受", "限制他人的自由"] },
+            { q: "[選擇題] 社會上設立法律和規則的主要目的是甚麼？", ans: "維持社會秩序和保障大家權利", options: ["維持社會秩序和保障大家權利", "限制市民生活", "增加政府收入"] }
         ];
 
-        // ==========================================
-        // 鋪木板過河：合共 50 題 (30題重組句子 + 20題邏輯排序)
-        // ==========================================
-        const allReorderTasks = [
-            ["1950年代，", "大量內地居民湧入香港，", "私人搭建的木屋", "急劇增加。"],
-            ["1953年，", "石硤尾木屋區", "發生大火，", "使很多居民失去家園。"],
-            ["1954年，", "政府開始", "興建徙置大廈，", "以安置災民。"],
-            ["現時香港的", "私營房屋樓價高，", "家庭要儲蓄很久", "才能購買。"],
-            ["現時香港的", "公共房屋供應不足，", "申請入住的居民", "需要輪候多年。"],
-            ["香港的公共房屋", "不斷向高空發展，", "屋邨的設施亦", "越來越完善。"],
-            ["食物環境衞生署", "負責清洗街道", "和收集垃圾，", "以保持社區環境衞生。"],
-            ["在社區", "種植樹木，", "可以為人們提供", "遮蔭休憩的地方。"],
-            ["我們應該", "妥善處理垃圾，", "保持環境衞生", "以預防蚊患和鼠患。"],
-            ["在斜坡", "栽種樹木，", "讓根部抓緊泥土，", "可以防止山泥傾瀉。"],
-            ["昔日公共房屋的", "居住環境較擠迫，", "但居民的鄰里關係", "一般較為親密。"],
-            ["早期徙置大廈", "如美荷樓室內", "沒有獨立廚房，", "居民要共用浴室。"],
-            ["公共屋邨和", "居者有其屋計劃屋苑，", "都是香港的", "公營房屋。"],
-            ["唐樓、村屋、", "獨立屋和私人屋苑，", "都是香港的", "私營房屋。"],
-            ["蚊子叮咬人類", "會傳播登革熱、", "瘧疾和日本腦炎等", "多種傳染病。"],
-            ["老鼠出沒", "不但會損毀財物，", "更會污染食物", "和傳播大鼠戊型肝炎。"],
-            ["我們必須", "徹底清除積水，", "避免蚊蟲滋生，", "保障居民健康。"],
-            ["當發現街上有", "老鼠出沒時，", "我們應該向", "食環署求助。"],
-            ["康樂及文化事務署", "負責管理公園，", "並在公園內", "種植各種植物。"],
-            ["政府透過", "立法管制建築工程時間，", "以減少對居民的", "噪音滋擾。"],
-            ["在道路兩旁", "增設隔音屏障，", "能有效減低", "車輛發出的噪音。"],
-            ["鄰居在深夜", "大聲播放音樂或鑽牆，", "會嚴重影響", "其他人的睡眠。"],
-            ["綠化社區", "不但能美化環境，", "還能阻隔灰塵", "使空氣更清新。"],
-            ["郊遊活動結束後，", "我們應該自律地", "把帶來的垃圾", "全部帶走。"],
-            ["美荷樓經過活化後，", "改建成了青年旅舍，", "並設有生活館", "供市民參觀。"],
-            ["港鐵借出", "大埔員工宿舍單位，", "供機構營運", "過渡性房屋。"],
-            ["提供過渡性房屋", "有助紓緩香港", "公共房屋供應不足的", "嚴重問題。"],
-            ["漁護署推出", "新設計的垃圾桶，", "以防止野豬及猴子", "翻倒垃圾。"],
-            ["冷氣機滴水", "容易引致積水，", "我們應請合資格技工", "進行修理。"],
-            ["到叢林地區", "進行户外活動時，", "應穿淺色長袖衣服", "及塗上驅蚊劑。"],
-            ["大量內地居民湧入香港", "私人搭建的木屋急劇增加", "石硤尾木屋區發生大火", "政府興建徙置大廈安置災民"],
-            ["村屋 (一般3層高)", "早期徙置大廈 (6至7層)", "1980年代公屋 (約20層)", "現代公屋 (超過30層)"],
-            ["天氣潮濕經常下雨", "花盆底盤及溝渠積水", "蚊子在積水中大量繁殖", "傳播登革熱等疾病"],
-            ["社區環境衞生惡劣", "吸引老鼠出沒及覓食", "老鼠污染人類的食物", "人類感染大鼠戊型肝炎"],
-            ["大廈鄰居深夜鑽牆", "產生嚴重的噪音滋擾", "影響其他居民的睡眠", "向管理處或政府部門投訴"],
-            ["政府在斜坡種植樹木", "樹木慢慢長大", "根部深入並抓緊泥土", "成功防止山泥傾瀉"],
-            ["市民在社區亂拋垃圾", "垃圾堆積發出臭味", "食環署派員清洗街道", "回復社區環境衞生"],
-            ["郊遊時帶備食物飲品", "進食後產生包裝垃圾", "發現郊野公園垃圾箱已滿", "自己把垃圾帶回家丟棄"],
-            ["公屋申請人數不斷增加", "公共房屋供應嚴重不足", "基層家庭需要輪候多年", "居住在擠迫的臨時房屋中"],
-            ["機構獲批營運過渡性房屋", "接受輪候公屋多年的家庭申請", "符合資格的家庭成功入住", "暫時紓緩了居住環境的問題"],
-            ["準備前往叢林郊遊", "穿上淺色的長袖衣服", "在皮膚上塗抹驅蚊劑", "安全地享受户外活動"],
-            ["發現冷氣機持續滴水", "滴水造成地面積水", "請合資格的技工進行修理", "解決積水及滋生蚊蟲的隱患"],
-            ["漁護署發現野豬翻倒垃圾", "導致環境衞生變差", "推出新設計的防護垃圾桶", "成功減少野生動物覓食"],
-            ["昔日一家九口居住極小空間", "單位內缺乏獨立廚房和浴室", "現代公屋提供獨立廚廁", "屋邨內更設有商場及街市"],
-            ["木屋區發生嚴重火災", "災民失去所有財物和家園", "入住政府提供的徙置大廈", "逐漸重建正常的生活"],
-            ["汽車在公路上高速行駛", "引擎和輪胎發出巨大噪音", "政府在道路兩旁增設隔音屏障", "減低對附近居民的滋擾"],
-            ["在公園內種植大量樹木", "樹冠為市民提供遮蔭", "樹葉阻隔空氣中的灰塵", "令社區空氣變得清新"],
-            ["發現大廈附近有老鼠出沒", "致電政府熱線求助", "食環署人員到場視察", "放置捕鼠器及進行滅鼠"],
-            ["政府推出居者有其屋計劃", "市民以較低價格購買單位", "減輕了家庭的經濟負擔", "成功改善了居住環境"],
-            ["美荷樓作為第一代徙置大廈", "完成其歷史任務後空置", "政府將其活化為青年旅舍", "設立生活館傳承歷史文化"]
+        const dbHouse = [
+            { q: "[選擇題] 1953年，石硤尾木屋區發生了甚麼災難，令大量居民失去家園？", ans: "大火", options: ["地震", "大火", "山泥傾瀉"] },
+            { q: "[選擇題] 1954年，香港政府開始興建甚麼房屋，以安置石硤尾木屋區的災民？", ans: "徙置大廈", options: ["村屋", "唐樓", "徙置大廈"] },
+            { q: "[選擇題] 早期政府興建的徙置大廈，一般樓高多少層？", ans: "6至7層", options: ["2至3層", "6至7層", "10至11層"] },
+            { q: "[選擇題] 1950年代第一代公屋（例如美荷樓）的單位內，通常缺乏哪項設施？", ans: "獨立廚廁", options: ["窗戶", "睡牀", "獨立廚廁"] },
+            { q: "[選擇題] 昔日的徙置大廈，居民一般要在哪裏生火煮食？", ans: "走廊", options: ["客廳", "走廊", "天台"] },
+            { q: "[選擇題] 1980年代興建的公共房屋，樓層一般高達多少層？", ans: "20層", options: ["6層", "20層", "50層"] },
+            { q: "[選擇題] 現今的公共屋邨發展趨勢如何？", ans: "向高空發展", options: ["向地下發展", "向高空發展", "逐漸減少樓層"] },
+            { q: "[選擇題] 以下哪類房屋屬於香港的公營房屋？", ans: "公共屋邨", options: ["唐樓", "公共屋邨", "私人屋苑"] },
+            { q: "[選擇題] 居者有其屋計劃（居屋）屬於哪一類房屋？", ans: "公營房屋", options: ["私營房屋", "公營房屋", "臨時房屋"] },
+            { q: "[選擇題] 以下哪項是香港的私營房屋？", ans: "唐樓", options: ["公共屋邨", "居屋", "唐樓"] },
+            { q: "[選擇題] 哪一類私營房屋通常會設有住客會所、泳池等設施？", ans: "私人屋苑", options: ["村屋", "唐樓", "私人屋苑"] },
+            { q: "[選擇題] 申請入住公共屋邨的家庭，主要面對甚麼困難？", ans: "輪候時間長", options: ["租金極度昂貴", "輪候時間長", "設施嚴重不足"] },
+            { q: "[選擇題] 由於私營房屋樓價高昂，部分基層市民無奈需要租住甚麼環境惡劣的單位？", ans: "劏房", options: ["獨立屋", "劏房", "居屋"] },
+            { q: "[選擇題] 蚊子叮咬人類，可能會傳播以下哪一種疾病？", ans: "登革熱", options: ["大鼠戊型肝炎", "登革熱", "感冒"] },
+            { q: "[選擇題] 以下哪項是預防蚊患的最有效方法？", ans: "清除積水", options: ["清除積水", "種植花草", "打開窗戶"] },
+            { q: "[選擇題] 哪種動物出沒會污染食物，並可能傳播大鼠戊型肝炎？", ans: "老鼠", options: ["蒼蠅", "老鼠", "蟑螂"] },
+            { q: "[選擇題] 預防鼠患的有效方法是甚麼？", ans: "妥善處理垃圾", options: ["妥善處理垃圾", "清除積水", "多種樹木"] },
+            { q: "[選擇題] 負責清洗街道、收集家居垃圾的政府部門是？", ans: "食物環境衞生署", options: ["房屋署", "食物環境衞生署", "地政總署"] },
+            { q: "[選擇題] 冷氣機滴水會引致甚麼衞生問題？", ans: "積水滋生蚊蟲", options: ["噪音滋擾", "積水滋生蚊蟲", "空氣污染"] },
+            { q: "[選擇題] 鄰居在深夜大聲播放音樂或鑽牆，會造成甚麼問題？", ans: "噪音滋擾", options: ["空氣污染", "噪音滋擾", "光污染"] },
+            { q: "[選擇題] 政府為了減低車輛行駛時發出的噪音，會在高速公路旁加建甚麼？", ans: "隔音屏障", options: ["減速帶", "隔音屏障", "交通燈"] },
+            { q: "[選擇題] 在斜坡上種植樹木，其根部能抓緊泥土，這有甚麼主要作用？", ans: "防止山泥傾瀉", options: ["增加房屋供應", "防止山泥傾瀉", "預防鼠患"] },
+            { q: "[選擇題] 綠化社區除了美化環境，還能帶來甚麼好處？", ans: "使空氣清新", options: ["使空氣清新", "增加泊車位", "減少垃圾"] },
+            { q: "[排序題] 公屋發展歷史：", ans: "木屋急增 ➔ 石硤尾大火 ➔ 建徙置大廈", options: ["木屋急增 ➔ 石硤尾大火 ➔ 建徙置大廈", "石硤尾大火 ➔ 木屋急增 ➔ 建徙置大廈", "建徙置大廈 ➔ 木屋急增 ➔ 石硤尾大火"] },
+            { q: "[選擇題] 香港房屋委員會主要負責甚麼工作？", ans: "制定和推行公共房屋計劃", options: ["清洗街道及滅蚊", "制定和推行公共房屋計劃", "管理公園及種植植物"] },
+            { q: "[選擇題] 1954年政府興建第一代公共房屋的最主要起因是甚麼？", ans: "為石硤尾大火災民提供居所", options: ["為了綠化社區", "為石硤尾大火災民提供居所", "為了解決噪音問題"] },
+            { q: "[選擇題] 政府在哪個年代開始興建第一代公共房屋（徙置大廈）？", ans: "1950年代", options: ["1950年代", "1970年代", "1990年代"] },
+            { q: "[選擇題] 以下哪一項是1950年代美荷樓居住環境的特點？", ans: "居住環境較擠迫", options: ["設有大型商場", "居住環境較擠迫", "擁有獨立花園"] },
+            { q: "[選擇題] 1950年代的徙置大廈居民，一般鄰里關係是怎樣的？", ans: "較為親密", options: ["非常冷漠", "互不相識", "較為親密"] },
+            { q: "[選擇題] 香港不少1980年代至今興建的公共屋邨附近，通常會增設哪些設施？", ans: "學校和商場", options: ["農田和果園", "學校和商場", "大型主題樂園"] },
+            { q: "[選擇題] 現時香港哪一類房屋的樓價非常高昂，令一般家庭難以負擔？", ans: "私營房屋", options: ["過渡性房屋", "公營房屋", "私營房屋"] },
+            { q: "[選擇題] 為了解決居住面積細小帶來的問題，人們可以使用甚麼來改善生活空間？", ans: "新穎的家具設計", options: ["購買更多雜物", "新穎的家具設計", "拆除大廈外牆"] },
+            { q: "[選擇題] 為了預防蚊患和鼠患，作為社區一分子的我們應該怎樣做？", ans: "同心協力保持環境衞生", options: ["同心協力保持環境衞生", "在深夜大聲播放音樂", "多使用即棄餐具"] },
+            { q: "[選擇題] 哪一個政府部門負責的工程，有助保持溝渠正常運作？", ans: "渠務署", options: ["渠務署", "地政總署", "環境保護署"] },
+            { q: "[選擇題] 渠務署保持溝渠正常運作，對社區有甚麼幫助？", ans: "改善環境衞生情況", options: ["提供更多房屋", "改善環境衞生情況", "減低車輛噪音"] },
+            { q: "[選擇題] 政府在部分路面鋪設甚麼物料，來減低汽車行駛時造成的滋擾？", ans: "低噪音物料", options: ["低噪音物料", "反光玻璃物料", "防水塑膠物料"] },
+            { q: "[選擇題] 政府如何從法律途徑管制建築工程和車輛發出的噪音？", ans: "立法管制", options: ["立法管制", "鼓勵市民投訴", "派發耳塞"] },
+            { q: "[選擇題] 綠化社區的樹木可以阻隔空氣中的甚麼，使空氣更清新？", ans: "灰塵", options: ["灰塵", "陽光", "雨水"] },
+            { q: "[選擇題] 樹木的樹冠為社區的市民提供了甚麼好處？", ans: "遮蔭休憩的地方", options: ["遮蔭休憩的地方", "防禦野獸的襲擊", "提供大量木材"] },
+            { q: "[選擇題] 以下哪一項「不是」綠化社區所帶來的好處？", ans: "增加房屋供應", options: ["美化環境", "增加房屋供應", "使空氣清新"] }
         ];
+
+        const dbEnergy = [
+            { q: "「港鐵 (MTR)」是靠哪種能源推動的？", ans: "電力", options: ["汽油", "柴油", "電力"] },
+            { q: "夏天很熱，媽媽開冷氣機，需要用到哪種能源？", ans: "電力", options: ["電力", "煤氣", "石油氣"] },
+            { q: "你的平板電腦 (iPad) 沒電了，需要插線充電，這是補充哪種能源？", ans: "電力", options: ["電力", "汽油", "石油氣"] },
+            { q: "香港島獨有的「叮叮」電車，車頂有一根長長的桿連接電纜，它是用甚麼能源的？", ans: "電力", options: ["柴油", "電力", "汽油"] },
+            { q: "家裏的雪櫃日夜運作保持食物新鮮，它吃的是甚麼？", ans: "電力", options: ["煤氣", "電力", "石油氣"] },
+            { q: "哪一種能源是「看不見、摸不到」，但可以藏在乾電池裏面的？", ans: "電力", options: ["電力", "煤氣", "柴油"] },
+            { q: "媽媽在廚房用的固定煮食爐，連接着地底長長的喉管，這是哪種能源？", ans: "煤氣", options: ["石油氣", "煤氣", "電力"] },
+            { q: "冬天一家人去酒樓「打邊爐」，桌上那個可以搬來搬去的手提小火爐裏面裝的是甚麼？", ans: "石油氣", options: ["煤氣", "石油氣", "柴油"] },
+            { q: "村屋外面常見的灰色大氣樽，裏面裝的是哪種氣體？", ans: "石油氣", options: ["煤氣", "石油氣", "汽油"] },
+            { q: "冬天洗澡時，能把水加熱的「熱水爐」（有連接入牆喉管的），通常是用哪種氣體？", ans: "煤氣", options: ["煤氣", "石油氣", "汽油"] },
+            { q: "哪兩種能源被稱為「氣體雙胞胎」，點燃後都會產生火焰？", ans: "煤氣和石油氣", options: ["汽油和柴油", "煤氣和石油氣", "電力和煤氣"] },
+            { q: "爸爸媽媽駕駛的「私家車」，車體比較輕巧，去油站通常加甚麼油？", ans: "汽油", options: ["汽油", "柴油", "煤氣"] },
+            { q: "送外賣的哥哥騎着「電單車」，需要哪種能源才能在馬路上飛馳？", ans: "汽油", options: ["柴油", "石油氣", "汽油"] },
+            { q: "每天載着很多乘客的「雙層巴士」，通常使用哪一種氣體能源？", ans: "柴油", options: ["汽油", "柴油", "石油氣"] },
+            { q: "地盤裏的「泥頭車」和馬路上的「大貨車」，去油站時要加甚麼油？", ans: "柴油", options: ["汽油", "柴油", "煤氣"] },
+            { q: "在維多利亞港航行的「天星小輪」或其他大船，通常使用哪種燃料？", ans: "柴油", options: ["柴油", "汽油", "石油氣"] },
+            { q: "哪兩種能源被稱為「液體兄弟」，都住在加油站裏？", ans: "汽油和柴油", options: ["汽油和柴油", "煤氣和石油氣", "汽油和煤氣"] },
+            { q: "遙控車用的是「電力」（電池），那馬路上的真私家車通常用甚麼？", ans: "汽油", options: ["電力", "汽油", "柴油"] },
+            { q: "如果你想去郊野公園露營燒烤，帶上一個手提爐，你應該準備哪種燃料？", ans: "石油氣", options: ["煤氣", "汽油", "石油氣"] },
+            { q: "以下哪一種交通工具「不是」使用液體燃料（汽油/柴油）的？", ans: "港鐵", options: ["泥頭車", "港鐵", "私家車"] },
+            { q: "垃圾車每天運送很重的垃圾，它和雙層巴士一樣，都需要哪種力氣大的能源？", ans: "柴油", options: ["柴油", "汽油", "煤氣"] },
+            { q: "加油站裏，除了賣給私家車的「汽油」外，最常見還有哪種燃料賣給大貨車？", ans: "柴油", options: ["煤氣", "柴油", "石油氣"] },
+            { q: "哪一種能源最神奇，既能讓巨大的港鐵移動，又能縮小藏在手錶裏讓指針轉動？", ans: "電力", options: ["電力", "汽油", "柴油"] },
+            { q: "私家車和泥頭車一起去加油站，它們加的油一樣嗎？", ans: "不一樣，私家車加汽油，泥頭車加柴油", options: ["一樣，都加汽油", "一樣，都加柴油", "不一樣，私家車加汽油，泥頭車加柴油"] },
+            { q: "我們家裏用來照明的電燈，是將哪種能源轉換成光能？", ans: "電力", options: ["煤氣", "石油氣", "電力"] },
+            { q: "哪一種氣體能源是「住在地底下，不用自己搬」的？", ans: "煤氣", options: ["煤氣", "石油氣", "柴油"] },
+            { q: "哪一種氣體能源是「被壓縮在鐵罐或大鋼樽裏，可以搬來搬去」的？", ans: "石油氣", options: ["煤氣", "石油氣", "汽油"] },
+            { q: "請選出正確的配對：", ans: "打邊爐手提爐 - 石油氣", options: ["大貨車 - 汽油", "港鐵 - 柴油", "打邊爐手提爐 - 石油氣"] },
+            { q: "「天然氣」的通常可以在哪裏找到？", ans: "地底深處或海底", options: ["地底深處或海底", "工廠裏的機器製造出來的", "天空的雲朵裏"] },
+            { q: "發電廠越來越喜歡使用「天然氣」，為甚麼？", ans: "因為它燃燒時比較乾淨，能減少空氣污染", options: ["因為它有士多啤梨香味", "因為它燃燒時比較乾淨，能減少空氣污染", "因為它可以直接加進私家車裏"] },
+            { q: "如果要把天然氣從很遠的國家用大船運來，科學家會把它冷卻變成超級冷的液體，它的名稱是甚麼？", ans: "液化天然氣 (LNG)", options: ["液化天然氣 (LNG)", "液化石油氣 (LPG)", "超級冰水"] },
+            { q: "香港的煤氣公司在製造煤氣時，用了哪種氣體作為主要原料來讓它更環保？", ans: "天然氣", options: ["汽車廢氣", "氧氣", "天然氣"] },
+            { q: "純淨的天然氣本來無色無味，但送到家前工程師會加入「臭臭的味道」，為甚麼？", ans: "如果漏氣了，我們馬上就能聞到臭味來逃生或找人修理", options: ["為了讓煮出來的湯更好喝", "如果漏氣了，我們馬上就能聞到臭味來逃生或找人修理", "因為天然氣會怕被昆蟲吃掉"] },
+            { q: "我們日常生活中常用的化石燃料，除了煤和天然氣之外，還有以下哪一種？", ans: "石油", options: ["木材", "石油", "太陽能"] },
+            { q: "化石燃料在地底需要經過數百萬年才能形成，請問它們是由甚麼演變而成的？", ans: "遠古的動植物", options: ["遠古的動植物", "外太空的隕石", "火山噴出的岩漿"] },
+            { q: "如果不加節制地大量開採和燃燒化石燃料，會對我們的地球造成甚麼主要後果？", ans: "耗盡資源並造成污染", options: ["令地球的植物生長得更快", "耗盡資源並造成污染", "減少廢物的產生"] },
+            { q: "在白天陽光充足的時候，我們在房間看書，怎樣做最能有效節約能源？", ans: "拉開窗簾，多利用天然光", options: ["開着所有的電燈確保夠光", "拉上窗簾並開啟枱燈", "拉開窗簾，多利用天然光"] },
+            { q: "秋天天氣涼爽，我們應該怎樣做來減少使用冷氣機，從而節省電力？", ans: "打開窗戶，享受自然風", options: ["打開窗戶，享受自然風", "把冷氣機的溫度調到最低", "同時開啟冷氣機和多把電風扇"] },
+            { q: "小明最後一個離開課室去上體育課，他應該怎樣做來節約能源？", ans: "關掉課室內不必要的電源", options: ["只關掉自己的電腦", "關掉課室內不必要的電源", "打開課室門，讓冷氣吹到走廊"] },
+            { q: "以下哪一種物品被當作垃圾丟棄在堆填區後，最「難以被分解」？", ans: "發泡膠飯盒", options: ["香蕉皮", "廢紙", "發泡膠飯盒"] },
+            { q: "香港每天產生大量固體廢物，目前的「堆填區」正面臨甚麼嚴峻的危機？", ans: "即將面臨飽和的危機", options: ["垃圾太少將要關閉", "即將面臨飽和的危機", "變成了受歡迎的遊樂場"] },
+            { q: "以堆填方式處理廢物，除了費用高昂，還會為附近的居民帶來甚麼困擾？", ans: "居民受垃圾氣味困擾", options: ["居民受垃圾氣味困擾", "吸引很多遊客來參觀", "令附近的樓房變得更堅固"] },
+            { q: "買東西時自備環保袋，堅決不索取即棄膠袋，這屬於「環保四用」的哪一種？", ans: "減少使用", options: ["廢物利用", "替代使用", "減少使用"] },
+            { q: "外出時帶備手帕來抹汗，以此代替使用即棄紙巾，這屬於「環保四用」的哪一種？", ans: "替代使用", options: ["循環再用", "替代使用", "減少使用"] },
+            { q: "美美把喝完飲料的膠樽洗乾淨，剪開一半後用來種小植物，這屬於哪一項？", ans: "廢物利用", options: ["減少使用", "替代使用", "廢物利用"] },
+            { q: "我們把廢紙放進藍色的回收箱，讓回收廠重新製成再生紙，這屬於哪一項？", ans: "循環再用", options: ["減少使用", "廢物利用", "循環再用"] },
+            { q: "為甚麼我們應該盡量減少使用即棄餐具（如發泡膠碗）？", ans: "因為會製造難以分解的廢物", options: ["因為顏色通常不夠漂亮", "因為會製造難以分解的廢物", "因為即棄餐具太重"] },
+            { q: "以下哪一個行為是「珍惜資源」的最佳榜樣？", ans: "離開時關燈，並回收乾淨鋁罐", options: ["經常買新手機，舊的直接丟掉", "離開時關燈，並回收乾淨鋁罐", "洗手時一直開着水喉讓水長流"] },
+            { q: "[選擇題] 常用的化石燃料主要包括煤、天然氣和哪一種？", ans: "石油", options: ["木材", "石油", "太陽能"] },
+            { q: "[選擇題] 化石燃料在地底需要經過數百萬年才能形成，它們是由甚麼演變而成的？", ans: "遠古的動植物", options: ["遠古的動植物", "火山的岩漿", "外太空的隕石"] },
+            { q: "[選擇題] 如果我們不加節制地大量開採化石燃料，最終會面臨甚麼危機？", ans: "耗盡資源", options: ["資源越來越多", "耗盡資源", "天氣變得更冷"] },
+            { q: "[選擇題] 大量燃燒煤和石油等化石燃料，會對地球造成甚麼嚴重的影響？", ans: "破壞環境及造成污染", options: ["令空氣變得更清新", "破壞環境及造成污染", "有助植物快速生長"] },
+            { q: "[選擇題] 在香港，發電廠主要依賴燃燒甚麼化石燃料來為我們提供電力？", ans: "煤和天然氣", options: ["木材和垃圾", "煤和天然氣", "石油氣和柴油"] },
+            { q: "[選擇題] 傳統的火力發電廠，最常燃燒哪一種「固體」的化石燃料來生產電力？", ans: "煤", options: ["煤", "天然氣", "石油"] },
+            { q: "[選擇題] 香港家庭煮食和沐浴用的「煤氣」，現在主要是用甚麼化石燃料作為原料加工製造出來的？", ans: "天然氣", options: ["天然氣", "木炭", "純氧氣"] },
+            { q: "[選擇題] 相比起燃燒煤炭，現在的發電廠越來越喜歡使用「天然氣」，最主要的原因是甚麼？", ans: "燃燒時產生的污染物較少", options: ["因為天然氣完全免費", "燃燒時產生的污染物較少", "因為它有獨特的香味"] },
+            { q: "[選擇題] 為甚麼化石燃料被稱為「不可再生能源」，我們必須珍惜使用？", ans: "因為用完後在短期內無法補充", options: ["因為它們很容易被雨水沖走", "因為用完後在短期內無法補充", "因為它們不能用來發電"] },
+            { q: "[選擇題] 當我們在家裏開冷氣或看電視時，我們正在消耗的「電力」，其源頭主要來自哪裏？", ans: "發電廠燃燒化石燃料", options: ["太陽能發電板", "風力發電機", "發電廠燃燒化石燃料"] },
+            { q: "[選擇題] 在日常生活中，天然氣最主要應用在甚麼地方？", ans: "發電和製造煤氣", options: ["發電和製造煤氣", "推動私家車", "製作塑膠玩具"] }
+        ];
+
+        const dbFreedom = [
+            { q: "[選擇題] 1984年，中英兩國政府簽署了哪一份重要文件，確認香港回歸祖國？", ans: "《中英聯合聲明》", options: ["《中英聯合聲明》", "《基本法》", "《南京條約》", "《施政報告》"] },
+            { q: "[選擇題] 中華人民共和國在哪一天對香港恢復行使主權，成立香港特別行政區？", ans: "1997年7月1日", options: ["1997年7月1日", "1999年12月20日", "1990年4月4日", "1984年12月19日"] },
+            { q: "[選擇題] 中華人民共和國對香港實施的基本方針政策是甚麼？", ans: "一國兩制", options: ["一國兩制", "一國一制", "港人治國", "全面管治"] },
+            { q: "[選擇題] 「一國兩制」代表香港特別行政區得以保留原有的甚麼？", ans: "制度和生活方式", options: ["制度和生活方式", "區旗和區徽設計", "總督管治制度", "所有舊有法律"] },
+            { q: "[選擇題] 哪一份文件是香港特別行政區的憲制性文件，保障了市民的權利和自由？", ans: "《基本法》", options: ["《基本法》", "《小學概覽》", "《人權法案》", "《中英聯合聲明》"] },
+            { q: "[選擇題] 為了草擬《基本法》，國家成立了甚麼委員會，並經過廣泛諮詢才定稿？", ans: "基本法起草委員會", options: ["基本法起草委員會", "香港立法會", "行政會議", "教育委員會"] },
+            { q: "[選擇題] 《基本法》是由國家的最高權力機關通過並頒布的，這個機關是甚麼？", ans: "全國人民代表大會", options: ["全國人民代表大會", "香港立法會", "香港區議會", "聯合國"] },
+            { q: "[選擇題] 香港區旗上的紅色背景代表甚麼？", ans: "祖國", options: ["祖國", "香港", "和平", "繁榮"] },
+            { q: "[選擇題] 香港區旗上的紫荊花圖案代表甚麼？", ans: "香港", options: ["香港", "祖國", "一國兩制", "民主"] },
+            { q: "[選擇題] 香港區旗上使用的紅、白兩色，象徵着甚麼方針？", ans: "一國兩制", options: ["一國兩制", "繁榮安定", "和平開放", "自由民主"] },
+
+            { q: "[選擇題] 市民可以在報章或網絡上理性地發表對社會事務的意見，這體現了哪種自由？", ans: "言論自由", options: ["言論自由", "信仰自由", "集會自由", "通訊自由"] },
+            { q: "[選擇題] 市民以和平、合法的方式舉行遊行來表達訴求，是行使了哪種自由？", ans: "集會及遊行自由", options: ["集會及遊行自由", "創作自由", "選擇職業自由", "宗教自由"] },
+            { q: "[選擇題] 香港有佛教、基督教、伊斯蘭教等不同宗教的廟宇和教堂，反映居民享有甚麼自由？", ans: "宗教信仰自由", options: ["宗教信仰自由", "言論自由", "集會自由", "出入境自由"] },
+            { q: "[選擇題] 作家、畫家和音樂家可以不受無理干預地發表作品，這體現了哪種自由？", ans: "文學藝術創作自由", options: ["文學藝術創作自由", "通訊秘密自由", "遊行自由", "信仰自由"] },
+            { q: "[選擇題] 我們與親友通電話或發送電郵的私隱受到法律嚴格保護，屬於哪一項自由？", ans: "通訊秘密和自由", options: ["通訊秘密和自由", "言論自由", "創作自由", "選擇職業自由"] },
+            { q: "[選擇題] 香港市民可以根據自己的專長、學歷和興趣尋找工作，這體現了甚麼自由？", ans: "選擇職業自由", options: ["選擇職業自由", "出入境自由", "言論自由", "信仰自由"] },
+            { q: "[選擇題] 香港居民只要持有有效旅行證件，就可以自由離開或返回香港，這是甚麼自由？", ans: "出入境自由", options: ["出入境自由", "通訊自由", "集會自由", "創作自由"] },
+
+            { q: "[選擇題] 自由是有界限的。我們在行使個人自由時，必須以甚麼為前提？", ans: "不損害他人權利和遵守法律", options: ["不損害他人權利和遵守法律", "滿足自己的所有慾望", "不用理會別人的感受", "只要不被警察發現"] },
+            { q: "[選擇題] 雖然我們享有言論自由，但在網上發表意見時，我們絕對「不應該」怎樣做？", ans: "惡意誹謗或造謠中傷他人", options: ["惡意誹謗或造謠中傷他人", "理性分析社會事件", "尊重別人的不同意見", "提出建設性的批評"] },
+            { q: "[選擇題] 社會設立法律和規則的主要目的是甚麼？", ans: "維持社會秩序和保障權利", options: ["維持社會秩序和保障權利", "限制市民所有的自由", "增加政府的稅收", "讓人們感到害怕"] },
+            { q: "[選擇題] 我們在享有權利和自由的同時，也必須負上甚麼責任？", ans: "尊重他人的權利", options: ["尊重他人的權利", "強迫他人接受自己的想法", "只顧及自己的利益", "忽略社會的整體利益"] },
+            { q: "[選擇題] 如果社會上每個人都不遵守規則，隨心所欲地做事，會導致甚麼後果？", ans: "社會變得混亂，權利不受保障", options: ["社會變得混亂，權利不受保障", "每個人都變得更快樂", "社會發展得更快", "生活更加方便"] },
+            { q: "[選擇題] 在公共圖書館內保持安靜，不騷擾他人閱讀，是甚麼的表現？", ans: "遵守規則和尊重他人", options: ["遵守規則和尊重他人", "放棄自己的言論自由", "盲目服從權威", "不喜歡與人溝通"] },
+            { q: "[選擇題] 居民如果在深夜時分在家中大聲播放音樂，這行為有甚麼問題？", ans: "侵犯了鄰居休息的權利", options: ["侵犯了鄰居休息的權利", "充分行使了創作自由", "能促進鄰里之間的關係", "沒有任何問題"] },
+            { q: "[選擇題] 《基本法》除了保障香港居民的權利，也規定了居民必須履行甚麼義務？", ans: "遵守香港特區實行的法律", options: ["遵守香港特區實行的法律", "必須信仰某一種宗教", "不能離開香港", "不能批評政府施政"] }
+        ];
+
+        const allMiningTasks = [...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom];
+
+        let currentCategory = 'energy';
+        let currentMiningIdx = 0, currentMiningTasks = [];
 
         function shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
@@ -405,11 +498,17 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_v4');
+            const savedData = localStorage.getItem('roblox_p4_save_v11');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
                     inventory = { ...defaultInv, ...parsed, equip: { ...defaultInv.equip, ...(parsed.equip || {}) }, medals: parsed.medals || [] };
+                    if(inventory.coin === undefined) inventory.coin = 0;
+                    if(inventory.hpPotion === undefined) inventory.hpPotion = 0;
+                    if(inventory.potionAtk === undefined) inventory.potionAtk = 0;
+                    if(inventory.potionDef === undefined) inventory.potionDef = 0;
+                    if(inventory.giftClaimed === undefined) inventory.giftClaimed = false;
+
                     if(inventory.playerName) {
                         document.getElementById('display-name').textContent = inventory.playerName;
                         goHome();
@@ -420,10 +519,26 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_v4', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_v11', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
+        }
+
+        function claimGift() {
+            if (inventory.giftClaimed) {
+                alert("❌ 你已經領取過這個禮品包了！");
+                return;
+            }
+            inventory.wood += 50;
+            inventory.stone += 50;
+            inventory.gem += 50;
+            inventory.star += 50;
+            inventory.coin += 50;
+            inventory.giftClaimed = true;
+            playSound('boss_win'); 
+            alert("🎉 恭喜！成功領取限定禮品包！\n獲得 金幣 +50, 木材 +50, 石頭 +50, 寶石 +50, 星星 +50！");
+            updateUI(); 
         }
 
         function calculateStats() {
@@ -432,12 +547,13 @@
             if(inventory.equip.stoneSword) atk += 25;
             if(inventory.equip.woodShield) def += 10;
             if(inventory.equip.stoneArmor) def += 25;
-            atk += (inventory.superWeaponLv * 5) + (inventory.superStoneLv * 3);
-            def += (inventory.superShieldLv * 5) + (inventory.superStoneLv * 3);
+            atk += (inventory.superWeaponLv * 5) + (inventory.superStoneLv * 3) + inventory.potionAtk;
+            def += (inventory.superShieldLv * 5) + (inventory.superStoneLv * 3) + inventory.potionDef;
             return { atk, def };
         }
 
         function updateUI(doSave = true) {
+            document.getElementById('inv-coin').textContent = inventory.coin;
             document.getElementById('inv-wood').textContent = inventory.wood;
             document.getElementById('inv-stone').textContent = inventory.stone;
             document.getElementById('inv-gem').textContent = inventory.gem;
@@ -465,6 +581,10 @@
             document.getElementById('sg-a-cost-m').textContent = ((inventory.superStoneLv + 1) * 5) * 2;
             document.getElementById('sg-a-cost-f').textContent = Math.floor(inventory.superStoneLv / 3) + 1;
 
+            document.getElementById('shop-coin-display').textContent = inventory.coin;
+            document.getElementById('shop-hp-count').textContent = inventory.hpPotion;
+            document.getElementById('boss-potion-count').textContent = inventory.hpPotion;
+
             const bossBtn = document.getElementById('btn-boss-menu');
             if (inventory.castles >= 1 || inventory.flyingCastle >= 1) {
                 bossBtn.classList.remove('btn-black');
@@ -473,12 +593,23 @@
                 bossBtn.disabled = false;
             }
 
+            let giftBtn = document.getElementById('btn-gift');
+            if (giftBtn && inventory.giftClaimed) {
+                giftBtn.innerHTML = "✅ 已領取新手禮品包";
+                giftBtn.style.background = "#9E9E9E";
+                giftBtn.style.cursor = "not-allowed";
+                giftBtn.style.boxShadow = "none";
+                giftBtn.style.animation = "none";
+                giftBtn.onclick = null;
+            }
+
             let medalStr = '';
             if (inventory.medals && inventory.medals.length > 0) {
                 inventory.medals.sort((a,b)=>a-b).forEach(m => {
                     medalStr += `<span class="medal-icon" title="${m} 連勝勳章">${medalsConfig[m]}</span> `;
                 });
                 document.getElementById('medal-container').innerHTML = medalStr;
+                document.getElementById('medal-bar').classList.remove('hidden');
             }
 
             if(doSave) saveGame();
@@ -496,59 +627,156 @@
             }
         }
         function openInstructions() { playSound('click'); hideAll(); document.getElementById('instruction-screen').classList.remove('hidden'); }
+        function openShop() { playSound('click'); updateUI(); hideAll(); document.getElementById('shop-zone').classList.remove('hidden'); }
         function openSuperForge() { playSound('click'); hideAll(); document.getElementById('super-forge-zone').classList.remove('hidden'); }
         function openForgeZone() { playSound('click'); hideAll(); document.getElementById('forge-zone').classList.remove('hidden'); }
         function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
         function openBossSelect() { playSound('click'); hideAll(); document.getElementById('boss-select-screen').classList.remove('hidden'); }
 
+        function buyItem(itemType) {
+            playSound('click');
+            if (itemType === 'hpPotion' && inventory.coin >= 15) {
+                inventory.coin -= 15; inventory.hpPotion++; playSound('win'); alert("✅ 成功購買 恢復藥水！(可在Boss戰使用)");
+            } else if (itemType === 'atkPotion' && inventory.coin >= 40) {
+                inventory.coin -= 40; inventory.potionAtk += 2; playSound('win'); alert("✅ 成功購買 力量藥水！永久增加 2 點攻擊力！");
+            } else if (itemType === 'defPotion' && inventory.coin >= 40) {
+                inventory.coin -= 40; inventory.potionDef += 2; playSound('win'); alert("✅ 成功購買 鐵壁藥水！永久增加 2 點防禦力！");
+            } else {
+                playSound('error'); alert("❌ 金幣不足！去答題或打怪賺錢吧！");
+            }
+            updateUI();
+        }
+
         function checkInvasion() {
             let r = Math.random();
-            if (r < 0.15) {
-                let beastPower = 20 + Math.floor(Math.random() * 50);
-                document.getElementById('event-title').textContent = "⚠️ 突發野獸襲擊！";
-                document.getElementById('event-desc').textContent = `一隻戰鬥力 ${beastPower} 的野獸出現了！你的總戰力：${calculateStats().atk + calculateStats().def}`;
-                document.getElementById('btn-event-fight').onclick = () => resolveEvent('beast', beastPower);
+            let isLegendary = false;
+            let beastPower = 0;
+            let title = "";
+            let desc = "";
+            let legendaryName = "";
+            let beastImg = ""; 
+            let eventBoxUi = document.getElementById('event-box-ui');
+            eventBoxUi.classList.remove('legendary-box');
+            document.getElementById('event-image').style.display = "none"; 
+
+            if (inventory.castles >= 1 && r < 0.05) {
+                isLegendary = true;
+                let legends = [
+                    { name: "🐉 【傳說】遠古黑龍", min: 150, max: 200, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Dragon&backgroundColor=311B92" },
+                    { name: "🦅 【傳說】暴風神鷲", min: 140, max: 190, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Eagle&backgroundColor=0D47A1" }
+                ];
+                let l = legends[Math.floor(Math.random() * legends.length)];
+                legendaryName = l.name;
+                beastPower = Math.floor(Math.random() * (l.max - l.min)) + l.min;
+                title = "🚨 警告！傳說級怪獸降臨！";
+                desc = `${l.name} 出現了！牠散發著強大的氣場！你必須在限時內連續答對 3 題才能擊敗牠！`;
+                beastImg = l.img;
+                eventBoxUi.classList.add('legendary-box');
+                playSound('legendary');
+            } else if (r < 0.25) { 
+                let normalBeasts = [
+                    { name: "🟢 搗蛋樹妖", power: 33, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Tree&backgroundColor=C8E6C9" },
+                    { name: "🟡 狂暴野豬", power: 60, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Boar&backgroundColor=FFECB3" },
+                    { name: "🔴 暗影巨蛛", power: 90, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Spider&backgroundColor=FFCDD2" },
+                    { name: "🟣 裝甲巨石魔", power: 120, img: "https://api.dicebear.com/9.x/bottts/svg?seed=Golem&backgroundColor=D1C4E9" }
+                ];
+                let b = normalBeasts[Math.floor(Math.random() * normalBeasts.length)];
+                beastPower = b.power;
+                title = "⚠️ 突發野獸襲擊！";
+                desc = `【${b.name}】出現了！戰鬥力高達 ${beastPower}！\n你的總戰力：${calculateStats().atk + calculateStats().def}`;
+                beastImg = b.img;
+            }
+
+            if (beastPower > 0) {
+                document.getElementById('event-title').textContent = title;
+                document.getElementById('event-desc').innerText = desc; 
+                let imgElement = document.getElementById('event-image');
+                imgElement.src = beastImg;
+                imgElement.style.display = "block";
+                document.getElementById('btn-event-fight').onclick = () => resolveEvent('fight', beastPower, isLegendary, legendaryName, beastImg);
+                document.getElementById('btn-event-flee').onclick = () => resolveEvent('flee', beastPower, isLegendary, legendaryName, beastImg);
                 document.getElementById('event-modal').classList.remove('hidden');
-            } else if (r < 0.25) {
-                inventory.gem++; playSound('medal');
-                alert("💎 運氣真好！你在路上撿到了一顆寶石！"); updateUI();
-            } else if (r < 0.35) {
-                inventory.star++; playSound('medal');
-                alert("🌟 幸運！天上掉下了一顆星星！"); updateUI();
+                return;
             }
+
+            if (r < 0.35) { inventory.gem++; playSound('medal'); alert("💎 運氣真好！你在路上撿到了一顆寶石！"); updateUI(); }
+            else if (r < 0.45) { inventory.star++; playSound('medal'); alert("🌟 幸運！天上掉下了一顆星星！"); updateUI(); }
         }
 
-        function resolveEvent(type, power) {
-            if (type === 'beast') {
-                let myPower = calculateStats().atk + calculateStats().def;
-                if (myPower >= power) {
-                    playSound('win'); inventory.gem += 2; alert("✅ 戰勝野獸！獲得 2 顆寶石！");
+        function resolveEvent(action, power, isLegendary, legendaryName, beastImg) {
+            if (action === 'fight') {
+                if (isLegendary) {
+                    document.getElementById('event-modal').classList.add('hidden');
+                    startLegendaryFight(legendaryName, beastImg);
+                    return;
                 } else {
-                    playSound('error');
-                    inventory.wood = Math.max(0, inventory.wood - 5); inventory.stone = Math.max(0, inventory.stone - 5);
-                    alert("❌ 不敵野獸！逃跑時丟失了 5 木材和 5 石頭！");
+                    let myPower = calculateStats().atk + calculateStats().def;
+                    if (myPower >= power) {
+                        playSound('boss_win');
+                        inventory.gem += 2; inventory.coin += 10;
+                        alert("✅ 戰勝野獸！獲得 10金幣 與 2寶石！");
+                    } else {
+                        playSound('error');
+                        inventory.wood = Math.max(0, inventory.wood - 5); 
+                        inventory.stone = Math.max(0, inventory.stone - 5);
+                        alert(`❌ 戰鬥失敗！受到重創，丟失了 5木材 和 5石頭！`);
+                    }
                 }
-                document.getElementById('event-modal').classList.add('hidden');
-                updateUI();
+            } else if (action === 'flee') {
+                let escapeChance = isLegendary ? 0.2 : 0.5; 
+                if (Math.random() < escapeChance) {
+                    playSound('click'); 
+                    alert("💨 你極限閃避，成功逃跑了！沒有損失任何物品。");
+                } else {
+                    playSound('error'); 
+                    let lossWood = isLegendary ? 5 : 2;
+                    let lossStone = isLegendary ? 5 : 2;
+                    inventory.wood = Math.max(0, inventory.wood - lossWood); 
+                    inventory.stone = Math.max(0, inventory.stone - lossStone);
+                    alert(`🏃 逃跑失敗被追上！慌忙中掉落了 ${lossWood}木材 和 ${lossStone}石頭！`);
+                }
             }
+            document.getElementById('event-modal').classList.add('hidden');
+            updateUI();
         }
 
-        function startGame(type) {
+        function nextMining() { playSound('click'); currentMiningIdx++; loadMining(); }
+
+        function startGame(cat) {
             playSound('click'); hideAll();
-            if (type === 'mining') { document.getElementById('game-mining').classList.remove('hidden'); loadMining(); }
-            else if (type === 'reorder') { document.getElementById('game-reorder').classList.remove('hidden'); loadReorder(); }
+            currentCategory = cat;
+            if(cat === 'hk') {
+                currentMiningTasks = shuffle(dbHK);
+                document.getElementById('level-title').innerHTML = "🏙️ 關卡一：香港是我家";
+            } else if (cat === 'house') {
+                currentMiningTasks = shuffle(dbHouse);
+                document.getElementById('level-title').innerHTML = "🏠 關卡二：安居樂";
+            } else if (cat === 'energy') {
+                currentMiningTasks = shuffle(dbEnergy);
+                document.getElementById('level-title').innerHTML = "⚡ 關卡三：能源世界";
+            } else if (cat === 'freedom') {
+                currentMiningTasks = shuffle(dbFreedom);
+                document.getElementById('level-title').innerHTML = "🗽 關卡四：自由與守規";
+            }
+            currentMiningIdx = 0;
+            document.getElementById('game-mining').classList.remove('hidden');
+            loadMining();
         }
 
-        let currentMiningIdx = 0, currentMiningTasks = [];
         function loadMining() {
             if (currentMiningIdx >= currentMiningTasks.length || currentMiningTasks.length===0) {
-                currentMiningTasks = shuffle(allMiningTasks); currentMiningIdx = 0;
+                if(currentCategory === 'hk') currentMiningTasks = shuffle(dbHK);
+                else if (currentCategory === 'house') currentMiningTasks = shuffle(dbHouse);
+                else if (currentCategory === 'energy') currentMiningTasks = shuffle(dbEnergy);
+                else if (currentCategory === 'freedom') currentMiningTasks = shuffle(dbFreedom);
+                currentMiningIdx = 0;
             }
             let t = currentMiningTasks[currentMiningIdx];
             document.getElementById('mining-question').textContent = t.q;
             document.getElementById('mining-msg').innerHTML = '';
             document.getElementById('mining-options').innerHTML = '';
             document.getElementById('btn-next-mining').classList.add('hidden');
+            document.getElementById('btn-hint-mining').classList.remove('hidden');
             
             let ops = shuffle([...t.options]);
             ops.forEach(opt => {
@@ -556,68 +784,35 @@
                 c.onclick = () => {
                     if (opt === t.ans) {
                         playSound('win');
-                        inventory.stone += 1; inventory.manuscript += 1; inventory.streak += 1;
+                        inventory.stone += 1; inventory.wood += 1; inventory.manuscript += 1; inventory.streak += 1;
+                        inventory.coin += 2;
                         if(inventory.streak % 3 === 0) inventory.fragment += 1;
                         checkMedalUnlock();
-                        document.getElementById('mining-msg').innerHTML = "<span style='color:#4CAF50'>✅ 答對了！獲得石頭與手稿！</span>";
+                        document.getElementById('mining-msg').innerHTML = "<span style='color:#4CAF50'>✅ 答對了！獲得 石頭、木材、手稿 與 2金幣！</span>";
                         document.getElementById('btn-next-mining').classList.remove('hidden');
+                        document.getElementById('btn-hint-mining').classList.add('hidden');
                         document.getElementById('mining-options').innerHTML = '';
                         updateUI(); checkInvasion();
                     } else {
                         playSound('error'); inventory.streak = 0; updateUI();
+                        c.style.visibility = 'hidden'; 
                         document.getElementById('mining-msg').innerHTML = "<span style='color:#b71c1c'>❌ 錯了！(連勝中斷)</span>";
                     }
                 };
                 document.getElementById('mining-options').appendChild(c);
             });
-        }
-        function nextMining() { playSound('click'); currentMiningIdx++; loadMining(); }
 
-        let currentReorderTasks = [], currentReorderIdx = 0;
-        function loadReorder() {
-            if (currentReorderIdx >= currentReorderTasks.length || currentReorderTasks.length===0) {
-                currentReorderTasks = shuffle(allReorderTasks); currentReorderIdx = 0;
-            }
-            let t = currentReorderTasks[currentReorderIdx];
-            let ans = [], bank = shuffle([...t]);
-            
-            let rUI = () => {
-                document.getElementById('word-bank').innerHTML = '';
-                document.getElementById('answer-area').innerHTML = '';
-                document.getElementById('reorder-msg').innerHTML = '';
-                document.getElementById('btn-next-reorder').classList.add('hidden');
-                
-                ans.forEach((w, i) => {
-                    let c = document.createElement('div'); c.className = 'word-chunk'; c.textContent = w;
-                    c.onclick = () => { playSound('click'); ans.splice(i, 1); bank.push(w); rUI(); };
-                    document.getElementById('answer-area').appendChild(c);
-                });
-                bank.forEach((w, i) => {
-                    let c = document.createElement('div'); c.className = 'word-chunk'; c.textContent = w;
-                    c.onclick = () => { playSound('click'); bank.splice(i, 1); ans.push(w); rUI(); checkReorder(); };
-                    document.getElementById('word-bank').appendChild(c);
-                });
+            document.getElementById('btn-hint-mining').onclick = () => {
+                if (inventory.star < 1) return alert("❌ 星星不足！需要 1 顆星星才能使用提示。");
+                let btns = Array.from(document.getElementById('mining-options').children);
+                let wrongBtn = btns.find(b => b.textContent !== t.ans && b.style.visibility !== 'hidden');
+                if (wrongBtn) {
+                    inventory.star--; updateUI(); playSound('medal');
+                    wrongBtn.style.visibility = 'hidden';
+                    alert("💡 提示生效！已幫你刪除一個錯誤的選項！");
+                } else { alert("💡 已經沒有錯誤選項可以刪除了！"); }
             };
-            
-            let checkReorder = () => {
-                if (ans.join('') === t.join('')) {
-                    playSound('win');
-                    inventory.wood += 1; inventory.manuscript += 1; inventory.streak += 1;
-                    if(inventory.streak % 3 === 0) inventory.fragment += 1;
-                    checkMedalUnlock();
-                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 橋樑搭建成功！獲得木材與手稿！</span>";
-                    document.getElementById('btn-next-reorder').classList.remove('hidden');
-                    document.getElementById('word-bank').innerHTML = '';
-                    updateUI(); checkInvasion();
-                } else if (bank.length === 0) {
-                    playSound('error'); inventory.streak = 0; updateUI();
-                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#b71c1c'>❌ 順序錯誤，橋樑塌陷！(連勝中斷)</span>";
-                }
-            };
-            rUI();
         }
-        function resetReorder() { playSound('click'); loadReorder(); }
-        function nextReorder() { playSound('click'); currentReorderIdx++; loadReorder(); }
 
         function checkMedalUnlock() {
             let m = Math.floor(inventory.streak / 100) * 100;
@@ -638,9 +833,7 @@
                 inventory.wood -= 3; inventory.equip.woodShield = true; playSound('win'); alert("鍛造木盾成功！");
             } else if (item === 'stoneArmor' && inventory.stone >= 5 && !inventory.equip.stoneArmor) {
                 inventory.stone -= 5; inventory.equip.stoneArmor = true; playSound('win'); alert("鍛造石甲成功！");
-            } else {
-                playSound('error'); alert("資源不足或已擁有該裝備！");
-            }
+            } else { playSound('error'); alert("資源不足或已擁有該裝備！"); }
             updateUI();
         }
 
@@ -651,14 +844,12 @@
             } else if (type === 'tower' && inventory.stone >= 2) {
                 inventory.stone -= 2; inventory.tower++; alert("建造了石塔！");
             } else if (type === 'castle' && inventory.hut >= 2 && inventory.tower >= 2) {
-                inventory.hut -= 2; inventory.tower -= 2; inventory.castles++; alert("合成大城堡！解鎖 Boss 挑戰！");
+                inventory.hut -= 2; inventory.tower -= 2; inventory.castles++; alert("合成大城堡！解鎖 Boss 挑戰與傳說怪獸遭遇！");
             } else if (type === 'flyingCastle' && inventory.gem >= 5 && inventory.castles >= 1) {
                 inventory.gem -= 5; inventory.castles -= 1; inventory.flyingCastle++; alert("奇蹟！建造了飛天城堡！");
             } else if (type === 'ferrisWheel' && inventory.star >= 5 && inventory.wood >= 5 && inventory.stone >= 5) {
                 inventory.star -= 5; inventory.wood -= 5; inventory.stone -= 5; inventory.ferrisWheel++; alert("奇蹟！建造了摩天輪！");
-            } else {
-                return playSound('error'), alert("❌ 資源不足或前置條件未達成！");
-            }
+            } else { return playSound('error'), alert("❌ 資源不足或前置條件未達成！"); }
             playSound('win'); updateUI(); restoreBuildings();
         }
 
@@ -677,23 +868,20 @@
             if (type === 'weapon') { lv = inventory.superWeaponLv; costM = (lv+1)*5; costF = Math.floor(lv/3); }
             else if (type === 'shield') { lv = inventory.superShieldLv; costM = (lv+1)*5; costF = Math.floor(lv/3); }
             else if (type === 'stone') { lv = inventory.superStoneLv; costM = ((lv+1)*5)*2; costF = Math.floor(lv/3)+1; }
-            
             if (inventory.manuscript >= costM && inventory.fragment >= costF) {
                 inventory.manuscript -= costM; inventory.fragment -= costF;
                 if (type === 'weapon') inventory.superWeaponLv++;
                 else if (type === 'shield') inventory.superShieldLv++;
                 else if (type === 'stone') inventory.superStoneLv++;
                 playSound('win'); updateUI(); alert("✨ 神器升級成功！");
-            } else {
-                playSound('error'); alert("❌ 手稿或碎片不足！");
-            }
+            } else { playSound('error'); alert("❌ 手稿或碎片不足！"); }
         }
 
-        // --- Boss 戰鬥系統 ---
         const bossConfig = {
-            1: { name: "🟢 Boss 1：元素吞噬者", time: 15, target: 5, mode: "accumulate", hpPenalty: 10, msg: "扣 10 HP，隨機吸走 2 元素！" },
-            2: { name: "🟡 Boss 2：混沌智者", time: 10, target: 3, mode: "streak", hpPenalty: 20, msg: "扣 20 HP，吸走最多數量的元素 5 個！連對歸零！" },
-            3: { name: "🔴 Boss 3：終極幻影魔王", time: 5, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！" }
+            1: { name: "🟢 Boss 1：元素吞噬者", time: 15, target: 5, mode: "accumulate", hpPenalty: 10, msg: "扣 10 HP，隨機吸走 2 元素！", img: "https://api.dicebear.com/9.x/bottts/svg?seed=Boss1&backgroundColor=C8E6C9" },
+            2: { name: "🟡 Boss 2：混沌智者", time: 10, target: 3, mode: "streak", hpPenalty: 20, msg: "扣 20 HP，吸走最多數量的元素 5 個！連對歸零！", img: "https://api.dicebear.com/9.x/bottts/svg?seed=Boss2&backgroundColor=FFECB3" },
+            3: { name: "🔴 Boss 3：終極幻影魔王", time: 5, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！", img: "https://api.dicebear.com/9.x/bottts/svg?seed=Boss3&backgroundColor=FFCDD2" },
+            'legendary': { name: "傳說怪獸", time: 10, target: 3, mode: "accumulate", hpPenalty: 25, msg: "受到傳說級攻擊！扣 25 HP！", img: "" }
         };
         let currentBoss = 1, bossTimerInterval, playerHP = 100, maxHP = 100, bossProgress = 0, bossTaskPool = [], currentBossTask = null;
 
@@ -701,13 +889,28 @@
             playSound('click');
             if (id === 2 && !inventory.medals.includes(100)) return alert("需先獲得 100 連勝勳章才能挑戰 Boss 2！");
             if (id === 3 && !inventory.medals.includes(300)) return alert("需先獲得 300 連勝勳章才能挑戰 Boss 3！");
+            document.getElementById('boss-image').src = bossConfig[id].img;
+            document.getElementById('boss-image').style.display = "block";
+            initCombatSystem(id, bossConfig[id].name);
+        }
 
-            currentBoss = id; maxHP = 100 + calculateStats().def * 2; playerHP = maxHP; bossProgress = 0;
+        function startLegendaryFight(monsterName, monsterImg) {
+            playSound('legendary');
+            bossConfig['legendary'].name = monsterName;
+            document.getElementById('boss-image').src = monsterImg;
+            document.getElementById('boss-image').style.display = "block";
+            initCombatSystem('legendary', monsterName);
+        }
+
+        function initCombatSystem(bossId, displayName) {
+            currentBoss = bossId; 
+            maxHP = 100 + calculateStats().def * 2; 
+            playerHP = maxHP; 
+            bossProgress = 0;
             bossTaskPool = shuffle(allMiningTasks);
-            
             hideAll();
             document.getElementById('boss-combat-screen').classList.remove('hidden');
-            document.getElementById('boss-name-title').textContent = bossConfig[id].name;
+            document.getElementById('boss-name-title').textContent = displayName;
             document.getElementById('btn-next-boss-q').classList.add('hidden');
             document.getElementById('btn-boss-flee').classList.remove('hidden');
             updateBossHP(); nextBossQuestion();
@@ -721,18 +924,29 @@
             document.getElementById('boss-progress-text').textContent = `目標：累積答對 ${bossProgress} / ${bossConfig[currentBoss].target}`;
         }
 
+        function usePotion() {
+            playSound('click');
+            if(inventory.hpPotion > 0) {
+                if(playerHP >= maxHP) { alert("生命值已滿，不需使用！"); return; }
+                inventory.hpPotion--;
+                playerHP = Math.min(maxHP, playerHP + 30);
+                playSound('win');
+                document.getElementById('boss-msg').innerHTML = `<span style='color:#E040FB'>💖 使用恢復藥水，回復 30 HP！</span>`;
+                updateUI(); updateBossHP();
+            } else {
+                alert("❌ 你沒有恢復藥水了！請先去商店購買！");
+            }
+        }
+
         function nextBossQuestion() {
             clearInterval(bossTimerInterval);
             document.getElementById('btn-next-boss-q').classList.add('hidden');
             document.getElementById('btn-boss-flee').classList.add('hidden');
             document.getElementById('boss-options').innerHTML = '';
             document.getElementById('boss-msg').innerHTML = '';
-            
             if (bossProgress >= bossConfig[currentBoss].target) return bossVictory();
-            
             currentBossTask = bossTaskPool.pop();
             if (!currentBossTask) { bossTaskPool = shuffle(allMiningTasks); currentBossTask = bossTaskPool.pop(); }
-            
             document.getElementById('boss-question').textContent = currentBossTask.q;
             let ops = shuffle([...currentBossTask.options]);
             ops.forEach(opt => {
@@ -740,10 +954,9 @@
                 btn.onclick = () => checkBossAnswer(opt);
                 document.getElementById('boss-options').appendChild(btn);
             });
-            
             let timeLeft = bossConfig[currentBoss].time;
             document.getElementById('boss-timer-bar').style.width = '100%';
-            
+            document.getElementById('btn-boss-flee').classList.remove('hidden');
             bossTimerInterval = setInterval(() => {
                 timeLeft--; document.getElementById('boss-timer-bar').style.width = (timeLeft / bossConfig[currentBoss].time * 100) + '%';
                 if (timeLeft <= 0) { clearInterval(bossTimerInterval); handleBossFail(true); }
@@ -762,7 +975,6 @@
         function handleBossFail(isTimeout) {
             playSound('error');
             if (bossConfig[currentBoss].mode === 'streak') bossProgress = 0;
-            
             let b = bossConfig[currentBoss]; playerHP -= b.hpPenalty;
             if (currentBoss === 1) {
                 let els = ['wood', 'stone', 'gem', 'star'];
@@ -774,25 +986,52 @@
                 inventory[maxEl] = Math.max(0, inventory[maxEl] - 5);
             } else if (currentBoss === 3) {
                 ['wood', 'stone', 'gem', 'star'].forEach(e => { inventory[e] = Math.floor(inventory[e] * 0.9); });
+            } else if (currentBoss === 'legendary') {
+                inventory.wood = Math.max(0, inventory.wood - 2);
+                inventory.stone = Math.max(0, inventory.stone - 2);
             }
-            
             let failReason = isTimeout ? "超時！" : "答錯！";
             document.getElementById('boss-msg').innerHTML = `<span style='color:#B71C1C'>❌ ${failReason} ${b.msg}</span>`;
             updateUI(true); updateBossHP();
-            
             if (playerHP <= 0) { setTimeout(() => bossDefeat(), 1000); return; }
             document.getElementById('btn-next-boss-q').classList.remove('hidden');
-            document.getElementById('btn-boss-flee').classList.remove('hidden');
+        }
+
+        function fleeBoss() {
+            playSound('click');
+            let confirmFlee = confirm("⚠️ 確定要逃跑嗎？逃跑將會直接結束挑戰，並掉落 5 個木材與 5 個石頭作為代價！");
+            if(confirmFlee) {
+                clearInterval(bossTimerInterval);
+                inventory.wood = Math.max(0, inventory.wood - 5);
+                inventory.stone = Math.max(0, inventory.stone - 5);
+                updateUI();
+                alert("💨 你匆忙逃離了戰鬥領地！");
+                goHome();
+            }
         }
 
         function bossVictory() {
             playSound('boss_win');
-            let rewards = { 1: { gem: 5, star: 5 }, 2: { gem: 10, star: 10 }, 3: { gem: 20, star: 20 } };
-            alert(`🎉 恭喜！你成功擊敗了【${bossConfig[currentBoss].name}】！\n獲得 ${rewards[currentBoss].gem} 寶石，${rewards[currentBoss].star} 星星！`);
-            inventory.gem += rewards[currentBoss].gem; inventory.star += rewards[currentBoss].star; goHome();
+            if (currentBoss === 'legendary') {
+                alert(`🎉 史詩級勝利！你成功在限時內擊敗了【${bossConfig['legendary'].name}】！\n獲得 5 寶石，5 星星，50 金幣！`);
+                inventory.gem += 5; inventory.star += 5; inventory.coin += 50;
+            } else {
+                let rewards = { 1: { gem: 5, star: 5, coin: 30 }, 2: { gem: 10, star: 10, coin: 60 }, 3: { gem: 20, star: 20, coin: 100 } };
+                alert(`🎉 恭喜！你成功擊敗了【${bossConfig[currentBoss].name}】！\n獲得 ${rewards[currentBoss].gem}寶石，${rewards[currentBoss].star}星星，${rewards[currentBoss].coin}金幣！`);
+                inventory.gem += rewards[currentBoss].gem; inventory.star += rewards[currentBoss].star; inventory.coin += rewards[currentBoss].coin; 
+            }
+            goHome();
         }
 
-        function bossDefeat() { playSound('error'); alert(`💀 你被【${bossConfig[currentBoss].name}】擊敗了... 請提升防禦力後再來挑戰！`); goHome(); }
+        function bossDefeat() { 
+            playSound('error'); 
+            if (currentBoss === 'legendary') {
+                alert(`💀 你不敵【${bossConfig['legendary'].name}】的猛烈攻勢... 下次記得買好藥水再來挑戰！`);
+            } else {
+                alert(`💀 你被【${bossConfig[currentBoss].name}】擊敗了... 快去商店買點藥水或升級裝備再來挑戰吧！`); 
+            }
+            goHome(); 
+        }
 
         window.onload = loadGame;
     </script>
