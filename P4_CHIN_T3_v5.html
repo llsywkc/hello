@@ -1,9 +1,18 @@
+是的，之前排行榜上顯示的「P4A01 (陳大文)」等名單只是為了讓畫面看起來熱鬧而自動生成的**虛擬例子（假對手）**。
+
+既然你希望刪除 PvP 及排行榜這一個設定，我已經幫你把遊戲中所有與 PvP、排行榜、挑戰代碼相關的按鈕、畫面和程式碼**全部乾淨地移除了**。
+
+同時，**交易市場** 和 **幸運抽獎轉盤** 依然保留，學生的存檔也不會受到任何影響。
+
+請複製以下這份移除了 PvP 系統的**乾淨版本**，並覆蓋你的 `.html` 檔案：
+
+```html
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>數碼冒險：4A森林大作戰 (PvP進階版)</title>
+    <title>數碼冒險：4A森林大作戰 (進階版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -90,9 +99,6 @@
         /* 其他 Modal 樣式 */
         .market-modal-content { background: #E8F5E9; border: 6px solid #4CAF50; }
         .gacha-modal-content { background: #FFF3E0; border: 6px solid #FF9800; }
-        .lb-modal-content { background: #E3F2FD; border: 6px solid #2196F3; }
-        .lb-list { text-align: left; background: #FFF; border-radius: 8px; padding: 15px; list-style: none; font-size: 1.2em; font-weight: bold; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
-        .lb-list li { padding: 8px 0; border-bottom: 2px dashed #BBDEFB; }
     </style>
 </head>
 <body>
@@ -137,7 +143,6 @@
                 <h3 style="margin-top:0; color:#4A148C;">🌟 勇者系統</h3>
                 <button class="btn-gold" onclick="openGacha()">🎰 幸運轉盤 (耗 1 🌟)</button>
                 <button class="btn-orange" onclick="openMarket()">🛒 秘密交易市場</button>
-                <button class="btn-blue" onclick="openLeaderboard()">🏆 班級排行榜 (PvP)</button>
             </div>
 
             <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#6A1B9A; margin-top: 15px;">📖 遊戲說明 (新手必看)</button>
@@ -181,8 +186,8 @@
                     <li>打不贏請按「逃跑」，但什麼都得不到！</li>
                 </ul>
 
-                <h3 style="color:#FF9800;">3. 秘密市場與 PvP 排行榜</h3>
-                <p>現在你可以用收集到的資源去「秘密市場」換取傳說卷軸或升級武器！也可以在排行榜發起挑戰，憑藉運氣和實力搶走別人的寶石！</p>
+                <h3 style="color:#FF9800;">3. 秘密市場與幸運抽獎</h3>
+                <p>現在你可以用收集到的資源去「秘密市場」換取傳說卷軸或升級武器！也可以使用星星在幸運轉盤試試手氣，最高可中大獎寶石！</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
@@ -322,18 +327,6 @@
             <div id="gacha-result" style="font-size: 5em; margin: 20px; text-shadow: 0 0 10px #FFD700;">🎁</div>
             <button class="btn-gold" onclick="rollGacha()">🎯 抽一次！</button>
             <button class="btn-grey" onclick="closeModal('gacha-modal')">❌ 離開</button>
-        </div>
-    </div>
-
-    <div id="leaderboard-modal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; display:flex; justify-content:center; align-items:center;">
-        <div class="event-box lb-modal-content" style="background:#FFF; padding:30px; border-radius:15px; text-align:center; max-width: 85%; width: 450px;">
-            <h2 style="color: #2196F3;">🏆 本地最強勇者榜</h2>
-            <ul id="lb-list" class="lb-list"></ul>
-            <p style="font-size: 0.9em; color: #666; font-weight:bold; margin-top:15px;">輸入對手代碼發起挑戰！(贏取對手 5% 寶石)</p>
-            <input type="text" id="pvp-code" placeholder="例如: P4A01" style="padding: 10px; width: 60%; font-size:1.2em;">
-            <br>
-            <button class="btn-red" onclick="startPvP()">⚔️ 挑戰</button>
-            <button class="btn-grey" style="margin-top: 15px;" onclick="closeModal('leaderboard-modal')">❌ 離開</button>
         </div>
     </div>
 
@@ -741,7 +734,7 @@
         // --- Modal 關閉通用 ---
         window.closeModal = function(id) { document.getElementById(id).classList.add('hidden'); }
 
-        // ================== 新增系統 (市場、抽獎、PvP) ==================
+        // ================== 新增系統 (市場、抽獎) ==================
 
         // 交易市場
         window.openMarket = function() {
@@ -806,51 +799,6 @@
                 }
                 updateUI();
             }, 800);
-        }
-
-        // 排行榜與 PvP
-        window.openLeaderboard = function() {
-            document.getElementById('leaderboard-modal').classList.remove('hidden');
-            updateLeaderboardUI();
-        }
-
-        function updateLeaderboardUI() {
-            // 從 LocalStorage 讀取或生成假資料
-            let lb = JSON.parse(localStorage.getItem('digi_classLeaderboard')) || [
-                { name: "P4A01 (陳大文)", streak: 45 },
-                { name: "P4B12 (李小明)", streak: 32 },
-                { name: "P4C05 (張志強)", streak: 28 },
-            ];
-            
-            lb.push({ name: "你 (當前)", streak: inventory.streak });
-            lb.sort((a, b) => b.streak - a.streak); 
-            
-            let html = "";
-            for(let i=0; i<Math.min(5, lb.length); i++) {
-                let crown = i===0 ? "🥇" : i===1 ? "🥈" : i===2 ? "🥉" : "🔸";
-                let isMe = lb[i].name.includes("你") ? "font-weight:bold; color:red;" : "";
-                html += `<li style="${isMe}">${crown} ${lb[i].name} - 連勝: ${lb[i].streak}</li>`;
-            }
-            document.getElementById('lb-list').innerHTML = html;
-        }
-
-        window.startPvP = function() {
-            let code = document.getElementById('pvp-code').value;
-            if(!code) return alert("請輸入對手的代碼！");
-            if(inventory.star < 1) return alert("需要 1 顆 ⭐ 才能發起挑戰！");
-            
-            inventory.star -= 1;
-            let winChance = inventory.streak > 10 ? 0.7 : 0.4; 
-            
-            if(Math.random() < winChance) {
-                let stolenGems = Math.floor(Math.random() * 5) + 2;
-                inventory.gem += stolenGems;
-                alert(`⚔️ 挑戰成功！你憑藉高超的答題速度擊敗了 ${code}，搶走了 ${stolenGems} 顆寶石！`);
-            } else {
-                alert(`💀 挑戰失敗！${code} 的防禦太強了，你損失了 1 顆星星。`);
-            }
-            updateUI();
-            updateLeaderboardUI();
         }
 
         // ================== Digimon 戰鬥遭遇 ==================
@@ -1406,3 +1354,4 @@
     </script>
 </body>
 </html>
+```
