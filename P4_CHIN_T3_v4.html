@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robloxï¼š4Aæ£®æž—å¤§å†’éšª (ä¿®å¾©åŠå„ªåŒ–ç‰ˆ)</title>
+    <title>數碼冒險：4A森林大作戰 (PvP進階版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -76,211 +76,270 @@
 
         .legendary-border { border-color: #FFD700 !important; box-shadow: 0 0 30px #FFD700 !important; }
         .combat-stats { background:#F3E5F5; padding:15px; border-radius:10px; font-size: 1.1em; margin-top:10px; border:3px solid #9C27B0; color:#333; font-weight: bold; line-height: 1.8; text-align: left; }
+
+        /* Digimon 圖片與戰鬥特效 */
+        .digimon-pic { width: 160px; height: 160px; object-fit: contain; margin: 10px auto; border: 4px solid #AB47BC; border-radius: 10px; background: #000; display: block; }
+        .glow-red { animation: glowRed 1.5s infinite; border-color: #f44336 !important; }
+        .glow-purple { animation: glowPurple 1.5s infinite; border-color: #9C27B0 !important; }
+        .glow-gold { animation: glowGold 1.5s infinite; border-color: #FFD700 !important; }
+        
+        @keyframes glowRed { 0% { box-shadow: 0 0 5px #f44336; } 50% { box-shadow: 0 0 25px #f44336; } 100% { box-shadow: 0 0 5px #f44336; } }
+        @keyframes glowPurple { 0% { box-shadow: 0 0 5px #9C27B0; } 50% { box-shadow: 0 0 25px #9C27B0; } 100% { box-shadow: 0 0 5px #9C27B0; } }
+        @keyframes glowGold { 0% { box-shadow: 0 0 10px #FFD700; } 50% { box-shadow: 0 0 30px #FFD700; } 100% { box-shadow: 0 0 10px #FFD700; } }
+        
+        /* 其他 Modal 樣式 */
+        .market-modal-content { background: #E8F5E9; border: 6px solid #4CAF50; }
+        .gacha-modal-content { background: #FFF3E0; border: 6px solid #FF9800; }
+        .lb-modal-content { background: #E3F2FD; border: 6px solid #2196F3; }
+        .lb-list { text-align: left; background: #FFF; border-radius: 8px; padding: 15px; list-style: none; font-size: 1.2em; font-weight: bold; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
+        .lb-list li { padding: 8px 0; border-bottom: 2px dashed #BBDEFB; }
     </style>
 </head>
 <body>
 
-    <h1>ðŸŸª æ£®æž—å¤§å†’éšªï¼š4Aå¯¶å¯¶ ðŸŸª</h1>
+    <h1>🟪 森林大冒險：4A寶寶 🟪</h1>
 
-    <div id="player-tag" class="player-info hidden">å†’éšªè€…ï¼š<span id="display-name"></span> <span id="streak-counter" style="color:#6A1B9A; margin-left: 10px;">ðŸ”¥ é€£å°: 0</span></div>
+    <div id="player-tag" class="player-info hidden">冒險者：<span id="display-name"></span> <span id="streak-counter" style="color:#6A1B9A; margin-left: 10px;">🔥 連對: 0</span></div>
 
     <div id="medal-bar" class="inventory-bar hidden">
-        <span style="color:#FFEB3B;">ðŸŽ–ï¸ æ¦®è­½å‹³ç« ç‰†ï¼š</span>
+        <span style="color:#FFEB3B;">🎖️ 榮譽勳章牆：</span>
         <span id="medal-container"></span>
     </div>
 
     <div id="top-nav" class="inventory-bar hidden">
-        <span>ðŸªµ æœ¨æ: <span id="inv-wood">0</span></span>
-        <span>ðŸ§± çŸ³é ­: <span id="inv-stone">0</span></span>
-        <span class="stat-atk">âš”ï¸ æ”»: <span id="inv-atk">10</span></span>
-        <span class="stat-def">ðŸ›¡ï¸ é˜²: <span id="inv-def">10</span></span>
-        <span class="gem-text">ðŸ’Ž å¯¶çŸ³: <span id="inv-gem">0</span></span>
-        <span class="star-text">ðŸŒŸ æ˜Ÿæ˜Ÿ: <span id="inv-star">0</span></span>
-        <span class="super-text">ðŸ“œ æ‰‹ç¨¿: <span id="inv-manu">0</span></span>
-        <span class="super-text">ðŸ”® ç¢Žç‰‡: <span id="inv-frag">0</span></span>
+        <span>🪵 木材: <span id="inv-wood">0</span></span>
+        <span>🧱 石頭: <span id="inv-stone">0</span></span>
+        <span class="stat-atk">⚔️ 攻: <span id="inv-atk">10</span></span>
+        <span class="stat-def">🛡️ 防: <span id="inv-def">10</span></span>
+        <span class="gem-text">💎 寶石: <span id="inv-gem">0</span></span>
+        <span class="star-text">🌟 星星: <span id="inv-star">0</span></span>
+        <span class="super-text">📜 手稿: <span id="inv-manu">0</span></span>
+        <span class="super-text">🔮 碎片: <span id="inv-frag">0</span></span>
     </div>
-    <div id="save-indicator" class="save-indicator hidden">ðŸ’¾ éŠæˆ²é€²åº¦å·²è‡ªå‹•è®€å–</div>
+    <div id="save-indicator" class="save-indicator hidden">💾 遊戲進度已自動讀取</div>
 
     <div id="main-container" class="container">
         
         <div id="login-screen" class="screen">
-            <h2>ðŸ•ï¸ å‰µå»ºä½ çš„è§’è‰²</h2>
-            <p>è«‹è¼¸å…¥å†’éšªè€…åç¨±ï¼š</p>
-            <input type="text" id="input-name" maxlength="10" placeholder="è¼¸å…¥åå­—...">
-            <button class="btn-purple" onclick="setPlayerName()">ðŸš€ é–‹å§‹éŠæˆ²</button>
+            <h2>🏕️ 創建你的角色</h2>
+            <p>請輸入冒險者名稱：</p>
+            <input type="text" id="input-name" maxlength="10" placeholder="輸入名字...">
+            <button class="btn-purple" onclick="setPlayerName()">🚀 開始遊戲</button>
         </div>
 
         <div id="start-screen" class="screen hidden">
-            <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <button class="btn-grey" onclick="logout()" style="font-size: 0.9em; padding: 8px 12px; margin: 0;">ðŸ”„ æ›´æ”¹åå­—</button>
-                <button class="btn-gold" onclick="claimGift()" style="font-size: 0.9em; padding: 8px 12px; margin: 0;">ðŸŽ 4Aå¤§ç¦®åŒ…</button>
+            <div style="width: 100%; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;">
+                <button class="btn-grey" onclick="logout()" style="font-size: 0.9em; padding: 8px 12px; margin: 0;">🔄 更改名字/登出</button>
+                <button class="btn-gold" onclick="claimGift()" style="font-size: 0.9em; padding: 8px 12px; margin: 0;">🎁 老玩家禮包</button>
             </div>
 
-            <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#6A1B9A;">ðŸ“– éŠæˆ²èªªæ˜Ž (æ–°æ‰‹å¿…çœ‹)</button>
-            <hr style="width: 80%; border-top: 4px dashed #6A1B9A;">
-            
-            <h2>ðŸ•ï¸ é¸æ“‡å†’éšªé—œå¡ (ç‰¹è¨“å€)</h2>
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
-                <button class="btn-green" onclick="startGame('fill')">â›ï¸ ç¤¦æ´žå°‹å¯¶ (å¡«å……é¡Œ)</button>
-                <button class="btn-blue" onclick="startGame('match-word')">ðŸ”® ç¬¦æ–‡è§£å¯† (é…è©žé¡Œ)</button>
-                <button class="btn-orange" onclick="startGame('connect')">ðŸ”— é­”æ³•é€£ç·š (é€£ç·šé¡Œ)</button>
-                <button class="btn-grey" onclick="startGame('punct')">ðŸ“œ å¤å·ä¿®å¾© (æ¨™é»žé¡Œ)</button>
-                <button class="btn-purple" onclick="startGame('reorder')">ðŸŒ‰ é‹ªæœ¨æ¿éŽæ²³ (é‡çµ„å¥å­)</button>
-                
-                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">ðŸ“ FAæ¸©ç¿’ (ç¶œåˆé¡Œ)</button>
-                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">ðŸ“ FAæ¸©ç¿’ (èª²æ–‡é‡çµ„)</button>
+            <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; width: 100%; border: 2px dashed #9C27B0;">
+                <h3 style="margin-top:0; color:#4A148C;">🌟 勇者系統</h3>
+                <button class="btn-gold" onclick="openGacha()">🎰 幸運轉盤 (耗 1 🌟)</button>
+                <button class="btn-orange" onclick="openMarket()">🛒 秘密交易市場</button>
+                <button class="btn-blue" onclick="openLeaderboard()">🏆 班級排行榜 (PvP)</button>
             </div>
-            <p style="font-size: 0.9em; font-weight: bold; color: #8E24AA;">(é€£çºŒç­”é¡Œæå‡æ”»é˜²å€¼ï¼Œæœ‰æ©ŸçŽ‡é‡åˆ°éš±è—çš„ã€Œå‚³èªªæ€ªã€ï¼)</p>
+
+            <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#6A1B9A; margin-top: 15px;">📖 遊戲說明 (新手必看)</button>
+            <hr style="width: 80%; border-top: 4px dashed #6A1B9A;">
+            
+            <h2>🏕️ 選擇冒險關卡 (特訓區)</h2>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
+                <button class="btn-green" onclick="startGame('fill')">⛏️ 礦洞尋寶 (填充題)</button>
+                <button class="btn-blue" onclick="startGame('match-word')">🔮 符文解密 (配詞題)</button>
+                <button class="btn-orange" onclick="startGame('connect')">🔗 魔法連線 (連線題)</button>
+                <button class="btn-grey" onclick="startGame('punct')">📜 古卷修復 (標點題)</button>
+                <button class="btn-purple" onclick="startGame('reorder')">🌉 鋪木板過河 (重組句子)</button>
+                
+                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (綜合題)</button>
+                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (課文重組)</button>
+            </div>
+            <p style="font-size: 0.9em; font-weight: bold; color: #8E24AA;">(連續答題提升攻防值，有機率遇到隱藏的「傳說怪」！)</p>
             
             <hr style="width: 80%; border-top: 4px dashed #6A1B9A;">
             
-            <button class="btn-gold" onclick="openSuperForge()">ðŸ‘‘ ç¥žå™¨å‡ç´šç¥­å£‡ (ç„¡é™æˆ°åŠ›)</button>
-            <button class="btn-red" onclick="openForgeZone()">âš”ï¸ è£å‚™é›é€ åŠ (åŸºç¤Žé˜²å…·)</button>
-            <button class="btn-blue" onclick="openBuildZone()">ðŸ”¨ é€²å…¥å»ºç¯‰å·¥åŠ (è§£éŽ–é«˜ç´šå»ºç¯‰)</button>
-            <button class="btn-black" id="btn-boss-menu" onclick="openBossSelect()" disabled>ðŸ”’ çµ‚æ¥µ Boss æŒ‘æˆ° (éœ€å»ºå¤§åŸŽå ¡)</button>
+            <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇 (無限戰力)</button>
+            <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊 (基礎防具)</button>
+            <button class="btn-blue" onclick="openBuildZone()">🔨 進入建築工坊 (解鎖高級建築)</button>
+            <button class="btn-black" id="btn-boss-menu" onclick="openBossSelect()" disabled>🔒 終極 Boss 挑戰 (需建大城堡)</button>
         </div>
 
         <div id="instruction-screen" class="screen hidden">
-            <h2>ðŸ“– å†’éšªè€…æŒ‡å—</h2>
+            <h2>📖 冒險者指南</h2>
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #6A1B9A; max-height: 400px; overflow-y: auto;">
-                <h3 style="color:#4A148C; margin-top:0;">1. å¦‚ä½•ç²å¾—å…ƒç´ èˆ‡å‹³ç« ï¼Ÿ</h3>
-                <p>ðŸªµ <b>æœ¨æ / ðŸ§± çŸ³é ­</b>ï¼šé€éŽå„å€‹åŸºç¤Žé—œå¡ç­”é¡Œç²å¾—ã€‚</p>
-                <p>ðŸ“œ <b>å‹¤å¥®æ‰‹ç¨¿</b>ï¼šæ¯æ¬¡ç­”å°é¡Œç›®éƒ½æœƒç²å¾—å¤§é‡æ‰‹ç¨¿ã€‚</p>
-                <p>ðŸ”® <b>é “æ‚Ÿç¢Žç‰‡</b>ï¼šé€£çºŒç­”å° 2 é¡ŒæŽ‰è½ 1 å€‹ç¢Žç‰‡ã€‚</p>
-                <p>ðŸ’Ž <b>å¯¶çŸ³ / ðŸŒŸ æ˜Ÿæ˜Ÿ</b>ï¼šæ‰“æ•—çªç™¼é‡Žç¸ï¼Œæˆ–åœ¨éŽé—œæ™‚æ©ŸçŽ‡æŽ‰è½ã€‚</p>
+                <h3 style="color:#4A148C; margin-top:0;">1. 如何獲得元素與勳章？</h3>
+                <p>🪵 <b>木材 / 🧱 石頭</b>：透過各個基礎關卡答題獲得。</p>
+                <p>📜 <b>勤奮手稿</b>：每次答對題目都會獲得大量手稿。</p>
+                <p>🔮 <b>頓悟碎片</b>：連續答對 2 題掉落碎片。</p>
+                <p>💎 <b>寶石 / 🌟 星星</b>：打敗突發野獸，或在過關時機率掉落。</p>
                 
-                <h3 style="color:#B71C1C;">2. å…¨æ–°æ”»é˜²æˆ°é¬¥ç³»çµ±</h3>
-                <p>é‡åˆ°æ€ªç¸æ™‚ï¼Œä½ å¿…é ˆè¬¹æ…Žè©•ä¼°é›™æ–¹å¯¦åŠ›ã€‚é»žæ“Šæ‡‰æˆ°éœ€æ¶ˆè€— <b>1 é¡†æ˜Ÿæ˜Ÿ</b>ï¼š</p>
+                <h3 style="color:#B71C1C;">2. 數碼暴龍戰鬥與答題系統</h3>
+                <p>在森林中隨時會遭遇野生怪獸或傳說級 Digimon：</p>
                 <ul>
-                    <li><b>æ”»æ“ŠåŠ›é”æ¨™ + é˜²ç¦¦åŠ›é”æ¨™</b>ï¼šå®Œç¾Žæ“Šæ®ºï¼ç²å¾—è±åŽšçŽå‹µï¼</li>
-                    <li><b>æ”»æ“ŠåŠ›é”æ¨™ï¼Œä½†é˜²ç¦¦åŠ›ä¸è¶³</b>ï¼šé›–ç„¶èƒ½æ“Šé€€æ€ªç¸ï¼Œä½†ä½ æœƒå—å‚·ï¼Œæœƒæå¤±éƒ¨åˆ†ç‰©è³‡æˆ–æ˜Ÿæ˜Ÿã€‚</li>
-                    <li><b>æ”»æ“ŠåŠ›ä¸è¶³</b>ï¼šç„¡æ³•ç ´é˜²ï¼Œç›´æŽ¥è¢«æ€ªç¸æ¶èµ°å¤§é‡è³‡æºï¼æ‰“ä¸è´è«‹æŒ‰ã€Œé€ƒè·‘ã€ï¼</li>
+                    <li><b>野生怪獸突襲</b>：點擊應戰後，必須在限時內答對 1 條問題才能擊退牠並獲得獎勵！</li>
+                    <li><b>傳說級試煉</b>：消耗星星開啟，連續答對 2 條問題即可收服傳說怪！</li>
+                    <li>打不贏請按「逃跑」，但什麼都得不到！</li>
                 </ul>
 
-                <h3 style="color:#FF9800;">3. å‚³èªªç´šæŒ‘æˆ°</h3>
-                <p>ç•¶ä½ çš„<b>æ”»æ“ŠåŠ›èˆ‡é˜²ç¦¦åŠ›ã€Œé›™é›™é”åˆ° 70 ä»¥ä¸Šã€</b>æ™‚ï¼Œæœ‰æ©ŸçŽ‡åœ¨ç­”é¡Œå¾Œé­é‡æ¥µç½•è¦‹çš„ã€Œå‚³èªªæ€ªã€ï¼æˆ°å‹ç‰ å€‘å¯ç²å¾—æµ·é‡è³‡æºèˆ‡å‚³èªªå‹³ç« ã€‚</p>
+                <h3 style="color:#FF9800;">3. 秘密市場與 PvP 排行榜</h3>
+                <p>現在你可以用收集到的資源去「秘密市場」換取傳說卷軸或升級武器！也可以在排行榜發起挑戰，憑藉運氣和實力搶走別人的寶石！</p>
             </div>
-            <button class="btn-red" onclick="goHome()">ðŸ  è¿”å›žä¸»ç•«é¢</button>
+            <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
 
         <div id="super-forge-zone" class="screen hidden">
-            <h2 style="color: #FF9800;">ðŸ‘‘ ç¥žå™¨ç¥­å£‡</h2>
+            <h2 style="color: #FF9800;">👑 神器祭壇</h2>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
                 <div class="super-gear-card">
-                    <h3>ðŸ—¡ï¸ ç ´é¡Œè€…ä¹‹åˆƒ <br>Lv.<span id="sg-w-lv">0</span></h3>
-                    <p class="stat-atk">æ•ˆæžœ: +<span id="sg-w-bonus">0</span> æ”»</p>
-                    <button class="btn-gold" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('weapon')">å‡ç´š (éœ€ <span id="sg-w-cost-m">5</span>æ‰‹ç¨¿ <span id="sg-w-cost-f">0</span>ç¢Žç‰‡)</button>
+                    <h3>🗡️ 破題者之刃 <br>Lv.<span id="sg-w-lv">0</span></h3>
+                    <p class="stat-atk">效果: +<span id="sg-w-bonus">0</span> 攻</p>
+                    <button class="btn-gold" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('weapon')">升級 (需 <span id="sg-w-cost-m">5</span>手稿 <span id="sg-w-cost-f">0</span>碎片)</button>
                 </div>
                 <div class="super-gear-card">
-                    <h3>ðŸ›¡ï¸ çµ•å°å°ˆæ³¨ä¹‹ç›¾ <br>Lv.<span id="sg-s-lv">0</span></h3>
-                    <p class="stat-def">æ•ˆæžœ: +<span id="sg-s-bonus">0</span> é˜²</p>
-                    <button class="btn-blue" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('shield')">å‡ç´š (éœ€ <span id="sg-s-cost-m">5</span>æ‰‹ç¨¿ <span id="sg-s-cost-f">0</span>ç¢Žç‰‡)</button>
+                    <h3>🛡️ 絕對專注之盾 <br>Lv.<span id="sg-s-lv">0</span></h3>
+                    <p class="stat-def">效果: +<span id="sg-s-bonus">0</span> 防</p>
+                    <button class="btn-blue" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('shield')">升級 (需 <span id="sg-s-cost-m">5</span>手稿 <span id="sg-s-cost-f">0</span>碎片)</button>
                 </div>
                 <div class="super-gear-card">
-                    <h3>ðŸ’Ž ç„¡ç‘•è³¢è€…ä¹‹çŸ³ <br>Lv.<span id="sg-a-lv">0</span></h3>
-                    <p class="gem-text">æ•ˆæžœ: å…¨å±¬æ€§ +<span id="sg-a-bonus">0</span></p>
-                    <button class="btn-purple" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('stone')">å‡ç´š (éœ€ <span id="sg-a-cost-m">10</span>æ‰‹ç¨¿ <span id="sg-a-cost-f">1</span>ç¢Žç‰‡)</button>
+                    <h3>💎 無瑕賢者之石 <br>Lv.<span id="sg-a-lv">0</span></h3>
+                    <p class="gem-text">效果: 全屬性 +<span id="sg-a-bonus">0</span></p>
+                    <button class="btn-purple" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('stone')">升級 (需 <span id="sg-a-cost-m">10</span>手稿 <span id="sg-a-cost-f">1</span>碎片)</button>
                 </div>
             </div>
-            <button class="btn-red" onclick="goHome()" style="margin-top:20px;">ðŸ  è¿”å›žä¸»ç•«é¢</button>
+            <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
 
         <div id="game-reorder" class="screen hidden">
-            <h2 id="reorder-title">ðŸŒ‰ é‹ªæœ¨æ¿éŽæ²³ (é‡çµ„å¥å­) <br><small style="color: #4A148C;">è«‹æŒ‰æ­£ç¢ºé †åºæŽ’åˆ—å¥å­ï¼ˆæ³¨æ„ç¨ç«‹çš„æ¨™é»žç¬¦è™Ÿï¼ï¼‰</small></h2>
+            <h2 id="reorder-title">🌉 鋪木板過河 (重組句子)</h2>
             <div class="status-msg" id="reorder-msg"></div>
             <div class="answer-area" id="answer-area"></div>
             <div class="word-bank" id="word-bank"></div>
             <div style="margin-top: 10px;">
-                <button class="btn-gold" id="btn-hint-reorder">ðŸ’¡ å…è²»æç¤º</button>
-                <button class="btn-orange" onclick="resetReorder()">ðŸ”„ é‡æ–°æŽ’åˆ—</button>
-                <button class="btn-green hidden" id="btn-next-reorder" onclick="nextReorder()">âž¡ï¸ ä¸‹ä¸€é¡Œ</button>
-                <button class="btn-red" onclick="goHome()">ðŸ  æš«åœé€€å‡º</button>
+                <button class="btn-gold" id="btn-hint-reorder">💡 免費提示</button>
+                <button class="btn-orange" onclick="resetReorder()">🔄 重新排列</button>
+                <button class="btn-green hidden" id="btn-next-reorder" onclick="nextReorder()">➡️ 下一題</button>
+                <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
             </div>
         </div>
 
         <div id="game-mc" class="screen hidden">
             <h2 id="mc-title">TITLE</h2>
             <div class="status-msg" id="mc-msg"></div>
-            <div class="question-text" id="mc-question">é¡Œç›®åŠ è¼‰ä¸­...</div>
+            <div class="question-text" id="mc-question">題目加載中...</div>
             <div class="word-bank" id="mc-options"></div>
             <div style="margin-top: 10px;">
-                <button class="btn-gold" id="btn-hint-mc">ðŸ’¡ å…è²»æç¤º</button>
-                <button class="btn-green hidden" id="btn-next-mc" onclick="nextMC()">âž¡ï¸ ä¸‹ä¸€é¡Œ</button>
-                <button class="btn-red" onclick="goHome()">ðŸ  æš«åœé€€å‡º</button>
+                <button class="btn-gold" id="btn-hint-mc">💡 免費提示</button>
+                <button class="btn-green hidden" id="btn-next-mc" onclick="nextMC()">➡️ 下一題</button>
+                <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
             </div>
         </div>
 
         <div id="forge-zone" class="screen hidden">
-            <h2>âš”ï¸ è£å‚™é›é€ åŠ</h2>
+            <h2>⚔️ 裝備鍛造坊</h2>
             <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-                <button class="btn-orange" onclick="craft('woodSword')">ðŸ—¡ï¸ æœ¨åŠ (+10æ”») <br><small>3 æœ¨æ</small></button>
-                <button class="btn-grey" onclick="craft('stoneSword')">âš”ï¸ çŸ³åŠ (+25æ”») <br><small>5 çŸ³é ­, 2 æœ¨æ</small></button>
-                <button class="btn-orange" onclick="craft('woodShield')">ðŸ›¡ï¸ æœ¨ç›¾ (+10é˜²) <br><small>3 æœ¨æ</small></button>
-                <button class="btn-grey" onclick="craft('stoneArmor')">ðŸ›¡ï¸ çŸ³ç”² (+25é˜²) <br><small>5 çŸ³é ­</small></button>
+                <button class="btn-orange" onclick="craft('woodSword')">🗡️ 木劍 (+10攻) <br><small>3 木材</small></button>
+                <button class="btn-grey" onclick="craft('stoneSword')">⚔️ 石劍 (+25攻) <br><small>5 石頭, 2 木材</small></button>
+                <button class="btn-orange" onclick="craft('woodShield')">🛡️ 木盾 (+10防) <br><small>3 木材</small></button>
+                <button class="btn-grey" onclick="craft('stoneArmor')">🛡️ 石甲 (+25防) <br><small>5 石頭</small></button>
             </div>
-            <button class="btn-red" onclick="goHome()" style="margin-top:20px;">ðŸ  è¿”å›žä¸»ç•«é¢</button>
+            <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
 
         <div id="build-zone" class="screen hidden">
-            <h2>ðŸ”¨ æ£®æž—å»ºç¯‰å·¥åŠ</h2>
+            <h2>🔨 森林建築工坊</h2>
             <div style="margin-bottom: 15px;">
-                <button class="btn-orange" onclick="buildItem('hut')">ðŸ›– å»ºæœ¨å±‹ (-2æœ¨)</button>
-                <button class="btn-grey" onclick="buildItem('tower')">ðŸ—¼ å»ºçŸ³å¡” (-2çŸ³)</button>
-                <button class="btn-blue" onclick="buildItem('castle')">ðŸ° åˆæˆå¤§åŸŽå ¡ (-2æœ¨å±‹, -2çŸ³å¡”)</button>
+                <button class="btn-orange" onclick="buildItem('hut')">🛖 建木屋 (-2木)</button>
+                <button class="btn-grey" onclick="buildItem('tower')">🗼 建石塔 (-2石)</button>
+                <button class="btn-blue" onclick="buildItem('castle')">🏰 合成大城堡 (-2木屋, -2石塔)</button>
             </div>
             <div style="background: rgba(255,255,255,0.5); padding: 10px; border-radius: 8px; border: 2px dashed #333; margin-bottom: 15px;">
-                <h3 style="margin-top:0; color: #6A1B9A;">âœ¨ å¥‡è¹Ÿå»ºç¯‰ (æ¶ˆè€—ç¨€æœ‰è³‡æº)</h3>
-                <button class="btn-purple" onclick="buildItem('flyingCastle')">ðŸ›¸ é£›å¤©åŸŽå ¡ <br><small>(-5å¯¶çŸ³, -1å¤§åŸŽå ¡)</small></button>
-                <button class="btn-gold" onclick="buildItem('ferrisWheel')">ðŸŽ¡ æ‘©å¤©è¼ª <br><small>(-5æ˜Ÿæ˜Ÿ, -5æœ¨æ, -5çŸ³é ­)</small></button>
+                <h3 style="margin-top:0; color: #6A1B9A;">✨ 奇蹟建築 (消耗稀有資源)</h3>
+                <button class="btn-purple" onclick="buildItem('flyingCastle')">🛸 飛天城堡 <br><small>(-5寶石, -1大城堡)</small></button>
+                <button class="btn-gold" onclick="buildItem('ferrisWheel')">🎡 摩天輪 <br><small>(-5星星, -5木材, -5石頭)</small></button>
             </div>
             <div class="world-grid" id="world-grid"></div>
-            <button class="btn-red" onclick="goHome()">ðŸ  è¿”å›žä¸»ç•«é¢</button>
+            <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
         
         <div id="boss-select-screen" class="screen hidden">
-            <h2 style="color:#9C27B0;">ðŸ—ºï¸ çµ‚æ¥µ Boss æŒ‘æˆ°å€</h2>
-            <p>è­¦å‘Šï¼šç­”éŒ¯æˆ–è¶…æ™‚å°‡æ‰£é™¤è¡€é‡(HP)èˆ‡å·²æ”¶é›†çš„å…ƒç´ ï¼</p>
-            <button class="btn-green" onclick="startBossFight(1)">ðŸŸ¢ Boss 1ï¼šå…ƒç´ åžå™¬è€… (é™æ™‚15ç§’/é¡Œ)</button>
-            <button class="btn-orange" onclick="startBossFight(2)">ðŸŸ¡ Boss 2ï¼šæ··æ²Œæ™ºè€… (é™æ™‚10ç§’/é¡Œ)</button>
-            <button class="btn-red" onclick="startBossFight(3)">ðŸ”´ Boss 3ï¼šçµ‚æ¥µå¹»å½±é­”çŽ‹ (é™æ™‚5ç§’/é¡Œ)</button>
-            <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">ðŸ  è¿”å›žä¸»ç•«é¢</button>
+            <h2 style="color:#9C27B0;">🗺️ 終極 Boss 挑戰區</h2>
+            <p>警告：答錯或超時將扣除血量(HP)與已收集的元素！</p>
+            <button class="btn-green" onclick="startBossFight(1)">【成熟期】暴龍獸 (限時15秒)</button>
+            <button class="btn-orange" onclick="startBossFight(2)">【完全體】機械暴龍獸 (限時10秒)</button>
+            <button class="btn-red" onclick="startBossFight(3)">【究極體】戰鬥暴龍獸 (限時5秒)</button>
+            <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
 
         <div id="boss-combat-screen" class="screen hidden">
             <h2 id="boss-name-title" style="color:#B71C1C; margin-bottom:5px;">Boss Name</h2>
             <div class="hp-bar-container" id="boss-hp-ui">
                 <div class="hp-bar" id="player-hp-bar"></div>
-                <div class="hp-text" id="player-hp-text">ä½ çš„ HP: 100/100</div>
+                <div class="hp-text" id="player-hp-text">你的 HP: 100/100</div>
             </div>
-            <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 5px;" id="boss-progress-text">ç›®æ¨™ï¼šç´¯ç©ç­”å° 0 / 5</div>
+            <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 5px;" id="boss-progress-text">目標：累積答對 0 / 5</div>
             <div class="timer-bar-container">
                 <div class="timer-bar" id="boss-timer-bar"></div>
             </div>
-            <div class="question-text" id="boss-question">é¡Œç›®åŠ è¼‰ä¸­...</div>
+            <div class="question-text" id="boss-question">題目加載中...</div>
             <div class="word-bank" id="boss-options"></div>
             <div class="status-msg" id="boss-msg"></div>
             <div>
-                <button class="btn-green hidden" id="btn-next-boss-q" onclick="nextCombatQuestion()">âž¡ï¸ ä¸‹ä¸€é¡Œ</button>
-                <button class="btn-grey" id="btn-boss-flee" onclick="fleeCombat()">ðŸƒ é€ƒè·‘ (æŽ‰è½è³‡æº)</button>
+                <button class="btn-green hidden" id="btn-next-boss-q" onclick="nextCombatQuestion()">➡️ 下一題</button>
+                <button class="btn-grey" id="btn-boss-flee" onclick="fleeCombat()">🏃 逃跑 (掉落資源)</button>
             </div>
         </div>
 
     </div>
 
-    <div id="event-modal" class="hidden">
-        <div class="event-box" id="event-box-inner">
-            <h2 id="event-title">äº‹ä»¶</h2>
+    <div id="event-modal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; display:flex; justify-content:center; align-items:center;">
+        <div class="event-box" id="event-box-inner" style="background:#FFF; padding:30px; border-radius:15px; text-align:center; border:8px solid #4A148C; max-width: 85%; width: 450px;">
+            <h2 id="event-title">事件</h2>
             <p id="event-desc" style="font-size: 1.1em;"></p>
             <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 15px;" id="event-btn-group">
-                <button class="btn-red" id="btn-event-fight">âš”ï¸ æ‡‰æˆ° (-1 ðŸŒŸ)</button>
-                <button class="btn-grey" id="btn-event-flee">ðŸƒ é€ƒè·‘</button>
+                <button class="btn-red" id="btn-event-fight">⚔️ 進入戰鬥</button>
+                <button class="btn-grey" id="btn-event-flee">🏃 逃跑</button>
             </div>
+        </div>
+    </div>
+
+    <div id="market-modal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; display:flex; justify-content:center; align-items:center;">
+        <div class="event-box market-modal-content" style="background:#FFF; padding:30px; border-radius:15px; text-align:center; max-width: 85%; width: 450px;">
+            <h2 style="color: #4CAF50;">🛒 秘密交易市場</h2>
+            <p>旅行商人帶來了稀有物品！</p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn-orange" onclick="buyItem('sword')">🗡️ 數碼合金劍 (祭壇連升2級) 💰 10 寶石</button>
+                <button class="btn-blue" onclick="buyItem('starpack')">🌟 星星大禮包 (+5 星星) 💰 20 木材</button>
+                <button class="btn-red" onclick="buyItem('scroll')">📜 傳說卷軸 (必遇傳說怪) 💰 50 石頭</button>
+            </div>
+            <button class="btn-grey" style="margin-top: 20px;" onclick="closeModal('market-modal')">❌ 離開</button>
+        </div>
+    </div>
+
+    <div id="gacha-modal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; display:flex; justify-content:center; align-items:center;">
+        <div class="event-box gacha-modal-content" style="background:#FFF; padding:30px; border-radius:15px; text-align:center; max-width: 85%; width: 450px;">
+            <h2 style="color: #FF9800;">🎰 幸運抽獎轉盤</h2>
+            <p style="font-weight: bold; color: #E65100;">每次消耗 1 顆 ⭐，最高可中 50 寶石！<br>(每日限 3 次，今日剩餘：<span id="gacha-chances">3</span>)</p>
+            <div id="gacha-result" style="font-size: 5em; margin: 20px; text-shadow: 0 0 10px #FFD700;">🎁</div>
+            <button class="btn-gold" onclick="rollGacha()">🎯 抽一次！</button>
+            <button class="btn-grey" onclick="closeModal('gacha-modal')">❌ 離開</button>
+        </div>
+    </div>
+
+    <div id="leaderboard-modal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; display:flex; justify-content:center; align-items:center;">
+        <div class="event-box lb-modal-content" style="background:#FFF; padding:30px; border-radius:15px; text-align:center; max-width: 85%; width: 450px;">
+            <h2 style="color: #2196F3;">🏆 本地最強勇者榜</h2>
+            <ul id="lb-list" class="lb-list"></ul>
+            <p style="font-size: 0.9em; color: #666; font-weight:bold; margin-top:15px;">輸入對手代碼發起挑戰！(贏取對手 5% 寶石)</p>
+            <input type="text" id="pvp-code" placeholder="例如: P4A01" style="padding: 10px; width: 60%; font-size:1.2em;">
+            <br>
+            <button class="btn-red" onclick="startPvP()">⚔️ 挑戰</button>
+            <button class="btn-grey" style="margin-top: 15px;" onclick="closeModal('leaderboard-modal')">❌ 離開</button>
         </div>
     </div>
 
     <script>
-        // ================== éŸ³æ•ˆèˆ‡å­˜æª”éµ ==================
-        const SAVE_KEY = 'roblox_p4_chi_combat_v7_ext'; 
+        // ================== 音效與存檔鍵 ==================
+        const SAVE_KEY = 'roblox_p4_chi_combat_v7_ext'; // ⚠️ 絕對不要更改這個字串，確保進度銜接！
         let audioCtx = null;
 
         function initAudio() {
@@ -320,236 +379,226 @@
             } catch(e) {}
         }
 
-        // ================== é¡Œåº«èˆ‡è¨­å®š ==================
+        // ================== 原有完整題庫 (不可刪減) ==================
         const fillTasks = [
-            { q: "åª½åª½çªç„¶æ”¶åˆ°å¤–ç¥–æ¯çš„æ¶ˆæ¯ï¼ŒåŒ†åŒ†ç•™ä¸‹ä¸€å¼µ ______ äº¤å¾…å®¶ä¸­äº‹å®œä¾¿å¤–å‡ºäº†ã€‚", ans: "ä¾¿æ¢", options: ["ä¾¿æ¢", "å ±ç´™", "é›œèªŒ", "èª²æœ¬"] },
-            { q: "ä»¥å‰çš„ç§‘æŠ€ä¸ç™¼é”ï¼Œäººå€‘çš„æºé€šå¤šä¾é  ______ ä½œåª’ä»‹ã€‚", ans: "æ›¸ä¿¡", options: ["æ›¸ä¿¡", "é£Ÿç‰©", "äº¤é€š", "å¤©æ°£"] },
-            { q: "å§å§çš„å©šç¦®åœ¨é¦¬çˆ¾ä»£å¤« ______ ï¼Œé‚£å…’çš„ç’°å¢ƒååˆ†å„ªç¾Žã€‚", ans: "èˆ‰è¡Œ", options: ["èˆ‰è¡Œ", "å–æ¶ˆ", "ç ´å£ž", "ç™¼ç¾"] },
-            { q: "ç¾ŽèŠ³æ·‹äº†ä¸€å¤©çš„é›¨ï¼Œçµæžœä»Šå¤©å¾—äº† ______ ã€‚", ans: "æ„Ÿå†’", options: ["æ„Ÿå†’", "è¿‘è¦–", "è›€ç‰™", "éª¨æŠ˜"] },
-            { q: "çˆºçˆºæœ€è¿‘æ‚£äº†æ„Ÿå†’ï¼Œé€™å¹¾å¤©é‚„ä¸åœåœ° ______ ï¼Œæ‰€ä»¥çˆ¸çˆ¸ä»Šæ—©å¸¶ä»–åŽ»çœ‹é†«ç”Ÿã€‚", ans: "å’³å—½", options: ["å’³å—½", "å¾®ç¬‘", "è·³èº", "ç¡è¦º"] },
-            { q: "å¼µä¼¯ä¼¯å­¸è­˜æ·µåšï¼Œå°äººå‹å–„æœ‰ç¦®ï¼Œæ˜¯æˆ‘æœ€ ______ çš„ä¸€ä½é•·è¼©ã€‚", ans: "å°Šæ•¬", options: ["å°Šæ•¬", "è¨ŽåŽ­", "å¿˜è¨˜", "å®³æ€•"] },
-            { q: "ä»Šå¤©è€å¸«é‚€è«‹æˆ‘ä»£è¡¨å­¸æ ¡åƒåŠ æ¼”è¬›æ¯”è³½ï¼Œä»–è«‹æˆ‘è€ƒæ…®ä¸€ä¸‹ï¼Œä½†è¦å„˜å¿«çµ¦ä»– ______ ã€‚", ans: "å›žè¦†", options: ["å›žè¦†", "æ‹’çµ•", "æ‰¹è©•", "å¿½ç•¥"] },
-            { q: "ç‚ºå……å¯¦è‡ªå·±ï¼Œä¸æƒ³ç™½ç™½æµªè²»å¯¶è²´çš„å…‰é™°ï¼Œæˆ‘ ______ åœ¨æš‘å‡æœŸé–“å ±è®€æ—¥æ–‡ç­å’Œé›»è…¦ç·¨ç¨‹ç­ã€‚", ans: "æ‰“ç®—", options: ["æ‰“ç®—", "æ”¾æ£„", "çŒœæ¸¬", "å¿˜è¨˜"] },
-            { q: "å› ç‚ºåœ°ç›¤çš„å·¥ä½œ ______ æ…¢äº†ï¼Œæ‰€ä»¥çˆ¸çˆ¸æœ€è¿‘æ¯å¤©éƒ½è¦åŠ ç­å·¥ä½œã€‚", ans: "é€²åº¦", options: ["é€²åº¦", "æ¸©åº¦", "é«˜åº¦", "é‡é‡"] },
-            { q: "é€™ä»¶äº‹æ˜¯æˆ‘åšéŒ¯äº†ï¼Œå¸Œæœ›ä½ èƒ½ ______ æˆ‘ã€‚", ans: "åŽŸè«’", options: ["åŽŸè«’", "è²¬å‚™", "å˜²ç¬‘", "æ‰“æ“¾"] },
-            { q: "æ²’æœ‰å¾—åˆ°ä¸»è¾¦å–®ä½çš„ ______ ï¼Œæˆ‘å€‘ä¸èƒ½éš¨æ„ç¿»å°ä»–å€‘çš„å®£å‚³å“çš„ã€‚", ans: "å‡†è¨±", options: ["å‡†è¨±", "ç¦æ­¢", "æ‹’çµ•", "åå°"] },
-            { q: "ç”±æ–¼èˆ’å©·å¸Œæœ›å°ˆå¿ƒå­¸æ¥­ï¼Œç¶“éŽå¤šç•ªè€ƒæ…®å’ŒæŽ™æ‰Žï¼Œå¥¹æ±ºå®š ______ æŽ’çƒéšŠã€‚", ans: "é€€å‡º", options: ["é€€å‡º", "åƒåŠ ", "çµ„ç¹”", "å¸¶é ˜"] },
-            { q: "åª½åª½å¿˜äº†ç¹³äº¤å…©æœŸé›»è²»ï¼Œæ‰€ä»¥é›»åŠ›å…¬å¸å¯„ä¾†æœ€å¾Œé€šçŸ¥å–®ï¼Œè«‹æˆ‘å€‘ ______ ç¹³äº¤æ¬¾é …ã€‚", ans: "å„˜å¿«", options: ["å„˜å¿«", "æ…¢æ…¢", "æ•…æ„", "çŒ¶è±«"] },
-            { q: "ç¶“éŽå¤šæœˆçš„æ²»ç™‚å’Œå®¶äººç´°å¿ƒçš„ç…§é¡§ï¼Œæ˜Žè¼å—å‚·çš„è†è“‹çµ‚æ–¼ ______ äº†ã€‚", ans: "åº·å¾©", options: ["åº·å¾©", "æƒ¡åŒ–", "ç™¼ç—…", "åŠ é‡"] },
-            { q: "å¤©æ–‡å°è¡¨ç¤ºï¼Œä»Šæ™šå‡Œæ™¨æœƒæ‡¸æŽ›å…«è™Ÿçƒˆé¢¨ä¿¡è™Ÿï¼Œæ‰€ä»¥ç¤¾å€ä¸­å¿ƒä¸‹åˆä»æœƒ ______ é–‹æ”¾ã€‚", ans: "ç…§å¸¸", options: ["ç…§å¸¸", "æš«åœ", "å»¶æœŸ", "å–æ¶ˆ"] },
-            { q: "è¶…å·¿é–€å¤–å¼µè²¼äº†é€šå‘Šï¼Œä¸Šé¢å¯«ç€ï¼šå¾ˆ ______ ï¼Œç¦®å“å·²æ›é ˜å®Œç•¢ï¼Œæ„Ÿè¬é–£ä¸‹çš„åƒèˆ‡ã€‚", ans: "æŠ±æ­‰", options: ["æŠ±æ­‰", "é«˜èˆˆ", "å¹¸é‹", "é©•å‚²"] },
-            { q: "å› çˆ²æ²’æœ‰å¥½å¥½çš„æ¶ˆæ¯’å’ŒåŒ…ç´¥ï¼Œçˆ¸çˆ¸ç‡™å‚·çš„å‚·å£ ______ äº†ã€‚", ans: "ç™¼ç‚Ž", options: ["ç™¼ç‚Ž", "çµç–¤", "å¾©åŽŸ", "æ¶ˆå¤±"] },
-            { q: "å·¥ä½œå¤šå¹´çš„æ ¡å·¥é™³å”å”é€€ä¼‘äº†ï¼Œæ ¡é•·ä»£è¡¨å¸«ç”Ÿå€‘ ______ æ„Ÿè¬ä»–ç‚ºå­¸æ ¡ä½œå‡ºçš„è²¢ç»ã€‚", ans: "è¡·å¿ƒ", options: ["è¡·å¿ƒ", "éš¨ä¾¿", "å‹‰å¼·", "å‡è£"] },
-            { q: "é€™å®¶é¤å»³ä¸ä½†è¡›ç”Ÿæƒ…æ³æƒ¡åŠ£ï¼Œé£¯èœä¸Šé‚„ç™¼ç¾æœ‰æ­»æŽ‰äº†çš„è’¼è …ï¼ŒçœŸæ˜¯ ______ äº†ï¼", ans: "ç³Ÿé€", options: ["ç³Ÿé€", "æ¥µä½³", "ç¾Žå‘³", "ä¹¾æ·¨"] },
-            { q: "ç•¶æˆ‘å€‘é–±è®€æ–‡ç« æ™‚ï¼Œä¸å¦¨é€éŽæ–‡ç« çš„é–‹é ­å’Œçµå°¾å¥å­ï¼Œæ­¸ç´å‡ºæ–‡ç« çš„ ______ ã€‚", ans: "ä¸»æ—¨", options: ["ä¸»æ—¨", "æ¨™é¡Œ", "ä½œè€…", "æ—¥æœŸ"] },
-            { q: "è‹¥ä¸æ˜¯åª½åª½ç´°å¿ƒçš„ç…§é¡§ï¼Œå¥¶å¥¶çš„ç—…å°±ä¸èƒ½é€™éº¼å¿«ä¾¿ ______ éŽä¾†ã€‚", ans: "å¥½è½‰", options: ["å¥½è½‰", "æƒ¡åŒ–", "åŠ é‡", "å‚³æŸ“"] },
-            { q: "ä¸»é¡Œæ¨‚åœ’è£çš„éŠæˆ²è¨­æ–½éƒ½æœ‰ ______ èˆ‡é«˜åº¦é™åˆ¶ï¼Œä»¥ç¢ºä¿éŠå®¢çš„å®‰å…¨ã€‚", ans: "å¹´é½¡", options: ["å¹´é½¡", "æ€§åˆ¥", "å­¸æ­·", "è²¡å¯Œ"] },
-            { q: "æ‰¿å”æ“æœ‰ç²—ç·çš„è²ç·šï¼Œé‚£èˆ‡ä»–æ¸©æŸ”çš„å¤–è¡¨ä¸¦ä¸ ______ ã€‚", ans: "ç›¸ç¨±", options: ["ç›¸ç¨±", "çŸ›ç›¾", "è¡çª", "ç›¸å"] },
-            { q: "ä»–åªæ˜¯è·Ÿä½ é–‹çŽ©ç¬‘ï¼Œä½  ______ é€™éº¼èªçœŸï¼Ÿ", ans: "ä½•å¿…", options: ["ä½•å¿…", "ä¸€å®š", "å¿…é ˆ", "è‚¯å®š"] },
-            { q: "è¦åœ¨é¦¬æ‹‰æ¾æ¯”è³½è„±ç©Žè€Œå‡ºï¼Œæœ€ ______ çš„ä¸æ˜¯è·‘æ­¥çš„é€Ÿåº¦ï¼Œè€Œæ˜¯å€‹äººçš„è€åŠ›å’Œæ¯…åŠ›ã€‚", ans: "è¦ç·Š", options: ["è¦ç·Š", "éš¨ä¾¿", "æ™®é€š", "æ¬¡è¦"] }
+            { q: "媽媽突然收到外祖母的消息，匆匆留下一張 ______ 交待家中事宜便外出了。", ans: "便條", options: ["便條", "報紙", "雜誌", "課本"] },
+            { q: "以前的科技不發達，人們的溝通多依靠 ______ 作媒介。", ans: "書信", options: ["書信", "食物", "交通", "天氣"] },
+            { q: "姐姐的婚禮在馬爾代夫 ______ ，那兒的環境十分優美。", ans: "舉行", options: ["舉行", "取消", "破壞", "發現"] },
+            { q: "美芳淋了一天的雨，結果今天得了 ______ 。", ans: "感冒", options: ["感冒", "近視", "蛀牙", "骨折"] },
+            { q: "爺爺最近患了感冒，這幾天還不停地 ______ ，所以爸爸今早帶他去看醫生。", ans: "咳嗽", options: ["咳嗽", "微笑", "跳躍", "睡覺"] },
+            { q: "張伯伯學識淵博，對人友善有禮，是我最 ______ 的一位長輩。", ans: "尊敬", options: ["尊敬", "討厭", "忘記", "害怕"] },
+            { q: "今天老師邀請我代表學校參加演講比賽，他請我考慮一下，但要儘快給他 ______ 。", ans: "回覆", options: ["回覆", "拒絕", "批評", "忽略"] },
+            { q: "為充實自己，不想白白浪費寶貴的光陰，我 ______ 在暑假期間報讀日文班和電腦編程班。", ans: "打算", options: ["打算", "放棄", "猜測", "忘記"] },
+            { q: "因為地盤的工作 ______ 慢了，所以爸爸最近每天都要加班工作。", ans: "進度", options: ["進度", "温度", "高度", "重量"] },
+            { q: "這件事是我做錯了，希望你能 ______ 我。", ans: "原諒", options: ["原諒", "責備", "嘲笑", "打擾"] },
+            { q: "沒有得到主辦單位的 ______ ，我們不能隨意翻印他們的宣傳品的。", ans: "准許", options: ["准許", "禁止", "拒絕", "反對"] },
+            { q: "由於舒婷希望專心學業，經過多番考慮和掙扎，她決定 ______ 排球隊。", ans: "退出", options: ["退出", "參加", "組織", "帶領"] },
+            { q: "媽媽忘了繳交兩期電費，所以電力公司寄來最後通知單，請我們 ______ 繳交款項。", ans: "儘快", options: ["儘快", "慢慢", "故意", "猶豫"] },
+            { q: "經過多月的治療和家人細心的照顧，明輝受傷的膝蓋終於 ______ 了。", ans: "康復", options: ["康復", "惡化", "發病", "加重"] },
+            { q: "天文台表示，今晚凌晨會懸掛八號烈風信號，所以社區中心下午仍會 ______ 開放。", ans: "照常", options: ["照常", "暫停", "延期", "取消"] },
+            { q: "超巿門外張貼了通告，上面寫着：很 ______ ，禮品已換領完畢，感謝閣下的參與。", ans: "抱歉", options: ["抱歉", "高興", "幸運", "驕傲"] },
+            { q: "因爲沒有好好的消毒和包紥，爸爸燙傷的傷口 ______ 了。", ans: "發炎", options: ["發炎", "結疤", "復原", "消失"] },
+            { q: "工作多年的校工陳叔叔退休了，校長代表師生們 ______ 感謝他為學校作出的貢獻。", ans: "衷心", options: ["衷心", "隨便", "勉強", "假裝"] },
+            { q: "這家餐廳不但衛生情況惡劣，飯菜上還發現有死掉了的蒼蠅，真是 ______ 了！", ans: "糟透", options: ["糟透", "極佳", "美味", "乾淨"] },
+            { q: "當我們閱讀文章時，不妨透過文章的開頭和結尾句子，歸納出文章的 ______ 。", ans: "主旨", options: ["主旨", "標題", "作者", "日期"] },
+            { q: "若不是媽媽細心的照顧，奶奶的病就不能這麼快便 ______ 過來。", ans: "好轉", options: ["好轉", "惡化", "加重", "傳染"] },
+            { q: "主題樂園裏的遊戲設施都有 ______ 與高度限制，以確保遊客的安全。", ans: "年齡", options: ["年齡", "性別", "學歷", "財富"] },
+            { q: "承協擁有粗獷的聲線，那與他温柔的外表並不 ______ 。", ans: "相稱", options: ["相稱", "矛盾", "衝突", "相反"] },
+            { q: "他只是跟你開玩笑，你 ______ 這麼認真？", ans: "何必", options: ["何必", "一定", "必須", "肯定"] },
+            { q: "要在馬拉松比賽脱穎而出，最 ______ 的不是跑步的速度，而是個人的耐力和毅力。", ans: "要緊", options: ["要緊", "隨便", "普通", "次要"] }
         ];
 
         const matchTasks = [
-            { q: "ç„¡è«–ä»»ä½•äººéƒ½è¦ ______ ç”Ÿå‘½ï¼Œå› ç‚ºç”Ÿå‘½æ˜¯ç„¡åƒ¹çš„ã€‚", ans: "æ„›æƒœ", options: ["æ„›æƒœ", "æµªè²»", "æ‹‹æ£„", "ç ´å£ž"] },
-            { q: "åƒèˆ‡ç¾©å·¥æ´»å‹•èƒ½è®“äººé«”æœƒåˆ°å–„è‰¯ã€ ______ åŠäº’åŠ©çš„ç²¾ç¥žã€‚", ans: "å‹æ„›", options: ["å‹æ„›", "è‡ªç§", "å†·æ¼ ", "å¦’å¿Œ"] },
-            { q: "å¼Ÿå¼Ÿä»Šå¤©é²äº†èµ·ç‰€ï¼Œæ‰€ä»¥ä»–é€£æ—©é¤ä¹Ÿä¸åƒï¼Œå°± ______ å‡ºé–€åŽ»äº†ã€‚", ans: "æ€¥å¿™", options: ["æ€¥å¿™", "æ‚ é–’", "ç·©æ…¢", "éŽ®å®š"] },
-            { q: "æƒ æ™¶æœ‰ä¸€é›™æ°´æ±ªæ±ªçš„å¤§çœ¼ç›ï¼Œé«˜æŒ‘æŒºæ‹”çš„é¼»æ¨‘å’Œä¸€æŠŠ ______ äº®éº—çš„ç§€é«®ï¼Œå¯ç®—æ˜¯ä¸€å€‹ç¾Žäººå…’ã€‚", ans: "çƒé»‘", options: ["çƒé»‘", "é›ªç™½", "é‡‘é»ƒ", "ç°æš—"] },
-            { q: "å”å”å¹´ç´€ä¸ç®—å¤§ï¼Œä½†å› ä»–è‡‰ä¸Šç•™äº† ______ çš„é¬å­ï¼Œçœ‹ä¸ŠåŽ»çµ¦äººæˆç†Ÿç©©é‡çš„æ„Ÿè¦ºã€‚", ans: "æ¿ƒå¯†", options: ["æ¿ƒå¯†", "ç¨€ç–", "å…‰ç¦¿", "ç¨€å°‘"] },
-            { q: "è€å¸«èª¬ï¼šã€Œä½ å€‘è¦è¶ç€ ______ çš„æ™‚å€™å¥½å¥½åŽ»åŠªåŠ›ï¼Œä¸è¦è™›åº¦å…‰é™°ã€‚ã€", ans: "é’æ˜¥", options: ["é’æ˜¥", "è¡°è€", "æ™šå¹´", "å¤è€"] },
-            { q: "ã€Œå¿«é»žåƒé£¯ï¼ã€æˆ‘å’Œå“¥å“¥ç¸½æ˜¯æ¨¡ä»¿ç€çˆ¸çˆ¸èª¬è©±çš„ ______ ä¾†é–‹çŽ©ç¬‘ã€‚", ans: "å£å»", options: ["å£å»", "å‹•ä½œ", "çœ¼ç¥ž", "æ­¥ä¼"] },
-            { q: "å¤œå¹•ä½Žåž‚ï¼Œåœ¨é€™äº”å…‰åè‰²çš„ä¸å¤œåŸŽè£ï¼Œé€£å¹¾é¡† ______ çš„æ˜Ÿæ˜Ÿä¹Ÿçœ‹ä¸åˆ°ã€‚", ans: "ç¨€ç–", options: ["ç¨€ç–", "å¯†é›œ", "æ“æ“ ", "ç„¡æ•¸"] },
-            { q: "è¡¨å¼Ÿè‡ªå¹¼åœ¨å¤–åœ‹é•·å¤§ï¼Œä»–é›–ç„¶æœƒèª¬å»£æ±è©±ï¼Œä½†ä¸æ™‚æœƒ ______ ç€è‹±èªžï¼Œå¤§å®¶ä¹Ÿä¸ä»¥ç‚ºç„¶ã€‚", ans: "å¤¾é›œ", options: ["å¤¾é›œ", "å–®ä¸€", "ç´”ç²¹", "åˆ†é–‹"] },
-            { q: "åª½åª½çš„è‡‰ä¸Šé›–ç„¶é•·äº†å¹¾æ¢ ______ ï¼Œä½†å¥¹ä¸¦ä¸ä»‹æ„ï¼Œå› ç‚ºå¥¹è¦ºå¾—é€™æ˜¯æ­²æœˆçš„ç—•è·¡ã€‚", ans: "çšºç´‹", options: ["çšºç´‹", "ç¬‘å®¹", "æ±—æ°´", "æ·šç—•"] },
-            { q: "è‹¥ä¸æ˜¯é …ç¾½ä½¿å‡ºã€Œ ______ ã€ä¹‹è¨ˆï¼Œç›¸ä¿¡é€™å ´æˆ°å½¹ä»–æœªå¿…èƒ½å¾—åˆ°å‹åˆ©ã€‚", ans: "ç ´é‡œæ²‰èˆŸ", options: ["ç ´é‡œæ²‰èˆŸ", "åŠé€”è€Œå»¢", "é€€é¿ä¸‰èˆ", "çŸ¥é›£è€Œé€€"] },
-            { q: "é™³ç¶“ç† ______ å¤§æ°£ï¼Œæ¸©æ–‡å„’é›…ï¼Œèˆ‰æ‰‹æŠ•è¶³è½è½å¤§æ–¹ï¼ŒåŒäº‹å€‘éƒ½å¾ˆå–œæ­¡ä»–ã€‚", ans: "ç«¯èŽŠ", options: ["ç«¯èŽŠ", "è¼•æµ®", "æ»‘ç¨½", "ç²—é­¯"] },
-            { q: "åª½åª½ä¸€é‚Šæ’«æ‘¸ç€å¦¹å¦¹çš„ ______ ï¼Œä¸€é‚ŠæŠ¹åŽ»å¥¹è‡‰ä¸Šçš„çœ¼æ·šï¼Œé‚„æ¸©æŸ”åœ°å®‰æ’«ç€å¥¹ã€‚", ans: "é¢é¾", options: ["é¢é¾", "æ‰‹æŽŒ", "èƒŒå½±", "è‚©è†€"] },
-            { q: "å°å¯¶å¯¶æœ‰ç€åœ“åœ“çš„çœ¼ç›ï¼Œé•·é•·çš„ ______ ï¼Œå¥½åƒä¸€å€‹ç²¾ç·»çš„æ´‹å¨ƒå¨ƒã€‚", ans: "ç«æ¯›", options: ["ç«æ¯›", "æŒ‡ç”²", "ç‰™é½’", "å˜´å”‡"] },
-            { q: "è–èª•ç¯€ï¼Œè¡—é“ä¸Šçš„ç‡ˆé£¾ ______ è€€çœ¼ï¼Œç¯€æ—¥æ°£æ°›æ¿ƒåŽšã€‚", ans: "é–ƒçˆ", options: ["é–ƒçˆ", "é»¯æ·¡", "ç†„æ»…", "æ¼†é»‘"] },
-            { q: "å“¥å“¥çœ‹æ›¸çœ‹å¾—å…¥äº†ç¥žï¼Œä¸€å‰¯ ______ çš„æ¨£å­ã€‚", ans: "æ´¥æ´¥æœ‰å‘³", options: ["æ´¥æ´¥æœ‰å‘³", "æ„çœ‰è‹¦è‡‰", "ç´¢ç„¶ç„¡å‘³", "ç„¡ç²¾æ‰“é‡‡"] },
-            { q: "è½äº†è€å¸«çš„è©³ç´°è§£é‡‹ï¼Œæˆ‘æ‰ ______ ï¼Œæ˜Žç™½é€™é“é¡Œçš„è§£æ³•ã€‚", ans: "æç„¶å¤§æ‚Ÿ", options: ["æç„¶å¤§æ‚Ÿ", "ç™¾æ€ä¸è§£", "åŸ·è¿·ä¸æ‚Ÿ", "åŠä¿¡åŠç–‘"] },
-            { q: "é­”è¡“å¸«çš„è¡¨æ¼”éžå¸¸ç²¾å½©ï¼Œè§€çœ¾å¸­ä¸ŠéŸ¿èµ·äº† ______ çš„æŽŒè²ã€‚", ans: "éœ‡è€³æ¬²è¾", options: ["éœ‡è€³æ¬²è¾", "é´‰é›€ç„¡è²", "æ‚„ç„¡è²æ¯", "ä½Žè²ç´°èªž"] },
-            { q: "ä¸‹èª²é˜è²ä¸€éŸ¿ï¼ŒåŒå­¸å€‘å°± ______ åœ°è·‘åˆ°æ“å ´çŽ©è€ã€‚", ans: "èˆˆé«˜é‡‡çƒˆ", options: ["èˆˆé«˜é‡‡çƒˆ", "åž‚é ­å–ªæ°£", "æ‚²ç—›æ¬²çµ•", "æ€’æ°£è¡è¡"] },
-            { q: "ä»–çš„æˆ¿é–“ç¸½æ˜¯æ”¶æ‹¾å¾— ______ ï¼Œä¸€å¡µä¸æŸ“ã€‚", ans: "äº•äº•æœ‰æ¢", options: ["äº•äº•æœ‰æ¢", "äº‚ä¸ƒå…«ç³Ÿ", "é›œäº‚ç„¡ç« ", "æ±å€’è¥¿æ­ª"] },
-            { q: "ä¸è¦ç¸½æƒ³ç€ä¸å‹žè€Œç²ï¼Œ ______ æ˜¯ä¸æœƒæœ‰çœŸæ­£æˆå°±çš„ã€‚", ans: "å®ˆæ ªå¾…å…”", options: ["å®ˆæ ªå¾…å…”", "å¥®ç™¼åœ–å¼·", "å­œå­œä¸å€¦", "ç²¾ç›Šæ±‚ç²¾"] },
-            { q: "å¼Ÿå¼Ÿ ______ åœ°æ‹†é–‹ç”Ÿæ—¥ç¦®ç‰©ï¼Œæƒ³çœ‹çœ‹è£é¢æ˜¯ç”šéº¼ã€‚", ans: "è¿«ä¸åŠå¾…", options: ["è¿«ä¸åŠå¾…", "æ…¢æ¢æ–¯ç†", "æ‹–æ³¥å¸¶æ°´", "çŒ¶è±«ä¸æ±º"] },
-            { q: "å°ŽéŠä¸€è·¯ä¸Š ______ åœ°ç‚ºæˆ‘å€‘ä»‹ç´¹ç•¶åœ°çš„æ­·å²æ•…äº‹ã€‚", ans: "æ»”æ»”ä¸çµ•", options: ["æ»”æ»”ä¸çµ•", "æ²‰é»˜å¯¡è¨€", "å•žå£ç„¡è¨€", "æ”¯æ”¯å¾å¾"] },
-            { q: "ç•¢æ¥­æ™‚ï¼ŒåŒå­¸å€‘éƒ½ ______ åœ°å‘è€å¸«é“åˆ¥ã€‚", ans: "ä¾ä¾ä¸æ¨", options: ["ä¾ä¾ä¸æ¨", "æšé•·è€ŒåŽ»", "è¿«ä¸åŠå¾…", "å†·é…·ç„¡æƒ…"] },
-            { q: "å¤œæ™šçš„æ£®æž—è£ ______ ï¼Œéœå¾—æœ‰äº›è®“äººå®³æ€•ã€‚", ans: "é´‰é›€ç„¡è²", options: ["é´‰é›€ç„¡è²", "äººè²é¼Žæ²¸", "åµåµé¬§é¬§", "å–§å›‚è”½å¤©"] }
+            { q: "無論任何人都要 ______ 生命，因為生命是無價的。", ans: "愛惜", options: ["愛惜", "浪費", "拋棄", "破壞"] },
+            { q: "參與義工活動能讓人體會到善良、 ______ 及互助的精神。", ans: "友愛", options: ["友愛", "自私", "冷漠", "妒忌"] },
+            { q: "弟弟今天遲了起牀，所以他連早餐也不吃，就 ______ 出門去了。", ans: "急忙", options: ["急忙", "悠閒", "緩慢", "鎮定"] },
+            { q: "惠晶有一雙水汪汪的大眼睛，高挑挺拔的鼻樑和一把 ______ 亮麗的秀髮，可算是一個美人兒。", ans: "烏黑", options: ["烏黑", "雪白", "金黃", "灰暗"] },
+            { q: "叔叔年紀不算大，但因他臉上留了 ______ 的鬍子，看上去給人成熟穩重的感覺。", ans: "濃密", options: ["濃密", "稀疏", "光禿", "稀少"] },
+            { q: "老師説：「你們要趁着 ______ 的時候好好去努力，不要虛度光陰。」", ans: "青春", options: ["青春", "衰老", "晚年", "古老"] },
+            { q: "「快點吃飯！」我和哥哥總是模仿着爸爸説話的 ______ 來開玩笑。", ans: "口吻", options: ["口吻", "動作", "眼神", "步伐"] },
+            { q: "夜幕低垂，在這五光十色的不夜城裏，連幾顆 ______ 的星星也看不到。", ans: "稀疏", options: ["稀疏", "密雜", "擁擠", "無數"] },
+            { q: "表弟自幼在外國長大，他雖然會説廣東話，但不時會 ______ 着英語，大家也不以為然。", ans: "夾雜", options: ["夾雜", "單一", "純粹", "分開"] },
+            { q: "媽媽的臉上雖然長了幾條 ______ ，但她並不介意，因為她覺得這是歲月的痕跡。", ans: "皺紋", options: ["皺紋", "笑容", "汗水", "淚痕"] },
+            { q: "若不是項羽使出「 ______ 」之計，相信這場戰役他未必能得到勝利。", ans: "破釜沉舟", options: ["破釜沉舟", "半途而廢", "退避三舍", "知難而退"] },
+            { q: "陳經理 ______ 大氣，温文儒雅，舉手投足落落大方，同事們都很喜歡他。", ans: "端莊", options: ["端莊", "輕浮", "滑稽", "粗魯"] },
+            { q: "媽媽一邊撫摸着妹妹的 ______ ，一邊抹去她臉上的眼淚，還温柔地安撫着她。", ans: "面龐", options: ["面龐", "手掌", "背影", "肩膀"] },
+            { q: "小寶寶有着圓圓的眼睛，長長的 ______ ，好像一個精緻的洋娃娃。", ans: "睫毛", options: ["睫毛", "指甲", "牙齒", "嘴唇"] },
+            { q: "聖誕節，街道上的燈飾 ______ 耀眼，節日氣氛濃厚。", ans: "閃爍", options: ["閃爍", "黯淡", "熄滅", "漆黑"] },
+            { q: "哥哥看書看得入了神，一副 ______ 的樣子。", ans: "津津有味", options: ["津津有味", "愁眉苦臉", "索然無味", "無精打采"] },
+            { q: "聽了老師的詳細解釋，我才 ______ ，明白這道題的解法。", ans: "恍然大悟", options: ["恍然大悟", "百思不解", "執迷不悟", "半信半疑"] },
+            { q: "魔術師的表演非常精彩，觀眾席上響起了 ______ 的掌聲。", ans: "震耳欲聾", options: ["震耳欲聾", "鴉雀無聲", "悄無聲息", "低聲細語"] },
+            { q: "下課鐘聲一響，同學們就 ______ 地跑到操場玩耍。", ans: "興高采烈", options: ["興高采烈", "垂頭喪氣", "悲痛欲絕", "怒氣衝衝"] },
+            { q: "他的房間總是收拾得 ______ ，一塵不染。", ans: "井井有條", options: ["井井有條", "亂七八糟", "雜亂無章", "東倒西歪"] },
+            { q: "不要總想着不勞而獲， ______ 是不會有真正成就的。", ans: "守株待兔", options: ["守株待兔", "奮發圖強", "孜孜不倦", "精益求精"] },
+            { q: "弟弟 ______ 地拆開生日禮物，想看看裏面是甚麼。", ans: "迫不及待", options: ["迫不及待", "慢條斯理", "拖泥帶水", "猶豫不決"] },
+            { q: "導遊一路上 ______ 地為我們介紹當地的歷史故事。", ans: "滔滔不絕", options: ["滔滔不絕", "沉默寡言", "啞口無言", "支支吾吾"] },
+            { q: "畢業時，同學們都 ______ 地向老師道別。", ans: "依依不捨", options: ["依依不捨", "揚長而去", "迫不及待", "冷酷無情"] },
+            { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧鬧", "喧囂蔽天"] }
         ];
 
         const connectTasks = [
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ ç§‘æŠ€ ã€‘______", ans: "ç™¼é”", options: ["ç™¼é”", "æ·µåš", "æµªè²»", "æƒ¡åŠ£"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ å­¸è­˜ ã€‘______", ans: "æ·µåš", options: ["æ·µåš", "ç™¼é”", "å¤§æ–¹", "ç©©é‡"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ ç™½ç™½ ã€‘______", ans: "æµªè²»", options: ["æµªè²»", "æ¶ˆè€—", "è™›åº¦", "èŠ±è²»"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ å°ˆå¿ƒ ã€‘______", ans: "å­¸æ¥­", options: ["å­¸æ¥­", "å®‰å…¨", "ä¸»æ—¨", "ç²¾ç¥ž"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ è¡›ç”Ÿ ã€‘______", ans: "æƒ¡åŠ£", options: ["æƒ¡åŠ£", "æ·µåš", "ç™¼é”", "ç©©é‡"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ æ­¸ç´ ã€‘______", ans: "ä¸»æ—¨", options: ["ä¸»æ—¨", "æ®µæ„", "çµè«–", "å¤§æ„"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ ç¢ºä¿ ã€‘______", ans: "å®‰å…¨", options: ["å®‰å…¨", "å®‰ç©©", "å®‰å¿ƒ", "å®‰å¯§"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ ç²—ç·çš„ ã€‘______", ans: "è²ç·š", options: ["è²ç·š", "å¿ƒæ€", "é¼»æ¨‘", "ç§€é«®"] }, 
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ æ¸©æŸ”çš„ ã€‘______", ans: "å¤–è¡¨", options: ["å¤–è¡¨", "è²ç·š", "é¼»æ¨‘", "æ´‹å¨ƒå¨ƒ"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ é«”æœƒåˆ° ã€‘______", ans: "å–„è‰¯", options: ["å–„è‰¯", "ç²¾ç¥ž", "ç—•è·¡", "æ°£æ°›"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ äº’åŠ©çš„ ã€‘______", ans: "ç²¾ç¥ž", options: ["ç²¾ç¥ž", "åŠ›é‡", "å–„è‰¯", "å…‰é™°"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ é«˜æŒ‘æŒºæ‹”çš„ ã€‘______", ans: "é¼»æ¨‘", options: ["é¼»æ¨‘", "ç§€é«®", "å¤–è¡¨", "è²ç·š"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ çƒé»‘äº®éº—çš„ ã€‘______", ans: "ç§€é«®", options: ["ç§€é«®", "é¼»æ¨‘", "å¤–è¡¨", "ç«æ¯›"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ æˆç†Ÿ ã€‘______", ans: "ç©©é‡", options: ["ç©©é‡", "å¤§æ–¹", "æ·µåš", "ç™¼é”"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ è™›åº¦ ã€‘______", ans: "å…‰é™°", options: ["å…‰é™°", "æ™‚é–“", "æ­²æœˆ", "é’æ˜¥"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ å¤œå¹• ã€‘______", ans: "ä½Žåž‚", options: ["ä½Žåž‚", "é™è‡¨", "é»‘å¤œ", "æ˜Ÿç©º"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ äº”å…‰ ã€‘______", ans: "åè‰²", options: ["åè‰²", "å…«é–€", "å››å°„", "åå½©"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ æ­²æœˆçš„ ã€‘______", ans: "ç—•è·¡", options: ["ç—•è·¡", "æ™‚å…‰", "å…‰é™°", "æµé€"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ èˆ‰æ‰‹ ã€‘______", ans: "æŠ•è¶³", options: ["æŠ•è¶³", "å¤§æ–¹", "å‹•è…³", "ç©©é‡"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ è½è½ ã€‘______", ans: "å¤§æ–¹", options: ["å¤§æ–¹", "ç©©é‡", "ç«¯èŽŠ", "é«”é¢"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ ç²¾ç·»çš„ ã€‘______", ans: "æ´‹å¨ƒå¨ƒ", options: ["æ´‹å¨ƒå¨ƒ", "å°å¯¶å¯¶", "ç§€é«®", "ç«æ¯›"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ ç¯€æ—¥ ã€‘______", ans: "æ°£æ°›", options: ["æ°£æ°›", "æ°›åœ", "æ…¶å…¸", "å¿«æ¨‚"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ é–ƒçˆ ã€‘______", ans: "è€€çœ¼", options: ["è€€çœ¼", "å…‰èŠ’", "æ˜Žäº®", "åˆºçœ¼"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ ç ´é‡œ ã€‘______", ans: "æ²‰èˆŸ", options: ["æ²‰èˆŸ", "æ²‰èˆ¹", "ä¸€æˆ°", "åˆ°åº•"] },
-            { q: "æ‰¾å‡ºæ­£ç¢ºçš„é…å°ï¼šã€ å‹å–„ ã€‘______", ans: "æœ‰ç¦®", options: ["æœ‰ç¦®", "å¤§æ–¹", "ç©©é‡", "ç†±æƒ…"] }
+            { q: "找出正確的配對：【 科技 】______", ans: "發達", options: ["發達", "淵博", "浪費", "惡劣"] },
+            { q: "找出正確的配對：【 學識 】______", ans: "淵博", options: ["淵博", "發達", "大方", "穩重"] },
+            { q: "找出正確的配對：【 白白 】______", ans: "浪費", options: ["浪費", "消耗", "虛度", "花費"] },
+            { q: "找出正確的配對：【 專心 】______", ans: "學業", options: ["學業", "安全", "主旨", "精神"] },
+            { q: "找出正確的配對：【 衛生 】______", ans: "惡劣", options: ["惡劣", "淵博", "發達", "穩重"] },
+            { q: "找出正確的配對：【 歸納 】______", ans: "主旨", options: ["主旨", "段意", "結論", "大意"] },
+            { q: "找出正確的配對：【 確保 】______", ans: "安全", options: ["安全", "安穩", "安心", "安寧"] },
+            { q: "找出正確的配對：【 粗獷的 】______", ans: "聲線", options: ["聲線", "心思", "鼻樑", "秀髮"] }, 
+            { q: "找出正確的配對：【 温柔的 】______", ans: "外表", options: ["外表", "聲線", "鼻樑", "洋娃娃"] },
+            { q: "找出正確的配對：【 體會到 】______", ans: "善良", options: ["善良", "精神", "痕跡", "氣氛"] },
+            { q: "找出正確的配對：【 互助的 】______", ans: "精神", options: ["精神", "力量", "善良", "光陰"] },
+            { q: "找出正確的配對：【 高挑挺拔的 】______", ans: "鼻樑", options: ["鼻樑", "秀髮", "外表", "聲線"] },
+            { q: "找出正確的配對：【 烏黑亮麗的 】______", ans: "秀髮", options: ["秀髮", "鼻樑", "外表", "睫毛"] },
+            { q: "找出正確的配對：【 成熟 】______", ans: "穩重", options: ["穩重", "大方", "淵博", "發達"] },
+            { q: "找出正確的配對：【 虛度 】______", ans: "光陰", options: ["光陰", "時間", "歲月", "青春"] },
+            { q: "找出正確的配對：【 夜幕 】______", ans: "低垂", options: ["低垂", "降臨", "黑夜", "星空"] },
+            { q: "找出正確的配對：【 五光 】______", ans: "十色", options: ["十色", "八門", "四射", "十彩"] },
+            { q: "找出正確的配對：【 歲月的 】______", ans: "痕跡", options: ["痕跡", "時光", "光陰", "流逝"] },
+            { q: "找出正確的配對：【 舉手 】______", ans: "投足", options: ["投足", "大方", "動腳", "穩重"] },
+            { q: "找出正確的配對：【 落落 】______", ans: "大方", options: ["大方", "穩重", "端莊", "體面"] },
+            { q: "找出正確的配對：【 精緻的 】______", ans: "洋娃娃", options: ["洋娃娃", "小寶寶", "秀髮", "睫毛"] },
+            { q: "找出正確的配對：【 節日 】______", ans: "氣氛", options: ["氣氛", "氛圍", "慶典", "快樂"] },
+            { q: "找出正確的配對：【 閃爍 】______", ans: "耀眼", options: ["耀眼", "光芒", "明亮", "刺眼"] },
+            { q: "找出正確的配對：【 破釜 】______", ans: "沉舟", options: ["沉舟", "沉船", "一戰", "到底"] },
+            { q: "找出正確的配對：【 友善 】______", ans: "有禮", options: ["有禮", "大方", "穩重", "熱情"] }
         ];
 
         const punctTasks = [
-            { q: "å¤¾å¨ƒå¨ƒåº—è·å“¡èª¬ ___ã€Œä½ åªå‰©ä¸‹æœ€å¾Œä¸€æ¬¡æ©Ÿæœƒï¼Œè¦å¥½å¥½æŠŠæ¡å•Šï¼ã€", ans: "ï¼š", options: ["ï¼š", "ï¼Œ", "ã€‚", "ï¼›"] },
-            { q: "å¤¾å¨ƒå¨ƒåº—è·å“¡èª¬ï¼šã€Œä½ åªå‰©ä¸‹æœ€å¾Œä¸€æ¬¡æ©Ÿæœƒï¼Œè¦å¥½å¥½æŠŠæ¡å•Š ___ ã€", ans: "ï¼", options: ["ï¼", "ã€‚", "ï¼Ÿ", "ï¼Œ"] },
-            { q: "ã€Œæ»´ç­” ___ æ»´ç­”â€¦â€¦ã€æ‰­ä¸ç·Šçš„æ°´é¾é ­ä¸æ™‚å¾€ä¸‹æ»´ã€‚", ans: "ã€", options: ["ã€", "â€”â€”", "ï¼Œ", "ã€‚"] },
-            { q: "é€™é³¥å…’èº«ä¸Šçš„ç¾½æ¯›å…¨ç™½ï¼Œé³¥å–™å½¢ç‹€ç¨ç‰¹ ___ å°±åƒçµç¶ä¼¼çš„ã€‚", ans: "ï¼Œ", options: ["ï¼Œ", "ã€", "ã€‚", "ï¼›"] },
-            { q: "ç‰ å€‘ä¸¦ä¸æ˜¯æ™®é€šçš„é³¥å…’ï¼Œè€Œæ˜¯ä¸€ç¨®çç¨€çš„å‹•ç‰© ___ é»‘è‡‰çµé·ºã€‚", ans: "â”€â”€", options: ["â”€â”€", "â€¦â€¦", "ï¼š", "ã€‚"] },
-            { q: "ç•¶é¢å°å›°é›£å’Œå£“åŠ›çš„æ™‚å€™ï¼Œæˆ‘å€‘æ‡‰è©²è¦å¦‚ä½•è™•ç†å‘¢ ___", ans: "ï¼Ÿ", options: ["ï¼Ÿ", "ï¼", "ã€‚", "â€¦â€¦"] },
-            { q: "ç…å­å±±ä¸Šçš„æœ›å¤«çŸ³æ˜¯é¦™æ¸¯æ²™ç”°å€è‘—åçš„åœ°æ¨™ ___", ans: "ã€‚", options: ["ã€‚", "ï¼", "ï¼Œ", "ï¼›"] },
-            { q: "æ“šèª¬æœ›å¤«çŸ³èƒŒå¾Œæœ‰ä¸€å€‹æ·’ç¾Žçš„æ•…äº‹ ___ ä¸€ä½å¥³å­çš„ä¸ˆå¤«å‡ºæµ·å·¥ä½œï¼Œä½†æ­¸æœŸæœªå®šã€‚", ans: "ï¼š", options: ["ï¼š", "ï¼Œ", "ã€‚", "ï¼›"] },
-            { q: "äººå€‘åœ¨è©²åœ°æ–¹ç™¼ç¾äº†ä¸€å¡Šå·¨çŸ³ï¼Œå› è€Œå‘½åç‚º ___ æœ›å¤«çŸ³ã€ã€‚", ans: "ã€Œ", options: ["ã€Œ", "ã€Ž", "ã€Š", "ã€ˆ"] },
-            { q: "æ¢…èŠ±ä¸€ç›´å—åˆ°ä¸­åœ‹æ–‡äººé›…å£«çš„å–œæ„› ___", ans: "ã€‚", options: ["ã€‚", "ï¼", "ï¼Œ", "ï¼›"] },
-            { q: "è©©æ­Œå¦‚ã€Œä¸ç¶“ä¸€ç•ªå¯’å¾¹éª¨ï¼Œæ€Žå¾—æ¢…èŠ±æ’²é¼»é¦™ã€ ___ ã€Œå¤©å‘æ¢…æ¢¢åˆ¥å‡ºå¥‡ï¼Œåœ‹é¦™æœªè¨±ä¸–äººçŸ¥ã€ç­‰ã€‚", ans: "ã€", options: ["ã€", "ï¼Œ", "ï¼›", "ã€‚"] },
-            { q: "ç‚ºç”šéº¼æ¢…èŠ±æœƒå¾—åˆ°æ–‡äººé›…å£«çš„å–œæ­¡ ___", ans: "ï¼Ÿ", options: ["ï¼Ÿ", "ï¼", "ã€‚", "â€¦â€¦"] },
-            { q: " ___ äºŒåå››å­ã€‹æ˜¯ä¸€æœ¬æ”¶éŒ„äº†å‚³çµ±æ°‘é–“æ•…äº‹çš„æ›¸ç±ã€‚", ans: "ã€Š", options: ["ã€Š", "ã€ˆ", "ã€Œ", "ã€Ž"] },
-            { q: "ä½ èªå¾—æ–¹ä½å—Ž ___", ans: "ï¼Ÿ", options: ["ï¼Ÿ", "ï¼", "ã€‚", "â€¦â€¦"] },
-            { q: "æœ€åŸºæœ¬å››å¤§æ–¹ä½æ˜¯æ± ___ å—ã€è¥¿ã€åŒ—ã€‚", ans: "ã€", options: ["ã€", "ï¼Œ", "ï¼›", "ã€‚"] },
-            { q: "è‡ªç„¶æ™¯è²Œï¼Œå¦‚ ___ é«˜å±±ã€å³½è°·ã€æµ·æ´‹ç­‰ã€‚", ans: "ï¼š", options: ["ï¼š", "ï¼Œ", "ã€‚", "ï¼›"] },
-            { q: "é¾çœ¼ç››ç”¢æ–¼è¶Šå—ã€å°å°¼åŠä¸­åœ‹å»£æ± ___ ç¦å»ºç­‰å—æ–¹åœ°å€ã€‚", ans: "ã€", options: ["ã€", "ï¼Œ", "ï¼›", "ã€‚"] },
-            { q: "ä»–å€‘é›£éœå¿ƒåšä¸€äº›éœæ…‹çš„æ´»å‹• ___ å¦‚çœ‹æ›¸ã€å¯«å­—ç­‰ã€‚", ans: "ï¼Œ", options: ["ï¼Œ", "ã€", "ã€‚", "ï¼›"] },
-            { q: "åª½åª½èª¬ ___ã€Œç™¼èŠ½çš„è’œé ­æœ¬ä¾†å°±ä¸å¤ªæœƒç”¨ä¾†é£Ÿç”¨ã€‚ã€", ans: "ï¼š", options: ["ï¼š", "ï¼Œ", "ã€‚", "ï¼›"] },
-            { q: "ç„¡è«–æ˜¯å’•åš•è‚‰ã€èŒ„æ±è¦ ___ æ±å¡è‚‰ï¼Œéƒ½å¾ˆç¾Žå‘³ã€‚", ans: "ã€", options: ["ã€", "ï¼Œ", "ï¼›", "ã€‚"] },
-            { q: "ã€Œå®å’š ___ å®å’šâ”€â”€ã€é–€éˆ´éŸ¿èµ·ä¾†ï¼Œæ˜¯åª½åª½å›žä¾†äº†å—Žï¼Ÿ", ans: "ã€", options: ["ã€", "â€¦â€¦", "ï¼š", "ã€‚"] },
-            { q: "ä¸€å€‹ç†ç€å°å¹³é ­çš„å°ç”·å­© ___ æˆ‘çš„å¼Ÿå¼Ÿå“è³¢ï¼Œæ­£åœ¨æœ—èª¦è©©æ­Œã€‚", ans: "â”€â”€", options: ["â”€â”€", "â€¦â€¦", "ï¼š", "ã€‚"] },
-            { q: "æ­£åœ¨æœ—èª¦è‡§å…‹å®¶çš„è©©æ­Œã€Šå°‘å¹´ ___ ã€‚", ans: "ã€‹", options: ["ã€‹", "ã€‰", "ã€", "ã€"] },
-            { q: "é€™æ˜¯ä¸€ä½æ”å½±è¨˜è€…å‡±æ–‡ ___ å¡ç‰¹æ‹æ”çš„æ–°èžåœ–ç‰‡ã€‚", ans: "Â·", options: ["Â·", "ã€", "ï¼Œ", "ã€‚"] },
-            { q: "æˆ‘å€‘æš‘å‡æœƒéŠè¦½è¢«è­½ç‚ºä¸–å¤–æ¡ƒæºçš„åœ°æ–¹ ___ é¦¬çˆ¾ä»£å¤«ã€‚", ans: "â”€â”€", options: ["â”€â”€", "â€¦â€¦", "ï¼š", "ã€‚"] }
+            { q: "夾娃娃店職員説 ___「你只剩下最後一次機會，要好好把握啊！」", ans: "：", options: ["：", "，", "。", "；"] },
+            { q: "夾娃娃店職員説：「你只剩下最後一次機會，要好好把握啊 ___ 」", ans: "！", options: ["！", "。", "？", "，"] },
+            { q: "「滴答 ___ 滴答……」扭不緊的水龍頭不時往下滴。", ans: "、", options: ["、", "——", "，", "。"] },
+            { q: "這鳥兒身上的羽毛全白，鳥喙形狀獨特 ___ 就像琵琶似的。", ans: "，", options: ["，", "、", "。", "；"] },
+            { q: "牠們並不是普通的鳥兒，而是一種珍稀的動物 ___ 黑臉琵鷺。", ans: "──", options: ["──", "……", "：", "。"] },
+            { q: "當面對困難和壓力的時候，我們應該要如何處理呢 ___", ans: "？", options: ["？", "！", "。", "……"] },
+            { q: "獅子山上的望夫石是香港沙田區著名的地標 ___", ans: "。", options: ["。", "！", "，", "；"] },
+            { q: "據説望夫石背後有一個淒美的故事 ___ 一位女子的丈夫出海工作，但歸期未定。", ans: "：", options: ["：", "，", "。", "；"] },
+            { q: "人們在該地方發現了一塊巨石，因而命名為 ___ 望夫石」。", ans: "「", options: ["「", "『", "《", "〈"] },
+            { q: "梅花一直受到中國文人雅士的喜愛 ___", ans: "。", options: ["。", "！", "，", "；"] },
+            { q: "詩歌如「不經一番寒徹骨，怎得梅花撲鼻香」 ___ 「天向梅梢別出奇，國香未許世人知」等。", ans: "、", options: ["、", "，", "；", "。"] },
+            { q: "為甚麼梅花會得到文人雅士的喜歡 ___", ans: "？", options: ["？", "！", "。", "……"] },
+            { q: " ___ 二十四孝》是一本收錄了傳統民間故事的書籍。", ans: "《", options: ["《", "〈", "「", "『"] },
+            { q: "你認得方位嗎 ___", ans: "？", options: ["？", "！", "。", "……"] },
+            { q: "最基本四大方位是東 ___ 南、西、北。", ans: "、", options: ["、", "，", "；", "。"] },
+            { q: "自然景貌，如 ___ 高山、峽谷、海洋等。", ans: "：", options: ["：", "，", "。", "；"] },
+            { q: "龍眼盛產於越南、印尼及中國廣東 ___ 福建等南方地區。", ans: "、", options: ["、", "，", "；", "。"] },
+            { q: "他們難靜心做一些靜態的活動 ___ 如看書、寫字等。", ans: "，", options: ["，", "、", "。", "；"] },
+            { q: "媽媽説 ___「發芽的蒜頭本來就不太會用來食用。」", ans: "：", options: ["：", "，", "。", "；"] },
+            { q: "無論是咕嚕肉、茄汁蝦 ___ 東坡肉，都很美味。", ans: "、", options: ["、", "，", "；", "。"] },
+            { q: "「叮咚 ___ 叮咚──」門鈴響起來，是媽媽回來了嗎？", ans: "、", options: ["、", "……", "：", "。"] },
+            { q: "一個理着小平頭的小男孩 ___ 我的弟弟卓賢，正在朗誦詩歌。", ans: "──", options: ["──", "……", "：", "。"] },
+            { q: "正在朗誦臧克家的詩歌《少年 ___ 。", ans: "》", options: ["》", "〉", "」", "』"] },
+            { q: "這是一位攝影記者凱文 ___ 卡特拍攝的新聞圖片。", ans: "·", options: ["·", "、", "，", "。"] },
+            { q: "我們暑假會遊覽被譽為世外桃源的地方 ___ 馬爾代夫。", ans: "──", options: ["──", "……", "：", "。"] }
         ];
 
-        // ===== é‡çµ„å¥å­æ›´æ–°ç‚ºæœ€æ–°ä¿®è¨‚ç‰ˆ =====
+        // ===== 修復版重組句子 =====
         const reorderTasks = [
-            ["å› ç‚º", "å¼Ÿå¼Ÿ", "ä¸Šèª²æ™‚", "æ²’æœ‰è¨˜ä½", "è€å¸«çš„æé†’", "ï¼Œ", "æ‰€ä»¥", "è€ƒè©¦æ™‚", "ç­”éŒ¯é¡Œç›®", "ã€‚"],
-            ["å› ç‚º", "å’–å•¡è±†", "å«æœ‰å’–å•¡å› ", "ï¼Œ", "æ‰€ä»¥", "é£²ç”¨å¤§é‡å’–å•¡", "æœƒå¼•è‡´", "å¿ƒæ‚¸", "ã€", "å¤±çœ ç­‰ç—‡ç‹€", "ã€‚"],
-            ["å¼Ÿå¼Ÿ", "æžä¸æ‡‚", "é€™é“é¡Œ", "å¦‚ä½•è¨ˆç®—", "ï¼Œ", "æ‰€ä»¥", "è¢«è€å¸«", "ç•™ä¸‹ä¾†è£œèª²", "ã€‚"],
-            ["å› ç‚º", "çˆ¸çˆ¸æ˜Žå¤©", "è¦å›žå…¬å¸å·¥ä½œ", "ï¼Œ", "æˆ‘å€‘çš„", "ä¸»é¡Œå…¬åœ’ä¸€å¤©éŠ", "è¦", "è¢«é€¼å–æ¶ˆäº†", "ã€‚"],
-            ["ç”±æ–¼", "å“¥å“¥", "æƒ³æ‰“ç ´", "ä¸€ç™¾ç±³çŸ­è·‘çš„ç´€éŒ„", "ï¼Œ", "æ‰€ä»¥", "ä»–æœ€è¿‘", "åŠ å¼·ç·´ç¿’", "ã€‚"],
-            ["æ”¿åºœ", "ç‚ºäº†", "é€²ä¸€æ­¥", "æ¸›è¼•", "å †å¡«å€çš„å£“åŠ›", "ï¼Œ", "æ‰€ä»¥æŽ¨è¡Œ", "å›ºé«”å»¢ç‰©æ”¶è²»è¨ˆåŠƒ", "ã€‚"],
-            ["å·¿æ°‘", "çŸ¥é“ä»Šå¤©æ™šä¸Š", "æœƒæ‡¸æŽ›", "å…«è™Ÿçƒˆé¢¨ä¿¡è™Ÿ", "ï¼Œ", "æ–¼æ˜¯", "çˆ­ç›¸åˆ°è¶…å·¿", "è³¼è²·ç³§é£Ÿ", "ã€‚"],
-            ["ä»–", "ç•¶ç¾©å·¥", "ä¸æ˜¯è¦ç²å¾—", "å¤§å®¶çš„ç¨±è¨±", "ï¼Œ", "è€Œæ˜¯æƒ³", "å¹«åŠ©", "æœ‰éœ€è¦çš„äºº", "ã€‚"],
-            ["ç”±æ–¼", "å¤©æ°£å½±éŸ¿", "ï¼Œ", "æ‰€ä»¥", "æ˜Žå¤©çš„é™¸é‹æœƒ", "è¦", "å»¶æœŸèˆ‰è¡Œ", "ã€‚"],
-            ["æ„å¤§åˆ©äºº", "è£½ä½œè–„é¤…æ™‚", "ä¸æœƒä½¿ç”¨è è˜¿", "ï¼Œ", "è€Œæ˜¯ä»¥", "ç•ªèŒ„", "å’Œ", "ç¾…å‹’è‘‰", "ä½œææ–™çš„", "ã€‚"],
-            ["ç”±æ–¼", "æ¸¯éµå·²å‘ŠçŸ¥", "è§€å¡˜ç·š", "å‡ºç¾æ•…éšœ", "ï¼Œ", "çˆ¸çˆ¸æ–¼æ˜¯", "ææ—©å‡ºé–€ä¸Šç­", "ã€‚"],
-            ["éŠ€è¡Œè·å“¡", "ä¸æœƒ", "å‘å®¢æˆ¶", "è©¢å•éŠ€è¡Œå¡çš„å¯†ç¢¼", "ï¼Œ", "è€Œæ˜¯æœƒ", "è©¢å•å€‹äººè³‡æ–™", "ä»¥æ ¸å¯¦èº«ä»½", "ã€‚"],
-            ["å¦‚æžœ", "ä½ å› ç‚º", "è²ªå°ä¾¿å®œ", "è€Œ", "æä¾›è³‡æ–™çµ¦é™Œç”Ÿäºº", "ï¼Œ", "å°‡æœƒ", "å› å°å¤±å¤§", "ã€‚"],
-            ["å› ç‚º", "æˆ‘çŸ¥é“", "ä½ å–œæ­¡é…¸èœé­š", "ï¼Œ", "æ‰è²·å›žä¾†", "çµ¦ä½ åƒ", "ã€‚"],
-            ["å¦‚æžœ", "ä½ ç¹¼çºŒ", "åƒé«˜è„‚è‚ªçš„é£Ÿç‰©", "ï¼Œ", "å°‡æœ‰æ©Ÿæœƒ", "æ‚£å¿ƒè‡Ÿç—…", "ã€‚"],
-            ["å› ç‚º", "çˆ¶æ¯æ‚‰å¿ƒçš„æ ½åŸ¹", "ï¼Œ", "æˆ‘æ‰å¯ä»¥", "æˆåŠŸå…¥è®€", "é€™æ‰€", "éŸ³æ¨‚å­¸é™¢", "ã€‚"],
-            ["å¦‚æžœ", "ä½ ç¹¼çºŒ", "ä¸ç¯€åˆ¶åœ°é£²é£Ÿ", "ï¼Œ", "ä½ çš„èº«é«”", "å°‡æœƒ", "å‡ºç¾", "å¾ˆå¤§çš„å•é¡Œ", "ã€‚"],
-            ["å› ç‚º", "ä½ æ€§æ ¼å›ºåŸ·", "ï¼Œ", "ä¸è‚¯", "è¼•æ˜“å—äººå¹«åŠ©", "ï¼Œ", "æˆ‘æ‰æœƒæ±ºå®š", "æš—ä¸­å¹«åŠ©ä½ ", "ã€‚"],
-            ["çˆ¶è¦ªçš„æ„›", "åƒ", "å†¬æ—¥çš„å¤ªé™½", "ï¼Œ", "å¾®å¾®", "æ¸©æš–", "æˆ‘å’Œåª½åª½çš„å¿ƒ", "ã€‚"],
-            ["å¸å¦å¾Œçš„å¥¹", "ä¸åƒ", "å¹³æ™‚çœ‹åˆ°èˆ¬", "ç¾Žè±”å‹•äºº", "ï¼Œ", "è€Œåƒ", "ä¸€å€‹é„°å®¶å¥³å­©èˆ¬", "æ¨¸ç´ ", "ã€‚"],
-            ["é€™å®¶å¿«é¤åº—", "å”®è³£çš„é£Ÿç‰©", "ä¸åƒ", "å…¶ä»–å¿«é¤åº—", "ï¼Œ", "è€Œæ˜¯", "å”®è³£", "ç‰¹åˆ¥çš„", "ä¸‰æ–‡æ²»", "ã€‚"],
-            ["çˆ¸çˆ¸ä¸åƒ", "ä¸€äº›", "åªæœƒæººæ„›å­©å­çš„çˆ¶æ¯", "ï¼Œ", "è€Œæ˜¯", "é©ç•¶çš„", "ç®¡æ•™ä»–å€‘", "ã€‚"],
-            ["æˆ‘å€‘", "å‡Œæ™¨æ™‚åˆ†", "ä¾¿ä¹˜æ—…éŠè»Š", "ä¸Šå¤ªå¹³å±±", "ï¼Œ", "æ‰€ä»¥", "è¶•å¾—åŠ", "çœ‹åˆ°", "ç¾Žéº—çš„æ—¥å‡º", "ã€‚"],
-            ["å› ç‚º", "è‡¨è¿‘è€ƒè©¦", "ï¼Œ", "æ‰€ä»¥", "å„é¡ž", "èª²å¤–æ´»å‹•", "æœƒæš«åœ", "ç›´è‡³", "è€ƒè©¦çµæŸ", "ã€‚"],
-            ["å°æ˜Ž", "ç™¼ç¾è‡ªå·±", "æœ€è¿‘çš„", "æˆç¸¾é€€æ­¥äº†", "ï¼Œ", "æ–¼æ˜¯", "é‡æ–°åˆ¶å®šäº†", "æº«ç¿’å’Œ", "ä½œæ¯æ™‚é–“è¡¨", "ã€‚"]
+            ["因為", "弟弟", "上課時", "沒有記住", "老師的提醒", "，", "所以", "考試時", "答錯題目", "。"],
+            ["因為", "咖啡豆", "含有咖啡因", "，", "所以", "飲用大量咖啡", "會引致", "心悸", "、", "失眠等症狀", "。"],
+            ["弟弟", "搞不懂", "這道題", "如何計算", "，", "所以", "被老師", "留下來補課", "。"],
+            ["因為", "爸爸明天", "要回公司工作", "，", "我們的", "主題公園一天遊", "要", "被逼取消了", "。"],
+            ["由於", "哥哥", "想打破", "一百米短跑的紀錄", "，", "所以", "他最近", "加強練習", "。"],
+            ["政府", "為了", "進一步", "減輕", "堆填區的壓力", "，", "所以推行", "固體廢物收費計劃", "。"],
+            ["巿民", "知道今天晚上", "會懸掛", "八號烈風信號", "，", "於是", "爭相到超巿", "購買糧食", "。"],
+            ["他", "當義工", "不是要獲得", "大家的稱許", "，", "而是想", "幫助", "有需要的人", "。"],
+            ["由於", "天氣影響", "，", "所以", "明天的陸運會", "要", "延期舉行", "。"],
+            ["意大利人", "製作薄餅時", "不會使用菠蘿", "，", "而是以", "番茄", "和", "羅勒葉", "作材料的", "。"],
+            ["由於", "港鐵已告知", "觀塘線", "出現故障", "，", "爸爸於是", "提早出門上班", "。"],
+            ["銀行職員", "不會", "向客戶", "詢問銀行卡的密碼", "，", "而是會", "詢問個人資料", "以核實身份", "。"],
+            ["如果", "你因為", "貪小便宜", "而", "提供資料給陌生人", "，", "將會", "因小失大", "。"],
+            ["因為", "我知道", "你喜歡酸菜魚", "，", "才買回來", "給你吃", "。"],
+            ["如果", "你繼續", "吃高脂肪的食物", "，", "將有機會", "患心臟病", "。"],
+            ["因為", "父母悉心的栽培", "，", "我才可以", "成功入讀", "這所", "音樂學院", "。"],
+            ["如果", "你繼續", "不節制地飲食", "，", "你的身體", "將會", "出現", "很大的問題", "。"],
+            ["因為", "你性格固執", "，", "不肯", "輕易受人幫助", "，", "我才會決定", "暗中幫助你", "。"],
+            ["父親的愛", "像", "冬日的太陽", "，", "微微", "温暖", "我和媽媽的心", "。"],
+            ["卸妝後的她", "不像", "平時看到般", "美豔動人", "，", "而像", "一個鄰家女孩般", "樸素", "。"],
+            ["這家快餐店", "售賣的食物", "不像", "其他快餐店", "，", "而是", "售賣", "特別的", "三文治", "。"],
+            ["爸爸不像", "一些", "只會溺愛孩子的父母", "，", "而是", "適當的", "管教他們", "。"],
+            ["我們", "凌晨時分", "便乘旅遊車", "上太平山", "，", "所以", "趕得及", "看到", "美麗的日出", "。"],
+            ["因為", "臨近考試", "，", "所以", "各類", "課外活動", "會暫停", "直至", "考試結束", "。"],
+            ["小明", "發現自己", "最近的", "成績退步了", "，", "於是", "重新制定了", "溫習和", "作息時間表", "。"]
         ];
 
-        // ================== FAæº«ç¿’ å°ˆå±¬é¡Œåº« ==================
+        // ===== FA溫習 (包含新增12題) =====
         const faMCTasks = [
-            { q: "é†«ç”Ÿèªªåªè¦æˆ‘æŒ‰æ™‚æœè—¥ï¼Œå¤šä¼‘æ¯ï¼Œèº«é«”å¾ˆå¿«å°±èƒ½ ______ã€‚", ans: "åº·å¾©", options: ["åº·å¾©", "å‡†è¨±", "é€€å‡º", "ç”Ÿæ•ˆ"] },
-            { q: "å¾—åˆ°æ ¡é•·çš„ ______ï¼Œæˆ‘å€‘çµ‚æ–¼å¯ä»¥åœ¨è‰åœ°ä¸Šé‡Žé¤äº†ã€‚", ans: "å‡†è¨±", options: ["å‡†è¨±", "æ”¯æŒ", "å®£ä½ˆ", "é›†åˆ"] },
-            { q: "å› ç‚ºè…³å‚·æœªç™’ï¼Œä»–åªèƒ½ç„¡å¥ˆåœ° ______ é€™å ´è¶³çƒæ¯”è³½ã€‚", ans: "é€€å‡º", options: ["é€€å‡º", "æ”¯æŒ", "åº·å¾©", "é›†åˆ"] },
-            { q: "ç„¡è«–ä½ åšç”šéº¼æ±ºå®šï¼Œä½œç‚ºä½ çš„å¥½æœ‹å‹ï¼Œæˆ‘éƒ½æœƒå…¨åŠ› ______ ä½ ã€‚", ans: "æ”¯æŒ", options: ["æ”¯æŒ", "å‡†è¨±", "å®£ä½ˆ", "é¬¥å¿—"] },
-            { q: "é›–ç„¶è½å¾Œäº†å…©çƒï¼Œä½†éšŠå“¡å€‘ä¾ç„¶ä¿æŒé«˜æ˜‚çš„ ______ï¼Œæ²’æœ‰æ”¾æ£„ã€‚", ans: "é¬¥å¿—", options: ["é¬¥å¿—", "å‹‡æ°£", "å¿ƒæƒ…", "ç²¾ç¥ž"] },
-            { q: "è€å¸«å®£ä½ˆï¼Œæ–°çš„åœ–æ›¸é¤¨å€Ÿé–±è¦å‰‡å°‡æ–¼ä¸‹æ˜ŸæœŸä¸€æ­£å¼ ______ã€‚", ans: "ç”Ÿæ•ˆ", options: ["ç”Ÿæ•ˆ", "å®£ä½ˆ", "å‡†è¨±", "é›†åˆ"] },
-            { q: "æ ¡é•·åœ¨æ—©æœƒä¸Š ______ äº†ä¸€å€‹å¥½æ¶ˆæ¯ï¼Œå…¨æ ¡åŒå­¸éƒ½æ­¡å‘¼èµ·ä¾†ã€‚", ans: "å®£ä½ˆ", options: ["å®£ä½ˆ", "ç”Ÿæ•ˆ", "é›†åˆ", "æ”¯æŒ"] },
-            { q: "è€å¸«è«‹å„ä½åŒå­¸åˆ°æ“å ´ ______ï¼Œæº–å‚™é–‹å§‹é‹å‹•æœƒã€‚", ans: "é›†åˆ", options: ["é›†åˆ", "é€€å‡º", "åº·å¾©", "å®£ä½ˆ"] },
-            { q: "______ ä½ é‚„ä¸çŸ¥é“æ˜Žå¤©è¦èˆ‰è¡Œä¸­æ–‡ç§‘é€²å±•æ€§è©•ä¼°å—Žï¼Ÿ", ans: "é›£é“", options: ["é›£é“", "ç•¶ç„¶", "å…¶å¯¦", "é›£æ€ª"] },
-            { q: "å°æ˜Žæƒ³å¯«ä¾¿æ¢çµ¦é™³è€å¸«ï¼Œé€™å¼µå¡çš„ã€Œä¸Šæ¬¾ã€æ‡‰è©²å¯«ç”šéº¼ï¼Ÿ", ans: "é™³è€å¸«ï¼š", options: ["è¦ªæ„›çš„é™³è€å¸«ï¼š", "æ–°è€å¸«ï¼š", "å­¸ç”Ÿï¼š"] },
-            { q: "ä½ æƒ³å¯«ä¸€å¼µä¾¿æ¢çµ¦åª½åª½ï¼Œã€Œä¸Šæ¬¾ã€æ‡‰è©²å¯«ï¼Ÿ", ans: "åª½åª½ï¼š", options: ["åª½åª½ï¼š", "è¦ªæ„›çš„åª½åª½ï¼š", "å¥³å…’ï¼š"] },
-            { q: "ä½ è¦å¯«ä¾¿æ¢çµ¦åŒå­¸å°æ¨‚ï¼Œã€Œä¸Šæ¬¾ã€è¦å¯«èª°çš„åå­—ï¼Ÿ", ans: "å°æ¨‚", options: ["å°æ¨‚", "è‡ªå·±", "åœ–æ›¸é¤¨è€å¸«"] },
-            { q: "ä½ æ˜¯å°ç¾Žï¼Œå“¥å“¥å¯«ä¾¿æ¢çµ¦ä½ ï¼Œã€Œä¸Šæ¬¾ã€æ‡‰è©²å¯«ç”šéº¼ï¼Ÿ", ans: "å°ç¾Žï¼š", options: ["è¦ªæ„›çš„å“¥å“¥ï¼š", "å°ç¾Žï¼š", "å“¥å“¥ï¼š"] },
-            { q: "è¡¨å§å¯«ä¾¿æ¢çµ¦ä½ ï¼Œã€Œä¸Šæ¬¾ã€æ‡‰è©²å¯«ç”šéº¼ï¼Ÿ", ans: "è¡¨å¦¹ï¼š", options: ["è¦ªæ„›çš„è¡¨å§ï¼š", "è¡¨å§ï¼š", "è¡¨å¦¹ï¼š"] },
-            { q: "ã€Œæ”¶ä¿¡äººå§“åã€å¯«åœ¨ä¾¿æ¢çš„å“ªä¸€å€‹ä½ç½®ï¼Ÿ", ans: "æœ€é–‹é ­çš„ç¬¬ä¸€è¡Œ", options: ["æœ€é–‹é ­çš„ç¬¬ä¸€è¡Œ", "æœ€å¾Œä¸€è¡Œ", "æ­£æ–‡çš„ä¸­é–“"] },
-            { q: "æ”¶ä¿¡äººå§“åï¼ˆä¸Šæ¬¾ï¼‰å¾Œé¢ï¼Œå¿…é ˆåŠ ä¸Šç”šéº¼æ¨™é»žç¬¦è™Ÿï¼Ÿ", ans: "å†’è™Ÿ (ï¼š)", options: ["å†’è™Ÿ (ï¼š)", "å¥è™Ÿ (ã€‚)", "å•è™Ÿ (?)"] },
-            { q: "ä½ å¯«ä¾¿æ¢çµ¦åª½åª½ï¼Œåœ¨å¯«ä¿¡äººçš„åå­—ä¸Šæ–¹ï¼Œæ‡‰è©²å¯«ç”šéº¼ã€Œè‡ªç¨±ã€ï¼Ÿ", ans: "å…’å­ / å¥³å…’", options: ["å…’å­ / å¥³å…’", "åª½åª½", "å­¸ç”Ÿ"] },
-            { q: "å°æ˜Žå¯«ä¾¿æ¢çµ¦åŒç­åŒå­¸å°æ¨‚ï¼Œå°æ˜Žæ‡‰è©²ç”¨ç”šéº¼ã€Œè‡ªç¨±ã€ï¼Ÿ", ans: "åŒå­¸", options: ["åŒå­¸", "è€å¸«", "å“¥å“¥"] },
-            { q: "ä¸»è¦çš„å…§å®¹å¯«åœ¨ä¾¿æ¢çš„å“ªä¸€éƒ¨åˆ†ï¼Ÿ", ans: "æ­£æ–‡", options: ["æ”¶ä¿¡äººçš„åå­—", "å¯«ä¿¡æ™‚é–“", "æ­£æ–‡", "å¯«ä¿¡äººçš„åå­—"] },
-            { q: "å¯«ä¿¡äººçš„åå­—ä¸Šæ–¹æ‡‰è©²å¯«ç”šéº¼ï¼Ÿ", ans: "è‡ªç¨±", options: ["è‡ªç¨±", "æ”¶ä¿¡äººçš„åå­—", "æ­£æ–‡"] },
-            { q: "åœ¨ä¾¿æ¢ä¸­æœ€å¾Œè¦åŠ ä¸Šç”šéº¼ï¼Ÿ", ans: "æ›¸å¯«æ™‚é–“", options: ["æ›¸å¯«æ™‚é–“", "åœ°é»ž", "å§“å", "æ›¸å¯«æ—¥æœŸ"] },
-            { q: "åœ¨ä¾¿æ¢æ ¼å¼ä¸­ï¼Œé€šå¸¸å¯«åœ¨ç¬¬ä¸€è¡Œã€Œé ‚æ ¼ã€çš„æ˜¯ç”šéº¼ï¼Ÿ", ans: "æ”¶ä¿¡äººå§“å", options: ["æ”¶ä¿¡äººå§“å", "å¯«ä¿¡äººå§“å", "æ­£æ–‡", "æ›¸å¯«æ™‚é–“"] },
-            { q: "é€™éº¼ç°¡å–®çš„å•é¡Œï¼Œé›£é“ä½ éƒ½ä¸æœƒå›žç­”å—Ž ___", ans: "ï¼Ÿ", options: ["ï¼Ÿ", "ï¼", "ã€‚", "â€¦â€¦"] },
-            { q: "å­¸æ ¡æœ‰æ˜Žç¢ºè¦å®šï¼Œçµ•ä¸ ______ å­¸ç”Ÿåœ¨æ²’æœ‰è€å¸«çš„é™ªåŒä¸‹é€²å…¥å¯¦é©—å®¤ã€‚", ans: "å‡†è¨±", options: ["å‡†è¨±", "æ”¯æŒ", "å®£ä½ˆ", "ç”Ÿæ•ˆ"] },
-            { q: "å¾—åˆ°åª½åª½çš„ ______ å¾Œï¼Œå¼Ÿå¼Ÿæ‰é–‹å¿ƒåœ°è·‘åˆ°æ¨“ä¸‹å…¬åœ’å’Œå¥½æœ‹å‹çŽ©è€ã€‚", ans: "å‡†è¨±", options: ["å‡†è¨±", "åº·å¾©", "é›†åˆ", "é€€å‡º"] },
-            // --- åº·å¾© ---
-            { q: "å¤§å®¶éƒ½ç‚ºä½é™¢çš„æž—åŒå­¸è£½ä½œäº†ä¸€å¼µç²¾ç¾Žçš„æ…°å•å¡ï¼Œç¥é¡˜ä»–æ—©æ—¥ ______ ã€‚", ans: "åº·å¾©", options: ["åº·å¾©", "é€€å‡º", "ç”Ÿæ•ˆ", "å®£ä½ˆ"] },
-            { q: "ç¶“éŽé†«ç”Ÿå¹¾å€‹æœˆä»¥ä¾†çš„æ‚‰å¿ƒæ²»ç™‚ï¼Œçˆºçˆºçš„èº«é«”çµ‚æ–¼å®Œå…¨ ______ äº†ã€‚", ans: "åº·å¾©", options: ["åº·å¾©", "å‡†è¨±", "é›†åˆ", "æ”¯æŒ"] },
-            // --- é€€å‡º ---
-            { q: "ç”±æ–¼ä¸å°å¿ƒæ‰­å‚·äº†è…³è¸ï¼Œå¿—æ˜Žåªå¥½ç„¡å¥ˆåœ°å®£ä½ˆ ______ é€™æ¬¡çš„ç”°å¾‘æ¯”è³½ã€‚", ans: "é€€å‡º", options: ["é€€å‡º", "åº·å¾©", "æ”¯æŒ", "ç”Ÿæ•ˆ"] },
-            { q: "æˆ‘å€‘é‡åˆ°å›°é›£æ™‚æ‡‰è©²å‹‡æ•¢é¢å°ï¼Œçµ•å°ä¸èƒ½è¼•è¨€ ______ ã€‚", ans: "é€€å‡º", options: ["é€€å‡º", "å‡†è¨±", "é›†åˆ", "å®£ä½ˆ"] },
-            // --- é¬¥å¿— ---
-            { q: "å³ä½¿åœ¨æ¯”è³½çš„ä¸‹åŠå ´è½å¾Œäº†ååˆ†ï¼ŒéšŠå“¡å€‘çš„ ______ ä¾ç„¶é«˜æ˜‚ï¼Œæ²’æœ‰æ”¾æ£„ã€‚", ans: "é¬¥å¿—", options: ["é¬¥å¿—", "å‹‡æ°£", "å¿ƒæƒ…", "ç²¾ç¥ž"] },
-            { q: "æ•™ç·´çš„ä¸€ç•ªé¼“å‹µèªªè©±ï¼Œçž¬é–“æ¿€ç™¼èµ·å…¨éšŠçƒå“¡å¿…å‹çš„ ______ ã€‚", ans: "é¬¥å¿—", options: ["é¬¥å¿—", "åŠ›é‡", "ä¿¡å¿ƒ", "èˆˆè¶£"] },
-            // --- é›£é“ ---
-            { q: "å¤©ç©ºçªç„¶è®Šå¾—çƒé›²å¯†ä½ˆï¼Œ ______ å¾…æœƒå…’åˆè¦ä¸‹èµ·å‚¾ç›†å¤§é›¨ä¾†å—Žï¼Ÿ", ans: "é›£é“", options: ["é›£é“", "ç•¶ç„¶", "å…¶å¯¦", "ä¹Ÿè¨±"] },
-            { q: "ä½ æŠŠé€™ä»¶äº‹ä¸€ç›´è—åœ¨å¿ƒè£¡ï¼Œ ______ å°±ä¸æ‰“ç®—å‘Šè¨´çˆ¸çˆ¸åª½åª½å—Žï¼Ÿ", ans: "é›£é“", options: ["é›£é“", "ç©¶ç«Ÿ", "åè€Œ", "ç«Ÿç„¶"] },
-            // --- æ”¯æŒ ---
-            { q: "ç„¡è«–æˆ‘å°‡ä¾†æƒ³åšç”šéº¼è·æ¥­ï¼Œçˆ¶æ¯éƒ½èªªæœƒé»˜é»˜åœ° ______ æˆ‘çš„æ±ºå®šã€‚", ans: "æ”¯æŒ", options: ["æ”¯æŒ", "é€€å‡º", "å‡†è¨±", "å®£ä½ˆ"] },
-            { q: "ç‚ºäº† ______ å­¸æ ¡çš„ç’°ä¿é€±æ´»å‹•ï¼Œå…¨ç­åŒå­¸éƒ½å …æŒè‡ªå‚™é¤å…·å›žæ ¡åƒåˆé£¯ã€‚", ans: "æ”¯æŒ", options: ["æ”¯æŒ", "é›†åˆ", "åº·å¾©", "ç”Ÿæ•ˆ"] },
+            // --- 准許 ---
+            { q: "學校有明確規定，絕不 ______ 學生在沒有老師的陪同下進入實驗室。", ans: "准許", options: ["准許", "支持", "宣佈", "生效"] },
+            { q: "得到媽媽的 ______ 後，弟弟才開心地跑到樓下公園和好朋友玩耍。", ans: "准許", options: ["准許", "康復", "集合", "退出"] },
+            // --- 康復 ---
+            { q: "大家都為住院的林同學製作了一張精美的慰問卡，祝願他早日 ______ 。", ans: "康復", options: ["康復", "退出", "生效", "宣佈"] },
+            { q: "經過醫生幾個月以來的悉心治療，爺爺的身體終於完全 ______ 了。", ans: "康復", options: ["康復", "准許", "集合", "支持"] },
+            // --- 退出 ---
+            { q: "由於不小心扭傷了腳踝，志明只好無奈地宣佈 ______ 這次的田徑比賽。", ans: "退出", options: ["退出", "康復", "支持", "生效"] },
+            { q: "我們遇到困難時應該勇敢面對，絕對不能輕言 ______ 。", ans: "退出", options: ["退出", "准許", "集合", "宣佈"] },
+            // --- 鬥志 ---
+            { q: "即使在比賽的下半場落後了十分，隊員們的 ______ 依然高昂，沒有放棄。", ans: "鬥志", options: ["鬥志", "勇氣", "心情", "精神"] },
+            { q: "教練的一番鼓勵說話，瞬間激發起全隊球員必勝的 ______ 。", ans: "鬥志", options: ["鬥志", "力量", "信心", "興趣"] },
+            // --- 難道 ---
+            { q: "天空突然變得烏雲密佈， ______ 待會兒又要下起傾盆大雨來嗎？", ans: "難道", options: ["難道", "當然", "其實", "也許"] },
+            { q: "你把這件事一直藏在心裡， ______ 就不打算告訴爸爸媽媽嗎？", ans: "難道", options: ["難道", "究竟", "反而", "竟然"] },
+            // --- 支持 ---
+            { q: "無論我將來想做甚麼職業，父母都說會默默地 ______ 我的決定。", ans: "支持", options: ["支持", "退出", "准許", "宣佈"] },
+            { q: "為了 ______ 學校的環保週活動，全班同學都堅持自備餐具回校吃午飯。", ans: "支持", options: ["支持", "集合", "康復", "生效"] },
             
-            // --- å…¶ä»–æº«ç¿’å­—è©ž ---
-            { q: "è€å¸«å®£ä½ˆï¼Œæ–°çš„åœ–æ›¸é¤¨å€Ÿé–±è¦å‰‡å°‡æ–¼ä¸‹æ˜ŸæœŸä¸€æ­£å¼ ______ã€‚", ans: "ç”Ÿæ•ˆ", options: ["ç”Ÿæ•ˆ", "å®£ä½ˆ", "å‡†è¨±", "é›†åˆ"] },
-            { q: "æ ¡é•·åœ¨æ—©æœƒä¸Š ______ äº†ä¸€å€‹å¥½æ¶ˆæ¯ï¼Œå…¨æ ¡åŒå­¸éƒ½æ­¡å‘¼èµ·ä¾†ã€‚", ans: "å®£ä½ˆ", options: ["å®£ä½ˆ", "ç”Ÿæ•ˆ", "é›†åˆ", "æ”¯æŒ"] },
-            { q: "è€å¸«è«‹å„ä½åŒå­¸åˆ°æ“å ´ ______ï¼Œæº–å‚™é–‹å§‹é‹å‹•æœƒã€‚", ans: "é›†åˆ", options: ["é›†åˆ", "é€€å‡º", "åº·å¾©", "å®£ä½ˆ"] },
-            { q: "ä½ æ˜¯å¤šéº¼æœŸå¾…é€™æ¬¡æ¯”è³½å•Š ___", ans: "ï¼", options: ["ï¼", "ï¼Ÿ", "ã€‚", "ï¼Œ"] }
+            // --- 其他溫習字詞 ---
+            { q: "老師宣佈，新的圖書館借閱規則將於下星期一正式 ______。", ans: "生效", options: ["生效", "宣佈", "准許", "集合"] },
+            { q: "校長在早會上 ______ 了一個好消息，全校同學都歡呼起來。", ans: "宣佈", options: ["宣佈", "生效", "集合", "支持"] },
+            { q: "老師請各位同學到操場 ______，準備開始運動會。", ans: "集合", options: ["集合", "退出", "康復", "宣佈"] },
+            
+            // --- 便條格式與標點 ---
+            { q: "找出便條格式的配對：【 寫信人 】______", ans: "姓名", options: ["姓名", "時間", "正文", "標題"] },
+            { q: "找出便條格式的配對：【 收信人 】______", ans: "姓名", options: ["姓名", "時間", "正文", "標題"] },
+            { q: "找出便條格式的配對：【 寫信人 】______", ans: "自稱", options: ["自稱", "姓名", "時間", "正文"] },
+            { q: "找出便條格式的配對：【 書寫 】______", ans: "時間", options: ["時間", "地點", "姓名", "正文"] },
+            { q: "找出便條格式的配對：【 便條的內容 】______", ans: "正文", options: ["正文", "標題", "時間", "姓名"] },
+            { q: "在便條格式中，通常寫在第一行「頂格」的是甚麼？", ans: "收信人姓名", options: ["收信人姓名", "寫信人姓名", "正文", "書寫時間"] },
+            { q: "這麼簡單的問題，難道你都不會回答嗎 ___", ans: "？", options: ["？", "！", "。", "……"] },
+            { q: "你是多麼期待這次比賽啊 ___", ans: "！", options: ["！", "？", "。", "，"] }
         ];
 
         const faReorderTasks = [
-            ["æˆ‘", "ç•¶ç„¶ç†è§£", "ä½ ", "ç¾åœ¨çš„", "å¿ƒæƒ…", "ã€‚"],
-            ["ç‚ºäº†", "åƒåŠ é€™æ¬¡", "æœ—èª¦æ¯”è³½", "ï¼Œ", "ä½ ä¸€ç›´", "åŠªåŠ›åœ°ç·´ç¿’", "ã€‚"],
-            ["ä½ æ˜¯", "å¤šéº¼", "æœŸå¾…", "é€™æ¬¡æ¯”è³½å•Š", "ï¼"]
+            ["我", "當然理解", "你", "現在的", "心情", "。"],
+            ["為了", "參加這次", "朗誦比賽", "，", "你一直", "努力地練習", "。"],
+            ["你是", "多麼", "期待", "這次比賽啊", "！"]
         ];
 
         const legendaryTasks = [
-            { q: "ã€Œå®Œç’§æ­¸è¶™ã€é€™å€‹æˆèªžçš„ä¸»è§’æ˜¯èª°ï¼Ÿ", ans: "è—ºç›¸å¦‚", options: ["è—ºç›¸å¦‚", "å»‰é —", "æ›¹æ“", "åŠ‰å‚™"] },
-            { q: "ä¸‹åˆ—å“ªä¸€å€‹è©žèªžæ²’æœ‰éŒ¯åˆ¥å­—ï¼Ÿ", ans: "è¿«ä¸åŠå¾…", options: ["è¿«ä¸åŠå¾…", "è¿«ä¸æ€¥å¾…", "ç ´ä¸åŠå¾…", "ç ´ä¸æ€¥å¾…"] },
-            { q: "ä¸‹åˆ—å“ªä¸€å€‹å¥å­æ˜¯ã€Œæ“¬äººå¥ã€ï¼Ÿ", ans: "å°é³¥åœ¨æžé ­ä¸Šé«˜èˆˆåœ°å”±æ­Œã€‚", options: ["å°é³¥åœ¨æžé ­ä¸Šé«˜èˆˆåœ°å”±æ­Œã€‚", "ä»–çš„è‡‰ç´…å¾—åƒä¸€å€‹è˜‹æžœã€‚", "å¤©ä¸Šçš„æ˜Ÿæ˜Ÿäº®æ™¶æ™¶çš„ã€‚", "é€™åº§å±±é«˜å¾—å¿«è¦ç¢°åˆ°å¤©äº†ã€‚"] },
-            { q: "åœ¨ã€Œåª½åª½é›–ç„¶å¾ˆç´¯ï¼Œï¼¿ï¼¿å …æŒç‚ºæˆ‘å€‘åšæ™šé£¯ã€‚ã€ä¸­ï¼Œæ‡‰å¡«å…¥ç”šéº¼é—œè¯è©žï¼Ÿ", ans: "ä½†æ˜¯", options: ["ä½†æ˜¯", "æ‰€ä»¥", "å¦‚æžœ", "å› ç‚º"] },
-            { q: "ã€Œè‰èˆ¹å€Ÿç®­ã€æ˜¯å‡ºè‡ªå“ªä¸€éƒ¨ä¸­åœ‹å¤å…¸åè‘—ï¼Ÿ", ans: "ã€Šä¸‰åœ‹æ¼”ç¾©ã€‹", options: ["ã€Šä¸‰åœ‹æ¼”ç¾©ã€‹", "ã€Šæ°´æ»¸å‚³ã€‹", "ã€Šè¥¿éŠè¨˜ã€‹", "ã€Šç´…æ¨“å¤¢ã€‹"] },
-            { q: "ã€ŒæŽç™½ã€è¢«å¾Œäººå°Šç¨±ç‚ºç”šéº¼ï¼Ÿ", ans: "è©©ä»™", options: ["è©©ä»™", "è©©è–", "è©©é¬¼", "è©©é­”"] },
-            { q: "ä¸‹åˆ—å“ªä¸€å€‹æ¨™é»žç¬¦è™Ÿçš„é‹ç”¨æ˜¯çµ•å°æ­£ç¢ºçš„ï¼Ÿ", ans: "æˆ‘å•ï¼šã€Œä»Šå¤©å¤©æ°£å¥½å—Žï¼Ÿã€", options: ["æˆ‘å•ï¼šã€Œä»Šå¤©å¤©æ°£å¥½å—Žï¼Ÿã€", "æˆ‘å•ï¼Œä»Šå¤©å¤©æ°£å¥½å—Žï¼Ÿ", "æˆ‘å•ï¼šã€Œä»Šå¤©å¤©æ°£å¥½å—Žã€ï¼Ÿ", "æˆ‘å•ï¼šä»Šå¤©å¤©æ°£å¥½å—Žï¼Ÿ"] },
-            { q: "ã€Œä¸€æ—¥ä¸è¦‹ï¼Œå¦‚éš”ä¸‰ç§‹ã€ä¸­çš„ã€Œä¸‰ç§‹ã€é€šå¸¸æŒ‡å¤šä¹…ï¼Ÿ", ans: "ä¸‰å¹´", options: ["ä¸‰å¹´", "ä¸‰åå¤©", "ä¸‰å€‹æœˆ", "ä¸‰ç™¾å¹´"] },
-            { q: "ã€Œç•«è›‡æ·»è¶³ã€æ¯”å–»ç”šéº¼ï¼Ÿ", ans: "å¤šæ­¤ä¸€èˆ‰", options: ["å¤šæ­¤ä¸€èˆ‰", "ç•«å·¥ç²¾æ¹›", "éžå¸¸å¯æ€•", "è¡Œå‹•è¿…é€Ÿ"] }
+            { q: "「完璧歸趙」這個成語的主角是誰？", ans: "藺相如", options: ["藺相如", "廉頗", "曹操", "劉備"] },
+            { q: "下列哪一個詞語沒有錯別字？", ans: "迫不及待", options: ["迫不及待", "迫不急待", "破不及待", "破不急待"] },
+            { q: "下列哪一個句子是「擬人句」？", ans: "小鳥在枝頭上高興地唱歌。", options: ["小鳥在枝頭上高興地唱歌。", "他的臉紅得像一個蘋果。", "天上的星星亮晶晶的。", "這座山高得快要碰到天了。"] },
+            { q: "在「媽媽雖然很累，＿＿堅持為我們做晚飯。」中，應填入甚麼關聯詞？", ans: "但是", options: ["但是", "所以", "如果", "因為"] },
+            { q: "「草船借箭」是出自哪一部中國古典名著？", ans: "《三國演義》", options: ["《三國演義》", "《水滸傳》", "《西遊記》", "《紅樓夢》"] },
+            { q: "「李白」被後人尊稱為甚麼？", ans: "詩仙", options: ["詩仙", "詩聖", "詩鬼", "詩魔"] },
+            { q: "下列哪一個標點符號的運用是絕對正確的？", ans: "我問：「今天天氣好嗎？」", options: ["我問：「今天天氣好嗎？」", "我問，今天天氣好嗎？", "我問：「今天天氣好嗎」？", "我問：今天天氣好嗎？"] },
+            { q: "「一日不見，如隔三秋」中的「三秋」通常指多久？", ans: "三年", options: ["三年", "三十天", "三個月", "三百年"] },
+            { q: "選出結構完全不同的詞語：", ans: "東西", options: ["東西", "左右", "上下", "美好"] },
+            { q: "「畫蛇添足」比喻甚麼？", ans: "多此一舉", options: ["多此一舉", "畫工精湛", "非常可怕", "行動迅速"] }
         ];
 
         const mcConfigs = {
-            'fill': { title: "â›ï¸ ç¤¦æ´žå°‹å¯¶ (å¡«å……é¡Œ)", subtitle: "æ•²ç¢Žæ­£ç¢ºçš„å­—è©žç¤¦çŸ³ï¼Œå¡«è£œå¥å­ï¼", tasks: fillTasks },
-            'match-word': { title: "ðŸ”® ç¬¦æ–‡è§£å¯† (é…è©žé¡Œ)", subtitle: "æ‰¾å‡ºæœ€é©åˆå¥å­èªžå¢ƒçš„è©žèªžï¼", tasks: matchTasks },
-            'connect': { title: "ðŸ”— é­”æ³•é€£ç·š (é€£ç·šé¡Œ)", subtitle: "æ‰¾å‡ºèˆ‡é¡Œç›®åŒ¹é…çš„å¦ä¸€åŠè©žèªžï¼", tasks: connectTasks },
-            'punct': { title: "ðŸ“œ å¤å·ä¿®å¾© (æ¨™é»žé¡Œ)", subtitle: "é¸æ“‡æ­£ç¢ºçš„æ¨™é»žç¬¦è™Ÿä¿®å¾©å¤å·ï¼", tasks: punctTasks },
-            'fa-mc': { title: "ðŸ“ FAæº«ç¿’ç‰¹è¨“ (ç¶œåˆé¡Œ)", subtitle: "é€²å±•æ€§è©•ä¼°å°ˆå±¬ï¼šè©žèªžã€ä¾¿æ¢èˆ‡æ¨™é»žï¼", tasks: faMCTasks }
+            'fill': { title: "⛏️ 礦洞尋寶 (填充題)", subtitle: "敲碎正確的字詞礦石，填補句子！", tasks: fillTasks },
+            'match-word': { title: "🔮 符文解密 (配詞題)", subtitle: "找出最適合句子語境的詞語！", tasks: matchTasks },
+            'connect': { title: "🔗 魔法連線 (連線題)", subtitle: "找出與題目匹配的另一半詞語！", tasks: connectTasks },
+            'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
+            'fa-mc': { title: "📝 FA溫習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks }
         };
 
-        const medalsConfig = { 100: 'ðŸ¥‰', 200: 'ðŸ¥ˆ', 300: 'ðŸ¥‡', 400: 'ðŸ…', 500: 'ðŸ’Ž', 600: 'ðŸŒ ', 700: 'ðŸ‘‘', 800: 'ðŸŒŒ', 900: 'ðŸ†', 1001: 'ðŸ‰', 1002: 'ðŸ¦„' };
+        const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🌌', 900: '🏆', 1001: '🐉', 1002: '🦄' };
+        
+        // ⚠️ 絕對不改變原有資料結構
         const defaultInv = { playerName: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [] };
         let inventory = { ...defaultInv };
 
         function shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
-        // ================== éŠæˆ²æ ¸å¿ƒé‚è¼¯ ==================
+        // ================== 遊戲核心邏輯 ==================
 
         function setPlayerName() {
             initAudio(); playSound('click');
             const name = document.getElementById('input-name').value.trim();
-            if (!name) return alert("è«‹è¼¸å…¥åå­—ï¼");
+            if (!name) return alert("請輸入名字！");
             inventory.playerName = name;
             document.getElementById('display-name').textContent = name;
             goHome();
@@ -566,15 +615,14 @@
             document.getElementById('login-screen').classList.remove('hidden');
         };
 
-        // è€çŽ©å®¶è£œå„Ÿæ©Ÿåˆ¶ (æŒ‰éˆ•è§¸ç™¼)
         window.claimGift = function() {
             playSound('click');
             if (inventory.giftClaimed) {
-                alert("âŒ ä½ å·²ç¶“é ˜å–éŽè€çŽ©å®¶è£œå„Ÿå¤§ç¦®åŒ…äº†ï¼Œä¸èƒ½é‡è¤‡é ˜å–å–”ï¼");
+                alert("❌ 你已經領取過老玩家補償大禮包了，不能重複領取喔！");
                 return;
             }
-            let code = prompt("è«‹è¼¸å…¥è€çŽ©å®¶å°ˆå±¬å¯†ç¢¼ï¼š\n(æç¤ºï¼šP4å¤§ç¦®åŒ…)");
-            if (code === "P4å¤§ç¦®åŒ…") {
+            let code = prompt("請輸入老玩家專屬密碼：\n(提示：P4大禮包)");
+            if (code === "P4大禮包") {
                 inventory.wood += 50;         
                 inventory.stone += 50;        
                 inventory.star += 20;         
@@ -583,9 +631,9 @@
                 inventory.giftClaimed = true; 
                 saveGame();
                 updateUI();
-                alert("ðŸŽ å¯†æŠ€å•Ÿå‹•ï¼å·²ç‚ºä½ ç™¼æ”¾ 50æœ¨æã€50çŸ³é ­ã€20æ˜Ÿæ˜Ÿã€20å¯¶çŸ³ã€300æ‰‹ç¨¿ï¼\nå¿«åŽ»å‡ç´šè£å‚™å§ï¼");
+                alert("🎁 密技啟動！已為你發放 50木材、50石頭、20星星、20寶石、300手稿！\n快去升級裝備吧！");
             } else if (code !== null) {
-                alert("âŒ å¯†ç¢¼éŒ¯èª¤ï¼");
+                alert("❌ 密碼錯誤！");
             }
         };
 
@@ -629,7 +677,7 @@
             document.getElementById('inv-star').textContent = inventory.star;
             document.getElementById('inv-manu').textContent = inventory.manuscript;
             document.getElementById('inv-frag').textContent = inventory.fragment;
-            document.getElementById('streak-counter').textContent = "ðŸ”¥ é€£å°: " + inventory.streak;
+            document.getElementById('streak-counter').textContent = "🔥 連對: " + inventory.streak;
 
             const stats = calculateStats();
             document.getElementById('inv-atk').textContent = stats.atk;
@@ -654,15 +702,15 @@
             if (inventory.castles >= 1 || inventory.flyingCastle >= 1) {
                 bossBtn.classList.remove('btn-black');
                 bossBtn.classList.add('btn-purple');
-                bossBtn.innerHTML = 'ðŸ—ºï¸ çµ‚æ¥µ Boss æŒ‘æˆ° (å·²è§£éŽ–)';
+                bossBtn.innerHTML = '🗺️ 終極 Boss 挑戰 (已解鎖)';
                 bossBtn.disabled = false;
             }
 
             let medalStr = '';
             if (inventory.medals && inventory.medals.length > 0) {
                 inventory.medals.sort((a,b)=>a-b).forEach(m => {
-                    let icon = medalsConfig[m] || 'ðŸŽ–ï¸';
-                    medalStr += `<span class="medal-icon" title="æˆå°±å‹³ç« ">${icon}</span> `;
+                    let icon = medalsConfig[m] || '🎖️';
+                    medalStr += `<span class="medal-icon" title="成就勳章">${icon}</span> `;
                 });
                 document.getElementById('medal-container').innerHTML = medalStr;
             }
@@ -689,99 +737,221 @@
         function openForgeZone() { playSound('click'); hideAll(); document.getElementById('forge-zone').classList.remove('hidden'); }
         function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
         function openBossSelect() { playSound('click'); hideAll(); document.getElementById('boss-select-screen').classList.remove('hidden'); }
+        
+        // --- Modal 關閉通用 ---
+        window.closeModal = function(id) { document.getElementById(id).classList.add('hidden'); }
 
-        // --- çªç™¼é­é‡èˆ‡å‚³èªªæ€ª ---
+        // ================== 新增系統 (市場、抽獎、PvP) ==================
+
+        // 交易市場
+        window.openMarket = function() {
+            document.getElementById('market-modal').classList.remove('hidden');
+        }
+
+        let guaranteedLegendary = false; // 不存入 save，僅本次遊戲有效
+
+        window.buyItem = function(item) {
+            playSound('click');
+            if (item === 'sword' && inventory.gem >= 10) {
+                inventory.gem -= 10;
+                inventory.superWeaponLv += 2; // 安全地提升屬性
+                alert("🛒 購買成功！你的【破題者之刃】連升 2 級！攻擊力大幅提升！");
+            } else if (item === 'starpack' && inventory.wood >= 20) {
+                inventory.wood -= 20;
+                inventory.star += 5;
+                alert("🛒 購買成功！獲得 5 顆 ⭐！");
+            } else if (item === 'scroll' && inventory.stone >= 50) {
+                inventory.stone -= 50;
+                guaranteedLegendary = true;
+                alert("🛒 購買成功！下一次進入森林【必遇傳說怪】！");
+            } else {
+                alert("❌ 資源不足！請先去溫習賺取資源吧！");
+            }
+            updateUI();
+        }
+
+        // 抽獎系統
+        let gachaDailyLimit = 3;
+        window.openGacha = function() {
+            document.getElementById('gacha-modal').classList.remove('hidden');
+            document.getElementById('gacha-chances').innerText = gachaDailyLimit;
+            document.getElementById('gacha-result').innerText = "🎁";
+        }
+
+        window.rollGacha = function() {
+            if (gachaDailyLimit <= 0) return alert("❌ 今天的抽獎次數用完啦！明天再來吧！");
+            if (inventory.star < 1) return alert("❌ 星星不足，無法抽獎！");
+            
+            inventory.star -= 1;
+            gachaDailyLimit -= 1;
+            document.getElementById('gacha-chances').innerText = gachaDailyLimit;
+            
+            let resultBox = document.getElementById('gacha-result');
+            resultBox.innerText = "🔄..."; 
+            playSound('click'); 
+
+            setTimeout(() => {
+                let r = Math.random();
+                if (r < 0.02) { 
+                    resultBox.innerText = "👑 傳說碎片 x3";
+                    inventory.gem += 50; 
+                    inventory.fragment += 3;
+                    alert("🎉 奇蹟！你抽中了【傳說大獎】！獲得 50 寶石和 3 個碎片！");
+                } else if (r < 0.3) { 
+                    resultBox.innerText = "💎 寶石 x5";
+                    inventory.gem += 5;
+                } else { 
+                    resultBox.innerText = "🪵 木材 x10";
+                    inventory.wood += 10;
+                }
+                updateUI();
+            }, 800);
+        }
+
+        // 排行榜與 PvP
+        window.openLeaderboard = function() {
+            document.getElementById('leaderboard-modal').classList.remove('hidden');
+            updateLeaderboardUI();
+        }
+
+        function updateLeaderboardUI() {
+            // 從 LocalStorage 讀取或生成假資料
+            let lb = JSON.parse(localStorage.getItem('digi_classLeaderboard')) || [
+                { name: "P4A01 (陳大文)", streak: 45 },
+                { name: "P4B12 (李小明)", streak: 32 },
+                { name: "P4C05 (張志強)", streak: 28 },
+            ];
+            
+            lb.push({ name: "你 (當前)", streak: inventory.streak });
+            lb.sort((a, b) => b.streak - a.streak); 
+            
+            let html = "";
+            for(let i=0; i<Math.min(5, lb.length); i++) {
+                let crown = i===0 ? "🥇" : i===1 ? "🥈" : i===2 ? "🥉" : "🔸";
+                let isMe = lb[i].name.includes("你") ? "font-weight:bold; color:red;" : "";
+                html += `<li style="${isMe}">${crown} ${lb[i].name} - 連勝: ${lb[i].streak}</li>`;
+            }
+            document.getElementById('lb-list').innerHTML = html;
+        }
+
+        window.startPvP = function() {
+            let code = document.getElementById('pvp-code').value;
+            if(!code) return alert("請輸入對手的代碼！");
+            if(inventory.star < 1) return alert("需要 1 顆 ⭐ 才能發起挑戰！");
+            
+            inventory.star -= 1;
+            let winChance = inventory.streak > 10 ? 0.7 : 0.4; 
+            
+            if(Math.random() < winChance) {
+                let stolenGems = Math.floor(Math.random() * 5) + 2;
+                inventory.gem += stolenGems;
+                alert(`⚔️ 挑戰成功！你憑藉高超的答題速度擊敗了 ${code}，搶走了 ${stolenGems} 顆寶石！`);
+            } else {
+                alert(`💀 挑戰失敗！${code} 的防禦太強了，你損失了 1 顆星星。`);
+            }
+            updateUI();
+            updateLeaderboardUI();
+        }
+
+        // ================== Digimon 戰鬥遭遇 ==================
         let currentEvent = null;
 
+        function setupMonsterCombatUI(name, picUrl, glowClass) {
+            document.getElementById('boss-hp-ui').classList.remove('hidden');
+            let bossNameElement = document.getElementById('boss-name-title');
+            let oldPic = document.getElementById('boss-pic-img');
+            if(oldPic) oldPic.remove();
+
+            let bossPicImg = document.createElement('img');
+            bossPicImg.id = 'boss-pic-img';
+            bossPicImg.className = `digimon-pic ${glowClass}`;
+            bossPicImg.src = picUrl;
+            
+            bossNameElement.innerHTML = name;
+            bossNameElement.parentNode.insertBefore(bossPicImg, bossNameElement.nextSibling);
+        }
+
         function checkInvasion() {
+            initAudio(); 
             let stats = calculateStats();
             let r = Math.random();
+            let eventModal = document.getElementById('event-modal');
+            let eventTitle = document.getElementById('event-title');
+            let eventDesc = document.getElementById('event-desc');
+            let fightBtn = document.getElementById('btn-event-fight');
+            let innerBox = document.getElementById('event-box-inner');
+            
+            innerBox.className = 'event-box';
+            fightBtn.style.display = 'inline-block';
 
-            if (stats.atk >= 70 && stats.def >= 70 && r < 0.15) {
+            // 1. 檢查【傳說級】Digimon 遭遇
+            if ((stats.atk >= 50 && stats.def >= 50 && r < 0.15) || guaranteedLegendary) { 
+                guaranteedLegendary = false; // 消耗狀態
                 let isDragon = Math.random() > 0.5;
-                currentEvent = { type: isDragon ? 'dragon' : 'unicorn', name: isDragon ? 'é å¤ç¢§ç‚Žå·¨é¾' : 'å¹½å½±æ˜Ÿå…‰ç¨è§’ç¸', reqAtk: 70, reqDef: 70 };
-                let imgIcon = isDragon ? 'ðŸ‰' : 'ðŸ¦„';
+                let digiName = isDragon ? '奧米加獸' : '紅蓮騎士獸';
+                let digiPic = isDragon ? 'https://digimon.net/cimages/digimon/omegamon.jpg' : 'https://digimon.net/cimages/digimon/dukemon.jpg';
+                
+                currentEvent = { type: 'legendary', name: digiName, pic: digiPic };
                 
                 playSound('legendary');
-                document.getElementById('event-box-inner').classList.add('legendary-border');
-                document.getElementById('event-title').innerHTML = `ðŸŒŸ å‚³èªªé™è‡¨ï¼`;
-                document.getElementById('event-title').style.color = '#FFD700';
+                innerBox.classList.add('legendary-border', 'glow-gold'); 
+                eventTitle.innerHTML = `🌟 傳說降臨！皇家騎士！`;
+                eventTitle.style.color = '#FFD700';
                 
-                document.getElementById('event-desc').innerHTML = `
-                    <div style="font-size: 80px; text-shadow: 0 0 20px #FFD700; margin: 10px 0;">${imgIcon}</div>
-                    ä½ é­é‡äº†ç¥žè©±ä¸­çš„<br><span style="color:#D50000; font-size:1.4em; font-weight:bold;">${currentEvent.name}</span>ï¼
-                    <div class="combat-stats" style="border-color: #FF9800; background: #FFF3E0;">
-                        <b>ðŸ“Š æˆ°é¬¥éœ€æ±‚</b><br>
-                        <span style="color:#2E7D32;">ä½ çš„ï¼šæ”» ${stats.atk} | é˜² ${stats.def}</span><br>
-                        <span style="color:#D50000;">è¦æ±‚ï¼šæ”» ${currentEvent.reqAtk} | é˜² ${currentEvent.reqDef}</span>
-                    </div>`;
+                eventDesc.innerHTML = `
+                    <img src="${digiPic}" class="digimon-pic" alt="傳說怪">
+                    強大的數據波動引來了<br><span style="color:#D50000; font-size:1.4em; font-weight:bold;">${digiName}</span>！<br>
+                    <span style="color:#2E7D32;">💬 必須連續答對 2 題才能獲得牠的認可！</span>`;
                 
-                document.getElementById('btn-event-fight').onclick = () => {
-                    if(inventory.star < 1) return alert("âŒ æ˜Ÿæ˜Ÿä¸è¶³ï¼è«‹å…ˆæ”¶é›†æ˜Ÿæ˜Ÿå†ä¾†æ‡‰æˆ°ï¼");
-                    playSound('click');
+                fightBtn.innerHTML = "⚔️ 接受試煉 (-1 🌟)";
+                fightBtn.className = 'btn-gold';
+                fightBtn.onclick = () => {
+                    initAudio(); playSound('click');
+                    if(inventory.star < 1) return alert("❌ 星星不足，無法開啟試煉！");
                     inventory.star -= 1; updateUI(); 
-                    
-                    if(stats.atk >= currentEvent.reqAtk && stats.def >= currentEvent.reqDef) {
-                        document.getElementById('event-modal').classList.add('hidden');
-                        startCombat('legendary');
-                    } else {
-                        alert(`âŒ ä½ çš„æˆ°åŠ›ä¸é”æ¨™ (éœ€è¦ æ”»${currentEvent.reqAtk} é˜²${currentEvent.reqDef})ï¼Œå·¨é¾çš„æ€’å¼æŠŠä½ éœ‡é£›äº†ï¼Œç‰©è³‡æŽ‰è½ï¼`);
-                        inventory.wood = Math.max(0, inventory.wood - 5); inventory.stone = Math.max(0, inventory.stone - 5);
-                        document.getElementById('event-modal').classList.add('hidden');
-                        updateUI();
-                    }
+                    eventModal.classList.add('hidden');
+                    startCombat('legendary', currentEvent);
                 };
             } 
+            // 2. 檢查【普通級】病毒 Digimon 遭遇
             else if (r < 0.3) {
-                document.getElementById('event-box-inner').classList.remove('legendary-border');
+                const normalMonsters = [
+                    { name: '惡魔獸', pic: 'https://digimon.net/cimages/digimon/devimon.jpg' },
+                    { name: '古加獸', pic: 'https://digimon.net/cimages/digimon/kuwagamon.jpg' },
+                    { name: '奧加獸', pic: 'https://digimon.net/cimages/digimon/orgemon.jpg' },
+                    { name: '飛龍獸', pic: 'https://digimon.net/cimages/digimon/airdramon.jpg' },
+                    { name: '蜘蛛獸', pic: 'https://digimon.net/cimages/digimon/dokugumon.jpg' }
+                ];
+                let monster = normalMonsters[Math.floor(Math.random() * normalMonsters.length)];
+                currentEvent = { type: 'virus', name: monster.name, pic: monster.pic };
                 
-                let mAtk = Math.floor(Math.random() * 20) + 10 + Math.floor(inventory.streak * 1.5);
-                let mDef = Math.floor(Math.random() * 20) + 10 + Math.floor(inventory.streak * 1.5);
+                innerBox.classList.add('glow-purple');
+                eventTitle.innerHTML = "⚠️ 野生 Digimon 襲擊！";
+                eventTitle.style.color = '#9C27B0';
+                eventDesc.innerHTML = `
+                    <img src="${monster.pic}" class="digimon-pic" alt="野生怪">
+                    一隻凶猛的<span style="color:#9C27B0; font-weight:bold;">${monster.name}</span>擋住了去路！<br>
+                    <span style="color:#D50000;">💬 答對 1 題來擊退牠！</span>`;
                 
-                const monsterEmojis = ['ðŸ‘¾', 'ðŸ‘¹', 'ðŸ‘º', 'ðŸ¦–', 'ðŸ¦‡', 'ðŸ•·ï¸', 'ðŸ¦‚', 'ðŸ¦…'];
-                let monsterIcon = monsterEmojis[Math.floor(Math.random() * monsterEmojis.length)];
-
-                document.getElementById('event-title').innerHTML = "âš ï¸ çªç™¼äº‹ä»¶ï¼";
-                document.getElementById('event-title').style.color = '#4A148C';
-                document.getElementById('event-desc').innerHTML = `
-                    <div style="font-size: 70px; margin: 10px 0;">${monsterIcon}</div>
-                    ä¸€éš»é‡Žç”Ÿæ€ªç¸å‡ºç¾äº†ï¼
-                    <div class="combat-stats">
-                        <b>ðŸ“Š æˆ°åŠ›å°æ¯”</b><br>
-                        <span style="color:#2E7D32;">ä½ çš„ï¼šæ”» ${stats.atk} | é˜² ${stats.def}</span><br>
-                        <span style="color:#D50000;">æ€ªç¸ï¼šæ”» ${mAtk} | é˜² ${mDef}</span>
-                    </div>`;
-                
-                document.getElementById('btn-event-fight').onclick = () => {
-                    if(inventory.star < 1) return alert("âŒ æ˜Ÿæ˜Ÿä¸è¶³ï¼è«‹å…ˆæ”¶é›†æ˜Ÿæ˜Ÿå†ä¾†æ‡‰æˆ°ï¼");
-                    playSound('click');
-                    inventory.star -= 1; 
-
-                    if (stats.atk >= mDef && stats.def >= mAtk) {
-                        alert("ðŸŽ‰ æ”»å®ˆå…¼å‚™ï¼ä½ å®Œç¾Žæ“Šæ•—äº†æ€ªç¸ï¼Œæ¯«é«®ç„¡å‚·åœ°ç²å¾—äº† 5 é¡†å¯¶çŸ³ï¼");
-                        inventory.gem += 5;
-                    } else if (stats.atk >= mDef && stats.def < mAtk) {
-                        alert("âš ï¸ ä½ æˆåŠŸæ“Šæ•—äº†æ€ªç¸ï¼Œä½†å› ç‚ºé˜²ç¦¦åŠ›ä¸è¶³å—äº†é»žå‚·ï¼ŒæŽ‰è½äº† 1 å€‹æœ¨æï¼Œå‹‰å¼·ç²å¾— 2 é¡†å¯¶çŸ³ï¼");
-                        inventory.wood = Math.max(0, inventory.wood - 1);
-                        inventory.gem += 2;
-                    } else {
-                        alert("ðŸ’€ ä½ çš„æ”»æ“ŠåŠ›å¤ªä½Žï¼Œç„¡æ³•çªç ´æ€ªç¸çš„é˜²ç¦¦ï¼è¢«æ€ªç¸æ‰“å‚·ä¸¦æ¶èµ°äº† 2 å€‹æœ¨æå’Œ 2 å€‹çŸ³é ­ï¼");
-                        inventory.wood = Math.max(0, inventory.wood - 2);
-                        inventory.stone = Math.max(0, inventory.stone - 2);
-                    }
-                    
-                    document.getElementById('event-modal').classList.add('hidden');
-                    updateUI();
+                fightBtn.innerHTML = "⚔️ 進入戰鬥";
+                fightBtn.className = 'btn-red';
+                fightBtn.onclick = () => {
+                    initAudio(); playSound('click');
+                    eventModal.classList.add('hidden');
+                    startCombat('virus', currentEvent);
                 };
-            } else { return; }
+            } else { return; } 
 
-            document.getElementById('event-modal').classList.remove('hidden');
+            eventModal.classList.remove('hidden');
+            
             document.getElementById('btn-event-flee').onclick = () => {
-                playSound('click');
-                alert("ðŸƒ è¡¡é‡éŽæˆ°åŠ›å¾Œï¼Œä½ å®‰å…¨åœ°é€ƒè·‘äº†ã€‚");
-                document.getElementById('event-modal').classList.add('hidden');
+                initAudio(); playSound('click');
+                alert("🏃 你急忙撤退，安全躲過了這次遭遇，但沒有獲得任何獎勵。");
+                eventModal.classList.add('hidden');
             };
         }
+
+        // ================== 打卡、成就、題庫邏輯 ==================
 
         function checkMedals() {
             let s = inventory.streak;
@@ -792,12 +962,11 @@
                     inventory.medals.push(k);
                     mStr = medalsConfig[key];
                     playSound('medal');
-                    alert(`ðŸŽŠ æ­å–œï¼ä½ é”æˆäº† ${key} é€£å‹ï¼Œç²å¾—å°ˆå±¬æ¦®è­½å‹³ç«  ${mStr}ï¼`);
+                    alert(`🎊 恭喜！你達成了 ${key} 連勝，獲得專屬榮譽勳章 ${mStr}！`);
                 }
             }
         }
 
-        // å¤§å¹…å¢žåŠ æ¯æ¬¡ç­”å°åŠé€£å‹çš„çŽå‹µ
         function addStreak() {
             inventory.streak++;
             inventory.manuscript += 3; 
@@ -821,9 +990,9 @@
                 currentReorderType = type;
                 
                 if(type === 'fa-reorder') {
-                    document.getElementById('reorder-title').innerHTML = "ðŸ“ FAæº«ç¿’ (èª²æ–‡é‡çµ„) <br><small style='color: #4A148C;'>é€²å±•æ€§è©•ä¼°å°ˆå±¬ç‰¹è¨“ï¼</small>";
+                    document.getElementById('reorder-title').innerHTML = "📝 FA溫習 (課文重組)";
                 } else {
-                    document.getElementById('reorder-title').innerHTML = "ðŸŒ‰ é‹ªæœ¨æ¿éŽæ²³ (é‡çµ„å¥å­) <br><small style='color: #4A148C;'>è«‹æŒ‰æ­£ç¢ºé †åºæŽ’åˆ—å¥å­ï¼ˆæ³¨æ„ç¨ç«‹çš„æ¨™é»žç¬¦è™Ÿï¼ï¼‰</small>";
+                    document.getElementById('reorder-title').innerHTML = "🌉 鋪木板過河 (重組句子)";
                 }
 
                 document.getElementById('game-reorder').classList.remove('hidden');
@@ -836,7 +1005,7 @@
                     document.getElementById('game-mc').classList.remove('hidden');
                     nextMC();
                 } else {
-                    alert("è¼‰å…¥éŒ¯èª¤ï¼"); goHome();
+                    alert("載入錯誤！"); goHome();
                 }
             }
         };
@@ -860,7 +1029,7 @@
             hintBtn.onclick = () => {
                 playSound('win'); 
                 hintBtn.disabled = true;
-                document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">ðŸ’¡ æç¤ºï¼šç¬¬ä¸€å¡Šæ˜¯ã€Œ${currentReorderAns[0]}ã€</span>`;
+                document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 提示：第一塊是「${currentReorderAns[0]}」</span>`;
             };
 
             reorderWords.forEach((word) => {
@@ -905,14 +1074,14 @@
                 }
                 if(correct) {
                     playSound('win'); addStreak();
-                    inventory.wood += 5; updateUI(); // å¢žåŠ æœ¨ææŽ‰è½
-                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>âœ… æ­£ç¢ºï¼æ©‹æ¨‘æ­å¥½äº†ï¼(æœ¨æ+5, æ‰‹ç¨¿+3)</span>";
+                    inventory.wood += 5; updateUI(); 
+                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+5, 手稿+3)</span>";
                     document.getElementById('btn-next-reorder').classList.remove('hidden');
                     Array.from(document.getElementById('answer-area').children).forEach(c => c.onclick = null);
                     checkInvasion();
                 } else {
                     playSound('error'); inventory.streak = 0; updateUI();
-                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#F44336'>âŒ é †åºä¸å°ï¼Œé€£å‹æ­¸é›¶ï¼</span>";
+                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#F44336'>❌ 順序不對，連勝歸零！</span>";
                     setTimeout(resetReorder, 1500);
                 }
             }
@@ -935,7 +1104,7 @@
             hintBtn.onclick = () => {
                 playSound('win'); 
                 hintBtn.disabled = true;
-                document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">ðŸ’¡ æç¤ºï¼šç­”æ¡ˆé•·åº¦æ˜¯ ${currentMCQ.ans.length} å€‹å­—ï¼</span>`;
+                document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示：答案長度是 ${currentMCQ.ans.length} 個字！</span>`;
                 let opts = document.querySelectorAll('#mc-options .stone-chunk');
                 let removed = 0;
                 opts.forEach(opt => {
@@ -961,27 +1130,27 @@
                 playSound('win'); addStreak();
                 element.style.backgroundColor = '#4CAF50';
                 element.style.boxShadow = '0 6px 0 #2E7D32';
-                inventory.stone += 5; updateUI(); // å¢žåŠ çŸ³é ­æŽ‰è½
-                document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>âœ… è§£ç­”æ­£ç¢ºï¼(çŸ³é ­+5, æ‰‹ç¨¿+3)</span>";
+                inventory.stone += 5; updateUI(); 
+                document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>✅ 解答正確！(石頭+5, 手稿+3)</span>";
                 document.getElementById('btn-next-mc').classList.remove('hidden');
                 checkInvasion();
             } else {
                 playSound('error'); inventory.streak = 0; updateUI();
                 element.style.backgroundColor = '#F44336';
                 element.style.boxShadow = '0 6px 0 #b71c1c';
-                document.getElementById('mc-msg').innerHTML = `<span style='color:#F44336'>âŒ ç­”éŒ¯äº†ï¼æ­£ç¢ºç­”æ¡ˆæ˜¯ã€Œ${currentMCQ.ans}ã€ã€‚é€£å‹æ­¸é›¶ï¼</span>`;
+                document.getElementById('mc-msg').innerHTML = `<span style='color:#F44336'>❌ 答錯了！正確答案是「${currentMCQ.ans}」。連勝歸零！</span>`;
                 document.getElementById('btn-next-mc').classList.remove('hidden');
             }
         }
 
         window.craft = function(item) {
             playSound('click');
-            if(inventory.equip[item]) return alert("ä½ å·²ç¶“æœ‰é€™å€‹è£å‚™äº†ï¼");
-            if(item === 'woodSword' && inventory.wood >= 3) { inventory.wood -= 3; inventory.equip.woodSword = true; alert("ðŸ—¡ï¸ é›é€ æˆåŠŸï¼"); }
-            else if(item === 'stoneSword' && inventory.stone >= 5 && inventory.wood >= 2) { inventory.stone -= 5; inventory.wood -= 2; inventory.equip.stoneSword = true; alert("âš”ï¸ é›é€ æˆåŠŸï¼"); }
-            else if(item === 'woodShield' && inventory.wood >= 3) { inventory.wood -= 3; inventory.equip.woodShield = true; alert("ðŸ›¡ï¸ é›é€ æˆåŠŸï¼"); }
-            else if(item === 'stoneArmor' && inventory.stone >= 5) { inventory.stone -= 5; inventory.equip.stoneArmor = true; alert("ðŸ›¡ï¸ é›é€ æˆåŠŸï¼"); }
-            else { alert("ææ–™ä¸è¶³ï¼"); }
+            if(inventory.equip[item]) return alert("你已經有這個裝備了！");
+            if(item === 'woodSword' && inventory.wood >= 3) { inventory.wood -= 3; inventory.equip.woodSword = true; alert("🗡️ 鍛造成功！"); }
+            else if(item === 'stoneSword' && inventory.stone >= 5 && inventory.wood >= 2) { inventory.stone -= 5; inventory.wood -= 2; inventory.equip.stoneSword = true; alert("⚔️ 鍛造成功！"); }
+            else if(item === 'woodShield' && inventory.wood >= 3) { inventory.wood -= 3; inventory.equip.woodShield = true; alert("🛡️ 鍛造成功！"); }
+            else if(item === 'stoneArmor' && inventory.stone >= 5) { inventory.stone -= 5; inventory.equip.stoneArmor = true; alert("🛡️ 鍛造成功！"); }
+            else { alert("材料不足！"); }
             updateUI();
         };
 
@@ -995,11 +1164,11 @@
             if (inventory.manuscript >= costM && inventory.fragment >= costF) {
                 inventory.manuscript -= costM; inventory.fragment -= costF;
                 playSound('win');
-                if (type === 'weapon') { inventory.superWeaponLv++; alert("ðŸ—¡ï¸ å‡ç´šæˆåŠŸï¼"); }
-                else if (type === 'shield') { inventory.superShieldLv++; alert("ðŸ›¡ï¸ å‡ç´šæˆåŠŸï¼"); }
-                else if (type === 'stone') { inventory.superStoneLv++; alert("ðŸ’Ž å‡ç´šæˆåŠŸï¼"); }
+                if (type === 'weapon') { inventory.superWeaponLv++; alert("🗡️ 升級成功！"); }
+                else if (type === 'shield') { inventory.superShieldLv++; alert("🛡️ 升級成功！"); }
+                else if (type === 'stone') { inventory.superStoneLv++; alert("💎 升級成功！"); }
                 updateUI();
-            } else { alert("ðŸ“œ æ‰‹ç¨¿æˆ– ðŸ”® ç¢Žç‰‡ä¸è¶³ï¼"); }
+            } else { alert("📜 手稿或 🔮 碎片不足！"); }
         };
 
         window.buildItem = function(type) {
@@ -1008,17 +1177,17 @@
             else if(type === 'tower' && inventory.stone >= 2) { inventory.stone -= 2; inventory.tower++; }
             else if(type === 'castle' && inventory.hut >= 2 && inventory.tower >= 2) { 
                 inventory.hut -= 2; inventory.tower -= 2; inventory.castles++; 
-                alert("ðŸ° é›„å‰çš„å¤§åŸŽå ¡å»ºæˆäº†ï¼å·²è§£éŽ–ã€çµ‚æ¥µ Boss æŒ‘æˆ°ã€‘ï¼");
+                alert("🏰 雄偉的大城堡建成了！已解鎖【終極 Boss 挑戰】！");
             }
             else if(type === 'flyingCastle' && inventory.gem >= 5 && inventory.castles >= 1) {
                 inventory.gem -= 5; inventory.castles -= 1; inventory.flyingCastle++;
-                alert("ðŸ›¸ å¥‡è¹Ÿé™è‡¨ï¼ä½ å»ºé€ äº†ã€é£›å¤©åŸŽå ¡ã€‘ï¼");
+                alert("🛸 奇蹟降臨！你建造了【飛天城堡】！");
             }
             else if(type === 'ferrisWheel' && inventory.star >= 5 && inventory.wood >= 5 && inventory.stone >= 5) {
                 inventory.star -= 5; inventory.wood -= 5; inventory.stone -= 5; inventory.ferrisWheel++;
-                alert("ðŸŽ¡ å¥‡è¹Ÿé™è‡¨ï¼ä½ å»ºé€ äº†ã€æ‘©å¤©è¼ªã€‘ï¼");
+                alert("🎡 奇蹟降臨！你建造了【摩天輪】！");
             }
-            else { alert("ææ–™æˆ–å‰ç½®å»ºç¯‰ä¸è¶³ï¼"); return; }
+            else { alert("材料或前置建築不足！"); return; }
             restoreBuildings(); updateUI();
         };
 
@@ -1026,14 +1195,14 @@
             document.getElementById('world-grid').innerHTML = "";
             const grid = document.getElementById('world-grid');
             const add = (e,n) => { let d=document.createElement('div'); d.className='building-item'; d.innerHTML=`<span class="emoji">${e}</span>${n}`; grid.appendChild(d); };
-            for(let i=0; i<inventory.hut; i++) add("ðŸ›–", "æœ¨å±‹");
-            for(let i=0; i<inventory.tower; i++) add("ðŸ—¼", "çŸ³å¡”");
-            for(let i=0; i<inventory.castles; i++) add("ðŸ°", "å¤§åŸŽå ¡");
-            for(let i=0; i<inventory.flyingCastle; i++) add("ðŸ›¸", "é£›å¤©åŸŽå ¡");
-            for(let i=0; i<inventory.ferrisWheel; i++) add("ðŸŽ¡", "æ‘©å¤©è¼ª");
+            for(let i=0; i<inventory.hut; i++) add("🛖", "木屋");
+            for(let i=0; i<inventory.tower; i++) add("🗼", "石塔");
+            for(let i=0; i<inventory.castles; i++) add("🏰", "大城堡");
+            for(let i=0; i<inventory.flyingCastle; i++) add("🛸", "飛天城堡");
+            for(let i=0; i<inventory.ferrisWheel; i++) add("🎡", "摩天輪");
         }
 
-        // --- å…±ç”¨æˆ°é¬¥ç³»çµ± (çµ‚æ¥µ Boss & å‚³èªªæ€ª) ---
+        // --- 共用戰鬥系統 (終極 Boss & 遭遇) ---
         let combatType = 'normal_boss';
         let currentCombatQ = {};
         let combatHP = 100;
@@ -1043,21 +1212,41 @@
         let combatCorrectCount = 0;
         let combatTarget = 5;
 
-        window.startBossFight = function(level) {
-            combatType = 'normal_boss'; combatTarget = 5;
-            document.getElementById('boss-hp-ui').classList.remove('hidden');
-            if(level === 1) { document.getElementById('boss-name-title').innerHTML = "ðŸŸ¢ Boss 1ï¼šå…ƒç´ åžå™¬è€…"; combatTimeLimit = 15; }
-            else if(level === 2) { document.getElementById('boss-name-title').innerHTML = "ðŸŸ¡ Boss 2ï¼šæ··æ²Œæ™ºè€…"; combatTimeLimit = 10; }
-            else { document.getElementById('boss-name-title').innerHTML = "ðŸ”´ Boss 3ï¼šçµ‚æ¥µå¹»å½±é­”çŽ‹"; combatTimeLimit = 5; }
-            startCombatScreen();
+        // Digimon官方圖
+        const bossPics = {
+            level1: 'https://digimon.net/cimages/digimon/greymon.jpg', 
+            level2: 'https://digimon.net/cimages/digimon/metalgreymon.jpg',
+            level3: 'https://digimon.net/cimages/digimon/wargreymon.jpg'
         };
 
-        function startCombat(type) {
+        window.startBossFight = function(level) {
+            initAudio();
+            combatType = 'normal_boss'; 
+            
+            if(level === 1) { 
+                combatTarget = 3; combatTimeLimit = 15; 
+                setupMonsterCombatUI("【成熟期】暴龍獸", bossPics.level1, 'glow-red');
+            }
+            else if(level === 2) { 
+                combatTarget = 4; combatTimeLimit = 10; 
+                setupMonsterCombatUI("【完全體】機械暴龍獸", bossPics.level2, 'glow-red');
+            }
+            else { 
+                combatTarget = 5; combatTimeLimit = 5; 
+                setupMonsterCombatUI("【究極體】戰鬥暴龍獸", bossPics.level3, 'glow-red');
+            }
+            
+            startCombatScreen();
+        }
+
+        function startCombat(type, evtData) {
             combatType = type;
             if(type === 'legendary') {
-                combatTarget = 3; combatTimeLimit = 12;
-                document.getElementById('boss-hp-ui').classList.add('hidden');
-                document.getElementById('boss-name-title').innerHTML = `<span style="color:#FFD700">ðŸŒŸ å‚³èªªæˆ°é¬¥ï¼š${currentEvent.name}</span>`;
+                combatTarget = 2; combatTimeLimit = 10;
+                setupMonsterCombatUI("【傳說試煉】" + evtData.name, evtData.pic, 'glow-gold');
+            } else if (type === 'virus') {
+                combatTarget = 1; combatTimeLimit = 15;
+                setupMonsterCombatUI("【野生突襲】" + evtData.name, evtData.pic, 'glow-purple');
             }
             startCombatScreen();
         }
@@ -1070,19 +1259,19 @@
             combatCorrectCount = 0;
             
             document.getElementById('boss-combat-screen').classList.remove('hidden');
-            document.getElementById('boss-progress-text').textContent = `ç›®æ¨™ï¼šç´¯ç©ç­”å° 0 / ${combatTarget}`;
+            document.getElementById('boss-progress-text').textContent = `目標：累積答對 0 / ${combatTarget}`;
             updateCombatHPBar(); nextCombatQuestion();
         }
 
         function updateCombatHPBar() {
             let pct = (combatHP / maxCombatHP) * 100;
             document.getElementById('player-hp-bar').style.width = pct + '%';
-            document.getElementById('player-hp-text').textContent = `ä½ çš„ HP: ${combatHP} / ${maxCombatHP}`;
+            document.getElementById('player-hp-text').textContent = `你的 HP: ${combatHP} / ${maxCombatHP}`;
             if(combatHP <= 0 && combatType === 'normal_boss') {
                 clearInterval(combatTimerInterval); playSound('error');
                 inventory.wood = Math.floor(inventory.wood / 2); inventory.stone = Math.floor(inventory.stone / 2);
                 updateUI();
-                alert("ðŸ’€ ä½ çš„ HP æ­¸é›¶äº†ï¼Boss æ“Šæ•—äº†ä½ ï¼Œä¸¦å¥ªèµ°äº†ä¸€åŠçš„æœ¨æå’ŒçŸ³é ­ï¼");
+                alert("💀 你的 HP 歸零了！Boss 擊敗了你，並奪走了一半的木材和石頭！");
                 goHome();
             }
         }
@@ -1122,7 +1311,7 @@
                     clearInterval(combatTimerInterval);
                     timerBar.style.transition = 'none';
                     timerBar.style.width = '0%';
-                    combatFail("è¶…æ™‚ï¼"); 
+                    combatFail("超時！"); 
                 }
             }, 1000);
         }
@@ -1139,11 +1328,18 @@
             if(combatType === 'legendary') {
                 inventory.streak = 0; inventory.gem = Math.max(0, inventory.gem - 2); inventory.star = Math.max(0, inventory.star - 2);
                 updateUI();
-                alert(`ðŸ’¥ ${reason} æŒ‘æˆ°å‚³èªªæ€ªå¤±æ•—ï¼æå¤±äº†å¯¶çŸ³èˆ‡æ˜Ÿæ˜Ÿï¼`);
+                alert(`💥 ${reason} 挑戰傳說怪失敗！損失了寶石與星星！`);
+                goHome();
+            } else if (combatType === 'virus') {
+                inventory.streak = 0;
+                inventory.wood = Math.max(0, inventory.wood - 2);
+                inventory.stone = Math.max(0, inventory.stone - 2);
+                updateUI();
+                alert(`💥 ${reason} 野生怪把你打傷了！損失 2 木材和 2 石頭。`);
                 goHome();
             } else {
                 combatHP -= 20; updateCombatHPBar();
-                document.getElementById('boss-msg').innerHTML = `<span style='color:#F44336'>ðŸ’¥ ${reason} Boss å°ä½ é€ æˆäº† 20 é»žå‚·å®³ï¼</span>`;
+                document.getElementById('boss-msg').innerHTML = `<span style='color:#F44336'>💥 ${reason} Boss 對你造成了 20 點傷害！</span>`;
                 document.getElementById('btn-next-boss-q').classList.remove('hidden');
             }
         }
@@ -1161,21 +1357,24 @@
                 playSound('win'); addStreak();
                 element.style.backgroundColor = '#4CAF50';
                 combatCorrectCount++;
-                document.getElementById('boss-progress-text').textContent = `ç›®æ¨™ï¼šç´¯ç©ç­”å° ${combatCorrectCount} / ${combatTarget}`;
-                document.getElementById('boss-msg').innerHTML = "<span style='color:#4CAF50'>âš”ï¸ æ¼‚äº®çš„ä¸€æ“Šï¼</span>";
+                document.getElementById('boss-progress-text').textContent = `目標：累積答對 ${combatCorrectCount} / ${combatTarget}`;
+                document.getElementById('boss-msg').innerHTML = "<span style='color:#4CAF50'>⚔️ 漂亮的一擊！</span>";
                 
                 if(combatCorrectCount >= combatTarget) {
                     playSound('boss_win');
                     setTimeout(() => {
                         if(combatType === 'legendary') {
-                            inventory.gem += 20; inventory.star += 20; inventory.mancript += 100;
-                            let code = currentEvent.name.includes('é¾') ? 1001 : 1002;
+                            inventory.gem += 20; inventory.star += 20; inventory.manuscript += 100;
+                            let code = currentEvent.name.includes('奧') ? 1001 : 1002;
                             if(!inventory.medals.includes(code)) inventory.medals.push(code);
                             updateUI();
-                            alert(`ðŸŒŸ å¥‡è¹Ÿï¼ä½ æˆåŠŸæ”¶æœäº†å‚³èªªæ€ªã€${currentEvent.name}ã€‘ï¼\nðŸŽ ç²å¾— 20 å¯¶çŸ³ã€20 æ˜Ÿæ˜Ÿã€100 æ‰‹ç¨¿ï¼ŒåŠå°ˆå±¬å‚³èªªå‹³ç« ï¼`);
+                            alert(`🌟 奇蹟！你成功收服了傳說怪【${currentEvent.name}】！\n🎁 獲得 20 寶石、20 星星、100 手稿，及專屬傳說勳章！`);
+                        } else if (combatType === 'virus') {
+                            inventory.gem += 5; updateUI(); 
+                            alert(`🏆 勝利！你擊退了野生怪，獲得 5 顆寶石！`);
                         } else {
                             inventory.gem += 10; inventory.star += 10; updateUI(); 
-                            alert("ðŸ† æ­å–œä½ æ“Šæ•—äº† Bossï¼ç²å¾— 10 é¡†å¯¶çŸ³å’Œ 10 é¡†æ˜Ÿæ˜Ÿï¼");
+                            alert("🏆 恭喜你擊敗了 Boss！獲得 10 顆寶石和 10 顆星星！");
                         }
                         goHome();
                     }, 1000);
@@ -1188,17 +1387,17 @@
             } else {
                 element.style.backgroundColor = '#F44336';
                 inventory.streak = 0; updateUI();
-                combatFail("ç­”éŒ¯äº†ï¼");
+                combatFail("答錯了！");
             }
         }
 
         window.fleeCombat = function() {
             playSound('click'); clearInterval(combatTimerInterval);
-            if(combatType === 'legendary') {
-                alert("ðŸƒ ä½ æ€¥å¿™é€ƒå‡ºå‚³èªªæ€ªçš„è¦–ç·šï¼Œå®‰ç„¶ç„¡æ™ã€‚");
+            if(combatType === 'legendary' || combatType === 'virus') {
+                alert("🏃 你急忙逃出危險區域，安然無恙。");
             } else {
                 inventory.wood = Math.max(0, inventory.wood - 5);
-                alert("ðŸƒ ä½ æ€¥å¿™é€ƒå‡º Boss çš„å·¢ç©´ï¼Œä½†åœ¨è·¯ä¸Šå¼„ä¸Ÿäº† 5 å€‹æœ¨æï¼");
+                alert("🏃 你急忙逃出 Boss 的巢穴，但在路上弄丟了 5 個木材！");
             }
             updateUI(); goHome();
         };
