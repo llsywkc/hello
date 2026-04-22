@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (數碼暴龍對戰 + 四大關卡終極版)</title>
+    <title>Roblox：森林大冒險 (終極無縫戰鬥版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -86,15 +86,11 @@
         }
         #btn-gift:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent; }
         
-        /* 數碼暴龍圖鑑風格圖片框 (Digimon Reference Book Style) */
+        /* 數碼暴龍圖鑑風格圖片框 */
         .beast-img { 
             width: 180px; height: 180px; margin: 10px auto; display: block; 
-            background: #FFFFFF; /* 純白背景，還原官方圖鑑 */
-            border-radius: 15px; /* 方角微圓，科技感更強 */
-            box-shadow: 0 8px 16px rgba(0,0,0,0.6); 
-            object-fit: contain; 
-            border: 5px solid #212121; /* 深灰色科技感邊框 */
-            padding: 5px;
+            background: #FFFFFF; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); 
+            object-fit: contain; border: 5px solid #212121; padding: 5px;
         }
     </style>
 </head>
@@ -158,10 +154,10 @@
             <hr style="width: 80%; border-top: 4px dashed #006064;">
             <h2>🗺️ 終極 Boss 挑戰區 (需建大城堡)</h2>
             <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;" id="boss-menu-area">
-                <button class="btn-black" id="btn-boss-1" onclick="startBossFight(1)" disabled>🔒 Boss 1</button>
-                <button class="btn-black" id="btn-boss-2" onclick="startBossFight(2)" disabled>🔒 Boss 2</button>
-                <button class="btn-black" id="btn-boss-3" onclick="startBossFight(3)" disabled>🔒 Boss 3</button>
-                <button class="btn-black" id="btn-boss-4" onclick="startBossFight(4)" disabled>🔒 Boss 4</button>
+                <button class="btn-black" id="btn-boss-1" onclick="startBossFight(1)" disabled>🔒 Boss 1 (20秒)</button>
+                <button class="btn-black" id="btn-boss-2" onclick="startBossFight(2)" disabled>🔒 Boss 2 (需20連勝)</button>
+                <button class="btn-black" id="btn-boss-3" onclick="startBossFight(3)" disabled>🔒 Boss 3 (需50連勝)</button>
+                <button class="btn-black" id="btn-boss-4" onclick="startBossFight(4)" disabled>🔒 Boss 4 (需100連勝)</button>
             </div>
         </div>
 
@@ -188,9 +184,9 @@
             <p style="font-weight:bold;">我只收閃亮的金幣！你需要甚麼幫助嗎？</p>
             <p>目前金幣: <span id="shop-coin-display" class="coin-text" style="font-size: 1.5em; font-weight: bold;">0</span></p>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 20px;">
-                <button class="btn-red" onclick="buyItem('hpPotion')">❤️ 恢復藥水 (擁有: <span id="shop-hp-count">0</span>)<br><small>戰鬥中補30血 | 15 金幣</small></button>
-                <button class="btn-orange" onclick="buyItem('atkPotion')">💪 力量藥水 <br><small>永久+2攻擊力 | 40 金幣</small></button>
-                <button class="btn-blue" onclick="buyItem('defPotion')">🛡️ 鐵壁藥水 <br><small>永久+2防禦力 | 40 金幣</small></button>
+                <button class="btn-red" onclick="buyItem('hpPotion')">❤️ 恢復藥水 (擁有: <span id="shop-hp-count">0</span>)<br><small>戰鬥中補30血 | 10 金幣</small></button>
+                <button class="btn-orange" onclick="buyItem('atkPotion')">💪 力量藥水 <br><small>永久+2攻擊力 | 20 金幣</small></button>
+                <button class="btn-blue" onclick="buyItem('defPotion')">🛡️ 鐵壁藥水 <br><small>永久+2防禦力 | 20 金幣</small></button>
             </div>
             <button class="btn-grey" onclick="goHome()">🏠 離開商店</button>
         </div>
@@ -331,7 +327,7 @@
             } catch(e) {}
         }
 
-        const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🐉', 900: '🌌', 1000: '🏆' };
+        const medalsConfig = { 10: '🥉', 20: '🥈', 30: '🥇', 40: '🏅', 50: '💎', 60: '🌠', 70: '👑', 80: '🐉', 90: '🌌', 100: '🏆' };
         
         const defaultInv = { 
             playerName: "", coin: 0, hpPotion: 0, potionAtk: 0, potionDef: 0,
@@ -390,7 +386,6 @@
             { q: "你的平板電腦 (iPad) 沒電了，需要插線充電，這是補充哪種能源？", ans: "電力", options: ["電力", "汽油", "石油氣"] },
             { q: "媽媽在廚房用的固定煮食爐，連接着地底長長的喉管，這是哪種能源？", ans: "煤氣", options: ["石油氣", "煤氣", "電力"] },
             { q: "冬天一家人去酒樓「打邊爐」，桌上那個可以搬來搬去的手提小火爐裏面裝的是甚麼？", ans: "石油氣", options: ["煤氣", "石油氣", "柴油"] },
-            { q: "香港街頭到處跑的「紅色的士」，最常用的燃料是甚麼？", ans: "石油氣", options: ["汽油", "石油氣", "柴油"] },
             { q: "爸爸媽媽駕駛的「私家車」，車體比較輕巧，去油站通常加甚麼油？", ans: "汽油", options: ["汽油", "柴油", "煤氣"] },
             { q: "每天載着很多乘客的「雙層巴士」，通常使用哪一種氣體能源？", ans: "柴油", options: ["汽油", "柴油", "石油氣"] },
             { q: "地盤裏的「泥頭車」和馬路上的「大貨車」，去油站時要加甚麼油？", ans: "柴油", options: ["汽油", "柴油", "煤氣"] },
@@ -438,7 +433,8 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_final17');
+            // 更新儲存空間名稱確保讀取最新邏輯
+            const savedData = localStorage.getItem('roblox_p4_save_final20');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -459,7 +455,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_final17', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_final20', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -522,15 +518,22 @@
             document.getElementById('shop-hp-count').textContent = inventory.hpPotion;
             document.getElementById('boss-potion-count').textContent = inventory.hpPotion;
 
-            // 解鎖 4 個 Boss
+            // 解鎖 4 個 Boss (只需 20, 50, 100 連勝)
             if (inventory.castles >= 1 || inventory.flyingCastle >= 1) {
                 for(let i=1; i<=4; i++) {
                     let b = document.getElementById(`btn-boss-${i}`);
                     if(b) {
-                        b.classList.remove('btn-black');
-                        b.classList.add(i===4 ? 'btn-red' : (i===3 ? 'btn-purple' : (i===2 ? 'btn-orange' : 'btn-green')));
-                        b.innerHTML = b.innerHTML.replace('🔒', '⚔️');
-                        b.disabled = false;
+                        let req = i===4 ? 100 : (i===3 ? 50 : (i===2 ? 20 : 0));
+                        let hasReq = req === 0 || inventory.medals.some(m => m >= req);
+                        if (hasReq) {
+                            b.classList.remove('btn-black');
+                            b.classList.add(i===4 ? 'btn-red' : (i===3 ? 'btn-purple' : (i===2 ? 'btn-orange' : 'btn-green')));
+                            b.innerHTML = b.innerHTML.replace('🔒', '⚔️');
+                            b.disabled = false;
+                        } else {
+                            b.classList.add('btn-black');
+                            b.disabled = true;
+                        }
                     }
                 }
             }
@@ -557,6 +560,7 @@
         }
 
         function hideAll() { document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); }
+        
         function goHome() {
             playSound('click'); updateUI(); hideAll(); clearInterval(bossTimerInterval);
             if(!inventory.playerName) document.getElementById('login-screen').classList.remove('hidden');
@@ -567,8 +571,49 @@
                 if(inventory.medals.length > 0) document.getElementById('medal-bar').classList.remove('hidden');
             }
         }
+
+        // --- 核心改動：打完怪獸後無縫返回答題關卡，並自動更新題目 ---
+        function endCombat() {
+            if (currentBoss === 'normalBeast' || currentBoss === 'legendary') {
+                hideAll();
+                document.getElementById('game-mining').classList.remove('hidden');
+                
+                // 確保頂部狀態列全部顯示
+                document.getElementById('player-tag').classList.remove('hidden');
+                document.getElementById('top-nav').classList.remove('hidden');
+                if(inventory.medals.length > 0) document.getElementById('medal-bar').classList.remove('hidden');
+                
+                updateUI();
+                
+                // 無縫自動進入下一題，不用手動按！
+                nextMining(); 
+            } else {
+                goHome(); // 主動挑戰的Boss則回主畫面
+            }
+        }
+
         function openInstructions() { playSound('click'); hideAll(); document.getElementById('instruction-screen').classList.remove('hidden'); }
+        
+        // --- 藥水系統徹底修復 (底層扣除金幣邏輯已更新為 10 和 20) ---
         function openShop() { playSound('click'); updateUI(); hideAll(); document.getElementById('shop-zone').classList.remove('hidden'); }
+        function buyItem(itemType) {
+            playSound('click');
+            if (itemType === 'hpPotion') {
+                if (inventory.coin >= 10) {
+                    inventory.coin -= 10; inventory.hpPotion++; playSound('win'); alert("✅ 成功購買 恢復藥水！(可在Boss戰使用)");
+                } else { playSound('error'); alert("❌ 金幣不足！去答題或打怪賺錢吧！"); }
+            } else if (itemType === 'atkPotion') {
+                if (inventory.coin >= 20) {
+                    inventory.coin -= 20; inventory.potionAtk += 2; playSound('win'); alert("✅ 成功購買 力量藥水！永久增加 2 點攻擊力！");
+                } else { playSound('error'); alert("❌ 金幣不足！去答題或打怪賺錢吧！"); }
+            } else if (itemType === 'defPotion') {
+                if (inventory.coin >= 20) {
+                    inventory.coin -= 20; inventory.potionDef += 2; playSound('win'); alert("✅ 成功購買 鐵壁藥水！永久增加 2 點防禦力！");
+                } else { playSound('error'); alert("❌ 金幣不足！去答題或打怪賺錢吧！"); }
+            }
+            updateUI();
+        }
+
         function openSuperForge() { playSound('click'); hideAll(); document.getElementById('super-forge-zone').classList.remove('hidden'); }
         function openForgeZone() { playSound('click'); hideAll(); document.getElementById('forge-zone').classList.remove('hidden'); }
         function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
@@ -590,7 +635,6 @@
             if (inventory.castles >= 1 && r < 0.05) {
                 isLegendary = true;
                 let legends = [
-                    // 滅世魔龍獸 (Megidramon), 伽樓達獸 (Garudamon)
                     { name: "🐉 【傳說】遠古黑龍", min: 150, max: 200, img: "https://digimon.net/cimages/digimon/megidramon.jpg" },
                     { name: "🦅 【傳說】暴風神鷲", min: 140, max: 190, img: "https://digimon.net/cimages/digimon/garudamon.jpg" }
                 ];
@@ -604,7 +648,6 @@
                 playSound('legendary');
             } else if (r < 0.25) { 
                 let normalBeasts = [
-                    // 朽木獸(Woodmon), 野豬獸(Boarmon), 毒蜘蛛獸(Dokugumon), 隕石獸(Golemon)
                     { name: "🟢 搗蛋樹妖", power: 33, img: "https://digimon.net/cimages/digimon/woodmon.jpg" },
                     { name: "🟡 狂暴野豬", power: 60, img: "https://digimon.net/cimages/digimon/boarmon.jpg" },
                     { name: "🔴 暗影巨蛛", power: 90, img: "https://digimon.net/cimages/digimon/dokugumon.jpg" },
@@ -641,7 +684,6 @@
                 if (isLegendary) {
                     startLegendaryFight(beastName, beastImg);
                 } else {
-                    // 進入一題定勝負的普通野獸戰！
                     startNormalBeastFight(beastName, beastImg, power);
                 }
             } else if (action === 'flee') {
@@ -657,6 +699,7 @@
                 }
                 document.getElementById('event-modal').classList.add('hidden');
                 updateUI();
+                nextMining(); // 逃跑後也無縫為玩家刷出下一題
             }
         }
 
@@ -737,8 +780,9 @@
         function nextMining() { playSound('click'); currentMiningIdx++; loadMining(); }
 
         function checkMedalUnlock() {
-            let m = Math.floor(inventory.streak / 100) * 100;
-            if (m >= 100 && !inventory.medals.includes(m) && medalsConfig[m]) {
+            let m = Math.floor(inventory.streak / 10) * 10;
+            // 每 10 連勝派發一次勳章
+            if (m >= 10 && m <= 100 && !inventory.medals.includes(m)) {
                 inventory.medals.push(m); playSound('medal'); alert(`🎊 難以置信！你達成了 ${m} 連勝！\n榮獲專屬勳章【${medalsConfig[m]}】！`);
             }
         }
@@ -799,23 +843,22 @@
             } else { playSound('error'); alert("❌ 手稿或碎片不足！"); }
         }
 
-        // --- Boss 戰鬥系統 (包含四個 Boss，使用 Digimon 官方圖片) ---
+        // --- Boss 戰鬥系統 (完美設定限時 20s, 15s, 10s, 5s) ---
         const bossConfig = {
-            // 惡魔獸(Devimon), 小丑皇(Piemon), 吸血魔獸(Vamdemon), 阿爾法獸(Alphamon)
-            1: { name: "🟢 Boss 1：元素吞噬者", time: 15, target: 5, mode: "accumulate", hpPenalty: 10, msg: "扣 10 HP，隨機吸走 2 元素！", img: "https://digimon.net/cimages/digimon/devimon.jpg" },
-            2: { name: "🟡 Boss 2：混沌智者", time: 10, target: 3, mode: "streak", hpPenalty: 20, msg: "扣 20 HP，連對歸零並吸走最多資源！", img: "https://digimon.net/cimages/digimon/piemon.jpg" },
-            3: { name: "🔴 Boss 3：幻影魔王", time: 5, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！", img: "https://digimon.net/cimages/digimon/vamdemon.jpg" },
-            4: { name: "🟣 Boss 4：法則守護者", time: 4, target: 6, mode: "streak", hpPenalty: 40, msg: "扣 40 HP！", img: "https://digimon.net/cimages/digimon/alphamon.jpg" },
-            'legendary': { name: "傳說怪獸", time: 10, target: 3, mode: "accumulate", hpPenalty: 25, msg: "受到傳說級攻擊！扣 25 HP！", img: "" },
-            'normalBeast': { name: "普通野獸", time: 15, target: 1, mode: "accumulate", hpPenalty: 20, msg: "受到怪獸攻擊！扣 20 HP！", img: "" }
+            1: { name: "🟢 Boss 1：元素吞噬者", time: 20, target: 4, mode: "accumulate", hpPenalty: 10, msg: "扣 10 HP，隨機吸走 2 元素！", img: "https://digimon.net/cimages/digimon/devimon.jpg" },
+            2: { name: "🟡 Boss 2：混沌智者", time: 15, target: 4, mode: "streak", hpPenalty: 20, msg: "扣 20 HP，連對歸零並吸走最多資源！", img: "https://digimon.net/cimages/digimon/piemon.jpg" },
+            3: { name: "🔴 Boss 3：幻影魔王", time: 10, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！", img: "https://digimon.net/cimages/digimon/vamdemon.jpg" },
+            4: { name: "🟣 Boss 4：法則守護者", time: 5, target: 5, mode: "streak", hpPenalty: 40, msg: "扣 40 HP！", img: "https://digimon.net/cimages/digimon/alphamon.jpg" },
+            'legendary': { name: "傳說怪獸", time: 15, target: 3, mode: "accumulate", hpPenalty: 25, msg: "受到傳說級攻擊！扣 25 HP！", img: "" },
+            'normalBeast': { name: "普通野獸", time: 20, target: 1, mode: "accumulate", hpPenalty: 20, msg: "受到怪獸攻擊！扣 20 HP！", img: "" }
         };
         let currentBoss = 1, bossTimerInterval, playerHP = 100, maxHP = 100, bossProgress = 0, bossTaskPool = [], currentBossTask = null;
 
         function startBossFight(id) {
             playSound('click');
-            if (id === 2 && !inventory.medals.includes(100)) return alert("需先獲得 100 連勝勳章才能挑戰 Boss 2！");
-            if (id === 3 && !inventory.medals.includes(300)) return alert("需先獲得 300 連勝勳章才能挑戰 Boss 3！");
-            if (id === 4 && !inventory.medals.includes(500)) return alert("需先獲得 500 連勝勳章 (💎) 才能挑戰 Boss 4！");
+            if (id === 2 && !inventory.medals.some(m => m >= 20)) return alert("需先獲得 20 連勝勳章 (🥈) 才能挑戰 Boss 2！");
+            if (id === 3 && !inventory.medals.some(m => m >= 50)) return alert("需先獲得 50 連勝勳章 (💎) 才能挑戰 Boss 3！");
+            if (id === 4 && !inventory.medals.some(m => m >= 100)) return alert("需先獲得 100 連勝勳章 (🏆) 才能挑戰 Boss 4！");
             
             document.getElementById('boss-image').src = bossConfig[id].img;
             document.getElementById('boss-image').style.display = "block";
@@ -943,11 +986,12 @@
 
         function fleeBoss() {
             playSound('click');
-            let confirmFlee = confirm("⚠️ 確定要逃跑嗎？逃跑將會直接結束挑戰，並掉落 5 個木材與 5 個石頭作為代價！");
+            let confirmFlee = confirm("⚠️ 確定要逃跑嗎？逃跑將會結束挑戰，並掉落 5 個木材與 5 個石頭作為代價！");
             if(confirmFlee) {
                 clearInterval(bossTimerInterval);
                 inventory.wood = Math.max(0, inventory.wood - 5); inventory.stone = Math.max(0, inventory.stone - 5);
-                updateUI(); alert("💨 你匆忙逃離了戰鬥領地！"); goHome();
+                updateUI(); alert("💨 你匆忙逃離了戰鬥領地！"); 
+                endCombat();
             }
         }
 
@@ -969,7 +1013,7 @@
                 alert(`🎉 恭喜！你成功擊敗了【${bossConfig[currentBoss].name}】！\n獲得 ${rewards[currentBoss].gem}寶石，${rewards[currentBoss].star}星星，${rewards[currentBoss].coin}金幣！`);
                 inventory.gem += rewards[currentBoss].gem; inventory.star += rewards[currentBoss].star; inventory.coin += rewards[currentBoss].coin; 
             }
-            goHome();
+            endCombat();
         }
 
         function bossDefeat() { 
@@ -981,7 +1025,7 @@
             } else {
                 alert(`💀 你被【${bossConfig[currentBoss].name}】擊敗了... 快去商店買點藥水或升級裝備再來挑戰吧！`); 
             }
-            goHome(); 
+            endCombat(); 
         }
 
         window.onload = loadGame;
