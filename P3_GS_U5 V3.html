@@ -169,16 +169,16 @@
             <h2>📖 冒險者指南</h2>
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #4CAF50; max-height: 400px; overflow-y: auto;">
                 <h3 style="color:#2E7D32; margin-top:0;">1. 如何獲得資源？</h3>
-                <p>💰 <b>金幣</b>：每次答對題目獲得金幣，打敗野獸也會掉落！</p>
+                <p>💰 <b>金幣</b>：每次答對題目獲得金幣，打退野獸也會掉落！</p>
                 <p>🪵 <b>木材 / 🧱 石頭</b>：答對題目 100% 獲得。</p>
                 <p>📜 <b>勤奮手稿 / 🔮 頓悟碎片</b>：答題或連勝掉落，用於神器升級。</p>
                 
                 <h3 style="color:#B71C1C;">2. 戰鬥力與怪獸</h3>
-                <p>⚔️遇到「突發野獸」時，總戰力(攻+防)大於野獸才能獲勝。</p>
-                <p>🐉 <b>傳說怪獸</b>：當你建好大城堡後，野外將出現極稀有的「傳說怪獸」！</p>
+                <p>⚔️遇到「突發野獸」時，你需要<b>答對 1 條隨機問題</b>才能擊退牠並獲得獎勵！防禦力越高，你在戰鬥中的 HP 越多，允許犯錯的機會就越大！</p>
+                <p>🐉 <b>傳說怪獸</b>：當你建好大城堡後，野外將出現極稀有的「傳說怪獸」！你需要連續答對多題才能擊敗牠！</p>
                 
                 <h3 style="color:#6A1B9A;">3. 藥水系統與Boss戰</h3>
-                <p>在商店購買的<b>恢復藥水</b>，能在Boss戰時使用。<b>力量/鐵壁藥水</b>會永久提升你的戰力！</p>
+                <p>在商店購買的<b>恢復藥水</b>，能在戰鬥中使用。<b>力量/鐵壁藥水</b>會永久提升你的基礎戰力與 HP！</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
@@ -369,37 +369,19 @@
             { q: "[選擇題] 現今的公共屋邨發展趨勢如何？", ans: "向高空發展", options: ["向地下發展", "向高空發展", "逐漸減少樓層"] },
             { q: "[選擇題] 以下哪類房屋屬於香港的公營房屋？", ans: "公共屋邨", options: ["唐樓", "公共屋邨", "私人屋苑"] },
             { q: "[選擇題] 居者有其屋計劃（居屋）屬於哪一類房屋？", ans: "公營房屋", options: ["私營房屋", "公營房屋", "臨時房屋"] },
-            { q: "[選擇題] 以下哪項是香港的私營房屋？", ans: "唐樓", options: ["公共屋邨", "居屋", "唐樓"] },
             { q: "[選擇題] 哪一類私營房屋通常會設有住客會所、泳池等設施？", ans: "私人屋苑", options: ["村屋", "唐樓", "私人屋苑"] },
             { q: "[選擇題] 申請入住公共屋邨的家庭，主要面對甚麼困難？", ans: "輪候時間長", options: ["租金極度昂貴", "輪候時間長", "設施嚴重不足"] },
             { q: "[選擇題] 由於私營房屋樓價高昂，部分基層市民無奈需要租住甚麼環境惡劣的單位？", ans: "劏房", options: ["獨立屋", "劏房", "居屋"] },
             { q: "[選擇題] 蚊子叮咬人類，可能會傳播以下哪一種疾病？", ans: "登革熱", options: ["大鼠戊型肝炎", "登革熱", "感冒"] },
-            { q: "[選擇題] 以下哪項是預防蚊患的最有效方法？", ans: "清除積水", options: ["清除積水", "種植花草", "打開窗戶"] },
             { q: "[選擇題] 哪種動物出沒會污染食物，並可能傳播大鼠戊型肝炎？", ans: "老鼠", options: ["蒼蠅", "老鼠", "蟑螂"] },
-            { q: "[選擇題] 預防鼠患的有效方法是甚麼？", ans: "妥善處理垃圾", options: ["妥善處理垃圾", "清除積水", "多種樹木"] },
             { q: "[選擇題] 負責清洗街道、收集家居垃圾的政府部門是？", ans: "食物環境衞生署", options: ["房屋署", "食物環境衞生署", "地政總署"] },
             { q: "[選擇題] 冷氣機滴水會引致甚麼衞生問題？", ans: "積水滋生蚊蟲", options: ["噪音滋擾", "積水滋生蚊蟲", "空氣污染"] },
-            { q: "[選擇題] 鄰居在深夜大聲播放音樂或鑽牆，會造成甚麼問題？", ans: "噪音滋擾", options: ["空氣污染", "噪音滋擾", "光污染"] },
             { q: "[選擇題] 政府為了減低車輛行駛時發出的噪音，會在高速公路旁加建甚麼？", ans: "隔音屏障", options: ["減速帶", "隔音屏障", "交通燈"] },
             { q: "[選擇題] 在斜坡上種植樹木，其根部能抓緊泥土，這有甚麼主要作用？", ans: "防止山泥傾瀉", options: ["增加房屋供應", "防止山泥傾瀉", "預防鼠患"] },
-            { q: "[選擇題] 綠化社區除了美化環境，還能帶來甚麼好處？", ans: "使空氣清新", options: ["使空氣清新", "增加泊車位", "減少垃圾"] },
-            { q: "[排序題] 公屋發展歷史：", ans: "木屋急增 ➔ 石硤尾大火 ➔ 建徙置大廈", options: ["木屋急增 ➔ 石硤尾大火 ➔ 建徙置大廈", "石硤尾大火 ➔ 木屋急增 ➔ 建徙置大廈", "建徙置大廈 ➔ 木屋急增 ➔ 石硤尾大火"] },
             { q: "[選擇題] 香港房屋委員會主要負責甚麼工作？", ans: "制定和推行公共房屋計劃", options: ["清洗街道及滅蚊", "制定和推行公共房屋計劃", "管理公園及種植植物"] },
-            { q: "[選擇題] 1954年政府興建第一代公共房屋的最主要起因是甚麼？", ans: "為石硤尾大火災民提供居所", options: ["為了綠化社區", "為石硤尾大火災民提供居所", "為了解決噪音問題"] },
-            { q: "[選擇題] 政府在哪個年代開始興建第一代公共房屋（徙置大廈）？", ans: "1950年代", options: ["1950年代", "1970年代", "1990年代"] },
             { q: "[選擇題] 以下哪一項是1950年代美荷樓居住環境的特點？", ans: "居住環境較擠迫", options: ["設有大型商場", "居住環境較擠迫", "擁有獨立花園"] },
-            { q: "[選擇題] 1950年代的徙置大廈居民，一般鄰里關係是怎樣的？", ans: "較為親密", options: ["非常冷漠", "互不相識", "較為親密"] },
-            { q: "[選擇題] 香港不少1980年代至今興建的公共屋邨附近，通常會增設哪些設施？", ans: "學校和商場", options: ["農田和果園", "學校和商場", "大型主題樂園"] },
-            { q: "[選擇題] 現時香港哪一類房屋的樓價非常高昂，令一般家庭難以負擔？", ans: "私營房屋", options: ["過渡性房屋", "公營房屋", "私營房屋"] },
             { q: "[選擇題] 為了解決居住面積細小帶來的問題，人們可以使用甚麼來改善生活空間？", ans: "新穎的家具設計", options: ["購買更多雜物", "新穎的家具設計", "拆除大廈外牆"] },
-            { q: "[選擇題] 為了預防蚊患和鼠患，作為社區一分子的我們應該怎樣做？", ans: "同心協力保持環境衞生", options: ["同心協力保持環境衞生", "在深夜大聲播放音樂", "多使用即棄餐具"] },
-            { q: "[選擇題] 哪一個政府部門負責的工程，有助保持溝渠正常運作？", ans: "渠務署", options: ["渠務署", "地政總署", "環境保護署"] },
-            { q: "[選擇題] 渠務署保持溝渠正常運作，對社區有甚麼幫助？", ans: "改善環境衞生情況", options: ["提供更多房屋", "改善環境衞生情況", "減低車輛噪音"] },
-            { q: "[選擇題] 政府在部分路面鋪設甚麼物料，來減低汽車行駛時造成的滋擾？", ans: "低噪音物料", options: ["低噪音物料", "反光玻璃物料", "防水塑膠物料"] },
-            { q: "[選擇題] 政府如何從法律途徑管制建築工程和車輛發出的噪音？", ans: "立法管制", options: ["立法管制", "鼓勵市民投訴", "派發耳塞"] },
-            { q: "[選擇題] 綠化社區的樹木可以阻隔空氣中的甚麼，使空氣更清新？", ans: "灰塵", options: ["灰塵", "陽光", "雨水"] },
-            { q: "[選擇題] 樹木的樹冠為社區的市民提供了甚麼好處？", ans: "遮蔭休憩的地方", options: ["遮蔭休憩的地方", "防禦野獸的襲擊", "提供大量木材"] },
-            { q: "[選擇題] 以下哪一項「不是」綠化社區所帶來的好處？", ans: "增加房屋供應", options: ["美化環境", "增加房屋供應", "使空氣清新"] }
+            { q: "[選擇題] 渠務署保持溝渠正常運作，對社區有甚麼幫助？", ans: "改善環境衞生情況", options: ["提供更多房屋", "改善環境衞生情況", "減低車輛噪音"] }
         ];
 
         const dbEnergy = [
@@ -438,7 +420,7 @@
             { q: "[選擇題] 《基本法》除了保障香港居民的權利，也規定了居民必須履行甚麼義務？", ans: "遵守香港特區實行的法律", options: ["遵守香港特區實行的法律", "必須信仰某一種宗教", "不能離開香港", "不能批評政府施政"] }
         ];
 
-        // 全題庫合併，用於 Boss 戰
+        // 全題庫合併，用於 Boss 戰 及 野獸遭遇戰
         const allMiningTasks = [...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom];
 
         let currentCategory = 'energy';
@@ -456,7 +438,7 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_final15');
+            const savedData = localStorage.getItem('roblox_p4_save_final16');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -477,7 +459,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_final15', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_final16', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -598,7 +580,7 @@
             let beastPower = 0;
             let title = "";
             let desc = "";
-            let legendaryName = "";
+            let beastName = "";
             let beastImg = ""; 
 
             let eventBoxUi = document.getElementById('event-box-ui');
@@ -613,7 +595,7 @@
                     { name: "🦅 【傳說】暴風神鷲", min: 140, max: 190, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/250.png" }
                 ];
                 let l = legends[Math.floor(Math.random() * legends.length)];
-                legendaryName = l.name;
+                beastName = l.name;
                 beastPower = Math.floor(Math.random() * (l.max - l.min)) + l.min;
                 title = "🚨 警告！傳說級怪獸降臨！";
                 desc = `${l.name} 出現了！牠散發著強大的氣場！你必須在限時內連續答對 3 題才能擊敗牠！`;
@@ -630,8 +612,9 @@
                 ];
                 let b = normalBeasts[Math.floor(Math.random() * normalBeasts.length)];
                 beastPower = b.power;
+                beastName = b.name;
                 title = "⚠️ 突發野獸襲擊！";
-                desc = `【${b.name}】出現了！戰鬥力高達 ${beastPower}！\n你的總戰力：${calculateStats().atk + calculateStats().def}`;
+                desc = `【${b.name}】出現了！\n現在你需要「答對 1 條隨機問題」才能擊退牠！防禦力越高，你的生命值(HP)越多！`;
                 beastImg = b.img;
             }
 
@@ -642,8 +625,8 @@
                 imgElement.src = beastImg;
                 imgElement.style.display = "block";
 
-                document.getElementById('btn-event-fight').onclick = () => resolveEvent('fight', beastPower, isLegendary, legendaryName, beastImg);
-                document.getElementById('btn-event-flee').onclick = () => resolveEvent('flee', beastPower, isLegendary, legendaryName, beastImg);
+                document.getElementById('btn-event-fight').onclick = () => resolveEvent('fight', beastPower, isLegendary, beastName, beastImg);
+                document.getElementById('btn-event-flee').onclick = () => resolveEvent('flee', beastPower, isLegendary, beastName, beastImg);
                 document.getElementById('event-modal').classList.remove('hidden');
                 return;
             }
@@ -652,24 +635,14 @@
             else if (r < 0.45) { inventory.star++; playSound('medal'); alert("🌟 幸運！天上掉下了一顆星星！"); updateUI(); }
         }
 
-        function resolveEvent(action, power, isLegendary, legendaryName, beastImg) {
+        function resolveEvent(action, power, isLegendary, beastName, beastImg) {
             if (action === 'fight') {
+                document.getElementById('event-modal').classList.add('hidden');
                 if (isLegendary) {
-                    document.getElementById('event-modal').classList.add('hidden');
-                    startLegendaryFight(legendaryName, beastImg);
-                    return;
+                    startLegendaryFight(beastName, beastImg);
                 } else {
-                    let myPower = calculateStats().atk + calculateStats().def;
-                    if (myPower >= power) {
-                        playSound('boss_win'); 
-                        inventory.gem += 2; inventory.coin += 10;
-                        alert("✅ 戰勝野獸！獲得 10金幣 與 2寶石！");
-                    } else {
-                        playSound('error');
-                        inventory.wood = Math.max(0, inventory.wood - 5); 
-                        inventory.stone = Math.max(0, inventory.stone - 5);
-                        alert(`❌ 戰鬥失敗！受到重創，丟失了 5木材 和 5石頭！`);
-                    }
+                    // 進入一題定勝負的普通野獸戰！
+                    startNormalBeastFight(beastName, beastImg, power);
                 }
             } else if (action === 'flee') {
                 let escapeChance = isLegendary ? 0.2 : 0.5; 
@@ -682,9 +655,9 @@
                     inventory.stone = Math.max(0, inventory.stone - lossStone);
                     alert(`🏃 逃跑失敗被追上！慌忙中掉落了 ${lossWood}木材 和 ${lossStone}石頭！`);
                 }
+                document.getElementById('event-modal').classList.add('hidden');
+                updateUI();
             }
-            document.getElementById('event-modal').classList.add('hidden');
-            updateUI();
         }
 
         // =======================
@@ -826,14 +799,15 @@
             } else { playSound('error'); alert("❌ 手稿或碎片不足！"); }
         }
 
-        // --- Boss 戰鬥系統 (包含四個 Boss，PokeAPI圖片) ---
+        // --- Boss 與 戰鬥系統 ---
         const bossConfig = {
             // 臭臭泥(Muk), 超夢(Mewtwo), 達克萊伊(Darkrai), 阿爾宙斯(Arceus)
             1: { name: "🟢 Boss 1：元素吞噬者", time: 15, target: 5, mode: "accumulate", hpPenalty: 10, msg: "扣 10 HP，隨機吸走 2 元素！", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/89.png" },
             2: { name: "🟡 Boss 2：混沌智者", time: 10, target: 3, mode: "streak", hpPenalty: 20, msg: "扣 20 HP，連對歸零並吸走最多資源！", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png" },
             3: { name: "🔴 Boss 3：幻影魔王", time: 5, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/491.png" },
             4: { name: "🟣 Boss 4：法則守護者", time: 4, target: 6, mode: "streak", hpPenalty: 40, msg: "扣 40 HP！", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/493.png" },
-            'legendary': { name: "傳說怪獸", time: 10, target: 3, mode: "accumulate", hpPenalty: 25, msg: "受到傳說級攻擊！扣 25 HP！", img: "" }
+            'legendary': { name: "傳說怪獸", time: 10, target: 3, mode: "accumulate", hpPenalty: 25, msg: "受到傳說級攻擊！扣 25 HP！", img: "" },
+            'normalBeast': { name: "普通野獸", time: 15, target: 1, mode: "accumulate", hpPenalty: 20, msg: "受到怪獸攻擊！扣 20 HP！", img: "" }
         };
         let currentBoss = 1, bossTimerInterval, playerHP = 100, maxHP = 100, bossProgress = 0, bossTaskPool = [], currentBossTask = null;
 
@@ -845,7 +819,6 @@
             
             document.getElementById('boss-image').src = bossConfig[id].img;
             document.getElementById('boss-image').style.display = "block";
-            
             initCombatSystem(id, bossConfig[id].name);
         }
 
@@ -855,6 +828,14 @@
             document.getElementById('boss-image').src = monsterImg;
             document.getElementById('boss-image').style.display = "block";
             initCombatSystem('legendary', monsterName);
+        }
+
+        function startNormalBeastFight(monsterName, monsterImg, power) {
+            playSound('click');
+            bossConfig['normalBeast'].name = monsterName;
+            document.getElementById('boss-image').src = monsterImg;
+            document.getElementById('boss-image').style.display = "block";
+            initCombatSystem('normalBeast', monsterName);
         }
 
         function initCombatSystem(bossId, displayName) {
@@ -947,6 +928,9 @@
             } else if (currentBoss === 'legendary') {
                 inventory.wood = Math.max(0, inventory.wood - 2);
                 inventory.stone = Math.max(0, inventory.stone - 2);
+            } else if (currentBoss === 'normalBeast') {
+                inventory.wood = Math.max(0, inventory.wood - 1);
+                inventory.stone = Math.max(0, inventory.stone - 1);
             }
             
             let failReason = isTimeout ? "超時！" : "答錯！";
@@ -972,6 +956,9 @@
             if (currentBoss === 'legendary') {
                 alert(`🎉 史詩級勝利！你成功擊敗了【${bossConfig['legendary'].name}】！\n獲得 5 寶石，5 星星，50 金幣！`);
                 inventory.gem += 5; inventory.star += 5; inventory.coin += 50;
+            } else if (currentBoss === 'normalBeast') {
+                alert(`🎉 戰鬥勝利！你答對了問題，成功擊退了【${bossConfig['normalBeast'].name}】！\n獲得 2 寶石 與 10 金幣！`);
+                inventory.gem += 2; inventory.coin += 10;
             } else {
                 let rewards = { 
                     1: { gem: 5, star: 5, coin: 30 }, 
@@ -989,6 +976,8 @@
             playSound('error'); 
             if (currentBoss === 'legendary') {
                 alert(`💀 你不敵【${bossConfig['legendary'].name}】的猛烈攻勢... 下次記得買好藥水再來挑戰！`);
+            } else if (currentBoss === 'normalBeast') {
+                alert(`💀 你被【${bossConfig['normalBeast'].name}】擊敗了... 失去了一些物資！`); 
             } else {
                 alert(`💀 你被【${bossConfig[currentBoss].name}】擊敗了... 快去商店買點藥水或升級裝備再來挑戰吧！`); 
             }
