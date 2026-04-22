@@ -1,22 +1,9 @@
-這三個問題都已經為你完美修復及優化了！
-
-以下是這次更新的重點內容：
-1. **🧪 藥水系統修復與降價**：修復了因金幣扣除邏輯導致有時無法購買的問題，並**大幅降低了藥水價格**（恢復藥水只需 10 金幣；力量/鐵壁藥水只需 20 金幣），讓小朋友更容易買到！
-2. **⚖️ Boss 與勳章難度大幅下調**：
-   * 原本需要 100、300、500 連勝才能解鎖 Boss，這對小朋友太嚴苛了。現在改為 **10連勝、20連勝、30連勝** 就能獲得勳章並解鎖後續 Boss！
-   * 同時增加了 Boss 和怪獸戰的**答題限時**（延長到 12～20 秒），讓小朋友有足夠時間閱讀題目。
-3. **⚔️ 打完怪不退出關卡**：新增了智能判斷！現在在關卡（礦洞）中遇到普通野獸或傳說怪獸，**打完後會直接返回答題畫面**，不會再被彈回主頁面，保持小朋友的學習節奏！
-*(註：如果是自己主動挑戰的 4 大終極 Boss，打完後則會正常回到主頁面領取獎勵)*
-
-請**全選、複製以下完整的程式碼，並覆蓋你原本的 HTML 檔案**即可：
-
-```html
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (難度優化 + 不退出關卡版)</title>
+    <title>Roblox：森林大冒險 (極致優化版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -167,10 +154,10 @@
             <hr style="width: 80%; border-top: 4px dashed #006064;">
             <h2>🗺️ 終極 Boss 挑戰區 (需建大城堡)</h2>
             <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;" id="boss-menu-area">
-                <button class="btn-black" id="btn-boss-1" onclick="startBossFight(1)" disabled>🔒 Boss 1</button>
-                <button class="btn-black" id="btn-boss-2" onclick="startBossFight(2)" disabled>🔒 Boss 2 (需 10 連勝)</button>
-                <button class="btn-black" id="btn-boss-3" onclick="startBossFight(3)" disabled>🔒 Boss 3 (需 20 連勝)</button>
-                <button class="btn-black" id="btn-boss-4" onclick="startBossFight(4)" disabled>🔒 Boss 4 (需 30 連勝)</button>
+                <button class="btn-black" id="btn-boss-1" onclick="startBossFight(1)" disabled>🔒 Boss 1 (20秒)</button>
+                <button class="btn-black" id="btn-boss-2" onclick="startBossFight(2)" disabled>🔒 Boss 2 (需20連勝)</button>
+                <button class="btn-black" id="btn-boss-3" onclick="startBossFight(3)" disabled>🔒 Boss 3 (需50連勝)</button>
+                <button class="btn-black" id="btn-boss-4" onclick="startBossFight(4)" disabled>🔒 Boss 4 (需100連勝)</button>
             </div>
         </div>
 
@@ -340,7 +327,6 @@
             } catch(e) {}
         }
 
-        // 調整勳章解鎖難度：改為每 10 勝獲得一個！
         const medalsConfig = { 10: '🥉', 20: '🥈', 30: '🥇', 40: '🏅', 50: '💎', 60: '🌠', 70: '👑', 80: '🐉', 90: '🌌', 100: '🏆' };
         
         const defaultInv = { 
@@ -447,7 +433,7 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_final18');
+            const savedData = localStorage.getItem('roblox_p4_save_final19');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -468,7 +454,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_final18', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_final19', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -531,12 +517,12 @@
             document.getElementById('shop-hp-count').textContent = inventory.hpPotion;
             document.getElementById('boss-potion-count').textContent = inventory.hpPotion;
 
-            // 解鎖 4 個 Boss (只需 10, 20, 30 連勝)
+            // 解鎖 4 個 Boss (只需 20, 50, 100 連勝)
             if (inventory.castles >= 1 || inventory.flyingCastle >= 1) {
                 for(let i=1; i<=4; i++) {
                     let b = document.getElementById(`btn-boss-${i}`);
                     if(b) {
-                        let req = i===4 ? 30 : (i===3 ? 20 : (i===2 ? 10 : 0));
+                        let req = i===4 ? 100 : (i===3 ? 50 : (i===2 ? 20 : 0));
                         let hasReq = req === 0 || inventory.medals.some(m => m >= req);
                         if (hasReq) {
                             b.classList.remove('btn-black');
@@ -597,7 +583,27 @@
         }
 
         function openInstructions() { playSound('click'); hideAll(); document.getElementById('instruction-screen').classList.remove('hidden'); }
+        
+        // --- 藥水購買邏輯已修復 ---
         function openShop() { playSound('click'); updateUI(); hideAll(); document.getElementById('shop-zone').classList.remove('hidden'); }
+        function buyItem(itemType) {
+            playSound('click');
+            if (itemType === 'hpPotion') {
+                if (inventory.coin >= 10) {
+                    inventory.coin -= 10; inventory.hpPotion++; playSound('win'); alert("✅ 成功購買 恢復藥水！(可在Boss戰使用)");
+                } else { playSound('error'); alert("❌ 金幣不足！去答題或打怪賺錢吧！"); }
+            } else if (itemType === 'atkPotion') {
+                if (inventory.coin >= 20) {
+                    inventory.coin -= 20; inventory.potionAtk += 2; playSound('win'); alert("✅ 成功購買 力量藥水！永久增加 2 點攻擊力！");
+                } else { playSound('error'); alert("❌ 金幣不足！去答題或打怪賺錢吧！"); }
+            } else if (itemType === 'defPotion') {
+                if (inventory.coin >= 20) {
+                    inventory.coin -= 20; inventory.potionDef += 2; playSound('win'); alert("✅ 成功購買 鐵壁藥水！永久增加 2 點防禦力！");
+                } else { playSound('error'); alert("❌ 金幣不足！去答題或打怪賺錢吧！"); }
+            }
+            updateUI();
+        }
+
         function openSuperForge() { playSound('click'); hideAll(); document.getElementById('super-forge-zone').classList.remove('hidden'); }
         function openForgeZone() { playSound('click'); hideAll(); document.getElementById('forge-zone').classList.remove('hidden'); }
         function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
@@ -829,13 +835,13 @@
             } else { playSound('error'); alert("❌ 手稿或碎片不足！"); }
         }
 
-        // --- Boss 戰鬥系統 (包含四個 Boss，使用 Digimon 官方圖片，調整秒數防過難) ---
+        // --- Boss 戰鬥系統 (包含四個 Boss，精準調整答題時間) ---
         const bossConfig = {
             // 惡魔獸(Devimon), 小丑皇(Piemon), 吸血魔獸(Vamdemon), 阿爾法獸(Alphamon)
             1: { name: "🟢 Boss 1：元素吞噬者", time: 20, target: 4, mode: "accumulate", hpPenalty: 10, msg: "扣 10 HP，隨機吸走 2 元素！", img: "https://digimon.net/cimages/digimon/devimon.jpg" },
             2: { name: "🟡 Boss 2：混沌智者", time: 15, target: 4, mode: "streak", hpPenalty: 20, msg: "扣 20 HP，連對歸零並吸走最多資源！", img: "https://digimon.net/cimages/digimon/piemon.jpg" },
-            3: { name: "🔴 Boss 3：幻影魔王", time: 12, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！", img: "https://digimon.net/cimages/digimon/vamdemon.jpg" },
-            4: { name: "🟣 Boss 4：法則守護者", time: 10, target: 5, mode: "streak", hpPenalty: 40, msg: "扣 40 HP！", img: "https://digimon.net/cimages/digimon/alphamon.jpg" },
+            3: { name: "🔴 Boss 3：幻影魔王", time: 10, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！", img: "https://digimon.net/cimages/digimon/vamdemon.jpg" },
+            4: { name: "🟣 Boss 4：法則守護者", time: 5, target: 5, mode: "streak", hpPenalty: 40, msg: "扣 40 HP！", img: "https://digimon.net/cimages/digimon/alphamon.jpg" },
             'legendary': { name: "傳說怪獸", time: 15, target: 3, mode: "accumulate", hpPenalty: 25, msg: "受到傳說級攻擊！扣 25 HP！", img: "" },
             'normalBeast': { name: "普通野獸", time: 20, target: 1, mode: "accumulate", hpPenalty: 20, msg: "受到怪獸攻擊！扣 20 HP！", img: "" }
         };
@@ -843,9 +849,9 @@
 
         function startBossFight(id) {
             playSound('click');
-            if (id === 2 && !inventory.medals.some(m => m >= 10)) return alert("需先獲得 10 連勝勳章 (🥉) 才能挑戰 Boss 2！");
-            if (id === 3 && !inventory.medals.some(m => m >= 20)) return alert("需先獲得 20 連勝勳章 (🥈) 才能挑戰 Boss 3！");
-            if (id === 4 && !inventory.medals.some(m => m >= 30)) return alert("需先獲得 30 連勝勳章 (🥇) 才能挑戰 Boss 4！");
+            if (id === 2 && !inventory.medals.some(m => m >= 20)) return alert("需先獲得 20 連勝勳章 (🥈) 才能挑戰 Boss 2！");
+            if (id === 3 && !inventory.medals.some(m => m >= 50)) return alert("需先獲得 50 連勝勳章 (💎) 才能挑戰 Boss 3！");
+            if (id === 4 && !inventory.medals.some(m => m >= 100)) return alert("需先獲得 100 連勝勳章 (🏆) 才能挑戰 Boss 4！");
             
             document.getElementById('boss-image').src = bossConfig[id].img;
             document.getElementById('boss-image').style.display = "block";
@@ -1019,4 +1025,3 @@
     </script>
 </body>
 </html>
-```
