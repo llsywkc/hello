@@ -97,6 +97,8 @@
         </div>
 
         <div id="start-screen" class="screen hidden">
+            <button id="btn-newbie-pack" class="btn-gold" onclick="claimNewbiePack()" style="width: 80%; border: 4px dashed #FFF; margin-bottom: 10px;">🎁 領取新手禮包 (所有材料+50)</button>
+
             <button class="btn-grey" onclick="openInstructions()" style="width: 80%;">📖 遊戲說明 (新手必看)</button>
             <hr style="width: 80%; border-top: 4px dashed #E65100;">
             
@@ -302,7 +304,7 @@
             initAudio(); 
             if(e.target.tagName === 'BUTTON' || e.target.classList.contains('word-chunk')) {
                 let oc = e.target.getAttribute('onclick') || '';
-                if(!oc.includes('checkAnswer') && !oc.includes('checkBossAnswer')) { playSound('click'); }
+                if(!oc.includes('checkAnswer') && !oc.includes('checkBossAnswer') && !oc.includes('claimNewbiePack')) { playSound('click'); }
             }
         });
 
@@ -310,7 +312,8 @@
         let player = {
             name: "冒險者", streak: 0,
             inv: { wood: 0, stone: 0, atk: 10, def: 10, gem: 0, star: 0, manu: 0, frag: 0 },
-            gear: { weapon: 0, shield: 0 }, buildings: { tent: 0, cabin: 0, castle: 0, base: 0, park: 0 }
+            gear: { weapon: 0, shield: 0 }, buildings: { tent: 0, cabin: 0, castle: 0, base: 0, park: 0 },
+            claimedNewbiePack: false // 新增新手禮包標記
         };
 
         function autoSave() { localStorage.setItem('roblox_p2_save', JSON.stringify(player)); }
@@ -323,7 +326,10 @@
         window.onload = function() {
             let data = localStorage.getItem('roblox_p2_save');
             if (data) {
-                player = JSON.parse(data);
+                let loadedPlayer = JSON.parse(data);
+                player = Object.assign(player, loadedPlayer); // 兼容舊存檔
+                if (player.claimedNewbiePack === undefined) player.claimedNewbiePack = false;
+                
                 document.getElementById("input-name").value = player.name;
                 document.getElementById('sg-w-lv').innerText = player.gear.weapon; 
                 document.getElementById('sg-w-bonus').innerText = player.gear.weapon * 5;
@@ -333,8 +339,44 @@
                 document.getElementById('sg-s-bonus').innerText = player.gear.shield * 5;
                 document.getElementById('sg-s-cost-m').innerText = 5 + player.gear.shield * 2; 
                 document.getElementById('sg-s-cost-f').innerText = player.gear.shield;
+                
+                // 更新新手禮包按鈕狀態
+                if (player.claimedNewbiePack) {
+                    let btn = document.getElementById('btn-newbie-pack');
+                    btn.disabled = true;
+                    btn.innerText = "🎁 新手禮包 (已領取)";
+                    btn.style.borderColor = "#9E9E9E";
+                    btn.classList.replace('btn-gold', 'btn-grey');
+                }
             }
         };
+
+        // --- 新手禮包功能 ---
+        function claimNewbiePack() {
+            if (player.claimedNewbiePack) {
+                alert("你已經領取過新手禮包了！");
+                return;
+            }
+            player.inv.wood += 50;
+            player.inv.stone += 50;
+            player.inv.gem += 50;
+            player.inv.star += 50;
+            player.inv.manu += 50;
+            player.inv.frag += 50;
+            player.claimedNewbiePack = true;
+            
+            playSound('win');
+            alert("🎁 領取成功！獲得所有材料 +50！快去升級裝備和建築吧！");
+            
+            let btn = document.getElementById('btn-newbie-pack');
+            btn.disabled = true;
+            btn.innerText = "🎁 新手禮包 (已領取)";
+            btn.style.borderColor = "#9E9E9E";
+            btn.classList.replace('btn-gold', 'btn-grey');
+            
+            renderStats();
+            autoSave();
+        }
 
         // --- 遊戲狀態管理 ---
         let currentMode = ""; let currentQuestion = null;
@@ -358,7 +400,6 @@
         // --- 題庫 ---
         const questions = {
             dictation: [ // 40題 默書及語文運用 (二下二冊三十一、三十二課)
-                // 第一批：20題
                 { q: "遇到不懂的生字，我們可以向老師___。", options: ["請教", "介紹", "欣賞", "連忙"], a: "請教", hint: "虛心向別人詢問和學習。" },
                 { q: "同學們___上台分享自己最喜歡的圖書。", options: ["輪流", "期待", "入神", "介紹"], a: "輪流", hint: "按照次序一個接一個地進行。" },
                 { q: "學校即將舉行陸運會，大家都非常___。", options: ["期待", "有趣", "介紹", "連忙"], a: "期待", hint: "充滿希望地等待。" },
@@ -379,7 +420,6 @@
                 { q: "「我會記住這個___，學習利用字典。」空格內應填上甚麼詞語？", options: ["教訓", "介紹", "期待", "欣賞"], a: "教訓", hint: "從錯誤中得到的經驗。" },
                 { q: "以下哪個字是「刀」部或「刂」部？", options: ["利", "袋", "裙", "褲"], a: "利", hint: "與刀子或切割有關的部首。" },
                 { q: "以下哪個字是「衣」部或「衤」部？", options: ["裙", "切", "刮", "判"], a: "裙", hint: "與衣服有關的部首。" },
-                // 第二批：新增的 20 題 (針對詞語、課文及「先...然後...」)
                 { q: "老師要我們___説出自己的名字。", options: ["輪流", "介紹", "連忙", "期待"], a: "輪流", hint: "按次序一個接一個地做。" },
                 { q: "魔術師的表演太___了，觀眾都看得很入神。", options: ["有趣", "活動", "請教", "教訓"], a: "有趣", hint: "能引起人的好奇心和喜愛。" },
                 { q: "同學們正在課室裏___同學的朗誦表演。", options: ["欣賞", "介紹", "期待", "連忙"], a: "欣賞", hint: "享受美好的事物。" },
@@ -712,7 +752,7 @@
             } else {
                 if (ans === currentQuestion.a) {
                     playSound('correct'); player.streak++;
-                    let rewardType = (currentMode === 'letter') ? (Math.random() > 0.5 ? 'wood' : 'stone') : ((currentMode === 'reorder' || currentMode === 'punctuation') ? 'wood' : 'stone');
+                    let rewardType = (currentMode === 'letter' || currentMode === 'dictation') ? (Math.random() > 0.5 ? 'wood' : 'stone') : ((currentMode === 'reorder' || currentMode === 'punctuation') ? 'wood' : 'stone');
                     let rewardText = rewardType === 'wood' ? '🪵 木材 +1' : '🧱 石頭 +1';
                     player.inv[rewardType] += 1; player.inv.manu += 1; rewardText += ', 📜 手稿 +1';
                     
