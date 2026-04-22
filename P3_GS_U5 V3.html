@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (精靈對戰 + 四大關卡終極版)</title>
+    <title>Roblox：森林大冒險 (數碼暴龍對戰 + 四大關卡終極版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -86,15 +86,15 @@
         }
         #btn-gift:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent; }
         
-        /* 寶可夢 風格圖片框 */
+        /* 數碼暴龍圖鑑風格圖片框 (Digimon Reference Book Style) */
         .beast-img { 
-            width: 160px; height: 160px; margin: 10px auto; display: block; 
-            background: radial-gradient(circle, #E1F5FE 0%, #B3E5FC 100%); 
-            border-radius: 50%; 
-            box-shadow: 0 6px 12px rgba(0,0,0,0.5), inset 0 0 15px rgba(255,255,255,0.8); 
+            width: 180px; height: 180px; margin: 10px auto; display: block; 
+            background: #FFFFFF; /* 純白背景，還原官方圖鑑 */
+            border-radius: 15px; /* 方角微圓，科技感更強 */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.6); 
             object-fit: contain; 
-            border: 6px double #0277BD; 
-            padding: 10px;
+            border: 5px solid #212121; /* 深灰色科技感邊框 */
+            padding: 5px;
         }
     </style>
 </head>
@@ -174,8 +174,8 @@
                 <p>📜 <b>勤奮手稿 / 🔮 頓悟碎片</b>：答題或連勝掉落，用於神器升級。</p>
                 
                 <h3 style="color:#B71C1C;">2. 戰鬥力與怪獸</h3>
-                <p>⚔️遇到「突發野獸」時，你需要<b>答對 1 條隨機問題</b>才能擊退牠並獲得獎勵！防禦力越高，你在戰鬥中的 HP 越多，允許犯錯的機會就越大！</p>
-                <p>🐉 <b>傳說怪獸</b>：當你建好大城堡後，野外將出現極稀有的「傳說怪獸」！你需要連續答對多題才能擊敗牠！</p>
+                <p>⚔️遇到「突發野獸」時，你需要<b>答對 1 條隨機問題</b>才能擊退牠並獲得獎勵！防禦力越高，你的 HP 越多，容錯機會就越大！</p>
+                <p>🐉 <b>傳說怪獸</b>：當你建好大城堡後，野外將出現極稀有的「傳說怪獸」！</p>
                 
                 <h3 style="color:#6A1B9A;">3. 藥水系統與Boss戰</h3>
                 <p>在商店購買的<b>恢復藥水</b>，能在戰鬥中使用。<b>力量/鐵壁藥水</b>會永久提升你的基礎戰力與 HP！</p>
@@ -438,7 +438,7 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_final16');
+            const savedData = localStorage.getItem('roblox_p4_save_final17');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -459,7 +459,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_final16', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_final17', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -573,7 +573,7 @@
         function openForgeZone() { playSound('click'); hideAll(); document.getElementById('forge-zone').classList.remove('hidden'); }
         function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
         
-        // --- 傳說怪獸與突發事件 (PokeAPI 寶可夢官方圖片) ---
+        // --- 傳說怪獸與突發事件 (使用 Digimon Reference Book 官方圖鑑圖片) ---
         function checkInvasion() {
             let r = Math.random();
             let isLegendary = false;
@@ -590,9 +590,9 @@
             if (inventory.castles >= 1 && r < 0.05) {
                 isLegendary = true;
                 let legends = [
-                    // 捷克羅姆(Zekrom), 鳳王(Ho-Oh)
-                    { name: "🐉 【傳說】遠古黑龍", min: 150, max: 200, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/644.png" },
-                    { name: "🦅 【傳說】暴風神鷲", min: 140, max: 190, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/250.png" }
+                    // 滅世魔龍獸 (Megidramon), 伽樓達獸 (Garudamon)
+                    { name: "🐉 【傳說】遠古黑龍", min: 150, max: 200, img: "https://digimon.net/cimages/digimon/megidramon.jpg" },
+                    { name: "🦅 【傳說】暴風神鷲", min: 140, max: 190, img: "https://digimon.net/cimages/digimon/garudamon.jpg" }
                 ];
                 let l = legends[Math.floor(Math.random() * legends.length)];
                 beastName = l.name;
@@ -604,11 +604,11 @@
                 playSound('legendary');
             } else if (r < 0.25) { 
                 let normalBeasts = [
-                    // 朽木妖(Trevenant), 炎武王(Emboar), 阿利多斯(Ariados), 隆隆岩(Golem)
-                    { name: "🟢 搗蛋樹妖", power: 33, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/709.png" },
-                    { name: "🟡 狂暴野豬", power: 60, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/500.png" },
-                    { name: "🔴 暗影巨蛛", power: 90, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/168.png" },
-                    { name: "🟣 裝甲巨石魔", power: 120, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/76.png" }
+                    // 朽木獸(Woodmon), 野豬獸(Boarmon), 毒蜘蛛獸(Dokugumon), 隕石獸(Golemon)
+                    { name: "🟢 搗蛋樹妖", power: 33, img: "https://digimon.net/cimages/digimon/woodmon.jpg" },
+                    { name: "🟡 狂暴野豬", power: 60, img: "https://digimon.net/cimages/digimon/boarmon.jpg" },
+                    { name: "🔴 暗影巨蛛", power: 90, img: "https://digimon.net/cimages/digimon/dokugumon.jpg" },
+                    { name: "🟣 裝甲巨石魔", power: 120, img: "https://digimon.net/cimages/digimon/golemon.jpg" }
                 ];
                 let b = normalBeasts[Math.floor(Math.random() * normalBeasts.length)];
                 beastPower = b.power;
@@ -799,13 +799,13 @@
             } else { playSound('error'); alert("❌ 手稿或碎片不足！"); }
         }
 
-        // --- Boss 與 戰鬥系統 ---
+        // --- Boss 戰鬥系統 (包含四個 Boss，使用 Digimon 官方圖片) ---
         const bossConfig = {
-            // 臭臭泥(Muk), 超夢(Mewtwo), 達克萊伊(Darkrai), 阿爾宙斯(Arceus)
-            1: { name: "🟢 Boss 1：元素吞噬者", time: 15, target: 5, mode: "accumulate", hpPenalty: 10, msg: "扣 10 HP，隨機吸走 2 元素！", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/89.png" },
-            2: { name: "🟡 Boss 2：混沌智者", time: 10, target: 3, mode: "streak", hpPenalty: 20, msg: "扣 20 HP，連對歸零並吸走最多資源！", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png" },
-            3: { name: "🔴 Boss 3：幻影魔王", time: 5, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/491.png" },
-            4: { name: "🟣 Boss 4：法則守護者", time: 4, target: 6, mode: "streak", hpPenalty: 40, msg: "扣 40 HP！", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/493.png" },
+            // 惡魔獸(Devimon), 小丑皇(Piemon), 吸血魔獸(Vamdemon), 阿爾法獸(Alphamon)
+            1: { name: "🟢 Boss 1：元素吞噬者", time: 15, target: 5, mode: "accumulate", hpPenalty: 10, msg: "扣 10 HP，隨機吸走 2 元素！", img: "https://digimon.net/cimages/digimon/devimon.jpg" },
+            2: { name: "🟡 Boss 2：混沌智者", time: 10, target: 3, mode: "streak", hpPenalty: 20, msg: "扣 20 HP，連對歸零並吸走最多資源！", img: "https://digimon.net/cimages/digimon/piemon.jpg" },
+            3: { name: "🔴 Boss 3：幻影魔王", time: 5, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！", img: "https://digimon.net/cimages/digimon/vamdemon.jpg" },
+            4: { name: "🟣 Boss 4：法則守護者", time: 4, target: 6, mode: "streak", hpPenalty: 40, msg: "扣 40 HP！", img: "https://digimon.net/cimages/digimon/alphamon.jpg" },
             'legendary': { name: "傳說怪獸", time: 10, target: 3, mode: "accumulate", hpPenalty: 25, msg: "受到傳說級攻擊！扣 25 HP！", img: "" },
             'normalBeast': { name: "普通野獸", time: 15, target: 1, mode: "accumulate", hpPenalty: 20, msg: "受到怪獸攻擊！扣 20 HP！", img: "" }
         };
