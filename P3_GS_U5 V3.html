@@ -432,9 +432,17 @@
             goHome();
         }
 
-        function loadGame() {
-            // 更新儲存空間名稱確保讀取最新邏輯
-            const savedData = localStorage.getItem('roblox_p4_save_final20');
+
+           function loadGame() {
+            // 系統會優先讀取最新存檔，如果沒有，會自動往下尋找同學們的舊版存檔並繼承！
+            const savedData = localStorage.getItem('roblox_p4_save_final20') 
+                           || localStorage.getItem('roblox_p4_save_final19')
+                           || localStorage.getItem('roblox_p4_save_final18')
+                           || localStorage.getItem('roblox_p4_save_v14')
+                           || localStorage.getItem('roblox_p4_save_v13')
+                           || localStorage.getItem('roblox_p4_save_v12')
+                           || localStorage.getItem('roblox_p4_save_v11');
+
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
