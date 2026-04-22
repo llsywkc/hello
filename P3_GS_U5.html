@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (極致優化版)</title>
+    <title>Roblox：森林大冒險 (終極無縫戰鬥版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -433,7 +433,8 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_final19');
+            // 更新儲存空間名稱確保讀取最新邏輯
+            const savedData = localStorage.getItem('roblox_p4_save_final20');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -454,7 +455,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_final19', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_final20', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -570,13 +571,22 @@
                 if(inventory.medals.length > 0) document.getElementById('medal-bar').classList.remove('hidden');
             }
         }
-        
-        // --- 核心改動：打完隨機怪獸後返回答題關卡 ---
+
+        // --- 核心改動：打完怪獸後無縫返回答題關卡，並自動更新題目 ---
         function endCombat() {
             if (currentBoss === 'normalBeast' || currentBoss === 'legendary') {
                 hideAll();
                 document.getElementById('game-mining').classList.remove('hidden');
+                
+                // 確保頂部狀態列全部顯示
+                document.getElementById('player-tag').classList.remove('hidden');
+                document.getElementById('top-nav').classList.remove('hidden');
+                if(inventory.medals.length > 0) document.getElementById('medal-bar').classList.remove('hidden');
+                
                 updateUI();
+                
+                // 無縫自動進入下一題，不用手動按！
+                nextMining(); 
             } else {
                 goHome(); // 主動挑戰的Boss則回主畫面
             }
@@ -584,7 +594,7 @@
 
         function openInstructions() { playSound('click'); hideAll(); document.getElementById('instruction-screen').classList.remove('hidden'); }
         
-        // --- 藥水購買邏輯已修復 ---
+        // --- 藥水系統徹底修復 (底層扣除金幣邏輯已更新為 10 和 20) ---
         function openShop() { playSound('click'); updateUI(); hideAll(); document.getElementById('shop-zone').classList.remove('hidden'); }
         function buyItem(itemType) {
             playSound('click');
@@ -625,7 +635,6 @@
             if (inventory.castles >= 1 && r < 0.05) {
                 isLegendary = true;
                 let legends = [
-                    // 滅世魔龍獸 (Megidramon), 伽樓達獸 (Garudamon)
                     { name: "🐉 【傳說】遠古黑龍", min: 150, max: 200, img: "https://digimon.net/cimages/digimon/megidramon.jpg" },
                     { name: "🦅 【傳說】暴風神鷲", min: 140, max: 190, img: "https://digimon.net/cimages/digimon/garudamon.jpg" }
                 ];
@@ -639,7 +648,6 @@
                 playSound('legendary');
             } else if (r < 0.25) { 
                 let normalBeasts = [
-                    // 朽木獸(Woodmon), 野豬獸(Boarmon), 毒蜘蛛獸(Dokugumon), 隕石獸(Golemon)
                     { name: "🟢 搗蛋樹妖", power: 33, img: "https://digimon.net/cimages/digimon/woodmon.jpg" },
                     { name: "🟡 狂暴野豬", power: 60, img: "https://digimon.net/cimages/digimon/boarmon.jpg" },
                     { name: "🔴 暗影巨蛛", power: 90, img: "https://digimon.net/cimages/digimon/dokugumon.jpg" },
@@ -676,7 +684,6 @@
                 if (isLegendary) {
                     startLegendaryFight(beastName, beastImg);
                 } else {
-                    // 進入一題定勝負的普通野獸戰！
                     startNormalBeastFight(beastName, beastImg, power);
                 }
             } else if (action === 'flee') {
@@ -691,7 +698,8 @@
                     alert(`🏃 逃跑失敗被追上！慌忙中掉落了 ${lossWood}木材 和 ${lossStone}石頭！`);
                 }
                 document.getElementById('event-modal').classList.add('hidden');
-                updateUI(); // 不退出關卡，只更新資源顯示
+                updateUI();
+                nextMining(); // 逃跑後也無縫為玩家刷出下一題
             }
         }
 
@@ -773,7 +781,7 @@
 
         function checkMedalUnlock() {
             let m = Math.floor(inventory.streak / 10) * 10;
-            // 只要連勝達到 10的倍數 (如 10, 20, 30...) 就發勳章
+            // 每 10 連勝派發一次勳章
             if (m >= 10 && m <= 100 && !inventory.medals.includes(m)) {
                 inventory.medals.push(m); playSound('medal'); alert(`🎊 難以置信！你達成了 ${m} 連勝！\n榮獲專屬勳章【${medalsConfig[m]}】！`);
             }
@@ -835,9 +843,8 @@
             } else { playSound('error'); alert("❌ 手稿或碎片不足！"); }
         }
 
-        // --- Boss 戰鬥系統 (包含四個 Boss，精準調整答題時間) ---
+        // --- Boss 戰鬥系統 (完美設定限時 20s, 15s, 10s, 5s) ---
         const bossConfig = {
-            // 惡魔獸(Devimon), 小丑皇(Piemon), 吸血魔獸(Vamdemon), 阿爾法獸(Alphamon)
             1: { name: "🟢 Boss 1：元素吞噬者", time: 20, target: 4, mode: "accumulate", hpPenalty: 10, msg: "扣 10 HP，隨機吸走 2 元素！", img: "https://digimon.net/cimages/digimon/devimon.jpg" },
             2: { name: "🟡 Boss 2：混沌智者", time: 15, target: 4, mode: "streak", hpPenalty: 20, msg: "扣 20 HP，連對歸零並吸走最多資源！", img: "https://digimon.net/cimages/digimon/piemon.jpg" },
             3: { name: "🔴 Boss 3：幻影魔王", time: 10, target: 5, mode: "streak", hpPenalty: 30, msg: "扣 30 HP，全元素減 10%！", img: "https://digimon.net/cimages/digimon/vamdemon.jpg" },
@@ -979,7 +986,7 @@
 
         function fleeBoss() {
             playSound('click');
-            let confirmFlee = confirm("⚠️ 確定要逃跑嗎？逃跑將會直接結束挑戰，並掉落 5 個木材與 5 個石頭作為代價！");
+            let confirmFlee = confirm("⚠️ 確定要逃跑嗎？逃跑將會結束挑戰，並掉落 5 個木材與 5 個石頭作為代價！");
             if(confirmFlee) {
                 clearInterval(bossTimerInterval);
                 inventory.wood = Math.max(0, inventory.wood - 5); inventory.stone = Math.max(0, inventory.stone - 5);
