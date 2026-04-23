@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>數碼冒險：4A森林大作戰 (全圖鑑版)</title>
+    <title>數碼冒險：4A森林大作戰 (全圖鑑防作弊版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -159,9 +159,9 @@
             </div>
             
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 10px; padding: 10px; background: #E0F2F1; border-radius: 8px; border: 2px dashed #00897B;">
-                <h3 style="width:100%; margin:0 0 5px 0; color:#00695C;">📘 最新進度：2526温習(二)</h3>
-                <button class="btn-green" onclick="startGame('dictation2-mc')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">📖 2526温習(二) - 填充</button>
-                <button class="btn-purple" onclick="startGame('dictation2-reorder')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">🌉 2526温習(二) - 重組</button>
+                <h3 style="width:100%; margin:0 0 5px 0; color:#00695C;">📘 最新進度：默書温習(二)</h3>
+                <button class="btn-green" onclick="startGame('dictation2-mc')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">📖 默書温習(二) - 填充</button>
+                <button class="btn-purple" onclick="startGame('dictation2-reorder')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">🌉 默書温習(二) - 重組</button>
             </div>
 
             <p style="font-size: 0.9em; font-weight: bold; color: #8E24AA;">(連續答題提升攻防值，有機率遇到隱藏的「傳說怪」！)</p>
@@ -398,7 +398,7 @@
 
     <script>
         // ================== 音效與存檔鍵 ==================
-        const SAVE_KEY = 'roblox_p4_chi_combat_v7_ext'; // ⚠️ 絕對不要更改這個字串
+        const SAVE_KEY = 'roblox_p4_chi_combat_v7_ext'; 
         let audioCtx = null;
 
         function initAudio() {
@@ -518,7 +518,7 @@
             { q: "找出正確的配對：【 落落 】______", ans: "大方", options: ["大方", "穩重", "端莊", "體面"] },
             { q: "找出正確的配對：【 精緻的 】______", ans: "洋娃娃", options: ["洋娃娃", "小寶寶", "秀髮", "睫毛"] },
             { q: "找出正確的配對：【 節日 】______", ans: "氣氛", options: ["氣氛", "氛圍", "慶典", "快樂"] },
-            { q: "找出正確的配對：【 閃爍 】______", ans: "耀眼", options: ["耀眼", "光芒", "明亮", "刺眼"] },
+            { q: "找出正確的配對：【 閃爍 】______",耀眼", options: ["耀眼", "光芒", "明亮", "刺眼"] },
             { q: "找出正確的配對：【 破釜 】______", ans: "沉舟", options: ["沉舟", "沉船", "一戰", "到底"] },
             { q: "找出正確的配對：【 友善 】______", ans: "有禮", options: ["有禮", "大方", "穩重", "熱情"] }
         ];
@@ -551,7 +551,6 @@
             { q: "我們暑假會遊覽被譽為世外桃源的地方 ___ 馬爾代夫。", ans: "──", options: ["──", "……", "：", "。"] }
         ];
 
-        // ===== 修復版重組句子 =====
         const reorderTasks = [
             ["因為", "弟弟", "上課時", "沒有記住", "老師的提醒", "，", "所以", "考試時", "答錯題目", "。"],
             ["因為", "咖啡豆", "含有咖啡因", "，", "所以", "飲用大量咖啡", "會引致", "心悸", "、", "失眠等症狀", "。"],
@@ -577,10 +576,9 @@
             ["爸爸不像", "一些", "只會溺愛孩子的父母", "，", "而是", "適當的", "管教他們", "。"],
             ["我們", "凌晨時分", "便乘旅遊車", "上太平山", "，", "所以", "趕得及", "看到", "美麗的日出", "。"],
             ["因為", "臨近考試", "，", "所以", "各類", "課外活動", "會暫停", "直至", "考試結束", "。"],
-            ["小明", "發現自己", "最近的", "成績退步了", "，", "於是", "重新制定了", "温習和", "作息時間表", "。"]
+            ["小明", "發現自己", "最近的", "成績退步了", "，", "於是", "重新制定了", "溫習和", "作息時間表", "。"]
         ];
 
-        // ===== FA溫習 =====
         const faMCTasks = [
             { q: "學校有明確規定，絕不 ______ 學生在沒有老師的陪同下進入實驗室。", ans: "准許", options: ["准許", "支持", "宣佈", "生效"] },
             { q: "得到媽媽的 ______ 後，弟弟才開心地跑到樓下公園和好朋友玩耍。", ans: "准許", options: ["准許", "康復", "集合", "退出"] },
@@ -622,10 +620,10 @@
             { q: "「李白」被後人尊稱為甚麼？", ans: "詩仙", options: ["詩仙", "詩聖", "詩鬼", "詩魔"] },
             { q: "下列哪一個標點符號的運用是絕對正確的？", ans: "我問：「今天天氣好嗎？」", options: ["我問：「今天天氣好嗎？」", "我問，今天天氣好嗎？", "我問：「今天天氣好嗎」？", "我問：今天天氣好嗎？"] },
             { q: "「一日不見，如隔三秋」中的「三秋」通常指多久？", ans: "三年", options: ["三年", "三十天", "三個月", "三百年"] },
+            { q: "選出結構完全不同的詞語：", ans: "東西", options: ["東西", "左右", "上下", "美好"] },
             { q: "「畫蛇添足」比喻甚麼？", ans: "多此一舉", options: ["多此一舉", "畫工精湛", "非常可怕", "行動迅速"] }
         ];
 
-        // ===== 2526温習(二) =====
         const dictation2Tasks = [
             { q: "看到同學買了最新款的遊戲機，弟弟心裡十分 ______。", ans: "羨慕", options: ["羨慕", "妒忌", "討厭", "驚訝"] },
             { q: "小明不但成績優異，還很有運動天賦，真令人 ______。", ans: "羨慕", options: ["羨慕", "驕傲", "佩服", "期待"] },
@@ -645,7 +643,6 @@
             { q: "哥哥做事總是 ______，結果經常出錯被媽媽責罵。", ans: "馬馬虎虎", options: ["馬馬虎虎", "井井有條", "小心翼翼", "乾乾淨淨"] },
             { q: "弟弟把墨汁當作果汁喝了一口，弄得滿嘴都是黑色，真是令人 ______。", ans: "啼笑皆非", options: ["啼笑皆非", "捧腹大笑", "悲痛欲絕", "怒氣衝天"] },
             { q: "看到小狗穿著人類的衣服在屋內走來走去，這滑稽的畫面讓我 ______。", ans: "啼笑皆非", options: ["啼笑皆非", "莫名其妙", "驚心動魄", "愁眉苦臉"] },
-            // 長句填充
             { q: "媽媽變老了，她瘦削的 ______ 上，兩道皺紋橫在眉毛之間。", ans: "面龐", options: ["面龐", "臉頰", "額頭", "下巴"] },
             { q: "媽媽變老了，她瘦削的面龐上，兩道 ______ 橫在眉毛之間。", ans: "皺紋", options: ["皺紋", "疤痕", "眉毛", "汗水"] },
             { q: "媽媽變老了，她瘦削的面龐上，兩道皺紋橫在 ______ 之間。", ans: "眉毛", options: ["眉毛", "眼睛", "鼻子", "嘴唇"] },
@@ -667,21 +664,20 @@
             'connect': { title: "🔗 魔法連線 (連線題)", subtitle: "找出與題目匹配的另一半詞語！", tasks: connectTasks },
             'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
             'fa-mc': { title: "📝 FA溫習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks },
-            'dictation2-mc': { title: "📖 2526温習(二) (填充題)", subtitle: "選擇正確的詞語完成句子！", tasks: dictation2Tasks }
+            'dictation2-mc': { title: "📖 默書温習(二) (填充題)", subtitle: "選擇正確的詞語完成句子！", tasks: dictation2Tasks }
         };
 
         const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🌌', 900: '🏆', 1001: '🐉', 1002: '🦄' };
         
         // ================== 搭檔數碼精靈資料 (Digidex) ==================
-        // 進化花費設定
         const evoCosts = {
-            1: { m: 300, f: 5, s: 10, g: 0 },   // 幼年期 -> 成長期
-            2: { m: 600, f: 10, s: 20, g: 0 },  // 成長期 -> 成熟期
-            3: {                                // 成熟期 -> 完全體 (分支)
+            1: { m: 300, f: 5, s: 10, g: 0 },
+            2: { m: 600, f: 10, s: 20, g: 0 },
+            3: {
                 A: { m: 1000, f: 15, s: 30, g: 0, title: "⭐ 光明進化" },
                 B: { m: 1000, f: 15, s: 0, g: 30, title: "💎 闇黑進化" }
             },
-            4: {                                // 完全體 -> 究極體 (跟隨分支)
+            4: {
                 A: { m: 2000, f: 30, s: 50, g: 0, title: "⭐ 究極光明" },
                 B: { m: 2000, f: 30, s: 0, g: 50, title: "💎 究極闇黑" }
             }
@@ -701,7 +697,7 @@
             'gabu': {
                 title: "加布獸路線", desc: "冷酷且敏捷，高人氣的冰狼型精靈。",
                 lv0: { n: "獨角獸", p: "tunomon.jpg", b: 0 },
-                lv1: { n: "加布獸", p: "gabumon.jpg", b: 20 },
+                lv1: { n: "加布獸", p: "https://res.cloudinary.com/fio/image/upload/v1603513689/Official/Card/official_card_bo-1j_9a56c731e8.jpg", b: 20 },
                 lv2: { n: "加魯魯獸", p: "garurumon.jpg", b: 50 },
                 lv3A: { n: "獸人加魯魯獸", p: "weregarurumon.jpg", b: 100 },
                 lv3B: { n: "地獄犬獸", p: "cerberumon.jpg", b: 120 },
@@ -751,11 +747,23 @@
             return dex.lv4A;
         }
 
-        // ⚠️ 不改變原有資料結構
-        const defaultInv = { playerName: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], partnerLv: 0, partnerId: "", partnerBranch: "A", partners: {} };
+        // 新增防作弊欄位
+        const defaultInv = { playerName: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], partnerLv: 0, partnerId: "", partnerBranch: "A", partners: {}, lastGachaDate: "", gachaDrawsToday: 0, scrollBoughtDate: "", hasLegendaryBuff: false };
         let inventory = { ...defaultInv };
 
         function shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+        // ================== 防作弊重置邏輯 ==================
+        function checkDailyReset() {
+            let today = new Date().toDateString(); 
+            if (inventory.lastGachaDate !== today) {
+                inventory.lastGachaDate = today;
+                inventory.gachaDrawsToday = 0;
+            }
+            if (inventory.scrollBoughtDate !== today) {
+                // 不強制清空 buff，但確保可以重新購買
+            }
+        }
 
         // ================== 遊戲核心邏輯 ==================
 
@@ -808,7 +816,6 @@
                     let parsed = JSON.parse(savedData);
                     inventory = { ...defaultInv, ...parsed, equip: { ...defaultInv.equip, ...(parsed.equip || {}) }, medals: parsed.medals || [] };
                     
-                    // 防呆與舊存檔相容
                     if(inventory.partnerLv === undefined) inventory.partnerLv = 0; 
                     if(inventory.partnerId === undefined) inventory.partnerId = "";
                     if(inventory.partnerBranch === undefined) inventory.partnerBranch = "A";
@@ -842,11 +849,9 @@
             if(inventory.equip.woodShield) def += 10;
             if(inventory.equip.stoneArmor) def += 25;
             
-            // 基礎升級屬性
             atk += (inventory.superWeaponLv * 5) + (inventory.superStoneLv * 3);
             def += (inventory.superShieldLv * 5) + (inventory.superStoneLv * 3);
             
-            // 只有「當前選擇」的數碼精靈提供加成
             if(inventory.partnerId) {
                 let pLevel = inventory.partnerLv || 0;
                 if (pLevel > 4) pLevel = 4;
@@ -925,8 +930,6 @@
         function openForgeZone() { playSound('click'); hideAll(); document.getElementById('forge-zone').classList.remove('hidden'); }
         function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
         function openBossSelect() { playSound('click'); hideAll(); document.getElementById('boss-select-screen').classList.remove('hidden'); }
-        
-        // --- Modal 關閉通用 ---
         window.closeModal = function(id) { document.getElementById(id).classList.add('hidden'); }
 
         // ================== 搭檔數碼精靈 (全圖鑑與分支進化系統) ==================
@@ -999,7 +1002,6 @@
             playSound('click');
             if (!inventory.partners) inventory.partners = {};
             
-            // 儲存當前搭檔的進度
             if (inventory.partnerId) {
                 inventory.partners[inventory.partnerId] = {
                     lv: inventory.partnerLv,
@@ -1007,7 +1009,6 @@
                 };
             }
             
-            // 讀取或初始化新搭檔
             if (inventory.partners[id]) {
                 inventory.partnerId = id;
                 inventory.partnerLv = inventory.partners[id].lv;
@@ -1019,6 +1020,7 @@
                 inventory.partners[id] = { lv: 0, branch: 'A' };
             }
             
+            saveGame(); 
             openPartnerZone();
             updateUI();
         }
@@ -1100,23 +1102,22 @@
                 alert(`✨ 數據重組！進化成功！\n你的數碼精靈進化成了【${newInfo.n}】！全屬性大幅提升！`);
                 
                 updatePartnerUI();
-                updateUI();
+                updateUI(); // 自動存檔
             } else {
                 alert("❌ 數據能量（資源）不足，無法進化！請去溫習累積資源吧！");
             }
         }
 
-        // ================== 新增系統 (市場、抽獎) ==================
-
-        let guaranteedLegendary = false; 
-        let scrollBoughtToday = false; 
+        // ================== 新增防作弊系統 (市場、抽獎) ==================
 
         window.openMarket = function() {
+            checkDailyReset();
             let swordCost = (inventory.superWeaponLv + 1) * 15;
             document.getElementById('btn-buy-sword').innerHTML = `🗡️ 數碼合金劍 (祭壇升2級) <br>💰 ${swordCost} 寶石`;
 
             let scrollBtn = document.getElementById('btn-buy-scroll');
-            if(scrollBoughtToday) {
+            let today = new Date().toDateString();
+            if(inventory.scrollBoughtDate === today) {
                 scrollBtn.disabled = true;
                 scrollBtn.innerHTML = "📜 傳說卷軸 (今日已售罄)";
                 scrollBtn.className = "btn-grey";
@@ -1131,6 +1132,9 @@
 
         window.buyItem = function(item) {
             playSound('click');
+            checkDailyReset();
+            let today = new Date().toDateString();
+
             if (item === 'sword') {
                 let swordCost = (inventory.superWeaponLv + 1) * 15;
                 if(inventory.gem >= swordCost) {
@@ -1150,12 +1154,15 @@
                     alert("❌ 木材不足！");
                 }
             } else if (item === 'scroll') {
+                if(inventory.scrollBoughtDate === today) {
+                    return alert("❌ 今日已售罄！");
+                }
                 if(inventory.wood >= 50 && inventory.stone >= 50 && inventory.star >= 10) {
                     inventory.wood -= 50;
                     inventory.stone -= 50;
                     inventory.star -= 10;
-                    guaranteedLegendary = true;
-                    scrollBoughtToday = true;
+                    inventory.hasLegendaryBuff = true; 
+                    inventory.scrollBoughtDate = today;
                     alert("🛒 購買成功！下一次進入森林【必遇傳說怪】！");
                     openMarket(); 
                 } else {
@@ -1165,20 +1172,25 @@
             updateUI();
         }
 
-        let gachaDailyLimit = 3;
         window.openGacha = function() {
+            checkDailyReset();
+            let limit = 3;
+            document.getElementById('gacha-chances').innerText = limit - inventory.gachaDrawsToday;
             document.getElementById('gacha-modal').classList.remove('hidden');
-            document.getElementById('gacha-chances').innerText = gachaDailyLimit;
             document.getElementById('gacha-result').innerText = "🎁";
         }
 
         window.rollGacha = function() {
-            if (gachaDailyLimit <= 0) return alert("❌ 今天的抽獎次數用完啦！明天再來吧！");
+            checkDailyReset();
+            let limit = 3;
+            if (inventory.gachaDrawsToday >= limit) return alert("❌ 今天的抽獎次數用完啦！明天再來吧！(每日凌晨重置)");
             if (inventory.star < 1) return alert("❌ 星星不足，無法抽獎！");
             
             inventory.star -= 1;
-            gachaDailyLimit -= 1;
-            document.getElementById('gacha-chances').innerText = gachaDailyLimit;
+            inventory.gachaDrawsToday += 1;
+            saveGame(); // 強制存檔防刷新刷星
+            
+            document.getElementById('gacha-chances').innerText = limit - inventory.gachaDrawsToday;
             
             let resultBox = document.getElementById('gacha-result');
             resultBox.innerText = "🔄..."; 
@@ -1198,7 +1210,7 @@
                     resultBox.innerText = "🪵 木材 x10";
                     inventory.wood += 10;
                 }
-                updateUI();
+                updateUI(); 
             }, 800);
         }
 
@@ -1233,8 +1245,10 @@
             innerBox.className = 'event-box';
             fightBtn.style.display = 'inline-block';
 
-            if ((stats.atk >= 50 && stats.def >= 50 && r < 0.15) || guaranteedLegendary) { 
-                guaranteedLegendary = false; 
+            if ((stats.atk >= 50 && stats.def >= 50 && r < 0.15) || inventory.hasLegendaryBuff) { 
+                inventory.hasLegendaryBuff = false; // 消耗卷軸狀態
+                saveGame(); // 強制存檔
+                
                 let isDragon = Math.random() > 0.5;
                 let digiName = isDragon ? '奧米加獸' : '紅蓮騎士獸';
                 let digiPic = isDragon ? 'https://digimon.net/cimages/digimon/omegamon.jpg' : 'https://digimon.net/cimages/digimon/dukemon.jpg';
@@ -1339,7 +1353,7 @@
                 if(type === 'fa-reorder') {
                     document.getElementById('reorder-title').innerHTML = "📝 FA溫習 (課文重組)";
                 } else if (type === 'dictation2-reorder') {
-                    document.getElementById('reorder-title').innerHTML = "📖 2526温習(二) (重組句子)";
+                    document.getElementById('reorder-title').innerHTML = "📖 默書温習(二) (重組句子)";
                 } else {
                     document.getElementById('reorder-title').innerHTML = "🌉 鋪木板過河 (重組句子)";
                 }
