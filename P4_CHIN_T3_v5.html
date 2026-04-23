@@ -1,14 +1,9 @@
-Here are the visual design changes you requested to enhance the momentum of boss and sacred beast battles, and a fix for the Gabumon image not displaying.
-
-Please **select all and copy** the complete, updated code below and overwrite your existing file.
-
-```html
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>數碼冒險：4A森林大作戰 (分支進化版)</title>
+    <title>數碼冒險：4A森林大作戰 (全圖鑑版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -101,11 +96,12 @@ Please **select all and copy** the complete, updated code below and overwrite yo
         .gacha-modal-content { background: #FFF3E0; border: 6px solid #FF9800; }
 
         /* 搭檔選擇卡片 */
-        .partner-card { background: #FFF; border: 4px solid #AB47BC; border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; transition: 0.2s; width: 180px; box-sizing: border-box; }
+        .partner-card { background: #FFF; border: 4px solid #AB47BC; border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; transition: 0.2s; width: 180px; box-sizing: border-box; position: relative; }
         .partner-card:hover { transform: scale(1.05); box-shadow: 0 0 15px #9C27B0; }
         .partner-card img { width: 100px; height: 100px; object-fit: contain; border-radius: 8px; border: 2px solid #ccc; }
         .partner-card h3 { margin: 5px 0; color: #4A148C; font-size: 1.2em; }
         .partner-card p { margin: 0; font-size: 0.9em; color: #666; font-weight: bold; }
+        .partner-active-border { border: 4px solid #FFD700 !important; box-shadow: 0 0 15px #FFD700; }
     </style>
 </head>
 <body>
@@ -170,7 +166,7 @@ Please **select all and copy** the complete, updated code below and overwrite yo
             
             <hr style="width: 80%; border-top: 4px dashed #6A1B9A;">
             
-            <button class="btn-purple" onclick="openPartnerZone()" style="box-shadow: 0 6px 0 #6A1B9A; animation: pulse 2s infinite;">🐾 搭檔數碼精靈 (進化路線)</button>
+            <button class="btn-purple" onclick="openPartnerZone()" style="box-shadow: 0 6px 0 #6A1B9A; animation: pulse 2s infinite;">🐾 搭檔精靈 (全圖鑑系統)</button>
             <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇 (基礎戰力)</button>
             
             <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:5px;">
@@ -194,29 +190,31 @@ Please **select all and copy** the complete, updated code below and overwrite yo
                     <li><b>傳說級試煉</b>：消耗星星開啟，連續答對 2 條問題即可收服傳說怪！</li>
                 </ul>
 
-                <h3 style="color:#2E7D32;">3. 搭檔數碼精靈 (進化系統)</h3>
-                <p>這是一項全新功能！你可以選擇一隻專屬的數碼精靈作為搭檔。收集資源讓牠進化，每次進化都能獲得極其強大的全屬性加成！<br>
-                <b>⚠️ 隱藏秘密：</b> 當精靈要進化成「完全體」時，你可以選擇「光明路線(耗星星)」或「闇黑路線(耗寶石)」，不同路線會變成不同的外觀喔！</p>
+                <h3 style="color:#2E7D32;">3. 收集全圖鑑 (搭檔系統)</h3>
+                <p>你可以擁有多隻數碼精靈！一開始可以選擇一隻專屬搭檔，透過溫習資源讓牠進化。如果中途想換口味，或者當前搭檔已經滿級，你可以隨時點擊「更換搭檔」來領養新的幼年期精靈！<br>
+                <b>⚠️ 分歧路線：</b> 當精靈要進化成「完全體」時，你可以選擇「光明路線」或「闇黑路線」，不同路線會有不同的外觀與屬性加成！</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
 
         <div id="partner-zone" class="screen hidden">
             <div id="partner-select-screen" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-                <h2 style="color: #9C27B0;">🥚 選擇你的專屬數碼精靈</h2>
-                <p style="font-weight:bold; color:#D50000;">請謹慎選擇！選定後將陪伴你整個冒險旅程！</p>
-                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 700px;">
+                <h2 style="color: #9C27B0;">🥚 數碼精靈圖鑑與切換</h2>
+                <p style="font-weight:bold; color:#D50000; margin-top:0;">你可以隨時切換搭檔！新領養的精靈將從幼年期開始培育。</p>
+                <div id="partner-grid-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 700px;">
                     </div>
+                <button class="btn-grey hidden" id="btn-cancel-select" onclick="openPartnerZone(false)" style="margin-top:20px;">❌ 取消切換</button>
             </div>
 
             <div id="partner-status-screen" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-                <h2 style="color: #9C27B0; margin-bottom: 5px;">🐾 我的搭檔</h2>
+                <h2 style="color: #9C27B0; margin-bottom: 5px;">🐾 我的當前搭檔</h2>
                 <p id="partner-path-name" style="margin-top:0; font-weight:bold; color:#6A1B9A;">路線</p>
                 
                 <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 15px; border: 4px dashed #9C27B0; text-align: center; width: 90%; max-width: 500px;">
                     <img id="partner-pic" class="status-pic" src="">
                     <h3 id="partner-name" style="color: #4A148C; font-size: 2em; margin: 10px 0; text-shadow: 1px 1px 0 #E1BEE7;">Name</h3>
-                    <p style="font-size: 1.3em; font-weight: bold; color: #2E7D32;">✨ 搭檔全屬性加成: <br>+<span id="partner-buff" style="font-size:1.8em; color:#D50000;">0</span> 攻防</p>
+                    <p style="font-size: 1.3em; font-weight: bold; color: #2E7D32; margin-bottom:5px;">✨ 目前搭檔加成: <br>+<span id="partner-buff" style="font-size:1.8em; color:#D50000;">0</span> 攻防</p>
+                    <p style="font-size: 0.8em; color: #666; margin-top:0;">(只有當前選擇的搭檔會提供戰力加成)</p>
 
                     <div id="evo-req-single" class="hidden" style="margin-top: 15px; background: #F3E5F5; padding: 15px; border-radius: 10px; border: 2px solid #AB47BC;">
                         <h4 style="margin: 0 0 10px 0; color: #D50000; font-size:1.2em;">🔼 下一階進化需求</h4>
@@ -248,8 +246,10 @@ Please **select all and copy** the complete, updated code below and overwrite yo
 
                     <div id="evo-max-msg" class="hidden" style="margin-top: 20px; padding: 15px; background: #FFF9C4; border: 2px solid #FBC02D; border-radius: 10px;">
                         <p style="color: #E65100; font-weight: bold; font-size: 1.4em; margin:0;">🏆 究極體達成！</p>
-                        <p style="color: #4CAF50; margin:5px 0 0 0; font-weight:bold;">你的搭檔已經達到最強狀態！</p>
+                        <p style="color: #4CAF50; margin:5px 0 0 0; font-weight:bold;">你的搭檔已經達到最強狀態！快去收集其他精靈吧！</p>
                     </div>
+
+                    <button class="btn-blue" onclick="openPartnerZone(true)" style="margin-top: 15px; width: 100%; font-size: 1em;">🔄 更換搭檔 / 查看圖鑑</button>
                 </div>
             </div>
             <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
@@ -462,7 +462,7 @@ Please **select all and copy** the complete, updated code below and overwrite yo
             { q: "主題樂園裏的遊戲設施都有 ______ 與高度限制，以確保遊客的安全。", ans: "年齡", options: ["年齡", "性別", "學歷", "財富"] },
             { q: "承協擁有粗獷的聲線，那與他温柔的外表並不 ______ 。", ans: "相稱", options: ["相稱", "矛盾", "衝突", "相反"] },
             { q: "他只是跟你開玩笑，你 ______ 這麼認真？", ans: "何必", options: ["何必", "一定", "必須", "肯定"] },
-            { q: "要在馬拉松比賽脱穎而出，最 ______ 的不是跑步的速度，而是個人的耐力和毅力。", ans: "要緊", options: ["要緊", "随便", "普通", "次要"] }
+            { q: "要在馬拉松比賽脱穎而出，最 ______ 的不是跑步的速度，而是個人的耐力和毅力。", ans: "要緊", options: ["要緊", "隨便", "普通", "次要"] }
         ];
 
         const matchTasks = [
@@ -485,7 +485,7 @@ Please **select all and copy** the complete, updated code below and overwrite yo
             { q: "聽了老師的詳細解釋，我才 ______ ，明白這道題的解法。", ans: "恍然大悟", options: ["恍然大悟", "百思不解", "執迷不悟", "半信半疑"] },
             { q: "魔術師的表演非常精彩，觀眾席上響起了 ______ 的掌聲。", ans: "震耳欲聾", options: ["震耳欲聾", "鴉雀無聲", "悄無聲息", "低聲細語"] },
             { q: "下課鐘聲一響，同學們就 ______ 地跑到操場玩耍。", ans: "興高采烈", options: ["興高采烈", "垂頭喪氣", "悲痛欲絕", "怒氣衝衝"] },
-            { q: "他的房間總是收拾得 ______ ，一塵不染。", ans: "井井條", options: ["井井有條", "亂七八糟", "雜亂無章", "東倒西歪"] },
+            { q: "他的房間總是收拾得 ______ ，一塵不染。", ans: "井井有條", options: ["井井有條", "亂七八糟", "雜亂無章", "東倒西歪"] },
             { q: "不要總想着不勞而獲， ______ 是不會有真正成就的。", ans: "守株待兔", options: ["守株待兔", "奮發圖強", "孜孜不倦", "精益求精"] },
             { q: "弟弟 ______ 地拆開生日禮物，想看看裏面是甚麼。", ans: "迫不及待", options: ["迫不及待", "慢條斯理", "拖泥帶水", "猶豫不決"] },
             { q: "導遊一路上 ______ 地為我們介紹當地的歷史故事。", ans: "滔滔不絕", options: ["滔滔不絕", "沉默寡言", "啞口無言", "支支吾吾"] },
@@ -557,7 +557,7 @@ Please **select all and copy** the complete, updated code below and overwrite yo
             ["因為", "爸爸明天", "要回公司工作", "，", "我們的", "主題公園一天遊", "要", "被逼取消了", "。"],
             ["由於", "哥哥", "想打破", "一百米短跑的紀錄", "，", "所以", "他最近", "加強練習", "。"],
             ["政府", "為了", "進一步", "減輕", "堆填區的壓力", "，", "所以推行", "固體廢物收費計劃", "。"],
-            ["巿民", "知道今天晚上", "會懸掛", "八號烈風信號", "，", "於是", "爭相到超巿", "購買糧食", ". "],
+            ["巿民", "知道今天晚上", "會懸掛", "八號烈風信號", "，", "於是", "爭相到超巿", "購買糧食", "。"],
             ["他", "當義工", "不是要獲得", "大家的稱許", "，", "而是想", "幫助", "有需要的人", "。"],
             ["由於", "天氣影響", "，", "所以", "明天的陸運會", "要", "延期舉行", "。"],
             ["意大利人", "製作薄餅時", "不會使用菠蘿", "，", "而是以", "番茄", "和", "羅勒葉", "作材料的", "。"],
@@ -656,15 +656,14 @@ Please **select all and copy** the complete, updated code below and overwrite yo
                 lv1: { n: "亞古獸", p: "agumon.jpg", b: 20 },
                 lv2: { n: "暴龍獸", p: "greymon.jpg", b: 50 },
                 lv3A: { n: "機械暴龍獸", p: "metalgreymon.jpg", b: 100 },
-                lv3B: { n: "喪屍暴龍獸", p: "skullgreymon.jpg", b: 120 }, // 闇黑數值略高
+                lv3B: { n: "喪屍暴龍獸", p: "skullgreymon.jpg", b: 120 },
                 lv4A: { n: "戰鬥暴龍獸", p: "wargreymon.jpg", b: 200 },
                 lv4B: { n: "無限龍獸", p: "mugendramon.jpg", b: 220 }
             },
             'gabu': {
                 title: "加布獸路線", desc: "冷酷且敏捷，高人氣的冰狼型精靈。",
                 lv0: { n: "獨角獸", p: "tsunomon.jpg", b: 0 },
-                // === BUG FIX for GABUMON IMAGE ===
-                // We are using a full working URL here. The display function will be modified to handle full URLs.
+                // 替換加布獸可用圖片
                 lv1: { n: "加布獸", p: "https://res.cloudinary.com/fio/image/upload/v1603513689/Official/Card/official_card_bo-1j_9a56c731e8.jpg", b: 20 },
                 lv2: { n: "加魯魯獸", p: "garurumon.jpg", b: 50 },
                 lv3A: { n: "獸人加魯魯獸", p: "weregarurumon.jpg", b: 100 },
@@ -715,8 +714,8 @@ Please **select all and copy** the complete, updated code below and overwrite yo
             return dex.lv4A;
         }
 
-        // ⚠️ 不改變原有資料結構
-        const defaultInv = { playerName: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], partnerLv: 0, partnerId: "", partnerBranch: "A" };
+        // ⚠️ 不改變原有資料結構，新增 partners 收集系統
+        const defaultInv = { playerName: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], partnerLv: 0, partnerId: "", partnerBranch: "A", partners: {} };
         let inventory = { ...defaultInv };
 
         function shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -776,6 +775,12 @@ Please **select all and copy** the complete, updated code below and overwrite yo
                     if(inventory.partnerLv === undefined) inventory.partnerLv = 0; 
                     if(inventory.partnerId === undefined) inventory.partnerId = "";
                     if(inventory.partnerBranch === undefined) inventory.partnerBranch = "A";
+                    if(!inventory.partners) {
+                        inventory.partners = {};
+                        if(inventory.partnerId) {
+                            inventory.partners[inventory.partnerId] = { lv: inventory.partnerLv, branch: inventory.partnerBranch };
+                        }
+                    }
 
                     if(inventory.playerName) {
                         document.getElementById('display-name').textContent = inventory.playerName;
@@ -804,7 +809,7 @@ Please **select all and copy** the complete, updated code below and overwrite yo
             atk += (inventory.superWeaponLv * 5) + (inventory.superStoneLv * 3);
             def += (inventory.superShieldLv * 5) + (inventory.superStoneLv * 3);
             
-            // 加入搭檔數碼精靈屬性加成
+            // 只有「當前選擇」的數碼精靈提供加成
             if(inventory.partnerId) {
                 let pLevel = inventory.partnerLv || 0;
                 if (pLevel > 4) pLevel = 4;
@@ -887,14 +892,23 @@ Please **select all and copy** the complete, updated code below and overwrite yo
         // --- Modal 關閉通用 ---
         window.closeModal = function(id) { document.getElementById(id).classList.add('hidden'); }
 
-        // ================== 搭檔數碼精靈 (分支進化系統) ==================
-        window.openPartnerZone = function() {
+        // ================== 搭檔數碼精靈 (全圖鑑與分支進化系統) ==================
+        
+        window.openPartnerZone = function(forceSelect = false) {
             playSound('click'); hideAll();
             document.getElementById('partner-zone').classList.remove('hidden');
             
-            if(!inventory.partnerId) {
+            if(!inventory.partnerId || forceSelect) {
                 document.getElementById('partner-select-screen').classList.remove('hidden');
                 document.getElementById('partner-status-screen').classList.add('hidden');
+                
+                // 如果已經有搭檔，顯示取消按鈕
+                if(inventory.partnerId) {
+                    document.getElementById('btn-cancel-select').classList.remove('hidden');
+                } else {
+                    document.getElementById('btn-cancel-select').classList.add('hidden');
+                }
+                
                 renderPartnerSelection();
             } else {
                 document.getElementById('partner-select-screen').classList.add('hidden');
@@ -904,37 +918,79 @@ Please **select all and copy** the complete, updated code below and overwrite yo
         }
 
         function renderPartnerSelection() {
-            let container = document.querySelector('#partner-select-screen div');
+            let container = document.getElementById('partner-grid-container');
             container.innerHTML = '';
             for(let id in digidex) {
                 let dex = digidex[id];
+                let pData = inventory.partners ? inventory.partners[id] : null;
+                
+                let currentLv = pData ? pData.lv : 0;
+                let currentBranch = pData ? pData.branch : 'A';
+                let info = getPartnerInfo(id, currentLv, currentBranch);
+                
+                let isActive = (id === inventory.partnerId);
+                
                 let card = document.createElement('div');
                 card.className = 'partner-card';
+                if(isActive) card.classList.add('partner-active-border');
+                
+                let statusText = isActive ? "<span style='color:#4CAF50'>當前搭檔</span>" : (pData ? `<span style='color:#2196F3'>點擊切換 (Lv.${currentLv})</span>` : "<span style='color:#FF9800'>領養 (幼年期)</span>");
+                
+                let picSrc = info.p.startsWith('http') ? info.p : `https://digimon.net/cimages/digimon/${info.p}`;
+
                 card.innerHTML = `
-                    <img src="https://digimon.net/cimages/digimon/${dex.lv0.p}">
-                    <h3>${dex.title}</h3>
-                    <p>${dex.desc}</p>
+                    <img src="${picSrc}">
+                    <h3>${info.n}</h3>
+                    <p style="font-size:0.8em; color:#666;">${dex.title}</p>
+                    <div style="margin-top:5px; font-size:1.1em; font-weight:bold;">${statusText}</div>
                 `;
+                
                 card.onclick = () => {
-                    if(confirm(`你確定要選擇【${dex.title}】作為你的搭檔嗎？選定後無法更改喔！`)) {
-                        inventory.partnerId = id;
-                        inventory.partnerLv = 0;
-                        inventory.partnerBranch = 'A';
-                        playSound('legendary');
-                        openPartnerZone();
-                        updateUI();
+                    if(isActive) {
+                        openPartnerZone(); // 切換回狀態畫面
+                        return;
+                    }
+                    let confirmMsg = pData ? `確定要切換搭檔為【${info.n}】嗎？` : `確定要領養【${dex.title}】嗎？將從幼年期開始培育！`;
+                    if(confirm(confirmMsg)) {
+                        selectPartner(id);
                     }
                 };
                 container.appendChild(card);
             }
         }
 
+        window.selectPartner = function(id) {
+            playSound('click');
+            if (!inventory.partners) inventory.partners = {};
+            
+            // 儲存當前搭檔的進度
+            if (inventory.partnerId) {
+                inventory.partners[inventory.partnerId] = {
+                    lv: inventory.partnerLv,
+                    branch: inventory.partnerBranch
+                };
+            }
+            
+            // 讀取或初始化新搭檔
+            if (inventory.partners[id]) {
+                inventory.partnerId = id;
+                inventory.partnerLv = inventory.partners[id].lv;
+                inventory.partnerBranch = inventory.partners[id].branch;
+            } else {
+                inventory.partnerId = id;
+                inventory.partnerLv = 0;
+                inventory.partnerBranch = 'A';
+                inventory.partners[id] = { lv: 0, branch: 'A' };
+            }
+            
+            openPartnerZone();
+            updateUI();
+        }
+
         function updatePartnerUI() {
             let pLevel = inventory.partnerLv || 0;
             let info = getPartnerInfo(inventory.partnerId, pLevel, inventory.partnerBranch);
 
-            // === BUG FIX for PARTNER IMAGE (e.g. GABUMON) ===
-            // Modify source display to check for full URLs
             let picSrc = info.p.startsWith('http') ? info.p : `https://digimon.net/cimages/digimon/${info.p}`;
             document.getElementById('partner-pic').src = picSrc;
             
@@ -972,7 +1028,7 @@ Please **select all and copy** the complete, updated code below and overwrite yo
                 let costs = (pLevel === 3) ? evoCosts[pLevel + 1][inventory.partnerBranch] : evoCosts[pLevel + 1];
                 document.getElementById('evo-s-m').innerText = costs.m;
                 document.getElementById('evo-s-f').innerText = costs.f;
-                document.getElementById('evo-s-s').innerText = (costs.s > 0) ? costs.s : costs.g; // 若是 B 路線顯示寶石數量
+                document.getElementById('evo-s-s').innerText = (costs.s > 0) ? costs.s : costs.g; 
                 if(costs.g > 0) {
                     document.getElementById('evo-s-s').previousSibling.textContent = '💎寶石: ';
                 } else {
@@ -1000,8 +1056,14 @@ Please **select all and copy** the complete, updated code below and overwrite yo
                 inventory.gem -= costs.g;
                 
                 inventory.partnerLv++;
-                // 只有在 Lv2 升 Lv3 時才記錄選擇的分支，後續跟隨此分支
                 if(pLevel === 2) inventory.partnerBranch = chosenBranch;
+                
+                // 同步更新儲存資料
+                if (!inventory.partners) inventory.partners = {};
+                inventory.partners[inventory.partnerId] = {
+                    lv: inventory.partnerLv,
+                    branch: inventory.partnerBranch
+                };
                 
                 playSound('legendary'); // 播放震撼音效
                 let newInfo = getPartnerInfo(inventory.partnerId, inventory.partnerLv, inventory.partnerBranch);
@@ -1123,9 +1185,7 @@ Please **select all and copy** the complete, updated code below and overwrite yo
 
             let bossPicImg = document.createElement('img');
             bossPicImg.id = 'boss-pic-img';
-            // === VISUAL CHANGE for BOSS & LEGENDARY IMAGE ===
-            // Apply the `.battle-pic` class instead of `.digimon-pic`
-            bossPicImg.className = `battle-pic ${glowClass}`;
+            bossPicImg.className = `battle-pic ${glowClass}`; // 使用放大的戰鬥圖片樣式
             bossPicImg.src = picUrl;
             
             bossNameElement.innerHTML = name;
@@ -1160,7 +1220,7 @@ Please **select all and copy** the complete, updated code below and overwrite yo
                 eventTitle.style.color = '#FFD700';
                 
                 eventDesc.innerHTML = `
-                    <img src="${digiPic}" class="status-pic" alt="傳說怪">
+                    <img src="${digiPic}" class="battle-pic" alt="傳說怪">
                     強大的數據波動引來了<br><span style="color:#D50000; font-size:1.4em; font-weight:bold;">${digiName}</span>！<br>
                     <span style="color:#2E7D32;">💬 必須連續答對 2 題才能獲得牠的認可！</span>`;
                 
@@ -1190,7 +1250,7 @@ Please **select all and copy** the complete, updated code below and overwrite yo
                 eventTitle.innerHTML = "⚠️ 野生 Digimon 襲擊！";
                 eventTitle.style.color = '#9C27B0';
                 eventDesc.innerHTML = `
-                    <img src="${monster.pic}" class="status-pic" alt="野生怪">
+                    <img src="${monster.pic}" class="battle-pic" alt="野生怪">
                     一隻凶猛的<span style="color:#9C27B0; font-weight:bold;">${monster.name}</span>擋住了去路！<br>
                     <span style="color:#D50000;">💬 答對 1 題來擊退牠！</span>`;
                 
@@ -1668,4 +1728,3 @@ Please **select all and copy** the complete, updated code below and overwrite yo
     </script>
 </body>
 </html>
-```
