@@ -1,3 +1,15 @@
+這是一個非常精確的除錯（Debug）與內容擴充！
+
+### 🔧 修正的 Bug（隱藏神獸消失的問題）：
+原來當學生在「建築工坊」將「豪華城堡」升級成「星際基地」時，系統會扣除 1 座城堡。因為之前設定隱藏神獸（青龍、朱雀）與終極 Boss 的出現條件是「必須擁有 1 座以上的城堡」，這導致學生只要把城堡升級了，系統就誤以為他們沒有城堡，從而不再觸發隱藏神獸。
+**修正方法**：我已經更改了判斷邏輯，現在只要擁有「豪華城堡」、「星際基地」或「夢幻遊樂園」的**其中任何一個**，系統就會判定已解鎖隱藏神獸和終極 Boss！此外也修復了重新整理網頁時，Boss 按鈕沒有正確讀取解鎖狀態的問題。
+
+### 📝 新增的 10 題詞語填充：
+我已經根據你上傳的 PDF（第三十一、三十二課的詞語：輪流、介紹、有趣、期待、活動、連忙、請教、欣賞、入神），為「📝 默書尋寶」關卡額外加入了 10 條情境填充題。現在這個關卡的總題數達到了 **50 題**！
+
+以下是更新後的完整 HTML 代碼，請直接複製並取代你的檔案：
+
+```html
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
@@ -313,7 +325,7 @@
             name: "冒險者", streak: 0,
             inv: { wood: 0, stone: 0, atk: 10, def: 10, gem: 0, star: 0, manu: 0, frag: 0 },
             gear: { weapon: 0, shield: 0 }, buildings: { tent: 0, cabin: 0, castle: 0, base: 0, park: 0 },
-            claimedNewbiePack: false // 新增新手禮包標記
+            claimedNewbiePack: false
         };
 
         function autoSave() { localStorage.setItem('roblox_p2_save', JSON.stringify(player)); }
@@ -340,7 +352,6 @@
                 document.getElementById('sg-s-cost-m').innerText = 5 + player.gear.shield * 2; 
                 document.getElementById('sg-s-cost-f').innerText = player.gear.shield;
                 
-                // 更新新手禮包按鈕狀態
                 if (player.claimedNewbiePack) {
                     let btn = document.getElementById('btn-newbie-pack');
                     btn.disabled = true;
@@ -348,34 +359,29 @@
                     btn.style.borderColor = "#9E9E9E";
                     btn.classList.replace('btn-gold', 'btn-grey');
                 }
+                
+                // 修正：重新整理時檢查是否已解鎖 Boss
+                checkBossUnlock();
+                renderStats();
             }
         };
 
-        // --- 新手禮包功能 ---
         function claimNewbiePack() {
             if (player.claimedNewbiePack) {
-                alert("你已經領取過新手禮包了！");
-                return;
+                alert("你已經領取過新手禮包了！"); return;
             }
-            player.inv.wood += 50;
-            player.inv.stone += 50;
-            player.inv.gem += 50;
-            player.inv.star += 50;
-            player.inv.manu += 50;
-            player.inv.frag += 50;
+            player.inv.wood += 50; player.inv.stone += 50; player.inv.gem += 50;
+            player.inv.star += 50; player.inv.manu += 50; player.inv.frag += 50;
             player.claimedNewbiePack = true;
             
             playSound('win');
             alert("🎁 領取成功！獲得所有材料 +50！快去升級裝備和建築吧！");
             
             let btn = document.getElementById('btn-newbie-pack');
-            btn.disabled = true;
-            btn.innerText = "🎁 新手禮包 (已領取)";
-            btn.style.borderColor = "#9E9E9E";
-            btn.classList.replace('btn-gold', 'btn-grey');
+            btn.disabled = true; btn.innerText = "🎁 新手禮包 (已領取)";
+            btn.style.borderColor = "#9E9E9E"; btn.classList.replace('btn-gold', 'btn-grey');
             
-            renderStats();
-            autoSave();
+            renderStats(); autoSave();
         }
 
         // --- 遊戲狀態管理 ---
@@ -384,7 +390,6 @@
         let isMonsterFight = false; let currentMonster = null;
         let monsterCorrectCount = 0; let monsterGoal = 1;
 
-        // --- 怪獸圖鑑 ---
         const monsters = [
             { name: "史萊姆", emoji: "🟢", atk: 10, def: 10, type: "normal", rewards: "🪵 木材 +2, 🧱 石頭 +2" },
             { name: "森林狼", emoji: "🐺", atk: 20, def: 15, type: "normal", rewards: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1" },
@@ -399,7 +404,7 @@
 
         // --- 題庫 ---
         const questions = {
-            dictation: [ // 40題 默書及語文運用 (二下二冊三十一、三十二課)
+            dictation: [ // 50題 默書及語文運用 (包含了新增的10題)
                 { q: "遇到不懂的生字，我們可以向老師___。", options: ["請教", "介紹", "欣賞", "連忙"], a: "請教", hint: "虛心向別人詢問和學習。" },
                 { q: "同學們___上台分享自己最喜歡的圖書。", options: ["輪流", "期待", "入神", "介紹"], a: "輪流", hint: "按照次序一個接一個地進行。" },
                 { q: "學校即將舉行陸運會，大家都非常___。", options: ["期待", "有趣", "介紹", "連忙"], a: "期待", hint: "充滿希望地等待。" },
@@ -439,7 +444,18 @@
                 { q: "重組句子：[我們] [然後] [吃過午飯，] [到公園玩耍。]", options: ["我們吃過午飯，然後到公園玩耍。", "然後我們吃過午飯，到公園玩耍。", "我們然後到公園玩耍，吃過午飯。", "到公園玩耍然後，我們吃過午飯。"], a: "我們吃過午飯，然後到公園玩耍。", hint: "先吃飯，再去玩。" },
                 { q: "下列哪一個句子的語序最通順？", options: ["我先温習功課，然後看電視。", "我然後看電視，先温習功課。", "我温習功課先，看電視然後。", "然後我温習功課，先看電視。"], a: "我先温習功課，然後看電視。", hint: "先做A，然後做B。" },
                 { q: "完成句子：爸爸先穿上運動鞋，然後___。", options: ["去公園跑步", "昨天去跑步", "因為去跑步", "但是去跑步"], a: "去公園跑步", hint: "「然後」後面接接着要做的動作。" },
-                { q: "完成句子：___，然後把功課交給老師。", options: ["我先檢查好書包", "我然後檢查好書包", "我所以檢查好書包", "我雖然檢查好書包"], a: "我先檢查好書包", hint: "交功課前要先做甚麼？" }
+                { q: "完成句子：___，然後把功課交給老師。", options: ["我先檢查好書包", "我然後檢查好書包", "我所以檢查好書包", "我雖然檢查好書包"], a: "我先檢查好書包", hint: "交功課前要先做甚麼？" },
+                // 新增的10題
+                { q: "老師在上課時，讓同學們___回答問題，確保每個人都有機會。", options: ["輪流", "欣賞", "連忙", "請教"], a: "輪流", hint: "按次序一個接一個地做。" },
+                { q: "開學第一天，班主任向我們___了新來的轉校生。", options: ["介紹", "期待", "入神", "活動"], a: "介紹", hint: "讓人了解有關的情況。" },
+                { q: "哥哥買了一本十分___的故事書，裏面有很多奇妙的冒險。", options: ["有趣", "連忙", "請教", "期待"], a: "有趣", hint: "能引起人的好奇心和喜愛。" },
+                { q: "聖誕節快到了，我們都十分___能收到聖誕老人的禮物。", options: ["期待", "輪流", "欣賞", "連忙"], a: "期待", hint: "充滿希望地等待。" },
+                { q: "學校為了慶祝校慶，舉辦了各式各樣的慶祝___。", options: ["活動", "介紹", "有趣", "入神"], a: "活動", hint: "為了某種目的而舉辦的行動。" },
+                { q: "聽到火警鐘聲響起，大家___放下手上的工作，走到操場集合。", options: ["連忙", "請教", "期待", "輪流"], a: "連忙", hint: "動作迅速、急忙。" },
+                { q: "遇到不明白的地方，我們應該主動向長輩或老師___。", options: ["請教", "欣賞", "介紹", "入神"], a: "請教", hint: "虛心向別人詢問。" },
+                { q: "音樂會上，大家都在安靜地___樂團演奏的美妙樂曲。", options: ["欣賞", "活動", "連忙", "期待"], a: "欣賞", hint: "享受美好的事物。" },
+                { q: "妹妹看電視看得太___了，連我叫她吃飯也沒有反應。", options: ["入神", "有趣", "輪流", "介紹"], a: "入神", hint: "注意力非常集中。" },
+                { q: "這套卡通片非常___，弟弟每天放學後都嚷着要看。", options: ["有趣", "連忙", "欣賞", "請教"], a: "有趣", hint: "能引起人的好奇心和喜愛。" }
             ],
             mining: [ 
                 { q: "媽媽提醒我要準時 ___ 表演場地。", options: ["到達", "準備", "欣賞", "精彩"], a: "到達", hint: "與時間和地點有關的動作。" },
@@ -554,7 +570,7 @@
         };
 
         const titles = { 
-            dictation: "📝 默書尋寶 (二下二冊三十一、三十二課)",
+            dictation: "📝 默書尋寶 (測考範圍 - 共50題)",
             reorder: "🌉 聯句過河", 
             mining: "⛏️ 礦洞尋寶", 
             punctuation: "🖋️ 標點尋寶", 
@@ -613,7 +629,10 @@
             document.getElementById("monster-encounter-panel").classList.remove("hidden");
             document.getElementById("game-title").innerText = "⚠️ 發現不明生物！";
 
-            let isMythical = (player.buildings.castle >= 1 && Math.random() < 0.25); 
+            // 修正Bug：如果玩家有城堡、基地或遊樂園其中之一，都算符合神獸條件
+            let hasAdvancedBuilding = (player.buildings.castle >= 1 || player.buildings.base >= 1 || player.buildings.park >= 1);
+            let isMythical = (hasAdvancedBuilding && Math.random() < 0.25); 
+            
             if (isMythical) {
                 currentMonster = mythicalBeasts[Math.floor(Math.random() * mythicalBeasts.length)];
                 document.getElementById("monster-encounter-panel").style.borderColor = "#9C27B0";
@@ -865,14 +884,17 @@
         }
 
         function checkBossUnlock() {
-            if (player.buildings.castle >= 1) {
+            // 修正Bug：擁有城堡、基地或遊樂園其中之一都能保持 Boss 關卡開啟
+            if (player.buildings.castle >= 1 || player.buildings.base >= 1 || player.buildings.park >= 1) {
                 let btn = document.getElementById("btn-boss-menu");
                 btn.disabled = false; btn.innerText = "🔓 終極 Boss 挑戰 (已解鎖)";
             }
         }
 
         function openBossSelect() {
-            if (player.buildings.castle >= 1) { hideAllScreens(); document.getElementById("boss-select-screen").classList.remove("hidden"); }
+            if (player.buildings.castle >= 1 || player.buildings.base >= 1 || player.buildings.park >= 1) { 
+                hideAllScreens(); document.getElementById("boss-select-screen").classList.remove("hidden"); 
+            }
         }
 
         // --- Boss 戰邏輯 ---
@@ -980,3 +1002,4 @@
     </script>
 </body>
 </html>
+```
