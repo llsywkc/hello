@@ -77,13 +77,9 @@
         .legendary-border { border-color: #FFD700 !important; box-shadow: 0 0 30px #FFD700 !important; }
         .combat-stats { background:#F3E5F5; padding:15px; border-radius:10px; font-size: 1.1em; margin-top:10px; border:3px solid #9C27B0; color:#333; font-weight: bold; line-height: 1.8; text-align: left; }
 
-        /* Digimon 圖片一般樣式 ( partner status) */
         .status-pic { width: 160px; height: 160px; object-fit: contain; margin: 10px auto; border: 4px solid #AB47BC; border-radius: 10px; background: #000; display: block; }
-        
-        /* 戰鬥遭遇畫面圖片 ( wild, boss, sacred beasts) */
         .battle-pic { width: 250px; height: 250px; object-fit: contain; margin: 10px auto; border: 4px solid #AB47BC; border-radius: 10px; background: #000; display: block; }
         
-        /* 戰鬥特效 */
         .glow-red { animation: glowRed 1.5s infinite; border-color: #f44336 !important; }
         .glow-purple { animation: glowPurple 1.5s infinite; border-color: #9C27B0 !important; }
         .glow-gold { animation: glowGold 1.5s infinite; border-color: #FFD700 !important; }
@@ -95,7 +91,6 @@
         .market-modal-content { background: #E8F5E9; border: 6px solid #4CAF50; }
         .gacha-modal-content { background: #FFF3E0; border: 6px solid #FF9800; }
 
-        /* 搭檔選擇卡片 */
         .partner-card { background: #FFF; border: 4px solid #AB47BC; border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; transition: 0.2s; width: 180px; box-sizing: border-box; position: relative; }
         .partner-card:hover { transform: scale(1.05); box-shadow: 0 0 15px #9C27B0; }
         .partner-card img { width: 100px; height: 100px; object-fit: contain; border-radius: 8px; border: 2px solid #ccc; }
@@ -162,6 +157,13 @@
                 <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (綜合題)</button>
                 <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (課文重組)</button>
             </div>
+            
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 10px; padding: 10px; background: #E0F2F1; border-radius: 8px; border: 2px dashed #00897B;">
+                <h3 style="width:100%; margin:0 0 5px 0; color:#00695C;">📘 最新進度：2526温習(二)</h3>
+                <button class="btn-green" onclick="startGame('dictation2-mc')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">📖 2526温習(二) - 填充</button>
+                <button class="btn-purple" onclick="startGame('dictation2-reorder')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">🌉 2526温習(二) - 重組</button>
+            </div>
+
             <p style="font-size: 0.9em; font-weight: bold; color: #8E24AA;">(連續答題提升攻防值，有機率遇到隱藏的「傳說怪」！)</p>
             
             <hr style="width: 80%; border-top: 4px dashed #6A1B9A;">
@@ -575,7 +577,7 @@
             ["爸爸不像", "一些", "只會溺愛孩子的父母", "，", "而是", "適當的", "管教他們", "。"],
             ["我們", "凌晨時分", "便乘旅遊車", "上太平山", "，", "所以", "趕得及", "看到", "美麗的日出", "。"],
             ["因為", "臨近考試", "，", "所以", "各類", "課外活動", "會暫停", "直至", "考試結束", "。"],
-            ["小明", "發現自己", "最近的", "成績退步了", "，", "於是", "重新制定了", "溫習和", "作息時間表", "。"]
+            ["小明", "發現自己", "最近的", "成績退步了", "，", "於是", "重新制定了", "温習和", "作息時間表", "。"]
         ];
 
         // ===== FA溫習 =====
@@ -620,8 +622,43 @@
             { q: "「李白」被後人尊稱為甚麼？", ans: "詩仙", options: ["詩仙", "詩聖", "詩鬼", "詩魔"] },
             { q: "下列哪一個標點符號的運用是絕對正確的？", ans: "我問：「今天天氣好嗎？」", options: ["我問：「今天天氣好嗎？」", "我問，今天天氣好嗎？", "我問：「今天天氣好嗎」？", "我問：今天天氣好嗎？"] },
             { q: "「一日不見，如隔三秋」中的「三秋」通常指多久？", ans: "三年", options: ["三年", "三十天", "三個月", "三百年"] },
-            { q: "選出結構完全不同的詞語：", ans: "東西", options: ["東西", "左右", "上下", "美好"] },
             { q: "「畫蛇添足」比喻甚麼？", ans: "多此一舉", options: ["多此一舉", "畫工精湛", "非常可怕", "行動迅速"] }
+        ];
+
+        // ===== 2526温習(二) =====
+        const dictation2Tasks = [
+            { q: "看到同學買了最新款的遊戲機，弟弟心裡十分 ______。", ans: "羨慕", options: ["羨慕", "妒忌", "討厭", "驚訝"] },
+            { q: "小明不但成績優異，還很有運動天賦，真令人 ______。", ans: "羨慕", options: ["羨慕", "驕傲", "佩服", "期待"] },
+            { q: "爺爺年紀大了，頭上的白髮變得越來越 ______。", ans: "稀疏", options: ["稀疏", "濃密", "茂盛", "雜亂"] },
+            { q: "秋天到了，樹上的葉子掉落不少，顯得有些 ______。", ans: "稀疏", options: ["稀疏", "枯黃", "枯萎", "凋零"] },
+            { q: "狂風中 ______ 著暴雨，吹得路上的行人東倒西歪。", ans: "夾雜", options: ["夾雜", "帶著", "混合", "包含"] },
+            { q: "他的廣東話裡偶爾會 ______ 幾句英語，聽起來很有趣。", ans: "夾雜", options: ["夾雜", "加上", "混入", "說出"] },
+            { q: "這件華麗的晚禮服，與她高貴的氣質十分 ______。", ans: "相稱", options: ["相稱", "配合", "適合", "相同"] },
+            { q: "他雖然年紀輕輕，卻有著與年齡不 ______ 的成熟穩重。", ans: "相稱", options: ["相稱", "相似", "符合", "匹配"] },
+            { q: "媽媽是個 ______ 的消費者，買東西前總會格價。", ans: "精明", options: ["精明", "聰明", "狡猾", "愚笨"] },
+            { q: "張老闆為人 ______ 能幹，把公司打理得井井有條。", ans: "精明", options: ["精明", "狡猾", "馬虎", "愚蠢"] },
+            { q: "面對突如其來的難題，班長依然 ______ 不迫地解決了。", ans: "從容", options: ["從容", "緊張", "慌張", "急忙"] },
+            { q: "在演講比賽中，她 ______ 地走上台，展現出自信的笑容。", ans: "從容", options: ["從容", "緩慢", "害怕", "激動"] },
+            { q: "這個人穿著 ______ 的服裝，引起了途人的注意。", ans: "怪裏怪氣", options: ["怪裏怪氣", "奇裝異服", "普普通通", "破破爛爛"] },
+            { q: "他今天說話的語氣 ______ 的，不知道是不是發生了甚麼事。", ans: "怪裏怪氣", options: ["怪裏怪氣", "吞吞吐吐", "理直氣壯", "結結巴巴"] },
+            { q: "做功課必須認真仔細，絕對不能 ______。", ans: "馬馬虎虎", options: ["馬馬虎虎", "認認真真", "仔仔細細", "慢條斯理"] },
+            { q: "哥哥做事總是 ______，結果經常出錯被媽媽責罵。", ans: "馬馬虎虎", options: ["馬馬虎虎", "井井有條", "小心翼翼", "乾乾淨淨"] },
+            { q: "弟弟把墨汁當作果汁喝了一口，弄得滿嘴都是黑色，真是令人 ______。", ans: "啼笑皆非", options: ["啼笑皆非", "捧腹大笑", "悲痛欲絕", "怒氣衝天"] },
+            { q: "看到小狗穿著人類的衣服在屋內走來走去，這滑稽的畫面讓我 ______。", ans: "啼笑皆非", options: ["啼笑皆非", "莫名其妙", "驚心動魄", "愁眉苦臉"] },
+            // 長句填充
+            { q: "媽媽變老了，她瘦削的 ______ 上，兩道皺紋橫在眉毛之間。", ans: "面龐", options: ["面龐", "臉頰", "額頭", "下巴"] },
+            { q: "媽媽變老了，她瘦削的面龐上，兩道 ______ 橫在眉毛之間。", ans: "皺紋", options: ["皺紋", "疤痕", "眉毛", "汗水"] },
+            { q: "媽媽變老了，她瘦削的面龐上，兩道皺紋橫在 ______ 之間。", ans: "眉毛", options: ["眉毛", "眼睛", "鼻子", "嘴唇"] },
+            { q: "嘴巴乾澀，嘴角被皺紋牽得 ______ 咧著。", ans: "向後", options: ["向後", "向前", "向上", "向下"] },
+            { q: "______ 乾澀，嘴角被皺紋牽得向後咧著。", ans: "嘴巴", options: ["嘴巴", "嘴唇", "舌頭", "喉嚨"] }
+        ];
+
+        const dictation2ReorderTasks = [
+            ["媽媽", "變老了", "，", "她", "瘦削的", "面龐上", "，", "兩道皺紋", "橫在", "眉毛之間", "。"],
+            ["她", "瘦削的", "面龐上", "，", "兩道皺紋", "橫在", "眉毛之間", "；", "嘴巴", "乾澀", "。"],
+            ["嘴巴", "乾澀", "，", "嘴角", "被", "皺紋", "牽得", "向後", "咧著", "。"],
+            ["媽媽變老了", "，", "瘦削的面龐上", "，", "兩道皺紋", "橫在眉毛之間", "。"],
+            ["嘴巴乾澀", "，", "嘴角", "被皺紋", "牽得", "向後咧著", "。"]
         ];
 
         const mcConfigs = {
@@ -629,7 +666,8 @@
             'match-word': { title: "🔮 符文解密 (配詞題)", subtitle: "找出最適合句子語境的詞語！", tasks: matchTasks },
             'connect': { title: "🔗 魔法連線 (連線題)", subtitle: "找出與題目匹配的另一半詞語！", tasks: connectTasks },
             'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
-            'fa-mc': { title: "📝 FA溫習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks }
+            'fa-mc': { title: "📝 FA溫習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks },
+            'dictation2-mc': { title: "📖 2526温習(二) (填充題)", subtitle: "選擇正確的詞語完成句子！", tasks: dictation2Tasks }
         };
 
         const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🌌', 900: '🏆', 1001: '🐉', 1002: '🦄' };
@@ -663,7 +701,6 @@
             'gabu': {
                 title: "加布獸路線", desc: "冷酷且敏捷，高人氣的冰狼型精靈。",
                 lv0: { n: "獨角獸", p: "tsunomon.jpg", b: 0 },
-                // 替換加布獸可用圖片
                 lv1: { n: "加布獸", p: "https://res.cloudinary.com/fio/image/upload/v1603513689/Official/Card/official_card_bo-1j_9a56c731e8.jpg", b: 20 },
                 lv2: { n: "加魯魯獸", p: "garurumon.jpg", b: 50 },
                 lv3A: { n: "獸人加魯魯獸", p: "weregarurumon.jpg", b: 100 },
@@ -714,7 +751,7 @@
             return dex.lv4A;
         }
 
-        // ⚠️ 不改變原有資料結構，新增 partners 收集系統
+        // ⚠️ 不改變原有資料結構
         const defaultInv = { playerName: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], partnerLv: 0, partnerId: "", partnerBranch: "A", partners: {} };
         let inventory = { ...defaultInv };
 
@@ -902,7 +939,6 @@
                 document.getElementById('partner-select-screen').classList.remove('hidden');
                 document.getElementById('partner-status-screen').classList.add('hidden');
                 
-                // 如果已經有搭檔，顯示取消按鈕
                 if(inventory.partnerId) {
                     document.getElementById('btn-cancel-select').classList.remove('hidden');
                 } else {
@@ -947,7 +983,7 @@
                 
                 card.onclick = () => {
                     if(isActive) {
-                        openPartnerZone(); // 切換回狀態畫面
+                        openPartnerZone(); 
                         return;
                     }
                     let confirmMsg = pData ? `確定要切換搭檔為【${info.n}】嗎？` : `確定要領養【${dex.title}】嗎？將從幼年期開始培育！`;
@@ -1001,7 +1037,6 @@
             if(pLevel >= 3) pathName += (inventory.partnerBranch === 'A' ? " (光明路線)" : " (闇黑路線)");
             document.getElementById('partner-path-name').innerText = pathName;
 
-            // 控制進化 UI 顯示
             document.getElementById('evo-req-single').classList.add('hidden');
             document.getElementById('evo-req-branch').classList.add('hidden');
             document.getElementById('evo-max-msg').classList.add('hidden');
@@ -1009,21 +1044,17 @@
             if (pLevel >= 4) {
                 document.getElementById('evo-max-msg').classList.remove('hidden');
             } else if (pLevel === 2) {
-                // Lv2 升 Lv3，顯示分支選擇
                 document.getElementById('evo-req-branch').classList.remove('hidden');
                 let costs = evoCosts[pLevel + 1];
-                // 路線 A
                 document.getElementById('branch-a-title').innerText = costs.A.title;
                 document.getElementById('evo-a-m').innerText = costs.A.m;
                 document.getElementById('evo-a-f').innerText = costs.A.f;
                 document.getElementById('evo-a-s').innerText = costs.A.s;
-                // 路線 B
                 document.getElementById('branch-b-title').innerText = costs.B.title;
                 document.getElementById('evo-b-m').innerText = costs.B.m;
                 document.getElementById('evo-b-f').innerText = costs.B.f;
                 document.getElementById('evo-b-g').innerText = costs.B.g;
             } else {
-                // 普通單線進化 (Lv0->1, Lv1->2, Lv3->4)
                 document.getElementById('evo-req-single').classList.remove('hidden');
                 let costs = (pLevel === 3) ? evoCosts[pLevel + 1][inventory.partnerBranch] : evoCosts[pLevel + 1];
                 document.getElementById('evo-s-m').innerText = costs.m;
@@ -1058,14 +1089,13 @@
                 inventory.partnerLv++;
                 if(pLevel === 2) inventory.partnerBranch = chosenBranch;
                 
-                // 同步更新儲存資料
                 if (!inventory.partners) inventory.partners = {};
                 inventory.partners[inventory.partnerId] = {
                     lv: inventory.partnerLv,
                     branch: inventory.partnerBranch
                 };
                 
-                playSound('legendary'); // 播放震撼音效
+                playSound('legendary'); 
                 let newInfo = getPartnerInfo(inventory.partnerId, inventory.partnerLv, inventory.partnerBranch);
                 alert(`✨ 數據重組！進化成功！\n你的數碼精靈進化成了【${newInfo.n}】！全屬性大幅提升！`);
                 
@@ -1081,7 +1111,6 @@
         let guaranteedLegendary = false; 
         let scrollBoughtToday = false; 
 
-        // 交易市場 (動態物價與混合資源)
         window.openMarket = function() {
             let swordCost = (inventory.superWeaponLv + 1) * 15;
             document.getElementById('btn-buy-sword').innerHTML = `🗡️ 數碼合金劍 (祭壇升2級) <br>💰 ${swordCost} 寶石`;
@@ -1108,7 +1137,7 @@
                     inventory.gem -= swordCost;
                     inventory.superWeaponLv += 2;
                     alert(`🛒 購買成功！你的【破題者之刃】連升 2 級！`);
-                    openMarket(); // 刷新價格
+                    openMarket(); 
                 } else {
                     alert(`❌ 寶石不足！需要 ${swordCost} 寶石。`);
                 }
@@ -1128,7 +1157,7 @@
                     guaranteedLegendary = true;
                     scrollBoughtToday = true;
                     alert("🛒 購買成功！下一次進入森林【必遇傳說怪】！");
-                    openMarket(); // 刷新按鈕狀態
+                    openMarket(); 
                 } else {
                     alert("❌ 資源不足！需要 50木材 + 50石頭 + 10星星。");
                 }
@@ -1136,7 +1165,6 @@
             updateUI();
         }
 
-        // 幸運抽獎
         let gachaDailyLimit = 3;
         window.openGacha = function() {
             document.getElementById('gacha-modal').classList.remove('hidden');
@@ -1185,7 +1213,7 @@
 
             let bossPicImg = document.createElement('img');
             bossPicImg.id = 'boss-pic-img';
-            bossPicImg.className = `battle-pic ${glowClass}`; // 使用放大的戰鬥圖片樣式
+            bossPicImg.className = `battle-pic ${glowClass}`; 
             bossPicImg.src = picUrl;
             
             bossNameElement.innerHTML = name;
@@ -1205,9 +1233,8 @@
             innerBox.className = 'event-box';
             fightBtn.style.display = 'inline-block';
 
-            // 1. 檢查【傳說級】Digimon 遭遇 (加防呆)
             if ((stats.atk >= 50 && stats.def >= 50 && r < 0.15) || guaranteedLegendary) { 
-                guaranteedLegendary = false; // 消耗卷軸狀態
+                guaranteedLegendary = false; 
                 let isDragon = Math.random() > 0.5;
                 let digiName = isDragon ? '奧米加獸' : '紅蓮騎士獸';
                 let digiPic = isDragon ? 'https://digimon.net/cimages/digimon/omegamon.jpg' : 'https://digimon.net/cimages/digimon/dukemon.jpg';
@@ -1234,7 +1261,6 @@
                     startCombat('legendary', currentEvent);
                 };
             } 
-            // 2. 檢查【普通級】病毒 Digimon 遭遇
             else if (r < 0.3) {
                 const normalMonsters = [
                     { name: '惡魔獸', pic: 'https://digimon.net/cimages/digimon/devimon.jpg' },
@@ -1292,7 +1318,6 @@
             inventory.streak++;
             inventory.manuscript += 3; 
             if(inventory.streak % 2 === 0) inventory.fragment += 2; 
-            // 降低星星溢出率
             if(Math.random() < 0.30) { 
                 if(Math.random() > 0.5) inventory.gem += 2; else inventory.star += 2; 
             }
@@ -1308,11 +1333,13 @@
             document.getElementById('top-nav').classList.remove('hidden');
             if(inventory.medals.length > 0) document.getElementById('medal-bar').classList.remove('hidden');
             
-            if(type === 'reorder' || type === 'fa-reorder') {
+            if(type === 'reorder' || type === 'fa-reorder' || type === 'dictation2-reorder') {
                 currentReorderType = type;
                 
                 if(type === 'fa-reorder') {
                     document.getElementById('reorder-title').innerHTML = "📝 FA溫習 (課文重組)";
+                } else if (type === 'dictation2-reorder') {
+                    document.getElementById('reorder-title').innerHTML = "📖 2526温習(二) (重組句子)";
                 } else {
                     document.getElementById('reorder-title').innerHTML = "🌉 鋪木板過河 (重組句子)";
                 }
@@ -1341,7 +1368,10 @@
             document.getElementById('answer-area').innerHTML = "";
             document.getElementById('word-bank').innerHTML = "";
             
-            let targetTasks = (currentReorderType === 'fa-reorder') ? faReorderTasks : reorderTasks;
+            let targetTasks = reorderTasks;
+            if(currentReorderType === 'fa-reorder') targetTasks = faReorderTasks;
+            if(currentReorderType === 'dictation2-reorder') targetTasks = dictation2ReorderTasks;
+
             let t = targetTasks[Math.floor(Math.random() * targetTasks.length)];
             currentReorderAns = [...t];
             let reorderWords = shuffle([...t]);
@@ -1397,7 +1427,7 @@
                 if(correct) {
                     playSound('win'); addStreak();
                     inventory.wood += 5; updateUI(); 
-                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！橋樑搭好了！(木材+5, 手稿+3)</span>";
+                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！(木材+5, 手稿+3)</span>";
                     document.getElementById('btn-next-reorder').classList.remove('hidden');
                     Array.from(document.getElementById('answer-area').children).forEach(c => c.onclick = null);
                     checkInvasion();
@@ -1534,7 +1564,6 @@
         let combatCorrectCount = 0;
         let combatTarget = 5;
 
-        // Digimon官方圖
         const bossPics = {
             level1: 'https://digimon.net/cimages/digimon/greymon.jpg', 
             level2: 'https://digimon.net/cimages/digimon/metalgreymon.jpg',
@@ -1605,7 +1634,7 @@
             document.getElementById('boss-msg').textContent = "";
             document.getElementById('boss-options').innerHTML = "";
             
-            let qPool = (combatType === 'legendary') ? legendaryTasks : [...fillTasks, ...matchTasks, ...connectTasks, ...punctTasks, ...faMCTasks];
+            let qPool = (combatType === 'legendary') ? legendaryTasks : [...fillTasks, ...matchTasks, ...connectTasks, ...punctTasks, ...faMCTasks, ...dictation2Tasks];
             currentCombatQ = qPool[Math.floor(Math.random() * qPool.length)];
             document.getElementById('boss-question').textContent = currentCombatQ.q;
             
