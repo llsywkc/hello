@@ -3,15 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (pokemon版)</title>
+    <title>Roblox：森林大冒險 (POKEMON版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
-        body { font-family: 'Nunito', "Microsoft JhengHei", sans-serif; background: #4CAE50; background-image: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1)), linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1)); background-size: 40px 40px; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #333; transition: background 1s ease; }
+        
+        body {
+            font-family: 'Nunito', "Microsoft JhengHei", sans-serif;
+            background: #4CAE50; 
+            background-image: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1)), linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1));
+            background-size: 40px 40px; background-position: 0 0, 20px 20px;
+            margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #333;
+            transition: background 1s ease;
+        }
+        
         h1 { color: #FFF; text-transform: uppercase; letter-spacing: 2px; text-shadow: 4px 4px 0 #2E7D32, -2px -2px 0 #2E7D32, 2px -2px 0 #2E7D32, -2px 2px 0 #2E7D32; font-size: 2.8em; text-align: center; margin: 10px 0; }
         .player-info { background: #FFEB3B; color: #333; font-size: 1.2em; font-weight: bold; padding: 5px 20px; border-radius: 20px; border: 4px solid #FBC02D; margin-bottom: 10px; box-shadow: 0 4px 0 #F57F17; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center; }
         .inventory-bar { background-color: #333; color: white; border: 4px solid #222; border-radius: 8px; padding: 10px 20px; font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; margin-bottom: 5px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; }
+        
         #medal-bar { background-color: #2E7D32; border-color: #1B5E20; box-shadow: 0 6px 0 #004D40; font-size: 1.4em; gap: 8px; }
         .medal-icon { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); animation: pulse 2s infinite; cursor: help; }
+
         .coin-text { color: #FFD700; text-shadow: 1px 1px 2px #000; animation: pulse 2s infinite; }
         .gem-text { color: #E040FB; text-shadow: 1px 1px 2px #000; }
         .star-text { color: #FFC107; text-shadow: 1px 1px 2px #000; animation: blink 2s infinite; }
@@ -20,11 +31,14 @@
         .stat-atk { color: #FF5252; text-shadow: 1px 1px 2px #000;}
         .stat-def { color: #448AFF; text-shadow: 1px 1px 2px #000;}
         .save-indicator { font-size: 0.8em; color: #81C784; margin-bottom: 15px; text-shadow: 1px 1px 0 #000; }
+
         .container { background-color: #E0F7FA; border: 8px solid #006064; border-radius: 12px; padding: 20px; width: 95%; max-width: 800px; box-shadow: 0 12px 0 #00363A; text-align: center; }
+
         input[type="text"] { font-size: 1.5em; padding: 10px; border: 4px solid #333; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; margin-bottom: 15px; font-weight: bold; }
         button { font-family: inherit; font-size: 1.2em; font-weight: bold; padding: 12px 20px; margin: 10px; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: all 0.1s; border: 4px solid rgba(0,0,0,0.2); }
         button:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent !important; }
         button:disabled { cursor: not-allowed; opacity: 0.6; filter: grayscale(100%); }
+        
         .btn-green { background-color: #4CAF50; color: white; box-shadow: 0 6px 0 #2E7D32; }
         .btn-blue { background-color: #2196F3; color: white; box-shadow: 0 6px 0 #1565C0; }
         .btn-orange { background-color: #FF9800; color: white; box-shadow: 0 6px 0 #E65100; }
@@ -33,26 +47,32 @@
         .btn-purple { background-color: #9C27B0; color: white; box-shadow: 0 6px 0 #6A1B9A; border: 4px solid #EA80FC; animation: pulse 2s infinite; }
         .btn-gold { background-color: #FFB300; color: white; box-shadow: 0 6px 0 #FF8F00; border: 4px solid #FFE082; animation: pulse 2s infinite; }
         .btn-black { background-color: #212121; color: white; box-shadow: 0 6px 0 #000000; border: 4px solid #757575; }
+
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(234, 128, 252, 0.7), 0 6px 0 #6A1B9A; } 70% { box-shadow: 0 0 0 15px rgba(234, 128, 252, 0), 0 6px 0 #6A1B9A; } 100% { box-shadow: 0 0 0 0 rgba(234, 128, 252, 0), 0 6px 0 #6A1B9A; } }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
-        
+
+        /* 神獸專屬特效 */
         .legendary-mode { background-color: #3e0000 !important; box-shadow: 0 12px 0 #1a0000 !important; border-color: #ff1744 !important; }
         .legendary-mode .question-text { background: #ffebee !important; border-color: #d50000 !important; color: #b71c1c; }
         .ultimate-warning { animation: screenShake 0.2s infinite, flashRed 0.5s infinite; }
         @keyframes screenShake { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-2px, -2px) rotate(-1deg); } 50% { transform: translate(-3px, 0px) rotate(1deg); } 75% { transform: translate(3px, 2px) rotate(0deg); } 100% { transform: translate(1px, -1px) rotate(-1deg); } }
         @keyframes flashRed { 0% { box-shadow: inset 0 0 50px #ff0000; } 50% { box-shadow: inset 0 0 10px #ff0000; } 100% { box-shadow: inset 0 0 50px #ff0000; } }
+        
         .frozen-options { pointer-events: none; filter: grayscale(100%) blur(1px) brightness(0.8); }
 
         .hidden { display: none !important; }
         .screen { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        
         .word-bank, .answer-area { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; min-height: 80px; padding: 15px; background: rgba(0,0,0,0.05); border-radius: 10px; border: 4px inset rgba(0,0,0,0.1); box-sizing: border-box; transition: all 0.3s; }
         .word-chunk { background-color: #FFEB3B; border: 4px solid #FBC02D; box-shadow: 0 6px 0 #F57F17; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; color: #333; }
         .stone-chunk { background-color: #9E9E9E; border: 4px solid #757575; box-shadow: 0 6px 0 #424242; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; color: #FFF; transition: visibility 0.2s; }
         .question-text { font-size: 1.5em; font-weight: bold; background: #FFF; padding: 15px; border: 4px solid #B0BEC5; border-radius: 8px; line-height: 1.5; width: 90%; box-sizing: border-box; }
         .status-msg { font-size: 1.5em; font-weight: bold; min-height: 55px; margin-bottom: 5px; text-align: center; }
+
         .boss-hp-bar-container { width: 90%; background: #333; border: 4px solid #222; border-radius: 10px; height: 30px; position: relative; overflow: hidden; margin-bottom: 10px; }
         .boss-hp-bar { background: #4CAF50; height: 100%; width: 100%; transition: width 0.3s; }
         .boss-hp-text { position: absolute; width: 100%; text-align: center; color: white; font-weight: bold; line-height: 30px; top: 0; left: 0; text-shadow: 1px 1px 2px #000; }
+        
         .timer-bar-container { width: 90%; background: #E0E0E0; border: 4px solid #9E9E9E; border-radius: 10px; height: 20px; position: relative; overflow: hidden; margin-bottom: 10px; }
         .timer-bar { background: #FF5252; height: 100%; width: 100%; transition: width 1s linear; }
 
@@ -68,37 +88,71 @@
         .super-gear-card { border: 4px solid #FF9800; background: #FFF3E0; width: 200px; }
         .super-gear-card h3 { margin: 5px 0; color: #E65100; font-size: 1.3em; }
 
-        #btn-gift { background: linear-gradient(45deg, #FF9800, #FF5722); color: white; border: none; padding: 12px 20px; font-size: 1.2em; border-radius: 10px; cursor: pointer; box-shadow: 0 6px 0 #D84315; margin: 15px 0; font-weight: bold; width: 80%; text-transform: uppercase; transition: all 0.1s; border: 4px solid #FFE0B2; animation: blink 2s infinite; }
-        #btn-gift:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent; }
+        #btn-gift {
+            background: linear-gradient(45deg, #FF9800, #FF5722); color: white; border: none; 
+            padding: 12px 20px; font-size: 1.2em; border-radius: 10px; cursor: pointer; 
+            box-shadow: 0 6px 0 #D84315; margin: 15px 0; font-weight: bold; width: 80%; 
+            text-transform: uppercase; transition: all 0.1s; border: 4px solid #FFE0B2;
+            animation: blink 2s infinite;
+        }
         
-        .beast-img { width: 180px; height: 180px; margin: 10px auto; display: block; background: #FFFFFF; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); object-fit: contain; border: 5px solid #212121; padding: 5px; }
+        .beast-img { 
+            width: 180px; height: 180px; margin: 10px auto; display: block; 
+            background: #FFFFFF; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); 
+            object-fit: contain; border: 5px solid #212121; padding: 5px;
+        }
 
-        .partner-card { background: #FFF; border: 6px solid #FFC107; border-radius: 15px; padding: 15px; width: 260px; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 8px 0 #FFA000; position: relative; }
+        .partner-card {
+            background: #FFF; border: 6px solid #FFC107; border-radius: 15px; padding: 15px;
+            width: 260px; display: flex; flex-direction: column; align-items: center; text-align: center;
+            box-shadow: 0 8px 0 #FFA000; position: relative;
+        }
         .partner-img { width: 120px; height: 120px; object-fit: contain; }
         .partner-title { color: #E65100; font-size: 1.4em; margin: 5px 0; }
         .partner-active-badge { position: absolute; top: -15px; right: -15px; background: #F44336; color: white; padding: 5px 10px; border-radius: 20px; font-weight: bold; border: 3px solid #FFF; transform: rotate(15deg); box-shadow: 0 4px 4px rgba(0,0,0,0.3); }
         .partner-icon-sm { width: 40px; height: 40px; border-radius: 50%; border: 3px solid #FFF; box-shadow: 0 2px 5px rgba(0,0,0,0.5); object-fit: contain; background: #E1F5FE; }
 
-        .album-card { background: #222; border: 6px solid #555; border-radius: 15px; padding: 15px; width: 230px; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 8px 0 #111; position: relative; color: white; }
-        .album-card.unlocked { background: linear-gradient(135deg, #FFEB3B, #FF9800); border-color: #FFF; box-shadow: 0 8px 0 #E65100, 0 0 20px rgba(255,215,0,0.6); color: #333; animation: pulse-glow 2s infinite; }
+        /* 閃卡紀念冊專屬樣式 */
+        .album-card {
+            background: #222; border: 6px solid #555; border-radius: 15px; padding: 15px;
+            width: 230px; display: flex; flex-direction: column; align-items: center; text-align: center;
+            box-shadow: 0 8px 0 #111; position: relative; color: white;
+        }
+        .album-card.unlocked {
+            background: linear-gradient(135deg, #FFEB3B, #FF9800); border-color: #FFF;
+            box-shadow: 0 8px 0 #E65100, 0 0 20px rgba(255,215,0,0.6); color: #333;
+            animation: pulse-glow 2s infinite;
+        }
         .album-img { width: 140px; height: 140px; object-fit: contain; filter: brightness(0) drop-shadow(0 0 5px #000); transition: all 0.3s; margin-bottom: 10px; }
         .album-card.unlocked .album-img { filter: drop-shadow(0 0 10px rgba(255,255,255,0.8)); }
 
-        #evo-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; overflow: hidden; }
+        /* 究極進化專屬特效 */
+        #evo-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 2000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; overflow: hidden;
+        }
         .evo-container { position: relative; display: flex; flex-direction: column; align-items: center; }
         .evo-img-target { width: 300px; height: 300px; object-fit: contain; z-index: 10; transition: all 0.1s; }
+        
         .evo-silhouette { filter: brightness(0) invert(1) drop-shadow(0 0 15px #FFF); animation: flashSilhouette 0.2s infinite alternate; }
         @keyframes flashSilhouette { from { filter: brightness(0) invert(1) drop-shadow(0 0 5px #FFF); opacity: 0.7; } to { filter: brightness(0) invert(1) drop-shadow(0 0 30px #FFF); opacity: 1; } }
+        
         .evo-shake { animation: heavyShake 0.1s infinite; }
         @keyframes heavyShake { 0% { transform: translate(3px, 2px) rotate(0deg); } 25% { transform: translate(-4px, -3px) rotate(-3deg); } 50% { transform: translate(-2px, 4px) rotate(3deg); } 75% { transform: translate(4px, -2px) rotate(0deg); } 100% { transform: translate(-3px, 3px) rotate(-2deg); } }
+        
         .evo-drop { animation: heavyDrop 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
         @keyframes heavyDrop { 0% { transform: scale(4); opacity: 0; filter: blur(20px); } 40% { transform: scale(0.8); opacity: 1; filter: blur(0px); } 100% { transform: scale(1.2); } }
+        
         #evo-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; border-radius: 50%; z-index: 1; opacity: 0; transition: opacity 1s; }
         .evo-bg-light { background: radial-gradient(circle, rgba(255,215,0,0.6) 0%, rgba(255,255,255,0.2) 40%, rgba(0,0,0,0) 70%); animation: pulseAura 1.5s infinite; opacity: 1 !important; }
         .evo-bg-dark { background: radial-gradient(circle, rgba(138,43,226,0.6) 0%, rgba(255,0,0,0.2) 40%, rgba(0,0,0,0) 70%); box-shadow: inset 0 0 100px #ff0000; animation: pulseAura 1.5s infinite; opacity: 1 !important; }
         .evo-bg-normal { background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%); animation: pulseAura 1.5s infinite; opacity: 1 !important; }
         @keyframes pulseAura { 0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; } 50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; } }
+
         #evo-flash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 2001; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        
         .evo-text-display { font-size: 3.5em; font-weight: bold; margin-top: 30px; z-index: 10; text-shadow: 0 4px 15px rgba(0,0,0,0.9); opacity: 0; transition: opacity 0.5s; text-align: center;}
         .evo-btn-complete { margin-top: 40px; z-index: 10; opacity: 0; transition: opacity 0.5s; font-size: 1.5em !important; padding: 15px 40px !important;}
     </style>
@@ -188,6 +242,13 @@
                 <h3 style="color:#B71C1C; margin-top:0;">1. 🩸 血月異變與神獸降臨 (極高難度)</h3>
                 <p>當你建好【大城堡】後，在礦洞答題時有 5% 機率觸發「天象異變」，天空會瞬間變成血紅色！</p>
                 <p>⚠️ <b>神獸規則</b>：血月出現後，你必須在接下來的 <b>15 次答題機會中，連續答對 5 到 7 題</b>（視乎難度）才能將神獸逼出來！只要答錯一題，連對就會歸零！如果耗盡 15 次機會仍未達成，血月就會消散。</p>
+                <p>🐉 <b>4大遠古神獸特性</b>：
+                   <br>- <b>獄炎魔龍</b>：造成無視防禦的 1.5 倍真實傷害。
+                   <br>- <b>霜凍孤狼</b>：有機率施放絕對冰凍，將你的選項鎖死 3 秒。
+                   <br>- <b>墮落・超夢</b>：禁療詛咒，整場戰鬥無法使用任何藥水。
+                   <br>- <b>滅世魔神</b>：有機率發動一擊必殺大招，答題時間瞬間縮減至 3 秒，答錯或超時直接秒殺！
+                   <br>- <b>🔥 狂暴化</b>：所有神獸血量低於 50% 時必定狂暴，答題時間永久減少 30%！
+                </p>
                 <h3 style="color:#E65100;">2. 戰鬥力與屬性 (超級重要)</h3>
                 <p>🛡️ <b>防禦力</b>：決定戰鬥中的<b>最大 HP</b>，允許你承受更多次答錯！</p>
                 <p>⚔️ <b>攻擊力 (重擊掉落)</b>：攻擊力越高，戰鬥勝利時觸發【重擊掉落】的機率越高！</p>
@@ -440,7 +501,7 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_final24') || localStorage.getItem('roblox_p4_save_final23') || localStorage.getItem('roblox_p4_save_final22');
+            const savedData = localStorage.getItem('roblox_p4_save_final25') || localStorage.getItem('roblox_p4_save_final24') || localStorage.getItem('roblox_p4_save_final23') || localStorage.getItem('roblox_p4_save_final22');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -456,7 +517,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_final24', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_final25', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -708,13 +769,11 @@
         function openForgeZone() { playSound('click'); hideAll(); document.getElementById('forge-zone').classList.remove('hidden'); }
         function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
         
-        // --- 核心修復：血月異變邏輯重新構建 ---
         function checkInvasion() {
-            if (inventory.bloodMoonActive) return; // 血月期間不觸發其他遭遇
+            if (inventory.bloodMoonActive) return;
 
             let r = Math.random(); 
             
-            // 觸發血月異變
             if (inventory.castles >= 1 && r < 0.05) {
                 inventory.bloodMoonActive = true; 
                 inventory.bloodMoonTarget = Math.floor(Math.random() * 3) + 5; 
@@ -727,7 +786,6 @@
                 return;
             }
 
-            // 觸發野生寶可夢
             if (r < 0.35) { 
                 let normalBeasts = [ { name: "🟢 妙蛙花", power: 33, img: "3" }, { name: "🟡 炎武王", power: 60, img: "500" }, { name: "🔴 耿鬼", power: 90, img: "94" }, { name: "🟣 隆隆岩", power: 120, img: "76" } ];
                 let b = normalBeasts[Math.floor(Math.random() * normalBeasts.length)];
@@ -744,7 +802,6 @@
             else if (r < 0.55) { inventory.star++; playSound('medal'); alert("🌟 幸運！天上掉下了一顆星星！"); updateUI(); }
         }
 
-        // --- 修復：確保傳說寶可夢的 ID 讀取無誤 ---
         function triggerEpicLegendary(id) {
             playSound('legendary'); let l = epicLegendaries[id]; currentLegendaryId = id;
             let eventBoxUi = document.getElementById('event-box-ui'); eventBoxUi.classList.add('legendary-box');
@@ -782,6 +839,9 @@
             currentMiningIdx = 0; document.getElementById('game-mining').classList.remove('hidden'); loadMining();
         }
 
+        // ==========================================
+        // 🛠️ 終極修復：血月判斷邏輯重寫，保證無 Bug
+        // ==========================================
         function loadMining() {
             if (currentMiningIdx >= currentMiningTasks.length || currentMiningTasks.length===0) {
                 if(currentCategory === 'hk') currentMiningTasks = shuffle(dbHK);
@@ -791,25 +851,39 @@
                 else if (currentCategory === 'culture') currentMiningTasks = shuffle(dbCulture);
                 currentMiningIdx = 0;
             }
+            
             let t = currentMiningTasks[currentMiningIdx];
-            document.getElementById('mining-question').textContent = t.q; document.getElementById('mining-msg').innerHTML = '';
-            document.getElementById('mining-options').innerHTML = ''; document.getElementById('btn-next-mining').classList.add('hidden');
+            document.getElementById('mining-question').textContent = t.q; 
+            document.getElementById('mining-msg').innerHTML = '';
+            document.getElementById('mining-options').innerHTML = ''; 
+            document.getElementById('btn-next-mining').classList.add('hidden');
             document.getElementById('btn-hint-mining').classList.remove('hidden');
             
             let ops = shuffle([...t.options]);
             ops.forEach(opt => {
-                let c = document.createElement('div'); c.className = 'stone-chunk'; c.textContent = opt;
+                let c = document.createElement('div'); 
+                c.className = 'stone-chunk'; 
+                c.textContent = opt;
+                
                 c.onclick = () => {
-                    // --- 核心修復：精準扣除血月次數並判定 ---
+                    // 1. 如果處於血月狀態，先扣除剩餘次數
                     if (inventory.bloodMoonActive) {
                         inventory.bloodMoonLeft--;
                     }
 
                     if (opt === t.ans) {
+                        // 答對邏輯
                         playSound('win');
-                        inventory.stone += 1; inventory.wood += 1; inventory.manuscript += 1; inventory.streak += 1; inventory.coin += 2;
+                        
+                        // 保留你特製的數值！
+                        inventory.stone += 5; 
+                        inventory.wood += 5; 
+                        inventory.manuscript += 3; 
+                        inventory.streak += 1; 
+                        inventory.coin += 2;
                         if(inventory.streak % 3 === 0) inventory.fragment += 1;
                         
+                        // 血月連對累積
                         if(inventory.bloodMoonActive) { 
                             inventory.bloodMoonStreak++; 
                             document.getElementById('level-title').innerHTML = `🩸 血月異變 (剩餘: ${inventory.bloodMoonLeft} | 需連對: ${inventory.bloodMoonStreak}/${inventory.bloodMoonTarget})`; 
@@ -817,10 +891,13 @@
                         
                         checkMedalUnlock();
                         document.getElementById('mining-msg').innerHTML = "<span style='color:#4CAF50'>✅ 答對了！獲得 石頭、木材、手稿 與 2金幣！</span>";
-                        document.getElementById('btn-next-mining').classList.remove('hidden'); document.getElementById('btn-hint-mining').classList.add('hidden');
+                        document.getElementById('btn-next-mining').classList.remove('hidden'); 
+                        document.getElementById('btn-hint-mining').classList.add('hidden');
                         document.getElementById('mining-options').innerHTML = ''; 
+                        
                         updateUI(); 
 
+                        // 血月狀態的最終判定
                         if (inventory.bloodMoonActive) {
                             if (inventory.bloodMoonStreak >= inventory.bloodMoonTarget) {
                                 let legendKeys = Object.keys(epicLegendaries);
@@ -828,25 +905,32 @@
                                 triggerEpicLegendary(lId);
                                 inventory.bloodMoonActive = false; 
                             } else if (inventory.bloodMoonLeft <= 0) {
-                                resetWeather(); playSound('error'); alert("💨 血月消散了... 你未能在限時內引出神獸。"); 
+                                resetWeather(); 
+                                playSound('error'); 
+                                alert("💨 血月消散了... 你未能在限時內引出神獸。"); 
                             }
                         } else {
                             checkInvasion();
                         }
 
                     } else {
-                        playSound('error'); inventory.streak = 0; 
+                        // 答錯邏輯
+                        playSound('error'); 
+                        inventory.streak = 0; 
+                        c.style.visibility = 'hidden'; 
+                        document.getElementById('mining-msg').innerHTML = "<span style='color:#b71c1c'>❌ 錯了！(連勝中斷)</span>";
                         
-                        if(inventory.bloodMoonActive) { 
+                        // 血月連對歸零並判定是否消散
+                        if (inventory.bloodMoonActive) { 
                             inventory.bloodMoonStreak = 0; 
                             document.getElementById('level-title').innerHTML = `🩸 血月異變 (剩餘: ${inventory.bloodMoonLeft} | 需連對: 0/${inventory.bloodMoonTarget})`;
                             if (inventory.bloodMoonLeft <= 0) {
-                                resetWeather(); alert("💨 血月消散了... 你未能在限時內引出神獸。"); 
+                                resetWeather(); 
+                                alert("💨 血月消散了... 你未能在限時內引出神獸。"); 
                             }
-                        }
-
-                        updateUI(); c.style.visibility = 'hidden'; 
-                        document.getElementById('mining-msg').innerHTML = "<span style='color:#b71c1c'>❌ 錯了！(連勝中斷)</span>";
+                        } 
+                        
+                        updateUI(); 
                     }
                 };
                 document.getElementById('mining-options').appendChild(c);
@@ -860,6 +944,7 @@
                 else { alert("💡 已經沒有錯誤選項可以刪除了！"); }
             };
         }
+        
         function nextMining() { playSound('click'); currentMiningIdx++; loadMining(); }
 
         let currentBoss = 1, bossTimerInterval, playerHP = 100, maxHP = 100, bossProgress = 0, bossTaskPool = [], currentBossTask = null;
@@ -1002,7 +1087,6 @@
             }
         }
 
-        // --- 核心修復：完美實裝重擊掉落系統 ---
         function grantBattleRewards(isBoss) {
             let atk = calculateStats().atk;
             let baseCoin = isBoss ? 50 : 10; inventory.coin += baseCoin;
