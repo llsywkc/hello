@@ -794,7 +794,7 @@
                 let legends = [ { name: "🐉 【傳說】超夢", min: 150, max: 200, img: "150" }, { name: "🦅 【傳說】洛奇亞", min: 140, max: 190, img: "249" }, { name: "🌌 【傳說】阿爾宙斯", min: 160, max: 220, img: "493" } ];
                 let l = legends[Math.floor(Math.random() * legends.length)];
                 beastName = l.name; beastPower = Math.floor(Math.random() * (l.max - l.min)) + l.min;
-                title = "🚨 警告！傳說寶可夢降臨！"; desc = `${l.name} 出現了！你必須在限時內連續答對 3 題才能收服牠！`;
+                title = "🚨 警告！傳說寶可夢降臨！"; desc = `${l.name} 出現了！你必須在限時內連續答對 3 題才能擊退牠！`;
                 beastImg = getPokePic(l.img); eventBoxUi.classList.add('legendary-box'); playSound('legendary');
             } else if (r < 0.35) { 
                 let normalBeasts = [ { name: "🟢 妙蛙花", power: 33, img: "3" }, { name: "🟡 炎武王", power: 60, img: "500" }, { name: "🔴 耿鬼", power: 90, img: "94" }, { name: "🟣 隆隆岩", power: 120, img: "76" } ];
@@ -1066,7 +1066,7 @@
 
             if (currentBoss === 'legendary') {
                 inventory.gem += 5; inventory.star += 5; inventory.coin += 50;
-                alert(`🎉 史詩級勝利！你成功收服了【${bossConfig['legendary'].name}】！\n獲得 5 寶石，5 星星，50 金幣！` + dropMsg);
+                alert(`🎉 史詩級勝利！你成功擊退了【${bossConfig['legendary'].name}】！\n獲得 5 寶石，5 星星，50 金幣！` + dropMsg);
             } else if (currentBoss === 'normalBeast') {
                 inventory.gem += 2; inventory.coin += 10;
                 alert(`🎉 戰鬥勝利！你答對了問題，成功擊退了【${bossConfig['normalBeast'].name}】！\n獲得 2 寶石 與 10 金幣！` + dropMsg);
