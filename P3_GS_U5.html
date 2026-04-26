@@ -878,7 +878,7 @@
                 c.onclick = () => {
                     if (opt === t.ans) {
                         playSound('win');
-                        inventory.stone += 1; inventory.wood += 1; inventory.manuscript += 1; inventory.streak += 1; inventory.coin += 2;
+                        inventory.stone += 5; inventory.wood += 5; inventory.manuscript += 3; inventory.streak += 1; inventory.coin += 2;
                         if(inventory.streak % 3 === 0) inventory.fragment += 1;
                         checkMedalUnlock();
                         document.getElementById('mining-msg').innerHTML = "<span style='color:#4CAF50'>✅ 答對了！獲得 石頭、木材、手稿 與 2金幣！</span>";
@@ -1149,10 +1149,10 @@
             let droppedItems = [];
             
             if (!currentBossData.effect) {
-                if (Math.random() < 0.05 + bonusProb) { inventory.gem += 1; droppedItems.push("💎 寶石 x1"); }
-                if (Math.random() < 0.05 + bonusProb) { inventory.star += 1; droppedItems.push("🌟 星星 x1"); }
-                if (Math.random() < 0.05 + bonusProb) { inventory.manuscript += 1; droppedItems.push("📜 手稿 x1"); }
-                if (Math.random() < 0.02 + bonusProb) { inventory.fragment += 1; droppedItems.push("🔮 碎片 x1"); }
+                if (Math.random() < 0.05 + bonusProb) { inventory.gem += 5; droppedItems.push("💎 寶石 x5"); }
+                if (Math.random() < 0.05 + bonusProb) { inventory.star += 5; droppedItems.push("🌟 星星 x5"); }
+                if (Math.random() < 0.05 + bonusProb) { inventory.manuscript += 5; droppedItems.push("📜 手稿 x5"); }
+                if (Math.random() < 0.02 + bonusProb) { inventory.fragment += 5; droppedItems.push("🔮 碎片 x5"); }
             }
 
             let dropMsg = droppedItems.length > 0 ? `\n\n💥 你的高攻擊力觸發了【重擊掉落】！\n額外搜刮到：\n` + droppedItems.join("\n") : "";
