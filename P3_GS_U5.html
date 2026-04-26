@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (終極完美流暢版)</title>
+    <title>Roblox：森林大冒險 (pokemon版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         body { font-family: 'Nunito', "Microsoft JhengHei", sans-serif; background: #4CAE50; background-image: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1)), linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1)); background-size: 40px 40px; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #333; transition: background 1s ease; }
@@ -187,19 +187,20 @@
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #4CAF50; max-height: 400px; overflow-y: auto;">
                 <h3 style="color:#B71C1C; margin-top:0;">1. 🩸 血月異變與神獸降臨 (極高難度)</h3>
                 <p>當你建好【大城堡】後，在礦洞答題時有 5% 機率觸發「天象異變」，天空會瞬間變成血紅色！</p>
-                <p>⚠️ <b>神獸規則</b>：血月出現後，你必須在接下來的 <b>15 次答題機會中，連續答對 5 到 7 題</b>才能將神獸逼出來！</p>
+                <p>⚠️ <b>神獸規則</b>：血月出現後，你必須在接下來的 <b>15 次答題機會中，連續答對 5 到 7 題</b>（視乎難度）才能將神獸逼出來！只要答錯一題，連對就會歸零！如果耗盡 15 次機會仍未達成，血月就會消散。</p>
                 <h3 style="color:#E65100;">2. 戰鬥力與屬性 (超級重要)</h3>
                 <p>🛡️ <b>防禦力</b>：決定戰鬥中的<b>最大 HP</b>，允許你承受更多次答錯！</p>
                 <p>⚔️ <b>攻擊力 (重擊掉落)</b>：攻擊力越高，戰鬥勝利時觸發【重擊掉落】的機率越高！</p>
                 <h3 style="color:#6A1B9A;">3. 全新寶可夢搭檔與閃卡紀念冊</h3>
-                <p>🐾 進入「搭檔中心」選擇並進化精靈，獲取強大全局戰力加成！體驗究極進化特效！</p>
+                <p>🐾 進入「搭檔中心」選擇並進化精靈，獲取強大全局戰力加成！</p>
+                <p>🎴 成功擊敗遠古神獸，即可在「傳說閃卡紀念冊」中永久解鎖專屬發光卡片與戰績！</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
 
         <div id="album-zone" class="screen hidden">
             <h2 style="color: #FFD700; text-shadow: 2px 2px 0 #333; font-size: 2em; margin-bottom: 5px;">🎴 傳說閃卡紀念冊</h2>
-            <p style="color: white; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px;">在血月異變中擊敗傳說神獸解鎖！</p>
+            <p style="color: white; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px;">在血月異變中連續答對引出並擊敗傳說神獸，即可解鎖閃卡！</p>
             <div id="album-list" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%;"></div>
             <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
@@ -207,6 +208,7 @@
         <div id="gacha-zone" class="screen hidden">
             <h2 style="color: #FF9800;">🎰 星星幸運抽獎</h2>
             <p>每次抽獎消耗 <b class="star-text">1 顆星星</b>！今日已抽次數：<span id="gacha-count">0</span>/3</p>
+            <p>大獎：50寶石+3碎片(2%) | 稀有：5寶石(28%) | 普通：10木材，10石頭(70%)</p>
             <button class="btn-gold" style="font-size: 1.5em; padding: 20px 40px;" onclick="drawGacha()">✨ 點擊抽獎 ✨</button>
             <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
@@ -230,6 +232,7 @@
 
         <div id="partner-zone" class="screen hidden">
             <h2 style="color: #D32F2F;">🐾 寶可夢搭檔中心</h2>
+            <p>選擇一隻寶可夢作為搭檔！進化可獲得強大屬性加成！(切換搭檔不保留加成，但進度會記錄)</p>
             <div id="partner-list" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%;"></div>
             <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
@@ -386,10 +389,10 @@
         const medalsConfig = { 10: '🥉', 20: '🥈', 30: '🥇', 40: '🏅', 50: '💎', 60: '🌠', 70: '👑', 80: '🐉', 90: '🌌', 100: '🏆' };
         
         const epicLegendaries = {
-            'inferno': { name: "獄炎魔龍", target: 4, time: 12, effect: "true_damage", desc: "特性：無視防禦造成真實傷害", img: "383", hpPenalty: 30 },
-            'frost': { name: "霜凍孤狼", target: 5, time: 10, effect: "freeze", desc: "特性：冰凍技能！隨機凍結選項", img: "245", hpPenalty: 25 },
-            'corrupted': { name: "墮落・超夢", target: 5, time: 10, effect: "anti_heal", desc: "特性：禁療詛咒！無法使用藥水", img: "150", hpPenalty: 40 },
-            'ender': { name: "滅世魔神", target: 6, time: 8, effect: "one_hit", desc: "特性：滅世一擊！答錯將被秒殺", img: "493", hpPenalty: 999 }
+            'inferno': { name: "獄炎魔龍", target: 4, time: 12, effect: "true_damage", desc: "特性：真實傷害", img: "383", hpPenalty: 30 },
+            'frost': { name: "霜凍孤狼", target: 5, time: 10, effect: "freeze", desc: "特性：凍結選項", img: "245", hpPenalty: 25 },
+            'corrupted': { name: "墮落超夢", target: 5, time: 10, effect: "anti_heal", desc: "特性：無法喝藥", img: "150", hpPenalty: 40 },
+            'ender': { name: "滅世魔神", target: 6, time: 8, effect: "one_hit", desc: "特性：答錯秒殺", img: "493", hpPenalty: 999 }
         };
 
         const defaultInv = { 
@@ -403,33 +406,29 @@
         let inventory = { ...defaultInv };
 
         const evoCosts = {
-            1: { m: 30, f: 1, s: 2, g: 0 },
-            2: { m: 60, f: 3, s: 5, g: 0 },
+            1: { m: 30, f: 1, s: 2, g: 0 }, 2: { m: 60, f: 3, s: 5, g: 0 },
             3: { A: { m: 100, f: 5, s: 10, g: 0, title: "⭐ 光明進化" }, B: { m: 100, f: 5, s: 0, g: 10, title: "💎 闇黑進化" } },
             4: { A: { m: 200, f: 10, s: 20, g: 0, title: "⭐ 傳說降臨" }, B: { m: 200, f: 10, s: 0, g: 20, title: "💎 幻之覺醒" } }
         };
 
         const pokedex = {
-            'fire': { title: "小火龍路線", desc: "經典火系御三家", lv0: { n: "小火龍", p: "4", b: 0 }, lv1: { n: "火恐龍", p: "5", b: 10 }, lv2: { n: "噴火龍", p: "6", b: 30 }, lv3A: { n: "超級噴火龍Y", p: "10035", b: 60 }, lv3B: { n: "超級噴火龍X", p: "10034", b: 80 }, lv4A: { n: "鳳王", p: "250", b: 150 }, lv4B: { n: "固拉多", p: "383", b: 180 } },
-            'water': { title: "傑尼龜路線", desc: "經典水系御三家", lv0: { n: "傑尼龜", p: "7", b: 0 }, lv1: { n: "卡咪龜", p: "8", b: 10 }, lv2: { n: "水箭龜", p: "9", b: 30 }, lv3A: { n: "超級水箭龜", p: "10036", b: 60 }, lv3B: { n: "拉普拉斯", p: "131", b: 80 }, lv4A: { n: "洛奇亞", p: "249", b: 150 }, lv4B: { n: "蓋歐卡", p: "382", b: 180 } },
-            'grass': { title: "妙蛙種子路線", desc: "經典草系御三家", lv0: { n: "妙蛙種子", p: "1", b: 0 }, lv1: { n: "妙蛙草", p: "2", b: 10 }, lv2: { n: "妙蛙花", p: "3", b: 30 }, lv3A: { n: "超級妙蛙花", p: "10033", b: 60 }, lv3B: { n: "時拉比", p: "251", b: 80 }, lv4A: { n: "哲爾尼亞斯", p: "716", b: 150 }, lv4B: { n: "烈空坐", p: "384", b: 180 } },
-            'psychic': { title: "拉魯拉絲路線", desc: "強大精神力寶可夢", lv0: { n: "拉魯拉絲", p: "280", b: 0 }, lv1: { n: "奇魯莉安", p: "281", b: 10 }, lv2: { n: "沙奈朵", p: "282", b: 30 }, lv3A: { n: "超級沙奈朵", p: "10051", b: 60 }, lv3B: { n: "艾路雷朵", p: "475", b: 80 }, lv4A: { n: "夢幻", p: "151", b: 150 }, lv4B: { n: "超夢", p: "150", b: 180 } },
-            'electric': { title: "皮丘路線", desc: "速度與雷電的化身", lv0: { n: "皮丘", p: "172", b: 0 }, lv1: { n: "皮卡丘", p: "25", b: 10 }, lv2: { n: "雷丘", p: "26", b: 30 }, lv3A: { n: "雷公", p: "243", b: 60 }, lv3B: { n: "捷拉奧拉", p: "807", b: 80 }, lv4A: { n: "捷克羅姆", p: "644", b: 150 }, lv4B: { n: "阿爾宙斯", p: "493", b: 180 } }
+            'fire': { title: "小火龍路線", desc: "火系御三家", lv0: { n: "小火龍", p: "4", b: 0 }, lv1: { n: "火恐龍", p: "5", b: 10 }, lv2: { n: "噴火龍", p: "6", b: 30 }, lv3A: { n: "超級噴火龍Y", p: "10035", b: 60 }, lv3B: { n: "超級噴火龍X", p: "10034", b: 80 }, lv4A: { n: "鳳王", p: "250", b: 150 }, lv4B: { n: "固拉多", p: "383", b: 180 } },
+            'water': { title: "傑尼龜路線", desc: "水系御三家", lv0: { n: "傑尼龜", p: "7", b: 0 }, lv1: { n: "卡咪龜", p: "8", b: 10 }, lv2: { n: "水箭龜", p: "9", b: 30 }, lv3A: { n: "超級水箭龜", p: "10036", b: 60 }, lv3B: { n: "拉普拉斯", p: "131", b: 80 }, lv4A: { n: "洛奇亞", p: "249", b: 150 }, lv4B: { n: "蓋歐卡", p: "382", b: 180 } },
+            'grass': { title: "妙蛙種子路線", desc: "草系御三家", lv0: { n: "妙蛙種子", p: "1", b: 0 }, lv1: { n: "妙蛙草", p: "2", b: 10 }, lv2: { n: "妙蛙花", p: "3", b: 30 }, lv3A: { n: "超級妙蛙花", p: "10033", b: 60 }, lv3B: { n: "時拉比", p: "251", b: 80 }, lv4A: { n: "哲爾尼亞斯", p: "716", b: 150 }, lv4B: { n: "烈空坐", p: "384", b: 180 } },
+            'psychic': { title: "拉魯拉絲路線", desc: "超能力寶可夢", lv0: { n: "拉魯拉絲", p: "280", b: 0 }, lv1: { n: "奇魯莉安", p: "281", b: 10 }, lv2: { n: "沙奈朵", p: "282", b: 30 }, lv3A: { n: "超級沙奈朵", p: "10051", b: 60 }, lv3B: { n: "艾路雷朵", p: "475", b: 80 }, lv4A: { n: "夢幻", p: "151", b: 150 }, lv4B: { n: "超夢", p: "150", b: 180 } },
+            'electric': { title: "皮丘路線", desc: "速度與雷電", lv0: { n: "皮丘", p: "172", b: 0 }, lv1: { n: "皮卡丘", p: "25", b: 10 }, lv2: { n: "雷丘", p: "26", b: 30 }, lv3A: { n: "雷公", p: "243", b: 60 }, lv3B: { n: "捷拉奧拉", p: "807", b: 80 }, lv4A: { n: "捷克羅姆", p: "644", b: 150 }, lv4B: { n: "阿爾宙斯", p: "493", b: 180 } }
         };
 
         function getPokePic(pId) { return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pId}.png`; }
 
-        // ====== 題庫壓縮處理防止截斷 ======
-        const dbHK=[{q:"中華人民共和國在哪一天對香港恢復行使主權？",ans:"1997年7月1日",options:["1997年7月1日","1999年12月20日","1997年10月1日"]},{q:"香港特區成立後實行甚麼方針保留原有制度？",ans:"一國兩制",options:["一國兩制","港人治港","高度自治"]},{q:"哪一部法律訂明了中國對香港的基本方針？",ans:"《基本法》",options:["《基本法》","《憲法》","《人權法》"]},{q:"香港特區區旗的紅色背景代表甚麼？",ans:"祖國",options:["祖國","香港","自由"]},{q:"區旗上的紫荊花圖案代表甚麼？",ans:"香港",options:["祖國","香港","和平"]},{q:"區旗紅、白兩色互相映襯象徵着甚麼？",ans:"一國兩制",options:["一國兩制","繁榮安定","自由平等"]},{q:"每年7月1日是甚麼紀念日？",ans:"香港特別行政區成立紀念日",options:["國慶日","香港特別行政區成立紀念日","勞動節"]},{q:"《基本法》除了訂明方針還保障了甚麼？",ans:"權利和自由",options:["權利和自由","絕對權力","免交稅款"]},{q:"我們在享有權利和自由的同時應該怎樣？",ans:"尊重他人的權利",options:["尊重他人的權利","忽略他人的感受","限制他人自由"]},{q:"設立法律和規則的主要目的是甚麼？",ans:"維持社會秩序和保障大家權利",options:["維持社會秩序和保障大家權利","限制市民生活","增加政府收入"]}];
+        const dbHK=[{q:"中國在哪一天對香港恢復行使主權？",ans:"1997年7月1日",options:["1997年7月1日","1999年12月20日","1997年10月1日"]},{q:"香港特區成立後實行甚麼方針保留原有制度？",ans:"一國兩制",options:["一國兩制","港人治港","高度自治"]},{q:"哪部法律訂明中國對香港的基本方針？",ans:"《基本法》",options:["《基本法》","《憲法》","《人權法》"]},{q:"區旗的紅色背景代表甚麼？",ans:"祖國",options:["祖國","香港","自由"]},{q:"區旗上的紫荊花圖案代表甚麼？",ans:"香港",options:["祖國","香港","和平"]},{q:"區旗紅白兩色互相映襯象徵着甚麼？",ans:"一國兩制",options:["一國兩制","繁榮安定","自由平等"]},{q:"每年7月1日是甚麼紀念日？",ans:"香港特別行政區成立紀念日",options:["國慶日","香港特別行政區成立紀念日","勞動節"]},{q:"《基本法》除了訂明方針還保障了甚麼？",ans:"權利和自由",options:["權利和自由","絕對權力","免交稅款"]},{q:"我們在享有權利和自由同時應該怎樣？",ans:"尊重他人的權利",options:["尊重他人的權利","忽略他人的感受","限制他人自由"]},{q:"設立法律和規則的主要目的是甚麼？",ans:"維持社會秩序和保障大家權利",options:["維持社會秩序和保障大家權利","限制市民生活","增加政府收入"]}];
         const dbHouse=[{q:"1953年石硤尾木屋區發生了甚麼災難？",ans:"大火",options:["地震","大火","山泥傾瀉"]},{q:"1954年政府開始興建甚麼房屋安置災民？",ans:"徙置大廈",options:["村屋","唐樓","徙置大廈"]},{q:"早期徙置大廈一般樓高多少層？",ans:"6至7層",options:["2至3層","6至7層","10至11層"]},{q:"1950年代第一代公屋通常缺乏甚麼？",ans:"獨立廚廁",options:["窗戶","睡牀","獨立廚廁"]},{q:"昔日的徙置大廈，居民一般在哪裏煮食？",ans:"走廊",options:["客廳","走廊","天台"]},{q:"1980年代公共房屋一般高達多少層？",ans:"20層",options:["6層","20層","50層"]},{q:"現今公共屋邨發展趨勢如何？",ans:"向高空發展",options:["向地下發展","向高空發展","減少樓層"]},{q:"以下哪類房屋屬於香港的公營房屋？",ans:"公共屋邨",options:["唐樓","公共屋邨","私人屋苑"]},{q:"居者有其屋計劃屬於哪一類房屋？",ans:"公營房屋",options:["私營房屋","公營房屋","臨時房屋"]},{q:"哪類私營房屋通常設有住客會所泳池？",ans:"私人屋苑",options:["村屋","唐樓","私人屋苑"]},{q:"申請入住公共屋邨的家庭主要面對甚麼困難？",ans:"輪候時間長",options:["租金昂貴","輪候時間長","設施不足"]},{q:"部分基層市民無奈租住甚麼惡劣的單位？",ans:"劏房",options:["獨立屋","劏房","居屋"]},{q:"蚊子叮咬人類可能會傳播哪一種疾病？",ans:"登革熱",options:["大鼠戊型肝炎","登革熱","感冒"]},{q:"哪種動物出沒可能傳播大鼠戊型肝炎？",ans:"老鼠",options:["蒼蠅","老鼠","蟑螂"]},{q:"負責清洗街道收集垃圾的政府部門是？",ans:"食物環境衞生署",options:["房屋署","食物環境衞生署","地政總署"]},{q:"冷氣機滴水會引致甚麼衞生問題？",ans:"積水滋生蚊蟲",options:["噪音滋擾","積水滋生蚊蟲","空氣污染"]},{q:"政府為減低車輛噪音會在公路旁加建甚麼？",ans:"隔音屏障",options:["減速帶","隔音屏障","交通燈"]},{q:"在斜坡種樹能抓緊泥土，主要作用是？",ans:"防止山泥傾瀉",options:["增加房屋","防止山泥傾瀉","預防鼠患"]},{q:"香港房屋委員會主要負責甚麼工作？",ans:"制定和推行公共房屋計劃",options:["清洗街道","制定和推行公共房屋計劃","管理公園"]},{q:"1950年代美荷樓居住環境特點是？",ans:"居住環境較擠迫",options:["設有商場","居住環境較擠迫","獨立花園"]},{q:"為改善狹小空間，人們可使用甚麼？",ans:"新穎的家具設計",options:["購買更多雜物","新穎的家具設計","拆除外牆"]},{q:"渠務署保持溝渠運作對社區的幫助是？",ans:"改善環境衞生情況",options:["提供更多房屋","改善環境衞生情況","減低噪音"]}];
-        const dbEnergy=[{q:"港鐵(MTR)是靠哪種能源推動的？",ans:"電力",options:["汽油","柴油","電力"]},{q:"夏天開冷氣機需要用到哪種能源？",ans:"電力",options:["電力","煤氣","石油氣"]},{q:"平板電腦沒電了，需要補充哪種能源？",ans:"電力",options:["電力","汽油","石油氣"]},{q:"固定煮食爐連接着地底喉管，這是哪種能源？",ans:"煤氣",options:["石油氣","煤氣","電力"]},{q:"打邊爐的手提小火爐裏面裝的是甚麼？",ans:"石油氣",options:["煤氣","石油氣","柴油"]},{q:"香港紅色的士最常用的燃料是甚麼？",ans:"石油氣",options:["汽油","石油氣","柴油"]},{q:"私家車去油站通常加甚麼油？",ans:"汽油",options:["汽油","柴油","煤氣"]},{q:"雙層巴士通常使用哪種能源？",ans:"柴油",options:["汽油","柴油","石油氣"]},{q:"泥頭車和大貨車去油站時要加甚麼油？",ans:"柴油",options:["汽油","柴油","煤氣"]},{q:"哪兩種能源被稱為液體兄弟？",ans:"汽油和柴油",options:["汽油和柴油","煤氣和石油氣","汽油和煤氣"]},{q:"帶手提爐去露營燒烤應準備哪種燃料？",ans:"石油氣",options:["煤氣","汽油","石油氣"]},{q:"發電廠越來越喜歡使用天然氣為甚麼？",ans:"燃燒時比較乾淨",options:["有香味","燃燒時比較乾淨","能加進私家車"]},{q:"日常使用的化石燃料除了煤和天然氣外還有？",ans:"石油",options:["木材","石油","太陽能"]},{q:"化石燃料是由甚麼演變而成的？",ans:"遠古的動植物",options:["遠古的動植物","隕石","岩漿"]},{q:"白天在房間看書怎樣做最節約能源？",ans:"拉開窗簾利用天然光",options:["開所有的燈","拉上窗簾開枱燈","拉開窗簾利用天然光"]},{q:"自備環保袋不索取膠袋屬於哪一項？",ans:"減少使用",options:["廢物利用","替代使用","減少使用"]},{q:"廢紙放進回收箱製成再生紙屬於哪一項？",ans:"循環再用",options:["減少使用","廢物利用","循環再用"]}];
+        const dbEnergy=[{q:"港鐵(MTR)是靠哪種能源推動的？",ans:"電力",options:["汽油","柴油","電力"]},{q:"夏天開冷氣機需要用到哪種能源？",ans:"電力",options:["電力","煤氣","石油氣"]},{q:"平板電腦沒電了，需要補充哪種能源？",ans:"電力",options:["電力","汽油","石油氣"]},{q:"固定煮食爐連接着地底喉管，這是哪種能源？",ans:"煤氣",options:["石油氣","煤氣","電力"]},{q:"打邊爐的手提小火爐裏面裝的是甚麼？",ans:"石油氣",options:["煤氣","石油氣","柴油"]},{q:"香港紅色的士最常用的燃料是甚麼？",ans:"石油氣",options:["汽油","石油氣","柴油"]},{q:"私家車去油站通常加甚麼油？",ans:"汽油",options:["汽油","柴油","煤氣"]},{q:"雙層巴士通常使用哪種能源？",ans:"柴油",options:["汽油","柴油","石油氣"]},{q:"泥頭車和大貨車去油站時要加甚麼油？",ans:"柴油",options:["汽油","柴油","煤氣"]},{q:"哪兩種能源被稱為液體兄弟？",ans:"汽油和柴油",options:["汽油和柴油","煤氣和石油氣","汽油和煤氣"]},{q:"帶手提爐去露營燒烤應準備哪種燃料？",ans:"石油氣",options:["煤氣","汽油","石油氣"]},{q:"哪種能源既能讓港鐵移動又能讓手錶指針轉動？",ans:"電力",options:["電力","汽油","柴油"]},{q:"發電廠越來越喜歡使用天然氣為甚麼？",ans:"燃燒時比較乾淨",options:["有香味","燃燒時比較乾淨","能加進私家車"]},{q:"日常使用的化石燃料除了煤和天然氣外還有？",ans:"石油",options:["木材","石油","太陽能"]},{q:"化石燃料是由甚麼演變而成的？",ans:"遠古的動植物",options:["遠古的動植物","隕石","岩漿"]},{q:"白天在房間看書怎樣做最節約能源？",ans:"拉開窗簾利用天然光",options:["開所有的燈","拉上窗簾開枱燈","拉開窗簾利用天然光"]},{q:"自備環保袋不索取膠袋屬於哪一項？",ans:"減少使用",options:["廢物利用","替代使用","減少使用"]},{q:"廢紙放進回收箱製成再生紙屬於哪一項？",ans:"循環再用",options:["減少使用","廢物利用","循環再用"]}];
         const dbFreedom=[{q:"1984年中英兩國簽署了哪份文件確認香港回歸？",ans:"《中英聯合聲明》",options:["《中英聯合聲明》","《基本法》","《南京條約》"]},{q:"中國在哪一天對香港恢復行使主權？",ans:"1997年7月1日",options:["1997年7月1日","1999年12月20日","1990年4月4日"]},{q:"國家對香港實施的基本方針政策是甚麼？",ans:"一國兩制",options:["一國兩制","一國一制","港人治國"]},{q:"哪份文件是香港憲制性文件，保障市民權利？",ans:"《基本法》",options:["《基本法》","《人權法案》","《聯合聲明》"]},{q:"《基本法》是由哪個機關通過並頒布的？",ans:"全國人民代表大會",options:["全國人民代表大會","香港立法會","聯合國"]},{q:"在報章發表對社會事務意見，體現哪種自由？",ans:"言論自由",options:["言論自由","信仰自由","集會自由"]},{q:"有不同宗教的廟宇和教堂，反映享有甚麼自由？",ans:"宗教信仰自由",options:["宗教信仰自由","言論自由","出入境自由"]},{q:"與親友通電話的私隱受保護，屬於哪項自由？",ans:"通訊秘密和自由",options:["通訊秘密和自由","言論自由","創作自由"]},{q:"行使個人自由時，必須以甚麼為前提？",ans:"不損害他人權利和遵守法律",options:["不損害他人權利和遵守法律","滿足自己慾望","不理會別人"]},{q:"每個人都不遵守規則會導致甚麼後果？",ans:"社會混亂，權利不受保障",options:["社會混亂，權利不受保障","每個人更快樂","生活更方便"]},{q:"在深夜大聲播放音樂有甚麼問題？",ans:"侵犯了鄰居休息的權利",options:["侵犯了鄰居休息的權利","行使了創作自由","沒有任何問題"]},{q:"《基本法》規定居民必須履行甚麼義務？",ans:"遵守香港特區實行的法律",options:["遵守香港特區實行的法律","必須信仰宗教","不能離開香港"]}];
         const dbCulture=[{q:"為甚麼香港會成為中外文化薈萃的城市？",ans:"以上皆是",options:["曾受英國管治","自古是中國領土","很多外籍人士居住","以上皆是"]},{q:"茶餐廳的食物最能反映香港哪一種特色？",ans:"中外文化交融",options:["只有中國文化","只有外來文化","中外文化交融"]},{q:"面對不同文化背景的居民，我們應該抱持甚麼態度？",ans:"接納和尊重",options:["互相排斥","接納和尊重","互不干涉"]},{q:"與不同宗教信仰的同學吃飯時，應該怎樣做？",ans:"尊重飲食禁忌",options:["強迫嘗試食物","尊重飲食禁忌","嘲笑飲食習慣"]},{q:"哪個宗教的信徒會在「齋戒月」日落前不吃東西？",ans:"伊斯蘭教",options:["佛教","基督教","伊斯蘭教"]},{q:"「的士、巴士」這些詞語有甚麼共同點？",ans:"都是外來語",options:["都是古詩用語","都是外來語","都是食物名稱"]},{q:"下列哪一項屬於中國傳統文化表演？",ans:"梁山伯與祝英台",options:["梁山伯與祝英台","英國舞台劇","非洲鼓之夜"]},{q:"下列哪一項屬於外來文化表演？",ans:"波蘭鋼琴大師演奏",options:["中國舞蹈","波蘭鋼琴大師演奏","粵劇"]},{q:"下列哪一項最能代表中外文化交融？",ans:"中西合璧樂器演奏",options:["中國舞蹈","外國鋼琴演奏","中西合璧樂器演奏"]},{q:"寶蓮禪寺屬於哪一個宗教？",ans:"佛教",options:["佛教","伊斯蘭教","天主教"]},{q:"九龍清真寺屬於哪一個宗教？",ans:"伊斯蘭教",options:["道教","伊斯蘭教","佛教"]},{q:"聖母無原罪主教座堂屬於哪一個宗教？",ans:"天主教",options:["基督教","天主教","道教"]},{q:"黃大仙祠屬於哪一個宗教？",ans:"道教",options:["道教","印度教","佛教"]},{q:"九龍城浸信會屬於哪一個宗教？",ans:"基督教",options:["基督教","天主教","伊斯蘭教"]},{q:"為甚麼香港有很多西方文化活動和宗教？",ans:"傳教士帶來西方文化",options:["只有西方人居住","傳教士帶來西方文化","香港沒有傳統文化"]},{q:"「T恤」和「三文魚」是吸收外國語言而成的？",ans:"外來詞",options:["外來詞","古語","宗教用語"]},{q:"粵劇表演、中國武術表演屬於哪種文化？",ans:"中國傳統文化",options:["中外文化交融","中國傳統文化","外國藝術"]},{q:"意式焗肉醬長通粉、三文魚壽司屬於哪種文化？",ans:"外國飲食文化",options:["中外文化交融","外國藝術","外國飲食文化"]},{q:"茶餐廳的西多士、菠蘿油屬於哪種文化？",ans:"香港地道飲食",options:["外國飲食","香港地道飲食","中國傳統"]}];
 
         const allMiningTasks = [...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom, ...dbCulture];
         let currentCategory = 'energy'; let currentMiningIdx = 0, currentMiningTasks = [];
-        let currentBoss = 1, bossTimerInterval, playerHP = 100, maxHP = 100, bossProgress = 0, bossTaskPool = [], currentBossTask = null;
-        let bossEnraged = false, isUltimateActive = false, currentBossData = null, currentLegendaryId = null;
 
         function shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
@@ -441,7 +440,7 @@
         }
 
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_final23') || localStorage.getItem('roblox_p4_save_final22') || localStorage.getItem('roblox_p4_save_final21');
+            const savedData = localStorage.getItem('roblox_p4_save_final24') || localStorage.getItem('roblox_p4_save_final23') || localStorage.getItem('roblox_p4_save_final22');
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -457,7 +456,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_final23', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_final24', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -709,43 +708,35 @@
         function openForgeZone() { playSound('click'); hideAll(); document.getElementById('forge-zone').classList.remove('hidden'); }
         function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
         
+        // --- 核心修復：血月異變邏輯重新構建 ---
         function checkInvasion() {
-            let r = Math.random(); let beastPower = 0; let title = ""; let desc = ""; let beastName = ""; let beastImg = ""; 
-            let eventBoxUi = document.getElementById('event-box-ui'); eventBoxUi.classList.remove('legendary-box');
-            document.getElementById('event-image').style.display = "none"; 
+            if (inventory.bloodMoonActive) return; // 血月期間不觸發其他遭遇
 
-            if (!inventory.bloodMoonActive && inventory.castles >= 1 && r < 0.05) {
-                inventory.bloodMoonActive = true; inventory.bloodMoonTarget = Math.floor(Math.random() * 3) + 5; 
-                inventory.bloodMoonStreak = 0; inventory.bloodMoonLeft = 15; document.body.style.background = "#3e0000"; playSound('legendary');
+            let r = Math.random(); 
+            
+            // 觸發血月異變
+            if (inventory.castles >= 1 && r < 0.05) {
+                inventory.bloodMoonActive = true; 
+                inventory.bloodMoonTarget = Math.floor(Math.random() * 3) + 5; 
+                inventory.bloodMoonStreak = 0; 
+                inventory.bloodMoonLeft = 15; 
+                document.body.style.background = "#3e0000"; 
+                playSound('legendary');
                 alert("⚠️ 警告！天象異變！血月降臨！\n礦洞深處傳來遠古神獸的氣息...\n你必須在接下來的 15 次挖掘中，連續答對題目才能將牠逼出來！");
+                document.getElementById('level-title').innerHTML = `🩸 血月異變 (剩餘: 15 | 需連對: 0/${inventory.bloodMoonTarget})`;
+                return;
             }
 
-            if (inventory.bloodMoonActive) {
-                inventory.bloodMoonLeft--;
-                if (inventory.bloodMoonStreak >= inventory.bloodMoonTarget) {
-                    let legendKeys = Object.keys(epicLegendaries);
-                    let lId = legendKeys[Math.floor(Math.random() * legendKeys.length)];
-                    triggerEpicLegendary(lId);
-                    inventory.bloodMoonActive = false; return;
-                } else if (inventory.bloodMoonLeft <= 0) {
-                    resetWeather(); playSound('error'); alert("💨 血月消散了... 你未能在限時內引出神獸。"); return;
-                }
-                document.getElementById('level-title').innerHTML = `🩸 血月異變 (剩餘機會: ${inventory.bloodMoonLeft} | 需連對: ${inventory.bloodMoonStreak}/${inventory.bloodMoonTarget})`;
-                return; 
-            }
-
+            // 觸發野生寶可夢
             if (r < 0.35) { 
                 let normalBeasts = [ { name: "🟢 妙蛙花", power: 33, img: "3" }, { name: "🟡 炎武王", power: 60, img: "500" }, { name: "🔴 耿鬼", power: 90, img: "94" }, { name: "🟣 隆隆岩", power: 120, img: "76" } ];
                 let b = normalBeasts[Math.floor(Math.random() * normalBeasts.length)];
-                beastPower = b.power; beastName = b.name; title = "⚠️ 突發野生寶可夢！"; desc = `野生的【${b.name}】跳了出來！\n現在你需要「答對 1 條隨機問題」才能擊退牠！`;
-                beastImg = getPokePic(b.img);
-            }
-
-            if (beastPower > 0) {
-                document.getElementById('event-title').textContent = title; document.getElementById('event-desc').innerText = desc; 
-                let imgElement = document.getElementById('event-image'); imgElement.src = beastImg; imgElement.style.display = "block";
-                document.getElementById('btn-event-fight').onclick = () => resolveEvent('fight', beastPower, false, beastName, beastImg);
-                document.getElementById('btn-event-flee').onclick = () => resolveEvent('flee', beastPower, false, beastName, beastImg);
+                let eventBoxUi = document.getElementById('event-box-ui'); eventBoxUi.classList.remove('legendary-box');
+                document.getElementById('event-title').textContent = "⚠️ 突發野生寶可夢！"; 
+                document.getElementById('event-desc').innerText = `野生的【${b.name}】跳了出來！\n現在你需要「答對 1 條隨機問題」才能擊退牠！`; 
+                let imgElement = document.getElementById('event-image'); imgElement.src = getPokePic(b.img); imgElement.style.display = "block";
+                document.getElementById('btn-event-fight').onclick = () => resolveEvent('fight', b.power, false, b.name, imgElement.src);
+                document.getElementById('btn-event-flee').onclick = () => resolveEvent('flee', b.power, false, b.name, imgElement.src);
                 document.getElementById('event-modal').classList.remove('hidden'); return;
             }
 
@@ -753,7 +744,7 @@
             else if (r < 0.55) { inventory.star++; playSound('medal'); alert("🌟 幸運！天上掉下了一顆星星！"); updateUI(); }
         }
 
-        // ====== 修復：修正 l.id 導致的崩潰問題 ======
+        // --- 修復：確保傳說寶可夢的 ID 讀取無誤 ---
         function triggerEpicLegendary(id) {
             playSound('legendary'); let l = epicLegendaries[id]; currentLegendaryId = id;
             let eventBoxUi = document.getElementById('event-box-ui'); eventBoxUi.classList.add('legendary-box');
@@ -809,17 +800,51 @@
             ops.forEach(opt => {
                 let c = document.createElement('div'); c.className = 'stone-chunk'; c.textContent = opt;
                 c.onclick = () => {
+                    // --- 核心修復：精準扣除血月次數並判定 ---
+                    if (inventory.bloodMoonActive) {
+                        inventory.bloodMoonLeft--;
+                    }
+
                     if (opt === t.ans) {
                         playSound('win');
                         inventory.stone += 1; inventory.wood += 1; inventory.manuscript += 1; inventory.streak += 1; inventory.coin += 2;
                         if(inventory.streak % 3 === 0) inventory.fragment += 1;
-                        if(inventory.bloodMoonActive) { inventory.bloodMoonStreak++; document.getElementById('level-title').innerHTML = `🩸 血月異變 (剩餘: ${inventory.bloodMoonLeft} | 需連對: ${inventory.bloodMoonStreak}/${inventory.bloodMoonTarget})`; }
+                        
+                        if(inventory.bloodMoonActive) { 
+                            inventory.bloodMoonStreak++; 
+                            document.getElementById('level-title').innerHTML = `🩸 血月異變 (剩餘: ${inventory.bloodMoonLeft} | 需連對: ${inventory.bloodMoonStreak}/${inventory.bloodMoonTarget})`; 
+                        }
+                        
                         checkMedalUnlock();
                         document.getElementById('mining-msg').innerHTML = "<span style='color:#4CAF50'>✅ 答對了！獲得 石頭、木材、手稿 與 2金幣！</span>";
                         document.getElementById('btn-next-mining').classList.remove('hidden'); document.getElementById('btn-hint-mining').classList.add('hidden');
-                        document.getElementById('mining-options').innerHTML = ''; updateUI(); checkInvasion();
+                        document.getElementById('mining-options').innerHTML = ''; 
+                        updateUI(); 
+
+                        if (inventory.bloodMoonActive) {
+                            if (inventory.bloodMoonStreak >= inventory.bloodMoonTarget) {
+                                let legendKeys = Object.keys(epicLegendaries);
+                                let lId = legendKeys[Math.floor(Math.random() * legendKeys.length)];
+                                triggerEpicLegendary(lId);
+                                inventory.bloodMoonActive = false; 
+                            } else if (inventory.bloodMoonLeft <= 0) {
+                                resetWeather(); playSound('error'); alert("💨 血月消散了... 你未能在限時內引出神獸。"); 
+                            }
+                        } else {
+                            checkInvasion();
+                        }
+
                     } else {
-                        playSound('error'); inventory.streak = 0; if(inventory.bloodMoonActive) inventory.bloodMoonStreak = 0;
+                        playSound('error'); inventory.streak = 0; 
+                        
+                        if(inventory.bloodMoonActive) { 
+                            inventory.bloodMoonStreak = 0; 
+                            document.getElementById('level-title').innerHTML = `🩸 血月異變 (剩餘: ${inventory.bloodMoonLeft} | 需連對: 0/${inventory.bloodMoonTarget})`;
+                            if (inventory.bloodMoonLeft <= 0) {
+                                resetWeather(); alert("💨 血月消散了... 你未能在限時內引出神獸。"); 
+                            }
+                        }
+
                         updateUI(); c.style.visibility = 'hidden'; 
                         document.getElementById('mining-msg').innerHTML = "<span style='color:#b71c1c'>❌ 錯了！(連勝中斷)</span>";
                     }
@@ -977,6 +1002,7 @@
             }
         }
 
+        // --- 核心修復：完美實裝重擊掉落系統 ---
         function grantBattleRewards(isBoss) {
             let atk = calculateStats().atk;
             let baseCoin = isBoss ? 50 : 10; inventory.coin += baseCoin;
