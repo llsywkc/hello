@@ -186,7 +186,7 @@
             
             <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
                 <button class="btn-gold" style="background:#FFC107; color:#333; border-color:#FFA000;" onclick="openAlbum()">🎴 傳說閃卡紀念冊</button>
-                <button class="btn-gold" onclick="openGacha()">🎰 每日抽獎 (防作弊)</button>
+                <button class="btn-gold" onclick="openGacha()">🎰 每日抽獎 </button>
                 <button class="btn-black" style="background:#424242;" onclick="openSecretMarket()">⛺ 秘密交易市場</button>
                 <button class="btn-red" style="background:#D32F2F;" onclick="openPartnerHub()">🐾 寶可夢搭檔中心</button>
 
@@ -239,7 +239,7 @@
         <div id="gacha-zone" class="screen hidden">
             <h2 style="color: #FF9800;">🎰 星星幸運抽獎</h2>
             <p>每次抽獎消耗 <b class="star-text">1 顆星星</b>！今日已抽次數：<span id="gacha-count">0</span>/3</p>
-            <p>大獎：50寶石+3碎片(2%) | 稀有：5寶石(28%) | 普通：10木材(70%)</p>
+            <p>大獎：50寶石+3碎片(2%) | 稀有：5寶石(28%) | 普通：10木材，10石頭(70%)</p>
             <button class="btn-gold" style="font-size: 1.5em; padding: 20px 40px;" onclick="drawGacha()">✨ 點擊抽獎 ✨</button>
             <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
@@ -670,7 +670,7 @@
             let r = Math.random();
             if (r < 0.02) { inventory.gem += 50; inventory.fragment += 3; playSound('boss_win'); alert("🎉 奇蹟發生！你中了傳說大獎！\n獲得 50 寶石 + 3 碎片！"); } 
             else if (r < 0.30) { inventory.gem += 5; playSound('win'); alert("✨ 恭喜！你中了稀有獎！\n獲得 5 寶石！"); } 
-            else { inventory.wood += 10; playSound('medal'); alert("📦 你中了普通獎！\n獲得 10 木材！"); }
+            else { inventory.wood += 10; inventory.stone +=10; playSound('medal'); alert("📦 你中了普通獎！\n獲得 10 木材, 10石頭！"); }
             openGacha(); updateUI();
         }
 
