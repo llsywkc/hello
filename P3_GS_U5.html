@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (終極神獸異變版)</title>
+    <title>Roblox：森林大冒險 (終極神獸除錯版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -13,7 +13,7 @@
             background-image: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1)), linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1));
             background-size: 40px 40px; background-position: 0 0, 20px 20px;
             margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #333;
-            transition: background 1s ease; /* 讓天氣變化漸變更順暢 */
+            transition: background 1s ease;
         }
         
         h1 { color: #FFF; text-transform: uppercase; letter-spacing: 2px; text-shadow: 4px 4px 0 #2E7D32, -2px -2px 0 #2E7D32, 2px -2px 0 #2E7D32, -2px 2px 0 #2E7D32; font-size: 2.8em; text-align: center; margin: 10px 0; }
@@ -52,6 +52,8 @@
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
         /* 神獸專屬特效 */
+        .legendary-mode { background-color: #3e0000 !important; box-shadow: 0 12px 0 #1a0000 !important; border-color: #ff1744 !important; }
+        .legendary-mode .question-text { background: #ffebee !important; border-color: #d50000 !important; color: #b71c1c; }
         .ultimate-warning { animation: screenShake 0.2s infinite, flashRed 0.5s infinite; }
         @keyframes screenShake { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-2px, -2px) rotate(-1deg); } 50% { transform: translate(-3px, 0px) rotate(1deg); } 75% { transform: translate(3px, 2px) rotate(0deg); } 100% { transform: translate(1px, -1px) rotate(-1deg); } }
         @keyframes flashRed { 0% { box-shadow: inset 0 0 50px #ff0000; } 50% { box-shadow: inset 0 0 10px #ff0000; } 100% { box-shadow: inset 0 0 50px #ff0000; } }
@@ -123,8 +125,6 @@
         }
         .album-img { width: 140px; height: 140px; object-fit: contain; filter: brightness(0) drop-shadow(0 0 5px #000); transition: all 0.3s; margin-bottom: 10px; }
         .album-card.unlocked .album-img { filter: drop-shadow(0 0 10px rgba(255,255,255,0.8)); }
-        @keyframes pulse-glow { 0% { box-shadow: 0 8px 0 #E65100, 0 0 10px #FFD700; } 50% { box-shadow: 0 8px 0 #E65100, 0 0 25px #FFF; } 100% { box-shadow: 0 8px 0 #E65100, 0 0 10px #FFD700; } }
-
     </style>
 </head>
 <body>
@@ -231,7 +231,7 @@
 
         <div id="album-zone" class="screen hidden">
             <h2 style="color: #FFD700; text-shadow: 2px 2px 0 #333; font-size: 2em; margin-bottom: 5px;">🎴 傳說閃卡紀念冊</h2>
-            <p style="color: white; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px;">在血月異變中連續答對以引出並擊敗傳說神獸，即可解鎖專屬閃卡！</p>
+            <p style="color: white; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px;">在血月異變中連續答對引出並擊敗傳說神獸，即可解鎖閃卡！</p>
             <div id="album-list" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%;"></div>
             <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
@@ -263,7 +263,7 @@
 
         <div id="partner-zone" class="screen hidden">
             <h2 style="color: #D32F2F;">🐾 寶可夢搭檔中心</h2>
-            <p>選擇一隻寶可夢作為搭檔！進化可獲得強大屬性加成！</p>
+            <p>選擇一隻寶可夢作為搭檔！進化可獲得強大屬性加成！(切換搭檔不保留加成，但進度會記錄)</p>
             <div id="partner-list" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%;"></div>
             <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
@@ -392,13 +392,12 @@
         }
 
         const medalsConfig = { 10: '🥉', 20: '🥈', 30: '🥇', 40: '🏅', 50: '💎', 60: '🌠', 70: '👑', 80: '🐉', 90: '🌌', 100: '🏆' };
-        
-        // --- 4 大遠古神獸資料庫 ---
+
         const epicLegendaries = {
             'inferno': { name: "獄炎魔龍", target: 4, time: 12, effect: "true_damage", desc: "生態：火山\n特性：無視防禦造成巨額真實傷害！", img: "383", hpPenalty: 30 },
             'frost': { name: "霜凍孤狼", target: 5, time: 10, effect: "freeze", desc: "生態：極地\n特性：冰凍技能！戰鬥中會隨機凍結選項 3 秒！", img: "245", hpPenalty: 25 },
             'corrupted': { name: "墮落・超夢", target: 5, time: 10, effect: "anti_heal", desc: "變種：暗黑\n特性：禁療詛咒！戰鬥中無法使用恢復藥水！", img: "150", hpPenalty: 40 },
-            'ender': { name: "滅世魔神", target: 6, time: 8, effect: "one_hit", desc: "階級：創世級\n特性：致命威脅！隨時爆發一擊必殺大招！", img: "493", hpPenalty: 50 }
+            'ender': { name: "滅世魔神", target: 6, time: 8, effect: "one_hit", desc: "階級：創世級\n特性：致命威脅！隨機爆發一擊必殺大招！", img: "493", hpPenalty: 50 }
         };
 
         const legendaryPool = [
@@ -407,7 +406,7 @@
             { id: "corrupted", name: "墮落・超夢", desc: "變種：暗黑\n特性：施加禁療詛咒。", img: "150" },
             { id: "ender", name: "滅世魔神", desc: "階級：創世級\n特性：有機率發動一擊必殺大招。", img: "493" }
         ];
-
+        
         const defaultInv = { 
             playerName: "", coin: 0, hpPotion: 0, potionAtk: 0, potionDef: 0,
             wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, streak: 0, 
@@ -430,9 +429,6 @@
 
         function getPokePic(pId) { return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pId}.png`; }
 
-        // ==========================================
-        // 題庫 
-        // ==========================================
         const dbHK = [ { q: "[選擇題] 中華人民共和國在哪一天對香港恢復行使主權？", ans: "1997年7月1日", options: ["1997年7月1日", "1999年12月20日", "1997年10月1日"] }, { q: "[選擇題] 香港特別行政區成立後，實行甚麼方針以保留原有的制度和生活方式？", ans: "一國兩制", options: ["一國兩制", "港人治港", "高度自治"] }, { q: "[選擇題] 哪一部法律訂明了中華人民共和國對香港的基本方針政策？", ans: "《基本法》", options: ["《基本法》", "《憲法》", "《人權法》"] }, { q: "[選擇題] 香港特別行政區區旗的紅色背景代表甚麼？", ans: "祖國", options: ["祖國", "香港", "自由"] }, { q: "[選擇題] 香港特別行政區區旗上的紫荊花圖案代表甚麼？", ans: "香港", options: ["祖國", "香港", "和平"] }, { q: "[選擇題] 區旗上紅、白兩色互相映襯，象徵着甚麼？", ans: "一國兩制", options: ["一國兩制", "繁榮安定", "自由平等"] }, { q: "[選擇題] 每年7月1日是甚麼紀念日？", ans: "香港特別行政區成立紀念日", options: ["國慶日", "香港特別行政區成立紀念日", "勞動節"] }, { q: "[選擇題] 《基本法》除了訂明基本方針外，還保障了香港居民的甚麼？", ans: "權利和自由", options: ["權利和自由", "絕對權力", "免交稅款"] }, { q: "[選擇題] 我們在享有權利和自由的同時，也應該怎樣對待他人？", ans: "尊重他人的權利", options: ["尊重他人的權利", "忽略他人的感受", "限制他人的自由"] }, { q: "[選擇題] 社會上設立法律和規則的主要目的是甚麼？", ans: "維持社會秩序和保障大家權利", options: ["維持社會秩序和保障大家權利", "限制市民生活", "增加政府收入"] } ];
         const dbHouse = [ { q: "[選擇題] 1953年，石硤尾木屋區發生了甚麼災難，令大量居民失去家園？", ans: "大火", options: ["地震", "大火", "山泥傾瀉"] }, { q: "[選擇題] 1954年，香港政府開始興建甚麼房屋，以安置石硤尾木屋區的災民？", ans: "徙置大廈", options: ["村屋", "唐樓", "徙置大廈"] }, { q: "[選擇題] 早期政府興建的徙置大廈，一般樓高多少層？", ans: "6至7層", options: ["2至3層", "6至7層", "10至11層"] }, { q: "[選擇題] 1950年代第一代公屋（例如美荷樓）的單位內，通常缺乏哪項設施？", ans: "獨立廚廁", options: ["窗戶", "睡牀", "獨立廚廁"] }, { q: "[選擇題] 昔日的徙置大廈，居民一般要在哪裏生火煮食？", ans: "走廊", options: ["客廳", "走廊", "天台"] }, { q: "[選擇題] 1980年代興建的公共房屋，樓層一般高達多少層？", ans: "20層", options: ["6層", "20層", "50層"] }, { q: "[選擇題] 現今的公共屋邨發展趨勢如何？", ans: "向高空發展", options: ["向地下發展", "向高空發展", "逐漸減少樓層"] }, { q: "[選擇題] 以下哪類房屋屬於香港的公營房屋？", ans: "公共屋邨", options: ["唐樓", "公共屋邨", "私人屋苑"] }, { q: "[選擇題] 居者有其屋計劃（居屋）屬於哪一類房屋？", ans: "公營房屋", options: ["私營房屋", "公營房屋", "臨時房屋"] }, { q: "[選擇題] 哪一類私營房屋通常會設有住客會所、泳池等設施？", ans: "私人屋苑", options: ["村屋", "唐樓", "私人屋苑"] }, { q: "[選擇題] 申請入住公共屋邨的家庭，主要面對甚麼困難？", ans: "輪候時間長", options: ["租金極度昂貴", "輪候時間長", "設施嚴重不足"] }, { q: "[選擇題] 由於私營房屋樓價高昂，部分基層市民無奈需要租住甚麼環境惡劣的單位？", ans: "劏房", options: ["獨立屋", "劏房", "居屋"] }, { q: "[選擇題] 蚊子叮咬人類，可能會傳播以下哪一種疾病？", ans: "登革熱", options: ["大鼠戊型肝炎", "登革熱", "感冒"] }, { q: "[選擇題] 哪種動物出沒會污染食物，並可能傳播大鼠戊型肝炎？", ans: "老鼠", options: ["蒼蠅", "老鼠", "蟑螂"] }, { q: "[選擇題] 負責清洗街道、收集家居垃圾的政府部門是？", ans: "食物環境衞生署", options: ["房屋署", "食物環境衞生署", "地政總署"] }, { q: "[選擇題] 冷氣機滴水會引致甚麼衞生問題？", ans: "積水滋生蚊蟲", options: ["噪音滋擾", "積水滋生蚊蟲", "空氣污染"] }, { q: "[選擇題] 政府為了減低車輛行駛時發出的噪音，會在高速公路旁加建甚麼？", ans: "隔音屏障", options: ["減速帶", "隔音屏障", "交通燈"] }, { q: "[選擇題] 在斜坡上種植樹木，其根部能抓緊泥土，這有甚麼主要作用？", ans: "防止山泥傾瀉", options: ["增加房屋供應", "防止山泥傾瀉", "預防鼠患"] }, { q: "[選擇題] 香港房屋委員會主要負責甚麼工作？", ans: "制定和推行公共房屋計劃", options: ["清洗街道及滅蚊", "制定和推行公共房屋計劃", "管理公園及種植植物"] }, { q: "[選擇題] 以下哪一項是1950年代美荷樓居住環境的特點？", ans: "居住環境較擠迫", options: ["設有大型商場", "居住環境較擠迫", "擁有獨立花園"] }, { q: "[選擇題] 為了解決居住面積細小帶來的問題，人們可以使用甚麼來改善生活空間？", ans: "新穎的家具設計", options: ["購買更多雜物", "新穎的家具設計", "拆除大廈外牆"] }, { q: "[選擇題] 渠務署保持溝渠正常運作，對社區有甚麼幫助？", ans: "改善環境衞生情況", options: ["提供更多房屋", "改善環境衞生情況", "減低車輛噪音"] } ];
         const dbEnergy = [ { q: "「港鐵 (MTR)」是靠哪種能源推動的？", ans: "電力", options: ["汽油", "柴油", "電力"] }, { q: "夏天很熱，媽媽開冷氣機，需要用到哪種能源？", ans: "電力", options: ["電力", "煤氣", "石油氣"] }, { q: "你的平板電腦 (iPad) 沒電了，需要插線充電，這是補充哪種能源？", ans: "電力", options: ["電力", "汽油", "石油氣"] }, { q: "媽媽在廚房用的固定煮食爐，連接着地底長長的喉管，這是哪種能源？", ans: "煤氣", options: ["石油氣", "煤氣", "電力"] }, { q: "冬天一家人去酒樓「打邊爐」，桌上那個可以搬來搬去的手提小火爐裏面裝的是甚麼？", ans: "石油氣", options: ["煤氣", "石油氣", "柴油"] }, { q: "香港街頭到處跑的「紅色的士」，最常用的燃料是甚麼？", ans: "石油氣", options: ["汽油", "石油氣", "柴油"] }, { q: "爸爸媽媽駕駛的「私家車」，車體比較輕巧，去油站通常加甚麼油？", ans: "汽油", options: ["汽油", "柴油", "煤氣"] }, { q: "每天載着很多乘客的「雙層巴士」，通常使用哪一種氣體能源？", ans: "柴油", options: ["汽油", "柴油", "石油氣"] }, { q: "地盤裏的「泥頭車」和馬路上的「大貨車」，去油站時要加甚麼油？", ans: "柴油", options: ["汽油", "柴油", "煤氣"] }, { q: "哪兩種能源被稱為「液體兄弟」，都住在加油站裏？", ans: "汽油和柴油", options: ["汽油和柴油", "煤氣和石油氣", "汽油和煤氣"] }, { q: "如果你想去郊野公園露營燒烤，帶上一個手提爐，你應該準備哪種燃料？", ans: "石油氣", options: ["煤氣", "汽油", "石油氣"] }, { q: "哪一種能源最神奇，既能讓巨大的港鐵移動，又能縮小藏在手錶裏讓指針轉動？", ans: "電力", options: ["電力", "汽油", "柴油"] }, { q: "發電廠越來越喜歡使用「天然氣」，為甚麼？", ans: "因為它燃燒時比較乾淨，能減少空氣污染", options: ["因為它有士多啤梨香味", "因為它燃燒時比較乾淨，能減少空氣污染", "因為它可以直接加進私家車裏"] }, { q: "我們日常生活中常用的化石燃料，除了煤和天然氣之外，還有以下哪一種？", ans: "石油", options: ["木材", "石油", "太陽能"] }, { q: "化石燃料在地底需要經過數百萬年才能形成，請問它們是由甚麼演變而成的？", ans: "遠古的動植物", options: ["遠古的動植物", "外太空的隕石", "火山噴出的岩漿"] }, { q: "在白天陽光充足的時候，我們在房間看書，怎樣做最能有效節約能源？", ans: "拉開窗簾，多利用天然光", options: ["開着所有的電燈確保夠光", "拉上窗簾並開啟枱燈", "拉開窗簾，多利用天然光"] }, { q: "買東西時自備環保袋，堅決不索取即棄膠袋，這屬於「環保四用」的哪一種？", ans: "減少使用", options: ["廢物利用", "替代使用", "減少使用"] }, { q: "我們把廢紙放進藍色的回收箱，讓回收廠重新製成再生紙，這屬於哪一項？", ans: "循環再用", options: ["減少使用", "廢物利用", "循環再用"] } ];
@@ -442,6 +438,18 @@
         const allMiningTasks = [...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom, ...dbCulture];
         let currentCategory = 'energy';
         let currentMiningIdx = 0, currentMiningTasks = [];
+
+        let currentBoss = 1, bossTimerInterval, playerHP = 100, maxHP = 100, bossProgress = 0, bossTaskPool = [], currentBossTask = null;
+        let bossEnraged = false, isUltimateActive = false, currentBossData = null, currentLegendaryId = null;
+
+        const bossConfig = {
+            1: { name: "🟢 Boss 1：黑暗吞噬者", time: 20, target: 4, hpPenalty: 10, img: getPokePic("89") }, 
+            2: { name: "🟡 Boss 2：混沌智者", time: 15, target: 4, hpPenalty: 20, img: getPokePic("65") }, 
+            3: { name: "🔴 Boss 3：噩夢幻影", time: 10, target: 5, hpPenalty: 30, img: getPokePic("491") }, 
+            4: { name: "🟣 Boss 4：創世之神", time: 5, target: 5, hpPenalty: 40, img: getPokePic("493") }, 
+            'legendary': { name: "傳說寶可夢", time: 15, target: 3, hpPenalty: 25, img: "" },
+            'normalBeast': { name: "野生寶可夢", time: 20, target: 1, hpPenalty: 20, img: "" }
+        };
 
         function shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
@@ -453,10 +461,11 @@
         }
 
         // ==========================================
-        // 核心存檔邏輯 (向下兼容至 final25)
+        // 核心存檔邏輯 (向下兼容)
         // ==========================================
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_final25')
+            const savedData = localStorage.getItem('roblox_p4_save_final26')
+                           || localStorage.getItem('roblox_p4_save_final25')
                            || localStorage.getItem('roblox_p4_save_final24')
                            || localStorage.getItem('roblox_p4_save_final23')
                            || localStorage.getItem('roblox_p4_save_final22');
@@ -480,7 +489,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_final25', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_final26', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -592,7 +601,7 @@
         
         function resetWeather() {
             inventory.bloodMoonActive = false;
-            document.body.style.background = ""; // 恢復正常漸變背景
+            document.body.style.background = ""; 
             updateUI();
         }
 
@@ -736,7 +745,6 @@
             let eventBoxUi = document.getElementById('event-box-ui'); eventBoxUi.classList.remove('legendary-box');
             document.getElementById('event-image').style.display = "none"; 
 
-            // 觸發血月異變
             if (!inventory.bloodMoonActive && inventory.castles >= 1 && r < 0.05) {
                 inventory.bloodMoonActive = true;
                 inventory.bloodMoonTarget = Math.floor(Math.random() * 3) + 5; // 5~7 題
@@ -749,7 +757,6 @@
                 return; 
             }
 
-            // 只有在非血月狀態下，普通怪才會出現
             if (!inventory.bloodMoonActive && r < 0.35) { 
                 let normalBeasts = [ { name: "🟢 妙蛙花", power: 33, img: "3" }, { name: "🟡 炎武王", power: 60, img: "500" }, { name: "🔴 耿鬼", power: 90, img: "94" }, { name: "🟣 隆隆岩", power: 120, img: "76" } ];
                 let b = normalBeasts[Math.floor(Math.random() * normalBeasts.length)];
@@ -773,7 +780,6 @@
             let l = legendaryPool[Math.floor(Math.random() * legendaryPool.length)];
             currentLegendaryId = l.id;
             
-            // 將傳說神獸配置寫入 bossConfig
             bossConfig['legendary'] = epicLegendaries[l.id];
             
             let eventBoxUi = document.getElementById('event-box-ui');
@@ -958,10 +964,22 @@
             } else { playSound('error'); alert("❌ 手稿或碎片不足！"); }
         }
 
-        // --- 核心戰鬥系統 (狂暴與異常狀態) ---
-        let bossEnraged = false;
-        let isUltimateActive = false;
-        let currentBossData = null;
+        // --- 核心戰鬥系統 ---
+        function startBossFight(id) {
+            playSound('click');
+            if (id === 2 && !inventory.medals.some(m => m >= 20)) return alert("需先獲得 20 連勝勳章 (🥈) 才能挑戰 Boss 2！");
+            if (id === 3 && !inventory.medals.some(m => m >= 50)) return alert("需先獲得 50 連勝勳章 (💎) 才能挑戰 Boss 3！");
+            if (id === 4 && !inventory.medals.some(m => m >= 100)) return alert("需先獲得 100 連勝勳章 (🏆) 才能挑戰 Boss 4！");
+            
+            document.getElementById('boss-image').src = bossConfig[id].img; document.getElementById('boss-image').style.display = "block";
+            initCombatSystem(id, bossConfig[id].name);
+        }
+
+        function startLegendaryFight(monsterName, monsterImg) {
+            playSound('legendary'); bossConfig['legendary'].name = monsterName;
+            document.getElementById('boss-image').src = monsterImg; document.getElementById('boss-image').style.display = "block";
+            initCombatSystem('legendary', monsterName);
+        }
 
         function startNormalBeastFight(monsterName, monsterImg, power) {
             playSound('click'); bossConfig['normalBeast'].name = monsterName;
