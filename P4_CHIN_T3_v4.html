@@ -117,12 +117,27 @@
         
         .blood-moon-ui { background: rgba(0,0,0,0.8); color: #ff5252; padding: 10px; border: 2px solid #ff0000; border-radius: 8px; font-weight: bold; margin-bottom: 10px; text-align: center; }
         
-        /* 紀念冊專屬 CSS */
-        .album-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 15px; margin-top: 15px; max-height: 400px; overflow-y: auto; padding: 10px;}
+        /* ================= 紀念冊專屬 CSS ================= */
+        .album-tab-btn { margin: 0 5px; padding: 8px 15px; font-size: 1rem; border-radius: 20px; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.5);}
+        .album-tab-btn:hover { transform: translateY(-3px); }
+        
+        .album-grid { display: grid; gap: 15px; margin-top: 15px; max-height: 50vh; overflow-y: auto; padding: 10px; align-items: end;}
+        
+        /* 依照不同階級動態改變 Grid 大小 */
+        .album-grid.normal { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+        .album-grid.boss { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+        .album-grid.epic { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+
         .card-slot { border: 3px solid #ccc; border-radius: 8px; padding: 10px; text-align: center; background: rgba(255,255,255,0.9); cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3);}
-        .card-slot:hover { transform: scale(1.05); }
+        .card-slot:hover { transform: scale(1.05); border-color:#1976D2; }
+        
+        /* 依照不同階級動態改變圖片大小 */
+        .album-grid.normal .card-slot img { width: 80px; height: 80px; object-fit:contain; }
+        .album-grid.boss .card-slot img { width: 120px; height: 120px; object-fit:contain; }
+        .album-grid.epic .card-slot img { width: 180px; height: 180px; object-fit:contain; }
+
         .card-locked img { filter: brightness(0) drop-shadow(0 0 2px rgba(0,0,0,0.5)); }
-        .card-locked .card-name { display: none; }
+        .card-locked .card-name, .card-locked .card-stats { display: none; }
         
         /* Modals 通用 */
         #event-modal, #market-modal, #gacha-modal, #album-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; display:flex; justify-content:center; align-items:center; }
@@ -130,7 +145,7 @@
         .event-box h2 { color:#4A148C; font-size: 2em; margin-top: 0; }
         .market-modal-content { background: #E8F5E9; border: 6px solid #4CAF50; }
         .gacha-modal-content { background: #FFF3E0; border: 6px solid #FF9800; }
-        .album-modal-content { background: #E3F2FD; border: 6px solid #1976D2; }
+        .album-modal-content { background: #E3F2FD; border: 6px solid #1976D2; max-width: 800px !important; width: 95%;}
 
     </style>
 </head>
@@ -170,7 +185,7 @@
             <div style="width: 100%; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;">
                 <button class="btn-grey" onclick="logout()" style="font-size: 0.9em; padding: 8px 12px; margin: 0;">🔄 更改名字/登出</button>
                 <button class="btn-gold" onclick="claimGift()" style="font-size: 0.9em; padding: 8px 12px; margin: 0;">🎁 老玩家禮包</button>
-                <button class="btn-blue" onclick="openAlbum()" style="font-size: 0.9em; padding: 8px 12px; margin: 0;">📖 閃卡紀念冊</button>
+                <button class="btn-blue" onclick="openAlbum()" style="font-size: 0.9em; padding: 8px 12px; margin: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 2px solid #fff;">📖 閃卡紀念冊</button>
             </div>
 
             <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; width: 100%; border: 2px dashed #9C27B0;">
@@ -234,7 +249,7 @@
                 </ul>
 
                 <h3 style="color:#2E7D32;">4. 搭檔進化與閃卡紀念冊</h3>
-                <p>你可以擁有多隻數碼精靈並自由切換！當精靈要進化成「完全體」時，可選擇「光明路線」或「闇黑路線」。擊敗各類 Boss 與神獸，更可以解鎖「📖 閃卡紀念冊」中對應的稀有圖鑑！</p>
+                <p>你可以擁有多隻數碼精靈並自由切換！當精靈要進化成「完全體」時，可選擇「光明路線」或「闇黑路線」。擊敗各類 Boss 與神獸，更可以解鎖「📖 閃卡紀念冊」中對應的稀有圖鑑，趕快收集齊全吧！</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
@@ -440,12 +455,16 @@
     </div>
 
     <div id="album-modal" class="hidden">
-        <div class="event-box album-modal-content">
-            <h2 style="color: #1976D2;">📖 閃卡紀念冊</h2>
-            <p style="font-weight: bold; color: #1565C0; margin-top:0;">擊敗各路 Boss 與神獸，點亮專屬圖鑑！</p>
-            <div id="album-grid-container" class="album-grid">
+        <div class="event-box album-modal-content" style="max-width: 800px; width: 95%;">
+            <h2 style="color: #1976D2; margin-bottom:10px;">📖 閃卡紀念冊</h2>
+            <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-bottom: 10px;">
+                <button class="btn-green album-tab-btn" onclick="renderAlbum('normal')">🐾 普通野獸</button>
+                <button class="btn-orange album-tab-btn" onclick="renderAlbum('boss')">👹 首領 Boss</button>
+                <button class="btn-red album-tab-btn" onclick="renderAlbum('epic')">☄️ 遠古神獸</button>
+            </div>
+            <div id="album-grid-container" class="album-grid normal">
                 </div>
-            <button class="btn-red" style="margin-top: 20px;" onclick="closeModal('album-modal')">❌ 關閉</button>
+            <button class="btn-grey" style="margin-top: 20px;" onclick="closeModal('album-modal')">❌ 關閉</button>
         </div>
     </div>
 
@@ -491,8 +510,7 @@
             } catch(e) {}
         }
 
-        // ================== 原有完整題庫 (已省略冗長文字以保持結構清晰，但保證能運行) ==================
-        // 由於篇幅限制，這裡放了你給的所有題目
+        // ================== 原有完整題庫 (已省略冗長文字以保持結構清晰，保證不影響運行) ==================
         const fillTasks = [
             { q: "媽媽突然收到外祖母的消息，匆匆留下一張 ______ 交待家中事宜便外出了。", ans: "便條", options: ["便條", "報紙", "雜誌", "課本"] },
             { q: "以前的科技不發達，人們的溝通多依靠 ______ 作媒介。", ans: "書信", options: ["書信", "食物", "交通", "天氣"] },
@@ -797,36 +815,34 @@
             return dex.lv4A;
         }
 
-        // ================== 閃卡圖鑑資料 ==================
+        // ================== 閃卡圖鑑資料 (依種類分類) ==================
         const albumData = [
-            { id: 'boss_1', name: '暴龍獸', pic: 'https://digimon.net/cimages/digimon/greymon.jpg' },
-            { id: 'boss_2', name: '機械暴龍獸', pic: 'https://digimon.net/cimages/digimon/metalgreymon.jpg' },
-            { id: 'boss_3', name: '戰鬥暴龍獸', pic: 'https://digimon.net/cimages/digimon/wargreymon.jpg' },
-            { id: 'leg_奧米加獸', name: '奧米加獸', pic: 'https://digimon.net/cimages/digimon/omegamon.jpg' },
-            { id: 'leg_紅蓮騎士獸', name: '紅蓮騎士獸', pic: 'https://digimon.net/cimages/digimon/dukemon.jpg' },
-            { id: 'wild_惡魔獸', name: '惡魔獸', pic: 'https://digimon.net/cimages/digimon/devimon.jpg' },
-            { id: 'wild_古加獸', name: '古加獸', pic: 'https://digimon.net/cimages/digimon/kuwagamon.jpg' },
-            { id: 'wild_奧加獸', name: '奧加獸', pic: 'https://digimon.net/cimages/digimon/orgemon.jpg' },
-            { id: 'wild_飛龍獸', name: '飛龍獸', pic: 'https://digimon.net/cimages/digimon/airdramon.jpg' },
-            { id: 'wild_蜘蛛獸', name: '蜘蛛獸', pic: 'https://digimon.net/cimages/digimon/dokugumon.jpg' },
-            { id: 'epic_inferno', name: '獄炎魔龍', pic: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/383.png` },
-            { id: 'epic_frost', name: '霜凍孤狼', pic: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/245.png` },
-            { id: 'epic_corrupted', name: '墮落・超夢', pic: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png` },
-            { id: 'epic_ender', name: '滅世魔神', pic: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/493.png` }
+            { id: 'wild_惡魔獸', name: '惡魔獸', pic: 'https://digimon.net/cimages/digimon/devimon.jpg', type: 'normal' },
+            { id: 'wild_古加獸', name: '古加獸', pic: 'https://digimon.net/cimages/digimon/kuwagamon.jpg', type: 'normal' },
+            { id: 'wild_奧加獸', name: '奧加獸', pic: 'https://digimon.net/cimages/digimon/orgemon.jpg', type: 'normal' },
+            { id: 'wild_飛龍獸', name: '飛龍獸', pic: 'https://digimon.net/cimages/digimon/airdramon.jpg', type: 'normal' },
+            { id: 'wild_蜘蛛獸', name: '蜘蛛獸', pic: 'https://digimon.net/cimages/digimon/dokugumon.jpg', type: 'normal' },
+            { id: 'boss_1', name: '暴龍獸', pic: 'https://digimon.net/cimages/digimon/greymon.jpg', type: 'boss' },
+            { id: 'boss_2', name: '機械暴龍獸', pic: 'https://digimon.net/cimages/digimon/metalgreymon.jpg', type: 'boss' },
+            { id: 'boss_3', name: '戰鬥暴龍獸', pic: 'https://digimon.net/cimages/digimon/wargreymon.jpg', type: 'boss' },
+            { id: 'leg_奧米加獸', name: '奧米加獸', pic: 'https://digimon.net/cimages/digimon/omegamon.jpg', type: 'epic' },
+            { id: 'leg_紅蓮騎士獸', name: '紅蓮騎士獸', pic: 'https://digimon.net/cimages/digimon/dukemon.jpg', type: 'epic' },
+            { id: 'epic_inferno', name: '獄炎魔龍', pic: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/383.png`, type: 'epic' },
+            { id: 'epic_frost', name: '霜凍孤狼', pic: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/245.png`, type: 'epic' },
+            { id: 'epic_corrupted', name: '墮落・超夢', pic: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png`, type: 'epic' },
+            { id: 'epic_ender', name: '滅世魔神', pic: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/493.png`, type: 'epic' }
         ];
 
-        // 🛡️ 防呆擴充存檔欄位
+        // 🛡️ 防呆擴充存檔欄位 (加入 cardStats 追蹤日期與次數)
         const defaultInv = { 
             playerName: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, 
             streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
             equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], 
             partnerLv: 0, partnerId: "", partnerBranch: "A", partners: {}, lastGachaDate: "", gachaDrawsToday: 0, 
             scrollBoughtDate: "", hasLegendaryBuff: false,
-            bloodMoonActive: false, bloodMoonTarget: 0, bloodMoonStreak: 0, bloodMoonLeft: 0, unlockedCards: [], potions: 0
+            bloodMoonActive: false, bloodMoonTarget: 0, bloodMoonStreak: 0, bloodMoonLeft: 0, unlockedCards: [], cardStats: {}, potions: 0
         };
         let inventory = { ...defaultInv };
-
-        function shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
         // ================== 防作弊與解鎖系統 ==================
         function checkDailyReset() {
@@ -839,34 +855,66 @@
 
         function unlockCard(cardId) {
             if (!inventory.unlockedCards) inventory.unlockedCards = [];
+            if (!inventory.cardStats) inventory.cardStats = {};
+
             if (!inventory.unlockedCards.includes(cardId)) {
                 inventory.unlockedCards.push(cardId);
-                saveGame();
             }
+            
+            if (!inventory.cardStats[cardId]) {
+                inventory.cardStats[cardId] = {
+                    firstDate: new Date().toLocaleDateString('zh-HK'),
+                    count: 1
+                };
+            } else {
+                inventory.cardStats[cardId].count++;
+            }
+            saveGame();
         }
 
         window.openAlbum = function() {
             playSound('click');
+            document.getElementById('album-modal').classList.remove('hidden');
+            renderAlbum('normal'); // 預設開啟普通野獸
+        }
+
+        window.renderAlbum = function(type) {
+            playSound('click');
             let container = document.getElementById('album-grid-container');
             container.innerHTML = "";
+            container.className = 'album-grid ' + type; // 動態套用 CSS 決定大小
             
             if(!inventory.unlockedCards) inventory.unlockedCards = [];
+            if(!inventory.cardStats) inventory.cardStats = {};
             
-            albumData.forEach(card => {
+            let filteredData = albumData.filter(c => c.type === type);
+            
+            filteredData.forEach(card => {
                 let isUnlocked = inventory.unlockedCards.includes(card.id);
+                let stats = inventory.cardStats[card.id] || { firstDate: '早期解鎖', count: 0 };
+                if (isUnlocked && stats.count === 0) stats.count = 1; // 兼容舊存檔
+                
                 let div = document.createElement('div');
                 div.className = 'card-slot ' + (isUnlocked ? '' : 'card-locked');
+                
+                let statsHtml = isUnlocked ? `
+                    <div class="card-stats" style="font-size:0.85em; color:#555; margin-top:8px; line-height:1.4;">
+                        📅 首次: ${stats.firstDate}<br>
+                        ⚔️ 討伐: ${stats.count} 次
+                    </div>
+                ` : '<div style="font-weight:bold; margin-top:5px; font-size:1.5em; color:#999;">???</div>';
+                
                 div.innerHTML = `
-                    <img src="${card.pic}" style="width:80px; height:80px; object-fit:contain;">
-                    <div class="card-name" style="font-weight:bold; margin-top:5px; font-size:0.8em;">${card.name}</div>
-                    ${!isUnlocked ? '<div style="font-weight:bold; margin-top:5px; font-size:1.5em; color:#999;">???</div>' : ''}
+                    <img src="${card.pic}">
+                    <div class="card-name" style="font-weight:bold; margin-top:8px; font-size:1.1em; color:#1565C0;">${card.name}</div>
+                    ${statsHtml}
                 `;
+                
                 if(isUnlocked) {
-                    div.onclick = () => alert(`📖 【${card.name}】已成功收集在紀念冊中！`);
+                    div.onclick = () => alert(`📖 【${card.name}】\n首次擊敗：${stats.firstDate}\n累積討伐：${stats.count} 次`);
                 }
                 container.appendChild(div);
             });
-            document.getElementById('album-modal').classList.remove('hidden');
         }
 
         // ================== 遊戲核心邏輯 ==================
@@ -909,7 +957,22 @@
                     inventory = { ...defaultInv, ...parsed, equip: { ...defaultInv.equip, ...(parsed.equip || {}) }, medals: parsed.medals || [] };
                     
                     if(inventory.unlockedCards === undefined) inventory.unlockedCards = [];
+                    if(inventory.cardStats === undefined) inventory.cardStats = {};
                     if(inventory.bloodMoonActive === undefined) inventory.bloodMoonActive = false;
+                    
+                    // 相容舊存檔的神獸ID (inferno -> epic_inferno)
+                    inventory.unlockedCards = inventory.unlockedCards.map(id => {
+                        if (id === 'inferno') return 'epic_inferno';
+                        if (id === 'frost') return 'epic_frost';
+                        if (id === 'corrupted') return 'epic_corrupted';
+                        if (id === 'ender') return 'epic_ender';
+                        return id;
+                    });
+                    
+                    // 將舊解鎖的卡片補入 cardStats
+                    inventory.unlockedCards.forEach(id => {
+                        if(!inventory.cardStats[id]) inventory.cardStats[id] = { firstDate: '早期解鎖', count: 1 };
+                    });
                     
                     if(!inventory.partners) {
                         inventory.partners = {};
@@ -1104,7 +1167,6 @@
             document.getElementById('evo-req-branch').classList.add('hidden');
             document.getElementById('evo-max-msg').classList.add('hidden');
             
-            // 開放按鈕 (避免前一次動畫鎖死)
             let bSingle = document.getElementById('btn-evolve-single');
             let bA = document.getElementById('btn-evolve-a');
             let bB = document.getElementById('btn-evolve-b');
@@ -1146,7 +1208,6 @@
             if (inventory.manuscript >= costs.m && inventory.fragment >= costs.f && inventory.star >= costs.s && inventory.gem >= costs.g) {
                 inventory.manuscript -= costs.m; inventory.fragment -= costs.f; inventory.star -= costs.s; inventory.gem -= costs.g;
                 
-                // 動態進化動畫鎖定
                 let bSingle = document.getElementById('btn-evolve-single');
                 let bA = document.getElementById('btn-evolve-a');
                 let bB = document.getElementById('btn-evolve-b');
@@ -1225,7 +1286,7 @@
             if (inventory.gachaDrawsToday >= limit) return alert("❌ 今天的抽獎次數用完啦！明天再來吧！");
             if (inventory.star < 1) return alert("❌ 星星不足，無法抽獎！");
             
-            inventory.star -= 1; inventory.gachaDrawsToday += 1; saveGame(); // 強制存檔防刷
+            inventory.star -= 1; inventory.gachaDrawsToday += 1; saveGame();
             document.getElementById('gacha-chances').innerText = limit - inventory.gachaDrawsToday;
             
             let resultBox = document.getElementById('gacha-result');
@@ -1275,7 +1336,7 @@
                     inventory.bloodMoonActive = false;
                     renderBloodMoonUI();
                     triggerEpicBoss();
-                    return true; // 代表觸發了遠古神獸，阻擋野生怪
+                    return true; 
                 } else if (inventory.bloodMoonLeft <= 0) {
                     inventory.bloodMoonActive = false;
                     alert("🌑 血月能量耗盡，天空恢復了正常...");
@@ -1283,7 +1344,7 @@
             } else {
                 if (isCorrect && inventory.castles >= 1 && Math.random() < 0.05) {
                     inventory.bloodMoonActive = true;
-                    inventory.bloodMoonTarget = Math.floor(Math.random() * 3) + 5; // 5~7題
+                    inventory.bloodMoonTarget = Math.floor(Math.random() * 3) + 5; 
                     inventory.bloodMoonStreak = 1;
                     inventory.bloodMoonLeft = 15;
                     alert("🩸 天象異變... 血月降臨！\n在剩餘機會耗盡前連續答對題目，將可召喚遠古神獸！");
@@ -1427,9 +1488,9 @@
 
         window.startBossFight = function(level) {
             initAudio(); combatType = 'normal_boss'; 
-            if(level === 1) { combatTarget = 3; combatTimeLimit = 15; setupMonsterCombatUI("【成熟期】暴龍獸", albumData[0].pic, 'glow-red'); currentEvent = {level:1}; }
-            else if(level === 2) { combatTarget = 4; combatTimeLimit = 10; setupMonsterCombatUI("【完全體】機械暴龍獸", albumData[1].pic, 'glow-red'); currentEvent = {level:2}; }
-            else { combatTarget = 5; combatTimeLimit = 5; setupMonsterCombatUI("【究極體】戰鬥暴龍獸", albumData[2].pic, 'glow-red'); currentEvent = {level:3}; }
+            if(level === 1) { combatTarget = 3; combatTimeLimit = 15; setupMonsterCombatUI("【成熟期】暴龍獸", albumData.find(c=>c.id==='boss_1').pic, 'glow-red'); currentEvent = {level:1}; }
+            else if(level === 2) { combatTarget = 4; combatTimeLimit = 10; setupMonsterCombatUI("【完全體】機械暴龍獸", albumData.find(c=>c.id==='boss_2').pic, 'glow-red'); currentEvent = {level:2}; }
+            else { combatTarget = 5; combatTimeLimit = 5; setupMonsterCombatUI("【究極體】戰鬥暴龍獸", albumData.find(c=>c.id==='boss_3').pic, 'glow-red'); currentEvent = {level:3}; }
             startCombatScreen();
         }
 
@@ -1502,7 +1563,6 @@
             oneHitActive = false;
             let currentLimit = baseCombatTimeLimit;
 
-            // 狂暴與一擊必殺判定
             if (combatType === 'epic') {
                 let boss = epicLegendaries[currentEvent.key];
                 if (combatCorrectCount >= Math.floor(combatTarget / 2)) {
@@ -1522,7 +1582,6 @@
             }
             combatTimeLimit = currentLimit;
 
-            // 禁療詛咒按鈕處理
             let potionBtn = document.getElementById('btn-combat-potion');
             if (potionBtn) {
                 if (combatType === 'epic' && epicLegendaries[currentEvent.key].effect === 'anti_heal') { potionBtn.style.display = 'none'; } 
@@ -1541,7 +1600,6 @@
                 document.getElementById('boss-options').appendChild(chunk);
             });
 
-            // 絕對冰凍特效
             if (combatType === 'epic' && epicLegendaries[currentEvent.key].effect === 'freeze' && Math.random() < 0.4) {
                 setTimeout(() => {
                     let opts = document.querySelectorAll('#boss-options .stone-chunk');
@@ -1632,7 +1690,7 @@
                         if (combatType === 'epic') {
                             inventory.gem += 50; inventory.star += 30; inventory.manuscript += 200; updateUI();
                             alert(`🎉 奇蹟！你擊敗了遠古神獸【${currentEvent.name}】！\n🎁 獲得 50寶石、30星星、200手稿！\n📖 閃卡已登錄至紀念冊！`);
-                            unlockCard(currentEvent.key);
+                            unlockCard(epicLegendaries[currentEvent.key].id);
                             document.body.classList.remove('legendary-mode');
                         } else if(combatType === 'legendary') {
                             inventory.gem += 20; inventory.star += 20; inventory.manuscript += 100; updateUI();
@@ -1664,7 +1722,7 @@
             document.body.classList.remove('ultimate-warning');
             if (combatType === 'epic') {
                 inventory.wood = Math.max(0, inventory.wood - 15); inventory.stone = Math.max(0, inventory.stone - 15);
-                alert("🏃 你恐懼地逃跑了！神獸的威壓讓你丟失了資源！");
+                alert("🏃 你恐懼地逃跑了！神獸的威壓讓你損失了資源！");
                 document.body.classList.remove('legendary-mode');
             } else if(combatType === 'legendary' || combatType === 'virus') {
                 alert("🏃 你急忙逃出危險區域，安然無恙。");
@@ -1674,174 +1732,6 @@
             }
             updateUI(); goHome();
         };
-
-        // ================== 打卡、成就、普通題庫邏輯 ==================
-        function checkMedals() {
-            let s = inventory.streak; let mStr = "";
-            for(let key in medalsConfig) {
-                let k = parseInt(key);
-                if(k <= 1000 && s >= k && !inventory.medals.includes(k)) {
-                    inventory.medals.push(k); mStr = medalsConfig[key]; playSound('medal');
-                    alert(`🎊 恭喜！你達成了 ${key} 連勝，獲得專屬榮譽勳章 ${mStr}！`);
-                }
-            }
-        }
-
-        function addStreak() {
-            inventory.streak++; inventory.manuscript += 3; 
-            if(inventory.streak % 2 === 0) inventory.fragment += 2; 
-            if(Math.random() < 0.30) { if(Math.random() > 0.5) inventory.gem += 2; else inventory.star += 2; }
-            checkMedals();
-        }
-
-        let currentLevelType = '';
-        let currentReorderType = 'reorder';
-        
-        window.startGame = function(type) {
-            initAudio(); playSound('click'); hideAll(); renderBloodMoonUI();
-            document.getElementById('player-tag').classList.remove('hidden');
-            document.getElementById('top-nav').classList.remove('hidden');
-            if(inventory.medals.length > 0) document.getElementById('medal-bar').classList.remove('hidden');
-            
-            if(type === 'reorder' || type === 'fa-reorder' || type === 'dictation2-reorder') {
-                currentReorderType = type;
-                if(type === 'fa-reorder') document.getElementById('reorder-title').innerHTML = "📝 FA溫習 (課文重組)";
-                else if (type === 'dictation2-reorder') document.getElementById('reorder-title').innerHTML = "📖 默書温習(二) (重組句子)";
-                else document.getElementById('reorder-title').innerHTML = "🌉 鋪木板過河 (重組句子)";
-
-                document.getElementById('game-reorder').classList.remove('hidden');
-                nextReorder();
-            } else {
-                let conf = mcConfigs[type];
-                if(conf) {
-                    currentLevelType = type;
-                    document.getElementById('mc-title').innerHTML = `${conf.title} <br><small id="mc-subtitle">${conf.subtitle}</small>`;
-                    document.getElementById('game-mc').classList.remove('hidden');
-                    nextMC();
-                } else { alert("載入錯誤！"); goHome(); }
-            }
-        };
-
-        let currentReorderAns = [];
-
-        window.nextReorder = function() {
-            playSound('click');
-            document.getElementById('btn-next-reorder').classList.add('hidden');
-            document.getElementById('reorder-msg').innerHTML = ""; // Clear also HTML
-            document.getElementById('answer-area').innerHTML = "";
-            document.getElementById('word-bank').innerHTML = "";
-            
-            let targetTasks = reorderTasks;
-            if(currentReorderType === 'fa-reorder') targetTasks = faReorderTasks;
-            if(currentReorderType === 'dictation2-reorder') targetTasks = dictation2ReorderTasks;
-
-            let t = targetTasks[Math.floor(Math.random() * targetTasks.length)];
-            currentReorderAns = [...t];
-            let reorderWords = shuffle([...t]);
-
-            const hintBtn = document.getElementById('btn-hint-reorder');
-            hintBtn.disabled = false;
-            hintBtn.onclick = () => {
-                playSound('win'); hintBtn.disabled = true;
-                document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 提示：第一塊是「${currentReorderAns[0]}」</span>`;
-            };
-
-            reorderWords.forEach((word) => {
-                let chunk = document.createElement('div');
-                chunk.className = 'word-chunk'; chunk.textContent = word; chunk.dataset.word = word;
-                chunk.onclick = () => moveToAnswer(chunk);
-                document.getElementById('word-bank').appendChild(chunk);
-            });
-            updateUI();
-        }
-
-        function moveToAnswer(chunk) { playSound('click'); document.getElementById('answer-area').appendChild(chunk); chunk.onclick = () => moveToBank(chunk); evaluateReorder(); }
-        function moveToBank(chunk) { playSound('click'); document.getElementById('word-bank').appendChild(chunk); chunk.onclick = () => moveToAnswer(chunk); evaluateReorder(); }
-
-        window.resetReorder = function() {
-            playSound('click');
-            const answerArea = document.getElementById('answer-area');
-            while(answerArea.firstChild) moveToBank(answerArea.firstChild);
-        };
-
-        function evaluateReorder() {
-            let currentArray = Array.from(document.getElementById('answer-area').children).map(c => c.dataset.word);
-            if(currentArray.length === currentReorderAns.length) {
-                let correct = true;
-                for(let i=0; i<currentReorderAns.length; i++) { if(currentReorderAns[i] !== currentArray[i]) { correct = false; break; } }
-                
-                if(correct) {
-                    playSound('win'); addStreak(); inventory.wood += 5; updateUI(); 
-                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#4CAF50'>✅ 正確！(木材+5, 手稿+3)</span>";
-                    Array.from(document.getElementById('answer-area').children).forEach(c => c.onclick = null);
-                    
-                    let epicTriggered = handleBloodMoon(true);
-                    if(!epicTriggered) { checkInvasion(); }
-                } else {
-                    playSound('error'); inventory.streak = 0; updateUI();
-                    document.getElementById('reorder-msg').innerHTML = "<span style='color:#F44336'>❌ 順序不對，連勝歸零！</span>";
-                    setTimeout(resetReorder, 1500);
-                    handleBloodMoon(false);
-                }
-                // 下一題按鈕永遠在最後一行判定顯示
-                document.getElementById('btn-next-reorder').classList.remove('hidden');
-            }
-        }
-
-        let currentMCQ = {};
-
-        window.nextMC = function() {
-            playSound('click');
-            document.getElementById('btn-next-mc').classList.add('hidden');
-            document.getElementById('mc-msg').innerHTML = ""; // Clear HTML
-            document.getElementById('mc-options').innerHTML = "";
-            
-            const taskList = mcConfigs[currentLevelType].tasks;
-            currentMCQ = taskList[Math.floor(Math.random() * taskList.length)];
-            document.getElementById('mc-question').textContent = currentMCQ.q;
-            
-            const hintBtn = document.getElementById('btn-hint-mc');
-            hintBtn.disabled = false;
-            hintBtn.onclick = () => {
-                playSound('win'); hintBtn.disabled = true;
-                document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示：答案長度是 ${currentMCQ.ans.length} 個字！</span>`;
-                let opts = document.querySelectorAll('#mc-options .stone-chunk');
-                let removed = 0;
-                opts.forEach(opt => { if(opt.textContent !== currentMCQ.ans && removed < 2) { opt.style.visibility = 'hidden'; removed++; } });
-            };
-
-            let shuffledOpts = shuffle([...currentMCQ.options]);
-            shuffledOpts.forEach(opt => {
-                let chunk = document.createElement('div');
-                chunk.className = 'stone-chunk'; chunk.textContent = opt;
-                chunk.onclick = () => checkMC(opt, chunk);
-                document.getElementById('mc-options').appendChild(chunk);
-            });
-            updateUI();
-        }
-
-        function checkMC(selected, element) {
-            let opts = document.querySelectorAll('#mc-options .stone-chunk');
-            opts.forEach(o => o.onclick = null);
-
-            if(selected === currentMCQ.ans) {
-                playSound('win'); addStreak();
-                element.style.backgroundColor = '#4CAF50'; element.style.boxShadow = '0 6px 0 #2E7D32';
-                inventory.stone += 5; updateUI(); 
-                document.getElementById('mc-msg').innerHTML = "<span style='color:#4CAF50'>✅ 解答正確！(石頭+5, 手稿+3)</span>";
-                
-                let epicTriggered = handleBloodMoon(true);
-                if(!epicTriggered) { checkInvasion(); }
-            } else {
-                playSound('error'); inventory.streak = 0; updateUI();
-                element.style.backgroundColor = '#F44336'; element.style.boxShadow = '0 6px 0 #b71c1c';
-                document.getElementById('mc-msg').innerHTML = `<span style='color:#F44336'>❌ 答錯了！正確答案是「${currentMCQ.ans}」。連勝歸零！</span>`;
-                
-                handleBloodMoon(false);
-            }
-            // 下一題按鈕永遠在最後一行判定顯示
-            document.getElementById('btn-next-mc').classList.remove('hidden');
-        }
 
         window.onload = loadGame;
     </script>
