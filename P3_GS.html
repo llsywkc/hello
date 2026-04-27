@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (震撼進化與閃卡擴充版)</title>
+    <title>Roblox：森林大冒險 (超級進化與生態版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -30,7 +30,6 @@
         .artifact-text { color: #FF1744; text-shadow: 1px 1px 4px #FFF; animation: pulse 1s infinite; }
         .stat-atk { color: #FF5252; text-shadow: 1px 1px 2px #000;}
         .stat-def { color: #448AFF; text-shadow: 1px 1px 2px #000;}
-        .save-indicator { font-size: 0.8em; color: #81C784; margin-bottom: 15px; text-shadow: 1px 1px 0 #000; }
 
         .container { background-color: #E0F7FA; border: 8px solid #006064; border-radius: 12px; padding: 20px; width: 95%; max-width: 800px; box-shadow: 0 12px 0 #00363A; text-align: center; }
 
@@ -60,18 +59,18 @@
         
         .frozen-options { pointer-events: none; filter: grayscale(100%) blur(1px) brightness(0.8); }
 
-        /* 進化特效 */
-        .evolving-flash { animation: evolveGlow 1.5s ease-in-out; }
-        @keyframes evolveGlow { 0% { filter: brightness(1); } 50% { filter: brightness(10) contrast(2) drop-shadow(0 0 20px #FFF); } 100% { filter: brightness(1); } }
-        
-        .evolving-ultimate { animation: evolveUltimate 2.5s cubic-bezier(0.25, 0.1, 0.25, 1); position: relative; z-index: 100; }
-        @keyframes evolveUltimate { 
-            0% { filter: brightness(1) hue-rotate(0deg); transform: scale(1); } 
-            20% { filter: brightness(3) hue-rotate(90deg); transform: scale(1.1); } 
-            50% { filter: brightness(10) contrast(3) drop-shadow(0 0 50px #FFD700); transform: scale(1.3) translateY(-10px); } 
-            80% { filter: brightness(20) contrast(5) drop-shadow(0 0 100px #FFF); transform: scale(1.5) translateY(-20px) rotate(5deg); } 
-            100% { filter: brightness(1); transform: scale(1); } 
-        }
+        /* 🌟 全新進化專屬特效區 */
+        #evo-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; display:flex; justify-content:center; align-items:center; flex-direction:column; }
+        #evo-box { position:relative; width:300px; height:300px; display:flex; justify-content:center; align-items:center; }
+        .evo-silhouette { filter: brightness(0) invert(1); animation: flashSilhouette 0.2s infinite alternate; }
+        @keyframes flashSilhouette { 0% { transform: scale(1); filter: brightness(0) invert(1); } 100% { transform: scale(1.1); filter: brightness(0) invert(0.8); } }
+        .evo-flash-white { animation: flashWhite 1s ease-out forwards; }
+        @keyframes flashWhite { 0% { filter: brightness(1); } 30% { filter: brightness(20) drop-shadow(0 0 100px white); transform: scale(1.5); } 100% { filter: brightness(1); transform: scale(1); } }
+        .evo-magic-circle { position: absolute; width: 350px; height: 350px; border-radius: 50%; border: 8px dashed; animation: spinCircle 3s linear infinite; opacity: 0.8; z-index: 1; }
+        .evo-light { border-color: #FFF9C4; box-shadow: 0 0 50px #FFEB3B, inset 0 0 50px #FFEB3B; }
+        .evo-dark { border-color: #EA80FC; box-shadow: 0 0 50px #6A1B9A, inset 0 0 50px #6A1B9A; }
+        @keyframes spinCircle { 0% { transform: rotate(0deg) scale(0.8); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(0.8); } }
+        .evo-shake-screen { animation: screenShake 0.1s infinite; }
 
         .hidden { display: none !important; }
         .screen { display: flex; flex-direction: column; align-items: center; gap: 15px; }
@@ -91,57 +90,29 @@
 
         #event-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; display:flex; justify-content:center; align-items:center; }
         .event-box { background:#FFF; padding:30px; border-radius:15px; text-align:center; border:8px solid #01579B; max-width: 85%; width: 450px; }
-        .event-box h2 { color:#0277BD; font-size: 2em; margin-top: 0; }
         .legendary-box { border:8px solid #9C27B0; background: #311B92; color: #FFF; }
-        .legendary-box h2 { color: #EA80FC; text-shadow: 0 0 10px #EA80FC; }
         
         .world-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; background: #8BC34A; padding: 20px; border: 6px solid #558B2F; border-radius: 10px; min-height: 150px; width: 90%; font-size: 3em; box-sizing: border-box; }
         .building-item, .super-gear-card { background: rgba(255,255,255,0.8); padding: 15px; border-radius: 10px; border: 4px dashed #33691E; display: flex; flex-direction: column; align-items: center; font-size: 1em; font-weight: bold; color: #1B5E20; text-align: center; }
-        .building-item span.emoji { font-size: 3.5em; margin-bottom: 5px; }
         .super-gear-card { border: 4px solid #FF9800; background: #FFF3E0; width: 200px; }
-        .super-gear-card h3 { margin: 5px 0; color: #E65100; font-size: 1.3em; }
-
-        #btn-gift {
-            background: linear-gradient(45deg, #FF9800, #FF5722); color: white; border: none; 
-            padding: 12px 20px; font-size: 1.2em; border-radius: 10px; cursor: pointer; 
-            box-shadow: 0 6px 0 #D84315; margin: 15px 0; font-weight: bold; width: 80%; 
-            text-transform: uppercase; transition: all 0.1s; border: 4px solid #FFE0B2;
-            animation: blink 2s infinite;
-        }
         
-        .beast-img { 
-            width: 180px; height: 180px; margin: 10px auto; display: block; 
-            background: #FFFFFF; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); 
-            object-fit: contain; border: 5px solid #212121; padding: 5px;
-        }
+        .beast-img { width: 180px; height: 180px; margin: 10px auto; display: block; background: #FFFFFF; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); object-fit: contain; border: 5px solid #212121; padding: 5px; }
 
-        .partner-card {
-            background: #FFF; border: 6px solid #FFC107; border-radius: 15px; padding: 15px;
-            width: 260px; display: flex; flex-direction: column; align-items: center; text-align: center;
-            box-shadow: 0 8px 0 #FFA000; position: relative;
-        }
+        .partner-card { background: #FFF; border: 6px solid #FFC107; border-radius: 15px; padding: 15px; width: 270px; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 8px 0 #FFA000; position: relative; }
         .partner-img { width: 120px; height: 120px; object-fit: contain; transition: all 0.5s; }
-        .partner-title { color: #E65100; font-size: 1.4em; margin: 5px 0; }
         .partner-active-badge { position: absolute; top: -15px; right: -15px; background: #F44336; color: white; padding: 5px 10px; border-radius: 20px; font-weight: bold; border: 3px solid #FFF; transform: rotate(15deg); box-shadow: 0 4px 4px rgba(0,0,0,0.3); }
-        .partner-icon-sm { width: 40px; height: 40px; border-radius: 50%; border: 3px solid #FFF; box-shadow: 0 2px 5px rgba(0,0,0,0.5); object-fit: contain; background: #E1F5FE; }
 
-        /* 閃卡紀念冊專屬樣式 (精準分級設計) */
         .album-card { background: #222; border: 4px solid #555; border-radius: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 4px 0 #111; position: relative; color: white; padding: 10px; }
         .album-card.unlocked { background: linear-gradient(135deg, #FFF9C4, #FFB300); border-color: #FFF; box-shadow: 0 4px 0 #F57F17; color: #333; }
-        
         .album-card.legendary { width: 220px; border-width: 6px; }
         .album-card.legendary .album-img { width: 140px; height: 140px; }
         .album-card.legendary.unlocked { animation: pulse-glow 2s infinite; }
-        
         .album-card.boss { width: 170px; }
         .album-card.boss .album-img { width: 100px; height: 100px; }
-        
         .album-card.wild { width: 120px; padding: 5px; }
         .album-card.wild .album-img { width: 70px; height: 70px; margin-bottom: 5px; }
-        
         .album-img { object-fit: contain; filter: brightness(0) drop-shadow(0 0 5px #000); transition: all 0.3s; }
         .album-card.unlocked .album-img { filter: drop-shadow(0 0 8px rgba(255,255,255,0.8)); }
-        
     </style>
 </head>
 <body>
@@ -186,17 +157,17 @@
 
         <div id="start-screen" class="screen hidden">
             <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#607D8B;">📖 遊戲說明 (新手必看)</button>
-            <button id="btn-gift" onclick="claimGift()">🎁 領取限定新手禮品包 (只限一次)</button>
 
             <hr style="width: 80%; border-top: 4px dashed #006064;">
             
-            <h2>🏕️ 選擇主題關卡</h2>
-            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
-                <button class="btn-blue" onclick="startGame('hk')">🏙️ 關卡一：香港是我家</button>
-                <button class="btn-green" onclick="startGame('house')">🏠 關卡二：安居樂</button>
-                <button class="btn-orange" onclick="startGame('energy')">⚡ 關卡三：能源世界</button>
-                <button class="btn-purple" onclick="startGame('freedom')">⚖️ 關卡四：自由與守規</button>
-                <button class="btn-gold" style="background:#E91E63; color:white; border-color:#C2185B;" onclick="startGame('culture')">🏮 關卡五：文化交融</button>
+            <h2>🗺️ 選擇探索地區</h2>
+            <p style="margin:0; font-weight:bold; color:#006064;">不同地區有較高機率遇到對應屬性的野生寶可夢！</p>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+                <button class="btn-blue" onclick="startGame('hk')">🌊 香港是我家 (蔚藍之海)</button>
+                <button class="btn-green" onclick="startGame('house')">🌳 安居樂 (豐饒之森)</button>
+                <button class="btn-orange" onclick="startGame('energy')">🌋 能源世界 (烈焰火山)</button>
+                <button class="btn-grey" style="background:#795548;" onclick="startGame('freedom')">⛰️ 自由與守規 (雷霆高原)</button>
+                <button class="btn-purple" onclick="startGame('culture')">🔮 文化交融 (幻影遺跡)</button>
             </div>
             
             <hr style="width: 80%; border-top: 4px dashed #006064;">
@@ -204,8 +175,8 @@
             <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
                 <button class="btn-gold" style="background:#FFC107; color:#333; border-color:#FFA000;" onclick="openAlbum()">🎴 圖鑑與閃卡紀念冊</button>
                 <button class="btn-gold" onclick="openGacha()">🎰 每日抽獎</button>
-                <button class="btn-black" style="background:#424242;" onclick="openSecretMarket()">⛺ 秘密交易市場</button>
-                <button class="btn-red" style="background:#D32F2F;" onclick="openPartnerHub()">🐾 寶可夢搭檔中心</button>
+                <button class="btn-black" style="background:#424242;" onclick="openSecretMarket()">⛺ 黑市 (碎片兌換)</button>
+                <button class="btn-red" style="background:#D32F2F;" onclick="openPartnerHub()">🐾 寶可夢進化中心</button>
 
                 <button class="btn-gold" onclick="openShop()">🛒 藥水商店</button>
                 <button class="btn-purple" onclick="openSuperForge()">👑 神器祭壇</button>
@@ -224,24 +195,23 @@
         </div>
 
         <div id="instruction-screen" class="screen hidden">
-            <h2>📖 冒險者指南</h2>
+            <h2>📖 冒險者終極指南</h2>
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #4CAF50; max-height: 400px; overflow-y: auto;">
-                <h3 style="color:#B71C1C; margin-top:0;">1. 🩸 血月異變與神獸降臨 (極高難度)</h3>
-                <p>當你建好【大城堡】後，在礦洞答題時有極低機率觸發「天象異變」，天空會瞬間變成血紅色！</p>
-                <p>⚠️ <b>神獸規則</b>：血月出現後，你必須在接下來的 <b>15 次答題機會中，連續答對 5 到 7 題</b>（視乎難度）才能將神獸逼出來！</p>
+                <h3 style="color:#006064; margin-top:0;">🗺️ 1. 探索地區與生態</h3>
+                <p>現在每個關卡對應不同的生態環境（海洋、森林、火山等）。選擇不同的地區，你會有更高機率遇到該屬性的專屬野生寶可夢！</p>
+                <h3 style="color:#B71C1C;">🩸 2. 血月異變與神獸降臨 (極高難度)</h3>
+                <p>當你建好【大城堡】後，答題時有極低機率觸發「天象異變」，天空會瞬間變成血紅色！</p>
+                <p>⚠️ <b>神獸規則</b>：你必須在接下來的 <b>15 次答題機會中，連續答對 5 到 7 題</b>才能將遠古神獸逼出來！</p>
                 <p>🐉 <b>4大遠古神獸特性</b>：
                    <br>- <b>獄炎魔龍</b>：造成無視防禦的 1.5 倍真實傷害。
                    <br>- <b>霜凍孤狼</b>：有機率施放絕對冰凍，將你的選項鎖死 3 秒。
                    <br>- <b>墮落・超夢</b>：禁療詛咒，整場戰鬥無法使用任何藥水。
-                   <br>- <b>滅世魔神</b>：有機率發動一擊必殺大招，答題時間瞬間縮減至 3 秒，答錯或超時直接秒殺！
+                   <br>- <b>滅世魔神</b>：隨機發動一擊必殺大招，答題時間瞬間縮減至 3 秒，答錯即秒殺！
                    <br>- <b>🔥 狂暴化</b>：所有神獸血量低於 50% 時必定狂暴，答題時間永久減少 30%！
                 </p>
-                <h3 style="color:#E65100;">2. 戰鬥力與屬性 (超級重要)</h3>
-                <p>🛡️ <b>防禦力</b>：決定戰鬥中的<b>最大 HP</b>，允許你承受更多次答錯！</p>
-                <p>⚔️ <b>攻擊力 (重擊掉落)</b>：攻擊力越高，戰鬥勝利時觸發【重擊掉落】的機率越高！</p>
-                <h3 style="color:#6A1B9A;">3. 全新進化與閃卡紀念冊</h3>
-                <p>🐾 <b>進化動畫</b>：搭檔寶可夢進化時會有震撼的光影特效，別忘了截圖！</p>
-                <p>🎴 <b>全圖鑑收集</b>：擊敗野生寶可夢、首領 Boss 與傳說神獸，都會永久記錄在「圖鑑與閃卡紀念冊」中！</p>
+                <h3 style="color:#6A1B9A;">🌟 3. 超級進化與碎片黑市</h3>
+                <p>🐾 <b>超級進化</b>：最終階段的「超級進化」需要集齊所有種類的材料。會引發巨大的天地異象動畫！</p>
+                <p>⛺ <b>碎片大翻身</b>：打到的「碎片」現在非常值錢！你可以進入【黑市】用碎片兌換難以取得的「手稿」與其他稀有資源！</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
@@ -256,31 +226,36 @@
         <div id="gacha-zone" class="screen hidden">
             <h2 style="color: #FF9800;">🎰 星星幸運抽獎</h2>
             <p>每次抽獎消耗 <b class="star-text">1 顆星星</b>！今日已抽次數：<span id="gacha-count">0</span>/3</p>
-            <p>大獎：50寶石+3碎片(2%) | 稀有：5寶石(28%) | 普通：10木材，10石頭(70%)</p>
             <button class="btn-gold" style="font-size: 1.5em; padding: 20px 40px;" onclick="drawGacha()">✨ 點擊抽獎 ✨</button>
             <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
 
         <div id="secret-market-zone" class="screen hidden">
-            <h2 style="color: #424242;">⛺ 森林秘密市場</h2>
+            <h2 style="color: #424242;">⛺ 森林秘密黑市 (碎片兌換)</h2>
+            <p style="font-weight:bold;">手稿太難打？用碎片跟我換吧！</p>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
                 <div class="super-gear-card">
-                    <h3>🗡️ 極限升級武器</h3>
-                    <p>效果：+10 永久攻擊</p>
-                    <button class="btn-purple" onclick="buySecret('weapon')">購買 (需 <span id="secret-wp-cost">15</span> 寶石)</button>
+                    <h3>📜 兌換神秘手稿</h3>
+                    <p>1 手稿 / <span style="color:#00E5FF">10 碎片</span></p>
+                    <button class="btn-blue" onclick="buySecret('manu')">兌換</button>
                 </div>
                 <div class="super-gear-card">
-                    <h3>🌟 地下市場：星星包</h3>
-                    <p>效果：獲得 1 顆星星</p>
-                    <button class="btn-orange" onclick="buySecret('star')">購買 (需 20 木材)</button>
+                    <h3>💎 兌換璀璨寶石</h3>
+                    <p>1 寶石 / <span style="color:#00E5FF">15 碎片</span></p>
+                    <button class="btn-purple" onclick="buySecret('gem')">兌換</button>
+                </div>
+                <div class="super-gear-card">
+                    <h3>🌟 兌換許願星星</h3>
+                    <p>1 星星 / <span style="color:#00E5FF">15 碎片</span></p>
+                    <button class="btn-orange" onclick="buySecret('star')">兌換</button>
                 </div>
             </div>
             <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
 
         <div id="partner-zone" class="screen hidden">
-            <h2 style="color: #D32F2F;">🐾 寶可夢搭檔中心</h2>
-            <p>選擇一隻寶可夢作為搭檔！進化可獲得強大屬性加成！</p>
+            <h2 style="color: #D32F2F;">🐾 寶可夢進化中心</h2>
+            <p>進化需要消耗木/石/手稿/碎片等大量材料，最終將引來「超級進化」！</p>
             <div id="partner-list" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%;"></div>
             <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
         </div>
@@ -307,12 +282,12 @@
                 <div class="super-gear-card">
                     <h3>🛡️ 絕對專注之盾 <br>Lv.<span id="sg-s-lv">0</span></h3>
                     <p class="stat-def">效果: +<span id="sg-s-bonus">0</span> 防</p>
-                    <button class="btn-blue" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('shield')">升級 (需 <span id="sg-s-cost-m">0</span>手稿 <span id="sg-s-cost-f">5</span>碎片)</button>
+                    <button class="btn-blue" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('shield')">升級 (需 <span id="sg-s-cost-m">5</span>手稿 <span id="sg-s-cost-f">0</span>碎片)</button>
                 </div>
                 <div class="super-gear-card">
                     <h3>💎 無瑕賢者之石 <br>Lv.<span id="sg-a-lv">0</span></h3>
                     <p class="gem-text">效果: 全屬性 +<span id="sg-a-bonus">0</span></p>
-                    <button class="btn-purple" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('stone')">升級 (需 <span id="sg-a-cost-m">5</span>手稿 <span id="sg-a-cost-f">5</span>碎片)</button>
+                    <button class="btn-purple" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('stone')">升級 (需 <span id="sg-a-cost-m">10</span>手稿 <span id="sg-a-cost-f">1</span>碎片)</button>
                 </div>
             </div>
             <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
@@ -380,6 +355,14 @@
 
     </div>
 
+    <div id="evo-modal" class="hidden">
+        <div id="evo-box">
+            <div id="evo-magic-circle" class="hidden"></div>
+            <img id="evo-img" src="" style="width:200px; height:200px; z-index:10;">
+        </div>
+        <h2 id="evo-text" style="color:white; margin-top:20px; font-size:2.5em; text-shadow: 0 0 10px #FFF;">進化中...</h2>
+    </div>
+
     <div id="event-modal" class="hidden">
         <div class="event-box" id="event-box-ui">
             <h2 id="event-title">事件</h2>
@@ -403,13 +386,13 @@
                 else if (type === 'error') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.2); gain.gain.setValueAtTime(0.2, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2); osc.start(); osc.stop(audioCtx.currentTime + 0.2); } 
                 else if (type === 'boss_win') { osc.type = 'triangle'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 1); gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.5); osc.start(); osc.stop(audioCtx.currentTime + 1.5); } 
                 else if (type === 'medal') { osc.type = 'square'; osc.frequency.setValueAtTime(600, audioCtx.currentTime); osc.frequency.setValueAtTime(900, audioCtx.currentTime + 0.2); osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.4); gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.0); osc.start(); osc.stop(audioCtx.currentTime + 1.0); } 
-                else if (type === 'legendary') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(100, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(300, audioCtx.currentTime + 1.5); gain.gain.setValueAtTime(0.4, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2.0); osc.start(); osc.stop(audioCtx.currentTime + 2.0); }
+                else if (type === 'legendary') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(100, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(500, audioCtx.currentTime + 2.0); gain.gain.setValueAtTime(0.4, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2.5); osc.start(); osc.stop(audioCtx.currentTime + 2.5); }
             } catch(e) {}
         }
 
         const medalsConfig = { 10: '🥉', 20: '🥈', 30: '🥇', 40: '🏅', 50: '💎', 60: '🌠', 70: '👑', 80: '🐉', 90: '🌌', 100: '🏆' };
 
-        // 19隻野生怪獸池
+        // 19隻野生怪獸池 (擴充版)
         const wildBeastPool = [
             { id: "3", name: "妙蛙花", power: 33 }, { id: "500", name: "炎武王", power: 60 }, { id: "94", name: "耿鬼", power: 90 }, { id: "76", name: "隆隆岩", power: 120 },
             { id: "12", name: "巴大蝶", power: 25 }, { id: "18", name: "大比鳥", power: 35 }, { id: "24", name: "阿柏怪", power: 40 }, { id: "28", name: "穿山王", power: 45 },
@@ -417,6 +400,15 @@
             { id: "49", name: "摩魯蛾", power: 80 }, { id: "53", name: "貓老大", power: 85 }, { id: "55", name: "哥達鴨", power: 95 }, { id: "59", name: "風速狗", power: 100 },
             { id: "62", name: "快泳蛙", power: 105 }, { id: "65", name: "胡地", power: 110 }, { id: "68", name: "怪力", power: 115 }
         ];
+
+        // 🗺️ 區域生態分類
+        const regionEncounters = {
+            'hk': ["55", "62", "53", "94"], // 蔚藍之海：哥達鴨, 快泳蛙, 貓老大, 耿鬼
+            'house': ["3", "12", "45", "49"], // 豐饒之森：妙蛙花, 巴大蝶, 霸王花, 摩魯蛾
+            'energy': ["500", "38", "59", "18"], // 烈焰火山：炎武王, 九尾, 風速狗, 大比鳥
+            'freedom': ["76", "28", "31", "34", "24"], // 雷霆高原：隆隆岩, 穿山王, 尼多后, 尼多王, 阿柏怪
+            'culture': ["65", "68", "94"] // 幻影遺跡：胡地, 怪力, 耿鬼
+        };
 
         const epicLegendaries = {
             'inferno': { name: "獄炎魔龍", target: 4, time: 12, effect: "true_damage", desc: "生態：火山\n特性：無視防禦造成巨額真實傷害！", img: "383", hpPenalty: 30 },
@@ -443,7 +435,13 @@
         };
         let inventory = { ...defaultInv };
 
-        const evoCosts = { 1: { m: 30, f: 1, s: 2, g: 0 }, 2: { m: 60, f: 3, s: 5, g: 0 }, 3: { A: { m: 100, f: 5, s: 10, g: 0, title: "⭐ 光明進化" }, B: { m: 100, f: 5, s: 0, g: 10, title: "💎 闇黑進化" } }, 4: { A: { m: 200, f: 10, s: 20, g: 0, title: "⭐ 傳說降臨" }, B: { m: 200, f: 10, s: 0, g: 20, title: "💎 幻之覺醒" } } };
+        // ⚖️ 重新調整進化條件：降低手稿要求，加入所有資源
+        const evoCosts = { 
+            1: { m: 10, f: 5, s: 2, g: 1, w: 20, st: 20 }, 
+            2: { m: 20, f: 10, s: 5, g: 3, w: 50, st: 50 }, 
+            3: { A: { m: 30, f: 20, s: 10, g: 5, w: 100, st: 100, title: "⭐ 光明進化" }, B: { m: 30, f: 20, s: 5, g: 10, w: 100, st: 100, title: "💎 闇黑進化" } }, 
+            4: { A: { m: 50, f: 50, s: 30, g: 20, w: 300, st: 300, title: "🌟 超級進化 (光)" }, B: { m: 50, f: 50, s: 20, g: 30, w: 300, st: 300, title: "🌌 超級進化 (闇)" } } 
+        };
         const pokedex = {
             'fire': { title: "小火龍路線", desc: "經典火系御三家", lv0: { n: "小火龍", p: "4", b: 0 }, lv1: { n: "火恐龍", p: "5", b: 10 }, lv2: { n: "噴火龍", p: "6", b: 30 }, lv3A: { n: "超級噴火龍Y", p: "10035", b: 60 }, lv3B: { n: "超級噴火龍X", p: "10034", b: 80 }, lv4A: { n: "鳳王", p: "250", b: 150 }, lv4B: { n: "固拉多", p: "383", b: 180 } },
             'water': { title: "傑尼龜路線", desc: "經典水系御三家", lv0: { n: "傑尼龜", p: "7", b: 0 }, lv1: { n: "卡咪龜", p: "8", b: 10 }, lv2: { n: "水箭龜", p: "9", b: 30 }, lv3A: { n: "超級水箭龜", p: "10036", b: 60 }, lv3B: { n: "拉普拉斯", p: "131", b: 80 }, lv4A: { n: "洛奇亞", p: "249", b: 150 }, lv4B: { n: "蓋歐卡", p: "382", b: 180 } },
@@ -455,7 +453,7 @@
         function getPokePic(pId) { return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pId}.png`; }
 
         const dbHK = [ { q: "[選擇題] 中華人民共和國在哪一天對香港恢復行使主權？", ans: "1997年7月1日", options: ["1997年7月1日", "1999年12月20日", "1997年10月1日"] }, { q: "[選擇題] 香港特別行政區成立後，實行甚麼方針以保留原有的制度和生活方式？", ans: "一國兩制", options: ["一國兩制", "港人治港", "高度自治"] }, { q: "[選擇題] 哪一部法律訂明了中華人民共和國對香港的基本方針政策？", ans: "《基本法》", options: ["《基本法》", "《憲法》", "《人權法》"] }, { q: "[選擇題] 香港特別行政區區旗的紅色背景代表甚麼？", ans: "祖國", options: ["祖國", "香港", "自由"] }, { q: "[選擇題] 香港特別行政區區旗上的紫荊花圖案代表甚麼？", ans: "香港", options: ["祖國", "香港", "和平"] }, { q: "[選擇題] 區旗上紅、白兩色互相映襯，象徵着甚麼？", ans: "一國兩制", options: ["一國兩制", "繁榮安定", "自由平等"] }, { q: "[選擇題] 每年7月1日是甚麼紀念日？", ans: "香港特別行政區成立紀念日", options: ["國慶日", "香港特別行政區成立紀念日", "勞動節"] }, { q: "[選擇題] 《基本法》除了訂明基本方針外，還保障了香港居民的甚麼？", ans: "權利和自由", options: ["權利和自由", "絕對權力", "免交稅款"] }, { q: "[選擇題] 我們在享有權利和自由的同時，也應該怎樣對待他人？", ans: "尊重他人的權利", options: ["尊重他人的權利", "忽略他人的感受", "限制他人的自由"] }, { q: "[選擇題] 社會上設立法律和規則的主要目的是甚麼？", ans: "維持社會秩序和保障大家權利", options: ["維持社會秩序和保障大家權利", "限制市民生活", "增加政府收入"] } ];
-        const dbHouse = [ { q: "[選擇題] 1953年，石硤尾木屋區發生了甚麼災難，令大量居民失去家園？", ans: "大火", options: ["地震", "大火", "山泥傾瀉"] }, { q: "[選擇題] 1954年，香港政府開始興建甚麼房屋，以安置石硤尾木屋區的災民？", ans: "徙置大廈", options: ["村屋", "唐樓", "徙置大廈"] }, { q: "[選擇題] 早期政府興建的徙置大廈，一般樓高多少層？", ans: "6至7層", options: ["2至3層", "6至7層", "10至11層"] }, { q: "[選擇題] 1950年代第一代公屋（例如美荷樓）的單位內，通常缺乏哪項設施？", ans: "獨立廚廁", options: ["窗戶", "睡牀", "獨立廚廁"] }, { q: "[選擇題] 昔日的徙置大廈，居民一般要在哪裏生火煮食？", ans: "走廊", options: ["客廳", "走廊", "天台"] }, { q: "[選擇題] 1980年代興建的公共房屋，樓層一般高達多少層？", ans: "20層", options: ["6層", "20層", "50層"] }, { q: "[選擇題] 現今的公共屋邨發展趨勢如何？", ans: "向高空發展", options: ["向地下發展", "向高空發展", "逐漸減少樓層"] }, { q: "[選擇題] 以下哪類房屋屬於香港的公營房屋？", ans: "公共屋邨", options: ["唐樓", "公共屋邨", "私人屋苑"] }, { q: "[選擇題] 居者有其屋計劃（居屋）屬於哪一類房屋？", ans: "公營房屋", options: ["私營房屋", "公營房屋", "臨時房屋"] }, { q: "[選擇題] 哪一類私營房屋通常會設有住客會所、泳池等設施？", ans: "私人屋苑", options: ["村屋", "唐樓", "私人屋苑"] }, { q: "[選擇題] 申請入住公共屋邨的家庭，主要面對甚麼困難？", ans: "輪候時間長", options: ["租金極度昂貴", "輪候時間長", "設施嚴重不足"] }, { q: "[選擇題] 由於私營房屋樓價高昂，部分基層市民無奈需要租住甚麼環境惡劣的單位？", ans: "劏房", options: ["獨立屋", "劏房", "居屋"] }, { q: "[選擇題] 蚊子叮咬人類，可能會傳播以下哪一種疾病？", ans: "登革熱", options: ["大鼠戊型肝炎", "登革熱", "感冒"] }, { q: "[選擇題] 哪種動物出沒會污染食物，並可能傳播大鼠戊型肝炎？", ans: "老鼠", options: ["蒼蠅", "老鼠", "蟑螂"] }, { q: "[選擇題] 負責清洗街道、收集家居垃圾的政府部門是？", ans: "食物環境衞生署", options: ["房屋署", "食物環境衞生署", "地政總署"] }, { q: "[選擇題] 冷氣機滴水會引致甚麼衞生問題？", ans: "積水滋生蚊蟲", options: ["噪音滋擾", "積水滋生蚊蟲", "空氣污染"] }, { q: "[選擇題] 政府為了減低車輛行駛時發出的噪音，會在高速公路旁加建甚麼？", ans: "隔音屏障", options: ["減速帶", "隔音屏障", "交通燈"] }, { q: "[選擇題] 在斜坡上種植樹木，其根部能抓緊泥土，這有甚麼主要作用？", ans: "防止山泥傾瀉", options: ["增加房屋供應", "防止山泥傾瀉", "預防鼠患"] }, { q: "[選擇題] 香港房屋委員會主要負責甚麼工作？", ans: "制定和推行公共房屋計劃", options: ["清洗街道及滅蚊", "制定和推行公共房屋計劃", "管理公園及種植植物"] }, { q: "[選擇題] 以下哪一項是1950年代美荷樓居住環境的特點？", ans: "居住環境較擠迫", options: ["設有大型商場", "居住環境較擠迫", "擁有獨立花園"] }, { q: "[選擇題] 為了解決居住面積細小帶來的問題，人們可以使用甚麼來改善生活空間？", ans: "新穎的家具設計", options: ["購買更多雜物", "新穎的家具設計", "拆除大廈外牆"] }, { q: "[選擇題] 渠務署保持溝渠正常運作，對社區有甚麼幫助？", ans: "改善環境衞生情況", options: ["提供更多房屋", "改善環境衞生情況", "減低車輛噪音"] } ];
+        const dbHouse = [ { q: "[選擇題] 1953年，石硤尾木屋區發生了甚麼災難，令大量居民失去家園？", ans: "大火", options: ["地震", "大火", "山泥傾瀉"] }, { q: "[選擇題] 1954年，香港政府開始興建甚麼房屋，以安置石硤尾木屋區的災民？", ans: "徙置大廈", options: ["村屋", "唐樓", "徙置大廈"] }, { q: "[選擇題] 早期政府興建的徙置大廈，一般樓高多少層？", ans: "6至7層", options: ["2至3層", "6至7層", "10至11層"] }, { q: "[選擇題] 1950年代第一代公屋（例如美荷樓）的單位內，通常缺乏哪項設施？", ans: "獨立廚廁", options: ["窗戶", "睡牀", "獨立廚廁"] }, { q: "[選擇題] 昔日的徙置大廈，居民一般要在哪裏生火煮食？", ans: "走廊", options: ["客廳", "走廊", "天台"] }, { q: "[選擇題] 1980年代興建的公共房屋，樓層一般高達多少層？", ans: "20層", options: ["6層", "20層", "50層"] }, { q: "[選擇題] 現今的公共屋邨發展趨勢如何？", ans: "向高空發展", options: ["向地下發展", "向高空發展", "逐漸減少樓層"] }, { q: "[選擇題] 以下哪類房屋属于香港的公營房屋？", ans: "公共屋邨", options: ["唐樓", "公共屋邨", "私人屋苑"] }, { q: "[選擇題] 居者有其屋計劃（居屋）屬於哪一類房屋？", ans: "公營房屋", options: ["私營房屋", "公營房屋", "臨時房屋"] }, { q: "[選擇題] 哪一類私營房屋通常會設有住客會所、泳池等設施？", ans: "私人屋苑", options: ["村屋", "唐樓", "私人屋苑"] }, { q: "[選擇題] 申請入住公共屋邨的家庭，主要面對甚麼困難？", ans: "輪候時間長", options: ["租金極度昂貴", "輪候時間長", "設施嚴重不足"] }, { q: "[選擇題] 由於私營房屋樓價高昂，部分基層市民無奈需要租住甚麼環境惡劣的單位？", ans: "劏房", options: ["獨立屋", "劏房", "居屋"] }, { q: "[選擇題] 蚊子叮咬人類，可能會傳播以下哪一種疾病？", ans: "登革熱", options: ["大鼠戊型肝炎", "登革熱", "感冒"] }, { q: "[選擇題] 哪種動物出沒會污染食物，並可能傳播大鼠戊型肝炎？", ans: "老鼠", options: ["蒼蠅", "老鼠", "蟑螂"] }, { q: "[選擇題] 負責清洗街道、收集家居垃圾的政府部門是？", ans: "食物環境衞生署", options: ["房屋署", "食物環境衞生署", "地政總署"] }, { q: "[選擇題] 冷氣機滴水會引致甚麼衞生問題？", ans: "積水滋生蚊蟲", options: ["噪音滋擾", "積水滋生蚊蟲", "空氣污染"] }, { q: "[選擇題] 政府為了減低車輛行駛時發出的噪音，會在高速公路旁加建甚麼？", ans: "隔音屏障", options: ["減速帶", "隔音屏障", "交通燈"] }, { q: "[選擇題] 在斜坡上種植樹木，其根部能抓緊泥土，這有甚麼主要作用？", ans: "防止山泥傾瀉", options: ["增加房屋供應", "防止山泥傾瀉", "預防鼠患"] }, { q: "[選擇題] 香港房屋委員會主要負責甚麼工作？", ans: "制定和推行公共房屋計劃", options: ["清洗街道及滅蚊", "制定和推行公共房屋計劃", "管理公園及種植植物"] }, { q: "[選擇題] 以下哪一項是1950年代美荷樓居住環境的特點？", ans: "居住環境較擠迫", options: ["設有大型商場", "居住環境較擠迫", "擁有獨立花園"] }, { q: "[選擇題] 為了解決居住面積細小帶來的問題，人們可以使用甚麼來改善生活空間？", ans: "新穎的家具設計", options: ["購買更多雜物", "新穎的家具設計", "拆除大廈外牆"] }, { q: "[選擇題] 渠務署保持溝渠正常運作，對社區有甚麼幫助？", ans: "改善環境衞生情況", options: ["提供更多房屋", "改善環境衞生情況", "減低車輛噪音"] } ];
         const dbEnergy = [ { q: "「港鐵 (MTR)」是靠哪種能源推動的？", ans: "電力", options: ["汽油", "柴油", "電力"] }, { q: "夏天很熱，媽媽開冷氣機，需要用到哪種能源？", ans: "電力", options: ["電力", "煤氣", "石油氣"] }, { q: "你的平板電腦 (iPad) 沒電了，需要插線充電，這是補充哪種能源？", ans: "電力", options: ["電力", "汽油", "石油氣"] }, { q: "媽媽在廚房用的固定煮食爐，連接着地底長長的喉管，這是哪種能源？", ans: "煤氣", options: ["石油氣", "煤氣", "電力"] }, { q: "冬天一家人去酒樓「打邊爐」，桌上那個可以搬來搬去的手提小火爐裏面裝的是甚麼？", ans: "石油氣", options: ["煤氣", "石油氣", "柴油"] }, { q: "香港街頭到處跑的「紅色的士」，最常用的燃料是甚麼？", ans: "石油氣", options: ["汽油", "石油氣", "柴油"] }, { q: "爸爸媽媽駕駛的「私家車」，車體比較輕巧，去油站通常加甚麼油？", ans: "汽油", options: ["汽油", "柴油", "煤氣"] }, { q: "每天載着很多乘客的「雙層巴士」，通常使用哪一種氣體能源？", ans: "柴油", options: ["汽油", "柴油", "石油氣"] }, { q: "地盤裏的「泥頭車」和馬路上的「大貨車」，去油站時要加甚麼油？", ans: "柴油", options: ["汽油", "柴油", "煤氣"] }, { q: "哪兩種能源被稱為「液體兄弟」，都住在加油站裏？", ans: "汽油和柴油", options: ["汽油和柴油", "煤氣和石油氣", "汽油和煤氣"] }, { q: "如果你想去郊野公園露營燒烤，帶上一個手提爐，你應該準備哪種燃料？", ans: "石油氣", options: ["煤氣", "汽油", "石油氣"] }, { q: "哪一種能源最神奇，既能讓巨大的港鐵移動，又能縮小藏在手錶裏讓指針轉動？", ans: "電力", options: ["電力", "汽油", "柴油"] }, { q: "發電廠越來越喜歡使用「天然氣」，為甚麼？", ans: "因為它燃燒時比較乾淨，能減少空氣污染", options: ["因為它有士多啤梨香味", "因為它燃燒時比較乾淨，能減少空氣污染", "因為它可以直接加進私家車裏"] }, { q: "我們日常生活中常用的化石燃料，除了煤和天然氣之外，還有以下哪一種？", ans: "石油", options: ["木材", "石油", "太陽能"] }, { q: "化石燃料在地底需要經過數百萬年才能形成，請問它們是由甚麼演變而成的？", ans: "遠古的動植物", options: ["遠古的動植物", "外太空的隕石", "火山噴出的岩漿"] }, { q: "在白天陽光充足的時候，我們在房間看書，怎樣做最能有效節約能源？", ans: "拉開窗簾，多利用天然光", options: ["開着所有的電燈確保夠光", "拉上窗簾並開啟枱燈", "拉開窗簾，多利用天然光"] }, { q: "買東西時自備環保袋，堅決不索取即棄膠袋，這屬於「環保四用」的哪一種？", ans: "減少使用", options: ["廢物利用", "替代使用", "減少使用"] }, { q: "我們把廢紙放進藍色的回收箱，讓回收廠重新製成再生紙，這屬於哪一項？", ans: "循環再用", options: ["減少使用", "廢物利用", "循環再用"] } ];
         const dbFreedom = [ { q: "[選擇題] 1984年，中英兩國政府簽署了哪一份重要文件，確認香港回歸祖國？", ans: "《中英聯合聲明》", options: ["《中英聯合聲明》", "《基本法》", "《南京條約》", "《施政報告》"] }, { q: "[選擇題] 中華人民共和國在哪一天對香港恢復行使主權，成立香港特別行政區？", ans: "1997年7月1日", options: ["1997年7月1日", "1999年12月20日", "1990年4月4日", "1984年12月19日"] }, { q: "[選擇題] 中華人民共和國對香港實施的基本方針政策是甚麼？", ans: "一國兩制", options: ["一國兩制", "一國一制", "港人治國", "全面管治"] }, { q: "[選擇題] 哪一份文件是香港特別行政區的憲制性文件，保障了市民的權利和自由？", ans: "《基本法》", options: ["《基本法》", "《小學概覽》", "《人權法案》", "《中英聯合聲明》"] }, { q: "[選擇題] 《基本法》是由國家的最高權力機關通過並頒布的，這個機關是甚麼？", ans: "全國人民代表大會", options: ["全國人民代表大會", "香港立法會", "香港區議會", "聯合國"] }, { q: "[選擇題] 市民可以在報章或網絡上理性地發表對社會事務的意見，這體現了哪種自由？", ans: "言論自由", options: ["言論自由", "信仰自由", "集會自由", "通訊自由"] }, { q: "[選擇題] 香港有佛教、基督教、伊斯蘭教等不同宗教的廟宇和教堂，反映居民享有甚麼自由？", ans: "宗教信仰自由", options: ["宗教信仰自由", "言論自由", "集會自由", "出入境自由"] }, { q: "[選擇題] 我們與親友通電話或發送電郵的私隱受到法律嚴格保護，屬於哪一項自由？", ans: "通訊秘密和自由", options: ["通訊秘密和自由", "言論自由", "創作自由", "選擇職業自由"] }, { q: "[選擇題] 自由是有界限的。我們在行使個人自由時，必須以甚麼為前提？", ans: "不損害他人權利和遵守法律", options: ["不損害他人權利和遵守法律", "滿足自己的所有慾望", "不用理會別人的感受", "只要不被警察發現"] }, { q: "[選擇題] 如果社會上每個人都不遵守規則，隨心所欲地做事，會導致甚麼後果？", ans: "社會變得混亂，權利不受保障", options: ["社會變得混亂，權利不受保障", "每個人都變得更快樂", "社會發展得更快", "生活更加方便"] }, { q: "[選擇題] 居民如果在深夜時分在家中大聲播放音樂，這行為有甚麼問題？", ans: "侵犯了鄰居休息的權利", options: ["侵犯了鄰居休息的權利", "充分行使了創作自由", "能促進鄰里之間的關係", "沒有任何問題"] }, { q: "[選擇題] 《基本法》除了保障香港居民的權利，也規定了居民必須履行甚麼義務？", ans: "遵守香港特區實行的法律", options: ["遵守香港特區實行的法律", "必須信仰某一種宗教", "不能離開香港", "不能批評政府施政"] } ];
         const dbCulture = [ { q: "[選擇題] 為甚麼香港會成為中外文化薈萃的城市？", ans: "以上皆是", options: ["曾經受英國管治一百多年", "自古以來是中國的領土", "有很多外籍人士和旅客在香港居住及遊覽", "以上皆是"] }, { q: "[選擇題] 茶餐廳的食物最能反映香港哪一種特色？", ans: "中外文化交融", options: ["只有中國文化", "只有外來文化", "中外文化交融", "沒有文化特色"] }, { q: "[選擇題] 面對不同文化背景的居民，我們應該抱持甚麼態度？", ans: "彼此接納和尊重，互相幫助", options: ["互相排斥，不相往來", "彼此接納和尊重，互相幫助", "互不干涉，漠不關心", "嘲笑他們的生活習慣"] }, { q: "[選擇題] 當我們與不同宗教信仰的同學一起吃飯時，應該怎樣做？", ans: "尊重他們的飲食禁忌（例如不吃豬肉或守齋）", options: ["強迫他們嘗試我們的食物", "尊重他們的飲食禁忌（例如不吃豬肉或守齋）", "嘲笑他們的飲食習慣", "拒絕跟他們一起吃飯"] }, { q: "[選擇題] 以下哪一個宗教的信徒會在「齋戒月」期間，在日落前不吃東西？", ans: "伊斯蘭教", options: ["佛教", "基督教", "伊斯蘭教", "道教"] }, { q: "[選擇題] 「的士、巴士」這些詞語有甚麼共同點？", ans: "都是外來語", options: ["都是古詩用語", "都是外來語", "都是宗教名稱", "都是食物名稱"] }, { q: "[選擇題] 下列哪一項屬於中國傳統文化表演？", ans: "梁山伯與祝英台", options: ["梁山伯與祝英台", "英國舞台劇", "非洲鼓之夜", "講影片危機"] }, { q: "[選擇題] 下列哪一項屬於外來文化表演？", ans: "波蘭鋼琴大師鋼琴演奏", options: ["中國舞蹈", "波蘭鋼琴大師鋼琴演奏", "中西合璧樂器演奏", "粵劇"] }, { q: "[選擇題] 下列哪一項最能代表中外文化交融？", ans: "中西合璧樂器演奏", options: ["只有中國舞蹈", "只有外國鋼琴演奏", "中西合璧樂器演奏", "只有非洲鼓之夜"] }, { q: "[選擇題] 「梁山伯與祝英台」較屬於哪一類文化表演？", ans: "中國文化", options: ["中國文化", "外來文化", "中外文化融合", "宗教活動"] }, { q: "[選擇題] 寶蓮禪寺屬於哪一個宗教？", ans: "佛教", options: ["佛教", "伊斯蘭教", "天主教", "基督教"] }, { q: "[選擇題] 九龍清真寺屬於哪一個宗教？", ans: "伊斯蘭教", options: ["道教", "伊斯蘭教", "佛教", "天主教"] }, { q: "[選擇題] 聖母無原罪主教座堂屬於哪一個宗教？", ans: "天主教", options: ["基督教", "佛教", "天主教", "道教"] }, { q: "[選擇題] 黃大仙祠屬於哪一個宗教？", ans: "道教", options: ["道教", "印度教", "伊斯蘭教", "佛教"] }, { q: "[選擇題] 印度廟最可能屬於哪一個宗教？", ans: "印度教", options: ["佛教", "印度教", "天主教", "道教"] }, { q: "[選擇題] 九龍城浸信會屬於哪一個宗教？", ans: "基督教", options: ["基督教", "天主教", "佛教", "伊斯蘭教"] }, { q: "[選擇題] 下列哪一個地方屬於佛教場所？", ans: "寶蓮禪寺", options: ["寶蓮禪寺", "九龍清真寺", "聖母無原罪主教座堂", "印度廟"] }, { q: "[選擇題] 下列哪一個地方屬於伊斯蘭教場所？", ans: "九龍清真寺", options: ["黃大仙祠", "寶蓮禪寺", "九龍清真寺", "九龍城浸信會"] }, { q: "[選擇題] 下列哪一個地方屬於天主教場所？", ans: "聖母無原罪主教座堂", options: ["聖母無原罪主教座堂", "黃大仙祠", "寶蓮禪寺", "印度廟"] }, { q: "[選擇題] 為甚麼香港會有很多西方文化活動和宗教？", ans: "因為歐洲的傳教士紛紛來到香港傳教，帶來了西方宗教和文化", options: ["因為只有西方人住在香港", "因為歐洲的傳教士紛紛來到香港傳教，帶來了西方宗教和文化", "因為香港人必須學習西方文化", "因為香港沒有自己的傳統文化"] }, { q: "[填充題] 香港自古便是 _______ 的領土，保留了深厚的傳統文化。", ans: "中國", options: ["英國", "中國", "尊重", "和諧"] }, { q: "[填充題] 香港曾經被 _______ 管治一百多年，因此生活上有很多受西方文化影響的地方。", ans: "英國", options: ["中國", "英國", "藝術", "多元"] }, { q: "[填充題] 今天的香港是一個 _______ 文化的社會，不同背景的居民一同建設這裏。", ans: "多元", options: ["多元", "藝術", "宗教", "交融"] }, { q: "[填充題] 無論大家的語言或生活方式有何不同，我們都要彼此接納和 _______。", ans: "尊重", options: ["交融", "尊重", "和諧", "藝術"] }, { q: "[填充題] 只要大家互相幫助，不同文化背景的居民就能在香港 _______ 共處。", ans: "和諧", options: ["尊重", "交融", "和諧", "多元"] }, { q: "[填充題] 香港在中外文化 _______ 的影響下，形成了獨特的生活面貌。", ans: "交融", options: ["和諧", "藝術", "宗教", "交融"] }, { q: "[填充題] 中外文化的特色體現於我們的飲食、_______、語言及宗教等方面。", ans: "藝術", options: ["藝術", "外來詞", "的士", "尊重"] }, { q: "[填充題] 「T恤」和「三文魚」等詞語，是吸收了外國語言而形成的 _______ 。", ans: "外來詞", options: ["外來詞", "的士", "藝術", "宗教"] }, { q: "[填充題] 在香港，我們可以乘坐 _______ （Taxi），這也是我們常用的外來語之一。", ans: "的士", options: ["的士", "巴士", "外來詞", "小巴"] }, { q: "[填充題] 香港居民有信仰自由，可以信奉不同的 _______ ，我們要有包容的心。", ans: "宗教", options: ["藝術", "外來詞", "宗教", "多元"] }, { q: "[配對題] 粵劇表演、中國武術表演屬於以下哪種文化？", ans: "中國傳統文化", options: ["中外文化交融", "中國傳統文化", "外國飲食文化", "香港地道飲食文化"] }, { q: "[配對題] 意式焗肉醬長通粉、三文魚壽司屬於以下哪種文化？", ans: "外國飲食文化", options: ["中外文化交融", "外國藝術", "外國飲食文化", "香港地道飲食文化"] }, { q: "[配對題] 新春花車巡遊屬於以下哪種文化？", ans: "中外文化交融", options: ["中國傳統文化", "外國藝術", "中外文化交融", "香港地道飲食文化"] }, { q: "[配對題] 茶餐廳的西多士、菠蘿油屬於以下哪種文化？", ans: "香港地道飲食文化", options: ["中外文化交融", "外國飲食文化", "香港地道飲食文化", "中國傳統文化"] }, { q: "[配對題] 芭蕾舞表演、非洲鼓屬於以下哪種文化？", ans: "外國藝術", options: ["外國藝術", "中外文化交融", "中國傳統文化", "香港地道飲食文化"] } ];
@@ -486,10 +484,11 @@
         }
 
         // ==========================================
-        // 核心存檔邏輯 (向下兼容至 final28)
+        // 核心存檔邏輯 (向下兼容至 final29)
         // ==========================================
         function loadGame() {
-            const savedData = localStorage.getItem('roblox_p4_save_final28')
+            const savedData = localStorage.getItem('roblox_p4_save_final29')
+                           || localStorage.getItem('roblox_p4_save_final28')
                            || localStorage.getItem('roblox_p4_save_final27')
                            || localStorage.getItem('roblox_p4_save_final26')
                            || localStorage.getItem('roblox_p4_save_final25')
@@ -518,7 +517,7 @@
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem('roblox_p4_save_final28', JSON.stringify(inventory));
+                localStorage.setItem('roblox_p4_save_final29', JSON.stringify(inventory));
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -661,13 +660,12 @@
         function openInstructions() { playSound('click'); hideAll(); document.getElementById('instruction-screen').classList.remove('hidden'); }
         
         // ==========================================
-        // 🎴 傳說閃卡紀念冊 2.0 (動態生成)
+        // 🎴 傳說閃卡紀念冊 2.0
         // ==========================================
         function openAlbum() {
             playSound('click'); hideAll(); document.getElementById('album-zone').classList.remove('hidden');
             let container = document.getElementById('album-list'); container.innerHTML = '';
 
-            // 1. 渲染傳說神獸 (Legendary)
             let html = '<h3 style="color:#FFD700; width:100%; text-align:center; border-bottom:2px solid #FFD700; padding-bottom:5px;">🌌 傳說神獸 (Legendary)</h3>';
             html += '<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px; width:100%; margin-bottom:20px;">';
             legendaryPool.forEach(l => {
@@ -676,7 +674,6 @@
             });
             html += '</div>';
 
-            // 2. 渲染終極首領 (Boss)
             html += '<h3 style="color:#FF5252; width:100%; text-align:center; border-bottom:2px solid #FF5252; padding-bottom:5px;">👹 終極首領 (Boss)</h3>';
             html += '<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:15px; width:100%; margin-bottom:20px;">';
             [1, 2, 3, 4].forEach(id => {
@@ -686,7 +683,6 @@
             });
             html += '</div>';
 
-            // 3. 渲染野生寶可夢 (Wild)
             html += '<h3 style="color:#4CAF50; width:100%; text-align:center; border-bottom:2px solid #4CAF50; padding-bottom:5px;">🐾 野生寶可夢 (Wild)</h3>';
             html += '<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; width:100%;">';
             wildBeastPool.forEach(l => {
@@ -728,21 +724,22 @@
             let r = Math.random();
             if (r < 0.02) { inventory.gem += 50; inventory.fragment += 3; playSound('boss_win'); alert("🎉 奇蹟發生！你中了傳說大獎！\n獲得 50 寶石 + 3 碎片！"); } 
             else if (r < 0.30) { inventory.gem += 5; playSound('win'); alert("✨ 恭喜！你中了稀有獎！\n獲得 5 寶石！"); } 
-            else { inventory.wood += 10; playSound('medal'); alert("📦 你中了普通獎！\n獲得 10 木材！"); }
+            else { inventory.wood += 10; inventory.stone += 10; playSound('medal'); alert("📦 你中了普通獎！\n獲得 10 木材 與 10 石頭！"); }
             openGacha(); updateUI();
         }
 
+        // ⛺ 黑市：碎片兌換系統
         function openSecretMarket() {
             playSound('click'); hideAll(); document.getElementById('secret-market-zone').classList.remove('hidden');
-            document.getElementById('secret-wp-cost').textContent = (inventory.superWeaponLv + 1) * 15;
         }
         function buySecret(type) {
             playSound('click');
-            if (type === 'weapon') {
-                let cost = (inventory.superWeaponLv + 1) * 15;
-                if (inventory.gem >= cost) { inventory.gem -= cost; inventory.superWeaponLv++; playSound('win'); alert(`✅ 購買成功！你的武器升級了！`); } else alert("❌ 寶石不足！");
+            if (type === 'manu') {
+                if (inventory.fragment >= 10) { inventory.fragment -= 10; inventory.manuscript++; playSound('win'); alert(`✅ 兌換成功！獲得 1 張手稿！`); } else alert("❌ 碎片不足！");
+            } else if (type === 'gem') {
+                if (inventory.fragment >= 15) { inventory.fragment -= 15; inventory.gem++; playSound('win'); alert("✅ 兌換成功！獲得 1 顆寶石！"); } else alert("❌ 碎片不足！");
             } else if (type === 'star') {
-                if (inventory.wood >= 20) { inventory.wood -= 20; inventory.star++; playSound('win'); alert("✅ 成功用 20 木材換取了 1 顆星星！"); } else alert("❌ 木材不足！");
+                if (inventory.fragment >= 15) { inventory.fragment -= 15; inventory.star++; playSound('win'); alert("✅ 兌換成功！獲得 1 顆星星！"); } else alert("❌ 碎片不足！");
             }
             openSecretMarket(); updateUI();
         }
@@ -760,16 +757,28 @@
                 let html = `<img src="${getPokePic(info.p)}" class="partner-img">`;
                 if (isCurrent) html += `<div class="partner-active-badge">當前搭檔</div>`;
                 html += `<h3 class="partner-title">${info.n}</h3><p style="margin:5px 0; color:#555; font-size:0.9em;">${route.title}</p><p class="stat-atk">戰力加成: +${info.b}</p>`;
-                if (!isCurrent) html += `<button class="btn-blue" style="padding:8px;" onclick="selectPartner('${pid}')">設定為搭檔</button>`;
+                if (!isCurrent) html += `<button class="btn-blue" style="padding:8px; width:80%;" onclick="selectPartner('${pid}')">設定為搭檔</button>`;
+                
                 if (pData.lv < 4 && isCurrent) {
-                    let nextLv = pData.lv + 1; let cost = evoCosts[nextLv];
-                    if (nextLv < 3) html += `<button class="btn-gold" style="padding:5px;" onclick="evolvePartner('', this)">進化<br><small>(${cost.m}手稿 ${cost.s}星)</small></button>`;
-                    else {
-                        html += `<div style="display:flex; gap:5px; margin-top:5px;">`;
-                        html += `<button class="btn-gold" style="padding:5px; font-size:0.8em;" onclick="evolvePartner('A', this)">${cost.A.title}<br><small>(${cost.A.m}手稿 ${cost.A.s}星)</small></button>`;
-                        html += `<button class="btn-purple" style="padding:5px; font-size:0.8em;" onclick="evolvePartner('B', this)">${cost.B.title}<br><small>(${cost.B.m}手稿 ${cost.B.g}寶石)</small></button></div>`;
+                    let nextLv = pData.lv + 1; 
+                    let costInfo = "";
+                    if (nextLv < 3) {
+                        let cost = evoCosts[nextLv];
+                        costInfo = `${cost.w}木 ${cost.st}石 ${cost.m}手稿 ${cost.f}碎片 ${cost.s}星 ${cost.g}石`;
+                        html += `<button class="btn-gold" style="padding:5px; width:90%; font-size:0.9em; margin-top:5px;" onclick="evolvePartner('', this)">✨ 進化<br><small>(${costInfo})</small></button>`;
+                    } else {
+                        html += `<div style="display:flex; gap:5px; margin-top:5px; width:100%;">`;
+                        let costA = evoCosts[nextLv].A;
+                        costInfo = `${costA.w}木 ${costA.st}石 ${costA.m}稿 ${costA.f}碎 ${costA.s}星 ${costA.g}石`;
+                        html += `<button class="btn-gold" style="padding:5px; flex:1; font-size:0.8em;" onclick="evolvePartner('A', this)">${costA.title}<br><small>(${costInfo})</small></button>`;
+                        
+                        let costB = evoCosts[nextLv].B;
+                        costInfo = `${costB.w}木 ${costB.st}石 ${costB.m}稿 ${costB.f}碎 ${costB.s}星 ${costB.g}石`;
+                        html += `<button class="btn-purple" style="padding:5px; flex:1; font-size:0.8em;" onclick="evolvePartner('B', this)">${costB.title}<br><small>(${costInfo})</small></button></div>`;
                     }
-                } else if (pData.lv === 4) html += `<p style="color:#9C27B0; font-weight:bold; margin-top:10px;">⭐ 最終形態 ⭐</p>`;
+                } else if (pData.lv === 4) {
+                    html += `<p style="color:#9C27B0; font-weight:bold; margin-top:10px; font-size:1.2em;">⭐ 最終形態 ⭐</p>`;
+                }
                 card.innerHTML = html; container.appendChild(card);
             }
         }
@@ -779,28 +788,53 @@
         function evolvePartner(branchChoice, btnElement) {
             let pid = inventory.partnerId; let pData = inventory.partners[pid]; let nextLv = pData.lv + 1;
             let req = nextLv < 3 ? evoCosts[nextLv] : evoCosts[nextLv][branchChoice];
-            if (inventory.manuscript >= req.m && inventory.star >= req.s && inventory.gem >= req.g && inventory.fragment >= (req.f||0)) {
+            
+            if (inventory.manuscript >= req.m && inventory.star >= req.s && inventory.gem >= req.g && inventory.fragment >= (req.f||0) && inventory.wood >= (req.w||0) && inventory.stone >= (req.st||0)) {
                 
-                playSound('legendary'); // 播放震撼音效
-                let card = btnElement.closest('.partner-card');
-                let img = card.querySelector('.partner-img');
+                // 扣除資源
+                inventory.manuscript -= req.m; inventory.star -= req.s; inventory.gem -= req.g; 
+                if(req.f) inventory.fragment -= req.f; if(req.w) inventory.wood -= req.w; if(req.st) inventory.stone -= req.st;
                 
-                // 決定進化動畫類型 (Lv4 終極特效)
-                if (nextLv === 4) img.classList.add('evolving-ultimate');
-                else img.classList.add('evolving-flash');
+                // 啟動動畫 Modal
+                let evoModal = document.getElementById('evo-modal');
+                let evoImg = document.getElementById('evo-img');
+                let evoCircle = document.getElementById('evo-magic-circle');
+                let evoText = document.getElementById('evo-text');
                 
-                // 鎖定所有按鈕避免重複點擊
-                let allBtns = document.querySelectorAll('#partner-list button');
-                allBtns.forEach(b => b.disabled = true);
+                let currentInfo = pokedex[pid][pData.lv < 3 ? 'lv'+pData.lv : 'lv'+pData.lv+pData.branch];
+                let nextInfo = pokedex[pid][nextLv < 3 ? 'lv'+nextLv : 'lv'+nextLv+branchChoice];
                 
-                // 動畫結束後更新進度
+                evoImg.src = getPokePic(currentInfo.p);
+                evoModal.classList.remove('hidden');
+                
+                evoImg.className = 'evo-silhouette';
+                evoText.textContent = nextLv === 4 ? (branchChoice === 'A' ? "🌟 超級進化 (光)..." : "🌌 超級進化 (闇)...") : "✨ 進化中...";
+                evoText.style.color = (branchChoice === 'B' || branchChoice === 'D') ? "#EA80FC" : "#FFEB3B";
+
+                playSound('legendary');
+
+                if (nextLv === 4) {
+                    document.body.classList.add('evo-shake-screen');
+                    evoCircle.classList.remove('hidden');
+                    evoCircle.className = 'evo-magic-circle ' + (branchChoice === 'B' ? 'evo-dark' : 'evo-light');
+                }
+
                 setTimeout(() => {
-                    inventory.manuscript -= req.m; inventory.star -= req.s; inventory.gem -= req.g; if(req.f) inventory.fragment -= req.f;
-                    inventory.partners[pid].lv = nextLv; if (nextLv >= 3) inventory.partners[pid].branch = branchChoice;
-                    playSound('boss_win'); alert("🌟 進化成功！寶可夢獲得了更強大的力量！"); 
-                    updateUI(); openPartnerHub();
-                }, nextLv === 4 ? 2500 : 1500);
-            } else { playSound('error'); alert("❌ 資源不足以進化！"); }
+                    evoImg.className = 'evo-flash-white';
+                    evoImg.src = getPokePic(nextInfo.p);
+                    if(nextLv === 4) document.body.classList.remove('evo-shake-screen');
+                    playSound('win');
+                    evoText.textContent = "進化成功！";
+                    
+                    setTimeout(() => {
+                        evoModal.classList.add('hidden');
+                        evoCircle.classList.add('hidden');
+                        inventory.partners[pid].lv = nextLv; 
+                        if (nextLv >= 3) inventory.partners[pid].branch = branchChoice;
+                        updateUI(); openPartnerHub();
+                    }, 1500);
+                }, 2000); // 2秒後爆發光芒
+            } else { playSound('error'); alert("❌ 資源不足！請檢查是否集齊所需種類。"); }
         }
 
         function openShop() { playSound('click'); updateUI(); hideAll(); document.getElementById('shop-zone').classList.remove('hidden'); }
@@ -834,10 +868,14 @@
                 return; 
             }
 
-            // 降低野生寶可夢出現率為 10%
+            // 根據地區抓取怪獸 (機率調低至 15%)
             if (!inventory.bloodMoonActive && r < 0.15) { 
-                let b = wildBeastPool[Math.floor(Math.random() * wildBeastPool.length)];
-                currentWildBeastId = b.id; // 記錄野生怪獸 ID
+                let poolIds = regionEncounters[currentCategory] || wildBeastPool.map(b => b.id);
+                let availableBeasts = wildBeastPool.filter(b => poolIds.includes(b.id));
+                if(availableBeasts.length === 0) availableBeasts = wildBeastPool;
+                
+                let b = availableBeasts[Math.floor(Math.random() * availableBeasts.length)];
+                currentWildBeastId = b.id; 
                 beastPower = b.power; beastName = b.name; title = "⚠️ 突發野生寶可夢！"; desc = `野生的【${b.name}】跳了出來！\n現在你需要「答對 1 條隨機問題」才能擊退牠！防禦力越高，你的 HP 越多！`;
                 beastImg = getPokePic(b.id);
             }
@@ -899,11 +937,13 @@
 
         function startGame(cat) {
             playSound('click'); hideAll(); currentCategory = cat;
-            if(cat === 'hk') { currentMiningTasks = shuffle(dbHK); document.getElementById('level-title').innerHTML = "🏙️ 關卡一：香港是我家"; } 
-            else if (cat === 'house') { currentMiningTasks = shuffle(dbHouse); document.getElementById('level-title').innerHTML = "🏠 關卡二：安居樂"; } 
-            else if (cat === 'energy') { currentMiningTasks = shuffle(dbEnergy); document.getElementById('level-title').innerHTML = "⚡ 關卡三：能源世界"; } 
-            else if (cat === 'freedom') { currentMiningTasks = shuffle(dbFreedom); document.getElementById('level-title').innerHTML = "⚖️ 關卡四：自由與守規"; }
-            else if (cat === 'culture') { currentMiningTasks = shuffle(dbCulture); document.getElementById('level-title').innerHTML = "🏮 關卡五：文化交融"; }
+            let titles = {'hk':"🌊 香港是我家 (蔚藍之海)", 'house':"🌳 安居樂 (豐饒之森)", 'energy':"🌋 能源世界 (烈焰火山)", 'freedom':"⛰️ 自由與守規 (雷霆高原)", 'culture':"🔮 文化交融 (幻影遺跡)"};
+            document.getElementById('level-title').innerHTML = titles[cat];
+            if(cat === 'hk') currentMiningTasks = shuffle(dbHK); 
+            else if (cat === 'house') currentMiningTasks = shuffle(dbHouse); 
+            else if (cat === 'energy') currentMiningTasks = shuffle(dbEnergy); 
+            else if (cat === 'freedom') currentMiningTasks = shuffle(dbFreedom);
+            else if (cat === 'culture') currentMiningTasks = shuffle(dbCulture);
             currentMiningIdx = 0; document.getElementById('game-mining').classList.remove('hidden'); loadMining();
         }
 
@@ -936,9 +976,6 @@
             return false;
         }
 
-        // ==========================================
-        // 🛠️ 確保不被覆蓋的按鈕顯示邏輯
-        // ==========================================
         function loadMining() {
             if (currentMiningIdx >= currentMiningTasks.length || currentMiningTasks.length===0) {
                 if(currentCategory === 'hk') currentMiningTasks = shuffle(dbHK);
@@ -959,10 +996,12 @@
                 c.onclick = () => {
                     if (opt === t.ans) {
                         playSound('win');
-                        inventory.stone += 5; inventory.wood += 5; inventory.manuscript += 3; inventory.streak += 3; inventory.coin += 3;
-                        if(inventory.streak % 3 === 0) inventory.fragment += 1;
+                        // 💰 獎勵全面升級為 3！
+                        inventory.stone += 3; inventory.wood += 3; inventory.manuscript += 3; inventory.streak += 1; inventory.coin += 5;
+                        if(inventory.streak % 3 === 0) inventory.fragment += 3;
+                        
                         checkMedalUnlock();
-                        document.getElementById('mining-msg').innerHTML = "<span style='color:#4CAF50'>✅ 答對了！獲得 石頭、木材、手稿 與 2金幣！</span>";
+                        document.getElementById('mining-msg').innerHTML = "<span style='color:#4CAF50'>✅ 答對了！獲得 3石頭、3木材、3手稿 與 5金幣！</span>";
                         document.getElementById('btn-hint-mining').classList.add('hidden');
                         document.getElementById('mining-options').innerHTML = ''; 
                         
@@ -973,7 +1012,6 @@
                             updateUI(); checkInvasion();
                         }
                         
-                        // ✅ 最後才顯示「下一題」按鈕，確保不被任何後續邏輯遮蓋
                         if (!bossTriggered) {
                             document.getElementById('btn-next-mining').classList.remove('hidden');
                         }
@@ -1230,10 +1268,10 @@
             let droppedItems = [];
             
             if (!isLegendaryBoss) {
-                if (Math.random() < 0.05 + bonusProb) { inventory.gem += 5; droppedItems.push("💎 寶石 x1"); }
-                if (Math.random() < 0.05 + bonusProb) { inventory.star += 5; droppedItems.push("🌟 星星 x1"); }
-                if (Math.random() < 0.05 + bonusProb) { inventory.manuscript += 5; droppedItems.push("📜 手稿 x1"); }
-                if (Math.random() < 0.02 + bonusProb) { inventory.fragment += 5; droppedItems.push("🔮 碎片 x1"); }
+                if (Math.random() < 0.05 + bonusProb) { inventory.gem += 1; droppedItems.push("💎 寶石 x1"); }
+                if (Math.random() < 0.05 + bonusProb) { inventory.star += 1; droppedItems.push("🌟 星星 x1"); }
+                if (Math.random() < 0.05 + bonusProb) { inventory.manuscript += 1; droppedItems.push("📜 手稿 x1"); }
+                if (Math.random() < 0.02 + bonusProb) { inventory.fragment += 1; droppedItems.push("🔮 碎片 x1"); }
             }
 
             let msg = "";
@@ -1251,7 +1289,6 @@
             let dropMsg = grantBattleRewards(currentBoss !== 'normalBeast' && currentBossData.effect);
 
             if (currentBossData.effect) {
-                // 傳說神獸紀錄
                 if (!inventory.album.legendary[currentLegendaryId]) {
                     inventory.album.legendary[currentLegendaryId] = { count: 0, firstDate: new Date().toLocaleDateString() };
                 }
@@ -1262,7 +1299,6 @@
                 alert(`🎉 史詩級勝利！\n你成功擊敗了遠古神獸【${currentBossData.name}】！\n獲得 20 寶石，20 星星，並在紀念冊解鎖了【傳說神獸閃卡】！\n額外獲得 1 顆【滅世神石】！\n\n` + dropMsg);
                 resetWeather();
             } else if (currentBoss === 'normalBeast') {
-                // 野生怪獸紀錄
                 if (!inventory.album.wild[currentWildBeastId]) {
                     inventory.album.wild[currentWildBeastId] = { count: 0, firstDate: new Date().toLocaleDateString() };
                 }
@@ -1271,7 +1307,6 @@
                 inventory.gem += 2; 
                 alert(`🎉 成功擊退了【${currentBossData.name}】！\n獲得 2 寶石！並且已將其記錄到圖鑑中！\n\n` + dropMsg);
             } else {
-                // 終極首領 Boss 紀錄
                 if ([1, 2, 3, 4].includes(currentBoss)) {
                     if (!inventory.album.boss[currentBoss]) {
                         inventory.album.boss[currentBoss] = { count: 0, firstDate: new Date().toLocaleDateString() };
