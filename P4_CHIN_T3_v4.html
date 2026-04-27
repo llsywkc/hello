@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>數碼冒險：4A森林大作戰 (神獸覺醒版)</title>
+    <title>數碼冒險：4A森林大作戰 (神獸覺醒華麗版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -71,7 +71,7 @@
         .super-gear-card { border: 4px solid #FF9800; background: #FFF3E0; width: 200px; }
         .super-gear-card h3 { margin: 5px 0; color: #E65100; font-size: 1.3em; }
 
-        .status-pic { width: 160px; height: 160px; object-fit: contain; margin: 10px auto; border: 4px solid #AB47BC; border-radius: 10px; background: #000; display: block; }
+        .status-pic { width: 160px; height: 160px; object-fit: contain; margin: 10px auto; border: 4px solid #AB47BC; border-radius: 10px; background: #000; display: block; transition: all 0.3s ease; }
         .battle-pic { width: 250px; height: 250px; object-fit: contain; margin: 10px auto; border: 4px solid #AB47BC; border-radius: 10px; background: #000; display: block; }
         
         .glow-red { animation: glowRed 1.5s infinite; border-color: #f44336 !important; }
@@ -107,23 +107,25 @@
         }
         
         .frozen-options { pointer-events: none; filter: grayscale(100%) blur(1px) brightness(0.8); transition: all 0.3s; }
-        .evolving-flash { animation: evolveGlow 1.5s ease-in-out; }
         
+        /* 💡 頂級華麗進化特效 (3秒時長) */
+        .evolving-flash { animation: evolveGlow 3s ease-in-out forwards; }
         @keyframes evolveGlow { 
-            0% { filter: brightness(1); } 
-            50% { filter: brightness(10) contrast(2) drop-shadow(0 0 20px #FFF); } 
-            100% { filter: brightness(1); } 
+            0% { filter: brightness(1) drop-shadow(0 0 0px transparent); transform: scale(1); } 
+            20% { filter: brightness(2) contrast(1.2) drop-shadow(0 0 30px #00E5FF); transform: scale(1.1) rotate(2deg); }
+            40% { filter: brightness(5) contrast(1.5) drop-shadow(0 0 60px #FF00FF); transform: scale(1.2) rotate(-2deg); }
+            60% { filter: brightness(10) contrast(2) drop-shadow(0 0 100px #FFD700); transform: scale(1.3) rotate(0deg); box-shadow: 0 0 50px #FFF; } 
+            80% { filter: brightness(4) contrast(1.3) drop-shadow(0 0 50px #FFF); transform: scale(1.15) rotate(1deg); }
+            100% { filter: brightness(1) drop-shadow(0 0 0px transparent); transform: scale(1); } 
         }
         
         .blood-moon-ui { background: rgba(0,0,0,0.8); color: #ff5252; padding: 10px; border: 2px solid #ff0000; border-radius: 8px; font-weight: bold; margin-bottom: 10px; text-align: center; }
         
-        /* ================= 紀念冊專屬 CSS ================= */
+        /* 紀念冊專屬 CSS */
         .album-tab-btn { margin: 0 5px; padding: 8px 15px; font-size: 1rem; border-radius: 20px; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.5);}
         .album-tab-btn:hover { transform: translateY(-3px); }
         
         .album-grid { display: grid; gap: 15px; margin-top: 15px; max-height: 50vh; overflow-y: auto; padding: 10px; align-items: end;}
-        
-        /* 依照不同階級動態改變 Grid 大小 */
         .album-grid.normal { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
         .album-grid.boss { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
         .album-grid.epic { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
@@ -131,7 +133,6 @@
         .card-slot { border: 3px solid #ccc; border-radius: 8px; padding: 10px; text-align: center; background: rgba(255,255,255,0.9); cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3);}
         .card-slot:hover { transform: scale(1.05); border-color:#1976D2; }
         
-        /* 依照不同階級動態改變圖片大小 */
         .album-grid.normal .card-slot img { width: 80px; height: 80px; object-fit:contain; }
         .album-grid.boss .card-slot img { width: 120px; height: 120px; object-fit:contain; }
         .album-grid.epic .card-slot img { width: 180px; height: 180px; object-fit:contain; }
@@ -510,7 +511,7 @@
             } catch(e) {}
         }
 
-        // ================== 原有完整題庫 (已省略冗長文字以保持結構清晰，保證不影響運行) ==================
+        // ================== 原有完整題庫 ==================
         const fillTasks = [
             { q: "媽媽突然收到外祖母的消息，匆匆留下一張 ______ 交待家中事宜便外出了。", ans: "便條", options: ["便條", "報紙", "雜誌", "課本"] },
             { q: "以前的科技不發達，人們的溝通多依靠 ______ 作媒介。", ans: "書信", options: ["書信", "食物", "交通", "天氣"] },
@@ -567,6 +568,7 @@
             { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧鬧", "喧囂蔽天"] }
         ];
 
+        // 🚨 這裡就是剛剛導致按鈕壞掉的罪魁禍首，已經完美修復！
         const connectTasks = [
             { q: "找出正確的配對：【 科技 】______", ans: "發達", options: ["發達", "淵博", "浪費", "惡劣"] },
             { q: "找出正確的配對：【 學識 】______", ans: "淵博", options: ["淵博", "發達", "大方", "穩重"] },
@@ -844,6 +846,8 @@
         };
         let inventory = { ...defaultInv };
 
+        function shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
         // ================== 防作弊與解鎖系統 ==================
         function checkDailyReset() {
             let today = new Date().toDateString(); 
@@ -875,14 +879,14 @@
         window.openAlbum = function() {
             playSound('click');
             document.getElementById('album-modal').classList.remove('hidden');
-            renderAlbum('normal'); // 預設開啟普通野獸
+            renderAlbum('normal'); 
         }
 
         window.renderAlbum = function(type) {
             playSound('click');
             let container = document.getElementById('album-grid-container');
             container.innerHTML = "";
-            container.className = 'album-grid ' + type; // 動態套用 CSS 決定大小
+            container.className = 'album-grid ' + type; 
             
             if(!inventory.unlockedCards) inventory.unlockedCards = [];
             if(!inventory.cardStats) inventory.cardStats = {};
@@ -892,7 +896,7 @@
             filteredData.forEach(card => {
                 let isUnlocked = inventory.unlockedCards.includes(card.id);
                 let stats = inventory.cardStats[card.id] || { firstDate: '早期解鎖', count: 0 };
-                if (isUnlocked && stats.count === 0) stats.count = 1; // 兼容舊存檔
+                if (isUnlocked && stats.count === 0) stats.count = 1; 
                 
                 let div = document.createElement('div');
                 div.className = 'card-slot ' + (isUnlocked ? '' : 'card-locked');
@@ -960,7 +964,6 @@
                     if(inventory.cardStats === undefined) inventory.cardStats = {};
                     if(inventory.bloodMoonActive === undefined) inventory.bloodMoonActive = false;
                     
-                    // 相容舊存檔的神獸ID (inferno -> epic_inferno)
                     inventory.unlockedCards = inventory.unlockedCards.map(id => {
                         if (id === 'inferno') return 'epic_inferno';
                         if (id === 'frost') return 'epic_frost';
@@ -969,7 +972,6 @@
                         return id;
                     });
                     
-                    // 將舊解鎖的卡片補入 cardStats
                     inventory.unlockedCards.forEach(id => {
                         if(!inventory.cardStats[id]) inventory.cardStats[id] = { firstDate: '早期解鎖', count: 1 };
                     });
@@ -1072,7 +1074,7 @@
                 document.getElementById('player-tag').classList.remove('hidden');
                 document.getElementById('top-nav').classList.remove('hidden');
                 if(inventory.medals.length > 0) document.getElementById('medal-bar').classList.remove('hidden');
-                renderBloodMoonUI(); // 回主畫面時根據狀態更新背景
+                renderBloodMoonUI(); 
             }
         }
 
@@ -1216,8 +1218,9 @@
                 if(bB) bB.disabled = true;
 
                 let partnerPic = document.getElementById('partner-pic');
+                // ✨ 觸發全新的 3秒華麗進化動畫
                 partnerPic.classList.add('evolving-flash');
-                document.getElementById('partner-name').innerText = "進化中...";
+                document.getElementById('partner-name').innerText = "系統進化中...";
                 playSound('legendary'); 
 
                 setTimeout(() => {
@@ -1232,7 +1235,7 @@
                     alert(`✨ 數據重組！進化成功！\n你的數碼精靈進化成了【${newInfo.n}】！全屬性大幅提升！`);
                     
                     updatePartnerUI(); updateUI();
-                }, 1500);
+                }, 3000); // 延長到 3 秒
             } else {
                 alert("❌ 數據能量（資源）不足，無法進化！請去溫習累積資源吧！");
             }
