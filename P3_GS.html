@@ -574,7 +574,7 @@
                 let p = inventory.partners[inventory.partnerId];
                 let key = p.lv < 3 ? 'lv'+p.lv : 'lv'+p.lv+p.branch;
                 let info = pokedex[inventory.partnerId][key];
-                partnerDisplay.innerHTML = `<img src="${getPokePic(info.p)}" class="partner-icon-sm" alt="搭檔"> <span style="color:#0277BD; font-weight:bold;">${info.n} (+${info.b}攻防)</span>`;
+                partnerDisplay.innerHTML = `<img src="${getPokePic(info.p)}" style="width: 35px; height: 35px; border-radius: 50%; border: 2px solid #FFF; box-shadow: 0 2px 4px rgba(0,0,0,0.3); background: #E1F5FE; vertical-align: middle; margin-right: 5px;" alt="搭檔"> <span style="color:#0277BD; font-weight:bold;">${info.n} (+${info.b}攻防)</span>`;
             } else { partnerDisplay.innerHTML = `<span style="font-size:0.9em; color:#555;">無搭檔</span>`; }
 
             document.getElementById('sg-w-lv').textContent = inventory.superWeaponLv;
