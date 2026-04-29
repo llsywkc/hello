@@ -782,7 +782,7 @@
             { q: "從山頂遠望，景色 ______ 得像一幅畫，令人心情舒暢。", ans: "秀麗", options: ["口吻", "秀麗", "馬馬虎虎", "啼笑皆非"] },
             { q: "經過一個月的練習，我 ______ 學會了騎單車，心裏高興極了。", ans: "終於", options: ["居然", "終於", "已經", "曾經"] },
             { q: "弟弟把冰淇淋掉在地上，只能 ______ 嘆氣，看着它慢慢融化。", ans: "無奈", options: ["不滿", "居然", "無奈", "果然"] },
-            { q: "說好了輪流玩，哥哥卻一直佔着電腦，妹妹 ______ 抗議：「你怎麼可以這樣！」", ans: "不滿", options: ["不滿", "無奈", "幸好", "依然"] },
+            { q: "說好了輪流玩，哥哥卻一直佔着電腦，妹妹 ______ 抗議：「你怎麼可以這樣！」", ans: "不禁", options: ["不禁", "將來", "幸好", "依然"] },
             { q: "平時害羞的小美，今天 ______ 主動報名參加講故事比賽，大家都嚇了一跳。", ans: "居然", options: ["果然", "居然", "不滿", "無奈"] },
             { q: "出門前天色很暗，我就帶了傘，後來 ______ 下起了大雨。", ans: "果然", options: ["居然", "幸好", "果然", "曾經"] },
             { q: "______ 有你陪我練習，不然我一個人還真不敢上台演講。", ans: "幸好", options: ["無奈", "不滿", "果然", "幸好"] },
@@ -1738,7 +1738,7 @@
                     alert("🌑 血月能量耗盡，天空恢復了正常...");
                 }
             } else {
-                if (isCorrect && inventory.castles >= 1 && Math.random() < 0.05) {
+                if (isCorrect && inventory.castles >= 1 && Math.random() < 0.02) {
                     inventory.bloodMoonActive = true;
                     inventory.bloodMoonTarget = Math.floor(Math.random() * 3) + 5; 
                     inventory.bloodMoonStreak = 1;
@@ -1827,7 +1827,7 @@
                     inventory.star -= 1; updateUI(); 
                     eventModal.classList.add('hidden'); startCombat('legendary', currentEvent);
                 };
-            } else if (r < 0.3) {
+            } else if (r < 0.15) {
                 const normalMonsters = [
                     { name: '惡魔獸', pic: 'https://digimon.net/cimages/digimon/devimon.jpg' },
                     { name: '古加獸', pic: 'https://digimon.net/cimages/digimon/kuwagamon.jpg' },
