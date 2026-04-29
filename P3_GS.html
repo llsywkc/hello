@@ -194,7 +194,7 @@
             <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
                 <button class="btn-gold" style="background:#FFC107; color:#333; border-color:#FFA000;" onclick="openAlbum()">🎴 圖鑑與閃卡紀念冊</button>
                 <button class="btn-gold" onclick="openGacha()">🎰 每日抽獎</button>
-                <button class="btn-black" style="background:#424242;" onclick="openSecretMarket()">⛺ 黑市 (碎片兌換)</button>
+                <button class="btn-black" style="background:#424242;" onclick="openSecretMarket()">⛺ llsy市場 (碎片兌換)</button>
                 <button class="btn-red" style="background:#D32F2F;" onclick="openPartnerHub()">🐾 寶可夢進化中心</button>
 
                 <button class="btn-gold" onclick="openShop()">🛒 藥水商店</button>
@@ -229,9 +229,9 @@
                    <br>- <b>滅世魔神</b>：隨機發動一擊必殺大招，答題時間瞬間縮減至 3 秒，答錯即秒殺！
                    <br>- <b>🔥 狂暴化</b>：所有神獸血量低於 50% 時必定狂暴，答題時間永久減少 30%！
                 </p>
-                <h3 style="color:#6A1B9A;">🌟 3. 超級進化與碎片黑市</h3>
+                <h3 style="color:#6A1B9A;">🌟 3. 超級進化與碎片市場</h3>
                 <p>🐾 <b>超級進化</b>：最終階段的「超級進化」需要集齊所有種類的材料。會引發巨大的天地異象動畫！</p>
-                <p>⛺ <b>碎片大翻身</b>：打到的「碎片」現在非常值錢！你可以進入【黑市】用碎片兌換難以取得的「手稿」與其他稀有資源！</p>
+                <p>⛺ <b>碎片大翻身</b>：打到的「碎片」現在非常值錢！你可以進入【llsy市場】用碎片兌換難以取得的「手稿」與其他稀有資源！</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
@@ -251,7 +251,7 @@
         </div>
 
         <div id="secret-market-zone" class="screen hidden">
-            <h2 style="color: #424242;">⛺ 森林秘密黑市 (碎片兌換)</h2>
+            <h2 style="color: #424242;">⛺ 森林秘密llsy市場 (碎片兌換)</h2>
             <p style="font-weight:bold;">手稿太難打？用碎片跟我換吧！</p>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
                 <div class="super-gear-card">
@@ -749,7 +749,7 @@
             openGacha(); updateUI();
         }
 
-        // ⛺ 黑市：碎片兌換系統
+        // ⛺ llsy市場：碎片兌換系統
         function openSecretMarket() {
             playSound('click'); hideAll(); document.getElementById('secret-market-zone').classList.remove('hidden');
         }
