@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (史詩神技升級版)</title>
+    <title>Roblox：3C常識大冒險</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -1018,10 +1018,10 @@
                     if (opt === t.ans) {
                         playSound('win');
                         inventory.stone += 3; inventory.wood += 3; inventory.manuscript += 3; inventory.streak += 1; inventory.coin += 5;
-                        if(inventory.streak % 3 === 0) inventory.fragment += 3;
+                        if(inventory.streak % 3 === 0) inventory.fragment += 20;
                         
                         checkMedalUnlock();
-                        document.getElementById('mining-msg').innerHTML = "<span style='color:#4CAF50'>✅ 答對了！獲得 3石頭、3木材、3手稿 與 5金幣！</span>";
+                        document.getElementById('mining-msg').innerHTML = "<span style='color:#4CAF50'>✅ 答對了！獲得 3石頭、3木材、20手稿 與 5金幣！</span>";
                         document.getElementById('btn-hint-mining').classList.add('hidden');
                         document.getElementById('mining-options').innerHTML = ''; 
                         
