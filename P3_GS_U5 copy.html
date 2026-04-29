@@ -707,7 +707,10 @@
             html += '<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px; width:100%; margin-bottom:20px;">';
             legendaryPool.forEach(l => {
                 let data = inventory.album.legendary[l.id];
-                html += renderAlbumCard(l, data, 'legendary');
+                // 強制讀取 l.img 裡面的數字來獲取正確的圖片 URL
+                let fixedInfo = { id: l.id, name: l.name, desc: l.desc, imgUrl: getPokePic(l.img) };
+                html += renderAlbumCard(fixedInfo, data, 'legendary');
+            });
             });
             html += '</div>';
 
