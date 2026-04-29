@@ -133,7 +133,7 @@
         <div id="start-screen" class="screen hidden">
             <button id="btn-newbie-pack" class="btn-gold" onclick="claimNewbiePack()" style="width: 80%; border: 4px dashed #FFF; margin-bottom: 10px;">🎁 領取新手禮包 (所有材料+50)</button>
 
-            <button class="btn-teal" onclick="openPartnerHub()" style="width: 80%; border: 4px solid #004D40; font-size: 1.3em;">🐾 寶可夢搭檔中心 (進化與裝備)</button>
+            <button class="btn-teal" onclick="openPartnerHub()" style="width: 80%; border: 4px solid #004D40; font-size: 1.3em;">🐾 寶可夢搭檔中心 (進化與切換)</button>
             
             <button class="btn-grey" onclick="openInstructions()" style="width: 80%; margin-top: 10px;">📖 遊戲說明 (新手必看)</button>
             <hr style="width: 80%; border-top: 4px dashed #E65100;">
@@ -166,8 +166,8 @@
         <div id="instruction-screen" class="screen hidden">
             <h2>📖 冒險者指南</h2>
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #FF9800; max-height: 400px; overflow-y: auto;">
-                <h3 style="color:#00796B; margin-top:0;">🌟 寶可夢搭檔系統 (全新!)</h3>
-                <p>在「搭檔中心」設定你的寶可夢，牠們會為你提供強大的攻防加成！收集足夠的碎片與寶石，就能讓牠們展現震撼的進化！</p>
+                <h3 style="color:#00796B; margin-top:0;">🌟 寶可夢搭檔系統</h3>
+                <p>在「搭檔中心」選擇並設定你的寶可夢，牠們會為你提供強大的攻防加成！收集足夠的碎片與寶石，就能讓牠們進化至更強的形態！</p>
                 <h3 style="color:#E65100;">1. 戰鬥力 (攻/防) 與怪獸遭遇</h3>
                 <p>在地圖探險時，有機率遇到<b>隨機怪獸</b>！你需要有足夠的「⚔️攻擊力」與「🛡️防禦力」才能迎戰。打贏可獲稀有資源！如果打不過，可以選擇「🏃 逃走」(75% 成功率)。建成「豪華城堡」後，甚至會遇到<b>隱藏神獸</b>！</p>
                 <h3 style="color:#B71C1C;">2. 如何獲得元素？</h3>
@@ -352,10 +352,10 @@
             }
         });
 
-        // --- 進化路線數據庫 ---
+        // --- 進化路線數據庫 (全面擴充4大屬性！) ---
         const pokedex = {
             'fire': { 
-                title: "火系搭檔", 
+                title: "🔥 火系搭檔", 
                 lv0: { n: "小火龍", p: "4", b: 0 }, 
                 lv1: { n: "火恐龍", p: "5", b: 10 }, 
                 lv2: { n: "噴火龍", p: "6", b: 30 }, 
@@ -363,6 +363,36 @@
                 lv3B: { n: "超級噴火龍X (闇)", p: "10034", b: 80 }, 
                 lv4A: { n: "鳳王 (光極)", p: "250", b: 150 }, 
                 lv4B: { n: "固拉多 (闇極)", p: "383", b: 180 } 
+            },
+            'water': {
+                title: "💧 水系搭檔", 
+                lv0: { n: "傑尼龜", p: "7", b: 0 }, 
+                lv1: { n: "卡咪龜", p: "8", b: 10 }, 
+                lv2: { n: "水箭龜", p: "9", b: 30 }, 
+                lv3A: { n: "超級水箭龜 (光)", p: "10036", b: 60 }, 
+                lv3B: { n: "洗翠大劍鬼 (闇)", p: "10243", b: 80 }, 
+                lv4A: { n: "洛奇亞 (光極)", p: "249", b: 150 }, 
+                lv4B: { n: "蓋歐卡 (闇極)", p: "382", b: 180 }
+            },
+            'grass': {
+                title: "🍃 草系搭檔", 
+                lv0: { n: "妙蛙種子", p: "1", b: 0 }, 
+                lv1: { n: "妙蛙草", p: "2", b: 10 }, 
+                lv2: { n: "妙蛙花", p: "3", b: 30 }, 
+                lv3A: { n: "超級妙蛙花 (光)", p: "10033", b: 60 }, 
+                lv3B: { n: "洗翠狙射樹梟 (闇)", p: "10244", b: 80 }, 
+                lv4A: { n: "雪拉比 (光極)", p: "251", b: 150 }, 
+                lv4B: { n: "烈空坐 (闇極)", p: "384", b: 180 }
+            },
+            'electric': {
+                title: "⚡ 電系搭檔",
+                lv0: { n: "皮丘", p: "172", b: 0 },
+                lv1: { n: "皮卡丘", p: "25", b: 10 },
+                lv2: { n: "雷丘", p: "26", b: 30 },
+                lv3A: { n: "阿羅拉雷丘 (光)", p: "10100", b: 60 },
+                lv3B: { n: "倫琴貓 (闇)", p: "405", b: 80 },
+                lv4A: { n: "捷克羅姆 (光極)", p: "644", b: 150 },
+                lv4B: { n: "捷拉奧拉 (闇極)", p: "807", b: 180 }
             }
         };
 
@@ -376,9 +406,8 @@
             inv: { wood: 0, stone: 0, atk: 10, def: 10, gem: 0, star: 0, manu: 0, frag: 0 },
             gear: { weapon: 0, shield: 0 }, buildings: { tent: 0, cabin: 0, castle: 0, base: 0, park: 0 },
             claimedNewbiePack: false,
-            // 寶可夢搭檔擴充結構
             partnerId: null,
-            partners: { 'fire': { lv: 0, branch: null } }
+            partners: {} // 將由迴圈自動補齊
         };
 
         function autoSave() { localStorage.setItem('roblox_p2_save', JSON.stringify(player)); }
@@ -392,9 +421,8 @@
             let data = localStorage.getItem('roblox_p2_save');
             if (data) {
                 let loadedPlayer = JSON.parse(data);
-                // 兼容舊存檔擴充
                 player = { ...player, ...loadedPlayer };
-                if (!player.partners) player.partners = { 'fire': { lv: 0, branch: null } };
+                if (!player.partners) player.partners = {};
                 if (player.partnerId === undefined) player.partnerId = null;
                 
                 document.getElementById("input-name").value = player.name;
@@ -449,7 +477,165 @@
             return family[stage].b;
         }
 
-        // --- 遊戲狀態管理 ---
+        // --- 搭檔中心邏輯 ---
+        function openPartnerHub() {
+            hideAllScreens();
+            document.getElementById("partner-hub-screen").classList.remove("hidden");
+            renderPartnerHub();
+        }
+
+        function renderPartnerHub() {
+            let html = "";
+            for(let key in pokedex) {
+                let fam = pokedex[key];
+                if(!player.partners[key]) player.partners[key] = {lv: 0, branch: null};
+                let pData = player.partners[key];
+                let stage = "lv" + pData.lv + (pData.branch || "");
+                let poke = fam[stage];
+                
+                let costStr = ""; let canEvo = false;
+                if(pData.lv === 0) { costStr = "需 5 碎片"; canEvo = player.inv.frag >= 5; }
+                else if(pData.lv === 1) { costStr = "需 10 碎片"; canEvo = player.inv.frag >= 10; }
+                else if(pData.lv === 2) { costStr = "需 5 寶石"; canEvo = player.inv.gem >= 5; }
+                else if(pData.lv === 3) { costStr = "需 10 寶石, 5 星星"; canEvo = player.inv.gem >= 10 && player.inv.star >= 5; }
+
+                html += `
+                    <div style="border: 4px solid #00796B; background: #E0F2F1; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; width: 220px;">
+                        <h3 style="margin-top: 0; color: #004D40;">${fam.title}</h3>
+                        <img src="${getPokePic(poke.p)}" style="width: 120px; height: 120px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));">
+                        <h4 style="color: #E65100;">${poke.n} <br> <small>(全屬性加成: +${poke.b})</small></h4>
+                        <button class="btn-green" style="padding: 8px 15px; font-size: 1em;" onclick="setPartner('${key}')">${player.partnerId === key ? "✔️ 目前搭檔" : "設為搭檔"}</button>
+                `;
+                
+                if(pData.lv < 4) {
+                    if(pData.lv === 2) {
+                         html += `<br><button class="btn-gold" style="padding: 5px 10px; font-size: 0.9em; margin-top: 10px;" ${canEvo?"":"disabled"} onclick="evolvePartner('${key}', 'A')">✨ 進化光系 (${costStr})</button>
+                                  <button class="btn-purple" style="padding: 5px 10px; font-size: 0.9em; margin-top: 5px;" ${canEvo?"":"disabled"} onclick="evolvePartner('${key}', 'B')">🌌 進化闇系 (${costStr})</button>`;
+                    } else if(pData.lv === 3) {
+                         html += `<br><button class="btn-red" style="padding: 5px 10px; font-size: 0.9em; margin-top: 10px;" ${canEvo?"":"disabled"} onclick="evolvePartner('${key}', '${pData.branch}')">🔥 究極進化 (${costStr})</button>`;
+                    } else {
+                         html += `<br><button class="btn-blue" style="padding: 5px 10px; font-size: 0.9em; margin-top: 10px;" ${canEvo?"":"disabled"} onclick="evolvePartner('${key}', null)">⭐ 進化 (${costStr})</button>`;
+                    }
+                } else {
+                    html += `<br><p style="color:#D32F2F; font-weight:bold; margin-top:10px;">🌟 已達最終形態</p>`;
+                }
+                html += `</div>`;
+            }
+            document.getElementById("partner-list").innerHTML = html;
+        }
+
+        function setPartner(id) {
+            player.partnerId = id;
+            playSound('craft');
+            renderStats();
+            renderPartnerHub();
+            autoSave();
+        }
+
+        function evolvePartner(id, branchChoice) {
+            let pData = player.partners[id];
+            
+            if(pData.lv === 0) { player.inv.frag -= 5; }
+            else if(pData.lv === 1) { player.inv.frag -= 10; }
+            else if(pData.lv === 2) { player.inv.gem -= 5; pData.branch = branchChoice; }
+            else if(pData.lv === 3) { player.inv.gem -= 10; player.inv.star -= 5; }
+            
+            let oldStage = "lv" + pData.lv + (pData.branch || "");
+            pData.lv++;
+            let newStage = "lv" + pData.lv + (pData.branch || "");
+            
+            let oldPoke = pokedex[id][oldStage];
+            let newPoke = pokedex[id][newStage];
+            
+            autoSave();
+
+            document.getElementById("evo-modal").classList.remove("hidden");
+            let evoImg = document.getElementById("evo-img");
+            let magicCircle = document.getElementById("evo-bg-circle");
+            let body = document.body;
+            let evoText = document.getElementById("evo-text");
+            
+            evoImg.src = getPokePic(oldPoke.p);
+            evoImg.className = "";
+            magicCircle.className = "hidden evo-magic-circle";
+            body.classList.remove("evo-shake-screen");
+            evoText.innerText = "……哦？搭檔的樣子有點奇怪！";
+
+            playSound('craft'); 
+            setTimeout(() => {
+                evoImg.classList.add("evo-silhouette");
+            }, 500);
+
+            setTimeout(() => {
+                evoImg.classList.remove("evo-silhouette");
+                evoImg.classList.add("evo-flash-white");
+                evoText.innerText = "正在進化……";
+                playSound('win'); 
+                
+                if (pData.lv >= 3) { 
+                    body.classList.add("evo-shake-screen");
+                    magicCircle.classList.remove("hidden");
+                    if (pData.branch === 'A') magicCircle.classList.add("evo-light");
+                    else magicCircle.classList.add("evo-dark");
+                }
+            }, 2500);
+
+            setTimeout(() => {
+                evoImg.classList.remove("evo-flash-white");
+                body.classList.remove("evo-shake-screen");
+                magicCircle.classList.add("hidden");
+                evoImg.src = getPokePic(newPoke.p);
+                evoText.innerText = `進化成功！變成了 ${newPoke.n}！`;
+                playSound('correct');
+            }, 4000);
+
+            setTimeout(() => {
+                document.getElementById("evo-modal").classList.add("hidden");
+                renderStats();
+                renderPartnerHub();
+            }, 6500);
+        }
+
+        function setPlayerName() {
+            let name = document.getElementById("input-name").value || "小冒險者";
+            player.name = name;
+            document.getElementById("display-name").innerText = name;
+            document.getElementById("player-tag").classList.remove("hidden");
+            document.getElementById("top-nav").classList.remove("hidden");
+            renderStats(); goHome(); autoSave();
+        }
+
+        function renderStats() {
+            let pBonus = getPartnerBonus();
+            let totalAtk = player.inv.atk + pBonus;
+            let totalDef = player.inv.def + pBonus;
+
+            document.getElementById("inv-wood").innerText = player.inv.wood;
+            document.getElementById("inv-stone").innerText = player.inv.stone;
+            document.getElementById("inv-atk").innerText = totalAtk + (pBonus > 0 ? ` (+${pBonus})` : "");
+            document.getElementById("inv-def").innerText = totalDef + (pBonus > 0 ? ` (+${pBonus})` : "");
+            document.getElementById("inv-gem").innerText = player.inv.gem;
+            document.getElementById("inv-star").innerText = player.inv.star;
+            document.getElementById("inv-manu").innerText = player.inv.manu;
+            document.getElementById("inv-frag").innerText = player.inv.frag;
+            document.getElementById("streak-counter").innerText = "🔥 連對: " + player.streak;
+
+            let badge = document.getElementById("partner-display");
+            if (player.partnerId) {
+                let pData = player.partners[player.partnerId];
+                let fam = pokedex[player.partnerId];
+                let stage = "lv" + pData.lv + (pData.branch || "");
+                let currentPoke = fam[stage];
+                
+                badge.classList.remove("hidden");
+                document.getElementById("partner-icon-img").src = getPokePic(currentPoke.p);
+                document.getElementById("partner-name-text").innerText = currentPoke.n;
+            } else {
+                badge.classList.add("hidden");
+            }
+        }
+
+        // --- 遊戲系統管理 ---
         let currentMode = ""; let currentQuestion = null;
         let onNextAction = "normal"; 
         let isMonsterFight = false; let currentMonster = null;
@@ -467,14 +653,13 @@
             { name: "朱雀", emoji: "🦚", atk: 120, def: 90, type: "mythical", rewards: "💎 寶石 +15, 🌟 星星 +15" }
         ];
 
-        // --- 題庫 ---
         const questions = {
-            dictation: [ // 50題 默書及語文運用 (包含了新增的10題)
+            dictation: [ // 50題 默書及語文運用
                 { q: "遇到不懂的生字，我們可以向老師___。", options: ["請教", "介紹", "欣賞", "連忙"], a: "請教", hint: "虛心向別人詢問和學習。" },
                 { q: "同學們___上台分享自己最喜歡的圖書。", options: ["輪流", "期待", "入神", "介紹"], a: "輪流", hint: "按照次序一個接一個地進行。" },
                 { q: "學校即將舉行陸運會，大家都非常___。", options: ["期待", "有趣", "介紹", "連忙"], a: "期待", hint: "充滿希望地等待。" },
                 { q: "這本童話書的故事十分___，我看了好幾次呢！", options: ["有趣", "輪流", "活動", "介紹"], a: "有趣", hint: "能引起人的好奇心和喜愛。" },
-                { q: "週末，爸爸帶我到博物館參觀，為我___恐恐的歷史。", options: ["介紹", "期待", "連忙", "請教"], a: "介紹", hint: "讓人了解有關的情況。" },
+                { q: "週末，爸爸帶我到博物館參觀，為我___恐龍的歷史。", options: ["介紹", "期待", "連忙", "請教"], a: "介紹", hint: "讓人了解有關的情況。" },
                 { q: "下課鐘聲一響，同學們___收拾書包準備回家。", options: ["連忙", "欣賞", "輪流", "入神"], a: "連忙", hint: "動作迅速、急忙地做某事。" },
                 { q: "我們一家人坐在沙發上，___精彩的電視節目。", options: ["欣賞", "活動", "期待", "請教"], a: "欣賞", hint: "享受美好的事物並感到快樂。" },
                 { q: "弟弟看故事書看得十分___，連媽媽叫他也聽不到。", options: ["入神", "有趣", "介紹", "輪流"], a: "入神", hint: "注意力非常集中。" },
@@ -653,175 +838,6 @@
         function openSuperForge() { hideAllScreens(); document.getElementById("super-forge-zone").classList.remove("hidden"); }
         function openForgeZone() { hideAllScreens(); document.getElementById("forge-zone").classList.remove("hidden"); }
         function openBuildZone() { hideAllScreens(); document.getElementById("build-zone").classList.remove("hidden"); }
-        
-        // 打開寶可夢搭檔中心
-        function openPartnerHub() {
-            hideAllScreens();
-            document.getElementById("partner-hub-screen").classList.remove("hidden");
-            renderPartnerHub();
-        }
-
-        // 渲染寶可夢列表
-        function renderPartnerHub() {
-            let html = "";
-            for(let key in pokedex) {
-                let fam = pokedex[key];
-                if(!player.partners[key]) player.partners[key] = {lv: 0, branch: null};
-                let pData = player.partners[key];
-                let stage = "lv" + pData.lv + (pData.branch || "");
-                let poke = fam[stage];
-                
-                let costStr = ""; let canEvo = false;
-                if(pData.lv === 0) { costStr = "需 5 碎片"; canEvo = player.inv.frag >= 5; }
-                else if(pData.lv === 1) { costStr = "需 10 碎片"; canEvo = player.inv.frag >= 10; }
-                else if(pData.lv === 2) { costStr = "需 5 寶石"; canEvo = player.inv.gem >= 5; }
-                else if(pData.lv === 3) { costStr = "需 10 寶石, 5 星星"; canEvo = player.inv.gem >= 10 && player.inv.star >= 5; }
-
-                html += `
-                    <div style="border: 4px solid #00796B; background: #E0F2F1; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; width: 220px;">
-                        <h3 style="margin-top: 0; color: #004D40;">${fam.title}</h3>
-                        <img src="${getPokePic(poke.p)}" style="width: 120px; height: 120px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));">
-                        <h4 style="color: #E65100;">${poke.n} <br> <small>(全屬性加成: +${poke.b})</small></h4>
-                        <button class="btn-green" style="padding: 8px 15px; font-size: 1em;" onclick="setPartner('${key}')">${player.partnerId === key ? "✔️ 目前搭檔" : "設為搭檔"}</button>
-                `;
-                
-                if(pData.lv < 4) {
-                    if(pData.lv === 2) {
-                         html += `<br><button class="btn-gold" style="padding: 5px 10px; font-size: 0.9em; margin-top: 10px;" ${canEvo?"":"disabled"} onclick="evolvePartner('${key}', 'A')">✨ 進化光系 (${costStr})</button>
-                                  <button class="btn-purple" style="padding: 5px 10px; font-size: 0.9em; margin-top: 5px;" ${canEvo?"":"disabled"} onclick="evolvePartner('${key}', 'B')">🌌 進化闇系 (${costStr})</button>`;
-                    } else if(pData.lv === 3) {
-                         html += `<br><button class="btn-red" style="padding: 5px 10px; font-size: 0.9em; margin-top: 10px;" ${canEvo?"":"disabled"} onclick="evolvePartner('${key}', '${pData.branch}')">🔥 究極進化 (${costStr})</button>`;
-                    } else {
-                         html += `<br><button class="btn-blue" style="padding: 5px 10px; font-size: 0.9em; margin-top: 10px;" ${canEvo?"":"disabled"} onclick="evolvePartner('${key}', null)">⭐ 進化 (${costStr})</button>`;
-                    }
-                } else {
-                    html += `<br><p style="color:#D32F2F; font-weight:bold; margin-top:10px;">🌟 已達最終形態</p>`;
-                }
-                html += `</div>`;
-            }
-            document.getElementById("partner-list").innerHTML = html;
-        }
-
-        // 設置搭檔
-        function setPartner(id) {
-            player.partnerId = id;
-            playSound('craft');
-            renderStats();
-            renderPartnerHub();
-            autoSave();
-        }
-
-        // 執行進化與動畫
-        function evolvePartner(id, branchChoice) {
-            let pData = player.partners[id];
-            
-            // 扣除材料
-            if(pData.lv === 0) { player.inv.frag -= 5; }
-            else if(pData.lv === 1) { player.inv.frag -= 10; }
-            else if(pData.lv === 2) { player.inv.gem -= 5; pData.branch = branchChoice; }
-            else if(pData.lv === 3) { player.inv.gem -= 10; player.inv.star -= 5; }
-            
-            let oldStage = "lv" + pData.lv + (pData.branch || "");
-            pData.lv++;
-            let newStage = "lv" + pData.lv + (pData.branch || "");
-            
-            let oldPoke = pokedex[id][oldStage];
-            let newPoke = pokedex[id][newStage];
-            
-            autoSave();
-
-            // 觸發震撼動畫
-            document.getElementById("evo-modal").classList.remove("hidden");
-            let evoImg = document.getElementById("evo-img");
-            let magicCircle = document.getElementById("evo-bg-circle");
-            let body = document.body;
-            let evoText = document.getElementById("evo-text");
-            
-            evoImg.src = getPokePic(oldPoke.p);
-            evoImg.className = "";
-            magicCircle.className = "hidden evo-magic-circle";
-            body.classList.remove("evo-shake-screen");
-            evoText.innerText = "……哦？搭檔的樣子有點奇怪！";
-
-            // 階段一：剪影閃爍
-            playSound('craft'); 
-            setTimeout(() => {
-                evoImg.classList.add("evo-silhouette");
-            }, 500);
-
-            // 階段二：閃白光 / 究極魔法陣震屏
-            setTimeout(() => {
-                evoImg.classList.remove("evo-silhouette");
-                evoImg.classList.add("evo-flash-white");
-                evoText.innerText = "正在進化……";
-                playSound('win'); 
-                
-                if (pData.lv >= 3) { 
-                    body.classList.add("evo-shake-screen");
-                    magicCircle.classList.remove("hidden");
-                    if (pData.branch === 'A') magicCircle.classList.add("evo-light");
-                    else magicCircle.classList.add("evo-dark");
-                }
-            }, 2500);
-
-            // 階段三：揭曉新形態
-            setTimeout(() => {
-                evoImg.classList.remove("evo-flash-white");
-                body.classList.remove("evo-shake-screen");
-                magicCircle.classList.add("hidden");
-                evoImg.src = getPokePic(newPoke.p);
-                evoText.innerText = `進化成功！變成了 ${newPoke.n}！`;
-                playSound('correct');
-            }, 4000);
-
-            // 關閉視窗
-            setTimeout(() => {
-                document.getElementById("evo-modal").classList.add("hidden");
-                renderStats();
-                renderPartnerHub();
-            }, 6500);
-        }
-
-        function setPlayerName() {
-            let name = document.getElementById("input-name").value || "小冒險者";
-            player.name = name;
-            document.getElementById("display-name").innerText = name;
-            document.getElementById("player-tag").classList.remove("hidden");
-            document.getElementById("top-nav").classList.remove("hidden");
-            renderStats(); goHome(); autoSave();
-        }
-
-        // 修改 renderStats 以動態整合搭檔數值
-        function renderStats() {
-            let pBonus = getPartnerBonus();
-            let totalAtk = player.inv.atk + pBonus;
-            let totalDef = player.inv.def + pBonus;
-
-            document.getElementById("inv-wood").innerText = player.inv.wood;
-            document.getElementById("inv-stone").innerText = player.inv.stone;
-            document.getElementById("inv-atk").innerText = totalAtk + (pBonus > 0 ? ` (+${pBonus})` : "");
-            document.getElementById("inv-def").innerText = totalDef + (pBonus > 0 ? ` (+${pBonus})` : "");
-            document.getElementById("inv-gem").innerText = player.inv.gem;
-            document.getElementById("inv-star").innerText = player.inv.star;
-            document.getElementById("inv-manu").innerText = player.inv.manu;
-            document.getElementById("inv-frag").innerText = player.inv.frag;
-            document.getElementById("streak-counter").innerText = "🔥 連對: " + player.streak;
-
-            // 頂部導航欄更新搭檔頭像
-            let badge = document.getElementById("partner-display");
-            if (player.partnerId) {
-                let pData = player.partners[player.partnerId];
-                let fam = pokedex[player.partnerId];
-                let stage = "lv" + pData.lv + (pData.branch || "");
-                let currentPoke = fam[stage];
-                
-                badge.classList.remove("hidden");
-                document.getElementById("partner-icon-img").src = getPokePic(currentPoke.p);
-                document.getElementById("partner-name-text").innerText = currentPoke.n;
-            } else {
-                badge.classList.add("hidden");
-            }
-        }
 
         function startGame(mode) {
             currentMode = mode;
@@ -859,7 +875,6 @@
             document.getElementById("mon-req-atk").innerText = currentMonster.atk;
             document.getElementById("mon-req-def").innerText = currentMonster.def;
 
-            // 判斷時加入搭檔加成
             let totalAtk = player.inv.atk + getPartnerBonus();
             let totalDef = player.inv.def + getPartnerBonus();
 
@@ -1118,7 +1133,7 @@
 
         function startBossFight(level) {
             currentBoss = level; bossMaxTime = level === 1 ? 15 : (level === 2 ? 10 : 5);
-            // 加入搭檔加成計算 HP
+            
             let totalDef = player.inv.def + getPartnerBonus();
             playerMaxHP = 50 + totalDef * 2; 
             playerHP = playerMaxHP; bossCorrectCount = 0;
