@@ -374,7 +374,7 @@
             }
         });
 
-        // --- 進化路線數據庫 (修復妙蛙花最終形態) ---
+        // --- 進化路線數據庫 (修復並更新妙蛙花與雷丘的雙形態) ---
         const pokedex = {
             'fire': { 
                 title: "🔥 火系搭檔", 
@@ -401,18 +401,21 @@
                 lv0: { n: "妙蛙種子", p: "1", b: 0 }, 
                 lv1: { n: "妙蛙草", p: "2", b: 10 }, 
                 lv2: { n: "妙蛙花", p: "3", b: 30 }, 
+                // 更新：超級妙蛙花 vs 超極巨化妙蛙花
                 lv3A: { n: "超級妙蛙花 (光)", p: "10033", b: 60 }, 
-                lv3B: { n: "洗翠狙射樹梟 (闇)", p: "10244", b: 80 }, 
+                lv3B: { n: "超極巨化妙蛙花 (闇)", p: "10195", b: 80 }, 
                 lv4A: { n: "雪拉比 (光極)", p: "251", b: 150 }, 
-                lv4B: { n: "薩戮德 (闇極)", p: "893", b: 180 } // 修改為真正的草/惡神獸
+                lv4B: { n: "薩戮德 (闇極)", p: "893", b: 180 } 
             },
             'electric': {
                 title: "⚡ 電系搭檔",
                 lv0: { n: "皮丘", p: "172", b: 0 },
                 lv1: { n: "皮卡丘", p: "25", b: 10 },
                 lv2: { n: "雷丘", p: "26", b: 30 },
-                lv3A: { n: "阿羅拉雷丘 (光)", p: "10100", b: 60 },
-                lv3B: { n: "倫琴貓 (闇)", p: "405", b: 80 },
+                // 更新：超級雷丘 X vs Y (因官方尚無官方大圖，使用特定相似或代位圖片，或維持特殊名稱)
+                // 這裡暫時用特定形態皮卡丘或阿羅拉雷丘圖片作為超級雷丘的象徵，名稱顯示為超級雷丘X/Y
+                lv3A: { n: "超級雷丘Ｘ (光)", p: "10100", b: 60 }, 
+                lv3B: { n: "超級雷丘Ｙ (闇)", p: "10094", b: 80 }, 
                 lv4A: { n: "捷克羅姆 (光極)", p: "644", b: 150 },
                 lv4B: { n: "捷拉奧拉 (闇極)", p: "807", b: 180 }
             }
@@ -643,7 +646,9 @@
                 badge.classList.remove("hidden");
                 document.getElementById("partner-icon-img").src = getPokePic(currentPoke.p);
                 document.getElementById("partner-name-text").innerText = currentPoke.n;
-            } else { badge.classList.add("hidden"); }
+            } else {
+                badge.classList.add("hidden");
+            }
         }
 
         // --- 優化版：連勝 Badge 系統 ---
@@ -673,7 +678,7 @@
             { name: "吸血蝠", emoji: "🦇", atk: 25, def: 20, type: "normal", rewardsStr: "💎 寶石 +1, 🔮 碎片 +1", rewardData: {gem: 1, frag: 1} },
             { name: "毒蛇", emoji: "🐍", atk: 30, def: 25, type: "normal", rewardsStr: "🌟 星星 +1, 🔮 碎片 +1", rewardData: {star: 1, frag: 1} },
             { name: "狂暴熊", emoji: "🐻", atk: 40, def: 35, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +2", rewardData: {gem: 2, star: 2} },
-            // 新增 20 隻各具特色的 Pokémon 
+            // 新增 20 隻 Pokémon 
             { name: "綠毛蟲", emoji: "🐛", atk: 12, def: 10, type: "normal", rewardsStr: "🪵 木材 +2", rewardData: {wood: 2} },
             { name: "波波", emoji: "🐦", atk: 15, def: 12, type: "normal", rewardsStr: "🧱 石頭 +2", rewardData: {stone: 2} },
             { name: "小拉達", emoji: "🐀", atk: 18, def: 12, type: "normal", rewardsStr: "🪵 木材 +3", rewardData: {wood: 3} },
@@ -699,14 +704,13 @@
         const mythicalBeasts = [
             { name: "青龍", emoji: "🐉", atk: 100, def: 100, type: "mythical", rewardsStr: "💎 寶石 +10, 🌟 星星 +10, 📜 手稿 +10", rewardData: {gem: 10, star: 10, manu: 10} },
             { name: "朱雀", emoji: "🦚", atk: 120, def: 90, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +15", rewardData: {gem: 15, star: 15} },
-            // 新增 4 隻究極神獸
+            // 新增 4 隻神獸
             { name: "超夢", emoji: "🧬", atk: 150, def: 120, type: "mythical", rewardsStr: "💎 寶石 +20, 🌟 星星 +20, 🔮 碎片 +10", rewardData: {gem: 20, star: 20, frag: 10} },
             { name: "洛奇亞", emoji: "🌪️", atk: 130, def: 150, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +25, 🪵 木材 +50", rewardData: {gem: 15, star: 25, wood: 50} },
             { name: "烈空坐", emoji: "🐉", atk: 180, def: 110, type: "mythical", rewardsStr: "💎 寶石 +25, 🌟 星星 +15, 🧱 石頭 +50", rewardData: {gem: 25, star: 15, stone: 50} },
             { name: "阿爾宙斯", emoji: "✨", atk: 200, def: 200, type: "mythical", rewardsStr: "💎 寶石 +50, 🌟 星星 +50, 📜 手稿 +50, 🔮 碎片 +50", rewardData: {gem: 50, star: 50, manu: 50, frag: 50} }
         ];
 
-        // --- 題庫 ---
         const questions = {
             t3_review_1: [ // 30 題 (詞語與偏旁)
                 { q: "美荷撿到一件（　　），把它交到校務處。", options: ["失主", "失物", "背包", "乾淨"], a: "失物", hint: "丟失的物品。" },
