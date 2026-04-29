@@ -192,7 +192,7 @@
             <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
                 <button class="btn-gold" style="background:#FFC107; color:#333; border-color:#FFA000;" onclick="openAlbum()">🎴 圖鑑與閃卡紀念冊</button>
                 <button class="btn-gold" onclick="openGacha()">🎰 每日抽獎</button>
-                <button class="btn-black" style="background:#424242;" onclick="openSecretMarket()">⛺ 黑市 (碎片兌換)</button>
+                <button class="btn-black" style="background:#424242;" onclick="openSecretMarket()">⛺ llsy市場 </button>
                 <button class="btn-red" style="background:#D32F2F;" onclick="openPartnerHub()">🐾 寶可夢進化中心</button>
 
                 <button class="btn-gold" onclick="openShop()">🛒 藥水商店</button>
@@ -247,21 +247,21 @@
         </div>
 
         <div id="secret-market-zone" class="screen hidden">
-            <h2 style="color: #424242;">⛺ 森林秘密黑市 (碎片兌換)</h2>
+            <h2 style="color: #424242;">⛺ 森林llsy市場 </h2>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
                 <div class="super-gear-card">
                     <h3>📜 兌換神秘手稿</h3>
-                    <p>1 手稿 / <span style="color:#00E5FF">10 碎片</span></p>
+                    <p>1 手稿 / <span style="color:#00E5FF">60 金幣</span></p>
                     <button class="btn-blue" onclick="buySecret('manu')">兌換</button>
                 </div>
                 <div class="super-gear-card">
                     <h3>💎 兌換璀璨寶石</h3>
-                    <p>1 寶石 / <span style="color:#00E5FF">15 碎片</span></p>
+                    <p>1 寶石 / <span style="color:#00E5FF">50 金幣</span></p>
                     <button class="btn-purple" onclick="buySecret('gem')">兌換</button>
                 </div>
                 <div class="super-gear-card">
                     <h3>🌟 兌換許願星星</h3>
-                    <p>1 星星 / <span style="color:#00E5FF">15 碎片</span></p>
+                    <p>1 星星 / <span style="color:#00E5FF">20 金幣</span></p>
                     <button class="btn-orange" onclick="buySecret('star')">兌換</button>
                 </div>
             </div>
@@ -758,7 +758,7 @@
             if (inventory.star < 1) return alert("❌ 星星不足！需要 1 顆星星才能抽獎。");
             inventory.star--; inventory.gachaDrawsToday++;
             let r = Math.random();
-            if (r < 0.02) { inventory.gem += 50; inventory.fragment += 3; playSound('boss_win'); alert("🎉 奇蹟發生！你中了傳說大獎！\n獲得 50 寶石 + 3 碎片！"); } 
+            if (r < 0.02) { inventory.gem += 50; inventory.fragment += 30; playSound('boss_win'); alert("🎉 奇蹟發生！你中了傳說大獎！\n獲得 50 寶石 + 30 碎片！"); } 
             else if (r < 0.30) { inventory.gem += 5; playSound('win'); alert("✨ 恭喜！你中了稀有獎！\n獲得 5 寶石！"); } 
             else { inventory.wood += 10; inventory.stone += 10; playSound('medal'); alert("📦 你中了普通獎！\n獲得 10 木材 與 10 石頭！"); }
             openGacha(); updateUI();
@@ -767,9 +767,9 @@
         function openSecretMarket() { playSound('click'); hideAll(); document.getElementById('secret-market-zone').classList.remove('hidden'); }
         function buySecret(type) {
             playSound('click');
-            if (type === 'manu') { if (inventory.fragment >= 10) { inventory.fragment -= 10; inventory.manuscript++; playSound('win'); alert(`✅ 兌換成功！獲得 1 張手稿！`); } else alert("❌ 碎片不足！"); }
-            else if (type === 'gem') { if (inventory.fragment >= 15) { inventory.fragment -= 15; inventory.gem++; playSound('win'); alert("✅ 兌換成功！獲得 1 顆寶石！"); } else alert("❌ 碎片不足！"); }
-            else if (type === 'star') { if (inventory.fragment >= 15) { inventory.fragment -= 15; inventory.star++; playSound('win'); alert("✅ 兌換成功！獲得 1 顆星星！"); } else alert("❌ 碎片不足！"); }
+            if (type === 'manu') { if (inventory.coin >= 50) { inventory.coin -= 50; inventory.manuscript++; playSound('win'); alert(`✅ 兌換成功！獲得 1 張手稿！`); } else alert("❌ 金幣不足！"); }
+            else if (type === 'gem') { if (inventory.wood >= 30) { inventory.wood -= 30; inventory.gem++; playSound('win'); alert("✅ 兌換成功！獲得 1 顆寶石！"); } else alert("❌ 木材不足！"); }
+            else if (type === 'star') { if (inventory.stone >= 30) { inventory.stone -= 30; inventory.star++; playSound('win'); alert("✅ 兌換成功！獲得 1 顆星星！"); } else alert("❌ 石頭不足！"); }
             openSecretMarket(); updateUI();
         }
 
@@ -1333,10 +1333,10 @@
             let droppedItems = [];
             
             if (!isLegendaryBoss) {
-                if (Math.random() < 0.05 + bonusProb) { inventory.gem += 1; droppedItems.push("💎 寶石 x1"); }
-                if (Math.random() < 0.05 + bonusProb) { inventory.star += 1; droppedItems.push("🌟 星星 x1"); }
-                if (Math.random() < 0.05 + bonusProb) { inventory.manuscript += 1; droppedItems.push("📜 手稿 x1"); }
-                if (Math.random() < 0.02 + bonusProb) { inventory.fragment += 1; droppedItems.push("🔮 碎片 x1"); }
+                if (Math.random() < 0.05 + bonusProb) { inventory.gem += 5; droppedItems.push("💎 寶石 x5"); }
+                if (Math.random() < 0.05 + bonusProb) { inventory.star += 5; droppedItems.push("🌟 星星 x5"); }
+                if (Math.random() < 0.05 + bonusProb) { inventory.manuscript += 3; droppedItems.push("📜 手稿 x3"); }
+                if (Math.random() < 0.02 + bonusProb) { inventory.fragment += 3; droppedItems.push("🔮 碎片 x3"); }
             }
 
             let msg = "";
