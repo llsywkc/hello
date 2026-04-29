@@ -54,7 +54,7 @@
         .word-bank { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; min-height: 80px; padding: 15px; background: rgba(0,0,0,0.05); border-radius: 10px; border: 4px inset rgba(0,0,0,0.1); box-sizing: border-box; }
         .word-chunk { background-color: #FFEB3B; border: 4px solid #FBC02D; box-shadow: 0 6px 0 #F57F17; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; color: #333; transition: transform 0.1s; }
         .word-chunk:active { transform: translateY(4px); box-shadow: 0 2px 0 #F57F17; }
-        .question-text { font-size: 1.5em; font-weight: bold; background: #FFF; padding: 15px; border: 4px solid #B0BEC5; border-radius: 8px; line-height: 1.5; width: 90%; box-sizing: border-box; }
+        .question-text { font-size: 1.5em; font-weight: bold; background: #FFF; padding: 15px; border: 4px solid #B0BEC5; border-radius: 8px; line-height: 1.5; width: 90%; box-sizing: border-box; transition: all 0.3s; }
         .hint-text { color: #E65100; font-weight: bold; font-size: 1.2em; min-height: 30px; margin: 5px 0; background: #FFF3E0; padding: 10px; border-radius: 8px; border: 2px dashed #FF9800; width: 90%; }
         
         .feedback-box { background: #E8F5E9; border: 4px solid #4CAF50; border-radius: 10px; padding: 20px; width: 90%; box-sizing: border-box; }
@@ -71,7 +71,7 @@
         .building-item span.emoji { font-size: 3.5em; margin-bottom: 5px; }
         .super-gear-card { border: 4px solid #FF9800; background: #FFF3E0; width: 200px; padding: 15px; border-radius: 10px; text-align: center;}
 
-        /* 進化專屬特效區 */
+        /* 進化與神獸專屬特效區 */
         #evo-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; display:flex; justify-content:center; align-items:center; flex-direction:column; }
         #evo-box { position:relative; width:300px; height:300px; display:flex; justify-content:center; align-items:center; }
         #evo-img { width: 250px; height: 250px; object-fit: contain; z-index: 2; transition: all 0.5s; }
@@ -80,13 +80,17 @@
         .evo-flash-white { animation: flashWhite 1s ease-out forwards; }
         @keyframes flashWhite { 0% { filter: brightness(1); } 30% { filter: brightness(20) drop-shadow(0 0 100px white); transform: scale(1.5); } 100% { filter: brightness(1); transform: scale(1); } }
         
-        /* 最終進化專屬魔法陣與震屏 */
         .evo-magic-circle { position: absolute; width: 350px; height: 350px; border-radius: 50%; border: 8px dashed; animation: spinCircle 3s linear infinite; opacity: 0.8; z-index: 1; }
         .evo-light { border-color: #FFF9C4; box-shadow: 0 0 50px #FFEB3B, inset 0 0 50px #FFEB3B; }
         .evo-dark { border-color: #EA80FC; box-shadow: 0 0 50px #6A1B9A, inset 0 0 50px #6A1B9A; }
         @keyframes spinCircle { 0% { transform: rotate(0deg) scale(0.8); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(0.8); } }
+        
         .evo-shake-screen { animation: screenShake 0.1s infinite; }
         @keyframes screenShake { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-2px, -2px) rotate(-1deg); } 50% { transform: translate(-3px, 0px) rotate(1deg); } 75% { transform: translate(3px, 2px) rotate(0deg); } 100% { transform: translate(1px, -1px) rotate(-1deg); } }
+
+        .mythical-encounter { box-shadow: 0 0 50px #E1BEE7, inset 0 0 50px #9C27B0 !important; animation: pulseMythical 1s infinite alternate; }
+        @keyframes pulseMythical { 0% { transform: scale(1); background: rgba(156, 39, 176, 0.1); } 100% { transform: scale(1.02); background: rgba(156, 39, 176, 0.3); } }
+        .mythical-question { box-shadow: 0 0 30px #9C27B0 !important; border: 4px solid #9C27B0 !important; background: #F3E5F5 !important; }
     </style>
 </head>
 <body>
@@ -299,7 +303,7 @@
     </div>
 
     <script>
-        // --- 遊戲音效系統 ---
+        // --- 遊戲音效引擎大升級 ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx;
 
@@ -320,30 +324,45 @@
                 gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
                 osc.start(now); osc.stop(now + 0.1);
             } else if (type === 'correct') {
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(400, now); osc.frequency.setValueAtTime(600, now + 0.1);
-                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
-                osc.start(now); osc.stop(now + 0.3);
-            } else if (type === 'wrong') {
-                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.3);
-                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
-                osc.start(now); osc.stop(now + 0.3);
-            } else if (type === 'craft') {
-                osc.type = 'square'; osc.frequency.setValueAtTime(300, now); osc.frequency.setValueAtTime(500, now + 0.1);
-                gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
-                osc.start(now); osc.stop(now + 0.3);
-            } else if (type === 'win') {
-                osc.type = 'square'; osc.frequency.setValueAtTime(400, now); osc.frequency.setValueAtTime(500, now + 0.1);
-                osc.frequency.setValueAtTime(600, now + 0.2); osc.frequency.setValueAtTime(800, now + 0.3);
-                gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.5);
-                osc.start(now); osc.stop(now + 0.5);
-            } else if (type === 'lose') {
-                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, now); osc.frequency.linearRampToValueAtTime(50, now + 0.8);
-                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.8);
-                osc.start(now); osc.stop(now + 0.8);
-            } else if (type === 'monster') {
-                osc.type = 'square'; osc.frequency.setValueAtTime(150, now); osc.frequency.setValueAtTime(250, now + 0.2);
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(400, now); osc.frequency.setValueAtTime(800, now + 0.1); osc.frequency.setValueAtTime(1200, now + 0.2);
                 gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.4);
                 osc.start(now); osc.stop(now + 0.4);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.4);
+                osc.start(now); osc.stop(now + 0.4);
+            } else if (type === 'craft') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(300, now); osc.frequency.setValueAtTime(500, now + 0.1); osc.frequency.setValueAtTime(700, now + 0.2);
+                gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.4);
+                osc.start(now); osc.stop(now + 0.4);
+            } else if (type === 'win') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(400, now); osc.frequency.setValueAtTime(500, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2); osc.frequency.setValueAtTime(800, now + 0.3); osc.frequency.setValueAtTime(1000, now + 0.4);
+                gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.6);
+                osc.start(now); osc.stop(now + 0.6);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, now); osc.frequency.linearRampToValueAtTime(50, now + 1);
+                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 1);
+                osc.start(now); osc.stop(now + 1);
+            } else if (type === 'monster') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(150, now); osc.frequency.setValueAtTime(200, now + 0.1); osc.frequency.setValueAtTime(150, now + 0.2); osc.frequency.setValueAtTime(250, now + 0.3);
+                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.5);
+                osc.start(now); osc.stop(now + 0.5);
+            } else if (type === 'mythical_spawn') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(100, now); osc.frequency.linearRampToValueAtTime(40, now + 2);
+                let osc2 = audioCtx.createOscillator();
+                osc2.type = 'square'; osc2.frequency.setValueAtTime(150, now); osc2.frequency.linearRampToValueAtTime(60, now + 2);
+                osc2.connect(gainNode); osc2.start(now); osc2.stop(now + 2);
+                gainNode.gain.setValueAtTime(0.5, now); gainNode.gain.linearRampToValueAtTime(0, now + 2.5);
+                osc.start(now); osc.stop(now + 2.5);
+            } else if (type === 'boss_hit') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(100, now); osc.frequency.exponentialRampToValueAtTime(20, now + 0.3);
+                gainNode.gain.setValueAtTime(0.5, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            } else if (type === 'flee') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(600, now); osc.frequency.linearRampToValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.3, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
             }
         }
 
@@ -355,7 +374,7 @@
             }
         });
 
-        // --- 進化路線數據庫 (全面擴充4大屬性！) ---
+        // --- 進化路線數據庫 (修復妙蛙花最終形態) ---
         const pokedex = {
             'fire': { 
                 title: "🔥 火系搭檔", 
@@ -385,7 +404,7 @@
                 lv3A: { n: "超級妙蛙花 (光)", p: "10033", b: 60 }, 
                 lv3B: { n: "洗翠狙射樹梟 (闇)", p: "10244", b: 80 }, 
                 lv4A: { n: "雪拉比 (光極)", p: "251", b: 150 }, 
-                lv4B: { n: "烈空坐 (闇極)", p: "384", b: 180 }
+                lv4B: { n: "薩戮德 (闇極)", p: "893", b: 180 } // 修改為真正的草/惡神獸
             },
             'electric': {
                 title: "⚡ 電系搭檔",
@@ -439,10 +458,8 @@
                 
                 if (player.claimedNewbiePack) {
                     let btn = document.getElementById('btn-newbie-pack');
-                    btn.disabled = true;
-                    btn.innerText = "🎁 新手禮包 (已領取)";
-                    btn.style.borderColor = "#9E9E9E";
-                    btn.classList.replace('btn-gold', 'btn-grey');
+                    btn.disabled = true; btn.innerText = "🎁 新手禮包 (已領取)";
+                    btn.style.borderColor = "#9E9E9E"; btn.classList.replace('btn-gold', 'btn-grey');
                 }
                 
                 checkBossUnlock();
@@ -451,9 +468,7 @@
         };
 
         function claimNewbiePack() {
-            if (player.claimedNewbiePack) {
-                alert("你已經領取過新手禮包了！"); return;
-            }
+            if (player.claimedNewbiePack) { alert("你已經領取過新手禮包了！"); return; }
             player.inv.wood += 50; player.inv.stone += 50; player.inv.gem += 50;
             player.inv.star += 50; player.inv.manu += 50; player.inv.frag += 50;
             player.claimedNewbiePack = true;
@@ -468,7 +483,6 @@
             renderStats(); autoSave();
         }
 
-        // 取得目前搭檔加成
         function getPartnerBonus() {
             if (!player.partnerId) return 0;
             let pData = player.partners[player.partnerId];
@@ -479,7 +493,7 @@
             return family[stage].b;
         }
 
-        // --- 搭檔中心邏輯 ---
+        // --- 搭檔中心邏輯 (多材料進化版) ---
         function openPartnerHub() {
             hideAllScreens();
             document.getElementById("partner-hub-screen").classList.remove("hidden");
@@ -496,10 +510,10 @@
                 let poke = fam[stage];
                 
                 let costStr = ""; let canEvo = false;
-                if(pData.lv === 0) { costStr = "需 5 碎片"; canEvo = player.inv.frag >= 5; }
-                else if(pData.lv === 1) { costStr = "需 10 碎片"; canEvo = player.inv.frag >= 10; }
-                else if(pData.lv === 2) { costStr = "需 5 寶石"; canEvo = player.inv.gem >= 5; }
-                else if(pData.lv === 3) { costStr = "需 10 寶石, 5 星星"; canEvo = player.inv.gem >= 10 && player.inv.star >= 5; }
+                if(pData.lv === 0) { costStr = "需 5木/5石/5碎"; canEvo = player.inv.wood >= 5 && player.inv.stone >= 5 && player.inv.frag >= 5; }
+                else if(pData.lv === 1) { costStr = "需 10木/10石/10碎"; canEvo = player.inv.wood >= 10 && player.inv.stone >= 10 && player.inv.frag >= 10; }
+                else if(pData.lv === 2) { costStr = "需 10寶/10星/10稿"; canEvo = player.inv.gem >= 10 && player.inv.star >= 10 && player.inv.manu >= 10; }
+                else if(pData.lv === 3) { costStr = "需 20寶/20星/20稿/20碎"; canEvo = player.inv.gem >= 20 && player.inv.star >= 20 && player.inv.manu >= 20 && player.inv.frag >= 20; }
 
                 html += `
                     <div style="border: 4px solid #00796B; background: #E0F2F1; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; width: 220px;">
@@ -527,22 +541,21 @@
         }
 
         function setPartner(id) {
-            player.partnerId = id;
-            playSound('craft');
-            renderStats();
-            renderPartnerHub();
-            autoSave();
+            player.partnerId = id; playSound('craft'); renderStats(); renderPartnerHub(); autoSave();
         }
 
         function evolvePartner(id, branchChoice) {
             let pData = player.partners[id];
             
-            if(pData.lv === 0) { player.inv.frag -= 5; }
-            else if(pData.lv === 1) { player.inv.frag -= 10; }
-            else if(pData.lv === 2) { player.inv.gem -= 5; pData.branch = branchChoice; }
-            else if(pData.lv === 3) { player.inv.gem -= 10; player.inv.star -= 5; }
-            
+            // 完美修復：必須在 branch 更新之前紀錄 oldStage！
             let oldStage = "lv" + pData.lv + (pData.branch || "");
+            
+            // 扣除多種材料
+            if(pData.lv === 0) { player.inv.wood -= 5; player.inv.stone -= 5; player.inv.frag -= 5; }
+            else if(pData.lv === 1) { player.inv.wood -= 10; player.inv.stone -= 10; player.inv.frag -= 10; }
+            else if(pData.lv === 2) { player.inv.gem -= 10; player.inv.star -= 10; player.inv.manu -= 10; pData.branch = branchChoice; }
+            else if(pData.lv === 3) { player.inv.gem -= 20; player.inv.star -= 20; player.inv.manu -= 20; player.inv.frag -= 20; }
+            
             pData.lv++;
             let newStage = "lv" + pData.lv + (pData.branch || "");
             
@@ -564,9 +577,7 @@
             evoText.innerText = "……哦？搭檔的樣子有點奇怪！";
 
             playSound('craft'); 
-            setTimeout(() => {
-                evoImg.classList.add("evo-silhouette");
-            }, 500);
+            setTimeout(() => { evoImg.classList.add("evo-silhouette"); }, 500);
 
             setTimeout(() => {
                 evoImg.classList.remove("evo-silhouette");
@@ -593,8 +604,7 @@
 
             setTimeout(() => {
                 document.getElementById("evo-modal").classList.add("hidden");
-                renderStats();
-                renderPartnerHub();
+                renderStats(); renderPartnerHub();
             }, 6500);
         }
 
@@ -633,12 +643,10 @@
                 badge.classList.remove("hidden");
                 document.getElementById("partner-icon-img").src = getPokePic(currentPoke.p);
                 document.getElementById("partner-name-text").innerText = currentPoke.n;
-            } else {
-                badge.classList.add("hidden");
-            }
+            } else { badge.classList.add("hidden"); }
         }
 
-        // 檢查連勝 Badge 系統
+        // --- 優化版：連勝 Badge 系統 ---
         function checkStreakBadge() {
             const badgeMilestones = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150];
             if (badgeMilestones.includes(player.streak) && !player.badges.includes(player.streak)) {
@@ -649,25 +657,23 @@
                 }, 300);
                 player.inv.wood += 20; player.inv.stone += 20; player.inv.gem += 20;
                 player.inv.star += 20; player.inv.manu += 20; player.inv.frag += 20;
-                renderStats();
-                autoSave();
+                renderStats(); autoSave();
             }
         }
 
-        // --- 遊戲系統管理 ---
         let currentMode = ""; let currentQuestion = null;
         let onNextAction = "normal"; 
         let isMonsterFight = false; let currentMonster = null;
         let monsterCorrectCount = 0; let monsterGoal = 1;
 
-        // 全面擴充野生 Pokémon 與神獸 (改用 rewardData 結構)
+        // --- 全面擴充野生 Pokémon 與神獸 ---
         const monsters = [
             { name: "史萊姆", emoji: "🟢", atk: 10, def: 10, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
             { name: "森林狼", emoji: "🐺", atk: 20, def: 15, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1", rewardData: {wood: 3, stone: 3, frag: 1} },
             { name: "吸血蝠", emoji: "🦇", atk: 25, def: 20, type: "normal", rewardsStr: "💎 寶石 +1, 🔮 碎片 +1", rewardData: {gem: 1, frag: 1} },
             { name: "毒蛇", emoji: "🐍", atk: 30, def: 25, type: "normal", rewardsStr: "🌟 星星 +1, 🔮 碎片 +1", rewardData: {star: 1, frag: 1} },
             { name: "狂暴熊", emoji: "🐻", atk: 40, def: 35, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +2", rewardData: {gem: 2, star: 2} },
-            // 新增 20 隻 Pokémon 
+            // 新增 20 隻各具特色的 Pokémon 
             { name: "綠毛蟲", emoji: "🐛", atk: 12, def: 10, type: "normal", rewardsStr: "🪵 木材 +2", rewardData: {wood: 2} },
             { name: "波波", emoji: "🐦", atk: 15, def: 12, type: "normal", rewardsStr: "🧱 石頭 +2", rewardData: {stone: 2} },
             { name: "小拉達", emoji: "🐀", atk: 18, def: 12, type: "normal", rewardsStr: "🪵 木材 +3", rewardData: {wood: 3} },
@@ -693,15 +699,16 @@
         const mythicalBeasts = [
             { name: "青龍", emoji: "🐉", atk: 100, def: 100, type: "mythical", rewardsStr: "💎 寶石 +10, 🌟 星星 +10, 📜 手稿 +10", rewardData: {gem: 10, star: 10, manu: 10} },
             { name: "朱雀", emoji: "🦚", atk: 120, def: 90, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +15", rewardData: {gem: 15, star: 15} },
-            // 新增 4 隻神獸
+            // 新增 4 隻究極神獸
             { name: "超夢", emoji: "🧬", atk: 150, def: 120, type: "mythical", rewardsStr: "💎 寶石 +20, 🌟 星星 +20, 🔮 碎片 +10", rewardData: {gem: 20, star: 20, frag: 10} },
             { name: "洛奇亞", emoji: "🌪️", atk: 130, def: 150, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +25, 🪵 木材 +50", rewardData: {gem: 15, star: 25, wood: 50} },
             { name: "烈空坐", emoji: "🐉", atk: 180, def: 110, type: "mythical", rewardsStr: "💎 寶石 +25, 🌟 星星 +15, 🧱 石頭 +50", rewardData: {gem: 25, star: 15, stone: 50} },
             { name: "阿爾宙斯", emoji: "✨", atk: 200, def: 200, type: "mythical", rewardsStr: "💎 寶石 +50, 🌟 星星 +50, 📜 手稿 +50, 🔮 碎片 +50", rewardData: {gem: 50, star: 50, manu: 50, frag: 50} }
         ];
 
+        // --- 題庫 ---
         const questions = {
-            t3_review_1: [ // 共 30 題 (詞語與偏旁)
+            t3_review_1: [ // 30 題 (詞語與偏旁)
                 { q: "美荷撿到一件（　　），把它交到校務處。", options: ["失主", "失物", "背包", "乾淨"], a: "失物", hint: "丟失的物品。" },
                 { q: "校工叔叔把校園打掃得很（　　）。", options: ["郊野", "背包", "乾淨", "認領"], a: "乾淨", hint: "沒有灰塵或垃圾。" },
                 { q: "我收拾好旅行用品，然後放進（　　）裏。", options: ["鏡子", "箱子", "字典", "背包"], a: "背包", hint: "用來裝物品背在背上的袋子。" },
@@ -733,7 +740,7 @@
                 { q: "以下哪個字是形聲字？", options: ["日", "山", "月", "胎"], a: "胎", hint: "一半表示意思，一半表示讀音。" },
                 { q: "「袋」字與以下哪個字部首不同？", options: ["裝", "裙", "展", "裳"], a: "展", hint: "展的部首是「尸」部。" }
             ],
-            t3_review_2: [ // 共 30 題 (標點、句式、書信、反問句)
+            t3_review_2: [ // 30 題 (標點、句式、書信、反問句)
                 { q: "引號（「　」）的作用是甚麼？", options: ["標示書本名稱", "標示説話內容或特別詞語", "標示地名", "表示句子結束"], a: "標示説話內容或特別詞語", hint: "把別人説的話括起來。" },
                 { q: "書名號（《　》）應該用在哪裏？", options: ["説話內容", "人名", "書本或文章名稱", "地名"], a: "書本或文章名稱", hint: "表示書名的符號。" },
                 { q: "以下哪個句子正確使用了書名號？", options: ["我借了「烏鴉喝水」這本書。", "我借了（烏鴉喝水）這本書。", "我借了《烏鴉喝水》這本書。", "我借了烏鴉喝水這本書。"], a: "我借了《烏鴉喝水》這本書。", hint: "書本名字要用《》。" },
@@ -765,8 +772,8 @@
                 { q: "把「這條裙子太長了，不可能是我的。」改為反問句，應該是？", options: ["這條裙子太長了，是我的嗎？", "這條裙子太長了，真的是我的嗎？", "這條裙子太長了，不是我的嗎？", "這條裙子太長了，怎麼可能是我的呢？"], a: "這條裙子太長了，怎麼可能是我的呢？", hint: "強調絕對不是我的。" },
                 { q: "反問句的特點是甚麼？", options: ["用來提問，需要別人回答", "用來描述事物的樣子", "用反問的形式加強語氣，不需要別人回答", "用來表達命令"], a: "用反問的形式加強語氣，不需要別人回答", hint: "答案已經藏在問題裏面了。" }
             ],
-            // ---------------- 保留舊有題庫 ----------------
-            dictation: [ // 舊50題 默書及語文運用
+            // --------- 舊題庫保留 ---------
+            dictation: [
                 { q: "遇到不懂的生字，我們可以向老師___。", options: ["請教", "介紹", "欣賞", "連忙"], a: "請教", hint: "虛心向別人詢問和學習。" },
                 { q: "同學們___上台分享自己最喜歡的圖書。", options: ["輪流", "期待", "入神", "介紹"], a: "輪流", hint: "按照次序一個接一個地進行。" },
                 { q: "學校即將舉行陸運會，大家都非常___。", options: ["期待", "有趣", "介紹", "連忙"], a: "期待", hint: "充滿希望地等待。" },
@@ -963,25 +970,31 @@
         }
 
         function triggerEncounter() {
-            playSound('monster');
             document.getElementById("question-panel").classList.add("hidden");
             document.getElementById("feedback-area").classList.add("hidden");
             document.getElementById("hint-area").classList.add("hidden");
             document.getElementById("bottom-controls").classList.add("hidden");
-            document.getElementById("monster-encounter-panel").classList.remove("hidden");
-            document.getElementById("game-title").innerText = "⚠️ 發現不明生物！";
+            
+            let encounterPanel = document.getElementById("monster-encounter-panel");
+            encounterPanel.classList.remove("hidden");
 
             let hasAdvancedBuilding = (player.buildings.castle >= 1 || player.buildings.base >= 1 || player.buildings.park >= 1);
             let isMythical = (hasAdvancedBuilding && Math.random() < 0.25); 
             
             if (isMythical) {
                 currentMonster = mythicalBeasts[Math.floor(Math.random() * mythicalBeasts.length)];
-                document.getElementById("monster-encounter-panel").style.borderColor = "#9C27B0";
+                encounterPanel.classList.add("mythical-encounter");
                 document.getElementById("mon-name").style.color = "#9C27B0";
+                document.body.classList.add("evo-shake-screen");
+                setTimeout(() => document.body.classList.remove("evo-shake-screen"), 2000);
+                document.getElementById("game-title").innerText = "⚠️ 史詩級神獸降臨！";
+                playSound('mythical_spawn');
             } else {
                 currentMonster = monsters[Math.floor(Math.random() * monsters.length)];
-                document.getElementById("monster-encounter-panel").style.borderColor = "#f44336";
+                encounterPanel.classList.remove("mythical-encounter");
                 document.getElementById("mon-name").style.color = "#333";
+                document.getElementById("game-title").innerText = "⚠️ 發現野生寶可夢！";
+                playSound('monster');
             }
 
             document.getElementById("mon-emoji").innerText = currentMonster.emoji;
@@ -1009,10 +1022,11 @@
 
         function tryFlee() {
             if (Math.random() < 0.75) {
+                playSound('flee');
                 alert("🏃 逃走成功！安全返回冒險路線。");
                 loadQuestion();
             } else {
-                playSound('wrong');
+                playSound('boss_hit');
                 let lostWood = Math.floor(Math.random() * 3);
                 let lostStone = Math.floor(Math.random() * 3);
                 player.inv.wood = Math.max(0, player.inv.wood - lostWood);
@@ -1029,7 +1043,15 @@
             monsterGoal = (currentMonster.type === "mythical" ? 3 : 1);
             
             document.getElementById("monster-encounter-panel").classList.add("hidden");
-            document.getElementById("question-panel").classList.remove("hidden");
+            
+            let qPanel = document.getElementById("question-panel");
+            qPanel.classList.remove("hidden");
+            if (currentMonster.type === "mythical") {
+                qPanel.classList.add("mythical-question");
+            } else {
+                qPanel.classList.remove("mythical-question");
+            }
+
             document.getElementById("bottom-controls").classList.remove("hidden");
             document.getElementById("game-title").innerText = `⚔️ 戰鬥中：${currentMonster.name} ${currentMonster.emoji}`;
             
@@ -1058,7 +1080,9 @@
         function loadQuestion() {
             isMonsterFight = false;
             document.getElementById("monster-encounter-panel").classList.add("hidden");
-            document.getElementById("question-panel").classList.remove("hidden");
+            let qPanel = document.getElementById("question-panel");
+            qPanel.classList.remove("hidden");
+            qPanel.classList.remove("mythical-question");
             document.getElementById("bottom-controls").classList.remove("hidden");
             document.getElementById("monster-fight-status").classList.add("hidden");
             document.getElementById("game-title").innerText = titles[currentMode];
@@ -1100,7 +1124,9 @@
                     fbArea.classList.remove("hidden", "error");
                     
                     if (monsterCorrectCount >= monsterGoal) {
-                        document.getElementById("feedback-msg").innerHTML = `✅ 答對了！正確答案是：<span style="color:#E65100;">${currentQuestion.a}</span><br><span style='color:#9C27B0'>🎉 成功擊敗 ${currentMonster.name}！</span>`;
+                        playSound('win');
+                        let winMsg = currentMonster.type === "mythical" ? `🎉 史詩級勝利！成功收服 ${currentMonster.name}！` : `🎉 成功擊敗 ${currentMonster.name}！`;
+                        document.getElementById("feedback-msg").innerHTML = `✅ 答對了！正確答案是：<span style="color:#E65100;">${currentQuestion.a}</span><br><span style='color:#9C27B0'>${winMsg}</span>`;
                         document.getElementById("reward-msg").innerText = "準備領取戰利品...";
                         onNextAction = "monster_win";
                     } else {
@@ -1159,7 +1185,6 @@
             } else if (onNextAction === "monster_next") {
                 loadMonsterQuestion();
             } else if (onNextAction === "monster_win") {
-                playSound('win');
                 alert(`🎉 你獲得了戰利品：${currentMonster.rewardsStr}`);
                 for (let k in currentMonster.rewardData) {
                     player.inv[k] += currentMonster.rewardData[k];
@@ -1328,7 +1353,7 @@
         }
 
         function bossDamage(reason) {
-            playSound('wrong');
+            playSound('boss_hit');
             let dmg = 10 + currentBoss * 5; playerHP -= dmg;
             player.inv.wood = Math.max(0, player.inv.wood - 2); player.inv.stone = Math.max(0, player.inv.stone - 2);
             renderStats(); updateBossHP(); autoSave();
