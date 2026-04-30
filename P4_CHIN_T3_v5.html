@@ -171,11 +171,43 @@
         .gacha-modal-content { background: #FFF3E0; border: 6px solid #FF9800; }
         .album-modal-content { background: #E3F2FD; border: 6px solid #1976D2; max-width: 800px !important; width: 95%;}
 
-    </style>
+    
+        /* ========== 每日任務系統 ========== */
+        .quest-panel { background: linear-gradient(135deg, #1A237E, #283593); border: 3px solid #5C6BC0; border-radius: 12px; padding: 12px 15px; width: 100%; box-sizing: border-box; margin-bottom: 8px; }
+        .quest-panel h3 { color: #E8EAF6; margin: 0 0 8px 0; font-size: 1em; text-align: center; }
+        .quest-item { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.08); border-radius: 8px; padding: 6px 10px; margin-bottom: 5px; font-size: 0.85em; color: #E8EAF6; flex-wrap: wrap; }
+        .quest-item.done { background: rgba(76,175,80,0.25); color: #A5D6A7; }
+        .quest-item.claimed { background: rgba(100,100,100,0.2); color: #777; text-decoration: line-through; }
+        .quest-progress { font-size: 0.75em; color: #90CAF9; margin-left: auto; font-weight: bold; }
+        .quest-mini-bar-bg { background: rgba(255,255,255,0.15); border-radius: 4px; height: 6px; width: 60px; }
+        .quest-mini-bar-fill { background: #42A5F5; height: 100%; border-radius: 4px; transition: width 0.4s; }
+        .quest-claim-btn { font-size: 0.72em !important; padding: 3px 8px !important; margin: 0 !important; box-shadow: 0 3px 0 #2E7D32 !important; }
+        /* ========== 成就系統 ========== */
+        #achievement-toast { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%) translateY(120px); background: linear-gradient(135deg, #1a1a2e, #16213e); color: #FFD700; border: 3px solid #FFD700; border-radius: 14px; padding: 12px 22px; font-weight: bold; font-size: 0.95em; z-index: 9998; opacity: 0; transition: all 0.5s cubic-bezier(0.34,1.56,0.64,1); text-align: center; max-width: 85vw; box-shadow: 0 0 25px rgba(255,215,0,0.6); pointer-events: none; }
+        #achievement-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .ach-grid { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px; }
+        .achievement-badge { display: inline-flex; flex-direction: column; align-items: center; background: rgba(255,255,255,0.9); border: 3px solid #FFD700; border-radius: 10px; padding: 8px 6px; width: 80px; font-size: 0.68em; color: #333; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
+        .achievement-badge:hover { transform: scale(1.08); }
+        .achievement-badge.locked { filter: grayscale(1) brightness(0.4); cursor: default; border-color: #555; box-shadow: none; }
+        .achievement-badge .ach-icon { font-size: 2em; line-height: 1.2; }
+        #achievement-modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.88); z-index: 1000; display: flex; justify-content: center; align-items: center; }
+        .ach-modal-box { background: #1a1a2e; border: 4px solid #FFD700; border-radius: 16px; padding: 25px 20px; max-width: 95%; width: 560px; max-height: 88vh; overflow-y: auto; text-align: center; }
+        .ach-modal-box h2 { color: #FFD700; margin-top: 0; font-size: 1.6em; }
+        .ach-modal-box p { color: #aaa; font-size: 0.85em; margin: 0 0 15px; }
+        /* ========== 感情值系統 ========== */
+        .affection-wrap { margin: 10px 0 5px; text-align: center; }
+        .affection-wrap .aff-label { font-size: 0.85em; color: #AD1457; font-weight: bold; }
+        .aff-bar-bg { background: #ddd; border: 2px solid #F48FB1; border-radius: 10px; height: 16px; width: 85%; margin: 4px auto 0; position: relative; overflow: hidden; }
+        .aff-bar-fill { background: linear-gradient(90deg, #F48FB1, #E91E63); height: 100%; border-radius: 10px; transition: width 0.6s ease; }
+        .aff-bar-text { position: absolute; width: 100%; text-align: center; color: white; font-size: 0.7em; font-weight: bold; line-height: 16px; top: 0; text-shadow: 1px 1px 1px rgba(0,0,0,0.6); }
+        #partner-dialogue { background: rgba(74,20,140,0.85); color: #FFE0F0; border: 2px solid #CE93D8; border-radius: 10px; padding: 10px 14px; margin: 8px auto; font-size: 0.9em; font-style: italic; max-width: 90%; display: none; animation: fadeInDia 0.5s; }
+        #partner-dialogue::before { content: "💬 "; font-style: normal; }
+        @keyframes fadeInDia { from { opacity:0; transform: translateY(5px); } to { opacity:1; transform: translateY(0); } }
+</style>
 </head>
 <body>
 
-    <h1>🟪 森林大冒險：4A中文 🟪</h1>
+    <h1>🟪 森林大冒險：4A寶寶 🟪</h1>
 
     <div id="player-tag" class="player-info hidden">
         <span>冒險者：<span id="display-name"></span></span> 
@@ -224,7 +256,16 @@
             </div>
 
             <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#6A1B9A; margin-top: 15px;">📖 遊戲指南 (神獸與機制介紹)</button>
-            <hr style="width: 80%; border-top: 4px dashed #6A1B9A;">
+            
+            <!-- ✅ 每日任務面板 -->
+            <div class="quest-panel" id="daily-quest-panel">
+                <h3>📋 每日任務 <span id="quest-reset-hint" style="font-size:0.75em; color:#90CAF9;">(每日重置)</span></h3>
+                <div id="quest-list"></div>
+            </div>
+            <!-- ✅ 成就按鈕 -->
+            <button class="btn-gold" onclick="openAchievements()" style="width:100%; font-size:0.9em; padding:8px; margin-bottom:8px;">🏆 成就徽章</button>
+
+<hr style="width: 80%; border-top: 4px dashed #6A1B9A;">
             
             <h2>🏕️ 選擇冒險關卡 (特訓區)</h2>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
@@ -308,6 +349,16 @@
                     <h3 id="partner-name" style="color: #4A148C; font-size: 2em; margin: 10px 0; text-shadow: 1px 1px 0 #E1BEE7;">Name</h3>
                     <p style="font-size: 1.3em; font-weight: bold; color: #2E7D32; margin-bottom:5px;">✨ 目前搭檔加成: <br>+<span id="partner-buff" style="font-size:1.8em; color:#D50000;">0</span> 攻防</p>
                     <p style="font-size: 0.8em; color: #666; margin-top:0;">(只有當前選擇的搭檔會提供戰力加成)</p>
+                    <!-- ✅ 感情值 -->
+                    <div class="affection-wrap">
+                        <div class="aff-label">💕 感情值: <span id="aff-val">0</span> / <span id="aff-next">10</span></div>
+                        <div class="aff-bar-bg">
+                            <div class="aff-bar-fill" id="aff-bar" style="width:0%;"></div>
+                            <div class="aff-bar-text" id="aff-rank-text">初識</div>
+                        </div>
+                    </div>
+                    <div id="partner-dialogue"></div>
+
 
                     <div id="evo-req-single" class="hidden" style="margin-top: 15px; background: #F3E5F5; padding: 15px; border-radius: 10px; border: 2px solid #AB47BC;">
                         <h4 style="margin: 0 0 10px 0; color: #D50000; font-size:1.2em;">🔼 下一階進化需求</h4>
@@ -526,7 +577,20 @@
         </div>
     </div>
 
-    <script>
+    
+    <!-- ✅ 成就彈窗 -->
+    <div id="achievement-modal" class="hidden">
+        <div class="ach-modal-box">
+            <h2>🏆 成就徽章</h2>
+            <p>解鎖成就即可永久收藏！灰色為尚未解鎖。</p>
+            <div class="ach-grid" id="ach-grid-container"></div>
+            <button class="btn-grey" onclick="closeModal('achievement-modal')" style="margin-top:20px;">關閉</button>
+        </div>
+    </div>
+    <!-- ✅ 成就 Toast -->
+    <div id="achievement-toast">🏆 成就解鎖！<br><span id="ach-toast-text"></span></div>
+
+<script>
         // ================== 全局函式定義 ==================
         // 🔑 已經改回 v7_ext，確保學生舊存檔完美繼承！
         const SAVE_KEY = 'roblox_p4_chi_combat_v7_ext'; 
@@ -981,7 +1045,9 @@
             coins: 0, dropBuffLeft: 0, 
             streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
             equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], 
-            partnerLv: 0, partnerId: "", partnerBranch: "A", partners: {}, lastGachaDate: "", gachaDrawsToday: 0, 
+            partnerLv: 0, partnerId: "", partnerBranch: "A", partners: {}, lastGachaDate: "",
+            achievements: [], totalCorrectAnswers: 0, totalBossWins: 0,
+            dailyQuestDate: "", dailyQuests: [], dailyQuestProgress: {}, gachaDrawsToday: 0, 
             scrollBoughtDate: "", hasLegendaryBuff: false,
             bloodMoonActive: false, bloodMoonTarget: 0, bloodMoonStreak: 0, bloodMoonLeft: 0, unlockedCards: [], cardStats: {}, potions: 0
         };
@@ -1013,11 +1079,217 @@
                 let el = document.querySelector('.screen:not(.hidden) .status-msg');
                 if (el) el.innerHTML += `<br><span style="color:#FFD700;font-weight:bold;">${msg}</span>`;
             }
+            // ✅ 每日任務 & 成就 & 感情值
+            inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers || 0) + 1;
+            updateQuestProgress('correct');
+            if (inventory.streak === 5)  { updateQuestProgress('streak5');  unlockAchievement('ach_streak10'); }
+            if (inventory.streak === 10) { updateQuestProgress('streak10'); unlockAchievement('ach_streak10'); }
+            if (inventory.streak === 20) unlockAchievement('ach_streak20');
+            if (inventory.totalCorrectAnswers === 1)  unlockAchievement('ach_first_answer');
+            if (inventory.totalCorrectAnswers >= 50)  unlockAchievement('ach_correct50');
+            if (inventory.totalCorrectAnswers >= 200) unlockAchievement('ach_correct200');
+            addAffection(1);
             handleBloodMoon(true);
             updateUI(); saveGame();
         }
 
-        function checkDailyReset() {
+        
+        // ========== ✅ 每日任務系統 ==========
+        const QUEST_POOL = [
+            { id: 'q_correct5',  desc: '答對 5 題',        type: 'correct',       target: 5,  reward: { manuscript: 50 } },
+            { id: 'q_correct10', desc: '答對 10 題',        type: 'correct',       target: 10, reward: { manuscript: 100, star: 1 } },
+            { id: 'q_streak5',   desc: '達成 5 連對',       type: 'streak5',       target: 1,  reward: { manuscript: 80, wood: 10 } },
+            { id: 'q_streak10',  desc: '達成 10 連對',      type: 'streak10',      target: 1,  reward: { gem: 2, fragment: 1 } },
+            { id: 'q_boss',      desc: '挑戰 Boss 1 次',    type: 'boss',          target: 1,  reward: { manuscript: 120, star: 2 } },
+            { id: 'q_anymode',   desc: '完成任意關卡 3 次',  type: 'anymode',       target: 3,  reward: { manuscript: 60, stone: 15 } },
+            { id: 'q_partner',   desc: '查看搭檔狀態 1 次',  type: 'visit_partner', target: 1,  reward: { manuscript: 30 } },
+        ];
+
+        function generateDailyQuests() {
+            let today = new Date().toDateString();
+            if (inventory.dailyQuestDate === today && inventory.dailyQuests && inventory.dailyQuests.length === 3) return;
+            inventory.dailyQuestDate = today;
+            let pool = [...QUEST_POOL];
+            let chosen = [];
+            while (chosen.length < 3 && pool.length > 0) {
+                let idx = Math.floor(Math.random() * pool.length);
+                chosen.push({ ...pool[idx], claimed: false });
+                pool.splice(idx, 1);
+            }
+            inventory.dailyQuests = chosen;
+            inventory.dailyQuestProgress = {};
+            saveGame();
+        }
+
+        function renderDailyQuests() {
+            if (!inventory.playerName) return;
+            generateDailyQuests();
+            let container = document.getElementById('quest-list');
+            if (!container) return;
+            container.innerHTML = '';
+            (inventory.dailyQuests || []).forEach((q, i) => {
+                let prog = (inventory.dailyQuestProgress || {})[q.id] || 0;
+                let done = prog >= q.target;
+                let claimed = q.claimed;
+                let pct = Math.min(100, Math.round(prog / q.target * 100));
+                const icons = { manuscript:'📜', star:'🌟', gem:'💎', fragment:'🔮', wood:'🪵', stone:'🧱', coins:'🪙' };
+                let rewardText = Object.entries(q.reward).map(([k,v]) => `${icons[k]||''}${v}`).join(' ');
+                let div = document.createElement('div');
+                div.className = 'quest-item' + (claimed ? ' claimed' : done ? ' done' : '');
+                div.innerHTML = `
+                    <span>${q.desc}</span>
+                    <span class="quest-progress">${Math.min(prog, q.target)}/${q.target}</span>
+                    <div class="quest-mini-bar-bg"><div class="quest-mini-bar-fill" style="width:${claimed?100:pct}%"></div></div>
+                    ${done && !claimed ? `<button class="btn-green quest-claim-btn" onclick="claimQuest(${i})">領取 ${rewardText}</button>` : ''}
+                    ${claimed ? '<span style="font-size:0.75em;color:#4CAF50;margin-left:auto;">✅已領</span>' : ''}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function claimQuest(idx) {
+            let q = (inventory.dailyQuests || [])[idx];
+            if (!q || q.claimed) return;
+            let prog = (inventory.dailyQuestProgress || {})[q.id] || 0;
+            if (prog < q.target) return;
+            q.claimed = true;
+            Object.entries(q.reward).forEach(([k, v]) => { inventory[k] = (inventory[k] || 0) + v; });
+            playSound('win');
+            unlockAchievement('ach_quest1');
+            saveGame(); updateUI(); renderDailyQuests();
+        }
+
+        function updateQuestProgress(type, amount = 1) {
+            if (!inventory.dailyQuests || !inventory.dailyQuestProgress) return;
+            inventory.dailyQuests.forEach(q => {
+                if (q.claimed) return;
+                if (q.type === type) {
+                    inventory.dailyQuestProgress[q.id] = Math.min(q.target, (inventory.dailyQuestProgress[q.id] || 0) + amount);
+                }
+            });
+        }
+
+        // ========== ✅ 成就系統 ==========
+        const ACHIEVEMENTS_LIST = [
+            { id: 'ach_first_answer',  icon: '🎯', name: '初出茅廬', desc: '答對第一題' },
+            { id: 'ach_correct50',     icon: '📚', name: '勤學苦練', desc: '累計答對 50 題' },
+            { id: 'ach_correct200',    icon: '🧠', name: '學識淵博', desc: '累計答對 200 題' },
+            { id: 'ach_streak10',      icon: '🔥', name: '連勝達人', desc: '達成 10 連對' },
+            { id: 'ach_streak20',      icon: '💥', name: '無敵連串', desc: '達成 20 連對' },
+            { id: 'ach_partner',       icon: '🐾', name: '初心搭檔', desc: '選擇第一隻搭檔' },
+            { id: 'ach_evo1',          icon: '⚡', name: '初次進化', desc: '搭檔首次進化' },
+            { id: 'ach_evo4',          icon: '🏆', name: '究極之力', desc: '搭檔達到究極體' },
+            { id: 'ach_boss1',         icon: '⚔️', name: 'Boss 獵人', desc: '擊敗第一個 Boss' },
+            { id: 'ach_boss5',         icon: '👑', name: '無敵勇者', desc: '累計擊敗 5 個 Boss' },
+            { id: 'ach_build',         icon: '🏗️', name: '建設者',   desc: '建造第一棟建築' },
+            { id: 'ach_cards10',       icon: '📖', name: '收藏家',   desc: '解鎖 10 張圖鑑卡' },
+            { id: 'ach_affection50',   icon: '💕', name: '心靈相通', desc: '搭檔感情值達 50' },
+            { id: 'ach_affection200',  icon: '💖', name: '永遠搭檔', desc: '搭檔感情值達 200' },
+            { id: 'ach_quest1',        icon: '📋', name: '任務達成', desc: '完成第一個每日任務' },
+        ];
+
+        function unlockAchievement(id) {
+            if (!inventory.achievements) inventory.achievements = [];
+            if (inventory.achievements.includes(id)) return;
+            inventory.achievements.push(id);
+            let ach = ACHIEVEMENTS_LIST.find(a => a.id === id);
+            if (ach) showAchievementToast(ach);
+            saveGame();
+        }
+
+        function showAchievementToast(ach) {
+            let toast = document.getElementById('achievement-toast');
+            let txt = document.getElementById('ach-toast-text');
+            if (!toast || !txt) return;
+            txt.textContent = `${ach.icon} ${ach.name} — ${ach.desc}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        window.openAchievements = function() {
+            playSound('click');
+            document.getElementById('achievement-modal').classList.remove('hidden');
+            renderAchievements();
+        };
+
+        function renderAchievements() {
+            let grid = document.getElementById('ach-grid-container');
+            if (!grid) return;
+            grid.innerHTML = '';
+            ACHIEVEMENTS_LIST.forEach(ach => {
+                let unlocked = (inventory.achievements || []).includes(ach.id);
+                let div = document.createElement('div');
+                div.className = 'achievement-badge' + (unlocked ? '' : ' locked');
+                div.innerHTML = `<span class="ach-icon">${ach.icon}</span><strong>${ach.name}</strong><span style="color:#888;margin-top:2px;">${ach.desc}</span>`;
+                if (unlocked) div.onclick = () => alert(`${ach.icon} ${ach.name}\n${ach.desc}\n✅ 已解鎖！`);
+                grid.appendChild(div);
+            });
+        }
+
+        // ========== ✅ 搭檔感情值系統 ==========
+        const AFF_RANKS = [
+            { min: 0,   label: '初識',     next: 10  },
+            { min: 10,  label: '朋友',     next: 30  },
+            { min: 30,  label: '好友',     next: 60  },
+            { min: 60,  label: '摯友',     next: 100 },
+            { min: 100, label: '心靈伴侶', next: 200 },
+            { min: 200, label: '永遠搭檔', next: 200 },
+        ];
+
+        const PARTNER_DIALOGUES = [
+            ['一起加油！💪', '不能放棄哦！', '你最棒了！✨'],
+            ['你越來越厲害了！🌟', '繼續努力！我支持你！', '感謝你選了我！'],
+            ['我相信你！⚡', '有我在，你不是一個人！', '繼續！你做得很好！'],
+            ['你已經是真正的勇者了！🔥', '全力以赴！我也會盡力！', '和你在一起感覺無敵！'],
+            ['跟你在一起，我無所畏懼！💖', '我為你感到驕傲！', '永遠都是你的搭檔！🏆'],
+        ];
+
+        function getPartnerDialogue(affection) {
+            let rankIdx = 0;
+            for (let i = AFF_RANKS.length - 1; i >= 0; i--) {
+                if (affection >= AFF_RANKS[i].min) { rankIdx = Math.min(i, PARTNER_DIALOGUES.length - 1); break; }
+            }
+            let lines = PARTNER_DIALOGUES[rankIdx];
+            return lines[Math.floor(Math.random() * lines.length)];
+        }
+
+        function addAffection(amount = 1) {
+            if (!inventory.partnerId || !inventory.partners || !inventory.partners[inventory.partnerId]) return;
+            let p = inventory.partners[inventory.partnerId];
+            p.affection = (p.affection || 0) + amount;
+            let aff = p.affection;
+            if (aff >= 50)  unlockAchievement('ach_affection50');
+            if (aff >= 200) unlockAchievement('ach_affection200');
+            if (aff % 10 === 0) {
+                let line = getPartnerDialogue(aff);
+                let el = document.querySelector('.screen:not(.hidden) .status-msg');
+                if (el) el.innerHTML += `<br><span style="color:#F48FB1;font-style:italic;">💬 ${line}</span>`;
+            }
+        }
+
+        function updateAffectionUI() {
+            let aff = 0;
+            if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                aff = inventory.partners[inventory.partnerId].affection || 0;
+            }
+            let rank = AFF_RANKS[0];
+            for (let i = AFF_RANKS.length - 1; i >= 0; i--) {
+                if (aff >= AFF_RANKS[i].min) { rank = AFF_RANKS[i]; break; }
+            }
+            let pct = rank.next > rank.min ? Math.min(100, Math.round((aff - rank.min) / (rank.next - rank.min) * 100)) : 100;
+            let valEl  = document.getElementById('aff-val');
+            let nextEl = document.getElementById('aff-next');
+            let barEl  = document.getElementById('aff-bar');
+            let rankEl = document.getElementById('aff-rank-text');
+            let diaEl  = document.getElementById('partner-dialogue');
+            if (valEl)  valEl.textContent  = aff;
+            if (nextEl) nextEl.textContent = rank.next;
+            if (barEl)  barEl.style.width  = pct + '%';
+            if (rankEl) rankEl.textContent = rank.label;
+            if (diaEl && aff > 0) { diaEl.style.display = 'block'; diaEl.textContent = getPartnerDialogue(aff); }
+        }
+
+function checkDailyReset() {
             let today = new Date().toDateString(); 
             if (inventory.lastGachaDate !== today) {
                 inventory.lastGachaDate = today;
@@ -1031,6 +1303,7 @@
 
             if (!inventory.unlockedCards.includes(cardId)) {
                 inventory.unlockedCards.push(cardId);
+                if (inventory.unlockedCards.length >= 10) unlockAchievement('ach_cards10');
             }
             
             if (!inventory.cardStats[cardId]) {
@@ -1127,6 +1400,11 @@
                     if(inventory.unlockedCards === undefined) inventory.unlockedCards = [];
                     if(inventory.cardStats === undefined) inventory.cardStats = {};
                     if(inventory.bloodMoonActive === undefined) inventory.bloodMoonActive = false;
+                    if (!inventory.achievements) inventory.achievements = [];
+                    if (inventory.totalCorrectAnswers === undefined) inventory.totalCorrectAnswers = 0;
+                    if (inventory.totalBossWins === undefined) inventory.totalBossWins = 0;
+                    if (!inventory.dailyQuests) inventory.dailyQuests = [];
+                    if (!inventory.dailyQuestProgress) inventory.dailyQuestProgress = {};
                     
                     if(!inventory.partners) {
                         inventory.partners = {};
@@ -1240,7 +1518,7 @@
         function hideAll() { document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); }
         
         function goHome() {
-            playSound('click'); updateUI(); hideAll(); clearInterval(combatTimerInterval);
+            playSound('click'); updateUI(); renderDailyQuests(); hideAll(); clearInterval(combatTimerInterval);
             if(!inventory.playerName) {
                 document.getElementById('login-screen').classList.remove('hidden');
             } else {
@@ -1265,6 +1543,7 @@
             if (type === 'hut') {
                 if (inventory.wood < 2) return alert("❌ 需要 🪵2 木材！");
                 inventory.wood -= 2; inventory.hut++;
+                unlockAchievement('ach_build');
                 alert(`✅ 建造了 🛖 木屋！目前共 ${inventory.hut} 座`);
             } else if (type === 'tower') {
                 if (inventory.stone < 2) return alert("❌ 需要 🧱2 石頭！");
@@ -1388,6 +1667,7 @@
             } else {
                 inventory.partnerId = id; inventory.partnerLv = 0; inventory.partnerBranch = 'A'; inventory.partners[id] = { lv: 0, branch: 'A' };
             }
+            unlockAchievement('ach_partner');
             saveGame(); openPartnerZone(); updateUI();
         }
 
@@ -1440,6 +1720,9 @@
                 // ✅ FIX: 第3級進化時，使用當前路線（A/B）而非寫死的 'A'
                 if (bSingle) bSingle.onclick = () => evolvePartner(pLevel === 3 ? inventory.partnerBranch : 'A');
             }
+            // ✅ 感情值 UI & 任務進度
+            updateAffectionUI();
+            updateQuestProgress('visit_partner');
         }
 
         window.evolvePartner = function(chosenBranch = 'A') {
@@ -1488,6 +1771,8 @@
                     setTimeout(() => {
                         inventory.partnerLv++;
                         if(pLevel === 2) inventory.partnerBranch = chosenBranch;
+                        unlockAchievement('ach_evo1');
+                        if (inventory.partnerLv >= 4) unlockAchievement('ach_evo4');
                         let newInfo = getPartnerInfo(inventory.partnerId, inventory.partnerLv, inventory.partnerBranch);
                         evoImg.src = newInfo.p.startsWith('http') ? newInfo.p : `https://digimon.net/cimages/digimon/${newInfo.p}`;
                         evoImg.parentElement.classList.add('evo-revealed');
@@ -1616,6 +1901,7 @@
         let reorderSessionTasks = [], reorderSessionIndex = 0, reorderCurrentAnswer = '';
 
         window.startGame = function(type) {
+            updateQuestProgress('anymode');
             initAudio(); playSound('click');
             if (!inventory.playerName) return alert("⚠️ 請先輸入冒險者名稱！");
             clearInterval(combatTimerInterval);
@@ -2150,6 +2436,10 @@
                         } else {
                             inventory.gem += 10; inventory.star += 10; inventory.coins += 100; updateUI(); 
                             alert("🏆 恭喜你擊敗了對手！獲得 10 顆寶石、10 顆星星、100金幣！\n📖 閃卡已登錄至紀念冊！");
+                            inventory.totalBossWins = (inventory.totalBossWins || 0) + 1;
+                            updateQuestProgress('boss');
+                            unlockAchievement('ach_boss1');
+                            if (inventory.totalBossWins >= 5) unlockAchievement('ach_boss5');
                             unlockCard('boss_' + currentEvent.level);
                         }
                         goHome();
