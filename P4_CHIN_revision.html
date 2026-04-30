@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>數碼冒險：4A森林大作戰 (神獸試煉版)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
+        /* 引入點陣像素字體，用於進化文字 */
+        @import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+        
+        body {
+            font-family: 'Nunito', "Microsoft JhengHei", sans-serif;
+            background: #4A148C; 
+            background-image: linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%, rgba(255,255,255,0.05)), linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%, rgba(255,255,255,0.05));
+            background-size: 40px 40px; background-position: 0 0, 20px 20px;
+            margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #333;
+            transition: background 1s ease;
+        }
+        
+        h1 { color: #FFF; text-transform: uppercase; letter-spacing: 2px; text-shadow: 4px 4px 0 #311B92, -2px -2px 0 #311B92, 2px -2px 0 #311B92, -2px 2px 0 #311B92; font-size: 2.8em; text-align: center; margin: 10px 0; }
+        .player-info { background: #E1BEE7; color: #333; font-size: 1.2em; font-weight: bold; padding: 5px 20px; border-radius: 20px; border: 4px solid #AB47BC; margin-bottom: 10px; box-shadow: 0 4px 0 #8E24AA; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; }
+        .inventory-bar { background-color: #212121; color: white; border: 4px solid #000; border-radius: 8px; padding: 10px 20px; font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; margin-bottom: 5px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; }
+        
+        #medal-bar { background-color: #311B92; border-color: #1A237E; box-shadow: 0 6px 0 #000051; font-size: 1.4em; gap: 8px; }
+        .medal-icon { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); animation: pulse 2s infinite; cursor: help; }
+
+        .gem-text { color: #E040FB; text-shadow: 1px 1px 2px #000; }
+        .star-text { color: #FFC107; text-shadow: 1px 1px 2px #000; animation: blink 2s infinite; }
+        .super-text { color: #00E5FF; text-shadow: 1px 1px 2px #000; }
+        .coin-text { color: #FFD700; text-shadow: 1px 1px 2px #000; font-weight: bold; }
+        .stat-atk { color: #FF5252; text-shadow: 1px 1px 2px #000;}
+        .stat-def { color: #448AFF; text-shadow: 1px 1px 2px #000;}
+        .save-indicator { font-size: 0.8em; color: #CE93D8; margin-bottom: 15px; text-shadow: 1px 1px 0 #000; }
+
+        .container { background-color: #F3E5F5; border: 8px solid #4A148C; border-radius: 12px; padding: 20px; width: 95%; max-width: 800px; box-shadow: 0 12px 0 #311B92; text-align: center; }
+
+        input[type="text"] { font-size: 1.5em; padding: 10px; border: 4px solid #333; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; margin-bottom: 15px; font-weight: bold; }
+        button { font-family: inherit; font-size: 1.2em; font-weight: bold; padding: 12px 20px; margin: 10px; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: all 0.1s; border: 4px solid rgba(0,0,0,0.2); }
+        button:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent !important; }
+        button:disabled { cursor: not-allowed; opacity: 0.6; filter: grayscale(100%); }
+        
+        .btn-green { background-color: #4CAF50; color: white; box-shadow: 0 6px 0 #2E7D32; }
+        .btn-blue { background-color: #2196F3; color: white; box-shadow: 0 6px 0 #1565C0; }
+        .btn-orange { background-color: #FF9800; color: white; box-shadow: 0 6px 0 #E65100; }
+        .btn-grey { background-color: #9E9E9E; color: white; box-shadow: 0 6px 0 #616161; }
+        .btn-red { background-color: #f44336; color: white; box-shadow: 0 6px 0 #b71c1c; }
+        .btn-purple { background-color: #9C27B0; color: white; box-shadow: 0 6px 0 #6A1B9A; border: 4px solid #EA80FC; animation: pulse 2s infinite; }
+        .btn-gold { background-color: #FFB300; color: white; box-shadow: 0 6px 0 #FF8F00; border: 4px solid #FFE082; animation: pulse 2s infinite; }
+
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(234, 128, 252, 0.7), 0 6px 0 #6A1B9A; } 70% { box-shadow: 0 0 0 15px rgba(234, 128, 252, 0), 0 6px 0 #6A1B9A; } 100% { box-shadow: 0 0 0 0 rgba(234, 128, 252, 0), 0 6px 0 #6A1B9A; } }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        .hidden { display: none !important; }
+        .screen { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        
+        .word-bank, .answer-area { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; min-height: 80px; padding: 15px; background: rgba(0,0,0,0.05); border-radius: 10px; border: 4px inset rgba(0,0,0,0.1); box-sizing: border-box; }
+        .word-chunk { background-color: #E1BEE7; border: 4px solid #BA68C8; box-shadow: 0 6px 0 #8E24AA; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; color: #333; }
+        .stone-chunk { background-color: #8E24AA; border: 4px solid #4A148C; box-shadow: 0 6px 0 #311B92; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; color: #FFF; transition: visibility 0.2s; }
+        .question-text { font-size: 1.5em; font-weight: bold; background: #FFF; padding: 15px; border: 4px solid #AB47BC; border-radius: 8px; line-height: 1.5; width: 90%; box-sizing: border-box; }
+        .status-msg { font-size: 1.5em; font-weight: bold; min-height: 55px; margin-bottom: 5px; }
+
+        .hp-bar-container { width: 90%; background: #333; border: 4px solid #222; border-radius: 10px; height: 30px; position: relative; overflow: hidden; margin-bottom: 10px; }
+        .hp-bar { background: #4CAF50; height: 100%; width: 100%; transition: width 0.3s; }
+        .hp-text { position: absolute; width: 100%; text-align: center; color: white; font-weight: bold; line-height: 30px; top: 0; left: 0; text-shadow: 1px 1px 2px #000; }
+        
+        .timer-bar-container { width: 90%; background: #E0E0E0; border: 4px solid #9E9E9E; border-radius: 10px; height: 20px; position: relative; overflow: hidden; margin-bottom: 10px; }
+        .timer-bar { background: #FF5252; height: 100%; width: 100%; transition: width 1s linear; }
+
+        .world-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; background: #CE93D8; padding: 20px; border: 6px solid #8E24AA; border-radius: 10px; min-height: 150px; width: 90%; font-size: 3em; box-sizing: border-box; }
+        .world-item { font-size: 3.5em; margin-bottom: 5px; animation: bounceIn 0.5s ease; }
+        @keyframes bounceIn { 0% { transform: scale(0.1); opacity: 0; } 60% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); } }
+
+        .super-gear-card { border: 4px solid #FF9800; background: #FFF3E0; width: 200px; padding: 15px; border-radius: 10px; text-align: center; }
+        .super-gear-card h3 { margin: 5px 0; color: #E65100; font-size: 1.3em; }
+
+        .status-pic { width: 160px; height: 160px; object-fit: contain; margin: 10px auto; border: 4px solid #AB47BC; border-radius: 10px; background: #000; display: block; transition: all 0.3s ease; }
+        .battle-pic { width: 250px; height: 250px; object-fit: contain; margin: 10px auto; border: 4px solid #AB47BC; border-radius: 10px; background: #000; display: block; }
+        
+        .glow-red { animation: glowRed 1.5s infinite; border-color: #f44336 !important; }
+        .glow-purple { animation: glowPurple 1.5s infinite; border-color: #9C27B0 !important; }
+        .glow-gold { animation: glowGold 1.5s infinite; border-color: #FFD700 !important; }
+        
+        @keyframes glowRed { 0% { box-shadow: 0 0 5px #f44336; } 50% { box-shadow: 0 0 25px #f44336; } 100% { box-shadow: 0 0 5px #f44336; } }
+        @keyframes glowPurple { 0% { box-shadow: 0 0 5px #9C27B0; } 50% { box-shadow: 0 0 25px #9C27B0; } 100% { box-shadow: 0 0 5px #9C27B0; } }
+        @keyframes glowGold { 0% { box-shadow: 0 0 10px #FFD700; } 50% { box-shadow: 0 0 30px #FFD700; } 100% { box-shadow: 0 0 10px #FFD700; } }
+        
+        .partner-card { background: #FFF; border: 4px solid #AB47BC; border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; transition: 0.2s; width: 180px; box-sizing: border-box; position: relative; }
+        .partner-card:hover { transform: scale(1.05); box-shadow: 0 0 15px #9C27B0; }
+        .partner-card img { width: 100px; height: 100px; object-fit: contain; border-radius: 8px; border: 2px solid #ccc; }
+        .partner-card h3 { margin: 5px 0; color: #4A148C; font-size: 1.2em; }
+        .partner-card p { margin: 0; font-size: 0.9em; color: #666; font-weight: bold; }
+        .partner-active-border { border: 4px solid #FFD700 !important; box-shadow: 0 0 15px #FFD700; }
+
+        /* ================= 戰鬥特效 ================= */
+        .legendary-mode { background-color: #3e0000 !important; transition: background 1s ease; }
+        .ultimate-warning { animation: screenShake 0.2s infinite, flashRed 0.5s infinite; }
+        
+        @keyframes screenShake { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-2px, -2px) rotate(-1deg); } 50% { transform: translate(-3px, 0px) rotate(1deg); } 75% { transform: translate(3px, 2px) rotate(0deg); } 100% { transform: translate(1px, -1px) rotate(-1deg); } }
+        @keyframes flashRed { 0% { box-shadow: inset 0 0 50px #ff0000; } 50% { box-shadow: inset 0 0 10px #ff0000; } 100% { box-shadow: inset 0 0 50px #ff0000; } }
+        
+        .frozen-options { pointer-events: none; filter: grayscale(100%) blur(1px) brightness(0.8); transition: all 0.3s; }
+        
+        /* 💡 動畫：數碼數據流背景與進化特效 */
+        #evo-modal { position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; justify-content:center; align-items:center; overflow: hidden; }
+        .matrix-bg { position: absolute; top:0; left:0; width:100%; height:100%; background: #000; background-image: repeating-linear-gradient(0deg, rgba(0,255,0,0.1) 0px, rgba(0,255,0,0.1) 2px, transparent 2px, transparent 10px); background-size: 100% 200%; animation: matrixFall 2s linear infinite; z-index: 1; }
+        @keyframes matrixFall { 0% { background-position: 0 0; } 100% { background-position: 0 100%; } }
+        
+        .evo-box { position: relative; z-index: 10; padding: 40px; border-radius: 20px; text-align: center; border: 8px solid #FFF; background: rgba(0,0,0,0.8); box-shadow: 0 0 50px #FFF; transition: all 1s; }
+        .evo-box img { width: 250px; height: 250px; object-fit: contain; filter: brightness(0) invert(1); transition: all 0.5s; }
+        
+        /* 巨大文字衝擊 (點陣字型) */
+        .evo-text-slam { 
+            font-family: 'DotGothic16', sans-serif;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(5); 
+            color: #FFD700; font-size: 6em; font-style: italic; font-weight: 900; 
+            text-shadow: 0 0 20px #FF0000, 5px 5px 0px #800000; 
+            white-space: nowrap; z-index: 20; opacity: 0; pointer-events: none; 
+        }
+        .slam-anim { animation: slamDown 1.5s cubic-bezier(0.1, 0.9, 0.2, 1) forwards, textShake 0.5s 1.5s infinite; }
+        @keyframes slamDown { 0% { transform: translate(-50%, -50%) scale(10); opacity: 0; } 50% { opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+        @keyframes textShake { 0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); } 25% { transform: translate(-52%, -48%) scale(1.02) rotate(-2deg); } 75% { transform: translate(-48%, -52%) scale(1.02) rotate(2deg); } }
+        
+        /* 路線分歧視覺 */
+        .evo-matrix .matrix-bg { background-image: repeating-linear-gradient(0deg, rgba(0,255,0,0.3) 0px, rgba(0,255,0,0.3) 2px, transparent 2px, transparent 10px); animation: matrixFall 1s linear infinite; }
+        .evo-matrix .evo-box { background: rgba(0,20,0,0.9); border-color: #00FF00; box-shadow: 0 0 80px #00FF00; }
+        .evo-matrix .evo-text-slam { color: #00FF00; text-shadow: 0 0 20px #00FF00, 5px 5px 0px #003300; }
+        
+        .evo-light .matrix-bg { background: #FFF !important; background-image: radial-gradient(circle, #FFF 20%, #FFF9C4 80%); animation: none; }
+        .evo-light .evo-box { background: rgba(255,255,255,0.9); border-color: #FFD700; box-shadow: 0 0 80px #FFD700; }
+        .evo-dark .matrix-bg { background: #000; animation: darkGlitch 0.2s infinite; }
+        @keyframes darkGlitch { 0% { filter: hue-rotate(0deg) invert(0%); } 50% { filter: hue-rotate(90deg) invert(20%); } 100% { filter: hue-rotate(0deg) invert(0%); } }
+        .evo-dark .evo-box { background: rgba(20,0,40,0.9); border-color: #9C27B0; box-shadow: 0 0 80px #9C27B0; animation: boxShake 0.1s infinite; }
+        @keyframes boxShake { 0% { transform: translate(2px, 1px); } 50% { transform: translate(-1px, -2px); } 100% { transform: translate(1px, 2px); } }
+        .evo-dark .evo-text-slam { color: #E040FB; text-shadow: 0 0 20px #6A1B9A, 5px 5px 0px #000; }
+
+        /* 完成動畫揭曉特效 */
+        .evolving-flash { animation: evolveGlow 3s ease-in-out forwards; }
+        @keyframes evolveGlow { 
+            0% { filter: brightness(1) drop-shadow(0 0 0px transparent); transform: scale(1); } 
+            20% { filter: brightness(2) contrast(1.2) drop-shadow(0 0 30px #00E5FF); transform: scale(1.1) rotate(2deg); }
+            40% { filter: brightness(5) contrast(1.5) drop-shadow(0 0 60px #FF00FF); transform: scale(1.2) rotate(-2deg); }
+            60% { filter: brightness(10) contrast(2) drop-shadow(0 0 100px #FFD700); transform: scale(1.3) rotate(0deg); box-shadow: 0 0 50px #FFF; } 
+            80% { filter: brightness(4) contrast(1.3) drop-shadow(0 0 50px #FFF); transform: scale(1.15) rotate(1deg); }
+            100% { filter: brightness(1) drop-shadow(0 0 0px transparent); transform: scale(1); } 
+        }
+        .evo-revealed img { filter: brightness(1) invert(0) !important; transform: scale(1.3); }
+
+        .blood-moon-ui { background: rgba(0,0,0,0.8); color: #ff5252; padding: 10px; border: 2px solid #ff0000; border-radius: 8px; font-weight: bold; margin-bottom: 10px; text-align: center; }
+        
+        /* 紀念冊專屬 CSS */
+        .album-tab-btn { margin: 0 5px; padding: 8px 15px; font-size: 1rem; border-radius: 20px; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.5);}
+        .album-tab-btn:hover { transform: translateY(-3px); }
+        .album-grid { display: grid; gap: 15px; margin-top: 15px; max-height: 50vh; overflow-y: auto; padding: 10px; align-items: end;}
+        .album-grid.normal { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+        .album-grid.boss { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+        .album-grid.epic { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+        .card-slot { border: 3px solid #ccc; border-radius: 8px; padding: 10px; text-align: center; background: rgba(255,255,255,0.9); cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3);}
+        .card-slot:hover { transform: scale(1.05); border-color:#1976D2; }
+        .album-grid.normal .card-slot img { width: 80px; height: 80px; object-fit:contain; }
+        .album-grid.boss .card-slot img { width: 120px; height: 120px; object-fit:contain; }
+        .album-grid.epic .card-slot img { width: 180px; height: 180px; object-fit:contain; }
+        .card-locked img { filter: brightness(0) drop-shadow(0 0 2px rgba(0,0,0,0.5)); }
+        .card-locked .card-name, .card-locked .card-stats { display: none; }
+        
+        /* Modals 通用 */
+        #event-modal, #market-modal, #gacha-modal, #album-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; display:flex; justify-content:center; align-items:center; }
+        .event-box { background:#FFF; padding:30px; border-radius:15px; text-align:center; border:8px solid #4A148C; max-width: 90%; width: 500px; max-height: 90vh; overflow-y: auto; }
+        .event-box h2 { color:#4A148C; font-size: 2em; margin-top: 0; }
+        .market-modal-content { background: #E8F5E9; border: 6px solid #4CAF50; }
+        .gacha-modal-content { background: #FFF3E0; border: 6px solid #FF9800; }
+        .album-modal-content { background: #E3F2FD; border: 6px solid #1976D2; max-width: 800px !important; width: 95%;}
+
+    </style>
+</head>
+<body>
+
+    <h1>🟪 森林大冒險：4A寶寶 🟪</h1>
+
+    <div id="player-tag" class="player-info hidden">
+        <span>冒險者：<span id="display-name"></span></span> 
+        <span id="streak-counter" style="color:#6A1B9A; margin-left: 10px;">🔥 連對: 0</span>
+        <span id="buff-indicator" style="color: #E65100; font-weight: bold; margin-left: 10px; animation: blink 2s infinite;"></span>
+    </div>
+
+    <div id="medal-bar" class="inventory-bar hidden">
+        <span style="color:#FFEB3B;">🎖️ 榮譽勳章牆：</span>
+        <span id="medal-container"></span>
+    </div>
+
+    <div id="top-nav" class="inventory-bar hidden">
+        <span>🪵 木材: <span id="inv-wood">0</span></span>
+        <span>🧱 石頭: <span id="inv-stone">0</span></span>
+        <span class="coin-text">💰 金幣: <span id="inv-coins">0</span></span>
+        <span class="stat-atk">⚔️ 攻: <span id="inv-atk">10</span></span>
+        <span class="stat-def">🛡️ 防: <span id="inv-def">10</span></span>
+        <span class="gem-text">💎 寶石: <span id="inv-gem">0</span></span>
+        <span class="star-text">🌟 星星: <span id="inv-star">0</span></span>
+        <span class="super-text">📜 手稿: <span id="inv-manu">0</span></span>
+        <span class="super-text">🔮 碎片: <span id="inv-frag">0</span></span>
+    </div>
+    <div id="save-indicator" class="save-indicator hidden">💾 遊戲進度已自動讀取</div>
+
+    <div id="main-container" class="container">
+        
+        <div id="login-screen" class="screen">
+            <h2>🏕️ 創建你的角色</h2>
+            <p>請輸入冒險者名稱：</p>
+            <input type="text" id="input-name" maxlength="10" placeholder="輸入名字...">
+            <button class="btn-purple" onclick="setPlayerName()">🚀 開始遊戲</button>
+        </div>
+
+        <div id="start-screen" class="screen hidden">
+            <div style="width: 100%; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;">
+                <button class="btn-grey" onclick="logout()" style="font-size: 0.9em; padding: 8px 12px; margin: 0;">🔄 更改名字/登出</button>
+                <button class="btn-gold" onclick="claimGift()" style="font-size: 0.9em; padding: 8px 12px; margin: 0;">🎁 老玩家禮包</button>
+                <button class="btn-blue" onclick="openAlbum()" style="font-size: 0.9em; padding: 8px 12px; margin: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 2px solid #fff;">📖 閃卡紀念冊</button>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; width: 100%; border: 2px dashed #9C27B0;">
+                <h3 style="margin-top:0; color:#4A148C;">🌟 勇者系統</h3>
+                <button class="btn-gold" onclick="openGacha()">🎰 幸運轉盤 (耗 1 🌟)</button>
+                <button class="btn-orange" onclick="openMarket()" style="animation: pulse 2s infinite;">🛒 秘密市場 & 銀行 (支援金幣)</button>
+            </div>
+
+            <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#6A1B9A; margin-top: 15px;">📖 遊戲指南 (神獸與機制介紹)</button>
+            <hr style="width: 80%; border-top: 4px dashed #6A1B9A;">
+            
+            <h2>🏕️ 選擇冒險關卡 (特訓區)</h2>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
+                <button class="btn-green" onclick="startGame('fill')">⛏️ 礦洞尋寶 (填充題)</button>
+                <button class="btn-blue" onclick="startGame('match-word')">🔮 符文解密 (配詞題)</button>
+                <button class="btn-orange" onclick="startGame('connect')">🔗 魔法連線 (連線題)</button>
+                <button class="btn-grey" onclick="startGame('punct')">📜 古卷修復 (標點題)</button>
+                <button class="btn-purple" onclick="startGame('reorder')">🌉 鋪木板過河 (重組句子)</button>
+                
+                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (綜合題)</button>
+                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (課文重組)</button>
+            </div>
+            
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 10px; padding: 10px; background: #FFF3E0; border-radius: 8px; border: 2px dashed #FF9800;">
+                <h3 style="width:100%; margin:0 0 5px 0; color:#E65100;">📙 最新進度：副詞與外貌描寫</h3>
+                <button class="btn-orange" onclick="startGame('adv-mc')" style="box-shadow: 0 6px 0 #E65100;">⏳ 副詞特訓 (初/高階)</button>
+                <button class="btn-gold" onclick="startGame('appearance-mc')" style="box-shadow: 0 6px 0 #FF8F00;">👤 外貌描寫特訓</button>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 10px; padding: 10px; background: #E0F2F1; border-radius: 8px; border: 2px dashed #00897B;">
+                <h3 style="width:100%; margin:0 0 5px 0; color:#00695C;">📘 最新進度：默書温習(二)</h3>
+                <button class="btn-green" onclick="startGame('dictation2-mc')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">📖 默書温習(二) - 填充</button>
+                <button class="btn-purple" onclick="startGame('dictation2-reorder')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">🌉 默書温習(二) - 重組</button>
+            </div>
+
+            <p style="font-size: 0.9em; font-weight: bold; color: #8E24AA;">(連續答題提升攻防值，有機率遇到隱藏的「傳說怪」！)</p>
+            
+            <hr style="width: 80%; border-top: 4px dashed #6A1B9A;">
+            
+            <button class="btn-purple" onclick="openPartnerZone()" style="box-shadow: 0 6px 0 #6A1B9A; animation: pulse 2s infinite;">🐾 搭檔精靈 (全圖鑑系統)</button>
+            <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇 (基礎戰力)</button>
+            
+            <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:5px;">
+                <button class="btn-red" onclick="openForgeZone()" style="font-size:1em;">⚔️ 裝備鍛造</button>
+                <button class="btn-blue" onclick="openBuildZone()" style="font-size:1em;">🔨 建築工坊</button>
+                <button class="btn-black" id="btn-boss-menu" onclick="openBossSelect()" disabled style="font-size:1em;">🔒 終極 Boss</button>
+            </div>
+        </div>
+
+        <div id="instruction-screen" class="screen hidden">
+            <h2>📖 冒險者指南</h2>
+            <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #6A1B9A; max-height: 50vh; overflow-y: auto;">
+                <h3 style="color:#4A148C; margin-top:0;">1. 經濟系統與藥水</h3>
+                <p>💰<b>金幣</b>：打怪會掉落，也可在市場用木/石兌換。能在市場購買強力的【雙倍掉落藥水】！<br>📜<b>手稿</b>：連對題數越高，手稿給越多（5連對x2，10連對每題給15個）。打贏Boss更會掉落幾百個！</p>
+                
+                <h3 style="color:#B71C1C;">2. 戰鬥系統與狂暴機制</h3>
+                <p>在森林中隨時會遭遇各級怪獸：<br>
+                <b>【狂暴機制】</b>當任何神獸/Boss的血量(答題進度)低於 50% 時，必定觸發狂暴！後續答題限時將永久減少 30%！</p>
+
+                <h3 style="color:#ff0000;">3. 血月降臨與遠古神獸 (極度危險)</h3>
+                <p>當你擁有至少 1 座大城堡時，答題有 5% 機率觸發「血月」。在血月期間連續答對目標題數，即可召喚擁有專屬特技的<b>五大遠古神獸</b>：</p>
+                <ul style="color:#3e0000; font-weight:bold; font-size:0.9em;">
+                    <li>☄️ 烈空坐：【畫龍點睛】無視防禦造成巨額真實傷害！</li>
+                    <li>🔮 超夢：【精神擊破】禁療詛咒！戰鬥中無法使用恢復藥水！</li>
+                    <li>❄️ 水君：【絕對零度】戰鬥中 40% 機率將選項按鈕凍結鎖死 3 秒！</li>
+                    <li>🔥 鳳王：【神聖之火】無視防禦造成巨額真實傷害！</li>
+                    <li>⭐ 阿爾宙斯：【制裁光礫】30% 機率發動大招，答題限時強制縮短至 3 秒，超時或答錯直接秒殺！</li>
+                </ul>
+
+                <h3 style="color:#2E7D32;">4. 究極進化與閃卡紀念冊</h3>
+                <p>你可以擁有多隻數碼精靈或 Pokémon 拍檔！當精靈進化時會觸發專屬「數據流」或「善惡分歧」超華麗動畫！擊敗各類 Boss 與神獸，更可以解鎖「📖 閃卡紀念冊」，記錄你的榮耀時刻。</p>
+            </div>
+            <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
+        </div>
+
+        <div id="partner-zone" class="screen hidden">
+            <div id="partner-select-screen" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                <h2 style="color: #9C27B0;">🥚 冒險拍檔圖鑑與切換</h2>
+                <p style="font-weight:bold; color:#D50000; margin-top:0;">你可以隨時切換搭檔！新領養的拍檔將從幼年期開始培育。</p>
+                <div id="partner-grid-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 700px;">
+                    </div>
+                <button class="btn-grey hidden" id="btn-cancel-select" onclick="openPartnerZone(false)" style="margin-top:20px;">❌ 取消切換</button>
+            </div>
+
+            <div id="partner-status-screen" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                <h2 style="color: #9C27B0; margin-bottom: 5px;">🐾 我的當前搭檔</h2>
+                <p id="partner-path-name" style="margin-top:0; font-weight:bold; color:#6A1B9A;">路線</p>
+                
+                <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 15px; border: 4px dashed #9C27B0; text-align: center; width: 90%; max-width: 500px;">
+                    <img id="partner-pic" class="status-pic" src="">
+                    <h3 id="partner-name" style="color: #4A148C; font-size: 2em; margin: 10px 0; text-shadow: 1px 1px 0 #E1BEE7;">Name</h3>
+                    <p style="font-size: 1.3em; font-weight: bold; color: #2E7D32; margin-bottom:5px;">✨ 目前搭檔加成: <br>+<span id="partner-buff" style="font-size:1.8em; color:#D50000;">0</span> 攻防</p>
+                    <p style="font-size: 0.8em; color: #666; margin-top:0;">(只有當前選擇的搭檔會提供戰力加成)</p>
+
+                    <div id="evo-req-single" class="hidden" style="margin-top: 15px; background: #F3E5F5; padding: 15px; border-radius: 10px; border: 2px solid #AB47BC;">
+                        <h4 style="margin: 0 0 10px 0; color: #D50000; font-size:1.2em;">🔼 下一階進化需求</h4>
+                        <div style="display:flex; justify-content:center; gap:15px; font-weight:bold; font-size:1.1em; flex-wrap:wrap;">
+                            <span>📜手稿: <span id="evo-s-m" style="color:#D50000;">0</span></span>
+                            <span>🔮碎片: <span id="evo-s-f" style="color:#D50000;">0</span></span>
+                            <span>🌟星星: <span id="evo-s-s" style="color:#D50000;">0</span></span>
+                        </div>
+                        <button class="btn-gold" id="btn-evolve-single" onclick="evolvePartner('A')" style="margin-top:15px; width:80%;">⚡ 進行進化！</button>
+                    </div>
+
+                    <div id="evo-req-branch" class="hidden" style="margin-top: 15px; width:100%;">
+                        <h4 style="margin: 0 0 10px 0; color: #D50000; font-size:1.2em;">⚠️ 發現分歧進化路線！</h4>
+                        <div style="display:flex; justify-content:space-between; gap:10px;">
+                            <div style="background: #FFF9C4; padding: 10px; border-radius: 10px; border: 2px solid #FBC02D; flex: 1;">
+                                <p style="margin:0 0 5px 0; font-weight:bold; color:#F57F17;" id="branch-a-title">⭐ 光明進化</p>
+                                <p style="margin:2px 0; font-size:0.9em;">📜<span id="evo-a-m">0</span> 🔮<span id="evo-a-f">0</span></p>
+                                <p style="margin:2px 0; font-size:0.9em; color:#D50000; font-weight:bold;">🌟星星: <span id="evo-a-s">0</span></p>
+                                <button class="btn-orange" id="btn-evolve-a" onclick="evolvePartner('A')" style="font-size:0.9em; padding:5px; width:100%;">選此路線</button>
+                            </div>
+                            <div style="background: #E1BEE7; padding: 10px; border-radius: 10px; border: 2px solid #8E24AA; flex: 1;">
+                                <p style="margin:0 0 5px 0; font-weight:bold; color:#4A148C;" id="branch-b-title">💎 闇黑進化</p>
+                                <p style="margin:2px 0; font-size:0.9em;">📜<span id="evo-b-m">0</span> 🔮<span id="evo-b-f">0</span></p>
+                                <p style="margin:2px 0; font-size:0.9em; color:#D50000; font-weight:bold;">💎寶石: <span id="evo-b-g">0</span></p>
+                                <button class="btn-purple" id="btn-evolve-b" onclick="evolvePartner('B')" style="font-size:0.9em; padding:5px; width:100%;">選此路線</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="evo-max-msg" class="hidden" style="margin-top: 20px; padding: 15px; background: #FFF9C4; border: 2px solid #FBC02D; border-radius: 10px;">
+                        <p style="color: #E65100; font-weight: bold; font-size: 1.4em; margin:0;">🏆 究極體達成！</p>
+                        <p style="color: #4CAF50; margin:5px 0 0 0; font-weight:bold;">你的搭檔已經達到最強狀態！快去收集其他拍檔吧！</p>
+                    </div>
+
+                    <button class="btn-blue" onclick="openPartnerZone(true)" style="margin-top: 15px; width: 100%; font-size: 1em;">🔄 更換搭檔 / 查看圖鑑</button>
+                </div>
+            </div>
+            <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
+        </div>
+
+        <div id="super-forge-zone" class="screen hidden">
+            <h2 style="color: #FF9800;">👑 神器祭壇</h2>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+                <div class="super-gear-card">
+                    <h3>🗡️ 破題者之刃 <br>Lv.<span id="sg-w-lv">0</span></h3>
+                    <p class="stat-atk">效果: +<span id="sg-w-bonus">0</span> 攻</p>
+                    <button class="btn-gold" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('weapon')">升級 (需 <span id="sg-w-cost-m">20</span>木材 <span id="sg-w-cost-f">5</span>寶石)</button>
+                </div>
+                <div class="super-gear-card">
+                    <h3>🛡️ 絕對專注之盾 <br>Lv.<span id="sg-s-lv">0</span></h3>
+                    <p class="stat-def">效果: +<span id="sg-s-bonus">0</span> 防</p>
+                    <button class="btn-blue" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('shield')">升級 (需 <span id="sg-s-cost-m">20</span>木材 <span id="sg-s-cost-f">5</span>寶石)</button>
+                </div>
+                <div class="super-gear-card">
+                    <h3>💎 無瑕賢者之石 <br>Lv.<span id="sg-a-lv">0</span></h3>
+                    <p class="gem-text">效果: 全屬性 +<span id="sg-a-bonus">0</span></p>
+                    <button class="btn-purple" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('stone')">升級 (需 <span id="sg-a-cost-m">30</span>木材 <span id="sg-a-cost-f">10</span>寶石)</button>
+                </div>
+            </div>
+            <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
+        </div>
+
+        <div id="game-reorder" class="screen hidden">
+            <h2 id="reorder-title">🌉 鋪木板過河 (重組句子)</h2>
+            <div id="reorder-bloodmoon-status" class="blood-moon-ui hidden"></div>
+            <div class="status-msg" id="reorder-msg"></div>
+            <div class="answer-area" id="answer-area"></div>
+            <div class="word-bank" id="word-bank"></div>
+            <div style="margin-top: 10px;">
+                <button class="btn-gold" id="btn-hint-reorder">💡 免費提示</button>
+                <button class="btn-orange" onclick="resetReorder()">🔄 重新排列</button>
+                <button class="btn-green hidden" id="btn-next-reorder" onclick="nextReorder()">➡️ 下一題</button>
+                <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
+            </div>
+        </div>
+
+        <div id="game-mc" class="screen hidden">
+            <h2 id="mc-title">TITLE</h2>
+            <div id="mc-bloodmoon-status" class="blood-moon-ui hidden"></div>
+            <div class="status-msg" id="mc-msg"></div>
+            <div class="question-text" id="mc-question">題目加載中...</div>
+            <div class="word-bank" id="mc-options"></div>
+            <div style="margin-top: 10px;">
+                <button class="btn-gold" id="btn-hint-mc">💡 免費提示</button>
+                <button class="btn-green hidden" id="btn-next-mc" onclick="nextMC()">➡️ 下一題</button>
+                <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
+            </div>
+        </div>
+
+        <div id="forge-zone" class="screen hidden">
+            <h2>⚔️ 裝備鍛造坊</h2>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                <button class="btn-orange" onclick="craft('woodSword')">🗡️ 木劍 (+10攻) <br><small>3 木材</small></button>
+                <button class="btn-grey" onclick="craft('stoneSword')">⚔️ 石劍 (+25攻) <br><small>5 石頭, 2 木材</small></button>
+                <button class="btn-orange" onclick="craft('woodShield')">🛡️ 木盾 (+10防) <br><small>3 木材</small></button>
+                <button class="btn-grey" onclick="craft('stoneArmor')">🛡️ 石甲 (+25防) <br><small>5 石頭</small></button>
+            </div>
+            <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
+        </div>
+
+        <div id="build-zone" class="screen hidden">
+            <h2>🔨 森林建築工坊</h2>
+            <div style="margin-bottom: 15px;">
+                <button class="btn-orange" onclick="buildItem('hut')">🛖 建木屋 (-2木)</button>
+                <button class="btn-grey" onclick="buildItem('tower')">🗼 建石塔 (-2石)</button>
+                <button class="btn-blue" onclick="buildItem('castle')">🏰 合成大城堡 (-2木屋, -2石塔)</button>
+            </div>
+            <div style="background: rgba(255,255,255,0.5); padding: 10px; border-radius: 8px; border: 2px dashed #333; margin-bottom: 15px;">
+                <h3 style="margin-top:0; color: #6A1B9A;">✨ 奇蹟建築 (消耗稀有資源)</h3>
+                <button class="btn-purple" onclick="buildItem('flyingCastle')">🛸 飛天城堡 <br><small>(-5寶石, -1大城堡)</small></button>
+                <button class="btn-gold" onclick="buildItem('ferrisWheel')">🎡 摩天輪 <br><small>(-5星星, -5木材, -5石頭)</small></button>
+            </div>
+            <div class="world-grid" id="world-grid"></div>
+            <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
+        </div>
+        
+        <div id="boss-select-screen" class="screen hidden">
+            <h2 style="color:#9C27B0;">🗺️ 終極 Boss 挑戰區</h2>
+            <p>警告：答錯或超時將扣除血量(HP)與已收集的元素！</p>
+            <button class="btn-green" onclick="startBossFight(1)">【成熟期】暴龍獸 (限時15秒)</button>
+            <button class="btn-orange" onclick="startBossFight(2)">【完全體】機械暴龍獸 (限時10秒)</button>
+            <button class="btn-red" onclick="startBossFight(3)">【究極體】戰鬥暴龍獸 (限時5秒)</button>
+            <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
+        </div>
+
+        <div id="boss-combat-screen" class="screen hidden">
+            <h2 id="boss-name-title" style="color:#B71C1C; margin-bottom:5px;">Boss Name</h2>
+            
+            <div class="hp-bar-container" id="boss-hp-ui">
+                <div class="hp-bar" id="player-hp-bar"></div>
+                <div class="hp-text" id="player-hp-text">你的 HP: 100/100</div>
+            </div>
+            <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 5px;" id="boss-progress-text">目標：累積答對 0 / 5</div>
+            <div class="timer-bar-container">
+                <div class="timer-bar" id="boss-timer-bar"></div>
+            </div>
+            <div class="question-text" id="boss-question">題目加載中...</div>
+            <div class="word-bank" id="boss-options"></div>
+            <div class="status-msg" id="boss-msg"></div>
+            <div>
+                <button class="btn-green hidden" id="btn-next-boss-q" onclick="nextCombatQuestion()">➡️ 下一題</button>
+                <button class="btn-green" id="btn-combat-potion" onclick="usePotion()">🧪 飲用藥水 (10🪵+10🪨)</button>
+                <button class="btn-grey" id="btn-boss-flee" onclick="fleeCombat()">🏃 逃跑 (掉落資源)</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="event-modal" class="hidden">
+        <div class="event-box" id="event-box-inner">
+            <h2 id="event-title">事件</h2>
+            <p id="event-desc" style="font-size: 1.1em;"></p>
+            <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 15px;" id="event-btn-group">
+                <button class="btn-red" id="btn-event-fight">⚔️ 進入戰鬥</button>
+                <button class="btn-grey" id="btn-event-flee">🏃 逃跑</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="market-modal" class="hidden">
+        <div class="event-box market-modal-content" style="max-height: 80vh; overflow-y:auto;">
+            <h2 style="color: #4CAF50;">🛒 秘密交易市場</h2>
+            
+            <div style="background: #E8EAF6; border: 3px dashed #1E88E5; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                <h3 style="color:#1565C0; margin-top:0;">🏦 資源交易所</h3>
+                <p style="margin:5px 0;">目前擁有: <span class="coin-text">💰 <span id="market-coin-display">0</span></span></p>
+                <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+                    <button class="btn-grey" onclick="exchangeCoins('wood')" style="font-size:0.9em; padding:8px;">賣 10🪵 換 50💰</button>
+                    <button class="btn-grey" onclick="exchangeCoins('stone')" style="font-size:0.9em; padding:8px;">賣 10🧱 換 50💰</button>
+                </div>
+            </div>
+
+            <div style="background: #FFF3E0; border: 3px dashed #FF9800; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                <h3 style="color:#E65100; margin-top:0;">🧪 神奇藥水店</h3>
+                <button class="btn-green" onclick="buyDropPotion()" style="width:100%; font-size:1em;">
+                    💊 雙倍掉落藥水<br><small>(接下來 20 題獲得雙倍基礎資源)</small><br>💰 200 金幣
+                </button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn-red" id="btn-buy-scroll" onclick="buyItem('scroll')">📜 傳說卷軸 (必遇傳說怪) <br>💰 50🪵 + 50🪨 + 10⭐</button>
+            </div>
+            <button class="btn-grey" style="margin-top: 20px;" onclick="closeModal('market-modal')">❌ 離開</button>
+        </div>
+    </div>
+
+    <div id="gacha-modal" class="hidden">
+        <div class="event-box gacha-modal-content">
+            <h2 style="color: #FF9800;">🎰 幸運抽獎轉盤</h2>
+            <p style="font-weight: bold; color: #E65100;">每次消耗 1 顆 ⭐，最高可中大獎！<br>(每日限 3 次，今日剩餘：<span id="gacha-chances">3</span>)</p>
+            <div id="gacha-result" style="font-size: 5em; margin: 20px; text-shadow: 0 0 10px #FFD700;">🎁</div>
+            <button class="btn-gold" onclick="rollGacha()">🎯 抽一次！</button>
+            <button class="btn-grey" onclick="closeModal('gacha-modal')">❌ 離開</button>
+        </div>
+    </div>
+
+    <div id="album-modal" class="hidden">
+        <div class="event-box album-modal-content" style="max-width: 800px; width: 95%;">
+            <h2 style="color: #1976D2; margin-bottom:10px;">📖 閃卡紀念冊</h2>
+            <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-bottom: 10px;">
+                <button class="btn-green album-tab-btn" onclick="renderAlbum('normal')">🐾 普通野獸</button>
+                <button class="btn-orange album-tab-btn" onclick="renderAlbum('boss')">👹 首領 Boss</button>
+                <button class="btn-red album-tab-btn" onclick="renderAlbum('epic')">☄️ 遠古神獸</button>
+            </div>
+            <div id="album-grid-container" class="album-grid normal">
+                </div>
+            <button class="btn-grey" style="margin-top: 20px;" onclick="closeModal('album-modal')">❌ 關閉</button>
+        </div>
+    </div>
+
+    <div id="evo-modal" class="hidden">
+        <div class="matrix-bg"></div>
+        <div class="evo-box" id="evo-box">
+            <h2 id="evo-text" class="evo-text-slam">進 化！</h2>
+            <img id="evo-img" src="">
+        </div>
+    </div>
+
+    <script>
+        // ================== 全局函式定義 ==================
+        // 🔑 已經改回 v7_ext，確保學生舊存檔完美繼承！
+        const SAVE_KEY = 'roblox_p4_chi_combat_v7_ext'; 
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+        function playSound(type) {
+            try {
+                if (!audioCtx) return;
+                const t = audioCtx.currentTime;
+                if (type === 'click') {
+                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(600, t);
+                    gain.gain.setValueAtTime(0.2, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+                    osc.start(); osc.stop(t + 0.1);
+                } else if (type === 'win') {
+                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(400, t); osc.frequency.linearRampToValueAtTime(800, t + 0.2);
+                    gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.3);
+                    osc.start(); osc.stop(t + 0.3);
+                } else if (type === 'error') {
+                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, t); osc.frequency.linearRampToValueAtTime(100, t + 0.2);
+                    gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.2);
+                    osc.start(); osc.stop(t + 0.2);
+                } else if (type === 'boss_win') {
+                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(400, t); osc.frequency.linearRampToValueAtTime(800, t + 1);
+                    gain.gain.setValueAtTime(0.3, t); gain.gain.linearRampToValueAtTime(0, t + 1.5);
+                    osc.start(); osc.stop(t + 1.5);
+                } else if (type === 'medal') {
+                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.type = 'square'; osc.frequency.setValueAtTime(600, t); osc.frequency.setValueAtTime(900, t + 0.2);
+                    osc.frequency.setValueAtTime(1200, t + 0.4); gain.gain.setValueAtTime(0.3, t); gain.gain.linearRampToValueAtTime(0, t + 1.0);
+                    osc.start(); osc.stop(t + 1.0);
+                } else if (type === 'evolution') {
+                    const bass = audioCtx.createOscillator();
+                    bass.type = 'sawtooth';
+                    bass.frequency.setValueAtTime(50, t);
+                    bass.frequency.exponentialRampToValueAtTime(150, t + 2.5);
+                    const bassGain = audioCtx.createGain();
+                    bassGain.gain.setValueAtTime(0.3, t);
+                    bassGain.gain.linearRampToValueAtTime(0, t + 3);
+                    bass.connect(bassGain); bassGain.connect(audioCtx.destination);
+                    bass.start(t); bass.stop(t + 3);
+
+                    for(let i=0; i<15; i++) {
+                        const osc = audioCtx.createOscillator();
+                        osc.type = 'sine';
+                        osc.frequency.value = 400 + (i * 50) + (Math.random()*100);
+                        const gain = audioCtx.createGain();
+                        gain.gain.setValueAtTime(0, t + i*0.15);
+                        gain.gain.linearRampToValueAtTime(0.15, t + i*0.15 + 0.05);
+                        gain.gain.linearRampToValueAtTime(0, t + i*0.15 + 0.2);
+                        osc.connect(gain); gain.connect(audioCtx.destination);
+                        osc.start(t + i*0.15); osc.stop(t + i*0.15 + 0.2);
+                    }
+
+                    const crashTime = t + 1.5;
+                    const crash = audioCtx.createOscillator();
+                    crash.type = 'square';
+                    crash.frequency.setValueAtTime(100, crashTime);
+                    crash.frequency.exponentialRampToValueAtTime(10, crashTime + 1.5);
+                    const crashGain = audioCtx.createGain();
+                    crashGain.gain.setValueAtTime(0, t);
+                    crashGain.gain.setValueAtTime(0.4, crashTime);
+                    crashGain.gain.exponentialRampToValueAtTime(0.01, crashTime + 1.5);
+                    crash.connect(crashGain); crashGain.connect(audioCtx.destination);
+                    crash.start(crashTime); crash.stop(crashTime + 1.5);
+                } else if (type === 'legendary') {
+                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.type = 'square'; osc.frequency.setValueAtTime(300, t); osc.frequency.linearRampToValueAtTime(900, t + 2);
+                    gain.gain.setValueAtTime(0.5, t); gain.gain.linearRampToValueAtTime(0, t + 3);
+                    osc.start(); osc.stop(t + 3);
+                }
+            } catch(e) {}
+        }
+
+        function shuffle(arr) {
+            let a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        // ================== 完整題庫資料 ==================
+        const fillTasks = [
+            { q: "媽媽突然收到外祖母的消息，匆匆留下一張 ______ 交待家中事宜便外出了。", ans: "便條", options: ["便條", "報紙", "雜誌", "課本"] },
+            { q: "以前的科技不發達，人們的溝通多依靠 ______ 作媒介。", ans: "書信", options: ["書信", "食物", "交通", "天氣"] },
+            { q: "姐姐的婚禮在馬爾代夫 ______ ，那兒的環境十分優美。", ans: "舉行", options: ["舉行", "取消", "破壞", "發現"] },
+            { q: "美芳淋了一天的雨，結果今天得了 ______ 。", ans: "感冒", options: ["感冒", "近視", "蛀牙", "骨折"] },
+            { q: "爺爺最近患了感冒，這幾天還不停地 ______ ，所以爸爸今早帶他去看醫生。", ans: "咳嗽", options: ["咳嗽", "微笑", "跳躍", "睡覺"] },
+            { q: "張伯伯學識淵博，對人友善有禮，是我最 ______ 的一位長輩。", ans: "尊敬", options: ["尊敬", "討厭", "忘記", "害怕"] },
+            { q: "今天老師邀請我代表學校參加演講比賽，他請我考慮一下，但要儘快給他 ______ 。", ans: "回覆", options: ["回覆", "拒絕", "批評", "忽略"] },
+            { q: "為充實自己，不想白白浪費寶貴的光陰，我 ______ 在暑假期間報讀日文班和電腦編程班。", ans: "打算", options: ["打算", "放棄", "猜測", "忘記"] },
+            { q: "因為地盤的工作 ______ 慢了，所以爸爸最近每天都要加班工作。", ans: "進度", options: ["進度", "温度", "高度", "重量"] },
+            { q: "這件事是我做錯了，希望你能 ______ 我。", ans: "原諒", options: ["原諒", "責備", "嘲笑", "打擾"] },
+            { q: "沒有得到主辦單位的 ______ ，我們不能隨意翻印他們的宣傳品的。", ans: "准許", options: ["准許", "禁止", "拒絕", "反對"] },
+            { q: "由於舒婷希望專心學業，經過多番考慮和掙扎，她決定 ______ 排球隊。", ans: "退出", options: ["退出", "參加", "組織", "帶領"] },
+            { q: "媽媽忘了繳交兩期電費，所以電力公司寄來最後通知單，請我們 ______ 繳交款項。", ans: "儘快", options: ["儘快", "慢慢", "故意", "猶豫"] },
+            { q: "經過多月的治療和家人細心的照顧，明輝受傷的膝蓋終於 ______ 了。", ans: "康復", options: ["康復", "惡化", "發病", "加重"] },
+            { q: "天文台表示，今晚凌晨會懸掛八號烈風信號，所以社區中心下午仍會 ______ 開放。", ans: "照常", options: ["照常", "暫停", "延期", "取消"] },
+            { q: "超巿門外張貼了通告，上面寫着：很 ______ ，禮品已換領完畢，感謝閣下的參與。", ans: "抱歉", options: ["抱歉", "高興", "幸運", "驕傲"] },
+            { q: "因爲沒有好好的消毒和包紥，爸爸燙傷的傷口 ______ 了。", ans: "發炎", options: ["發炎", "結疤", "復原", "消失"] },
+            { q: "工作多年的校工陳叔叔退休了，校長代表師生們 ______ 感謝他為學校作出的貢獻。", ans: "衷心", options: ["衷心", "隨便", "勉強", "假裝"] },
+            { q: "這家餐廳不但衛生情況惡劣，飯菜上還發現有死掉了的蒼蠅，真是 ______ 了！", ans: "糟透", options: ["糟透", "極佳", "美味", "乾淨"] },
+            { q: "當我們閱讀文章時，不妨透過文章的開頭和結尾句子，歸納出文章的 ______ 。", ans: "主旨", options: ["主旨", "標題", "作者", "日期"] },
+            { q: "若不是媽媽細心的照顧，奶奶的病就不能這麼快便 ______ 過來。", ans: "好轉", options: ["好轉", "惡化", "加重", "傳染"] },
+            { q: "主題樂園裏的遊戲設施都有 ______ 與高度限制，以確保遊客的安全。", ans: "年齡", options: ["年齡", "性別", "學歷", "財富"] },
+            { q: "承協擁有粗獷的聲線，那與他温柔的外表並不 ______ 。", ans: "相稱", options: ["相稱", "矛盾", "衝突", "相反"] },
+            { q: "他只是跟你開玩笑，你 ______ 這麼認真？", ans: "何必", options: ["何必", "一定", "必須", "肯定"] },
+            { q: "要在馬拉松比賽脱穎而出，最 ______ 的不是跑步的速度，而是個人的耐力和毅力。", ans: "要緊", options: ["要緊", "隨便", "普通", "次要"] }
+        ];
+
+        const matchTasks = [
+            { q: "無論任何人都要 ______ 生命，因為生命是無價的。", ans: "愛惜", options: ["愛惜", "浪費", "拋棄", "破壞"] },
+            { q: "參與義工活動能讓人體會到善良、 ______ 及互助的精神。", ans: "友愛", options: ["友愛", "自私", "冷漠", "妒忌"] },
+            { q: "弟弟今天遲了起牀，所以他連早餐也不吃，就 ______ 出門去了。", ans: "急忙", options: ["急忙", "悠閒", "緩慢", "鎮定"] },
+            { q: "惠晶有一雙水汪汪的大眼睛，高挑挺拔的鼻樑和一把 ______ 亮麗的秀髮，可算是一個美人兒。", ans: "烏黑", options: ["烏黑", "雪白", "金黃", "灰暗"] },
+            { q: "叔叔年紀不算大，但因他臉上留了 ______ 的鬍子，看上去給人成熟穩重的感覺。", ans: "濃密", options: ["濃密", "稀疏", "光禿", "稀少"] },
+            { q: "老師説：「你們要趁着 ______ 的時候好好去努力，不要虛度光陰。」", ans: "青春", options: ["青春", "衰老", "晚年", "古老"] },
+            { q: "「快點吃飯！」我和哥哥總是模仿着爸爸説話的 ______ 來開玩笑。", ans: "口吻", options: ["口吻", "動作", "眼神", "步伐"] },
+            { q: "夜幕低垂，在這五光十色的不夜城裏，連幾顆 ______ 的星星也看不到。", ans: "稀疏", options: ["稀疏", "密雜", "擁擠", "無數"] },
+            { q: "表弟自幼在外國長大，他雖然會説廣東話，但不時會 ______ 着英語，大家也不以為然。", ans: "夾雜", options: ["夾雜", "單一", "純粹", "分開"] },
+            { q: "媽媽的臉上雖然長了幾條 ______ ，但她並不介意，因為她覺得這是歲月的痕跡。", ans: "皺紋", options: ["皺紋", "笑容", "汗水", "淚痕"] },
+            { q: "若不是項羽使出「 ______ 」之計，相信這場戰役他未必能得到勝利。", ans: "破釜沉舟", options: ["破釜沉舟", "半途而廢", "退避三舍", "知難而退"] },
+            { q: "陳經理 ______ 大氣，温文儒雅，舉手投足落落大方，同事們都很喜歡他。", ans: "端莊", options: ["端莊", "輕浮", "滑稽", "粗魯"] },
+            { q: "媽媽一邊撫摸着妹妹的 ______ ，一邊抹去她臉上的眼淚，還温柔地安撫着她。", ans: "面龐", options: ["面龐", "手掌", "背影", "肩膀"] },
+            { q: "小寶寶有着圓圓的眼睛，長長的 ______ ，好像一個精緻的洋娃娃。", ans: "睫毛", options: ["睫毛", "指甲", "牙齒", "嘴唇"] },
+            { q: "聖誕節，街道上的燈飾 ______ 耀眼，節日氣氛濃厚。", ans: "閃爍", options: ["閃爍", "黯淡", "熄滅", "漆黑"] },
+            { q: "哥哥看書看得入了神，一副 ______ 的樣子。", ans: "津津有味", options: ["津津有味", "愁眉苦臉", "索然無味", "無精打采"] },
+            { q: "聽了老師的詳細解釋，我才 ______ ，明白這道題的解法。", ans: "恍然大悟", options: ["恍然大悟", "百思不解", "執迷不悟", "半信半疑"] },
+            { q: "魔術師的表演非常精彩，觀眾席上響起了 ______ 的掌聲。", ans: "震耳欲聾", options: ["震耳欲聾", "鴉雀無聲", "悄無聲息", "低聲細語"] },
+            { q: "下課鐘聲一響，同學們就 ______ 地跑到操場玩耍。", ans: "興高采烈", options: ["興高采烈", "垂頭喪氣", "悲痛欲絕", "怒氣衝衝"] },
+            { q: "他的房間總是收拾得 ______ ，一塵不染。", ans: "井井有條", options: ["井井有條", "亂七八糟", "雜亂無章", "東倒西歪"] },
+            { q: "不要總想着不勞而獲， ______ 是不會有真正成就的。", ans: "守株待兔", options: ["守株待兔", "奮發圖強", "孜孜不倦", "精益求精"] },
+            { q: "弟弟 ______ 地拆開生日禮物，想看看裏面是甚麼。", ans: "迫不及待", options: ["迫不及待", "慢條斯理", "拖泥帶水", "猶豫不決"] },
+            { q: "導遊一路上 ______ 地為我們介紹當地的歷史故事。", ans: "滔滔不絕", options: ["滔滔不絕", "沉默寡言", "啞口無言", "支支吾吾"] },
+            { q: "畢業時，同學們都 ______ 地向老師道別。", ans: "依依不捨", options: ["依依不捨", "揚長而去", "迫不及待", "冷酷無情"] },
+            { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧闹", "喧囂蔽天"] }
+        ];
+
+        const connectTasks = [
+            { q: "找出正確的配對：【 科技 】______", ans: "發達", options: ["發達", "淵博", "浪費", "惡劣"] },
+            { q: "找出正確的配對：【 學識 】______", ans: "淵博", options: ["淵博", "發達", "大方", "穩重"] },
+            { q: "找出正確的配對：【 白白 】______", ans: "浪費", options: ["浪費", "消耗", "虛度", "花費"] },
+            { q: "找出正確的配對：【 專心 】______", ans: "學業", options: ["學業", "安全", "主旨", "精神"] },
+            { q: "找出正確的配對：【 衛生 】______", ans: "惡劣", options: ["惡劣", "淵博", "發達", "穩重"] },
+            { q: "找出正確的配對：【 歸納 】______", ans: "主旨", options: ["主旨", "段意", "結論", "大意"] },
+            { q: "找出正確的配對：【 確保 】______", ans: "安全", options: ["安全", "安穩", "安心", "安寧"] },
+            { q: "找出正確的配對：【 粗獷的 】______", ans: "聲線", options: ["聲線", "心思", "鼻樑", "秀髮"] }, 
+            { q: "找出正確的配對：【 温柔的 】______", ans: "外表", options: ["外表", "聲線", "鼻樑", "洋娃娃"] },
+            { q: "找出正確的配對：【 體會到 】______", ans: "善良", options: ["善良", "精神", "痕跡", "氣氛"] },
+            { q: "找出正確的配對：【 互助的 】______", ans: "精神", options: ["精神", "力量", "善良", "光陰"] },
+            { q: "找出正確的配對：【 高挑挺拔的 】______", ans: "鼻樑", options: ["鼻樑", "秀髮", "外表", "聲線"] },
+            { q: "找出正確的配對：【 烏黑亮麗的 】______", ans: "秀髮", options: ["秀髮", "鼻樑", "外表", "睫毛"] },
+            { q: "找出正確的配對：【 成熟 】______", ans: "穩重", options: ["穩重", "大方", "淵博", "發達"] },
+            { q: "找出正確的配對：【 虛度 】______", ans: "光陰", options: ["光陰", "時間", "歲月", "青春"] },
+            { q: "找出正確的配對：【 夜幕 】______", ans: "低垂", options: ["低垂", "降臨", "黑夜", "星空"] },
+            { q: "找出正確的配對：【 五光 】______", ans: "十色", options: ["十色", "八門", "四射", "十彩"] },
+            { q: "找出正確的配對：【 歲月的 】______", ans: "痕跡", options: ["痕跡", "時光", "光陰", "流逝"] },
+            { q: "找出正確的配對：【 舉手 】______", ans: "投足", options: ["投足", "大方", "動腳", "穩重"] },
+            { q: "找出正確的配對：【 落落 】______", ans: "大方", options: ["大方", "穩重", "端莊", "體面"] },
+            { q: "找出正確的配對：【 精緻的 】______", ans: "洋娃娃", options: ["洋娃娃", "小寶寶", "秀髮", "睫毛"] },
+            { q: "找出正確的配對：【 節日 】______", ans: "氣氛", options: ["氣氛", "氛圍", "慶典", "快樂"] },
+            { q: "找出正確的配對：【 閃爍 】______", ans: "耀眼", options: ["耀眼", "光芒", "明亮", "刺眼"] },
+            { q: "找出正確的配對：【 破釜 】______", ans: "沉舟", options: ["沉舟", "沉船", "一戰", "到底"] },
+            { q: "找出正確的配對：【 友善 】______", ans: "有禮", options: ["有禮", "大方", "穩重", "熱情"] }
+        ];
+
+        const punctTasks = [
+            { q: "夾娃娃店職員説 ___「你只剩下最後一次機會，要好好把握啊！」", ans: "：", options: ["：", "，", "。", "；"] },
+            { q: "夾娃娃店職員説：「你只剩下最後一次機會，要好好把握啊 ___ 」", ans: "！", options: ["！", "。", "？", "，"] },
+            { q: "「滴答 ___ 滴答……」扭不緊的水龍頭不時往下滴。", ans: "、", options: ["、", "——", "，", "。"] },
+            { q: "這鳥兒身上的羽毛全白，鳥喙形狀獨特 ___ 就像琵琶似的。", ans: "，", options: ["，", "、", "。", "；"] },
+            { q: "牠們並不是普通的鳥兒，而是一種珍稀的動物 ___ 黑臉琵鷺。", ans: "──", options: ["──", "……", "：", "。"] },
+            { q: "當面對困難和壓力的時候，我們應該要如何處理呢 ___", ans: "？", options: ["？", "！", "。", "……"] },
+            { q: "獅子山上的望夫石是香港沙田區著名的地標 ___", ans: "。", options: ["。", "！", "，", "；"] },
+            { q: "據説望夫石背後有一個淒美的故事 ___ 一位女子的丈夫出海工作，但歸期未定。", ans: "：", options: ["：", "，", "。", "；"] },
+            { q: "人們在該地方發現了一塊巨石，因而命名為 ___ 望夫石」。", ans: "「", options: ["「", "『", "《", "〈"] },
+            { q: "梅花一直受到中國文人雅士的喜愛 ___", ans: "。", options: ["。", "！", "，", "；"] },
+            { q: "詩歌如「不經一番寒徹骨，怎得梅花撲鼻香」 ___ 「天向梅梢別出奇，國香未許世人知」等。", ans: "、", options: ["、", "，", "；", "。"] },
+            { q: "為甚麼梅花會得到文人雅士的喜歡 ___", ans: "？", options: ["？", "！", "。", "……"] },
+            { q: " ___ 二十四孝》是一本收錄了傳統民間故事的書籍。", ans: "《", options: ["《", "〈", "「", "『"] },
+            { q: "你認得方位嗎 ___", ans: "？", options: ["？", "！", "。", "……"] },
+            { q: "最基本四大方位是東 ___ 南、西、北。", ans: "、", options: ["、", "，", "；", "。"] },
+            { q: "自然景貌，如 ___ 高山、峽谷、海洋等。", ans: "：", options: ["：", "，", "。", "；"] },
+            { q: "龍眼盛產於越南、印尼及中國廣東 ___ 福建等南方地區。", ans: "、", options: ["、", "，", "；", "。"] },
+            { q: "他們難靜心做一些靜態的活動 ___ 如看書、寫字等。", ans: "，", options: ["，", "、", "。", "；"] },
+            { q: "媽媽説 ___「發芽的蒜頭本來就不太會用來食用。」", ans: "：", options: ["：", "，", "。", "；"] },
+            { q: "無論是咕嚕肉、茄汁蝦 ___ 東坡肉，都很美味。", ans: "、", options: ["、", "，", "；", "。"] },
+            { q: "「叮咚 ___ 叮咚──」門鈴響起來，是媽媽回來了嗎？", ans: "、", options: ["、", "……", "：", "。"] },
+            { q: "一個理着小平頭的小男孩 ___ 我的弟弟卓賢，正在朗誦詩歌。", ans: "──", options: ["──", "……", "：", "。"] },
+            { q: "正在朗誦臧克家的詩歌《少年 ___ 。", ans: "》", options: ["》", "〉", "」", "』"] },
+            { q: "這是一位攝影記者凱文 ___ 卡特拍攝的新聞圖片。", ans: "·", options: ["·", "、", "，", "。"] },
+            { q: "我們暑假會遊覽被譽為世外桃源的地方 ___ 馬爾代夫。", ans: "──", options: ["──", "……", "：", "。"] }
+        ];
+
+        const faMCTasks = [
+            { q: "學校有明確規定，絕不 ______ 學生在沒有老師的陪同下進入實驗室。", ans: "准許", options: ["准許", "支持", "宣佈", "生效"] },
+            { q: "得到媽媽的 ______ 後，弟弟才開心地跑到樓下公園和好朋友玩耍。", ans: "准許", options: ["准許", "康復", "集合", "退出"] },
+            { q: "大家都為住院的林同學製作了一張精美的慰問卡，祝願他早日 ______ 。", ans: "康復", options: ["康復", "退出", "生效", "宣佈"] },
+            { q: "經過醫生幾個月以來的悉心治療，爺爺的身體終於完全 ______ 了。", ans: "康復", options: ["康復", "准許", "集合", "支持"] },
+            { q: "由於不小心扭傷了腳踝，志明只好無奈地宣佈 ______ 這次的田徑比賽。", ans: "退出", options: ["退出", "康復", "支持", "生效"] },
+            { q: "我們遇到困難時應該勇敢面對，絕對不能輕言 ______ 。", ans: "退出", options: ["退出", "准許", "集合", "宣佈"] },
+            { q: "即使在比賽的下半場落後了十分，隊員們的 ______ 依然高昂，沒有放棄。", ans: "鬥志", options: ["鬥志", "勇氣", "心情", "精神"] },
+            { q: "教練的一番鼓勵說話，瞬間激發起全隊球員必勝的 ______ 。", ans: "鬥志", options: ["鬥志", "力量", "信心", "興趣"] },
+            { q: "天空突然變得烏雲密佈， ______ 待會兒又要下起傾盆大雨來嗎？", ans: "難道", options: ["難道", "當然", "其實", "也許"] },
+            { q: "你把這件事一直藏在心裡， ______ 就不打算告訴爸爸媽媽嗎？", ans: "難道", options: ["難道", "究竟", "反而", "竟然"] },
+            { q: "無論我將來想做甚麼職業，父母都說會默默地 ______ 我的決定。", ans: "支持", options: ["支持", "退出", "准許", "宣佈"] },
+            { q: "為了 ______ 學校的環保週活動，全班同學都堅持自備餐具回校吃午飯。", ans: "支持", options: ["支持", "集合", "康復", "生效"] },
+            { q: "老師宣佈，新的圖書館借閱規則將於下星期一正式 ______。", ans: "生效", options: ["生效", "宣佈", "准許", "集合"] },
+            { q: "校長在早會上 ______ 了一個好消息，全校同學都歡呼起來。", ans: "宣佈", options: ["宣佈", "生效", "集合", "支持"] },
+            { q: "老師請各位同學到操場 ______，準備開始運動會。", ans: "集合", options: ["集合", "退出", "康復", "宣佈"] },
+            { q: "找出便條格式的配對：【 寫信人 】______", ans: "姓名", options: ["姓名", "時間", "正文", "標題"] },
+            { q: "找出便條格式的配對：【 收信人 】______", ans: "姓名", options: ["姓名", "時間", "正文", "標題"] },
+            { q: "找出便條格式的配對：【 寫信人 】______", ans: "自稱", options: ["自稱", "姓名", "時間", "正文"] },
+            { q: "找出便條格式的配對：【 書寫 】______", ans: "時間", options: ["時間", "地點", "姓名", "正文"] },
+            { q: "找出便條格式的配對：【 便條的內容 】______", ans: "正文", options: ["正文", "標題", "時間", "姓名"] },
+            { q: "在便條格式中，通常寫在第一行「頂格」的是甚麼？", ans: "收信人姓名", options: ["收信人姓名", "寫信人姓名", "正文", "書寫時間"] },
+            { q: "這麼簡單的問題，難道你都不會回答嗎 ___", ans: "？", options: ["？", "！", "。", "……"] },
+            { q: "你是多麼期待這次比賽啊 ___", ans: "！", options: ["！", "？", "。", "，"] }
+        ];
+
+        const dictation2Tasks = [
+            { q: "小明成績優異，又會彈鋼琴，讓同學們都十分 ______。", ans: "羨慕", options: ["羨慕", "稀疏", "秀麗", "馬馬虎虎"] },
+            { q: "這片樹林的樹木長得十分 ______，陽光很容易照進來。", ans: "稀疏", options: ["夾雜", "稀疏", "口吻", "秀麗"] },
+            { q: "公園裏充滿了孩子的笑聲，還 ______ 着一陣陣花香。", ans: "夾雜", options: ["相稱", "夾雜", "馬馬虎虎", "口吻"] },
+            { q: "這瓶果汁的味道很特別，______ 了蘋果和檸檬的香氣。", ans: "夾雜", options: ["稀疏", "夾雜", "羨慕", "秀麗"] },
+            { q: "她穿了一件藍色的裙子，跟她的膚色很 ______。", ans: "相稱", options: ["相稱", "怪裏怪氣", "口吻", "稀疏"] },
+            { q: "老師用温和的 ______ 鼓勵我們不要害怕失敗。", ans: "口吻", options: ["秀麗", "羨慕", "口吻", "稀疏"] },
+            { q: "他用開玩笑的 ______ 對我說：「你是不是又忘了帶作業？」", ans: "口吻", options: ["相稱", "口吻", "夾雜", "怪裏怪氣"] },
+            { q: "姐姐長得十分 ______，就像古裝劇裏的美人一樣。", ans: "秀麗", options: ["怪裏怪氣", "相稱", "秀麗", "夾雜"] },
+            { q: "弟弟戴上爸爸的眼鏡後，作出 ______ 的鬼臉，逗得全家哈哈大笑。", ans: "怪裏怪氣", options: ["馬馬虎虎", "怪裏怪氣", "啼笑皆非", "羨慕"] },
+            { q: "這條街上有一間小店，裝潢得 ______，十分引人注目。", ans: "怪裏怪氣", options: ["秀麗", "怪裏怪氣", "稀疏", "口吻"] },
+            { q: "做作業千萬不可以 ______，要認真檢查每一道題目。", ans: "馬馬虎虎", options: ["馬馬虎虎", "相稱", "夾雜", "羨慕"] },
+            { q: "他對功課的態度一向 ______，所以成績沒有進步。", ans: "馬馬虎虎", options: ["秀麗", "稀疏", "馬馬虎虎", "口吻"] },
+            { q: "小明幫媽媽洗碗，卻打破了兩個盤子，讓媽媽 ______。", ans: "啼笑皆非", options: ["馬馬虎虎", "羨慕", "啼笑皆非", "秀麗"] },
+            { q: "秋天一到，樹上的葉子漸漸變得 ______，不再像夏天那樣茂密。", ans: "稀疏", options: ["稀疏", "相稱", "口吻", "秀麗"] },
+            { q: "小美穿了一條紅裙子和一雙白皮鞋，打扮和她的年紀很 ______。", ans: "相稱", options: ["夾雜", "相稱", "馬馬虎虎", "怪裏怪氣"] },
+            { q: "看見同學有新買的文具套裝，我 ______ 地說：「真希望能擁有一套。」", ans: "羨慕", options: ["相稱", "稀少", "羨慕", "怪裏怪氣"] },
+            { q: "奶奶第一次用手機拍照，竟然把手指也拍進去，大家看了都 ______。", ans: "啼笑皆非", options: ["啼笑皆非", "秀麗", "稀疏", "口吻"] },
+            { q: "從山頂遠望，景色 ______ 得像一幅畫，令人心情舒暢。", ans: "秀麗", options: ["口吻", "秀麗", "馬馬虎虎", "啼笑皆非"] },
+            { q: "經過一個月的練習，我 ______ 學會了騎單車，心裏高興極了。", ans: "終於", options: ["居然", "終於", "已經", "曾經"] },
+            { q: "弟弟把冰淇淋掉在地上，只能 ______ 嘆氣，看着它慢慢融化。", ans: "無奈", options: ["不滿", "居然", "無奈", "果然"] },
+            { q: "說好了輪流玩，哥哥卻一直佔着電腦，妹妹 ______ 抗議：「你怎麼可以這樣！」", ans: "不滿", options: ["不滿", "無奈", "幸好", "依然"] },
+            { q: "平時害羞的小美，今天 ______ 主動報名參加講故事比賽，大家都嚇了一跳。", ans: "居然", options: ["果然", "居然", "不滿", "無奈"] },
+            { q: "出門前天色很暗，我就帶了傘，後來 ______ 下起了大雨。", ans: "果然", options: ["居然", "幸好", "果然", "曾經"] },
+            { q: "______ 有你陪我練習，不然我一個人還真不敢上台演講。", ans: "幸好", options: ["無奈", "不滿", "果然", "幸好"] },
+            { q: "畢業那麼多年，老師 ______ 記得我們每個人的名字。", ans: "依然", options: ["有時", "已經", "依然", "終於"] },
+            { q: "妹妹的性格很特別，______ 像個小大人，有時卻又非常孩子氣。", ans: "有時", options: ["曾經", "有時", "將來", "依然"] },
+            { q: "我 ______ 把全部功課都做完了，現在可以看課外書了。", ans: "已經", options: ["將來", "曾經", "依然", "已經"] },
+            { q: "媽媽 ______ 告訴我，她小時候家裏也有這樣一個鐵皮玩具。", ans: "曾經", options: ["已經", "曾經", "有時", "將來"] },
+            { q: "班上在討論 ______ 想要從事的職業，小華說他想當獸醫。", ans: "將來", options: ["將來", "已經", "依然", "有時"] },
+            { q: "聽他說話的 ______，好像對這次考試很有信心。", ans: "口吻", options: ["口吻", "稀疏", "相稱", "語氣"] },
+            { q: "這篇文章以小孩的 ______ 來描寫大自然，讀起來十分有趣。", ans: "口吻", options: ["口吻", "秀麗", "怪裏怪氣", "羨慕"] },
+            { q: "客人用不禮貌的 ______ 對待店員，令旁邊的人感到很不舒服。", ans: "口吻", options: ["夾雜", "相稱", "口吻", "馬馬虎虎"] },
+            { q: "媽媽變老了，她瘦削的 ______ 上，兩道皺紋橫在眉毛之間。", ans: "面龐", options: ["面龐", "臉頰", "額頭", "下巴"] },
+            { q: "媽媽變老了，她瘦削的面龐上，兩道 ______ 橫在眉毛之間。", ans: "皺紋", options: ["皺紋", "疤痕", "眉毛", "汗水"] },
+            { q: "媽媽變老了，她瘦削的面龐上，兩道皺紋橫在 ______ 之間。", ans: "眉毛", options: ["眉毛", "眼睛", "鼻子", "嘴唇"] },
+            { q: "嘴巴乾澀，嘴角被皺紋牽得 ______ 咧著。", ans: "向後", options: ["向後", "向前", "向上", "向下"] },
+            { q: "______ 乾澀，嘴角被皺紋牽得向後咧著。", ans: "嘴巴", options: ["嘴巴", "嘴唇", "舌頭", "喉嚨"] }
+        ];
+
+        const advTasks = [
+            { q: "「我___告訴過你千百遍，這件事不是我幹的。」", ans: "已經", options: ["忽然", "已經", "頓時", "終於"] },
+            { q: "「我___要上班去了，請把桌子上的公事包遞給我。」", ans: "馬上", options: ["馬上", "曾經", "不時", "始終"] },
+            { q: "「他___不肯改過，你不要對他抱太大的期望。」", ans: "始終", options: ["快要", "已經", "始終", "頓時"] },
+            { q: "「老師一走進教室，大家___安靜下來。」", ans: "頓時", options: ["經常", "依然", "快要", "頓時"] },
+            { q: "「妹妹給我們講故事，說着說着，___大笑起來。」", ans: "忽然", options: ["馬上", "忽然", "始終", "已經"] },
+            { q: "「他___給我很大的幫助，我怎會忘記他呢？」", ans: "曾經", options: ["曾經", "終於", "頓時", "立刻"] },
+            { q: "「因為我經常遲到，所以___給老師責罰。」", ans: "不時", options: ["已經", "忽然", "不時", "頓時"] },
+            { q: "「我猜姐姐___回來了，你看見她，立刻向她認錯吧。」", ans: "快要", options: ["依然", "始終", "曾經", "快要"] },
+            { q: "「你看見她，___向她認錯吧。」", ans: "立刻", options: ["立刻", "不時", "已經", "曾經"] },
+            { q: "選出句子中的時間副詞：「他始終不肯改過。」", ans: "始終", options: ["他", "不肯", "始終", "改過"] },
+            { q: "選出句子中的時間副詞：「我馬上要上班去了。」", ans: "馬上", options: ["上班", "馬上", "我", "去了"] },
+            { q: "選出句子中的時間副詞：「老師一走進教室，大家頓時安靜下來。」", ans: "頓時", options: ["老師", "走進", "大家", "頓時"] },
+            { q: "選出句子中的時間副詞：「他曾經給我很大的幫助。」", ans: "曾經", options: ["他", "幫助", "很大", "曾經"] },
+            { q: "「這項工程___完成了，大家都鬆了一口氣。」", ans: "終於", options: ["始終", "終於", "馬上", "不時"] },
+            { q: "「雨下得很大，但他___堅持要出門。」", ans: "依然", options: ["依然", "頓時", "馬上", "快要"] }
+        ];
+
+        const appearanceTasks = [
+            { q: "以下哪個詞語最適合用來形容「頭髮」？", ans: "白髮蒼蒼", options: ["白髮蒼蒼", "櫻桃小嘴", "筆直", "瓜子臉"] },
+            { q: "以下哪個詞語最適合用來形容「頭髮」？", ans: "光禿禿", options: ["血盆大口", "光禿禿", "柳葉眉", "整齊"] },
+            { q: "以下哪個詞語最適合用來形容「眉毛」？", ans: "眉如新月", options: ["潔白", "臉色蒼白", "眉如新月", "扁平"] },
+            { q: "以下哪個詞語最適合用來形容「眉毛」？", ans: "柳葉眉", options: ["櫻桃小嘴", "光禿禿", "筆直", "柳葉眉"] },
+            { q: "以下哪個詞語最適合用來形容「眼睛及眉毛」？", ans: "濃眉大眼", options: ["濃眉大眼", "潔白", "扁平", "整齊"] },
+            { q: "以下哪個詞語最適合用來形容「眼睛及眉毛」？", ans: "眉清目秀", options: ["血盆大口", "白髮蒼蒼", "眉清目秀", "臉色蒼白"] },
+            { q: "以下哪個詞語最適合用來形容「鼻子」？", ans: "筆直", options: ["筆直", "櫻桃小嘴", "瓜子臉", "潔白"] },
+            { q: "以下哪個詞語最適合用來形容「鼻子」？", ans: "扁平", options: ["整齊", "扁平", "柳葉眉", "濃眉大眼"] },
+            { q: "以下哪個詞語最適合用來形容「嘴巴」？", ans: "櫻桃小嘴", options: ["眉清目秀", "白髮蒼蒼", "筆直", "櫻桃小嘴"] },
+            { q: "以下哪個詞語最適合用來形容「嘴巴」？", ans: "血盆大口", options: ["瓜子臉", "血盆大口", "光禿禿", "潔白"] },
+            { q: "以下哪個詞語最適合用來形容「牙齒」？", ans: "潔白", options: ["扁平", "臉色蒼白", "潔白", "柳葉眉"] },
+            { q: "以下哪個詞語最適合用來形容「牙齒」？", ans: "整齊", options: ["整齊", "血盆大口", "眉如新月", "筆直"] },
+            { q: "以下哪個詞語最適合用來形容「面容」？", ans: "瓜子臉", options: ["光禿禿", "櫻桃小嘴", "濃眉大眼", "瓜子臉"] },
+            { q: "以下哪個詞語最適合用來形容「面容」？", ans: "臉色蒼白", options: ["臉色蒼白", "扁平", "潔白", "整齊"] },
+            { q: "綜合題：哪個外貌描寫的配對是【錯誤】的？", ans: "頭髮：筆直", options: ["牙齒：潔白", "嘴巴：櫻桃小嘴", "頭髮：筆直", "眉毛：柳葉眉"] }
+        ];
+
+        const reorderTasks = [
+            ["因為", "弟弟", "上課時", "沒有記住", "老師的提醒", "，", "所以", "考試時", "答錯題目", "。"],
+            ["因為", "咖啡豆", "含有咖啡因", "，", "所以", "飲用大量咖啡", "會引致", "心悸", "、", "失眠等症狀", "。"],
+            ["弟弟", "搞不懂", "這道題", "如何計算", "，", "所以", "被老師", "留下來補課", "。"],
+            ["因為", "爸爸明天", "要回公司工作", "，", "我們的", "主題公園一天遊", "要", "被逼取消了", "。"],
+            ["由於", "哥哥", "想打破", "一百米短跑的紀錄", "，", "所以", "他最近", "加強練習", "。"],
+            ["政府", "為了", "進一步", "減輕", "堆填區的壓力", "，", "所以推行", "固體廢物收費計劃", "。"],
+            ["巿民", "知道今天晚上", "會懸掛", "八號烈風信號", "，", "於是", "爭相到超巿", "購買糧食", "。"],
+            ["他", "當義工", "不是要獲得", "大家的稱許", "，", "而是想", "幫助", "有需要的人", "。"],
+            ["由於", "天氣影響", "，", "所以", "明天的陸運會", "要", "延期舉行", "。"],
+            ["意大利人", "製作薄餅時", "不會使用菠蘿", "，", "而是以", "番茄", "和", "羅勒葉", "作材料的", "。"],
+            ["由於", "港鐵已告知", "觀塘線", "出現故障", "，", "爸爸於是", "提早出門上班", "。"],
+            ["銀行職員", "不會", "向客戶", "詢問銀行卡的密碼", "，", "而是會", "詢問個人資料", "以核實身份", "。"],
+            ["如果", "你因為", "貪小便宜", "而", "提供資料給陌生人", "，", "將會", "因小失大", "。"],
+            ["因為", "我知道", "你喜歡酸菜魚", "，", "才買回來", "給你吃", "。"],
+            ["如果", "你繼續", "吃高脂肪的食物", "，", "將有機會", "患心臟病", "。"],
+            ["因為", "父母悉心的栽培", "，", "我才可以", "成功入讀", "這所", "音樂學院", "。"],
+            ["如果", "你繼續", "不節制地飲食", "，", "你的身體", "將會", "出現", "很大的問題", "。"],
+            ["因為", "你性格固執", "，", "不肯", "輕易受人幫助", "，", "我才會決定", "暗中幫助你", "。"],
+            ["父親的愛", "像", "冬日的太陽", "，", "微微", "温暖", "我和媽媽的心", "。"],
+            ["卸妝後的她", "不像", "平時看到般", "美豔動人", "，", "而像", "一個鄰家女孩般", "樸素", "。"],
+            ["這家快餐店", "售賣的食物", "不像", "其他快餐店", "，", "而是", "售賣", "特別的", "三文治", "。"],
+            ["爸爸不像", "一些", "只會溺愛孩子的父母", "，", "而是", "適當的", "管教他們", "。"],
+            ["我們", "凌晨時分", "便乘旅遊車", "上太平山", "，", "所以", "趕得及", "看到", "美麗的日出", "。"],
+            ["因為", "臨近考試", "，", "所以", "各類", "課外活動", "會暫停", "直至", "考試結束", "。"],
+            ["小明", "發現自己", "最近的", "成績退步了", "，", "於是", "重新制定了", "溫習和", "作息時間表", "。"]
+        ];
+
+        const faReorderTasks = [
+            ["我", "當然理解", "你", "現在的", "心情", "。"],
+            ["為了", "參加這次", "朗誦比賽", "，", "你一直", "努力地練習", "。"],
+            ["你是", "多麼", "期待", "這次比賽啊", "！"]
+        ];
+
+        const dictation2ReorderTasks = [
+            ["媽媽", "變老了", "，", "她", "瘦削的", "面龐上", "，", "兩道皺紋", "橫在", "眉毛之間", "。"],
+            ["她", "瘦削的", "面龐上", "，", "兩道皺紋", "橫在", "眉毛之間", "；", "嘴巴", "乾澀", "。"],
+            ["嘴巴", "乾澀", "，", "嘴角", "被", "皺紋", "牽得", "向後", "咧著", "。"],
+            ["媽媽變老了", "，", "瘦削的面龐上", "，", "兩道皺紋", "橫在眉毛之間", "。"],
+            ["嘴巴乾澀", "，", "嘴角", "被皺紋", "牽得", "向後咧著", "。"]
+        ];
+
+        const legendaryTasks = [
+            { q: "「完璧歸趙」這個成語的主角是誰？", ans: "藺相如", options: ["藺相如", "廉頗", "曹操", "劉備"] },
+            { q: "下列哪一個詞語沒有錯別字？", ans: "迫不及待", options: ["迫不及待", "迫不急待", "破不及待", "破不急待"] },
+            { q: "下列哪一個句子是「擬人句」？", ans: "小鳥在枝頭上高興地唱歌。", options: ["小鳥在枝頭上高興地唱歌。", "他的臉紅得像一個蘋果。", "天上的星星亮晶晶的。", "這座山高得快要碰到天了。"] },
+            { q: "在「媽媽雖然很累，＿＿堅持為我們做晚飯。」中，應填入甚麼關聯詞？", ans: "但是", options: ["但是", "所以", "如果", "因為"] },
+            { q: "「草船借箭」是出自哪一部中國古典名著？", ans: "《三國演義》", options: ["《三國演義》", "《水滸傳》", "《西遊記》", "《紅樓夢》"] },
+            { q: "「李白」被後人尊稱為甚麼？", ans: "詩仙", options: ["詩仙", "詩聖", "詩鬼", "詩魔"] },
+            { q: "下列哪一個標點符號的運用是絕對正確的？", ans: "我問：「今天天氣好嗎？」", options: ["我問：「今天天氣好嗎？」", "我問，今天天氣好嗎？", "我問：「今天天氣好嗎」？", "我問：今天天氣好嗎？"] },
+            { q: "「一日不見，如隔三秋」中的「三秋」通常指多久？", ans: "三年", options: ["三年", "三十天", "三個月", "三百年"] },
+            { q: "選出結構完全不同的詞語：", ans: "東西", options: ["東西", "左右", "上下", "美好"] },
+            { q: "「畫蛇添足」比喻甚麼？", ans: "多此一舉", options: ["多此一舉", "畫工精湛", "非常可怕", "行動迅速"] }
+        ];
+
+        const mcConfigs = {
+            'fill': { title: "⛏️ 礦洞尋寶 (填充題)", subtitle: "敲碎正確的字詞礦石，填補句子！", tasks: fillTasks },
+            'match-word': { title: "🔮 符文解密 (配詞題)", subtitle: "找出最適合句子語境的詞語！", tasks: matchTasks },
+            'connect': { title: "🔗 魔法連線 (連線題)", subtitle: "找出與題目匹配的另一半詞語！", tasks: connectTasks },
+            'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
+            'fa-mc': { title: "📝 FA溫習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks },
+            'dictation2-mc': { title: "📖 默書温習(二) (填充題)", subtitle: "選擇正確的詞語完成句子！", tasks: dictation2Tasks },
+            'adv-mc': { title: "⏳ 時間法師 (副詞題)", subtitle: "選擇正確的時間副詞完成句子！", tasks: advTasks },
+            'appearance-mc': { title: "👤 變身畫家 (外貌描寫)", subtitle: "選出最適合描寫人物外貌的詞語！", tasks: appearanceTasks }
+        };
+
+        const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🌌', 900: '🏆', 1001: '🐉', 1002: '🦄' };
+
+        // ================== 🌟 史詩神獸 / Boss 更新 ==================
+        const epicLegendaries = {
+            'mewtwo': { id: 'epic_mewtwo', name: "超夢", target: 5, time: 10, effect: "anti_heal", desc: "精神擊破！戰鬥中無法使用恢復藥水！", img: "150", hpPenalty: 40 },
+            'rayquaza': { id: 'epic_rayquaza', name: "烈空坐", target: 4, time: 12, effect: "true_damage", desc: "畫龍點睛！無視防禦造成巨額真實傷害！", img: "384", hpPenalty: 30 },
+            'arceus': { id: 'epic_arceus', name: "阿爾宙斯", target: 6, time: 8, effect: "one_hit", desc: "制裁光礫！隨機爆發一擊必殺大招！", img: "493", hpPenalty: 50 },
+            'suicune': { id: 'epic_suicune', name: "水君", target: 5, time: 10, effect: "freeze", desc: "絕對零度！戰鬥中會隨機凍結選項 3 秒！", img: "245", hpPenalty: 25 },
+            'lugia': { id: 'epic_lugia', name: "鳳王", target: 5, time: 12, effect: "true_damage", desc: "神聖之火！無視防禦造成巨額真實傷害！", img: "250", hpPenalty: 35 }
+        };
+
+        const evoCosts = {
+            1: { m: 300, f: 5, s: 10, g: 0 },
+            2: { m: 600, f: 10, s: 20, g: 0 },
+            3: { A: { m: 1000, f: 15, s: 30, g: 0, title: "⭐ 光明進化" }, B: { m: 1000, f: 15, s: 0, g: 30, title: "💎 闇黑進化" } },
+            4: { A: { m: 2000, f: 30, s: 50, g: 0, title: "⭐ 究極光明" }, B: { m: 2000, f: 30, s: 0, g: 50, title: "💎 究極闇黑" } }
+        };
+
+        const digidex = {
+            'agu': { title: "亞古獸路線", desc: "經典主角，攻擊力最強的龍型精靈。", lv0: { n: "滾球獸", p: "koromon.jpg", b: 0 }, lv1: { n: "亞古獸", p: "agumon.jpg", b: 20 }, lv2: { n: "暴龍獸", p: "greymon.jpg", b: 50 }, lv3A: { n: "機械暴龍獸", p: "metalgreymon.jpg", b: 100 }, lv3B: { n: "喪屍暴龍獸", p: "skullgreymon.jpg", b: 120 }, lv4A: { n: "戰鬥暴龍獸", p: "wargreymon.jpg", b: 200 }, lv4B: { n: "無限龍獸", p: "mugendramon.jpg", b: 220 } },
+            'gabu': { title: "加布獸路線", desc: "冷酷且敏捷，高人氣的冰狼型精靈。", lv0: { n: "獨角獸", p: "tsunomon.jpg", b: 0 }, lv1: { n: "加布獸", p: "gabumon.jpg", b: 20 }, lv2: { n: "加魯魯獸", p: "garurumon.jpg", b: 50 }, lv3A: { n: "獸人加魯魯獸", p: "weregarurumon.jpg", b: 100 }, lv3B: { n: "地獄犬獸", p: "cerberumon.jpg", b: 120 }, lv4A: { n: "鋼鐵加魯魯獸", p: "metalgarurumon.jpg", b: 200 }, lv4B: { n: "阿努比獸", p: "anubimon.jpg", b: 220 } },
+            'pata': { title: "巴達獸路線", desc: "擁有神聖力量，能帶來奇蹟的精靈。", lv0: { n: "迪哥獸", p: "tokomon.jpg", b: 0 }, lv1: { n: "巴達獸", p: "patamon.jpg", b: 20 }, lv2: { n: "天使獸", p: "angemon.jpg", b: 50 }, lv3A: { n: "神聖天使獸", p: "holyangemon.jpg", b: 100 }, lv3B: { n: "吸血魔獸", p: "vamdemon.jpg", b: 120 }, lv4A: { n: "究極天使獸", p: "seraphimon.jpg", b: 200 }, lv4B: { n: "小丑皇", p: "piemon.jpg", b: 220 } },
+            'tail': { title: "迪路獸路線", desc: "專屬女孩子！可愛又迷人的神聖貓咪。", lv0: { n: "喵喵獸", p: "nyaromon.jpg", b: 0 }, lv1: { n: "小狗獸", p: "plotmon.jpg", b: 20 }, lv2: { n: "迪路獸", p: "tailmon.jpg", b: 50 }, lv3A: { n: "天女獸", p: "angewomon.jpg", b: 100 }, lv3B: { n: "妖女獸", p: "ladydevimon.jpg", b: 120 }, lv4A: { n: "聖龍獸", p: "holydramon.jpg", b: 200 }, lv4B: { n: "莉莉絲獸", p: "lilithmon.jpg", b: 220 } },
+            'pal': { title: "巴魯獸路線", desc: "專屬女孩子！熱愛大自然的美麗花仙子。", lv0: { n: "種子獸", p: "tanemon.jpg", b: 0 }, lv1: { n: "巴魯獸", p: "palmon.jpg", b: 20 }, lv2: { n: "仙人掌獸", p: "togemon.jpg", b: 50 }, lv3A: { n: "花仙獸", p: "lilimon.jpg", b: 100 }, lv3B: { n: "南瓜獸", p: "pumpmon.jpg", b: 120 }, lv4A: { n: "薔薇獸", p: "rosemon.jpg", b: 200 }, lv4B: { n: "木偶獸", p: "pinocchimon.jpg", b: 220 } },
+            'pika': { title: "皮卡丘路線", desc: "電系拍檔：十萬伏特！", lv0: { n: "皮丘", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/172.png", b: 0 }, lv1: { n: "皮卡丘", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png", b: 20 }, lv2: { n: "雷丘", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/26.png", b: 50 }, lv3A: { n: "電擊魔獸", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/466.png", b: 100 }, lv3B: { n: "倫琴貓", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/405.png", b: 120 }, lv4A: { n: "捷拉奧拉", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/807.png", b: 200 }, lv4B: { n: "捷克羅姆", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/644.png", b: 220 } },
+            'chari': { title: "噴火龍路線", desc: "火系拍檔：戰鬥動作更快！", lv0: { n: "小火龍", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png", b: 0 }, lv1: { n: "火恐龍", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png", b: 20 }, lv2: { n: "噴火龍", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png", b: 50 }, lv3A: { n: "超級噴火龍Y", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10035.png", b: 100 }, lv3B: { n: "超級噴火龍X", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10034.png", b: 120 }, lv4A: { n: "鳳王", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/250.png", b: 200 }, lv4B: { n: "固拉多(原始)", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10077.png", b: 220 } },
+            'ninja': { title: "甲賀忍蛙路線", desc: "水系拍檔：迴避率提升！", lv0: { n: "呱呱泡蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/656.png", b: 0 }, lv1: { n: "呱頭蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/657.png", b: 20 }, lv2: { n: "甲賀忍蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/658.png", b: 50 }, lv3A: { n: "小智版忍蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10116.png", b: 100 }, lv3B: { n: "達克萊伊", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/491.png", b: 120 }, lv4A: { n: "水君", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/245.png", b: 200 }, lv4B: { n: "帕路奇亞", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/484.png", b: 220 } },
+            'lucario': { title: "路卡利歐路線", desc: "格鬥系拍檔：防禦加強！", lv0: { n: "利歐路", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/447.png", b: 0 }, lv1: { n: "路卡利歐", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/448.png", b: 20 }, lv2: { n: "超級路卡利歐", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10059.png", b: 50 }, lv3A: { n: "武道熊師", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/892.png", b: 100 }, lv3B: { n: "瑪夏多", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/802.png", b: 120 }, lv4A: { n: "蒼響", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/888.png", b: 200 }, lv4B: { n: "藏瑪然特", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/889.png", b: 220 } }
+        };
+
+        // ================== 🐦 常見的野生 Pokémon (不再使用神獸/拍檔) ==================
+        const pokemonMonsters = [
+            { name: "綠毛蟲", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10.png" },
+            { name: "波波", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/16.png" },
+            { name: "比比鳥", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png" },
+            { name: "小拉達", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/19.png" },
+            { name: "六尾", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/37.png" },
+            { name: "喵喵", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/52.png" },
+            { name: "可達鴨", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/54.png" },
+            { name: "蚊香蝌蚪", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/60.png" },
+            { name: "腕力", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/66.png" },
+            { name: "小拳石", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/74.png" },
+            { name: "呆呆獸", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/79.png" },
+            { name: "卡拉卡拉", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/104.png" },
+            { name: "瓦斯彈", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/109.png" },
+            { name: "角金魚", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/118.png" },
+            { name: "鯉魚王", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/129.png" },
+            { name: "伊布", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png" },
+            { name: "卡比獸", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/143.png" },
+            { name: "大尾立", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/162.png" },
+            { name: "瑪力露", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/183.png" },
+            { name: "烏波", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/194.png" }
+        ];
+
+        const albumData = [
+            { id: 'wild_惡魔獸', name: '惡魔獸', pic: 'https://digimon.net/cimages/digimon/devimon.jpg', type: 'normal' },
+            { id: 'wild_古加獸', name: '古加獸', pic: 'https://digimon.net/cimages/digimon/kuwagamon.jpg', type: 'normal' },
+            { id: 'boss_1', name: '暴龍獸', pic: 'https://digimon.net/cimages/digimon/greymon.jpg', type: 'boss' },
+            { id: 'boss_3', name: '戰鬥暴龍獸', pic: 'https://digimon.net/cimages/digimon/wargreymon.jpg', type: 'boss' }
+        ];
+
+        // 將神獸加入 Album
+        for (let key in epicLegendaries) {
+            let boss = epicLegendaries[key];
+            albumData.push({ id: boss.id, name: boss.name, pic: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${boss.img}.png`, type: 'epic' });
+        }
+
+        pokemonMonsters.forEach(p => {
+            albumData.push({ id: 'wild_' + p.name, name: p.name, pic: p.pic, type: 'normal' });
+        });
+
+        // ================== 存檔與資料設定 ==================
+        const defaultInv = { 
+            playerName: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, 
+            coins: 0, dropBuffLeft: 0, 
+            streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
+            equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], 
+            partnerLv: 0, partnerId: "", partnerBranch: "A", partners: {}, lastGachaDate: "", gachaDrawsToday: 0, 
+            scrollBoughtDate: "", hasLegendaryBuff: false,
+            bloodMoonActive: false, bloodMoonTarget: 0, bloodMoonStreak: 0, bloodMoonLeft: 0, unlockedCards: [], cardStats: {}, potions: 0
+        };
+        let inventory = { ...defaultInv };
+
+        // ================== 核心功能：連勝與存檔 (藥水雙倍機制) ==================
+        function addStreak() {
+            inventory.streak = (inventory.streak || 0) + 1;
+            let s = inventory.streak;
+            let mult = inventory.dropBuffLeft > 0 ? 2 : 1;
+            
+            if (inventory.dropBuffLeft > 0) {
+                inventory.dropBuffLeft--;
+            }
+
+            let mGain = 3;
+            if (s >= 10) mGain = 15;
+            else if (s >= 5) mGain = 6;
+            
+            mGain *= mult;
+            inventory.manuscript += mGain;
+
+            let msg = `🔥 ${s}連對！獲得 📜x${mGain}`;
+            if (s % 3 === 0) { inventory.wood += 5 * mult; inventory.stone += 3 * mult; msg += `、🪵x${5*mult}、🧱x${3*mult}`; }
+            if (s % 5 === 0) { inventory.star += 1; msg += `、🌟x1`; }
+            if (s % 10 === 0) { inventory.gem += 3; inventory.fragment += 1; msg += `、💎x3、🔮x1`; playSound('medal'); }
+            
+            if (msg) {
+                let el = document.querySelector('.screen:not(.hidden) .status-msg');
+                if (el) el.innerHTML += `<br><span style="color:#FFD700;font-weight:bold;">${msg}</span>`;
+            }
+            handleBloodMoon(true);
+            updateUI(); saveGame();
+        }
+
+        function checkDailyReset() {
+            let today = new Date().toDateString(); 
+            if (inventory.lastGachaDate !== today) {
+                inventory.lastGachaDate = today;
+                inventory.gachaDrawsToday = 0;
+            }
+        }
+
+        function unlockCard(cardId) {
+            if (!inventory.unlockedCards) inventory.unlockedCards = [];
+            if (!inventory.cardStats) inventory.cardStats = {};
+
+            if (!inventory.unlockedCards.includes(cardId)) {
+                inventory.unlockedCards.push(cardId);
+            }
+            
+            if (!inventory.cardStats[cardId]) {
+                inventory.cardStats[cardId] = { firstDate: new Date().toLocaleDateString('zh-HK'), count: 1 };
+            } else {
+                inventory.cardStats[cardId].count++;
+            }
+            saveGame();
+        }
+
+        window.openAlbum = function() {
+            playSound('click');
+            document.getElementById('album-modal').classList.remove('hidden');
+            renderAlbum('normal'); 
+        }
+
+        window.renderAlbum = function(type) {
+            playSound('click');
+            let container = document.getElementById('album-grid-container');
+            container.innerHTML = "";
+            container.className = 'album-grid ' + type; 
+            
+            if(!inventory.unlockedCards) inventory.unlockedCards = [];
+            if(!inventory.cardStats) inventory.cardStats = {};
+            
+            let filteredData = albumData.filter(c => c.type === type);
+            
+            filteredData.forEach(card => {
+                let isUnlocked = inventory.unlockedCards.includes(card.id);
+                let stats = inventory.cardStats[card.id] || { firstDate: '早期解鎖', count: 0 };
+                if (isUnlocked && stats.count === 0) stats.count = 1; 
+                
+                let div = document.createElement('div');
+                div.className = 'card-slot ' + (isUnlocked ? '' : 'card-locked');
+                
+                let statsHtml = isUnlocked ? `
+                    <div class="card-stats" style="font-size:0.85em; color:#555; margin-top:8px; line-height:1.4;">
+                        📅 首次: ${stats.firstDate}<br>
+                        ⚔️ 討伐: ${stats.count} 次
+                    </div>
+                ` : '<div style="font-weight:bold; margin-top:5px; font-size:1.5em; color:#999;">???</div>';
+                
+                div.innerHTML = `
+                    <img src="${card.pic}">
+                    <div class="card-name" style="font-weight:bold; margin-top:8px; font-size:1.1em; color:#1565C0;">${card.name}</div>
+                    ${statsHtml}
+                `;
+                
+                if(isUnlocked) {
+                    div.onclick = () => alert(`📖 【${card.name}】\n首次擊敗：${stats.firstDate}\n累積討伐：${stats.count} 次`);
+                }
+                container.appendChild(div);
+            });
+        }
+
+        // ================== 遊戲主流程 ==================
+        function setPlayerName() {
+            initAudio(); playSound('click');
+            const name = document.getElementById('input-name').value.trim();
+            if (!name) return alert("請輸入名字！");
+            inventory.playerName = name;
+            document.getElementById('display-name').textContent = name;
+            goHome();
+        }
+        
+        window.logout = function() {
+            playSound('click'); inventory.playerName = ""; saveGame(); hideAll();
+            document.getElementById('player-tag').classList.add('hidden');
+            document.getElementById('top-nav').classList.add('hidden');
+            document.getElementById('medal-bar').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        };
+
+        window.claimGift = function() {
+            playSound('click');
+            if (inventory.giftClaimed) { return alert("❌ 你已經領取過老玩家補償大禮包了，不能重複領取喔！"); }
+            let code = prompt("請輸入老玩家專屬密碼：\n(提示：P4大禮包)");
+            if (code === "P4大禮包") {
+                inventory.wood += 50; inventory.stone += 50; inventory.star += 20; inventory.gem += 20; inventory.manuscript += 300; inventory.coins += 500; inventory.giftClaimed = true; 
+                saveGame(); updateUI();
+                alert("🎁 密技啟動！獲得各類資源及 500 金幣！");
+            } else if (code !== null) { alert("❌ 密碼錯誤！"); }
+        };
+
+        function loadGame() {
+            const savedData = localStorage.getItem(SAVE_KEY);
+            if (savedData) {
+                try {
+                    let parsed = JSON.parse(savedData);
+                    inventory = { ...defaultInv, ...parsed, equip: { ...defaultInv.equip, ...(parsed.equip || {}) }, medals: parsed.medals || [] };
+                    
+                    if(inventory.coins === undefined) inventory.coins = 0;
+                    if(inventory.dropBuffLeft === undefined) inventory.dropBuffLeft = 0;
+                    if(inventory.unlockedCards === undefined) inventory.unlockedCards = [];
+                    if(inventory.cardStats === undefined) inventory.cardStats = {};
+                    if(inventory.bloodMoonActive === undefined) inventory.bloodMoonActive = false;
+                    
+                    if(!inventory.partners) {
+                        inventory.partners = {};
+                        if(inventory.partnerId) inventory.partners[inventory.partnerId] = { lv: inventory.partnerLv, branch: inventory.partnerBranch };
+                    }
+
+                    if(inventory.playerName) {
+                        document.getElementById('display-name').textContent = inventory.playerName;
+                        goHome();
+                    }
+                } catch (e) { inventory = { ...defaultInv }; }
+            }
+        }
+
+        function saveGame() {
+            if(inventory.playerName) {
+                localStorage.setItem(SAVE_KEY, JSON.stringify(inventory));
+                document.getElementById('save-indicator').classList.remove('hidden');
+                setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
+            }
+        }
+
+
+        // ✅ FIX: getPartnerInfo 函數 (原版缺少此定義)
+        function getPartnerInfo(id, lv, branch) {
+            let dex = digidex[id];
+            if (!dex) return { n: '???', p: '', b: 0 };
+            let key;
+            if (lv <= 2) {
+                key = 'lv' + lv;
+            } else {
+                key = 'lv' + lv + branch; // e.g. 'lv3A', 'lv3B', 'lv4A', 'lv4B'
+            }
+            return dex[key] || { n: '???', p: '', b: 0 };
+        }
+
+        function calculateStats() {
+            let atk = 10, def = 10;
+            if(inventory.equip.woodSword) atk += 10;
+            if(inventory.equip.stoneSword) atk += 25;
+            if(inventory.equip.woodShield) def += 10;
+            if(inventory.equip.stoneArmor) def += 25;
+            
+            atk += (inventory.superWeaponLv * 5) + (inventory.superStoneLv * 3);
+            def += (inventory.superShieldLv * 5) + (inventory.superStoneLv * 3);
+            
+            if(inventory.partnerId) {
+                let pLevel = inventory.partnerLv || 0;
+                if (pLevel > 4) pLevel = 4;
+                let info = getPartnerInfo(inventory.partnerId, pLevel, inventory.partnerBranch);
+                atk += info.b; def += info.b;
+            }
+            return { atk, def };
+        }
+
+        function updateUI(doSave = true) {
+            document.getElementById('inv-wood').textContent = inventory.wood;
+            document.getElementById('inv-stone').textContent = inventory.stone;
+            document.getElementById('inv-gem').textContent = inventory.gem;
+            document.getElementById('inv-star').textContent = inventory.star;
+            document.getElementById('inv-manu').textContent = inventory.manuscript;
+            document.getElementById('inv-frag').textContent = inventory.fragment;
+            document.getElementById('inv-coins').textContent = inventory.coins;
+            document.getElementById('streak-counter').textContent = "🔥 連對: " + inventory.streak;
+
+            let buffEl = document.getElementById('buff-indicator');
+            if (inventory.dropBuffLeft > 0) {
+                buffEl.textContent = `🧪 雙倍掉落 (剩 ${inventory.dropBuffLeft} 題)`;
+            } else {
+                buffEl.textContent = '';
+            }
+
+            const stats = calculateStats();
+            document.getElementById('inv-atk').textContent = stats.atk;
+            document.getElementById('inv-def').textContent = stats.def;
+
+            document.getElementById('sg-w-lv').textContent = inventory.superWeaponLv;
+            document.getElementById('sg-w-bonus').textContent = inventory.superWeaponLv * 5;
+            document.getElementById('sg-w-cost-m').textContent = (inventory.superWeaponLv + 1) * 20;
+            document.getElementById('sg-w-cost-f').textContent = (inventory.superWeaponLv + 1) * 5;
+
+            document.getElementById('sg-s-lv').textContent = inventory.superShieldLv;
+            document.getElementById('sg-s-bonus').textContent = inventory.superShieldLv * 5;
+            document.getElementById('sg-s-cost-m').textContent = (inventory.superShieldLv + 1) * 20;
+            document.getElementById('sg-s-cost-f').textContent = (inventory.superShieldLv + 1) * 5;
+
+            document.getElementById('sg-a-lv').textContent = inventory.superStoneLv;
+            document.getElementById('sg-a-bonus').textContent = inventory.superStoneLv * 3;
+            document.getElementById('sg-a-cost-m').textContent = (inventory.superStoneLv + 1) * 30;
+            document.getElementById('sg-a-cost-f').textContent = (inventory.superStoneLv + 1) * 10;
+
+            const bossBtn = document.getElementById('btn-boss-menu');
+            if (inventory.castles >= 1 || inventory.flyingCastle >= 1) {
+                bossBtn.classList.remove('btn-black');
+                bossBtn.classList.add('btn-purple');
+                bossBtn.innerHTML = '🗺️ 終極 Boss 挑戰 (已解鎖)';
+                bossBtn.disabled = false;
+            }
+
+            let medalStr = '';
+            if (inventory.medals && inventory.medals.length > 0) {
+                inventory.medals.sort((a,b)=>a-b).forEach(m => {
+                    let icon = medalsConfig[m] || '🎖️';
+                    medalStr += `<span class="medal-icon" title="成就勳章">${icon}</span> `;
+                });
+                document.getElementById('medal-container').innerHTML = medalStr;
+            }
+            if(doSave) saveGame();
+        }
+
+        function hideAll() { document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); }
+        
+        function goHome() {
+            playSound('click'); updateUI(); hideAll(); clearInterval(combatTimerInterval);
+            if(!inventory.playerName) {
+                document.getElementById('login-screen').classList.remove('hidden');
+            } else {
+                document.getElementById('start-screen').classList.remove('hidden');
+                document.getElementById('player-tag').classList.remove('hidden');
+                document.getElementById('top-nav').classList.remove('hidden');
+                if(inventory.medals.length > 0) document.getElementById('medal-bar').classList.remove('hidden');
+                renderBloodMoonUI(); 
+            }
+        }
+
+        function openInstructions() { playSound('click'); hideAll(); document.getElementById('instruction-screen').classList.remove('hidden'); }
+        function openSuperForge() { playSound('click'); hideAll(); document.getElementById('super-forge-zone').classList.remove('hidden'); }
+        function openForgeZone() { playSound('click'); hideAll(); document.getElementById('forge-zone').classList.remove('hidden'); }
+        function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
+        function openBossSelect() { playSound('click'); hideAll(); document.getElementById('boss-select-screen').classList.remove('hidden'); }
+        window.closeModal = function(id) { document.getElementById(id).classList.add('hidden'); }
+
+        // ================== 建築工坊邏輯 ==================
+        window.buildItem = function(type) {
+            playSound('click');
+            if (type === 'hut') {
+                if (inventory.wood < 2) return alert("❌ 需要 🪵2 木材！");
+                inventory.wood -= 2; inventory.hut++;
+                alert(`✅ 建造了 🛖 木屋！目前共 ${inventory.hut} 座`);
+            } else if (type === 'tower') {
+                if (inventory.stone < 2) return alert("❌ 需要 🧱2 石頭！");
+                inventory.stone -= 2; inventory.tower++;
+                alert(`✅ 建造了 🗼 石塔！目前共 ${inventory.tower} 座`);
+            } else if (type === 'castle') {
+                if (inventory.hut < 2 || inventory.tower < 2) return alert("❌ 需要 🛖2 木屋 + 🗼2 石塔！");
+                inventory.hut -= 2; inventory.tower -= 2; inventory.castles++;
+                alert(`✅ 合成了 🏰 大城堡！目前共 ${inventory.castles} 座`);
+            } else if (type === 'flyingCastle') {
+                if (inventory.gem < 5 || inventory.castles < 1) return alert("❌ 需要 💎5 寶石 + 🏰1 大城堡！");
+                inventory.gem -= 5; inventory.castles--; inventory.flyingCastle++;
+                alert(`✅ 建造了 🛸 飛天城堡！目前共 ${inventory.flyingCastle} 座`);
+            } else if (type === 'ferrisWheel') {
+                if (inventory.star < 5 || inventory.wood < 5 || inventory.stone < 5) return alert("❌ 需要 🌟5 星星 + 🪵5 木材 + 🧱5 石頭！");
+                inventory.star -= 5; inventory.wood -= 5; inventory.stone -= 5; inventory.ferrisWheel++;
+                alert(`✅ 建造了 🎡 摩天輪！目前共 ${inventory.ferrisWheel} 座`);
+            }
+            updateUI(); saveGame(); restoreBuildings();
+        };
+
+        window.craft = function(item) {
+            playSound('click');
+            const recipes = {
+                woodSword:  { wood: 3, stone: 0, label: '🗡️ 木劍' },
+                stoneSword: { wood: 2, stone: 5, label: '⚔️ 石劍' },
+                woodShield: { wood: 3, stone: 0, label: '🛡️ 木盾' },
+                stoneArmor: { wood: 0, stone: 5, label: '🛡️ 石甲' }
+            };
+            let r = recipes[item];
+            if (!r) return;
+            if (inventory.equip[item]) return alert(`✅ 你已經擁有 ${r.label} 了！`);
+            if (inventory.wood < r.wood || inventory.stone < r.stone) return alert(`❌ 材料不足！需要 🪵${r.wood} 木材、🧱${r.stone} 石頭`);
+            inventory.wood -= r.wood; inventory.stone -= r.stone;
+            inventory.equip[item] = true;
+            updateUI(); saveGame();
+            alert(`✅ 成功鍛造 ${r.label}！`);
+        };
+
+        function restoreBuildings() {
+            let grid = document.getElementById('world-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            const addItems = (count, emoji) => {
+                for (let i = 0; i < count; i++) {
+                    let el = document.createElement('div');
+                    el.className = 'world-item'; el.textContent = emoji;
+                    grid.appendChild(el);
+                }
+            };
+            addItems(inventory.hut, '🛖');
+            addItems(inventory.tower, '🗼');
+            addItems(inventory.castles, '🏰');
+            addItems(inventory.flyingCastle, '🛸');
+            addItems(inventory.ferrisWheel, '🎡');
+            if (grid.children.length === 0) {
+                grid.innerHTML = '<p style="color:#666; font-size: 0.5em;">🌱 森林空空的，快去建造吧！</p>';
+            }
+        }
+
+        // ================== 搭檔數碼精靈 (進化系統) ==================
+        window.openPartnerZone = function(forceSelect = false) {
+            playSound('click'); hideAll();
+            document.getElementById('partner-zone').classList.remove('hidden');
+            
+            if(!inventory.partnerId || forceSelect) {
+                document.getElementById('partner-select-screen').classList.remove('hidden');
+                document.getElementById('partner-status-screen').classList.add('hidden');
+                
+                if(inventory.partnerId) document.getElementById('btn-cancel-select').classList.remove('hidden');
+                else document.getElementById('btn-cancel-select').classList.add('hidden');
+                renderPartnerSelection();
+            } else {
+                document.getElementById('partner-select-screen').classList.add('hidden');
+                document.getElementById('partner-status-screen').classList.remove('hidden');
+                updatePartnerUI();
+            }
+        }
+
+        function renderPartnerSelection() {
+            let container = document.getElementById('partner-grid-container');
+            container.innerHTML = '';
+            for(let id in digidex) {
+                let dex = digidex[id];
+                let pData = inventory.partners ? inventory.partners[id] : null;
+                let currentLv = pData ? pData.lv : 0;
+                let currentBranch = pData ? pData.branch : 'A';
+                let info = getPartnerInfo(id, currentLv, currentBranch);
+                let isActive = (id === inventory.partnerId);
+                
+                let card = document.createElement('div');
+                card.className = 'partner-card';
+                if(isActive) card.classList.add('partner-active-border');
+                
+                let statusText = isActive ? "<span style='color:#4CAF50'>當前搭檔</span>" : (pData ? `<span style='color:#2196F3'>點擊切換 (Lv.${currentLv})</span>` : "<span style='color:#FF9800'>領養 (幼年期)</span>");
+                let picSrc = info.p.startsWith('http') ? info.p : `https://digimon.net/cimages/digimon/${info.p}`;
+
+                card.innerHTML = `
+                    <img src="${picSrc}">
+                    <h3>${info.n}</h3>
+                    <p style="font-size:0.8em; color:#666;">${dex.title}</p>
+                    <div style="margin-top:5px; font-size:1.1em; font-weight:bold;">${statusText}</div>
+                `;
+                
+                card.onclick = () => {
+                    if(isActive) { openPartnerZone(); return; }
+                    let confirmMsg = pData ? `確定要切換搭檔為【${info.n}】嗎？` : `確定要領養【${dex.title}】嗎？將從幼年期開始培育！`;
+                    if(confirm(confirmMsg)) selectPartner(id);
+                };
+                container.appendChild(card);
+            }
+        }
+
+        window.selectPartner = function(id) {
+            playSound('click');
+            if (!inventory.partners) inventory.partners = {};
+            if (inventory.partnerId) inventory.partners[inventory.partnerId] = { lv: inventory.partnerLv, branch: inventory.partnerBranch };
+            
+            if (inventory.partners[id]) {
+                inventory.partnerId = id; inventory.partnerLv = inventory.partners[id].lv; inventory.partnerBranch = inventory.partners[id].branch;
+            } else {
+                inventory.partnerId = id; inventory.partnerLv = 0; inventory.partnerBranch = 'A'; inventory.partners[id] = { lv: 0, branch: 'A' };
+            }
+            saveGame(); openPartnerZone(); updateUI();
+        }
+
+        function updatePartnerUI() {
+            let pLevel = inventory.partnerLv || 0;
+            let info = getPartnerInfo(inventory.partnerId, pLevel, inventory.partnerBranch);
+
+            let picSrc = info.p.startsWith('http') ? info.p : `https://digimon.net/cimages/digimon/${info.p}`;
+            document.getElementById('partner-pic').src = picSrc;
+            
+            document.getElementById('partner-name').innerText = info.n;
+            document.getElementById('partner-buff').innerText = info.b;
+            
+            let pathName = digidex[inventory.partnerId].title;
+            if(pLevel >= 3) pathName += (inventory.partnerBranch === 'A' ? " (光明路線)" : " (闇黑路線)");
+            document.getElementById('partner-path-name').innerText = pathName;
+
+            document.getElementById('evo-req-single').classList.add('hidden');
+            document.getElementById('evo-req-branch').classList.add('hidden');
+            document.getElementById('evo-max-msg').classList.add('hidden');
+            
+            let bSingle = document.getElementById('btn-evolve-single');
+            let bA = document.getElementById('btn-evolve-a');
+            let bB = document.getElementById('btn-evolve-b');
+            if(bSingle) bSingle.disabled = false;
+            if(bA) bA.disabled = false;
+            if(bB) bB.disabled = false;
+
+            if (pLevel >= 4) {
+                document.getElementById('evo-max-msg').classList.remove('hidden');
+            } else if (pLevel === 2) {
+                document.getElementById('evo-req-branch').classList.remove('hidden');
+                let costs = evoCosts[pLevel + 1];
+                document.getElementById('branch-a-title').innerText = costs.A.title;
+                document.getElementById('evo-a-m').innerText = costs.A.m;
+                document.getElementById('evo-a-f').innerText = costs.A.f;
+                document.getElementById('evo-a-s').innerText = costs.A.s;
+                document.getElementById('branch-b-title').innerText = costs.B.title;
+                document.getElementById('evo-b-m').innerText = costs.B.m;
+                document.getElementById('evo-b-f').innerText = costs.B.f;
+                document.getElementById('evo-b-g').innerText = costs.B.g;
+            } else {
+                document.getElementById('evo-req-single').classList.remove('hidden');
+                let costs = (pLevel === 3) ? evoCosts[pLevel + 1][inventory.partnerBranch] : evoCosts[pLevel + 1];
+                document.getElementById('evo-s-m').innerText = costs.m;
+                document.getElementById('evo-s-f').innerText = costs.f;
+                document.getElementById('evo-s-s').innerText = (costs.s > 0) ? costs.s : costs.g; 
+                if(costs.g > 0) document.getElementById('evo-s-s').previousSibling.textContent = '💎寶石: ';
+                else document.getElementById('evo-s-s').previousSibling.textContent = '🌟星星: ';
+                // ✅ FIX: 第3級進化時，使用當前路線（A/B）而非寫死的 'A'
+                if (bSingle) bSingle.onclick = () => evolvePartner(pLevel === 3 ? inventory.partnerBranch : 'A');
+            }
+        }
+
+        window.evolvePartner = function(chosenBranch = 'A') {
+            playSound('click');
+            let pLevel = inventory.partnerLv || 0;
+            if (pLevel >= 4) return;
+
+            let costs = (pLevel === 2 || pLevel === 3) ? evoCosts[pLevel + 1][chosenBranch] : evoCosts[pLevel + 1];
+
+            if (inventory.manuscript >= costs.m && inventory.fragment >= costs.f && inventory.star >= costs.s && inventory.gem >= costs.g) {
+                inventory.manuscript -= costs.m; inventory.fragment -= costs.f; inventory.star -= costs.s; inventory.gem -= costs.g;
+                
+                ['btn-evolve-single', 'btn-evolve-a', 'btn-evolve-b'].forEach(id => {
+                    let btn = document.getElementById(id);
+                    if (btn) btn.disabled = true;
+                });
+
+                hideAll();
+                let evoModal = document.getElementById('evo-modal');
+                let evoImg = document.getElementById('evo-img');
+                let evoText = document.getElementById('evo-text');
+                
+                let curInfo = getPartnerInfo(inventory.partnerId, pLevel, inventory.partnerBranch);
+                evoImg.src = curInfo.p.startsWith('http') ? curInfo.p : `https://digimon.net/cimages/digimon/${curInfo.p}`;
+                
+                if (pLevel < 2) {
+                    evoModal.className = 'evo-matrix';
+                    evoText.textContent = "進 化！";
+                } else {
+                    evoModal.className = chosenBranch === 'A' ? 'evo-light' : 'evo-dark'; 
+                    evoText.textContent = (pLevel === 3) ? "究 極 進 化！" : "超 進 化！";
+                }
+                
+                evoImg.parentElement.classList.remove('evo-revealed');
+                evoText.className = 'evo-text-slam'; 
+                evoImg.classList.add('evolving-flash');
+                
+                evoModal.classList.remove('hidden');
+                
+                // 🎶 播放專屬的史詩級 BGM！
+                playSound('evolution'); 
+
+                setTimeout(() => {
+                    evoText.classList.add('slam-anim');
+                    
+                    setTimeout(() => {
+                        inventory.partnerLv++;
+                        if(pLevel === 2) inventory.partnerBranch = chosenBranch;
+                        let newInfo = getPartnerInfo(inventory.partnerId, inventory.partnerLv, inventory.partnerBranch);
+                        evoImg.src = newInfo.p.startsWith('http') ? newInfo.p : `https://digimon.net/cimages/digimon/${newInfo.p}`;
+                        evoImg.parentElement.classList.add('evo-revealed');
+                        
+                        setTimeout(() => {
+                            evoModal.classList.add('hidden');
+                            if (!inventory.partners) inventory.partners = {};
+                            inventory.partners[inventory.partnerId] = { lv: inventory.partnerLv, branch: inventory.partnerBranch };
+                            
+                            alert(`✨ 數據重組！進化成功！\n你的拍檔進化成了【${newInfo.n}】！全屬性大幅提升！`);
+                            openPartnerZone(); updateUI();
+                        }, 2500); 
+                        
+                    }, 1000); 
+                }, 1500); 
+                
+            } else {
+                alert("❌ 數據能量（資源）不足，無法進化！請去溫習累積資源吧！");
+            }
+        }
+
+        // ================== 金幣市場與神器升級 ==================
+        window.openMarket = function() {
+            checkDailyReset();
+            document.getElementById('market-coin-display').textContent = inventory.coins;
+            let scrollBtn = document.getElementById('btn-buy-scroll');
+            let today = new Date().toDateString();
+            if(inventory.scrollBoughtDate === today) {
+                scrollBtn.disabled = true; scrollBtn.innerHTML = "📜 傳說卷軸 (今日已售罄)"; scrollBtn.className = "btn-grey";
+            } else {
+                scrollBtn.disabled = false; scrollBtn.innerHTML = "📜 傳說卷軸 (必遇傳說怪) <br>💰 50🪵 + 50🪨 + 10⭐"; scrollBtn.className = "btn-red";
+            }
+            document.getElementById('market-modal').classList.remove('hidden');
+        }
+
+        window.exchangeCoins = function(type) {
+            playSound('click');
+            if (type === 'wood') {
+                if (inventory.wood >= 10) { inventory.wood -= 10; inventory.coins += 50; } else { return alert("❌ 木材不足 10 個！"); }
+            } else if (type === 'stone') {
+                if (inventory.stone >= 10) { inventory.stone -= 10; inventory.coins += 50; } else { return alert("❌ 石頭不足 10 個！"); }
+            }
+            document.getElementById('market-coin-display').textContent = inventory.coins;
+            updateUI();
+        }
+
+        window.buyDropPotion = function() {
+            playSound('click');
+            if (inventory.coins >= 200) {
+                inventory.coins -= 200;
+                inventory.dropBuffLeft += 20;
+                document.getElementById('market-coin-display').textContent = inventory.coins;
+                updateUI();
+                alert("🧪 購買成功！接下來 20 題你將獲得【雙倍基礎資源掉落】！");
+            } else {
+                alert("❌ 金幣不足！需要 200 金幣。去打怪或賣資源吧！");
+            }
+        }
+
+        window.buyItem = function(item) {
+            playSound('click'); checkDailyReset(); let today = new Date().toDateString();
+            if (item === 'scroll') {
+                if(inventory.scrollBoughtDate === today) return alert("❌ 今日已售罄！");
+                if(inventory.wood >= 50 && inventory.stone >= 50 && inventory.star >= 10) {
+                    inventory.wood -= 50; inventory.stone -= 50; inventory.star -= 10;
+                    inventory.hasLegendaryBuff = true; inventory.scrollBoughtDate = today;
+                    alert("🛒 購買成功！下一次進入森林【必遇傳說怪】！"); openMarket(); 
+                } else { alert("❌ 資源不足！需要 50木材 + 50石頭 + 10星星。"); }
+            }
+            updateUI();
+        }
+
+        // --- 修復：神器祭壇升級機制 ---
+        window.upgradeSuperGear = function(type) {
+            playSound('click');
+            let costW = 20; 
+            let costG = 5;  
+            
+            if (type === 'weapon') { costW = (inventory.superWeaponLv + 1) * 20; costG = (inventory.superWeaponLv + 1) * 5; }
+            else if (type === 'shield') { costW = (inventory.superShieldLv + 1) * 20; costG = (inventory.superShieldLv + 1) * 5; }
+            else if (type === 'stone') { costW = (inventory.superStoneLv + 1) * 30; costG = (inventory.superStoneLv + 1) * 10; }
+
+            if (inventory.wood >= costW && inventory.gem >= costG) {
+                inventory.wood -= costW; 
+                inventory.gem -= costG;
+                playSound('win');
+                
+                if (type === 'weapon') { inventory.superWeaponLv++; alert("🗡️ 升級成功！破題者之刃升級了！"); }
+                else if (type === 'shield') { inventory.superShieldLv++; alert("🛡️ 升級成功！絕對專注之盾升級了！"); }
+                else if (type === 'stone') { inventory.superStoneLv++; alert("💎 升級成功！無瑕賢者之石升級了！"); }
+                
+                updateUI();
+            } else { 
+                alert(`❌ 資源不足！需要 ${costW} 木材 及 ${costG} 寶石。`); 
+            }
+        };
+
+        window.openGacha = function() {
+            checkDailyReset(); let limit = 3;
+            document.getElementById('gacha-chances').innerText = limit - inventory.gachaDrawsToday;
+            document.getElementById('gacha-modal').classList.remove('hidden');
+            document.getElementById('gacha-result').innerText = "🎁";
+        }
+
+        window.rollGacha = function() {
+            checkDailyReset(); let limit = 3;
+            if (inventory.gachaDrawsToday >= limit) return alert("❌ 今天的抽獎次數用完啦！明天再來吧！");
+            if (inventory.star < 1) return alert("❌ 星星不足，無法抽獎！");
+            
+            inventory.star -= 1; inventory.gachaDrawsToday += 1; saveGame();
+            document.getElementById('gacha-chances').innerText = limit - inventory.gachaDrawsToday;
+            
+            let resultBox = document.getElementById('gacha-result');
+            resultBox.innerText = "🔄..."; playSound('click'); 
+
+            setTimeout(() => {
+                let r = Math.random();
+                if (r < 0.05) { resultBox.innerText = "👑 大量手稿 x50"; inventory.manuscript += 50; alert("🎉 運氣爆棚！抽中 50 份手稿！"); } 
+                else if (r < 0.3) { resultBox.innerText = "💎 寶石 x5"; inventory.gem += 5; } 
+                else { resultBox.innerText = "🪵 木材 x20"; inventory.wood += 20; }
+                updateUI(); 
+            }, 800);
+        }
+
+        // ================== 關卡流程 ==================
+        let reorderSessionTasks = [], reorderSessionIndex = 0, reorderCurrentAnswer = '';
+
+        window.startGame = function(type) {
+            initAudio(); playSound('click');
+            if (!inventory.playerName) return alert("⚠️ 請先輸入冒險者名稱！");
+            clearInterval(combatTimerInterval);
+            renderBloodMoonUI();
+
+            const reorderMap = {
+                'reorder':            { tasks: reorderTasks,           title: "🌉 鋪木板過河 (重組句子)" },
+                'fa-reorder':         { tasks: faReorderTasks,         title: "📝 FA溫習 (課文重組)" },
+                'dictation2-reorder': { tasks: dictation2ReorderTasks, title: "🌉 默書温習(二) - 重組" }
+            };
+
+            if (reorderMap[type]) {
+                hideAll();
+                document.getElementById('reorder-title').textContent = reorderMap[type].title;
+                document.getElementById('game-reorder').classList.remove('hidden');
+                document.getElementById('player-tag').classList.remove('hidden');
+                document.getElementById('top-nav').classList.remove('hidden');
+                startReorderSession(reorderMap[type].tasks);
+                return;
+            }
+
+            if (mcConfigs[type]) {
+                hideAll();
+                document.getElementById('mc-title').textContent = mcConfigs[type].title;
+                document.getElementById('game-mc').classList.remove('hidden');
+                document.getElementById('player-tag').classList.remove('hidden');
+                document.getElementById('top-nav').classList.remove('hidden');
+                startMCSession(type);
+                return;
+            }
+
+            alert("⚠️ 找不到此關卡：" + type);
+        };
+
+        function startReorderSession(tasks) {
+            reorderSessionTasks = shuffle([...tasks]);
+            reorderSessionIndex = 0;
+            loadReorderQuestion();
+        }
+
+        function loadReorderQuestion() {
+            if (reorderSessionIndex >= reorderSessionTasks.length) {
+                document.getElementById('reorder-msg').textContent = "🎉 恭喜完成所有題目！";
+                document.getElementById('answer-area').innerHTML = '<button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>';
+                document.getElementById('word-bank').innerHTML = '';
+                document.getElementById('btn-next-reorder').classList.add('hidden');
+                return;
+            }
+            let task = reorderSessionTasks[reorderSessionIndex];
+            let words, answer;
+            if (Array.isArray(task)) { words = shuffle([...task]); answer = task.join(''); }
+            else { answer = task.answer || task.ans || ''; words = task.words ? shuffle([...task.words]) : shuffle(answer.split('')); }
+            
+            reorderCurrentAnswer = answer;
+            document.getElementById('reorder-msg').textContent = "";
+            document.getElementById('btn-next-reorder').classList.add('hidden');
+            let answerArea = document.getElementById('answer-area');
+            let wordBank = document.getElementById('word-bank');
+            answerArea.innerHTML = ''; wordBank.innerHTML = '';
+            
+            words.forEach(word => {
+                let btn = document.createElement('button');
+                btn.className = 'btn-blue'; btn.textContent = word;
+                btn.onclick = () => {
+                    (btn.parentNode === wordBank ? answerArea : wordBank).appendChild(btn);
+                    let cur = [...answerArea.children].map(b => b.textContent).join('');
+                    if (cur === reorderCurrentAnswer) {
+                        document.getElementById('reorder-msg').innerHTML = '<span style="color:#4CAF50">✅ 正確！</span>';
+                        [...answerArea.children].forEach(b => b.disabled = true);
+                        playSound('win'); addStreak();
+                        let epicTriggered = handleBloodMoon(true);
+                        if(!epicTriggered) { checkInvasion(); }
+                        document.getElementById('btn-next-reorder').classList.remove('hidden'); 
+                    }
+                };
+                wordBank.appendChild(btn);
+            });
+            document.getElementById('btn-hint-reorder').onclick = () => {
+                document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 正確答案：「<b>${reorderCurrentAnswer}</b>」</span>`;
+            };
+        }
+
+        window.nextReorder = function() { reorderSessionIndex++; loadReorderQuestion(); };
+        window.resetReorder = function() { loadReorderQuestion(); };
+
+        // ================== 關卡流程 (選擇題) ==================
+        let mcSessionTasks = [], mcSessionIndex = 0;
+
+        function startMCSession(type) {
+            mcSessionTasks = shuffle([...mcConfigs[type].tasks]);
+            mcSessionIndex = 0;
+            loadMCQuestion();
+        }
+
+        function loadMCQuestion() {
+            if (mcSessionIndex >= mcSessionTasks.length) {
+                document.getElementById('mc-question').textContent = "🎉 恭喜完成所有題目！";
+                document.getElementById('mc-options').innerHTML = '<button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>';
+                document.getElementById('mc-msg').textContent = "";
+                document.getElementById('btn-next-mc').classList.add('hidden');
+                return;
+            }
+            let task = mcSessionTasks[mcSessionIndex];
+            document.getElementById('mc-question').textContent = task.q;
+            document.getElementById('mc-msg').textContent = "";
+            document.getElementById('btn-next-mc').classList.add('hidden');
+            let optDiv = document.getElementById('mc-options');
+            optDiv.innerHTML = '';
+            
+            shuffle([...task.options]).forEach(opt => {
+                let btn = document.createElement('button');
+                btn.className = 'btn-blue'; btn.textContent = opt;
+                btn.onclick = () => {
+                    [...optDiv.children].forEach(b => b.disabled = true);
+                    if (opt === task.ans) {
+                        btn.style.backgroundColor = '#4CAF50';
+                        document.getElementById('mc-msg').innerHTML = '<span style="color:#4CAF50">✅ 答對了！</span>';
+                        playSound('win'); addStreak(); 
+                        let epicTriggered = handleBloodMoon(true);
+                        if(!epicTriggered) { checkInvasion(); }
+                    } else {
+                        btn.style.backgroundColor = '#F44336';
+                        document.getElementById('mc-msg').innerHTML = `<span style="color:#F44336">❌ 答錯！正確答案：<b>${task.ans}</b></span>`;
+                        playSound('error'); inventory.streak = 0; handleBloodMoon(false); updateUI(); saveGame();
+                    }
+                    document.getElementById('btn-next-mc').classList.remove('hidden');
+                };
+                optDiv.appendChild(btn);
+            });
+            document.getElementById('btn-hint-mc').onclick = () => {
+                document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示：答案是「<b>${task.ans}</b>」</span>`;
+            };
+        }
+
+        window.nextMC = function() { mcSessionIndex++; loadMCQuestion(); };
+
+        // ================== 血月與天象異變系統 ==================
+        function renderBloodMoonUI() {
+            const mcUI = document.getElementById('mc-bloodmoon-status');
+            const roUI = document.getElementById('reorder-bloodmoon-status');
+            
+            if (inventory.bloodMoonActive) {
+                document.body.classList.add('legendary-mode');
+                let txt = `🩸 血月異變！連對: <span style="font-size:1.2em;">${inventory.bloodMoonStreak} / ${inventory.bloodMoonTarget}</span> (剩餘機會: ${inventory.bloodMoonLeft})`;
+                if(mcUI) { mcUI.innerHTML = txt; mcUI.classList.remove('hidden'); }
+                if(roUI) { roUI.innerHTML = txt; roUI.classList.remove('hidden'); }
+            } else {
+                document.body.classList.remove('legendary-mode');
+                if(mcUI) mcUI.classList.add('hidden');
+                if(roUI) roUI.classList.add('hidden');
+            }
+        }
+
+        function handleBloodMoon(isCorrect) {
+            if (inventory.bloodMoonActive) {
+                inventory.bloodMoonLeft--;
+                if (isCorrect) {
+                    inventory.bloodMoonStreak++;
+                } else {
+                    inventory.bloodMoonStreak = 0;
+                    let msg = "<br><span style='color:#ff0000; font-weight:bold;'>🩸 答錯了！血月連對中斷！</span>";
+                    let mcMsg = document.getElementById('mc-msg');
+                    let roMsg = document.getElementById('reorder-msg');
+                    if(mcMsg && mcMsg.innerHTML) mcMsg.innerHTML += msg;
+                    if(roMsg && roMsg.innerHTML) roMsg.innerHTML += msg;
+                }
+
+                if (inventory.bloodMoonStreak >= inventory.bloodMoonTarget) {
+                    inventory.bloodMoonActive = false;
+                    renderBloodMoonUI();
+                    triggerEpicBoss();
+                    return true; 
+                } else if (inventory.bloodMoonLeft <= 0) {
+                    inventory.bloodMoonActive = false;
+                    alert("🌑 血月能量耗盡，天空恢復了正常...");
+                }
+            } else {
+                if (isCorrect && inventory.castles >= 1 && Math.random() < 0.05) {
+                    inventory.bloodMoonActive = true;
+                    inventory.bloodMoonTarget = Math.floor(Math.random() * 3) + 5; 
+                    inventory.bloodMoonStreak = 1;
+                    inventory.bloodMoonLeft = 15;
+                    alert("🩸 天象異變... 血月降臨！\n在剩餘機會耗盡前連續答對題目，將可召喚遠古神獸！");
+                }
+            }
+            saveGame();
+            renderBloodMoonUI();
+            return false;
+        }
+
+        // ================== 戰鬥遭遇 ==================
+        let currentEvent = null;
+
+        function setupMonsterCombatUI(name, picUrl, glowClass) {
+            document.getElementById('boss-hp-ui').classList.remove('hidden');
+            let bossNameElement = document.getElementById('boss-name-title');
+            let oldPic = document.getElementById('boss-pic-img');
+            if(oldPic) oldPic.remove();
+
+            let bossPicImg = document.createElement('img');
+            bossPicImg.id = 'boss-pic-img';
+            bossPicImg.className = `battle-pic ${glowClass}`; 
+            bossPicImg.src = picUrl;
+            
+            bossNameElement.innerHTML = name;
+            bossNameElement.parentNode.insertBefore(bossPicImg, bossNameElement.nextSibling);
+        }
+
+        function triggerEpicBoss() {
+            const keys = Object.keys(epicLegendaries);
+            const key = keys[Math.floor(Math.random() * keys.length)];
+            const boss = epicLegendaries[key];
+            
+            currentEvent = { type: 'epic', key: key, name: boss.name, pic: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${boss.img}.png` };
+            
+            let eventModal = document.getElementById('event-modal');
+            let eventTitle = document.getElementById('event-title');
+            let eventDesc = document.getElementById('event-desc');
+            let fightBtn = document.getElementById('btn-event-fight');
+            let innerBox = document.getElementById('event-box-inner');
+            
+            playSound('legendary');
+            innerBox.className = 'event-box legendary-border glow-red';
+            document.body.classList.add('legendary-mode');
+            
+            eventTitle.innerHTML = `☄️ 遠古神獸降臨！`;
+            eventTitle.style.color = '#ff0000';
+            eventDesc.innerHTML = `
+                <img src="${currentEvent.pic}" class="battle-pic" alt="神獸">
+                <span style="color:#D50000; font-size:1.8em; font-weight:bold;">${boss.name}</span><br>
+                <span style="color:#FFF; background:#D50000; padding:2px 8px; border-radius:5px; font-weight:bold; font-size:0.9em;">特技：${boss.desc}</span><br>
+                <span style="font-weight:bold; margin-top:5px; display:inline-block;">目標: 答對 ${boss.target} 題 (限時 ${boss.time} 秒/題)</span>`;
+                
+            fightBtn.innerHTML = "⚔️ 迎擊神獸";
+            fightBtn.className = 'btn-red';
+            fightBtn.onclick = () => {
+                initAudio(); playSound('click');
+                eventModal.classList.add('hidden');
+                startCombat('epic', currentEvent);
+            };
+            eventModal.classList.remove('hidden');
+            
+            document.getElementById('btn-event-flee').onclick = () => {
+                initAudio(); playSound('click');
+                alert("🏃 你恐懼地逃跑了！神獸的威壓讓你損失 15 木材和 15 石頭！");
+                inventory.wood = Math.max(0, inventory.wood - 15);
+                inventory.stone = Math.max(0, inventory.stone - 15);
+                document.body.classList.remove('legendary-mode');
+                eventModal.classList.add('hidden');
+                updateUI();
+            };
+        }
+
+        function checkInvasion() {
+            let stats = calculateStats();
+            let r = Math.random();
+            let eventModal = document.getElementById('event-modal');
+            let eventTitle = document.getElementById('event-title');
+            let eventDesc = document.getElementById('event-desc');
+            let fightBtn = document.getElementById('btn-event-fight');
+            let innerBox = document.getElementById('event-box-inner');
+            
+            innerBox.className = 'event-box';
+            fightBtn.style.display = 'inline-block';
+
+            if ((stats.atk >= 50 && stats.def >= 50 && r < 0.10) || inventory.hasLegendaryBuff) { 
+                inventory.hasLegendaryBuff = false; saveGame();
+                let isDragon = Math.random() > 0.5;
+                let digiName = isDragon ? '蒼響' : '藏瑪然特';
+                let digiPic = isDragon ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/888.png' : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/889.png';
+                currentEvent = { type: 'legendary', name: digiName, pic: digiPic };
+                
+                playSound('legendary'); innerBox.classList.add('legendary-border', 'glow-gold'); 
+                eventTitle.innerHTML = `🌟 傳說降臨！皇家騎士！`; eventTitle.style.color = '#FFD700';
+                eventDesc.innerHTML = `<img src="${digiPic}" class="battle-pic"><br><span style="color:#D50000; font-size:1.4em; font-weight:bold;">${digiName}</span>！<br><span style="color:#2E7D32;">💬 必須連續答對 2 題才能獲得牠的認可！</span>`;
+                
+                fightBtn.innerHTML = "⚔️ 接受試煉 (-1 🌟)"; fightBtn.className = 'btn-gold';
+                fightBtn.onclick = () => {
+                    initAudio(); playSound('click');
+                    if(inventory.star < 1) return alert("❌ 星星不足，無法開啟試煉！");
+                    inventory.star -= 1; updateUI(); 
+                    eventModal.classList.add('hidden'); startCombat('legendary', currentEvent);
+                };
+            } else if (r < 0.3) {
+                // 抽出 20 款野生 Pokemon 其中一款
+                let monster = pokemonMonsters[Math.floor(Math.random() * pokemonMonsters.length)];
+                currentEvent = { type: 'virus', name: monster.name, pic: monster.pic };
+                
+                innerBox.classList.add('glow-purple');
+                eventTitle.innerHTML = "⚠️ 野生怪獸突襲！"; eventTitle.style.color = '#9C27B0';
+                eventDesc.innerHTML = `<img src="${monster.pic}" class="battle-pic"><br>一隻凶猛的<span style="color:#9C27B0; font-weight:bold;">${monster.name}</span>擋住了去路！<br><span style="color:#D50000;">💬 答對 1 題來擊退牠！</span>`;
+                
+                fightBtn.innerHTML = "⚔️ 進入戰鬥"; fightBtn.className = 'btn-red';
+                fightBtn.onclick = () => {
+                    initAudio(); playSound('click'); eventModal.classList.add('hidden'); startCombat('virus', currentEvent);
+                };
+            } else { return; } 
+
+            eventModal.classList.remove('hidden');
+            document.getElementById('btn-event-flee').onclick = () => {
+                initAudio(); playSound('click'); alert("🏃 你急忙撤退，安全躲過了這次遭遇，但沒有獲得任何獎勵。"); eventModal.classList.add('hidden');
+            };
+        }
+
+        // ================== 戰鬥與神獸特技核心邏輯 ==================
+        let combatType = 'normal_boss';
+        let currentCombatQ = {};
+        let combatHP = 100, maxCombatHP = 100;
+        let combatTimeLimit = 0, baseCombatTimeLimit = 0;
+        let combatTimerInterval;
+        let combatCorrectCount = 0, combatTarget = 5;
+        
+        let isEnraged = false;
+        let oneHitActive = false;
+
+        window.startBossFight = function(level) {
+            initAudio(); combatType = 'normal_boss'; 
+            if(level === 1) { combatTarget = 3; combatTimeLimit = 15; setupMonsterCombatUI("【成熟期】暴龍獸", albumData.find(c=>c.id==='boss_1').pic, 'glow-red'); currentEvent = {level:1}; }
+            else if(level === 2) { combatTarget = 4; combatTimeLimit = 10; setupMonsterCombatUI("【完全體】機械暴龍獸", albumData.find(c=>c.id==='boss_2')?.pic || 'https://digimon.net/cimages/digimon/metalgreymon.jpg', 'glow-red'); currentEvent = {level:2}; }
+            else { combatTarget = 5; combatTimeLimit = 5; setupMonsterCombatUI("【究極體】戰鬥暴龍獸", albumData.find(c=>c.id==='boss_3').pic, 'glow-red'); currentEvent = {level:3}; }
+            startCombatScreen();
+        }
+
+        function startCombat(type, evtData) {
+            combatType = type;
+            if(type === 'epic') {
+                let boss = epicLegendaries[evtData.key];
+                combatTarget = boss.target; combatTimeLimit = boss.time;
+                setupMonsterCombatUI(`【遠古神獸】${evtData.name}`, evtData.pic, 'glow-red');
+            } else if(type === 'legendary') {
+                combatTarget = 2; combatTimeLimit = 10;
+                setupMonsterCombatUI("【傳說試煉】" + evtData.name, evtData.pic, 'glow-gold');
+            } else if (type === 'virus') {
+                combatTarget = 1; combatTimeLimit = 15;
+                setupMonsterCombatUI("【野生突襲】" + evtData.name, evtData.pic, 'glow-purple');
+            }
+            startCombatScreen();
+        }
+
+        function startCombatScreen() {
+            playSound('boss_win'); hideAll();
+            document.getElementById('player-tag').classList.remove('hidden');
+            const stats = calculateStats();
+            combatHP = maxCombatHP = 100 + stats.def;
+            combatCorrectCount = 0;
+            isEnraged = false; oneHitActive = false;
+            document.body.classList.remove('ultimate-warning');
+            baseCombatTimeLimit = combatTimeLimit;
+            
+            document.getElementById('boss-combat-screen').classList.remove('hidden');
+            document.getElementById('boss-progress-text').textContent = `目標：累積答對 0 / ${combatTarget}`;
+            updateCombatHPBar(); nextCombatQuestion();
+        }
+
+        function updateCombatHPBar() {
+            let pct = (combatHP / maxCombatHP) * 100;
+            document.getElementById('player-hp-bar').style.width = Math.max(0, Math.min(100, pct)) + '%';
+            document.getElementById('player-hp-text').textContent = `你的 HP: ${Math.max(0, combatHP)} / ${maxCombatHP}`;
+            if(combatHP <= 0) {
+                clearInterval(combatTimerInterval); playSound('error');
+                inventory.wood = Math.floor(inventory.wood / 2); inventory.stone = Math.floor(inventory.stone / 2);
+                updateUI();
+                alert("💀 你的 HP 歸零了！你被擊敗，並丟失了一半的木材和石頭！");
+                document.body.classList.remove('legendary-mode', 'ultimate-warning');
+                goHome();
+            }
+        }
+
+        window.usePotion = function() {
+            if (combatType === 'epic' && currentEvent && epicLegendaries[currentEvent.key].effect === 'anti_heal') {
+                alert("🌑 禁療詛咒生效中！無法使用藥水！"); return;
+            }
+            if (inventory.wood >= 10 && inventory.stone >= 10) {
+                if(combatHP >= maxCombatHP) return alert("HP 已滿！");
+                inventory.wood -= 10; inventory.stone -= 10;
+                combatHP = Math.min(maxCombatHP, combatHP + 30);
+                updateCombatHPBar(); updateUI(); playSound('medal');
+                alert("🧪 飲用成功！恢復了 30 點 HP！");
+            } else { alert("❌ 材料不足！需要 10🪵 + 10🪨。"); }
+        }
+
+        window.nextCombatQuestion = function() {
+            clearInterval(combatTimerInterval);
+            document.getElementById('btn-next-boss-q').classList.add('hidden');
+            document.getElementById('btn-boss-flee').classList.remove('hidden');
+            document.getElementById('boss-msg').textContent = "";
+            document.getElementById('boss-options').innerHTML = "";
+            
+            document.body.classList.remove('ultimate-warning');
+            oneHitActive = false;
+            let currentLimit = baseCombatTimeLimit;
+
+            if (combatType === 'epic') {
+                let boss = epicLegendaries[currentEvent.key];
+                if (combatCorrectCount >= Math.floor(combatTarget / 2)) {
+                    if (!isEnraged) { isEnraged = true; alert(`⚠️ 警告！【${boss.name}】血量低於 50%，進入狂暴狀態！\n所有答題限時永久縮短 30%！`); }
+                    currentLimit = Math.ceil(baseCombatTimeLimit * 0.7);
+                }
+                if (boss.effect === 'one_hit' && Math.random() < 0.3) {
+                    oneHitActive = true; currentLimit = 3;
+                    document.body.classList.add('ultimate-warning');
+                    document.getElementById('boss-msg').innerHTML = `<span style='color:#ff0000; font-size:1.2em;'>☠️ ${boss.name} 正在蓄力大招！快在 3 秒內作答！</span>`;
+                }
+            } else if (combatType === 'normal_boss' || combatType === 'legendary') {
+                if (combatCorrectCount >= Math.floor(combatTarget / 2)) {
+                    if (!isEnraged) { isEnraged = true; alert(`⚠️ 警告！對手進入狂暴狀態！限時縮短 30%！`); }
+                    currentLimit = Math.ceil(baseCombatTimeLimit * 0.7);
+                }
+            }
+            combatTimeLimit = currentLimit;
+
+            let potionBtn = document.getElementById('btn-combat-potion');
+            if (potionBtn) {
+                if (combatType === 'epic' && epicLegendaries[currentEvent.key].effect === 'anti_heal') { potionBtn.style.display = 'none'; } 
+                else { potionBtn.style.display = 'inline-block'; }
+            }
+
+            let qPool = [...fillTasks, ...matchTasks, ...connectTasks, ...punctTasks, ...faMCTasks, ...dictation2Tasks, ...advTasks, ...appearanceTasks];
+            currentCombatQ = qPool[Math.floor(Math.random() * qPool.length)];
+            document.getElementById('boss-question').textContent = currentCombatQ.q;
+            
+            let shuffledOpts = shuffle([...currentCombatQ.options]);
+            shuffledOpts.forEach(opt => {
+                let chunk = document.createElement('div');
+                chunk.className = 'stone-chunk'; chunk.textContent = opt;
+                chunk.onclick = () => checkCombat(opt, chunk);
+                document.getElementById('boss-options').appendChild(chunk);
+            });
+
+            if (combatType === 'epic' && epicLegendaries[currentEvent.key].effect === 'freeze' && Math.random() < 0.4) {
+                setTimeout(() => {
+                    let opts = document.querySelectorAll('#boss-options .stone-chunk');
+                    if (opts.length > 0) {
+                        let randIdx = Math.floor(Math.random() * opts.length);
+                        opts[randIdx].classList.add('frozen-options');
+                        document.getElementById('boss-msg').innerHTML = "<span style='color:#00E5FF; font-weight:bold;'>❄️ 絕對零度！部分選項被凍結了 3 秒！</span>";
+                        setTimeout(() => { if(opts[randIdx]) opts[randIdx].classList.remove('frozen-options'); }, 3000);
+                    }
+                }, 50);
+            }
+            
+            let timerBar = document.getElementById('boss-timer-bar');
+            timerBar.style.transition = 'none'; timerBar.style.width = '100%';
+            
+            setTimeout(() => { 
+                timerBar.style.transition = `width ${combatTimeLimit}s linear`; timerBar.style.width = '0%'; 
+            }, 50);
+            
+            let timeLeft = combatTimeLimit;
+            combatTimerInterval = setInterval(() => {
+                timeLeft--;
+                if(timeLeft <= 0) { 
+                    clearInterval(combatTimerInterval);
+                    timerBar.style.transition = 'none'; timerBar.style.width = '0%';
+                    combatFail("超時！"); 
+                }
+            }, 1000);
+        }
+
+        function combatFail(reason) {
+            playSound('error');
+            let timerBar = document.getElementById('boss-timer-bar');
+            timerBar.style.transition = 'none'; timerBar.style.width = timerBar.offsetWidth + 'px';
+            let opts = document.querySelectorAll('#boss-options .stone-chunk');
+            opts.forEach(o => o.onclick = null);
+            document.body.classList.remove('ultimate-warning');
+            
+            if (combatType === 'epic') {
+                inventory.streak = 0; updateUI();
+                let boss = epicLegendaries[currentEvent.key];
+                let dmg = boss.hpPenalty;
+                
+                if (boss.effect === 'true_damage') {
+                    dmg = Math.floor(dmg * 1.5); combatHP -= dmg;
+                    document.getElementById('boss-msg').innerHTML = `<span style='color:#ff0000'>🔥 真實傷害！無視防禦扣除了 ${dmg} HP！</span>`;
+                } else if (boss.effect === 'one_hit' && oneHitActive) {
+                    combatHP = 0; document.getElementById('boss-msg').innerHTML = `<span style='color:#ff0000'>☠️ 一擊必殺！你被秒殺了！</span>`;
+                } else {
+                    let finalDmg = Math.max(10, dmg - calculateStats().def); combatHP -= finalDmg;
+                    document.getElementById('boss-msg').innerHTML = `<span style='color:#F44336'>💥 神獸造成了 ${finalDmg} 點傷害！</span>`;
+                }
+                document.getElementById('btn-next-boss-q').classList.remove('hidden');
+                updateCombatHPBar();
+
+            } else if(combatType === 'legendary') {
+                inventory.streak = 0; updateUI();
+                alert(`💥 ${reason} 挑戰失敗！`); goHome();
+            } else if (combatType === 'virus') {
+                inventory.streak = 0; inventory.wood = Math.max(0, inventory.wood - 2); inventory.stone = Math.max(0, inventory.stone - 2); updateUI();
+                alert(`💥 ${reason} 野生怪把你打傷了！損失 2 木材和 2 石頭。`); goHome();
+            } else {
+                combatHP -= 20; updateCombatHPBar();
+                document.getElementById('boss-msg').innerHTML = `<span style='color:#F44336'>💥 ${reason} 對手對你造成了 20 點傷害！</span>`;
+                document.getElementById('btn-next-boss-q').classList.remove('hidden');
+            }
+        }
+
+        function checkCombat(selected, element) {
+            clearInterval(combatTimerInterval);
+            let timerBar = document.getElementById('boss-timer-bar');
+            timerBar.style.transition = 'none'; timerBar.style.width = timerBar.offsetWidth + 'px';
+
+            let opts = document.querySelectorAll('#boss-options .stone-chunk');
+            opts.forEach(o => o.onclick = null);
+            document.body.classList.remove('ultimate-warning');
+
+            if(selected === currentCombatQ.ans) {
+                playSound('win'); addStreak();
+                element.style.backgroundColor = '#4CAF50';
+                combatCorrectCount++;
+                document.getElementById('boss-progress-text').textContent = `目標：累積答對 ${combatCorrectCount} / ${combatTarget}`;
+                document.getElementById('boss-msg').innerHTML = "<span style='color:#4CAF50'>⚔️ 漂亮的一擊！</span>";
+                
+                if(combatCorrectCount >= combatTarget) {
+                    playSound('boss_win');
+                    setTimeout(() => {
+                        if (combatType === 'epic') {
+                            let ms = Math.floor(Math.random() * 201) + 100;
+                            inventory.gem += 50; inventory.star += 30; inventory.manuscript += ms; inventory.coins += 200; updateUI();
+                            alert(`🎉 奇蹟！你擊敗了遠古神獸【${currentEvent.name}】！\n🎁 獲得 50寶石、30星星、${ms}手稿、200金幣！\n📖 閃卡已登錄至紀念冊！`);
+                            unlockCard(epicLegendaries[currentEvent.key].id);
+                            document.body.classList.remove('legendary-mode');
+                        } else if(combatType === 'legendary') {
+                            let ms = Math.floor(Math.random() * 101) + 100;
+                            inventory.gem += 20; inventory.star += 20; inventory.manuscript += ms; inventory.coins += 100; updateUI();
+                            alert(`🌟 奇蹟！你成功收服了傳說怪【${currentEvent.name}】！\n🎁 獲得 20寶石、20星星、${ms}手稿、100金幣！\n📖 閃卡已登錄至紀念冊！`);
+                            unlockCard('leg_' + currentEvent.name);
+                        } else if (combatType === 'virus') {
+                            inventory.coins += 50; inventory.gem += 5; updateUI(); 
+                            alert(`🏆 勝利！你擊退了野生怪，獲得 5 顆寶石、50金幣！\n📖 閃卡已登錄至紀念冊！`);
+                            unlockCard('wild_' + currentEvent.name);
+                        } else {
+                            inventory.gem += 10; inventory.star += 10; inventory.coins += 100; updateUI(); 
+                            alert("🏆 恭喜你擊敗了對手！獲得 10 顆寶石、10 顆星星、100金幣！\n📖 閃卡已登錄至紀念冊！");
+                            unlockCard('boss_' + currentEvent.level);
+                        }
+                        goHome();
+                    }, 1000);
+                } else {
+                    document.getElementById('btn-boss-flee').classList.add('hidden');
+                    setTimeout(() => { window.nextCombatQuestion(); }, 1500);
+                }
+            } else {
+                element.style.backgroundColor = '#F44336';
+                combatFail("答錯了！");
+            }
+        }
+
+        window.fleeCombat = function() {
+            playSound('click'); clearInterval(combatTimerInterval);
+            document.body.classList.remove('ultimate-warning');
+            if (combatType === 'epic') {
+                inventory.wood = Math.max(0, inventory.wood - 15); inventory.stone = Math.max(0, inventory.stone - 15);
+                alert("🏃 你恐懼地逃跑了！神獸的威壓讓你損失了資源！");
+                document.body.classList.remove('legendary-mode');
+            } else if(combatType === 'legendary' || combatType === 'virus') {
+                alert("🏃 你急忙逃出危險區域，安然無恙。");
+            } else {
+                inventory.wood = Math.max(0, inventory.wood - 5);
+                alert("🏃 你急忙逃出對手的巢穴，但在路上弄丟了 5 個木材！");
+            }
+            updateUI(); goHome();
+        };
+
+        window.onload = loadGame;
+    </script>
+</body>
+</html>
