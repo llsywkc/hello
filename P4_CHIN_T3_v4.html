@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>數碼冒險：4A森林大作戰 (T3)</title>
+    <title>數碼冒險：4A森林大作戰 (Pokémon 聯動版)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         /* 引入點陣像素字體，用於進化文字 */
@@ -98,6 +98,7 @@
         
         @keyframes screenShake { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-2px, -2px) rotate(-1deg); } 50% { transform: translate(-3px, 0px) rotate(1deg); } 75% { transform: translate(3px, 2px) rotate(0deg); } 100% { transform: translate(1px, -1px) rotate(-1deg); } }
         @keyframes flashRed { 0% { box-shadow: inset 0 0 50px #ff0000; } 50% { box-shadow: inset 0 0 10px #ff0000; } 100% { box-shadow: inset 0 0 50px #ff0000; } }
+        
         .frozen-options { pointer-events: none; filter: grayscale(100%) blur(1px) brightness(0.8); transition: all 0.3s; }
         
         /* 💡 動畫：數碼數據流背景與進化特效 */
@@ -283,15 +284,15 @@
                 </ul>
 
                 <h3 style="color:#2E7D32;">4. 究極進化與閃卡紀念冊</h3>
-                <p>你可以擁有多隻數碼精靈！當精靈進化時會觸發專屬「數據流」或「善惡分歧」超華麗動畫！擊敗各類 Boss 與神獸，更可以解鎖「📖 閃卡紀念冊」，記錄你的榮耀時刻。</p>
+                <p>你可以擁有多隻數碼精靈或 Pokémon 拍檔！當精靈進化時會觸發專屬「數據流」或「善惡分歧」超華麗動畫！擊敗各類 Boss 與神獸，更可以解鎖「📖 閃卡紀念冊」，記錄你的榮耀時刻。</p>
             </div>
             <button class="btn-red" onclick="goHome()">🏠 返回主畫面</button>
         </div>
 
         <div id="partner-zone" class="screen hidden">
             <div id="partner-select-screen" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-                <h2 style="color: #9C27B0;">🥚 數碼精靈圖鑑與切換</h2>
-                <p style="font-weight:bold; color:#D50000; margin-top:0;">你可以隨時切換搭檔！新領養的精靈將從幼年期開始培育。</p>
+                <h2 style="color: #9C27B0;">🥚 冒險拍檔圖鑑與切換</h2>
+                <p style="font-weight:bold; color:#D50000; margin-top:0;">你可以隨時切換搭檔！新領養的拍檔將從幼年期開始培育。</p>
                 <div id="partner-grid-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 700px;">
                     </div>
                 <button class="btn-grey hidden" id="btn-cancel-select" onclick="openPartnerZone(false)" style="margin-top:20px;">❌ 取消切換</button>
@@ -337,7 +338,7 @@
 
                     <div id="evo-max-msg" class="hidden" style="margin-top: 20px; padding: 15px; background: #FFF9C4; border: 2px solid #FBC02D; border-radius: 10px;">
                         <p style="color: #E65100; font-weight: bold; font-size: 1.4em; margin:0;">🏆 究極體達成！</p>
-                        <p style="color: #4CAF50; margin:5px 0 0 0; font-weight:bold;">你的搭檔已經達到最強狀態！快去收集其他精靈吧！</p>
+                        <p style="color: #4CAF50; margin:5px 0 0 0; font-weight:bold;">你的搭檔已經達到最強狀態！快去收集其他拍檔吧！</p>
                     </div>
 
                     <button class="btn-blue" onclick="openPartnerZone(true)" style="margin-top: 15px; width: 100%; font-size: 1em;">🔄 更換搭檔 / 查看圖鑑</button>
@@ -352,17 +353,17 @@
                 <div class="super-gear-card">
                     <h3>🗡️ 破題者之刃 <br>Lv.<span id="sg-w-lv">0</span></h3>
                     <p class="stat-atk">效果: +<span id="sg-w-bonus">0</span> 攻</p>
-                    <button class="btn-gold" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('weapon')">升級 (需 <span id="sg-w-cost-m">5</span>手稿 <span id="sg-w-cost-f">0</span>碎片)</button>
+                    <button class="btn-gold" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('weapon')">升級 (需 <span id="sg-w-cost-m">20</span>木材 <span id="sg-w-cost-f">5</span>寶石)</button>
                 </div>
                 <div class="super-gear-card">
                     <h3>🛡️ 絕對專注之盾 <br>Lv.<span id="sg-s-lv">0</span></h3>
                     <p class="stat-def">效果: +<span id="sg-s-bonus">0</span> 防</p>
-                    <button class="btn-blue" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('shield')">升級 (需 <span id="sg-s-cost-m">5</span>手稿 <span id="sg-s-cost-f">0</span>碎片)</button>
+                    <button class="btn-blue" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('shield')">升級 (需 <span id="sg-s-cost-m">20</span>木材 <span id="sg-s-cost-f">5</span>寶石)</button>
                 </div>
                 <div class="super-gear-card">
                     <h3>💎 無瑕賢者之石 <br>Lv.<span id="sg-a-lv">0</span></h3>
                     <p class="gem-text">效果: 全屬性 +<span id="sg-a-bonus">0</span></p>
-                    <button class="btn-purple" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('stone')">升級 (需 <span id="sg-a-cost-m">10</span>手稿 <span id="sg-a-cost-f">1</span>碎片)</button>
+                    <button class="btn-purple" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('stone')">升級 (需 <span id="sg-a-cost-m">30</span>木材 <span id="sg-a-cost-f">10</span>寶石)</button>
                 </div>
             </div>
             <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
@@ -486,7 +487,6 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="btn-orange" id="btn-buy-sword" onclick="buyItem('sword')">🗡️ 數碼合金劍 (祭壇升2級)</button>
                 <button class="btn-red" id="btn-buy-scroll" onclick="buyItem('scroll')">📜 傳說卷軸 (必遇傳說怪) <br>💰 50🪵 + 50🪨 + 10⭐</button>
             </div>
             <button class="btn-grey" style="margin-top: 20px;" onclick="closeModal('market-modal')">❌ 離開</button>
@@ -569,7 +569,6 @@
                     osc.frequency.setValueAtTime(1200, t + 0.4); gain.gain.setValueAtTime(0.3, t); gain.gain.linearRampToValueAtTime(0, t + 1.0);
                     osc.start(); osc.stop(t + 1.0);
                 } else if (type === 'evolution') {
-                    // 🌟 專屬史詩級進化 BGM (3秒)
                     const bass = audioCtx.createOscillator();
                     bass.type = 'sawtooth';
                     bass.frequency.setValueAtTime(50, t);
@@ -676,7 +675,7 @@
             { q: "弟弟 ______ 地拆開生日禮物，想看看裏面是甚麼。", ans: "迫不及待", options: ["迫不及待", "慢條斯理", "拖泥帶水", "猶豫不決"] },
             { q: "導遊一路上 ______ 地為我們介紹當地的歷史故事。", ans: "滔滔不絕", options: ["滔滔不絕", "沉默寡言", "啞口無言", "支支吾吾"] },
             { q: "畢業時，同學們都 ______ 地向老師道別。", ans: "依依不捨", options: ["依依不捨", "揚長而去", "迫不及待", "冷酷無情"] },
-            { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧鬧", "喧囂蔽天"] }
+            { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧闹", "喧囂蔽天"] }
         ];
 
         const connectTasks = [
@@ -924,7 +923,11 @@
             'gabu': { title: "加布獸路線", desc: "冷酷且敏捷，高人氣的冰狼型精靈。", lv0: { n: "獨角獸", p: "tsunomon.jpg", b: 0 }, lv1: { n: "加布獸", p: "gabumon.jpg", b: 20 }, lv2: { n: "加魯魯獸", p: "garurumon.jpg", b: 50 }, lv3A: { n: "獸人加魯魯獸", p: "weregarurumon.jpg", b: 100 }, lv3B: { n: "地獄犬獸", p: "cerberumon.jpg", b: 120 }, lv4A: { n: "鋼鐵加魯魯獸", p: "metalgarurumon.jpg", b: 200 }, lv4B: { n: "阿努比獸", p: "anubimon.jpg", b: 220 } },
             'pata': { title: "巴達獸路線", desc: "擁有神聖力量，能帶來奇蹟的精靈。", lv0: { n: "迪哥獸", p: "tokomon.jpg", b: 0 }, lv1: { n: "巴達獸", p: "patamon.jpg", b: 20 }, lv2: { n: "天使獸", p: "angemon.jpg", b: 50 }, lv3A: { n: "神聖天使獸", p: "holyangemon.jpg", b: 100 }, lv3B: { n: "吸血魔獸", p: "vamdemon.jpg", b: 120 }, lv4A: { n: "究極天使獸", p: "seraphimon.jpg", b: 200 }, lv4B: { n: "小丑皇", p: "piemon.jpg", b: 220 } },
             'tail': { title: "迪路獸路線", desc: "專屬女孩子！可愛又迷人的神聖貓咪。", lv0: { n: "喵喵獸", p: "nyaromon.jpg", b: 0 }, lv1: { n: "小狗獸", p: "plotmon.jpg", b: 20 }, lv2: { n: "迪路獸", p: "tailmon.jpg", b: 50 }, lv3A: { n: "天女獸", p: "angewomon.jpg", b: 100 }, lv3B: { n: "妖女獸", p: "ladydevimon.jpg", b: 120 }, lv4A: { n: "聖龍獸", p: "holydramon.jpg", b: 200 }, lv4B: { n: "莉莉絲獸", p: "lilithmon.jpg", b: 220 } },
-            'pal': { title: "巴魯獸路線", desc: "專屬女孩子！熱愛大自然的美麗花仙子。", lv0: { n: "種子獸", p: "tanemon.jpg", b: 0 }, lv1: { n: "巴魯獸", p: "palmon.jpg", b: 20 }, lv2: { n: "仙人掌獸", p: "togemon.jpg", b: 50 }, lv3A: { n: "花仙獸", p: "lilimon.jpg", b: 100 }, lv3B: { n: "南瓜獸", p: "pumpmon.jpg", b: 120 }, lv4A: { n: "薔薇獸", p: "rosemon.jpg", b: 200 }, lv4B: { n: "木偶獸", p: "pinocchimon.jpg", b: 220 } }
+            'pal': { title: "巴魯獸路線", desc: "專屬女孩子！熱愛大自然的美麗花仙子。", lv0: { n: "種子獸", p: "tanemon.jpg", b: 0 }, lv1: { n: "巴魯獸", p: "palmon.jpg", b: 20 }, lv2: { n: "仙人掌獸", p: "togemon.jpg", b: 50 }, lv3A: { n: "花仙獸", p: "lilimon.jpg", b: 100 }, lv3B: { n: "南瓜獸", p: "pumpmon.jpg", b: 120 }, lv4A: { n: "薔薇獸", p: "rosemon.jpg", b: 200 }, lv4B: { n: "木偶獸", p: "pinocchimon.jpg", b: 220 } },
+            'pika': { title: "皮卡丘路線", desc: "電系拍檔：十萬伏特！", lv0: { n: "皮丘", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/172.png", b: 0 }, lv1: { n: "皮卡丘", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png", b: 20 }, lv2: { n: "雷丘", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/26.png", b: 50 }, lv3A: { n: "電擊魔獸", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/466.png", b: 100 }, lv3B: { n: "倫琴貓", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/405.png", b: 120 }, lv4A: { n: "捷拉奧拉", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/807.png", b: 200 }, lv4B: { n: "捷克羅姆", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/644.png", b: 220 } },
+            'chari': { title: "噴火龍路線", desc: "火系拍檔：戰鬥動作更快！", lv0: { n: "小火龍", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png", b: 0 }, lv1: { n: "火恐龍", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png", b: 20 }, lv2: { n: "噴火龍", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png", b: 50 }, lv3A: { n: "超級噴火龍Y", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10035.png", b: 100 }, lv3B: { n: "超級噴火龍X", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10034.png", b: 120 }, lv4A: { n: "鳳王", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/250.png", b: 200 }, lv4B: { n: "固拉多(原始)", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10077.png", b: 220 } },
+            'ninja': { title: "甲賀忍蛙路線", desc: "水系拍檔：迴避率提升！", lv0: { n: "呱呱泡蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/656.png", b: 0 }, lv1: { n: "呱頭蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/657.png", b: 20 }, lv2: { n: "甲賀忍蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/658.png", b: 50 }, lv3A: { n: "小智版忍蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10116.png", b: 100 }, lv3B: { n: "達克萊伊", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/491.png", b: 120 }, lv4A: { n: "水君", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/245.png", b: 200 }, lv4B: { n: "帕路奇亞", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/484.png", b: 220 } },
+            'lucario': { title: "路卡利歐路線", desc: "格鬥系拍檔：防禦加強！", lv0: { n: "利歐路", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/447.png", b: 0 }, lv1: { n: "路卡利歐", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/448.png", b: 20 }, lv2: { n: "超級路卡利歐", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10059.png", b: 50 }, lv3A: { n: "武道熊師", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/892.png", b: 100 }, lv3B: { n: "瑪夏多", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/802.png", b: 120 }, lv4A: { n: "蒼響", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/888.png", b: 200 }, lv4B: { n: "藏瑪然特", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/889.png", b: 220 } }
         };
 
         function getPartnerInfo(id, lv, branch) {
@@ -938,6 +941,29 @@
             return dex.lv4A;
         }
 
+        const pokemonMonsters = [
+            { name: "超夢", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png" },
+            { name: "烈空坐", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png" },
+            { name: "班基拉斯", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/248.png" },
+            { name: "烈咬陸鯊", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/445.png" },
+            { name: "快龍", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/149.png" },
+            { name: "耿鬼", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png" },
+            { name: "暴飛龍", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/373.png" },
+            { name: "巨金怪", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/376.png" },
+            { name: "路卡利歐", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/448.png" },
+            { name: "甲賀忍蛙", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/658.png" },
+            { name: "索羅亞克", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/571.png" },
+            { name: "蒼響", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/888.png" },
+            { name: "藏瑪然特", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/889.png" },
+            { name: "武道熊師", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/892.png" },
+            { name: "多龍巴魯托", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/887.png" },
+            { name: "噴火龍", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png" },
+            { name: "水箭龜", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png" },
+            { name: "妙蛙花", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png" },
+            { name: "怪力", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/68.png" },
+            { name: "風速狗", pic: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/59.png" }
+        ];
+
         const albumData = [
             { id: 'wild_惡魔獸', name: '惡魔獸', pic: 'https://digimon.net/cimages/digimon/devimon.jpg', type: 'normal' },
             { id: 'wild_古加獸', name: '古加獸', pic: 'https://digimon.net/cimages/digimon/kuwagamon.jpg', type: 'normal' },
@@ -946,6 +972,10 @@
             { id: 'leg_奧米加獸', name: '奧米加獸', pic: 'https://digimon.net/cimages/digimon/omegamon.jpg', type: 'epic' },
             { id: 'epic_inferno', name: '獄炎魔龍', pic: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/383.png`, type: 'epic' }
         ];
+
+        pokemonMonsters.forEach(p => {
+            albumData.push({ id: 'wild_' + p.name, name: p.name, pic: p.pic, type: 'normal' });
+        });
 
         // ================== 存檔與資料設定 ==================
         const defaultInv = { 
@@ -1163,18 +1193,18 @@
 
             document.getElementById('sg-w-lv').textContent = inventory.superWeaponLv;
             document.getElementById('sg-w-bonus').textContent = inventory.superWeaponLv * 5;
-            document.getElementById('sg-w-cost-m').textContent = (inventory.superWeaponLv + 1) * 5;
-            document.getElementById('sg-w-cost-f').textContent = Math.floor(inventory.superWeaponLv / 3);
+            document.getElementById('sg-w-cost-m').textContent = (inventory.superWeaponLv + 1) * 20;
+            document.getElementById('sg-w-cost-f').textContent = (inventory.superWeaponLv + 1) * 5;
 
             document.getElementById('sg-s-lv').textContent = inventory.superShieldLv;
             document.getElementById('sg-s-bonus').textContent = inventory.superShieldLv * 5;
-            document.getElementById('sg-s-cost-m').textContent = (inventory.superShieldLv + 1) * 5;
-            document.getElementById('sg-s-cost-f').textContent = Math.floor(inventory.superShieldLv / 3);
+            document.getElementById('sg-s-cost-m').textContent = (inventory.superShieldLv + 1) * 20;
+            document.getElementById('sg-s-cost-f').textContent = (inventory.superShieldLv + 1) * 5;
 
             document.getElementById('sg-a-lv').textContent = inventory.superStoneLv;
             document.getElementById('sg-a-bonus').textContent = inventory.superStoneLv * 3;
-            document.getElementById('sg-a-cost-m').textContent = ((inventory.superStoneLv + 1) * 5) * 2;
-            document.getElementById('sg-a-cost-f').textContent = Math.floor(inventory.superStoneLv / 3) + 1;
+            document.getElementById('sg-a-cost-m').textContent = (inventory.superStoneLv + 1) * 30;
+            document.getElementById('sg-a-cost-f').textContent = (inventory.superStoneLv + 1) * 10;
 
             const bossBtn = document.getElementById('btn-boss-menu');
             if (inventory.castles >= 1 || inventory.flyingCastle >= 1) {
@@ -1434,8 +1464,6 @@
                 evoImg.classList.add('evolving-flash');
                 
                 evoModal.classList.remove('hidden');
-                
-                // 🎶 播放專屬的史詩級 BGM！
                 playSound('evolution'); 
 
                 setTimeout(() => {
@@ -1453,7 +1481,7 @@
                             if (!inventory.partners) inventory.partners = {};
                             inventory.partners[inventory.partnerId] = { lv: inventory.partnerLv, branch: inventory.partnerBranch };
                             
-                            alert(`✨ 數據重組！進化成功！\n你的數碼精靈進化成了【${newInfo.n}】！全屬性大幅提升！`);
+                            alert(`✨ 數據重組！進化成功！\n你的拍檔進化成了【${newInfo.n}】！全屬性大幅提升！`);
                             openPartnerZone(); updateUI();
                         }, 2500); 
                         
@@ -1465,13 +1493,10 @@
             }
         }
 
-        // ================== 金幣市場與抽獎 ==================
+        // ================== 金幣市場與神器升級 ==================
         window.openMarket = function() {
             checkDailyReset();
             document.getElementById('market-coin-display').textContent = inventory.coins;
-            let swordCost = (inventory.superWeaponLv + 1) * 15;
-            document.getElementById('btn-buy-sword').innerHTML = `🗡️ 數碼合金劍 (祭壇升2級) <br>💰 ${swordCost} 寶石`;
-
             let scrollBtn = document.getElementById('btn-buy-scroll');
             let today = new Date().toDateString();
             if(inventory.scrollBoughtDate === today) {
@@ -1508,14 +1533,7 @@
 
         window.buyItem = function(item) {
             playSound('click'); checkDailyReset(); let today = new Date().toDateString();
-            if (item === 'sword') {
-                let swordCost = (inventory.superWeaponLv + 1) * 15;
-                if(inventory.gem >= swordCost) { inventory.gem -= swordCost; inventory.superWeaponLv += 2; alert(`🛒 購買成功！你的【破題者之刃】連升 2 級！`); openMarket(); } 
-                else { alert(`❌ 寶石不足！需要 ${swordCost} 寶石。`); }
-            } else if (item === 'starpack') {
-                if(inventory.wood >= 20) { inventory.wood -= 20; inventory.star += 5; alert("🛒 購買成功！獲得 5 顆 ⭐！"); } 
-                else { alert("❌ 木材不足！"); }
-            } else if (item === 'scroll') {
+            if (item === 'scroll') {
                 if(inventory.scrollBoughtDate === today) return alert("❌ 今日已售罄！");
                 if(inventory.wood >= 50 && inventory.stone >= 50 && inventory.star >= 10) {
                     inventory.wood -= 50; inventory.stone -= 50; inventory.star -= 10;
@@ -1525,6 +1543,32 @@
             }
             updateUI();
         }
+
+        // --- 修復：神器祭壇升級機制 ---
+        window.upgradeSuperGear = function(type) {
+            playSound('click');
+            let costW = 20; // 預設木材
+            let costG = 5;  // 預設寶石
+            
+            // 動態計算所需資源
+            if (type === 'weapon') { costW = (inventory.superWeaponLv + 1) * 20; costG = (inventory.superWeaponLv + 1) * 5; }
+            else if (type === 'shield') { costW = (inventory.superShieldLv + 1) * 20; costG = (inventory.superShieldLv + 1) * 5; }
+            else if (type === 'stone') { costW = (inventory.superStoneLv + 1) * 30; costG = (inventory.superStoneLv + 1) * 10; }
+
+            if (inventory.wood >= costW && inventory.gem >= costG) {
+                inventory.wood -= costW; 
+                inventory.gem -= costG;
+                playSound('win');
+                
+                if (type === 'weapon') { inventory.superWeaponLv++; alert("🗡️ 升級成功！破題者之刃升級了！"); }
+                else if (type === 'shield') { inventory.superShieldLv++; alert("🛡️ 升級成功！絕對專注之盾升級了！"); }
+                else if (type === 'stone') { inventory.superStoneLv++; alert("💎 升級成功！無瑕賢者之石升級了！"); }
+                
+                updateUI();
+            } else { 
+                alert(`❌ 資源不足！需要 ${costW} 木材 及 ${costG} 寶石。`); 
+            }
+        };
 
         window.openGacha = function() {
             checkDailyReset(); let limit = 3;
@@ -1848,13 +1892,14 @@
                     { name: '古加獸', pic: 'https://digimon.net/cimages/digimon/kuwagamon.jpg' },
                     { name: '奧加獸', pic: 'https://digimon.net/cimages/digimon/orgemon.jpg' },
                     { name: '飛龍獸', pic: 'https://digimon.net/cimages/digimon/airdramon.jpg' },
-                    { name: '蜘蛛獸', pic: 'https://digimon.net/cimages/digimon/dokugumon.jpg' }
+                    { name: '蜘蛛獸', pic: 'https://digimon.net/cimages/digimon/dokugumon.jpg' },
+                    ...pokemonMonsters
                 ];
                 let monster = normalMonsters[Math.floor(Math.random() * normalMonsters.length)];
                 currentEvent = { type: 'virus', name: monster.name, pic: monster.pic };
                 
                 innerBox.classList.add('glow-purple');
-                eventTitle.innerHTML = "⚠️ 野生 Digimon 襲擊！"; eventTitle.style.color = '#9C27B0';
+                eventTitle.innerHTML = "⚠️ 野生怪獸突襲！"; eventTitle.style.color = '#9C27B0';
                 eventDesc.innerHTML = `<img src="${monster.pic}" class="battle-pic"><br>一隻凶猛的<span style="color:#9C27B0; font-weight:bold;">${monster.name}</span>擋住了去路！<br><span style="color:#D50000;">💬 答對 1 題來擊退牠！</span>`;
                 
                 fightBtn.innerHTML = "⚔️ 進入戰鬥"; fightBtn.className = 'btn-red';
