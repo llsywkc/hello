@@ -97,6 +97,10 @@
         
         /* 怪物圖片特效 */
         .poke-img-style { width: 160px; height: 160px; object-fit: contain; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); }
+        
+        /* 搭檔卡片進階邊框特效 */
+        .adv-partner-card { border: 4px solid #6A1B9A !important; background: #F3E5F5 !important; }
+        .adv-partner-card h3 { color: #4A148C !important; }
     </style>
 </head>
 <body>
@@ -114,6 +118,7 @@
     <div id="player-tag" class="player-info hidden">冒險者：<span id="display-name"></span> <span id="streak-counter" style="color:#E65100; margin-left: 10px;">🔥 連對: 0</span></div>
 
     <div id="top-nav" class="inventory-bar hidden">
+        <span style="color:#FFF;">🏆 徽章: <span id="badge-count" style="color:#FFEB3B; text-shadow: 1px 1px 2px #000;">0</span></span>
         <span>🪵 木材: <span id="inv-wood">0</span></span>
         <span>🧱 石頭: <span id="inv-stone">0</span></span>
         <span class="stat-atk">⚔️ 攻: <span id="inv-atk">10</span></span>
@@ -179,9 +184,10 @@
             <h2>📖 冒險者指南</h2>
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #FF9800; max-height: 400px; overflow-y: auto;">
                 <h3 style="color:#00796B; margin-top:0;">🌟 寶可夢搭檔系統</h3>
-                <p>在「搭檔中心」選擇並設定你的寶可夢，牠們會為你提供強大的攻防加成！收集足夠的碎片與寶石，就能讓牠們進化至更強的形態！</p>
+                <p>在「搭檔中心」選擇並設定你的寶可夢，牠們會為你提供強大的攻防加成！收集足夠的碎片與寶石，就能讓牠們進化至更強的形態！<br>
+                <b style="color: purple;">進階搭檔</b>需要更多材料進化，但能提供更強大的戰力！</p>
                 <h3 style="color:#E65100;">1. 戰鬥力 (攻/防) 與怪獸遭遇</h3>
-                <p>在地圖探險時，有機率遇到<b>隨機怪獸與野生 Pokémon</b>！你需要有足夠的「⚔️攻擊力」與「🛡️防禦力」才能迎戰。打贏可獲稀有資源！建成「豪華城堡」後，甚至會遇到<b>超夢、烈空坐等神獸</b>！</p>
+                <p>在地圖探險時，有機率遇到<b>隨機怪獸與野生 Pokémon</b>！你需要有足夠的「⚔️攻擊力」與「🛡️防禦力」才能迎戰。打贏可獲稀有資源！建成「豪華城堡」後，甚至會遇到<b>超夢、阿爾宙斯等神獸</b>！</p>
                 <h3 style="color:#B71C1C;">2. 如何獲得元素？</h3>
                 <p>🪵 <b>木材 / 🧱 石頭</b>：透過一般答題獲得。</p>
                 <p>📜 <b>勤奮手稿</b>：每次答對都會獲得 1 張，用於神器升級。</p>
@@ -313,7 +319,7 @@
     </div>
 
     <script>
-        // --- 遊戲音效引擎大升級 ---
+        // --- 遊戲音效引擎 ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx;
 
@@ -384,10 +390,10 @@
             }
         });
 
-        // --- 進化路線數據庫 (全面重製：保留同種寶可夢的極致進化！) ---
+        // --- 進階進化路線數據庫 (8大屬性全面登場！) ---
         const pokedex = {
             'fire': { 
-                title: "🔥 火系搭檔", 
+                title: "🔥 火系搭檔", advanced: false,
                 lv0: { n: "小火龍", p: "4", b: 0 }, 
                 lv1: { n: "火恐龍", p: "5", b: 10 }, 
                 lv2: { n: "噴火龍", p: "6", b: 30 }, 
@@ -397,7 +403,7 @@
                 lv4B: { n: "霸主・超極巨噴火龍 (闇極)", p: "10196", b: 180 } 
             },
             'water': {
-                title: "💧 水系搭檔", 
+                title: "💧 水系搭檔", advanced: false,
                 lv0: { n: "傑尼龜", p: "7", b: 0 }, 
                 lv1: { n: "卡咪龜", p: "8", b: 10 }, 
                 lv2: { n: "水箭龜", p: "9", b: 30 }, 
@@ -407,7 +413,7 @@
                 lv4B: { n: "霸主・超極巨水箭龜 (闇極)", p: "shiny/10197", b: 180 }
             },
             'grass': {
-                title: "🍃 草系搭檔", 
+                title: "🍃 草系搭檔", advanced: false,
                 lv0: { n: "妙蛙種子", p: "1", b: 0 }, 
                 lv1: { n: "妙蛙草", p: "2", b: 10 }, 
                 lv2: { n: "妙蛙花", p: "3", b: 30 }, 
@@ -417,21 +423,62 @@
                 lv4B: { n: "霸主・超極巨妙蛙花 (闇極)", p: "shiny/10195", b: 180 } 
             },
             'electric': {
-                title: "⚡ 電系搭檔",
+                title: "⚡ 電系搭檔", advanced: false,
                 lv0: { n: "皮丘", p: "172", b: 0 },
                 lv1: { n: "皮卡丘", p: "25", b: 10 },
                 lv2: { n: "雷丘", p: "26", b: 30 },
                 lv3A: { n: "超級雷丘Ｘ (光)", p: "10100", b: 60 }, 
-                lv3B: { n: "超級雷丘Ｙ (闇)", p: "10094", b: 80 }, 
+                lv3B: { n: "超極巨化皮卡丘 (闇)", p: "10199", b: 80 }, 
                 lv4A: { n: "輝耀・超級雷丘Ｘ (光極)", p: "shiny/10100", b: 150 },
-                lv4B: { n: "輝耀・超級雷丘Ｙ (闇極)", p: "shiny/10094", b: 180 }
+                lv4B: { n: "霸主・超極巨皮卡丘 (闇極)", p: "shiny/10199", b: 180 }
+            },
+            'ghost': {
+                title: "👻 幽靈系搭檔 (進階)", advanced: true,
+                lv0: { n: "鬼斯", p: "92", b: 0 },
+                lv1: { n: "鬼斯通", p: "93", b: 20 },
+                lv2: { n: "耿鬼", p: "94", b: 50 },
+                lv3A: { n: "超級耿鬼 (光)", p: "10038", b: 100 },
+                lv3B: { n: "超極巨化耿鬼 (闇)", p: "10202", b: 120 },
+                lv4A: { n: "輝耀・超級耿鬼 (光極)", p: "shiny/10038", b: 200 },
+                lv4B: { n: "霸主・超極巨耿鬼 (闇極)", p: "shiny/10202", b: 250 }
+            },
+            'psychic': {
+                title: "🔮 超能系搭檔 (進階)", advanced: true,
+                lv0: { n: "拉魯拉絲", p: "280", b: 0 },
+                lv1: { n: "奇魯莉安", p: "281", b: 20 },
+                lv2: { n: "沙奈朵", p: "282", b: 50 },
+                lv3A: { n: "超級沙奈朵 (光)", p: "10051", b: 100 },
+                lv3B: { n: "超級艾路雷朵 (闇)", p: "10068", b: 120 },
+                lv4A: { n: "輝耀・超級沙奈朵 (光極)", p: "shiny/10051", b: 200 },
+                lv4B: { n: "輝耀・超級艾路雷朵 (闇極)", p: "shiny/10068", b: 250 }
+            },
+            'beast': {
+                title: "🦖 巨獸系搭檔 (進階)", advanced: true,
+                lv0: { n: "幼基拉斯", p: "246", b: 0 },
+                lv1: { n: "沙基拉斯", p: "247", b: 20 },
+                lv2: { n: "班基拉斯", p: "248", b: 50 },
+                lv3A: { n: "超級班基拉斯 (光)", p: "10061", b: 100 },
+                lv3B: { n: "鐵荊棘 (闇)", p: "995", b: 120 },
+                lv4A: { n: "輝耀・超級班基拉斯 (光極)", p: "shiny/10061", b: 200 },
+                lv4B: { n: "霸主・鐵荊棘 (闇極)", p: "shiny/995", b: 250 }
+            },
+            'dragon': {
+                title: "🐉 飛龍系搭檔 (進階)", advanced: true,
+                lv0: { n: "寶貝龍", p: "371", b: 0 },
+                lv1: { n: "甲殼龍", p: "372", b: 20 },
+                lv2: { n: "暴飛龍", p: "373", b: 50 },
+                lv3A: { n: "超級暴飛龍 (光)", p: "10089", b: 100 },
+                lv3B: { n: "轟鳴月 (闇)", p: "997", b: 120 },
+                lv4A: { n: "輝耀・超級暴飛龍 (光極)", p: "shiny/10089", b: 200 },
+                lv4B: { n: "霸主・轟鳴月 (闇極)", p: "shiny/997", b: 250 }
             }
         };
 
         function getPokePic(pId) { 
             // 處理 Shiny 異色形態的特殊路徑
             if (pId.toString().startsWith("shiny/")) {
-                return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pId}.png`;
+                let realId = pId.split("/")[1];
+                return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${realId}.png`;
             }
             return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pId}.png`; 
         }
@@ -507,7 +554,7 @@
             return family[stage].b;
         }
 
-        // --- 搭檔中心邏輯 (多材料進化版) ---
+        // --- 搭檔中心邏輯 (進階難度判斷) ---
         function openPartnerHub() {
             hideAllScreens();
             document.getElementById("partner-hub-screen").classList.remove("hidden");
@@ -524,13 +571,24 @@
                 let poke = fam[stage];
                 
                 let costStr = ""; let canEvo = false;
-                if(pData.lv === 0) { costStr = "需 5木/5石/5碎"; canEvo = player.inv.wood >= 5 && player.inv.stone >= 5 && player.inv.frag >= 5; }
-                else if(pData.lv === 1) { costStr = "需 10木/10石/10碎"; canEvo = player.inv.wood >= 10 && player.inv.stone >= 10 && player.inv.frag >= 10; }
-                else if(pData.lv === 2) { costStr = "需 10寶/10星/10稿"; canEvo = player.inv.gem >= 10 && player.inv.star >= 10 && player.inv.manu >= 10; }
-                else if(pData.lv === 3) { costStr = "需 20寶/20星/20稿/20碎"; canEvo = player.inv.gem >= 20 && player.inv.star >= 20 && player.inv.manu >= 20 && player.inv.frag >= 20; }
+                
+                // 區分進階與基礎難度
+                if (fam.advanced) {
+                    if(pData.lv === 0) { costStr = "需 15木/15石/15碎"; canEvo = player.inv.wood >= 15 && player.inv.stone >= 15 && player.inv.frag >= 15; }
+                    else if(pData.lv === 1) { costStr = "需 30木/30石/30碎"; canEvo = player.inv.wood >= 30 && player.inv.stone >= 30 && player.inv.frag >= 30; }
+                    else if(pData.lv === 2) { costStr = "需 25寶/25星/25稿"; canEvo = player.inv.gem >= 25 && player.inv.star >= 25 && player.inv.manu >= 25; }
+                    else if(pData.lv === 3) { costStr = "需 50寶/50星/50稿/50碎"; canEvo = player.inv.gem >= 50 && player.inv.star >= 50 && player.inv.manu >= 50 && player.inv.frag >= 50; }
+                } else {
+                    if(pData.lv === 0) { costStr = "需 5木/5石/5碎"; canEvo = player.inv.wood >= 5 && player.inv.stone >= 5 && player.inv.frag >= 5; }
+                    else if(pData.lv === 1) { costStr = "需 10木/10石/10碎"; canEvo = player.inv.wood >= 10 && player.inv.stone >= 10 && player.inv.frag >= 10; }
+                    else if(pData.lv === 2) { costStr = "需 10寶/10星/10稿"; canEvo = player.inv.gem >= 10 && player.inv.star >= 10 && player.inv.manu >= 10; }
+                    else if(pData.lv === 3) { costStr = "需 20寶/20星/20稿/20碎"; canEvo = player.inv.gem >= 20 && player.inv.star >= 20 && player.inv.manu >= 20 && player.inv.frag >= 20; }
+                }
+
+                let cardClass = fam.advanced ? "adv-partner-card" : "";
 
                 html += `
-                    <div style="border: 4px solid #00796B; background: #E0F2F1; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; width: 220px;">
+                    <div class="${cardClass}" style="border: 4px solid #00796B; background: #E0F2F1; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; width: 220px;">
                         <h3 style="margin-top: 0; color: #004D40;">${fam.title}</h3>
                         <img src="${getPokePic(poke.p)}" style="width: 120px; height: 120px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));">
                         <h4 style="color: #E65100;">${poke.n} <br> <small>(全屬性加成: +${poke.b})</small></h4>
@@ -560,15 +618,21 @@
 
         function evolvePartner(id, branchChoice) {
             let pData = player.partners[id];
-            
-            // 完美修復：必須在 branch 更新之前紀錄 oldStage！
+            let fam = pokedex[id];
             let oldStage = "lv" + pData.lv + (pData.branch || "");
             
-            // 扣除多種材料
-            if(pData.lv === 0) { player.inv.wood -= 5; player.inv.stone -= 5; player.inv.frag -= 5; }
-            else if(pData.lv === 1) { player.inv.wood -= 10; player.inv.stone -= 10; player.inv.frag -= 10; }
-            else if(pData.lv === 2) { player.inv.gem -= 10; player.inv.star -= 10; player.inv.manu -= 10; pData.branch = branchChoice; }
-            else if(pData.lv === 3) { player.inv.gem -= 20; player.inv.star -= 20; player.inv.manu -= 20; player.inv.frag -= 20; }
+            // 扣除材料 (分進階與基礎)
+            if (fam.advanced) {
+                if(pData.lv === 0) { player.inv.wood -= 15; player.inv.stone -= 15; player.inv.frag -= 15; }
+                else if(pData.lv === 1) { player.inv.wood -= 30; player.inv.stone -= 30; player.inv.frag -= 30; }
+                else if(pData.lv === 2) { player.inv.gem -= 25; player.inv.star -= 25; player.inv.manu -= 25; pData.branch = branchChoice; }
+                else if(pData.lv === 3) { player.inv.gem -= 50; player.inv.star -= 50; player.inv.manu -= 50; player.inv.frag -= 50; }
+            } else {
+                if(pData.lv === 0) { player.inv.wood -= 5; player.inv.stone -= 5; player.inv.frag -= 5; }
+                else if(pData.lv === 1) { player.inv.wood -= 10; player.inv.stone -= 10; player.inv.frag -= 10; }
+                else if(pData.lv === 2) { player.inv.gem -= 10; player.inv.star -= 10; player.inv.manu -= 10; pData.branch = branchChoice; }
+                else if(pData.lv === 3) { player.inv.gem -= 20; player.inv.star -= 20; player.inv.manu -= 20; player.inv.frag -= 20; }
+            }
             
             pData.lv++;
             let newStage = "lv" + pData.lv + (pData.branch || "");
@@ -631,7 +695,6 @@
             renderStats(); goHome(); autoSave();
         }
 
-        // --- 優化版：連勝 Badge 系統與顯示 ---
         const badgeIcons = {
             10: "🥉", 20: "🥈", 30: "🥇", 40: "🏅", 50: "🎖️",
             60: "🏵️", 70: "🏆", 80: "💎", 90: "👑", 100: "🌟", 150: "✨"
@@ -698,15 +761,13 @@
         let isMonsterFight = false; let currentMonster = null;
         let monsterCorrectCount = 0; let monsterGoal = 1;
 
-        // --- 全面擴充野生 Pokémon 與神獸 (實體圖片版) ---
+        // 野生怪物資料庫
         const monsters = [
-            { name: "森林變異史萊姆", pId: "88", atk: 10, def: 10, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} }, // 臭泥代位
-            { name: "狂暴森林狼", pId: "261", atk: 20, def: 15, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1", rewardData: {wood: 3, stone: 3, frag: 1} }, // 土狼犬代位
-            { name: "暗影吸血蝠", pId: "42", atk: 25, def: 20, type: "normal", rewardsStr: "💎 寶石 +1, 🔮 碎片 +1", rewardData: {gem: 1, frag: 1} }, // 大嘴蝠代位
-            { name: "猛毒蛇", pId: "23", atk: 30, def: 25, type: "normal", rewardsStr: "🌟 星星 +1, 🔮 碎片 +1", rewardData: {star: 1, frag: 1} }, // 阿柏蛇代位
-            { name: "嗜血狂暴熊", pId: "216", atk: 40, def: 35, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +2", rewardData: {gem: 2, star: 2} }, // 熊寶寶代位
-            
-            // 20 隻官方 Pokémon (使用圖鑑 ID)
+            { name: "森林變異史萊姆", pId: "88", atk: 10, def: 10, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
+            { name: "狂暴森林狼", pId: "261", atk: 20, def: 15, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1", rewardData: {wood: 3, stone: 3, frag: 1} },
+            { name: "暗影吸血蝠", pId: "42", atk: 25, def: 20, type: "normal", rewardsStr: "💎 寶石 +1, 🔮 碎片 +1", rewardData: {gem: 1, frag: 1} },
+            { name: "猛毒蛇", pId: "23", atk: 30, def: 25, type: "normal", rewardsStr: "🌟 星星 +1, 🔮 碎片 +1", rewardData: {star: 1, frag: 1} },
+            { name: "嗜血狂暴熊", pId: "216", atk: 40, def: 35, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +2", rewardData: {gem: 2, star: 2} },
             { name: "綠毛蟲", pId: "10", atk: 12, def: 10, type: "normal", rewardsStr: "🪵 木材 +2", rewardData: {wood: 2} },
             { name: "波波", pId: "16", atk: 15, def: 12, type: "normal", rewardsStr: "🧱 石頭 +2", rewardData: {stone: 2} },
             { name: "小拉達", pId: "19", atk: 18, def: 12, type: "normal", rewardsStr: "🪵 木材 +3", rewardData: {wood: 3} },
@@ -730,22 +791,21 @@
         ];
 
         const mythicalBeasts = [
-            { name: "傳說蒼龍", pId: "384", atk: 100, def: 100, type: "mythical", rewardsStr: "💎 寶石 +10, 🌟 星星 +10, 📜 手稿 +10", rewardData: {gem: 10, star: 10, manu: 10} }, // 烈空坐代位
-            { name: "傳說神鳥", pId: "250", atk: 120, def: 90, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +15", rewardData: {gem: 15, star: 15} }, // 鳳王代位
+            { name: "傳說蒼龍 (烈空坐)", pId: "384", atk: 100, def: 100, type: "mythical", rewardsStr: "💎 寶石 +10, 🌟 星星 +10, 📜 手稿 +10", rewardData: {gem: 10, star: 10, manu: 10} },
+            { name: "傳說神鳥 (鳳王)", pId: "250", atk: 120, def: 90, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +15", rewardData: {gem: 15, star: 15} },
             { name: "超夢", pId: "150", atk: 150, def: 120, type: "mythical", rewardsStr: "💎 寶石 +20, 🌟 星星 +20, 🔮 碎片 +10", rewardData: {gem: 20, star: 20, frag: 10} },
             { name: "洛奇亞", pId: "249", atk: 130, def: 150, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +25, 🪵 木材 +50", rewardData: {gem: 15, star: 25, wood: 50} },
-            { name: "基格爾德", pId: "644", atk: 180, def: 110, type: "mythical", rewardsStr: "💎 寶石 +25, 🌟 星星 +15, 🧱 石頭 +50", rewardData: {gem: 25, star: 15, stone: 50} },
+            { name: "基格爾德", pId: "718", atk: 180, def: 110, type: "mythical", rewardsStr: "💎 寶石 +25, 🌟 星星 +15, 🧱 石頭 +50", rewardData: {gem: 25, star: 15, stone: 50} },
             { name: "阿爾宙斯", pId: "493", atk: 200, def: 200, type: "mythical", rewardsStr: "💎 寶石 +50, 🌟 星星 +50, 📜 手稿 +50, 🔮 碎片 +50", rewardData: {gem: 50, star: 50, manu: 50, frag: 50} }
         ];
 
-        // Boss 資料庫
         const bossData = {
             1: { n: "元素吞噬者 (惡食大王)", pId: "799" },
             2: { n: "混沌智者 (胡地)", pId: "65" },
             3: { n: "終極幻影魔王 (無極汰那)", pId: "890" }
         };
 
-        // --- 題庫 ---
+        // 題庫資料...
         const questions = {
             t3_review_1: [ // 30 題 (詞語與偏旁)
                 { q: "美荷撿到一件（　　），把它交到校務處。", options: ["失主", "失物", "背包", "乾淨"], a: "失物", hint: "丟失的物品。" },
@@ -811,7 +871,6 @@
                 { q: "把「這條裙子太長了，不可能是我的。」改為反問句，應該是？", options: ["這條裙子太長了，是我的嗎？", "這條裙子太長了，真的是我的嗎？", "這條裙子太長了，不是我的嗎？", "這條裙子太長了，怎麼可能是我的呢？"], a: "這條裙子太長了，怎麼可能是我的呢？", hint: "強調絕對不是我的。" },
                 { q: "反問句的特點是甚麼？", options: ["用來提問，需要別人回答", "用來描述事物的樣子", "用反問的形式加強語氣，不需要別人回答", "用來表達命令"], a: "用反問的形式加強語氣，不需要別人回答", hint: "答案已經藏在問題裏面了。" }
             ],
-            // --------- 舊題庫保留 ---------
             dictation: [
                 { q: "遇到不懂的生字，我們可以向老師___。", options: ["請教", "介紹", "欣賞", "連忙"], a: "請教", hint: "虛心向別人詢問和學習。" },
                 { q: "同學們___上台分享自己最喜歡的圖書。", options: ["輪流", "期待", "入神", "介紹"], a: "輪流", hint: "按照次序一個接一個地進行。" },
@@ -1036,7 +1095,6 @@
                 playSound('monster');
             }
 
-            // 更新圖片或表情
             let imgContainer = document.getElementById("mon-image-container");
             if (currentMonster.pId) {
                 imgContainer.innerHTML = `<img src="${getPokePic(currentMonster.pId)}" class="poke-img-style">`;
@@ -1171,12 +1229,12 @@
                     
                     if (monsterCorrectCount >= monsterGoal) {
                         playSound('win');
-                        let winMsg = currentMonster.type === "mythical" ? `🎉 史詩級勝利！成功擊退 ${currentMonster.name}！` : `🎉 成功擊退 ${currentMonster.name}！`;
+                        let winMsg = currentMonster.type === "mythical" ? `🎉 史詩級勝利！成功擊退 ${currentMonster.name}！` : `🎉 成功擊敗 ${currentMonster.name}！`;
                         document.getElementById("feedback-msg").innerHTML = `✅ 答對了！正確答案是：<span style="color:#E65100;">${currentQuestion.a}</span><br><span style='color:#9C27B0'>${winMsg}</span>`;
                         document.getElementById("reward-msg").innerText = "準備領取戰利品...";
                         onNextAction = "monster_win";
                     } else {
-                        document.getElementById("feedback-msg").innerHTML = `✅ 答對了！正確答案是：<span style="color:#E65100;">${currentQuestion.a}</span><br>還要答對 ${monsterGoal - monsterCorrectCount} 題才能擊退它！`;
+                        document.getElementById("feedback-msg").innerHTML = `✅ 答對了！正確答案是：<span style="color:#E65100;">${currentQuestion.a}</span><br>還要答對 ${monsterGoal - monsterCorrectCount} 題才能擊敗它！`;
                         document.getElementById("reward-msg").innerText = "繼續戰鬥！";
                         onNextAction = "monster_next";
                     }
@@ -1245,7 +1303,6 @@
             }
         }
 
-        // --- 裝備與建築 ---
         function craft(type) {
             if (type === 'woodSword' && player.inv.wood >= 3) { player.inv.wood -= 3; player.inv.atk += 10; alert("鍛造成功！攻擊力 +10"); } 
             else if (type === 'stoneSword' && player.inv.stone >= 5 && player.inv.wood >= 2) { player.inv.stone -= 5; player.inv.wood -= 2; player.inv.atk += 25; alert("鍛造成功！攻擊力 +25"); } 
@@ -1307,7 +1364,6 @@
             }
         }
 
-        // --- Boss 戰邏輯 ---
         let bossTimer, bossTimeLeft, bossMaxTime;
         let bossCorrectCount = 0; let bossGoal = 5;
         let playerHP = 100, playerMaxHP = 100; let currentBoss = 1;
