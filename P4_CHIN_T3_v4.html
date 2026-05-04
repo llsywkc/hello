@@ -203,11 +203,62 @@
         #partner-dialogue { background: rgba(74,20,140,0.85); color: #FFE0F0; border: 2px solid #CE93D8; border-radius: 10px; padding: 10px 14px; margin: 8px auto; font-size: 0.9em; font-style: italic; max-width: 90%; display: none; animation: fadeInDia 0.5s; }
         #partner-dialogue::before { content: "💬 "; font-style: normal; }
         @keyframes fadeInDia { from { opacity:0; transform: translateY(5px); } to { opacity:1; transform: translateY(0); } }
+
+        /* ===== 神獸視覺特效 ===== */
+        @keyframes screenShakeAnim {
+            0%,100%{transform:translate(0,0)}
+            10%{transform:translate(-12px,-8px)}
+            20%{transform:translate(10px,10px)}
+            30%{transform:translate(-10px,6px)}
+            40%{transform:translate(8px,-10px)}
+            50%{transform:translate(-8px,8px)}
+            60%{transform:translate(10px,-6px)}
+            70%{transform:translate(-6px,10px)}
+            80%{transform:translate(8px,-8px)}
+            90%{transform:translate(-10px,6px)}
+        }
+        .screen-shaking { animation: screenShakeAnim 0.8s ease-in-out; }
+
+        @keyframes flashAnim {
+            0%,100%{opacity:0} 25%,75%{opacity:0.9} 50%{opacity:0.3}
+        }
+        .fx-overlay {
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            z-index:9997;pointer-events:none;opacity:0;
+        }
+        @keyframes crackFadeOut {
+            0%{opacity:1} 60%{opacity:0.8} 100%{opacity:0}
+        }
+        .crack-overlay {
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            z-index:9996;pointer-events:none;
+            animation: crackFadeOut 2.5s ease forwards;
+        }
+        @keyframes particleFall {
+            0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+            100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+        }
+        .fx-particle {
+            position:fixed;top:-20px;pointer-events:none;z-index:9995;
+            animation: particleFall linear forwards;
+        }
+        /* 文字顛倒 */
+        .flip-text-active .question-text,
+        .flip-text-active #mc-question,
+        .flip-text-active #boss-question,
+        .flip-text-active .word-bank button,
+        .flip-text-active #mc-options button,
+        .flip-text-active #boss-options button,
+        .flip-text-active #answer-area button,
+        .flip-text-active #word-bank button {
+            display:inline-block;
+            transform: rotate(180deg);
+        }
 </style>
 </head>
 <body>
 
-    <h1>🟪 森林大冒險：4A 🟪</h1>
+    <h1>🟪 森林大冒險：4A中文練習 🟪</h1>
 
     <div id="player-tag" class="player-info hidden">
         <span>冒險者：<span id="display-name"></span></span> 
@@ -271,7 +322,6 @@
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
                 <button class="btn-green" onclick="startGame('fill')">⛏️ 礦洞尋寶 (填充題)</button>
                 <button class="btn-blue" onclick="startGame('match-word')">🔮 符文解密 (配詞題)</button>
-                <button class="btn-orange" onclick="startGame('connect')">🔗 魔法連線 (連線題)</button>
                 <button class="btn-grey" onclick="startGame('punct')">📜 古卷修復 (標點題)</button>
                 <button class="btn-purple" onclick="startGame('reorder')">🌉 鋪木板過河 (重組句子)</button>
                 
@@ -323,11 +373,13 @@
                 <h3 style="color:#ff0000;">3. 血月降臨與遠古神獸 (極度危險)</h3>
                 <p>當你擁有至少 1 座大城堡時，答題有 5% 機率觸發「血月」。在血月期間連續答對目標題數，即可召喚擁有專屬特技的<b>五大遠古神獸</b>：</p>
                 <ul style="color:#3e0000; font-weight:bold; font-size:0.9em;">
-                    <li>☄️ 烈空坐：【畫龍點睛】無視防禦造成巨額真實傷害！</li>
-                    <li>🔮 超夢：【精神擊破】禁療詛咒！戰鬥中無法使用恢復藥水！</li>
-                    <li>❄️ 水君：【絕對零度】戰鬥中 40% 機率將選項按鈕凍結鎖死 3 秒！</li>
-                    <li>🔥 鳳王：【神聖之火】無視防禦造成巨額真實傷害！</li>
-                    <li>⭐ 阿爾宙斯：【制裁光礫】30% 機率發動大招，答題限時強制縮短至 3 秒，超時或答錯直接秒殺！</li>
+                    <li>☄️ 烈空坐：【畫龍點睛】無視防禦造成巨額真實傷害＋全畫面白色爆閃！</li>
+                    <li>🔮 超夢：【精神擊破】禁療詛咒＋所有題目文字上下顛倒（持續整場）！</li>
+                    <li>🌊 帝牙盧卡：【海嘯裂地】整場戰鬥答題限時縮短至5-8秒＋禁療＋藍色巨浪！</li>
+                    <li>🔥 鳳王：【神聖之火】無視防禦造成巨額真實傷害＋火焰爆發！</li>
+                    <li>🌀 洛奇亞：【銀翼暴風】選項按鈕隨機打亂位置3次＋全畫面雪花強風！</li>
+                    <li>🌋 固拉多：【大地震裂】戰鬥開始扣一半HP＋全畫面震動龜裂！</li>
+                    <li>⭐ 阿爾宙斯：【創世審判】答題限時強制縮短至3秒＋答錯扣雙倍傷害＋禁療＋全畫面震動金閃！（最強神獸）</li>
                 </ul>
 
                 <h3 style="color:#2E7D32;">4. 究極進化與閃卡紀念冊</h3>
@@ -433,7 +485,7 @@
             <div class="answer-area" id="answer-area"></div>
             <div class="word-bank" id="word-bank"></div>
             <div style="margin-top: 10px;">
-                <button class="btn-gold" id="btn-hint-reorder">💡 提示 (🌟2 / 💰100)</button>
+                <button class="btn-gold" id="btn-hint-reorder">💡 提示 (🌟2)</button>
                 <button class="btn-orange" onclick="resetReorder()">🔄 重新排列</button>
                 <button class="btn-green hidden" id="btn-next-reorder" onclick="nextReorder()">➡️ 下一題</button>
                 <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
@@ -447,7 +499,7 @@
             <div class="question-text" id="mc-question">題目加載中...</div>
             <div class="word-bank" id="mc-options"></div>
             <div style="margin-top: 10px;">
-                <button class="btn-gold" id="btn-hint-mc">💡 提示 (🌟2 / 💰100)</button>
+                <button class="btn-gold" id="btn-hint-mc">💡 提示 (🌟2)</button>
                 <button class="btn-green hidden" id="btn-next-mc" onclick="nextMC()">➡️ 下一題</button>
                 <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
             </div>
@@ -862,34 +914,6 @@
             { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧闹", "喧囂蔽天"] }
         ];
 
-        const connectTasks = [
-            { q: "找出正確的配對：【 科技 】______", ans: "發達", options: ["發達", "淵博", "浪費", "惡劣"] },
-            { q: "找出正確的配對：【 學識 】______", ans: "淵博", options: ["淵博", "發達", "大方", "穩重"] },
-            { q: "找出正確的配對：【 白白 】______", ans: "浪費", options: ["浪費", "消耗", "虛度", "花費"] },
-            { q: "找出正確的配對：【 專心 】______", ans: "學業", options: ["學業", "安全", "主旨", "精神"] },
-            { q: "找出正確的配對：【 衛生 】______", ans: "惡劣", options: ["惡劣", "淵博", "發達", "穩重"] },
-            { q: "找出正確的配對：【 歸納 】______", ans: "主旨", options: ["主旨", "段意", "結論", "大意"] },
-            { q: "找出正確的配對：【 確保 】______", ans: "安全", options: ["安全", "安穩", "安心", "安寧"] },
-            { q: "找出正確的配對：【 粗獷的 】______", ans: "聲線", options: ["聲線", "心思", "鼻樑", "秀髮"] }, 
-            { q: "找出正確的配對：【 温柔的 】______", ans: "外表", options: ["外表", "聲線", "鼻樑", "洋娃娃"] },
-            { q: "找出正確的配對：【 體會到 】______", ans: "善良", options: ["善良", "精神", "痕跡", "氣氛"] },
-            { q: "找出正確的配對：【 互助的 】______", ans: "精神", options: ["精神", "力量", "善良", "光陰"] },
-            { q: "找出正確的配對：【 高挑挺拔的 】______", ans: "鼻樑", options: ["鼻樑", "秀髮", "外表", "聲線"] },
-            { q: "找出正確的配對：【 烏黑亮麗的 】______", ans: "秀髮", options: ["秀髮", "鼻樑", "外表", "睫毛"] },
-            { q: "找出正確的配對：【 成熟 】______", ans: "穩重", options: ["穩重", "大方", "淵博", "發達"] },
-            { q: "找出正確的配對：【 虛度 】______", ans: "光陰", options: ["光陰", "時間", "歲月", "青春"] },
-            { q: "找出正確的配對：【 夜幕 】______", ans: "低垂", options: ["低垂", "降臨", "黑夜", "星空"] },
-            { q: "找出正確的配對：【 五光 】______", ans: "十色", options: ["十色", "八門", "四射", "十彩"] },
-            { q: "找出正確的配對：【 歲月的 】______", ans: "痕跡", options: ["痕跡", "時光", "光陰", "流逝"] },
-            { q: "找出正確的配對：【 舉手 】______", ans: "投足", options: ["投足", "大方", "動腳", "穩重"] },
-            { q: "找出正確的配對：【 落落 】______", ans: "大方", options: ["大方", "穩重", "端莊", "體面"] },
-            { q: "找出正確的配對：【 精緻的 】______", ans: "洋娃娃", options: ["洋娃娃", "小寶寶", "秀髮", "睫毛"] },
-            { q: "找出正確的配對：【 節日 】______", ans: "氣氛", options: ["氣氛", "氛圍", "慶典", "快樂"] },
-            { q: "找出正確的配對：【 閃爍 】______", ans: "耀眼", options: ["耀眼", "光芒", "明亮", "刺眼"] },
-            { q: "找出正確的配對：【 破釜 】______", ans: "沉舟", options: ["沉舟", "沉船", "一戰", "到底"] },
-            { q: "找出正確的配對：【 友善 】______", ans: "有禮", options: ["有禮", "大方", "穩重", "熱情"] }
-        ];
-
         const punctTasks = [
             { q: "夾娃娃店職員説 ___「你只剩下最後一次機會，要好好把握啊！」", ans: "：", options: ["：", "，", "。", "；"] },
             { q: "夾娃娃店職員説：「你只剩下最後一次機會，要好好把握啊 ___ 」", ans: "！", options: ["！", "。", "？", "，"] },
@@ -1039,8 +1063,8 @@
             ["因為", "父母悉心的栽培", "，", "我才可以", "成功入讀", "這所", "音樂學院", "。"],
             ["如果", "你繼續", "不節制地飲食", "，", "你的身體", "將會", "出現", "很大的問題", "。"],
             ["因為", "你性格固執", "，", "不肯", "輕易受人幫助", "，", "我才會決定", "暗中幫助你", "。"],
-            ["父親的愛", "像", "冬日的太陽", "，", "微微", "温暖着", "我和媽媽的心", "。"],
-         
+            ["父親的愛", "像", "冬日的太陽", "，", "微微", "温暖", "我和媽媽的心", "。"],
+            ["卸妝後的她", "不像", "平時看到般", "美豔動人", "，", "而像", "一個鄰家女孩般", "樸素", "。"],
             ["這家快餐店", "售賣的食物", "不像", "其他快餐店", "，", "而是", "售賣", "特別的", "三文治", "。"],
             ["爸爸不像", "一些", "只會溺愛孩子的父母", "，", "而是", "適當的", "管教他們", "。"],
             ["我們", "凌晨時分", "便乘旅遊車", "上太平山", "，", "所以", "趕得及", "看到", "美麗的日出", "。"],
@@ -1059,7 +1083,7 @@
             ["她", "瘦削的", "面龐上", "，", "兩道皺紋", "橫在", "眉毛之間", "；", "嘴巴", "乾澀", "。"],
             ["嘴巴", "乾澀", "，", "嘴角", "被", "皺紋", "牽得", "向後", "咧著", "。"],
             ["媽媽變老了", "，", "瘦削的面龐上", "，", "兩道皺紋", "橫在眉毛之間", "。"],
-            ["嘴巴乾澀", "，", "嘴角", "被皺紋", "牽得", "向後咧着", "。"]
+            ["嘴巴乾澀", "，", "嘴角", "被皺紋", "牽得", "向後咧著", "。"]
         ];
 
         const legendaryTasks = [
@@ -1120,7 +1144,6 @@
         const mcConfigs = {
             'fill': { title: "⛏️ 礦洞尋寶 (填充題)", subtitle: "敲碎正確的字詞礦石，填補句子！", tasks: fillTasks },
             'match-word': { title: "🔮 符文解密 (配詞題)", subtitle: "找出最適合句子語境的詞語！", tasks: matchTasks },
-            'connect': { title: "🔗 魔法連線 (連線題)", subtitle: "找出與題目匹配的另一半詞語！", tasks: connectTasks },
             'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
             'fa-mc': { title: "📝 FA温習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks },
             'dictation2-mc': { title: "📖 默書温習(二) (填充題)", subtitle: "選擇正確的詞語完成句子！", tasks: dictation2Tasks },
@@ -1133,11 +1156,13 @@
 
         // ================== 🌟 史詩神獸 / Boss 更新 ==================
         const epicLegendaries = {
-            'mewtwo': { id: 'epic_mewtwo', name: "超夢", target: 5, time: 10, effect: "anti_heal", desc: "精神擊破！戰鬥中無法使用恢復藥水！", img: "150", hpPenalty: 40 },
-            'rayquaza': { id: 'epic_rayquaza', name: "烈空坐", target: 4, time: 12, effect: "true_damage", desc: "畫龍點睛！無視防禦造成巨額真實傷害！", img: "384", hpPenalty: 30 },
-            'arceus': { id: 'epic_arceus', name: "阿爾宙斯", target: 6, time: 8, effect: "one_hit", desc: "制裁光礫！隨機爆發一擊必殺大招！", img: "493", hpPenalty: 50 },
-            'suicune': { id: 'epic_suicune', name: "水君", target: 5, time: 10, effect: "freeze", desc: "絕對零度！戰鬥中會隨機凍結選項 3 秒！", img: "245", hpPenalty: 25 },
-            'lugia': { id: 'epic_lugia', name: "鳳王", target: 5, time: 12, effect: "true_damage", desc: "神聖之火！無視防禦造成巨額真實傷害！", img: "250", hpPenalty: 35 }
+            'mewtwo':   { id: 'epic_mewtwo',   name: "🔮 超夢",     target: 5, time: 10, effect: "anti_heal_flip", desc: "精神擊破！禁療詛咒＋所有題目文字上下顛倒！",                          img: "150", hpPenalty: 40 },
+            'rayquaza': { id: 'epic_rayquaza', name: "☄️ 烈空坐",   target: 4, time: 12, effect: "true_damage",    desc: "畫龍點睛！無視防禦造成巨額真實傷害＋全畫面白色爆閃！",             img: "384", hpPenalty: 30 },
+            'kyogre':   { id: 'epic_kyogre',   name: "🌊 帝牙盧卡", target: 5, time: 10, effect: "slow_time",      desc: "海嘯裂地！整場戰鬥答題限時縮短至5-8秒＋禁療＋藍色巨浪！",         img: "382", hpPenalty: 35 },
+            'ho_oh':    { id: 'epic_ho_oh',    name: "🔥 鳳王",     target: 5, time: 12, effect: "true_damage",    desc: "神聖之火！無視防禦造成巨額真實傷害＋火焰爆發！",                   img: "250", hpPenalty: 35 },
+            'lugia':    { id: 'epic_lugia',    name: "🌀 洛奇亞",   target: 5, time: 11, effect: "shuffle_options", desc: "銀翼暴風！選項按鈕隨機打亂位置3次＋全畫面雪花強風！",              img: "249", hpPenalty: 30 },
+            'groudon':  { id: 'epic_groudon',  name: "🌋 固拉多",   target: 5, time: 12, effect: "half_hp",        desc: "大地震裂！戰鬥開始扣一半HP＋全畫面震動龜裂！",                    img: "383", hpPenalty: 40 },
+            'arceus':   { id: 'epic_arceus',   name: "⭐ 阿爾宙斯", target: 6, time:  8, effect: "one_hit",        desc: "創世審判！限時強制3秒＋答錯扣雙倍傷害＋禁療＋全畫面震動金閃！", img: "493", hpPenalty: 60 }
         };
 
         const evoCosts = {
@@ -1550,7 +1575,8 @@ function checkDailyReset() {
         };
 
         function loadGame() {
-            const savedData = localStorage.getItem(SAVE_KEY);
+            let savedData = null;
+            try { savedData = localStorage.getItem(SAVE_KEY); } catch(e) {}
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -1578,11 +1604,13 @@ function checkDailyReset() {
                     }
                 } catch (e) { inventory = { ...defaultInv }; }
             }
+            // Always initialise UI regardless of save state
+            goHome();
         }
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem(SAVE_KEY, JSON.stringify(inventory));
+                try { localStorage.setItem(SAVE_KEY, JSON.stringify(inventory)); } catch(e) {}
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -2145,12 +2173,8 @@ function checkDailyReset() {
                     inventory.star -= 2;
                     document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟2）：正確答案：「<b>${reorderCurrentAnswer}</b>」</span>`;
                     updateUI(); saveGame();
-                } else if (inventory.coins >= 100) {
-                    inventory.coins -= 100;
-                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗💰100）：正確答案：「<b>${reorderCurrentAnswer}</b>」</span>`;
-                    updateUI(); saveGame();
                 } else {
-                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟2 星星 或 💰100 金幣！</span>`;
+                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟2 星星！</span>`;
                 }
             };
         }
@@ -2207,12 +2231,8 @@ function checkDailyReset() {
                     inventory.star -= 2;
                     document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟2）：答案是「<b>${task.ans}</b>」</span>`;
                     updateUI(); saveGame();
-                } else if (inventory.coins >= 100) {
-                    inventory.coins -= 100;
-                    document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗💰100）：答案是「<b>${task.ans}</b>」</span>`;
-                    updateUI(); saveGame();
                 } else {
-                    document.getElementById('mc-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟2 星星 或 💰100 金幣！</span>`;
+                    document.getElementById('mc-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟2 星星！</span>`;
                 }
             };
         }
@@ -2308,7 +2328,7 @@ function checkDailyReset() {
             innerBox.className = 'event-box legendary-border glow-red';
             document.body.classList.add('legendary-mode');
             
-            eventTitle.innerHTML = `☄️ 遠古神獸降臨！`;
+            eventTitle.innerHTML = `${boss.name} 遠古神獸降臨！`;
             eventTitle.style.color = '#ff0000';
             eventDesc.innerHTML = `
                 <img src="${currentEvent.pic}" class="battle-pic" alt="神獸">
@@ -2397,6 +2417,9 @@ function checkDailyReset() {
         
         let isEnraged = false;
         let oneHitActive = false;
+        let combatFlipText = false;
+        let combatAntiHeal = false;
+        let combatSlowTime = false;
 
         window.startBossFight = function(level) {
             initAudio(); combatType = 'normal_boss'; 
@@ -2412,6 +2435,22 @@ function checkDailyReset() {
                 let boss = epicLegendaries[evtData.key];
                 combatTarget = boss.target; combatTimeLimit = boss.time;
                 setupMonsterCombatUI(`【遠古神獸】${evtData.name}`, evtData.pic, 'glow-red');
+                // 觸發神獸視覺特效
+                setTimeout(() => triggerBeastEffect(boss.effect, boss.name), 500);
+                // 特殊效果：帝牙盧卡縮短限時
+                if(boss.effect === 'slow_time') {
+                    let newTime = Math.floor(Math.random() * 4) + 5; // 5-8秒
+                    combatTimeLimit = newTime;
+                    combatAntiHeal = true; combatSlowTime = true;
+                }
+                // 特殊效果：超夢禁療＋顛倒
+                if(boss.effect === 'anti_heal_flip') {
+                    combatAntiHeal = true; combatFlipText = true;
+                }
+                // 特殊效果：阿爾宙斯禁療
+                if(boss.effect === 'one_hit') {
+                    combatAntiHeal = true;
+                }
             } else if(type === 'legendary') {
                 combatTarget = 2; combatTimeLimit = 10;
                 setupMonsterCombatUI("【傳說試煉】" + evtData.name, evtData.pic, 'glow-gold');
@@ -2431,9 +2470,24 @@ function checkDailyReset() {
             isEnraged = false; oneHitActive = false;
             document.body.classList.remove('ultimate-warning');
             baseCombatTimeLimit = combatTimeLimit;
+            // 重置神獸特效
+            fxFlipText(false);
+            combatFlipText = false;
+            combatAntiHeal = false;
+            combatSlowTime = false;
             
             document.getElementById('boss-combat-screen').classList.remove('hidden');
             document.getElementById('boss-progress-text').textContent = `目標：累積答對 0 / ${combatTarget}`;
+            // 固拉多：扣一半HP
+            if(combatType === 'epic' && currentEvent && epicLegendaries[currentEvent.key] && epicLegendaries[currentEvent.key].effect === 'half_hp') {
+                setTimeout(() => {
+                    combatHP = Math.floor(combatHP / 2);
+                    updateCombatHPBar();
+                    document.getElementById('boss-msg').innerHTML = `<span style="color:#ff4400;font-weight:bold;">🌋 大地震裂！你損失了一半的HP！</span>`;
+                }, 1200);
+            }
+            // 超夢：啟用顛倒
+            if(combatFlipText) { setTimeout(() => fxFlipText(true), 900); }
             updateCombatHPBar(); nextCombatQuestion();
         }
 
@@ -2443,6 +2497,7 @@ function checkDailyReset() {
             document.getElementById('player-hp-text').textContent = `你的 HP: ${Math.max(0, combatHP)} / ${maxCombatHP}`;
             if(combatHP <= 0) {
                 clearInterval(combatTimerInterval); playSound('error');
+                fxFlipText(false); combatFlipText = false; combatAntiHeal = false; combatSlowTime = false;
                 inventory.wood = Math.floor(inventory.wood / 2); inventory.stone = Math.floor(inventory.stone / 2);
                 updateUI();
                 alert("💀 你的 HP 歸零了！你被擊敗，並丟失了一半的木材和石頭！");
@@ -2452,7 +2507,7 @@ function checkDailyReset() {
         }
 
         window.usePotion = function() {
-            if (combatType === 'epic' && currentEvent && epicLegendaries[currentEvent.key].effect === 'anti_heal') {
+            if (combatAntiHeal) {
                 alert("🌑 禁療詛咒生效中！無法使用藥水！"); return;
             }
             if (inventory.wood >= 10 && inventory.stone >= 10) {
@@ -2496,11 +2551,11 @@ function checkDailyReset() {
 
             let potionBtn = document.getElementById('btn-combat-potion');
             if (potionBtn) {
-                if (combatType === 'epic' && epicLegendaries[currentEvent.key].effect === 'anti_heal') { potionBtn.style.display = 'none'; } 
+                if (combatAntiHeal) { potionBtn.style.display = 'none'; } 
                 else { potionBtn.style.display = 'inline-block'; }
             }
 
-            let qPool = [...fillTasks, ...matchTasks, ...connectTasks, ...punctTasks, ...faMCTasks, ...dictation2Tasks, ...advTasks, ...appearanceTasks];
+            let qPool = [...fillTasks, ...matchTasks, ...punctTasks, ...faMCTasks, ...dictation2Tasks, ...advTasks, ...appearanceTasks];
             currentCombatQ = qPool[Math.floor(Math.random() * qPool.length)];
             document.getElementById('boss-question').textContent = currentCombatQ.q;
             
@@ -2522,6 +2577,26 @@ function checkDailyReset() {
                         setTimeout(() => { if(opts[randIdx]) opts[randIdx].classList.remove('frozen-options'); }, 3000);
                     }
                 }, 50);
+            }
+
+            // 洛奇亞：銀翼暴風 - 隨機打亂選項位置3次
+            if (combatType === 'epic' && epicLegendaries[currentEvent.key].effect === 'shuffle_options') {
+                let shuffleCount = 0;
+                const doShuffle = () => {
+                    let container = document.getElementById('boss-options');
+                    let btns = Array.from(container.querySelectorAll('.stone-chunk'));
+                    if (btns.length === 0) return;
+                    // Fisher-Yates shuffle DOM nodes
+                    for (let i = btns.length - 1; i > 0; i--) {
+                        let j = Math.floor(Math.random() * (i + 1));
+                        container.insertBefore(btns[j], btns[i]);
+                        [btns[i], btns[j]] = [btns[j], btns[i]];
+                    }
+                    shuffleCount++;
+                    document.getElementById('boss-msg').innerHTML = `<span style='color:#aaddff; font-weight:bold;'>🌀 銀翼暴風！選項被打亂了！（${shuffleCount}/3）</span>`;
+                    if (shuffleCount < 3) setTimeout(doShuffle, 600);
+                };
+                setTimeout(doShuffle, 300);
             }
             
             let timerBar = document.getElementById('boss-timer-bar');
@@ -2559,7 +2634,11 @@ function checkDailyReset() {
                     dmg = Math.floor(dmg * 1.5); combatHP -= dmg;
                     document.getElementById('boss-msg').innerHTML = `<span style='color:#ff0000'>🔥 真實傷害！無視防禦扣除了 ${dmg} HP！</span>`;
                 } else if (boss.effect === 'one_hit' && oneHitActive) {
-                    combatHP = 0; document.getElementById('boss-msg').innerHTML = `<span style='color:#ff0000'>☠️ 一擊必殺！你被秒殺了！</span>`;
+                    combatHP = 0; document.getElementById('boss-msg').innerHTML = `<span style='color:#ff0000'>☠️ 創世審判！你被秒殺了！</span>`;
+                } else if (boss.effect === 'one_hit' && !oneHitActive) {
+                    // 阿爾宙斯：答錯扣雙倍傷害
+                    let finalDmg = Math.max(20, (dmg - calculateStats().def) * 2); combatHP -= finalDmg;
+                    document.getElementById('boss-msg').innerHTML = `<span style='color:#ffcc00'>⭐ 創世審判！雙倍懲罰！扣除 ${finalDmg} HP！</span>`;
                 } else {
                     let finalDmg = Math.max(10, dmg - calculateStats().def); combatHP -= finalDmg;
                     document.getElementById('boss-msg').innerHTML = `<span style='color:#F44336'>💥 神獸造成了 ${finalDmg} 點傷害！</span>`;
@@ -2598,6 +2677,7 @@ function checkDailyReset() {
                 
                 if(combatCorrectCount >= combatTarget) {
                     playSound('boss_win');
+                    fxFlipText(false); combatFlipText = false; combatAntiHeal = false; combatSlowTime = false;
                     setTimeout(() => {
                         if (combatType === 'epic') {
                             let ms = Math.floor(Math.random() * 201) + 100;
@@ -2652,6 +2732,128 @@ function checkDailyReset() {
         };
 
         window.onload = loadGame;
-    </script>
+    
+        // ===== 神獸視覺特效函式 =====
+
+        // 全畫面震動
+        function fxScreenShake(duration) {
+            duration = duration || 800;
+            document.body.classList.add('screen-shaking');
+            setTimeout(function(){ document.body.classList.remove('screen-shaking'); }, duration);
+        }
+
+        // 全畫面閃光（顏色、次數）
+        function fxFlashBurst(color, times) {
+            color = color || '#ffffff'; times = times || 6;
+            var overlay = document.createElement('div');
+            overlay.className = 'fx-overlay';
+            overlay.style.background = color;
+            document.body.appendChild(overlay);
+            var count = 0;
+            var iv = setInterval(function(){
+                overlay.style.opacity = (count % 2 === 0) ? '0.88' : '0';
+                count++;
+                if(count > times * 2){ overlay.remove(); clearInterval(iv); }
+            }, 75);
+        }
+
+        // 全畫面龜裂（顏色）
+        function fxCrackScreen(color) {
+            color = color || 'rgba(100,180,255,0.55)';
+            var c = document.createElement('div');
+            c.className = 'crack-overlay';
+            // SVG裂縫
+            c.innerHTML = '<svg width="100%" height="100%" viewBox="0 0 400 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><g stroke="' + color + '" stroke-width="3" fill="none" opacity="0.9"><polyline points="200,0 180,80 220,120 170,200 210,260 160,350 200,400"/><polyline points="200,0 230,60 200,120 240,180 200,260 240,350 210,400"/><polyline points="180,80 120,150 150,220 100,300"/><polyline points="220,120 280,180 250,250 300,320"/><polyline points="170,200 110,280 140,360"/><polyline points="210,260 270,330 240,420"/></g></svg>';
+            document.body.appendChild(c);
+            setTimeout(function(){ c.remove(); }, 2600);
+        }
+
+        // 粒子飄落（雪花/火花/星星）
+        function fxParticles(emoji, count, durationRange) {
+            emoji = emoji || '❄️'; count = count || 30;
+            durationRange = durationRange || [2000, 4000];
+            for(var i = 0; i < count; i++){
+                (function(){
+                    var p = document.createElement('div');
+                    p.className = 'fx-particle';
+                    p.textContent = emoji;
+                    p.style.left = Math.random() * 100 + 'vw';
+                    p.style.fontSize = (0.8 + Math.random() * 1.2) + 'em';
+                    var dur = durationRange[0] + Math.random() * (durationRange[1] - durationRange[0]);
+                    p.style.animationDuration = dur + 'ms';
+                    p.style.animationDelay = (Math.random() * 1000) + 'ms';
+                    document.body.appendChild(p);
+                    setTimeout(function(){ p.remove(); }, dur + 1200);
+                })();
+            }
+        }
+
+        // 色調覆蓋
+        function fxColorWarp(color, duration) {
+            color = color || 'rgba(180,0,0,0.4)'; duration = duration || 1200;
+            var overlay = document.createElement('div');
+            overlay.className = 'fx-overlay';
+            overlay.style.background = color;
+            overlay.style.opacity = '1';
+            overlay.style.transition = 'opacity ' + duration + 'ms ease';
+            document.body.appendChild(overlay);
+            setTimeout(function(){ overlay.style.opacity = '0'; }, duration / 3);
+            setTimeout(function(){ overlay.remove(); }, duration + 300);
+        }
+
+        // 文字顛倒開關
+        var flipTextActive = false;
+        function fxFlipText(on) {
+            flipTextActive = on;
+            if(on){ document.body.classList.add('flip-text-active'); }
+            else { document.body.classList.remove('flip-text-active'); }
+        }
+
+        // ===== 各神獸技能觸發 =====
+        function triggerBeastEffect(effect, beastName) {
+            // 重置顛倒（新戰鬥開始前清除）
+            fxFlipText(false);
+
+            if(effect === 'true_damage') {
+                // 烈空坐 / 鳳王
+                if(beastName && beastName.indexOf('鳳王') !== -1){
+                    fxFlashBurst('#ff6600', 5);
+                    fxParticles('🔥', 25, [1500, 3000]);
+                } else {
+                    fxFlashBurst('#ffffff', 7);
+                    fxParticles('☄️', 15, [800, 1600]);
+                }
+            } else if(effect === 'anti_heal_flip') {
+                // 超夢：紫閃 + 文字顛倒
+                fxFlashBurst('rgba(120,0,200,0.7)', 5);
+                fxColorWarp('rgba(80,0,150,0.35)', 1500);
+                setTimeout(function(){ fxFlipText(true); }, 800);
+            } else if(effect === 'slow_time') {
+                // 帝牙盧卡：藍色巨浪
+                fxColorWarp('rgba(0,100,220,0.5)', 1800);
+                fxFlashBurst('rgba(0,150,255,0.6)', 4);
+                fxParticles('🌊', 20, [1200, 2500]);
+            } else if(effect === 'shuffle_options') {
+                // 洛奇亞：雪花強風
+                fxColorWarp('rgba(200,230,255,0.35)', 1500);
+                fxParticles('❄️', 30, [2000, 4000]);
+                fxParticles('💨', 15, [1500, 3000]);
+            } else if(effect === 'half_hp') {
+                // 固拉多：震動 + 龜裂 + 紅色
+                fxScreenShake(1000);
+                fxCrackScreen('rgba(255,80,0,0.7)');
+                fxColorWarp('rgba(200,50,0,0.4)', 1200);
+                fxParticles('🪨', 15, [1000, 2000]);
+            } else if(effect === 'one_hit') {
+                // 阿爾宙斯：全部特效
+                fxScreenShake(1200);
+                fxFlashBurst('#ffee00', 8);
+                fxColorWarp('rgba(255,220,0,0.4)', 2000);
+                fxParticles('⭐', 40, [1000, 2500]);
+                fxParticles('✨', 20, [800, 2000]);
+            }
+        }
+
+</script>
 </body>
 </html>
