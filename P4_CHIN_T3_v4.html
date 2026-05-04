@@ -207,7 +207,7 @@
 </head>
 <body>
 
-    <h1>🟪 森林大冒險：4A寶寶 🟪</h1>
+    <h1>🟪 森林大冒險：4A 🟪</h1>
 
     <div id="player-tag" class="player-info hidden">
         <span>冒險者：<span id="display-name"></span></span> 
@@ -275,8 +275,8 @@
                 <button class="btn-grey" onclick="startGame('punct')">📜 古卷修復 (標點題)</button>
                 <button class="btn-purple" onclick="startGame('reorder')">🌉 鋪木板過河 (重組句子)</button>
                 
-                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (綜合題)</button>
-                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (課文重組)</button>
+                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA温習 (綜合題)</button>
+                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA温習 (課文重組)</button>
             </div>
             
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 10px; padding: 10px; background: #FFF3E0; border-radius: 8px; border: 2px dashed #FF9800;">
@@ -679,9 +679,7 @@
                     osc.type = 'square'; osc.frequency.setValueAtTime(300, t); osc.frequency.linearRampToValueAtTime(900, t + 2);
                     gain.gain.setValueAtTime(0.5, t); gain.gain.linearRampToValueAtTime(0, t + 3);
                     osc.start(); osc.stop(t + 3);
-                }
-
-                // ── 方案一：情境反饋音效 ──────────────────────────────
+                // ── 方案一：情境反饋音效 ──
                 } else if (type === 'star_gain') {
                     [523, 659, 784].forEach((freq, i) => {
                         const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
@@ -715,7 +713,7 @@
                     o.type = 'triangle'; o.frequency.setValueAtTime(500, t); o.frequency.exponentialRampToValueAtTime(150, t + 0.5);
                     g.gain.setValueAtTime(0.25, t); g.gain.linearRampToValueAtTime(0.0, t + 0.5);
                     o.start(t); o.stop(t + 0.5);
-                // ── 方案三：UI 互動音效 ────────────────────────────────
+                // ── 方案三：UI 互動音效 ──
                 } else if (type === 'build') {
                     [0, 0.12].forEach(delay => {
                         const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
@@ -760,7 +758,7 @@
                         g.gain.setValueAtTime(0.18, t + i * 0.09); g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.09 + 0.15);
                         o.start(t + i * 0.09); o.stop(t + i * 0.09 + 0.18);
                     });
-                // ── 方案四：戰鬥強化音效 ──────────────────────────────
+                // ── 方案四：戰鬥強化音效 ──
                 } else if (type === 'encounter') {
                     [0, 0.2, 0.4].forEach((delay, i) => {
                         const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
@@ -775,11 +773,11 @@
                     o1.type = 'sawtooth'; o1.frequency.setValueAtTime(120, t); o1.frequency.linearRampToValueAtTime(60, t + 0.3);
                     g1.gain.setValueAtTime(0.4, t); g1.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
                     o1.start(t); o1.stop(t + 0.35);
-                    const o2 = audioCtx.createOscillator(); const g2 = audioCtx.createGain();
-                    o2.connect(g2); g2.connect(audioCtx.destination);
-                    o2.type = 'sine'; o2.frequency.setValueAtTime(55, t);
-                    g2.gain.setValueAtTime(0.3, t); g2.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
-                    o2.start(t); o2.stop(t + 0.4);
+                    const o2b = audioCtx.createOscillator(); const g2b = audioCtx.createGain();
+                    o2b.connect(g2b); g2b.connect(audioCtx.destination);
+                    o2b.type = 'sine'; o2b.frequency.setValueAtTime(55, t);
+                    g2b.gain.setValueAtTime(0.3, t); g2b.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+                    o2b.start(t); o2b.stop(t + 0.4);
                 } else if (type === 'block') {
                     const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
                     o.connect(g); g.connect(audioCtx.destination);
@@ -794,7 +792,7 @@
                         g.gain.setValueAtTime(0.15, t + i * 0.1); g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.18);
                         o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.2);
                     });
-                
+                }
             } catch(e) {}
         }
 
@@ -1041,13 +1039,13 @@
             ["因為", "父母悉心的栽培", "，", "我才可以", "成功入讀", "這所", "音樂學院", "。"],
             ["如果", "你繼續", "不節制地飲食", "，", "你的身體", "將會", "出現", "很大的問題", "。"],
             ["因為", "你性格固執", "，", "不肯", "輕易受人幫助", "，", "我才會決定", "暗中幫助你", "。"],
-            ["父親的愛", "像", "冬日的太陽", "，", "微微", "温暖", "我和媽媽的心", "。"],
-            ["卸妝後的她", "不像", "平時看到般", "美豔動人", "，", "而像", "一個鄰家女孩般", "樸素", "。"],
+            ["父親的愛", "像", "冬日的太陽", "，", "微微", "温暖着", "我和媽媽的心", "。"],
+         
             ["這家快餐店", "售賣的食物", "不像", "其他快餐店", "，", "而是", "售賣", "特別的", "三文治", "。"],
             ["爸爸不像", "一些", "只會溺愛孩子的父母", "，", "而是", "適當的", "管教他們", "。"],
             ["我們", "凌晨時分", "便乘旅遊車", "上太平山", "，", "所以", "趕得及", "看到", "美麗的日出", "。"],
             ["因為", "臨近考試", "，", "所以", "各類", "課外活動", "會暫停", "直至", "考試結束", "。"],
-            ["小明", "發現自己", "最近的", "成績退步了", "，", "於是", "重新制定了", "溫習和", "作息時間表", "。"]
+            ["小明", "發現自己", "最近的", "成績退步了", "，", "於是", "重新制定了", "温習和", "作息時間表", "。"]
         ];
 
         const faReorderTasks = [
@@ -1061,7 +1059,7 @@
             ["她", "瘦削的", "面龐上", "，", "兩道皺紋", "橫在", "眉毛之間", "；", "嘴巴", "乾澀", "。"],
             ["嘴巴", "乾澀", "，", "嘴角", "被", "皺紋", "牽得", "向後", "咧著", "。"],
             ["媽媽變老了", "，", "瘦削的面龐上", "，", "兩道皺紋", "橫在眉毛之間", "。"],
-            ["嘴巴乾澀", "，", "嘴角", "被皺紋", "牽得", "向後咧著", "。"]
+            ["嘴巴乾澀", "，", "嘴角", "被皺紋", "牽得", "向後咧着", "。"]
         ];
 
         const legendaryTasks = [
@@ -1124,11 +1122,11 @@
             'match-word': { title: "🔮 符文解密 (配詞題)", subtitle: "找出最適合句子語境的詞語！", tasks: matchTasks },
             'connect': { title: "🔗 魔法連線 (連線題)", subtitle: "找出與題目匹配的另一半詞語！", tasks: connectTasks },
             'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
-            'fa-mc': { title: "📝 FA溫習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks },
+            'fa-mc': { title: "📝 FA温習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks },
             'dictation2-mc': { title: "📖 默書温習(二) (填充題)", subtitle: "選擇正確的詞語完成句子！", tasks: dictation2Tasks },
             'adv-mc': { title: "⏳ 時間法師 (副詞題)", subtitle: "選擇正確的時間副詞完成句子！", tasks: advTasks },
             'appearance-mc': { title: "👤 變身畫家 (外貌描寫)", subtitle: "選出最適合描寫人物外貌的詞語！", tasks: appearanceTasks },
-            'term3-vocab': { title: "📚 第三學期詞語温習", subtitle: "溫習第三學期詞語，鞏固基礎！", tasks: term3VocabTasks }
+            'term3-vocab': { title: "📚 第三學期詞語温習", subtitle: "温習第三學期詞語，鞏固基礎！", tasks: term3VocabTasks }
         };
 
         const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🌌', 900: '🏆', 1001: '🐉', 1002: '🦄' };
@@ -1646,17 +1644,17 @@ function checkDailyReset() {
 
             document.getElementById('sg-w-lv').textContent = inventory.superWeaponLv;
             document.getElementById('sg-w-bonus').textContent = inventory.superWeaponLv * 5;
-            document.getElementById('sg-w-cost-m').textContent = (inventory.superWeaponLv + 1) * 20;
+            document.getElementById('sg-w-cost-m').textContent = (inventory.superWeaponLv + 1) * 10;
             document.getElementById('sg-w-cost-f').textContent = (inventory.superWeaponLv + 1) * 5;
 
             document.getElementById('sg-s-lv').textContent = inventory.superShieldLv;
             document.getElementById('sg-s-bonus').textContent = inventory.superShieldLv * 5;
-            document.getElementById('sg-s-cost-m').textContent = (inventory.superShieldLv + 1) * 20;
+            document.getElementById('sg-s-cost-m').textContent = (inventory.superShieldLv + 1) * 10;
             document.getElementById('sg-s-cost-f').textContent = (inventory.superShieldLv + 1) * 5;
 
             document.getElementById('sg-a-lv').textContent = inventory.superStoneLv;
             document.getElementById('sg-a-bonus').textContent = inventory.superStoneLv * 3;
-            document.getElementById('sg-a-cost-m').textContent = (inventory.superStoneLv + 1) * 30;
+            document.getElementById('sg-a-cost-m').textContent = (inventory.superStoneLv + 1) * 15;
             document.getElementById('sg-a-cost-f').textContent = (inventory.superStoneLv + 1) * 10;
 
             const bossBtn = document.getElementById('btn-boss-menu');
@@ -1953,7 +1951,7 @@ function checkDailyReset() {
                 }, 1500); 
                 
             } else {
-                alert("❌ 數據能量（資源）不足，無法進化！請去溫習累積資源吧！");
+                alert("❌ 數據能量（資源）不足，無法進化！請去温習累積資源吧！");
             }
         }
 
@@ -2072,7 +2070,7 @@ function checkDailyReset() {
 
             const reorderMap = {
                 'reorder':            { tasks: reorderTasks,           title: "🌉 鋪木板過河 (重組句子)" },
-                'fa-reorder':         { tasks: faReorderTasks,         title: "📝 FA溫習 (課文重組)" },
+                'fa-reorder':         { tasks: faReorderTasks,         title: "📝 FA温習 (課文重組)" },
                 'dictation2-reorder': { tasks: dictation2ReorderTasks, title: "🌉 默書温習(二) - 重組" }
             };
 
@@ -2385,7 +2383,7 @@ function checkDailyReset() {
 
             eventModal.classList.remove('hidden');
             document.getElementById('btn-event-flee').onclick = () => {
-                initAudio(); playSound('click'); playSound('flee'); alert("🏃 你急忙撤退，安全躲過了這次遭遇，但沒有獲得任何獎勵。"); eventModal.classList.add('hidden');
+                initAudio(); playSound('click'); playSound('flee'); alert('🏃 你急忙撤退，安全躲過了這次遭遇，但沒有獲得任何獎勵。'); eventModal.classList.add('hidden');
             };
         }
 
@@ -2645,7 +2643,7 @@ function checkDailyReset() {
                 alert("🏃 你恐懼地逃跑了！神獸的威壓讓你損失了資源！");
                 document.body.classList.remove('legendary-mode');
             } else if(combatType === 'legendary' || combatType === 'virus') {
-                playSound('flee'); alert("🏃 你急忙逃出危險區域，安然無恙。");
+                playSound('flee'); alert('🏃 你急忙逃出危險區域，安然無恙。');
             } else {
                 inventory.wood = Math.max(0, inventory.wood - 5);
                 alert("🏃 你急忙逃出對手的巢穴，但在路上弄丟了 5 個木材！");
