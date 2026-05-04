@@ -1708,6 +1708,7 @@ function checkDailyReset() {
         
         function goHome() {
             playSound('click'); updateUI(); renderDailyQuests(); hideAll(); clearInterval(combatTimerInterval);
+            stopContinuousShake(); fxFlipText(false);
             if(!inventory.playerName) {
                 document.getElementById('login-screen').classList.remove('hidden');
             } else {
@@ -2605,34 +2606,42 @@ function checkDailyReset() {
             if (combatType === 'epic' && currentEvent) {
                 let bossEff = epicLegendaries[currentEvent.key].effect;
                 let bossNm  = epicLegendaries[currentEvent.key].name;
-                if (bossEff === 'true_damage') {
-                    // 烈空坐：白閃；鳳王：火焰
+                let roll = Math.random();
+
+                if (bossEff === 'true_damage' && roll < 0.70) {
+                    // 烈空坐(70%) / 鳳王(70%)
                     if (bossNm.indexOf('鳳王') !== -1) {
                         fxFlashBurst('rgba(255,80,0,0.55)', 3);
-                        fxParticles('🔥', 8, [800, 1500]);
+                        fxParticles('🔥', 14, [3000, 6000]);
+                        fxParticles('🌋', 6, [3500, 6000]);
                     } else {
                         fxFlashBurst('rgba(255,255,255,0.75)', 4);
-                        fxParticles('☄️', 5, [600, 1200]);
+                        fxParticles('☄️', 12, [3000, 5500]);
                     }
                 } else if (bossEff === 'anti_heal_flip') {
-                    // 超夢：紫閃（輕量版，每題）
+                    // 超夢(100%)：紫閃每題
                     fxFlashBurst('rgba(100,0,180,0.45)', 2);
-                } else if (bossEff === 'slow_time') {
-                    // 帝牙盧卡：藍光脈衝
+                    fxParticles('🔮', 8, [3500, 6000]);
+                } else if (bossEff === 'slow_time' && roll < 0.60) {
+                    // 帝牙盧卡(60%)：藍光脈衝
                     fxFlashBurst('rgba(0,120,255,0.35)', 2);
-                    fxParticles('🌊', 5, [800, 1500]);
+                    fxParticles('🌊', 12, [3000, 6000]);
+                    fxParticles('💧', 8, [3500, 6000]);
                 } else if (bossEff === 'shuffle_options') {
-                    // 洛奇亞：雪花（每題少量）
-                    fxParticles('❄️', 8, [1000, 2000]);
-                    fxParticles('💨', 4, [800, 1500]);
-                } else if (bossEff === 'half_hp') {
-                    // 固拉多：震動（每題）
-                    fxScreenShake(400);
-                    fxParticles('🪨', 4, [600, 1200]);
-                } else if (bossEff === 'one_hit') {
-                    // 阿爾宙斯：金閃＋震動（每題）
+                    // 洛奇亞(100%)：雪花強風持續
+                    fxParticles('❄️', 16, [3500, 6000]);
+                    fxParticles('💨', 10, [3000, 5500]);
+                } else if (bossEff === 'half_hp' && roll < 0.70) {
+                    // 固拉多(70%)：持續震動整題
+                    fxScreenShake(0, true);
+                    fxParticles('🪨', 12, [3000, 6000]);
+                    fxParticles('💥', 6, [2500, 5000]);
+                } else if (bossEff === 'one_hit' && roll < 0.80) {
+                    // 阿爾宙斯(80%)：持續震動 + 金閃
+                    fxScreenShake(0, true);
                     fxFlashBurst('rgba(255,220,0,0.5)', 3);
-                    fxParticles('⭐', 10, [600, 1200]);
+                    fxParticles('⭐', 18, [3000, 6000]);
+                    fxParticles('✨', 10, [3500, 6000]);
                 }
             }
 
@@ -2648,6 +2657,7 @@ function checkDailyReset() {
                 timeLeft--;
                 if(timeLeft <= 0) { 
                     clearInterval(combatTimerInterval);
+                    stopContinuousShake();
                     timerBar.style.transition = 'none'; timerBar.style.width = '0%';
                     combatFail("超時！"); 
                 }
@@ -2655,6 +2665,7 @@ function checkDailyReset() {
         }
 
         function combatFail(reason) {
+            stopContinuousShake();
             playSound('error'); playSound('hit');
             let timerBar = document.getElementById('boss-timer-bar');
             timerBar.style.transition = 'none'; timerBar.style.width = timerBar.offsetWidth + 'px';
@@ -2698,6 +2709,7 @@ function checkDailyReset() {
 
         function checkCombat(selected, element) {
             clearInterval(combatTimerInterval);
+            stopContinuousShake();
             let timerBar = document.getElementById('boss-timer-bar');
             timerBar.style.transition = 'none'; timerBar.style.width = timerBar.offsetWidth + 'px';
 
@@ -2714,6 +2726,7 @@ function checkDailyReset() {
                 
                 if(combatCorrectCount >= combatTarget) {
                     playSound('boss_win');
+                    stopContinuousShake();
                     fxFlipText(false); combatFlipText = false; combatAntiHeal = false; combatSlowTime = false;
                     setTimeout(() => {
                         if (combatType === 'epic') {
@@ -2772,11 +2785,29 @@ function checkDailyReset() {
     
         // ===== 神獸視覺特效函式 =====
 
-        // 全畫面震動
-        function fxScreenShake(duration) {
+        // 全畫面震動（continuous=true 持續至手動停止）
+        var continuousShakeInterval = null;
+        function fxScreenShake(duration, continuous) {
             duration = duration || 800;
-            document.body.classList.add('screen-shaking');
-            setTimeout(function(){ document.body.classList.remove('screen-shaking'); }, duration);
+            if (continuous) {
+                // 持續震動模式：用 setInterval 每30ms隨機位移
+                stopContinuousShake();
+                continuousShakeInterval = setInterval(function(){
+                    var x = (Math.random() - 0.5) * 10;
+                    var y = (Math.random() - 0.5) * 10;
+                    document.body.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+                }, 30);
+            } else {
+                document.body.classList.add('screen-shaking');
+                setTimeout(function(){ document.body.classList.remove('screen-shaking'); }, duration);
+            }
+        }
+        function stopContinuousShake() {
+            if (continuousShakeInterval) {
+                clearInterval(continuousShakeInterval);
+                continuousShakeInterval = null;
+                document.body.style.transform = '';
+            }
         }
 
         // 全畫面閃光（顏色、次數）
@@ -2808,19 +2839,20 @@ function checkDailyReset() {
         // 粒子飄落（雪花/火花/星星）
         function fxParticles(emoji, count, durationRange) {
             emoji = emoji || '❄️'; count = count || 30;
-            durationRange = durationRange || [2000, 4000];
+            durationRange = durationRange || [3000, 6000];
             for(var i = 0; i < count; i++){
                 (function(){
                     var p = document.createElement('div');
                     p.className = 'fx-particle';
                     p.textContent = emoji;
                     p.style.left = Math.random() * 100 + 'vw';
-                    p.style.fontSize = (0.8 + Math.random() * 1.2) + 'em';
+                    p.style.fontSize = (0.8 + Math.random() * 1.4) + 'em';
+                    var delay = Math.random() * 2000;
                     var dur = durationRange[0] + Math.random() * (durationRange[1] - durationRange[0]);
                     p.style.animationDuration = dur + 'ms';
-                    p.style.animationDelay = (Math.random() * 1000) + 'ms';
+                    p.style.animationDelay = delay + 'ms';
                     document.body.appendChild(p);
-                    setTimeout(function(){ p.remove(); }, dur + 1200);
+                    setTimeout(function(){ p.remove(); }, dur + delay + 500);
                 })();
             }
         }
