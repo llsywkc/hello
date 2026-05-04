@@ -207,7 +207,7 @@
 </head>
 <body>
 
-    <h1>🟪 森林大冒險：4A中文 🟪</h1>
+    <h1>🟪 森林大冒險：4A 🟪</h1>
 
     <div id="player-tag" class="player-info hidden">
         <span>冒險者：<span id="display-name"></span></span> 
@@ -433,7 +433,7 @@
             <div class="answer-area" id="answer-area"></div>
             <div class="word-bank" id="word-bank"></div>
             <div style="margin-top: 10px;">
-                <button class="btn-gold" id="btn-hint-reorder">💡 提示 (🌟1 / 💰50)</button>
+                <button class="btn-gold" id="btn-hint-reorder">💡 提示 (🌟2 / 💰100)</button>
                 <button class="btn-orange" onclick="resetReorder()">🔄 重新排列</button>
                 <button class="btn-green hidden" id="btn-next-reorder" onclick="nextReorder()">➡️ 下一題</button>
                 <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
@@ -447,7 +447,7 @@
             <div class="question-text" id="mc-question">題目加載中...</div>
             <div class="word-bank" id="mc-options"></div>
             <div style="margin-top: 10px;">
-                <button class="btn-gold" id="btn-hint-mc">💡 提示 (🌟1 / 💰50)</button>
+                <button class="btn-gold" id="btn-hint-mc">💡 提示 (🌟2 / 💰100)</button>
                 <button class="btn-green hidden" id="btn-next-mc" onclick="nextMC()">➡️ 下一題</button>
                 <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
             </div>
@@ -680,6 +680,121 @@
                     gain.gain.setValueAtTime(0.5, t); gain.gain.linearRampToValueAtTime(0, t + 3);
                     osc.start(); osc.stop(t + 3);
                 }
+
+                // ── 方案一：情境反饋音效 ──────────────────────────────
+                } else if (type === 'star_gain') {
+                    [523, 659, 784].forEach((freq, i) => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'sine'; o.frequency.setValueAtTime(freq, t + i * 0.12);
+                        g.gain.setValueAtTime(0.22, t + i * 0.12); g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.12 + 0.18);
+                        o.start(t + i * 0.12); o.stop(t + i * 0.12 + 0.2);
+                    });
+                } else if (type === 'coin_drop') {
+                    [1200, 1500, 1100].forEach((freq, i) => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'sine'; o.frequency.setValueAtTime(freq, t + i * 0.07);
+                        g.gain.setValueAtTime(0.15, t + i * 0.07); g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.07 + 0.1);
+                        o.start(t + i * 0.07); o.stop(t + i * 0.07 + 0.12);
+                    });
+                } else if (type === 'blood_moon') {
+                    const o1 = audioCtx.createOscillator(); const g1 = audioCtx.createGain();
+                    o1.connect(g1); g1.connect(audioCtx.destination);
+                    o1.type = 'sawtooth'; o1.frequency.setValueAtTime(60, t); o1.frequency.linearRampToValueAtTime(120, t + 1.5);
+                    g1.gain.setValueAtTime(0.0, t); g1.gain.linearRampToValueAtTime(0.35, t + 1.0); g1.gain.linearRampToValueAtTime(0.0, t + 2.0);
+                    o1.start(t); o1.stop(t + 2.0);
+                    const o2 = audioCtx.createOscillator(); const g2 = audioCtx.createGain();
+                    o2.connect(g2); g2.connect(audioCtx.destination);
+                    o2.type = 'square'; o2.frequency.setValueAtTime(180, t + 0.5); o2.frequency.linearRampToValueAtTime(90, t + 2.0);
+                    g2.gain.setValueAtTime(0.15, t + 0.5); g2.gain.linearRampToValueAtTime(0.0, t + 2.0);
+                    o2.start(t + 0.5); o2.stop(t + 2.0);
+                } else if (type === 'flee') {
+                    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                    o.connect(g); g.connect(audioCtx.destination);
+                    o.type = 'triangle'; o.frequency.setValueAtTime(500, t); o.frequency.exponentialRampToValueAtTime(150, t + 0.5);
+                    g.gain.setValueAtTime(0.25, t); g.gain.linearRampToValueAtTime(0.0, t + 0.5);
+                    o.start(t); o.stop(t + 0.5);
+                // ── 方案三：UI 互動音效 ────────────────────────────────
+                } else if (type === 'build') {
+                    [0, 0.12].forEach(delay => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'square'; o.frequency.setValueAtTime(180, t + delay); o.frequency.linearRampToValueAtTime(120, t + delay + 0.1);
+                        g.gain.setValueAtTime(0.3, t + delay); g.gain.exponentialRampToValueAtTime(0.01, t + delay + 0.15);
+                        o.start(t + delay); o.stop(t + delay + 0.15);
+                    });
+                } else if (type === 'forge') {
+                    [0, 0.18, 0.32].forEach((delay, i) => {
+                        const freq = [220, 200, 260][i];
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'sawtooth'; o.frequency.setValueAtTime(freq, t + delay);
+                        g.gain.setValueAtTime(0.28, t + delay); g.gain.exponentialRampToValueAtTime(0.01, t + delay + 0.12);
+                        o.start(t + delay); o.stop(t + delay + 0.15);
+                    });
+                    const ring = audioCtx.createOscillator(); const ringG = audioCtx.createGain();
+                    ring.connect(ringG); ringG.connect(audioCtx.destination);
+                    ring.type = 'sine'; ring.frequency.setValueAtTime(1800, t + 0.35);
+                    ringG.gain.setValueAtTime(0.1, t + 0.35); ringG.gain.exponentialRampToValueAtTime(0.001, t + 1.0);
+                    ring.start(t + 0.35); ring.stop(t + 1.0);
+                } else if (type === 'gacha') {
+                    for (let i = 0; i < 10; i++) {
+                        const delay = i * i * 0.012 + i * 0.03;
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'square'; o.frequency.setValueAtTime(400 + i * 30, t + delay);
+                        g.gain.setValueAtTime(0.12, t + delay); g.gain.exponentialRampToValueAtTime(0.01, t + delay + 0.06);
+                        o.start(t + delay); o.stop(t + delay + 0.07);
+                    }
+                    const reveal = audioCtx.createOscillator(); const revG = audioCtx.createGain();
+                    reveal.connect(revG); revG.connect(audioCtx.destination);
+                    reveal.type = 'triangle'; reveal.frequency.setValueAtTime(600, t + 1.2); reveal.frequency.linearRampToValueAtTime(1200, t + 1.6);
+                    revG.gain.setValueAtTime(0.25, t + 1.2); revG.gain.linearRampToValueAtTime(0.0, t + 1.8);
+                    reveal.start(t + 1.2); reveal.stop(t + 1.8);
+                } else if (type === 'purchase') {
+                    [800, 1000, 800, 1200].forEach((freq, i) => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'sine'; o.frequency.setValueAtTime(freq, t + i * 0.09);
+                        g.gain.setValueAtTime(0.18, t + i * 0.09); g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.09 + 0.15);
+                        o.start(t + i * 0.09); o.stop(t + i * 0.09 + 0.18);
+                    });
+                // ── 方案四：戰鬥強化音效 ──────────────────────────────
+                } else if (type === 'encounter') {
+                    [0, 0.2, 0.4].forEach((delay, i) => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'square'; o.frequency.setValueAtTime(440 - i * 40, t + delay);
+                        g.gain.setValueAtTime(0.22, t + delay); g.gain.exponentialRampToValueAtTime(0.01, t + delay + 0.15);
+                        o.start(t + delay); o.stop(t + delay + 0.18);
+                    });
+                } else if (type === 'hit') {
+                    const o1 = audioCtx.createOscillator(); const g1 = audioCtx.createGain();
+                    o1.connect(g1); g1.connect(audioCtx.destination);
+                    o1.type = 'sawtooth'; o1.frequency.setValueAtTime(120, t); o1.frequency.linearRampToValueAtTime(60, t + 0.3);
+                    g1.gain.setValueAtTime(0.4, t); g1.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+                    o1.start(t); o1.stop(t + 0.35);
+                    const o2 = audioCtx.createOscillator(); const g2 = audioCtx.createGain();
+                    o2.connect(g2); g2.connect(audioCtx.destination);
+                    o2.type = 'sine'; o2.frequency.setValueAtTime(55, t);
+                    g2.gain.setValueAtTime(0.3, t); g2.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+                    o2.start(t); o2.stop(t + 0.4);
+                } else if (type === 'block') {
+                    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                    o.connect(g); g.connect(audioCtx.destination);
+                    o.type = 'sine'; o.frequency.setValueAtTime(900, t); o.frequency.linearRampToValueAtTime(1100, t + 0.08);
+                    g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+                    o.start(t); o.stop(t + 0.25);
+                } else if (type === 'heal') {
+                    [300, 400, 500, 650, 800].forEach((freq, i) => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'sine'; o.frequency.setValueAtTime(freq, t + i * 0.1);
+                        g.gain.setValueAtTime(0.15, t + i * 0.1); g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.18);
+                        o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.2);
+                    });
+                
             } catch(e) {}
         }
 
@@ -1120,7 +1235,7 @@
 
             let msg = `🔥 ${s}連對！獲得 📜x${mGain}`;
             inventory.wood += 1 * mult; if (s % 3 === 0) { inventory.wood += 7 * mult; inventory.stone += 3 * mult; msg += `、🪵x${(1+7)*mult}、🧱x${3*mult}`; } else { msg += `、🪵x${1*mult}`; }
-            if (s % 5 === 0) { inventory.star += 1; msg += `、🌟x1`; }
+            if (s % 5 === 0) { inventory.star += 1; msg += `、🌟x1`; playSound('star_gain'); }
             if (s % 10 === 0) { inventory.gem += 3; inventory.fragment += 1; msg += `、💎x3、🔮x1`; playSound('medal'); }
             
             if (msg) {
@@ -1591,11 +1706,11 @@ function checkDailyReset() {
             if (type === 'hut') {
                 if (inventory.wood < 2) return alert("❌ 需要 🪵2 木材！");
                 inventory.wood -= 2; inventory.hut++;
-                unlockAchievement('ach_build');
+                unlockAchievement('ach_build'); playSound('build');
                 alert(`✅ 建造了 🛖 木屋！目前共 ${inventory.hut} 座`);
             } else if (type === 'tower') {
                 if (inventory.stone < 2) return alert("❌ 需要 🧱2 石頭！");
-                inventory.stone -= 2; inventory.tower++;
+                inventory.stone -= 2; inventory.tower++; playSound('build');
                 alert(`✅ 建造了 🗼 石塔！目前共 ${inventory.tower} 座`);
             } else if (type === 'castle') {
                 if (inventory.hut < 2 || inventory.tower < 2) return alert("❌ 需要 🛖2 木屋 + 🗼2 石塔！");
@@ -1626,7 +1741,7 @@ function checkDailyReset() {
             if (inventory.equip[item]) return alert(`✅ 你已經擁有 ${r.label} 了！`);
             if (inventory.wood < r.wood || inventory.stone < r.stone) return alert(`❌ 材料不足！需要 🪵${r.wood} 木材、🧱${r.stone} 石頭`);
             inventory.wood -= r.wood; inventory.stone -= r.stone;
-            inventory.equip[item] = true;
+            inventory.equip[item] = true; playSound('forge');
             updateUI(); saveGame();
             alert(`✅ 成功鍛造 ${r.label}！`);
         };
@@ -1859,9 +1974,9 @@ function checkDailyReset() {
         window.exchangeCoins = function(type) {
             playSound('click');
             if (type === 'wood') {
-                if (inventory.wood >= 10) { inventory.wood -= 10; inventory.coins += 50; } else { return alert("❌ 木材不足 10 個！"); }
+                if (inventory.wood >= 10) { inventory.wood -= 10; inventory.coins += 50; playSound('coin_drop'); } else { return alert("❌ 木材不足 10 個！"); }
             } else if (type === 'stone') {
-                if (inventory.stone >= 10) { inventory.stone -= 10; inventory.coins += 50; } else { return alert("❌ 石頭不足 10 個！"); }
+                if (inventory.stone >= 10) { inventory.stone -= 10; inventory.coins += 50; playSound('coin_drop'); } else { return alert("❌ 石頭不足 10 個！"); }
             }
             document.getElementById('market-coin-display').textContent = inventory.coins;
             updateUI();
@@ -1870,7 +1985,7 @@ function checkDailyReset() {
         window.buyDropPotion = function() {
             playSound('click');
             if (inventory.coins >= 200) {
-                inventory.coins -= 200;
+                inventory.coins -= 200; playSound('purchase');
                 inventory.dropBuffLeft += 20;
                 document.getElementById('market-coin-display').textContent = inventory.coins;
                 updateUI();
@@ -1886,7 +2001,7 @@ function checkDailyReset() {
                 if(inventory.scrollBoughtDate === today) return alert("❌ 今日已售罄！");
                 if(inventory.wood >= 50 && inventory.stone >= 50 && inventory.star >= 10) {
                     inventory.wood -= 50; inventory.stone -= 50; inventory.star -= 10;
-                    inventory.hasLegendaryBuff = true; inventory.scrollBoughtDate = today;
+                    inventory.hasLegendaryBuff = true; playSound('purchase'); inventory.scrollBoughtDate = today;
                     alert("🛒 購買成功！下一次進入森林【必遇傳說怪】！"); openMarket(); 
                 } else { alert("❌ 資源不足！需要 50木材 + 50石頭 + 10星星。"); }
             }
@@ -1906,7 +2021,7 @@ function checkDailyReset() {
             if (inventory.wood >= costW && inventory.gem >= costG) {
                 inventory.wood -= costW; 
                 inventory.gem -= costG;
-                playSound('win');
+                playSound('forge');
                 
                 if (type === 'weapon') { inventory.superWeaponLv++; alert("🗡️ 升級成功！破題者之刃升級了！"); }
                 else if (type === 'shield') { inventory.superShieldLv++; alert("🛡️ 升級成功！絕對專注之盾升級了！"); }
@@ -1926,7 +2041,7 @@ function checkDailyReset() {
         }
 
         window.rollGacha = function() {
-            checkDailyReset(); let limit = 3;
+            playSound('gacha'); checkDailyReset(); let limit = 3;
             if (inventory.gachaDrawsToday >= limit) return alert("❌ 今天的抽獎次數用完啦！明天再來吧！");
             if (inventory.star < 1) return alert("❌ 星星不足，無法抽獎！");
             
@@ -2028,16 +2143,16 @@ function checkDailyReset() {
                 wordBank.appendChild(btn);
             });
             document.getElementById('btn-hint-reorder').onclick = () => {
-                if (inventory.star >= 1) {
-                    inventory.star -= 1;
-                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟1）：正確答案：「<b>${reorderCurrentAnswer}</b>」</span>`;
+                if (inventory.star >= 2) {
+                    inventory.star -= 2;
+                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟2）：正確答案：「<b>${reorderCurrentAnswer}</b>」</span>`;
                     updateUI(); saveGame();
-                } else if (inventory.coins >= 50) {
-                    inventory.coins -= 50;
-                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗💰50）：正確答案：「<b>${reorderCurrentAnswer}</b>」</span>`;
+                } else if (inventory.coins >= 100) {
+                    inventory.coins -= 100;
+                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗💰100）：正確答案：「<b>${reorderCurrentAnswer}</b>」</span>`;
                     updateUI(); saveGame();
                 } else {
-                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟1 星星 或 💰50 金幣！</span>`;
+                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟2 星星 或 💰100 金幣！</span>`;
                 }
             };
         }
@@ -2090,16 +2205,16 @@ function checkDailyReset() {
                 optDiv.appendChild(btn);
             });
             document.getElementById('btn-hint-mc').onclick = () => {
-                if (inventory.star >= 1) {
-                    inventory.star -= 1;
-                    document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟1）：答案是「<b>${task.ans}</b>」</span>`;
+                if (inventory.star >= 2) {
+                    inventory.star -= 2;
+                    document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟2）：答案是「<b>${task.ans}</b>」</span>`;
                     updateUI(); saveGame();
-                } else if (inventory.coins >= 50) {
-                    inventory.coins -= 50;
-                    document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗💰50）：答案是「<b>${task.ans}</b>」</span>`;
+                } else if (inventory.coins >= 100) {
+                    inventory.coins -= 100;
+                    document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗💰100）：答案是「<b>${task.ans}</b>」</span>`;
                     updateUI(); saveGame();
                 } else {
-                    document.getElementById('mc-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟1 星星 或 💰50 金幣！</span>`;
+                    document.getElementById('mc-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟2 星星 或 💰100 金幣！</span>`;
                 }
             };
         }
@@ -2147,8 +2262,8 @@ function checkDailyReset() {
                     alert("🌑 血月能量耗盡，天空恢復了正常...");
                 }
             } else {
-                if (isCorrect && inventory.castles >= 1 && Math.random() < 0.05) {
-                    inventory.bloodMoonActive = true;
+                if (isCorrect && inventory.castles >= 1 && Math.random() < 0.02) {
+                    inventory.bloodMoonActive = true; playSound('blood_moon');
                     inventory.bloodMoonTarget = Math.floor(Math.random() * 3) + 5; 
                     inventory.bloodMoonStreak = 1;
                     inventory.bloodMoonLeft = 15;
@@ -2235,14 +2350,14 @@ function checkDailyReset() {
             innerBox.className = 'event-box';
             fightBtn.style.display = 'inline-block';
 
-            if ((stats.atk >= 50 && stats.def >= 50 && r < 0.10) || inventory.hasLegendaryBuff) { 
+            if ((stats.atk >= 50 && stats.def >= 50 && r < 0.05) || inventory.hasLegendaryBuff) { 
                 inventory.hasLegendaryBuff = false; saveGame();
                 let isDragon = Math.random() > 0.5;
                 let digiName = isDragon ? '蒼響' : '藏瑪然特';
                 let digiPic = isDragon ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/888.png' : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/889.png';
                 currentEvent = { type: 'legendary', name: digiName, pic: digiPic };
                 
-                playSound('legendary'); innerBox.classList.add('legendary-border', 'glow-gold'); 
+                playSound('legendary'); playSound('encounter'); innerBox.classList.add('legendary-border', 'glow-gold'); 
                 eventTitle.innerHTML = `🌟 傳說降臨！皇家騎士！`; eventTitle.style.color = '#FFD700';
                 eventDesc.innerHTML = `<img src="${digiPic}" class="battle-pic"><br><span style="color:#D50000; font-size:1.4em; font-weight:bold;">${digiName}</span>！<br><span style="color:#2E7D32;">💬 必須連續答對 2 題才能獲得牠的認可！</span>`;
                 
@@ -2253,12 +2368,12 @@ function checkDailyReset() {
                     inventory.star -= 1; updateUI(); 
                     eventModal.classList.add('hidden'); startCombat('legendary', currentEvent);
                 };
-            } else if (r < 0.3) {
+            } else if (r < 0.12) {
                 // 抽出 20 款野生 Pokemon 其中一款
                 let monster = pokemonMonsters[Math.floor(Math.random() * pokemonMonsters.length)];
                 currentEvent = { type: 'virus', name: monster.name, pic: monster.pic };
                 
-                innerBox.classList.add('glow-purple');
+                innerBox.classList.add('glow-purple'); playSound('encounter');
                 eventTitle.innerHTML = "⚠️ 野生怪獸突襲！"; eventTitle.style.color = '#9C27B0';
                 eventDesc.innerHTML = `<img src="${monster.pic}" class="battle-pic"><br>一隻凶猛的<span style="color:#9C27B0; font-weight:bold;">${monster.name}</span>擋住了去路！<br><span style="color:#D50000;">💬 答對 1 題來擊退牠！</span>`;
                 
@@ -2270,7 +2385,7 @@ function checkDailyReset() {
 
             eventModal.classList.remove('hidden');
             document.getElementById('btn-event-flee').onclick = () => {
-                initAudio(); playSound('click'); alert("🏃 你急忙撤退，安全躲過了這次遭遇，但沒有獲得任何獎勵。"); eventModal.classList.add('hidden');
+                initAudio(); playSound('click'); playSound('flee'); alert("🏃 你急忙撤退，安全躲過了這次遭遇，但沒有獲得任何獎勵。"); eventModal.classList.add('hidden');
             };
         }
 
@@ -2345,7 +2460,7 @@ function checkDailyReset() {
             if (inventory.wood >= 10 && inventory.stone >= 10) {
                 if(combatHP >= maxCombatHP) return alert("HP 已滿！");
                 inventory.wood -= 10; inventory.stone -= 10;
-                combatHP = Math.min(maxCombatHP, combatHP + 30);
+                combatHP = Math.min(maxCombatHP, combatHP + 30); playSound('heal');
                 updateCombatHPBar(); updateUI(); playSound('medal');
                 alert("🧪 飲用成功！恢復了 30 點 HP！");
             } else { alert("❌ 材料不足！需要 10🪵 + 10🪨。"); }
@@ -2430,7 +2545,7 @@ function checkDailyReset() {
         }
 
         function combatFail(reason) {
-            playSound('error');
+            playSound('error'); playSound('hit');
             let timerBar = document.getElementById('boss-timer-bar');
             timerBar.style.transition = 'none'; timerBar.style.width = timerBar.offsetWidth + 'px';
             let opts = document.querySelectorAll('#boss-options .stone-chunk');
@@ -2477,7 +2592,7 @@ function checkDailyReset() {
             document.body.classList.remove('ultimate-warning');
 
             if(selected === currentCombatQ.ans) {
-                playSound('win'); addStreak();
+                playSound('win'); playSound('block'); addStreak();
                 element.style.backgroundColor = '#4CAF50';
                 combatCorrectCount++;
                 document.getElementById('boss-progress-text').textContent = `目標：累積答對 ${combatCorrectCount} / ${combatTarget}`;
@@ -2517,7 +2632,7 @@ function checkDailyReset() {
                     setTimeout(() => { window.nextCombatQuestion(); }, 1500);
                 }
             } else {
-                element.style.backgroundColor = '#F44336';
+                element.style.backgroundColor = '#F44336'; playSound('hit');
                 combatFail("答錯了！");
             }
         }
@@ -2530,7 +2645,7 @@ function checkDailyReset() {
                 alert("🏃 你恐懼地逃跑了！神獸的威壓讓你損失了資源！");
                 document.body.classList.remove('legendary-mode');
             } else if(combatType === 'legendary' || combatType === 'virus') {
-                alert("🏃 你急忙逃出危險區域，安然無恙。");
+                playSound('flee'); alert("🏃 你急忙逃出危險區域，安然無恙。");
             } else {
                 inventory.wood = Math.max(0, inventory.wood - 5);
                 alert("🏃 你急忙逃出對手的巢穴，但在路上弄丟了 5 個木材！");
