@@ -2558,6 +2558,8 @@ function checkDailyReset() {
             let qPool = [...fillTasks, ...matchTasks, ...punctTasks, ...faMCTasks, ...dictation2Tasks, ...advTasks, ...appearanceTasks];
             currentCombatQ = qPool[Math.floor(Math.random() * qPool.length)];
             document.getElementById('boss-question').textContent = currentCombatQ.q;
+            // 超夢：確保每題文字持續顛倒
+            if (combatFlipText) { fxFlipText(true); }
             
             let shuffledOpts = shuffle([...currentCombatQ.options]);
             shuffledOpts.forEach(opt => {
@@ -2599,6 +2601,41 @@ function checkDailyReset() {
                 setTimeout(doShuffle, 300);
             }
             
+            // ===== 每題觸發神獸視覺特效 =====
+            if (combatType === 'epic' && currentEvent) {
+                let bossEff = epicLegendaries[currentEvent.key].effect;
+                let bossNm  = epicLegendaries[currentEvent.key].name;
+                if (bossEff === 'true_damage') {
+                    // 烈空坐：白閃；鳳王：火焰
+                    if (bossNm.indexOf('鳳王') !== -1) {
+                        fxFlashBurst('rgba(255,80,0,0.55)', 3);
+                        fxParticles('🔥', 8, [800, 1500]);
+                    } else {
+                        fxFlashBurst('rgba(255,255,255,0.75)', 4);
+                        fxParticles('☄️', 5, [600, 1200]);
+                    }
+                } else if (bossEff === 'anti_heal_flip') {
+                    // 超夢：紫閃（輕量版，每題）
+                    fxFlashBurst('rgba(100,0,180,0.45)', 2);
+                } else if (bossEff === 'slow_time') {
+                    // 帝牙盧卡：藍光脈衝
+                    fxFlashBurst('rgba(0,120,255,0.35)', 2);
+                    fxParticles('🌊', 5, [800, 1500]);
+                } else if (bossEff === 'shuffle_options') {
+                    // 洛奇亞：雪花（每題少量）
+                    fxParticles('❄️', 8, [1000, 2000]);
+                    fxParticles('💨', 4, [800, 1500]);
+                } else if (bossEff === 'half_hp') {
+                    // 固拉多：震動（每題）
+                    fxScreenShake(400);
+                    fxParticles('🪨', 4, [600, 1200]);
+                } else if (bossEff === 'one_hit') {
+                    // 阿爾宙斯：金閃＋震動（每題）
+                    fxFlashBurst('rgba(255,220,0,0.5)', 3);
+                    fxParticles('⭐', 10, [600, 1200]);
+                }
+            }
+
             let timerBar = document.getElementById('boss-timer-bar');
             timerBar.style.transition = 'none'; timerBar.style.width = '100%';
             
