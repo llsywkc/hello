@@ -203,11 +203,62 @@
         #partner-dialogue { background: rgba(74,20,140,0.85); color: #FFE0F0; border: 2px solid #CE93D8; border-radius: 10px; padding: 10px 14px; margin: 8px auto; font-size: 0.9em; font-style: italic; max-width: 90%; display: none; animation: fadeInDia 0.5s; }
         #partner-dialogue::before { content: "💬 "; font-style: normal; }
         @keyframes fadeInDia { from { opacity:0; transform: translateY(5px); } to { opacity:1; transform: translateY(0); } }
+
+        /* ===== 神獸視覺特效 ===== */
+        @keyframes screenShakeAnim {
+            0%,100%{transform:translate(0,0)}
+            10%{transform:translate(-12px,-8px)}
+            20%{transform:translate(10px,10px)}
+            30%{transform:translate(-10px,6px)}
+            40%{transform:translate(8px,-10px)}
+            50%{transform:translate(-8px,8px)}
+            60%{transform:translate(10px,-6px)}
+            70%{transform:translate(-6px,10px)}
+            80%{transform:translate(8px,-8px)}
+            90%{transform:translate(-10px,6px)}
+        }
+        .screen-shaking { animation: screenShakeAnim 0.8s ease-in-out; }
+
+        @keyframes flashAnim {
+            0%,100%{opacity:0} 25%,75%{opacity:0.9} 50%{opacity:0.3}
+        }
+        .fx-overlay {
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            z-index:9997;pointer-events:none;opacity:0;
+        }
+        @keyframes crackFadeOut {
+            0%{opacity:1} 60%{opacity:0.8} 100%{opacity:0}
+        }
+        .crack-overlay {
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            z-index:9996;pointer-events:none;
+            animation: crackFadeOut 2.5s ease forwards;
+        }
+        @keyframes particleFall {
+            0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+            100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+        }
+        .fx-particle {
+            position:fixed;top:-20px;pointer-events:none;z-index:9995;
+            animation: particleFall linear forwards;
+        }
+        /* 文字顛倒 */
+        .flip-text-active .question-text,
+        .flip-text-active #mc-question,
+        .flip-text-active #boss-question,
+        .flip-text-active .word-bank button,
+        .flip-text-active #mc-options button,
+        .flip-text-active #boss-options button,
+        .flip-text-active #answer-area button,
+        .flip-text-active #word-bank button {
+            display:inline-block;
+            transform: rotate(180deg);
+        }
 </style>
 </head>
 <body>
 
-    <h1>🟪 森林大冒險：4A寶寶 🟪</h1>
+    <h1>🟪 森林大冒險：4A中文練習 🟪</h1>
 
     <div id="player-tag" class="player-info hidden">
         <span>冒險者：<span id="display-name"></span></span> 
@@ -271,12 +322,11 @@
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
                 <button class="btn-green" onclick="startGame('fill')">⛏️ 礦洞尋寶 (填充題)</button>
                 <button class="btn-blue" onclick="startGame('match-word')">🔮 符文解密 (配詞題)</button>
-                <button class="btn-orange" onclick="startGame('connect')">🔗 魔法連線 (連線題)</button>
                 <button class="btn-grey" onclick="startGame('punct')">📜 古卷修復 (標點題)</button>
                 <button class="btn-purple" onclick="startGame('reorder')">🌉 鋪木板過河 (重組句子)</button>
                 
-                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (綜合題)</button>
-                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA溫習 (課文重組)</button>
+                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA温習 (綜合題)</button>
+                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA温習 (課文重組)</button>
             </div>
             
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 10px; padding: 10px; background: #FFF3E0; border-radius: 8px; border: 2px dashed #FF9800;">
@@ -289,6 +339,11 @@
                 <h3 style="width:100%; margin:0 0 5px 0; color:#00695C;">📘 最新進度：默書温習(二)</h3>
                 <button class="btn-green" onclick="startGame('dictation2-mc')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">📖 默書温習(二) - 填充</button>
                 <button class="btn-purple" onclick="startGame('dictation2-reorder')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">🌉 默書温習(二) - 重組</button>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 10px; padding: 10px; background: #FFF8E1; border-radius: 8px; border: 2px dashed #F9A825;">
+                <h3 style="width:100%; margin:0 0 5px 0; color:#F57F17;">📚 最新進度：第三學期詞語温習</h3>
+                <button class="btn-gold" onclick="startGame('term3-vocab')" style="background-color: #F9A825; box-shadow: 0 6px 0 #F57F17;">📚 第三學期詞語温習</button>
             </div>
 
             <p style="font-size: 0.9em; font-weight: bold; color: #8E24AA;">(連續答題提升攻防值，有機率遇到隱藏的「傳說怪」！)</p>
@@ -318,11 +373,13 @@
                 <h3 style="color:#ff0000;">3. 血月降臨與遠古神獸 (極度危險)</h3>
                 <p>當你擁有至少 1 座大城堡時，答題有 5% 機率觸發「血月」。在血月期間連續答對目標題數，即可召喚擁有專屬特技的<b>五大遠古神獸</b>：</p>
                 <ul style="color:#3e0000; font-weight:bold; font-size:0.9em;">
-                    <li>☄️ 烈空坐：【畫龍點睛】無視防禦造成巨額真實傷害！</li>
-                    <li>🔮 超夢：【精神擊破】禁療詛咒！戰鬥中無法使用恢復藥水！</li>
-                    <li>❄️ 水君：【絕對零度】戰鬥中 40% 機率將選項按鈕凍結鎖死 3 秒！</li>
-                    <li>🔥 鳳王：【神聖之火】無視防禦造成巨額真實傷害！</li>
-                    <li>⭐ 阿爾宙斯：【制裁光礫】30% 機率發動大招，答題限時強制縮短至 3 秒，超時或答錯直接秒殺！</li>
+                    <li>☄️ 烈空坐：【畫龍點睛】無視防禦造成巨額真實傷害＋全畫面白色爆閃！</li>
+                    <li>🔮 超夢：【精神擊破】禁療詛咒＋所有題目文字上下顛倒（持續整場）！</li>
+                    <li>🌊 帝牙盧卡：【海嘯裂地】整場戰鬥答題限時縮短至5-8秒＋禁療＋藍色巨浪！</li>
+                    <li>🔥 鳳王：【神聖之火】無視防禦造成巨額真實傷害＋火焰爆發！</li>
+                    <li>🌀 洛奇亞：【銀翼暴風】選項按鈕隨機打亂位置3次＋全畫面雪花強風！</li>
+                    <li>🌋 固拉多：【大地震裂】戰鬥開始扣一半HP＋全畫面震動龜裂！</li>
+                    <li>⭐ 阿爾宙斯：【創世審判】答題限時強制縮短至3秒＋答錯扣雙倍傷害＋禁療＋全畫面震動金閃！（最強神獸）</li>
                 </ul>
 
                 <h3 style="color:#2E7D32;">4. 究極進化與閃卡紀念冊</h3>
@@ -405,17 +462,17 @@
                 <div class="super-gear-card">
                     <h3>🗡️ 破題者之刃 <br>Lv.<span id="sg-w-lv">0</span></h3>
                     <p class="stat-atk">效果: +<span id="sg-w-bonus">0</span> 攻</p>
-                    <button class="btn-gold" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('weapon')">升級 (需 <span id="sg-w-cost-m">20</span>木材 <span id="sg-w-cost-f">5</span>寶石)</button>
+                    <button class="btn-gold" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('weapon')">升級 (需 <span id="sg-w-cost-m">10</span>木材 <span id="sg-w-cost-f">5</span>寶石)</button>
                 </div>
                 <div class="super-gear-card">
                     <h3>🛡️ 絕對專注之盾 <br>Lv.<span id="sg-s-lv">0</span></h3>
                     <p class="stat-def">效果: +<span id="sg-s-bonus">0</span> 防</p>
-                    <button class="btn-blue" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('shield')">升級 (需 <span id="sg-s-cost-m">20</span>木材 <span id="sg-s-cost-f">5</span>寶石)</button>
+                    <button class="btn-blue" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('shield')">升級 (需 <span id="sg-s-cost-m">10</span>木材 <span id="sg-s-cost-f">5</span>寶石)</button>
                 </div>
                 <div class="super-gear-card">
                     <h3>💎 無瑕賢者之石 <br>Lv.<span id="sg-a-lv">0</span></h3>
                     <p class="gem-text">效果: 全屬性 +<span id="sg-a-bonus">0</span></p>
-                    <button class="btn-purple" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('stone')">升級 (需 <span id="sg-a-cost-m">30</span>木材 <span id="sg-a-cost-f">10</span>寶石)</button>
+                    <button class="btn-purple" style="font-size: 0.9em; padding: 5px 10px;" onclick="upgradeSuperGear('stone')">升級 (需 <span id="sg-a-cost-m">15</span>木材 <span id="sg-a-cost-f">10</span>寶石)</button>
                 </div>
             </div>
             <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
@@ -428,7 +485,7 @@
             <div class="answer-area" id="answer-area"></div>
             <div class="word-bank" id="word-bank"></div>
             <div style="margin-top: 10px;">
-                <button class="btn-gold" id="btn-hint-reorder">💡 免費提示</button>
+                <button class="btn-gold" id="btn-hint-reorder">💡 提示 (🌟2)</button>
                 <button class="btn-orange" onclick="resetReorder()">🔄 重新排列</button>
                 <button class="btn-green hidden" id="btn-next-reorder" onclick="nextReorder()">➡️ 下一題</button>
                 <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
@@ -442,7 +499,7 @@
             <div class="question-text" id="mc-question">題目加載中...</div>
             <div class="word-bank" id="mc-options"></div>
             <div style="margin-top: 10px;">
-                <button class="btn-gold" id="btn-hint-mc">💡 免費提示</button>
+                <button class="btn-gold" id="btn-hint-mc">💡 提示 (🌟2)</button>
                 <button class="btn-green hidden" id="btn-next-mc" onclick="nextMC()">➡️ 下一題</button>
                 <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
             </div>
@@ -674,6 +731,119 @@
                     osc.type = 'square'; osc.frequency.setValueAtTime(300, t); osc.frequency.linearRampToValueAtTime(900, t + 2);
                     gain.gain.setValueAtTime(0.5, t); gain.gain.linearRampToValueAtTime(0, t + 3);
                     osc.start(); osc.stop(t + 3);
+                // ── 方案一：情境反饋音效 ──
+                } else if (type === 'star_gain') {
+                    [523, 659, 784].forEach((freq, i) => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'sine'; o.frequency.setValueAtTime(freq, t + i * 0.12);
+                        g.gain.setValueAtTime(0.22, t + i * 0.12); g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.12 + 0.18);
+                        o.start(t + i * 0.12); o.stop(t + i * 0.12 + 0.2);
+                    });
+                } else if (type === 'coin_drop') {
+                    [1200, 1500, 1100].forEach((freq, i) => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'sine'; o.frequency.setValueAtTime(freq, t + i * 0.07);
+                        g.gain.setValueAtTime(0.15, t + i * 0.07); g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.07 + 0.1);
+                        o.start(t + i * 0.07); o.stop(t + i * 0.07 + 0.12);
+                    });
+                } else if (type === 'blood_moon') {
+                    const o1 = audioCtx.createOscillator(); const g1 = audioCtx.createGain();
+                    o1.connect(g1); g1.connect(audioCtx.destination);
+                    o1.type = 'sawtooth'; o1.frequency.setValueAtTime(60, t); o1.frequency.linearRampToValueAtTime(120, t + 1.5);
+                    g1.gain.setValueAtTime(0.0, t); g1.gain.linearRampToValueAtTime(0.35, t + 1.0); g1.gain.linearRampToValueAtTime(0.0, t + 2.0);
+                    o1.start(t); o1.stop(t + 2.0);
+                    const o2 = audioCtx.createOscillator(); const g2 = audioCtx.createGain();
+                    o2.connect(g2); g2.connect(audioCtx.destination);
+                    o2.type = 'square'; o2.frequency.setValueAtTime(180, t + 0.5); o2.frequency.linearRampToValueAtTime(90, t + 2.0);
+                    g2.gain.setValueAtTime(0.15, t + 0.5); g2.gain.linearRampToValueAtTime(0.0, t + 2.0);
+                    o2.start(t + 0.5); o2.stop(t + 2.0);
+                } else if (type === 'flee') {
+                    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                    o.connect(g); g.connect(audioCtx.destination);
+                    o.type = 'triangle'; o.frequency.setValueAtTime(500, t); o.frequency.exponentialRampToValueAtTime(150, t + 0.5);
+                    g.gain.setValueAtTime(0.25, t); g.gain.linearRampToValueAtTime(0.0, t + 0.5);
+                    o.start(t); o.stop(t + 0.5);
+                // ── 方案三：UI 互動音效 ──
+                } else if (type === 'build') {
+                    [0, 0.12].forEach(delay => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'square'; o.frequency.setValueAtTime(180, t + delay); o.frequency.linearRampToValueAtTime(120, t + delay + 0.1);
+                        g.gain.setValueAtTime(0.3, t + delay); g.gain.exponentialRampToValueAtTime(0.01, t + delay + 0.15);
+                        o.start(t + delay); o.stop(t + delay + 0.15);
+                    });
+                } else if (type === 'forge') {
+                    [0, 0.18, 0.32].forEach((delay, i) => {
+                        const freq = [220, 200, 260][i];
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'sawtooth'; o.frequency.setValueAtTime(freq, t + delay);
+                        g.gain.setValueAtTime(0.28, t + delay); g.gain.exponentialRampToValueAtTime(0.01, t + delay + 0.12);
+                        o.start(t + delay); o.stop(t + delay + 0.15);
+                    });
+                    const ring = audioCtx.createOscillator(); const ringG = audioCtx.createGain();
+                    ring.connect(ringG); ringG.connect(audioCtx.destination);
+                    ring.type = 'sine'; ring.frequency.setValueAtTime(1800, t + 0.35);
+                    ringG.gain.setValueAtTime(0.1, t + 0.35); ringG.gain.exponentialRampToValueAtTime(0.001, t + 1.0);
+                    ring.start(t + 0.35); ring.stop(t + 1.0);
+                } else if (type === 'gacha') {
+                    for (let i = 0; i < 10; i++) {
+                        const delay = i * i * 0.012 + i * 0.03;
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'square'; o.frequency.setValueAtTime(400 + i * 30, t + delay);
+                        g.gain.setValueAtTime(0.12, t + delay); g.gain.exponentialRampToValueAtTime(0.01, t + delay + 0.06);
+                        o.start(t + delay); o.stop(t + delay + 0.07);
+                    }
+                    const reveal = audioCtx.createOscillator(); const revG = audioCtx.createGain();
+                    reveal.connect(revG); revG.connect(audioCtx.destination);
+                    reveal.type = 'triangle'; reveal.frequency.setValueAtTime(600, t + 1.2); reveal.frequency.linearRampToValueAtTime(1200, t + 1.6);
+                    revG.gain.setValueAtTime(0.25, t + 1.2); revG.gain.linearRampToValueAtTime(0.0, t + 1.8);
+                    reveal.start(t + 1.2); reveal.stop(t + 1.8);
+                } else if (type === 'purchase') {
+                    [800, 1000, 800, 1200].forEach((freq, i) => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'sine'; o.frequency.setValueAtTime(freq, t + i * 0.09);
+                        g.gain.setValueAtTime(0.18, t + i * 0.09); g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.09 + 0.15);
+                        o.start(t + i * 0.09); o.stop(t + i * 0.09 + 0.18);
+                    });
+                // ── 方案四：戰鬥強化音效 ──
+                } else if (type === 'encounter') {
+                    [0, 0.2, 0.4].forEach((delay, i) => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'square'; o.frequency.setValueAtTime(440 - i * 40, t + delay);
+                        g.gain.setValueAtTime(0.22, t + delay); g.gain.exponentialRampToValueAtTime(0.01, t + delay + 0.15);
+                        o.start(t + delay); o.stop(t + delay + 0.18);
+                    });
+                } else if (type === 'hit') {
+                    const o1 = audioCtx.createOscillator(); const g1 = audioCtx.createGain();
+                    o1.connect(g1); g1.connect(audioCtx.destination);
+                    o1.type = 'sawtooth'; o1.frequency.setValueAtTime(120, t); o1.frequency.linearRampToValueAtTime(60, t + 0.3);
+                    g1.gain.setValueAtTime(0.4, t); g1.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+                    o1.start(t); o1.stop(t + 0.35);
+                    const o2b = audioCtx.createOscillator(); const g2b = audioCtx.createGain();
+                    o2b.connect(g2b); g2b.connect(audioCtx.destination);
+                    o2b.type = 'sine'; o2b.frequency.setValueAtTime(55, t);
+                    g2b.gain.setValueAtTime(0.3, t); g2b.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+                    o2b.start(t); o2b.stop(t + 0.4);
+                } else if (type === 'block') {
+                    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                    o.connect(g); g.connect(audioCtx.destination);
+                    o.type = 'sine'; o.frequency.setValueAtTime(900, t); o.frequency.linearRampToValueAtTime(1100, t + 0.08);
+                    g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+                    o.start(t); o.stop(t + 0.25);
+                } else if (type === 'heal') {
+                    [300, 400, 500, 650, 800].forEach((freq, i) => {
+                        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.type = 'sine'; o.frequency.setValueAtTime(freq, t + i * 0.1);
+                        g.gain.setValueAtTime(0.15, t + i * 0.1); g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.18);
+                        o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.2);
+                    });
                 }
             } catch(e) {}
         }
@@ -742,34 +912,6 @@
             { q: "導遊一路上 ______ 地為我們介紹當地的歷史故事。", ans: "滔滔不絕", options: ["滔滔不絕", "沉默寡言", "啞口無言", "支支吾吾"] },
             { q: "畢業時，同學們都 ______ 地向老師道別。", ans: "依依不捨", options: ["依依不捨", "揚長而去", "迫不及待", "冷酷無情"] },
             { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧闹", "喧囂蔽天"] }
-        ];
-
-        const connectTasks = [
-            { q: "找出正確的配對：【 科技 】______", ans: "發達", options: ["發達", "淵博", "浪費", "惡劣"] },
-            { q: "找出正確的配對：【 學識 】______", ans: "淵博", options: ["淵博", "發達", "大方", "穩重"] },
-            { q: "找出正確的配對：【 白白 】______", ans: "浪費", options: ["浪費", "消耗", "虛度", "花費"] },
-            { q: "找出正確的配對：【 專心 】______", ans: "學業", options: ["學業", "安全", "主旨", "精神"] },
-            { q: "找出正確的配對：【 衛生 】______", ans: "惡劣", options: ["惡劣", "淵博", "發達", "穩重"] },
-            { q: "找出正確的配對：【 歸納 】______", ans: "主旨", options: ["主旨", "段意", "結論", "大意"] },
-            { q: "找出正確的配對：【 確保 】______", ans: "安全", options: ["安全", "安穩", "安心", "安寧"] },
-            { q: "找出正確的配對：【 粗獷的 】______", ans: "聲線", options: ["聲線", "心思", "鼻樑", "秀髮"] }, 
-            { q: "找出正確的配對：【 温柔的 】______", ans: "外表", options: ["外表", "聲線", "鼻樑", "洋娃娃"] },
-            { q: "找出正確的配對：【 體會到 】______", ans: "善良", options: ["善良", "精神", "痕跡", "氣氛"] },
-            { q: "找出正確的配對：【 互助的 】______", ans: "精神", options: ["精神", "力量", "善良", "光陰"] },
-            { q: "找出正確的配對：【 高挑挺拔的 】______", ans: "鼻樑", options: ["鼻樑", "秀髮", "外表", "聲線"] },
-            { q: "找出正確的配對：【 烏黑亮麗的 】______", ans: "秀髮", options: ["秀髮", "鼻樑", "外表", "睫毛"] },
-            { q: "找出正確的配對：【 成熟 】______", ans: "穩重", options: ["穩重", "大方", "淵博", "發達"] },
-            { q: "找出正確的配對：【 虛度 】______", ans: "光陰", options: ["光陰", "時間", "歲月", "青春"] },
-            { q: "找出正確的配對：【 夜幕 】______", ans: "低垂", options: ["低垂", "降臨", "黑夜", "星空"] },
-            { q: "找出正確的配對：【 五光 】______", ans: "十色", options: ["十色", "八門", "四射", "十彩"] },
-            { q: "找出正確的配對：【 歲月的 】______", ans: "痕跡", options: ["痕跡", "時光", "光陰", "流逝"] },
-            { q: "找出正確的配對：【 舉手 】______", ans: "投足", options: ["投足", "大方", "動腳", "穩重"] },
-            { q: "找出正確的配對：【 落落 】______", ans: "大方", options: ["大方", "穩重", "端莊", "體面"] },
-            { q: "找出正確的配對：【 精緻的 】______", ans: "洋娃娃", options: ["洋娃娃", "小寶寶", "秀髮", "睫毛"] },
-            { q: "找出正確的配對：【 節日 】______", ans: "氣氛", options: ["氣氛", "氛圍", "慶典", "快樂"] },
-            { q: "找出正確的配對：【 閃爍 】______", ans: "耀眼", options: ["耀眼", "光芒", "明亮", "刺眼"] },
-            { q: "找出正確的配對：【 破釜 】______", ans: "沉舟", options: ["沉舟", "沉船", "一戰", "到底"] },
-            { q: "找出正確的配對：【 友善 】______", ans: "有禮", options: ["有禮", "大方", "穩重", "熱情"] }
         ];
 
         const punctTasks = [
@@ -927,7 +1069,7 @@
             ["爸爸不像", "一些", "只會溺愛孩子的父母", "，", "而是", "適當的", "管教他們", "。"],
             ["我們", "凌晨時分", "便乘旅遊車", "上太平山", "，", "所以", "趕得及", "看到", "美麗的日出", "。"],
             ["因為", "臨近考試", "，", "所以", "各類", "課外活動", "會暫停", "直至", "考試結束", "。"],
-            ["小明", "發現自己", "最近的", "成績退步了", "，", "於是", "重新制定了", "溫習和", "作息時間表", "。"]
+            ["小明", "發現自己", "最近的", "成績退步了", "，", "於是", "重新制定了", "温習和", "作息時間表", "。"]
         ];
 
         const faReorderTasks = [
@@ -957,26 +1099,70 @@
             { q: "「畫蛇添足」比喻甚麼？", ans: "多此一舉", options: ["多此一舉", "畫工精湛", "非常可怕", "行動迅速"] }
         ];
 
+        const term3VocabTasks = [
+            { q: "天上的煙火在黑夜中特別＿＿，因此顯得十分燦爛。", ans: "閃耀", options: ["愛惜", "率領", "閃耀", "勇猛"] },
+            { q: "舞台上的燈光不停地＿＿，十分吸引觀眾。", ans: "閃耀", options: ["相處", "驕傲", "視覺", "閃耀"] },
+            { q: "媽媽很＿＿這部電腦，所以叫我小心使用。", ans: "愛惜", options: ["愛惜", "爽快", "友愛", "破釜沉舟"] },
+            { q: "我們要＿＿時間，因為它一過去就不會再回來。", ans: "愛惜", options: ["迫不及待", "愛惜", "愁眉苦臉", "身先士卒"] },
+            { q: "同學之間要互相＿＿，這樣才不會吵架。", ans: "友愛", options: ["驕傲", "友愛", "奮不顧身", "一本正經"] },
+            { q: "班上同學都很＿＿，大家相處得十分融洽。", ans: "友愛", options: ["勇猛", "貪生怕死", "率領", "友愛"] },
+            { q: "我們要學會與人＿＿，因為良好的關係需要互相尊重。", ans: "相處", options: ["視覺", "驕傲", "相處", "迫不及待"] },
+            { q: "小朋友要學會和同學和平＿＿，這樣才會開心。", ans: "相處", options: ["率領", "藝術", "閃耀", "相處"] },
+            { q: "爺爺説話時往往都是＿＿的，從來不會亂開玩笑。", ans: "一本正經", options: ["爽快", "愛惜", "臉紅耳赤", "一本正經"] },
+            { q: "哥哥做事總是＿＿的樣子，看起來十分認真。", ans: "一本正經", options: ["友愛", "閃耀", "一本正經", "勇猛"] },
+            { q: "夜空中的星星不停地＿＿，把夜晚點綴得很美。", ans: "閃耀", options: ["視覺", "相處", "閃耀", "貪生怕死"] },
+            { q: "這顆寶石在燈光下十分＿＿，吸引了眾人的目光。", ans: "閃耀", options: ["爽快", "驕傲", "閃耀", "勇猛"] },
+            { q: "我們要好好運用＿＿去欣賞美麗的圖畫，仔細地看清楚每個細節。", ans: "視覺", options: ["奮不顧身", "視覺", "率領", "以一當十"] },
+            { q: "眼睛是人體的＿＿器官，所以很重要。", ans: "視覺", options: ["視覺", "藝術", "友愛", "破釜沉舟"] },
+            { q: "這幅畫很有＿＿感，看起來既特別又漂亮。", ans: "藝術", options: ["藝術", "率領", "愛惜", "愁眉苦臉"] },
+            { q: "她很喜歡音樂和＿＿創作，所以常常參加比賽。", ans: "藝術", options: ["爽快", "相處", "貪生怕死", "藝術"] },
+            { q: "這位同學的性格很＿＿，做事從不拖拉。", ans: "爽快", options: ["驕傲", "友愛", "爽快", "一本正經"] },
+            { q: "他處理問題時十分＿＿，從不會轉彎抹角。", ans: "爽快", options: ["迫不及待", "率領", "爽快", "視覺"] },
+            { q: "弟弟＿＿想拆開生日禮物，所以一直催着我。", ans: "迫不及待", options: ["愛惜", "相處", "迫不及待", "驕傲"] },
+            { q: "梓晴＿＿想知道比賽結果，所以不停追問老師。", ans: "迫不及待", options: ["友愛", "藝術", "迫不及待", "勇猛"] },
+            { q: "琪柏説話很＿＿，從不會拐彎抹角。", ans: "率直", options: ["一本正經", "驕傲", "閃耀", "率直"] },
+            { q: "允晴是個＿＿的人，想到甚麼就會説甚麼。", ans: "率直", options: ["貪生怕死", "相處", "率直", "視覺"] },
+            { q: "聽到這個壞消息後，他變得＿＿，很不開心。", ans: "愁眉苦臉", options: ["臉紅耳赤", "愁眉苦臉", "爽快", "友愛"] },
+            { q: "偉恒因為被老師稱讚，所以害羞得＿＿。", ans: "臉紅耳赤", options: ["率領", "臉紅耳赤", "視覺", "以一當十"] },
+            { q: "芠宇將軍親自＿＿軍隊前進，令他們士氣大增。", ans: "率領", options: ["愛惜", "藝術", "閃耀", "率領"] },
+            { q: "老師＿＿小組進行活動，所以大家都很有秩序。", ans: "率領", options: ["爽快", "友愛", "相處", "率領"] },
+            { q: "不要因為小小的成功就變得＿＿，這樣會令人反感。", ans: "驕傲", options: ["驕傲", "勇猛", "視覺", "閃耀"] },
+            { q: "在戰場上，士兵如果＿＿，就無法保衛自己的國家。", ans: "貪生怕死", options: ["貪生怕死", "奮不顧身", "身先士卒", "以一當十"] },
+            { q: "我們不能做一個＿＿的人，遇到危險時只顧着自己逃跑。", ans: "貪生怕死", options: ["友愛", "爽快", "藝術", "貪生怕死"] },
+            { q: "消防員＿＿地救出被困的市民，所以大家都很敬佩他們。", ans: "奮不顧身", options: ["愁眉苦臉", "奮不顧身", "一本正經", "閃耀"] },
+            { q: "他為了救朋友，＿＿地跳進水中，實在非常勇敢。", ans: "奮不顧身", options: ["率直", "奮不顧身", "愛惜", "視覺"] },
+            { q: "看到不理想的成績，姐姐整天＿＿，心情很差。", ans: "愁眉苦臉", options: ["愁眉苦臉", "迫不及待", "友愛", "藝術"] },
+            { q: "他因為考試失手，所以一直＿＿，不願意説話。", ans: "愁眉苦臉", options: ["愁眉苦臉", "爽快", "率領", "閃耀"] },
+            { q: "葳霖的身體很強壯，而且十分＿＿，在球場上總是跑在最前面。", ans: "勇猛", options: ["勇猛", "友愛", "率直", "一本正經"] },
+            { q: "頌文在籃球比賽中表現得十分＿＿，一個人就拿下了三十分。", ans: "勇猛", options: ["愛惜", "勇猛", "視覺", "破釜沉舟"] },
+            { q: "晨曦將軍在戰場上總是＿＿，一馬當先地向前衝鋒陷陣。", ans: "身先士卒", options: ["相處", "身先士卒", "爽快", "藝術"] },
+            { q: "這次山區救援行動中，搜救隊長＿＿，走在最前面為隊員開路。", ans: "身先士卒", options: ["臉紅耳赤", "身先士卒", "閃耀", "友愛"] },
+            { q: "頌文決定＿＿，不再給自己留退路，全力以赴完成這項挑戰。", ans: "破釜沉舟", options: ["破釜沉舟", "率直", "視覺", "愁眉苦臉"] },
+            { q: "為了在這次比賽中奪冠，整支隊伍抱着＿＿的決心，拚命練習。", ans: "破釜沉舟", options: ["破釜沉舟", "一本正經", "爽快", "愛惜"] }
+        ];
+
         const mcConfigs = {
             'fill': { title: "⛏️ 礦洞尋寶 (填充題)", subtitle: "敲碎正確的字詞礦石，填補句子！", tasks: fillTasks },
             'match-word': { title: "🔮 符文解密 (配詞題)", subtitle: "找出最適合句子語境的詞語！", tasks: matchTasks },
-            'connect': { title: "🔗 魔法連線 (連線題)", subtitle: "找出與題目匹配的另一半詞語！", tasks: connectTasks },
             'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
-            'fa-mc': { title: "📝 FA溫習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks },
+            'fa-mc': { title: "📝 FA温習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks },
             'dictation2-mc': { title: "📖 默書温習(二) (填充題)", subtitle: "選擇正確的詞語完成句子！", tasks: dictation2Tasks },
             'adv-mc': { title: "⏳ 時間法師 (副詞題)", subtitle: "選擇正確的時間副詞完成句子！", tasks: advTasks },
-            'appearance-mc': { title: "👤 變身畫家 (外貌描寫)", subtitle: "選出最適合描寫人物外貌的詞語！", tasks: appearanceTasks }
+            'appearance-mc': { title: "👤 變身畫家 (外貌描寫)", subtitle: "選出最適合描寫人物外貌的詞語！", tasks: appearanceTasks },
+            'term3-vocab': { title: "📚 第三學期詞語温習", subtitle: "温習第三學期詞語，鞏固基礎！", tasks: term3VocabTasks }
         };
 
         const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🌌', 900: '🏆', 1001: '🐉', 1002: '🦄' };
 
         // ================== 🌟 史詩神獸 / Boss 更新 ==================
         const epicLegendaries = {
-            'mewtwo': { id: 'epic_mewtwo', name: "超夢", target: 5, time: 10, effect: "anti_heal", desc: "精神擊破！戰鬥中無法使用恢復藥水！", img: "150", hpPenalty: 40 },
-            'rayquaza': { id: 'epic_rayquaza', name: "烈空坐", target: 4, time: 12, effect: "true_damage", desc: "畫龍點睛！無視防禦造成巨額真實傷害！", img: "384", hpPenalty: 30 },
-            'arceus': { id: 'epic_arceus', name: "阿爾宙斯", target: 6, time: 8, effect: "one_hit", desc: "制裁光礫！隨機爆發一擊必殺大招！", img: "493", hpPenalty: 50 },
-            'suicune': { id: 'epic_suicune', name: "水君", target: 5, time: 10, effect: "freeze", desc: "絕對零度！戰鬥中會隨機凍結選項 3 秒！", img: "245", hpPenalty: 25 },
-            'lugia': { id: 'epic_lugia', name: "鳳王", target: 5, time: 12, effect: "true_damage", desc: "神聖之火！無視防禦造成巨額真實傷害！", img: "250", hpPenalty: 35 }
+            'mewtwo':   { id: 'epic_mewtwo',   name: "🔮 超夢",     target: 5, time: 10, effect: "anti_heal_flip", desc: "精神擊破！禁療詛咒＋所有題目文字上下顛倒！",                          img: "150", hpPenalty: 40 },
+            'rayquaza': { id: 'epic_rayquaza', name: "☄️ 烈空坐",   target: 4, time: 12, effect: "true_damage",    desc: "畫龍點睛！無視防禦造成巨額真實傷害＋全畫面白色爆閃！",             img: "384", hpPenalty: 30 },
+            'kyogre':   { id: 'epic_kyogre',   name: "🌊 帝牙盧卡", target: 5, time: 10, effect: "slow_time",      desc: "海嘯裂地！整場戰鬥答題限時縮短至5-8秒＋禁療＋藍色巨浪！",         img: "382", hpPenalty: 35 },
+            'ho_oh':    { id: 'epic_ho_oh',    name: "🔥 鳳王",     target: 5, time: 12, effect: "true_damage",    desc: "神聖之火！無視防禦造成巨額真實傷害＋火焰爆發！",                   img: "250", hpPenalty: 35 },
+            'lugia':    { id: 'epic_lugia',    name: "🌀 洛奇亞",   target: 5, time: 11, effect: "shuffle_options", desc: "銀翼暴風！選項按鈕隨機打亂位置3次＋全畫面雪花強風！",              img: "249", hpPenalty: 30 },
+            'groudon':  { id: 'epic_groudon',  name: "🌋 固拉多",   target: 5, time: 12, effect: "half_hp",        desc: "大地震裂！戰鬥開始扣一半HP＋全畫面震動龜裂！",                    img: "383", hpPenalty: 40 },
+            'arceus':   { id: 'epic_arceus',   name: "⭐ 阿爾宙斯", target: 6, time:  8, effect: "one_hit",        desc: "創世審判！限時強制3秒＋答錯扣雙倍傷害＋禁療＋全畫面震動金閃！", img: "493", hpPenalty: 60 }
         };
 
         const evoCosts = {
@@ -1063,16 +1249,16 @@
                 inventory.dropBuffLeft--;
             }
 
-            let mGain = 3;
-            if (s >= 10) mGain = 15;
-            else if (s >= 5) mGain = 6;
+            let mGain = 4;
+            if (s >= 10) mGain = 18;
+            else if (s >= 5) mGain = 8;
             
             mGain *= mult;
             inventory.manuscript += mGain;
 
             let msg = `🔥 ${s}連對！獲得 📜x${mGain}`;
-            if (s % 3 === 0) { inventory.wood += 5 * mult; inventory.stone += 3 * mult; msg += `、🪵x${5*mult}、🧱x${3*mult}`; }
-            if (s % 5 === 0) { inventory.star += 1; msg += `、🌟x1`; }
+            inventory.wood += 1 * mult; if (s % 3 === 0) { inventory.wood += 7 * mult; inventory.stone += 3 * mult; msg += `、🪵x${(1+7)*mult}、🧱x${3*mult}`; } else { msg += `、🪵x${1*mult}`; }
+            if (s % 5 === 0) { inventory.star += 1; msg += `、🌟x1`; playSound('star_gain'); }
             if (s % 10 === 0) { inventory.gem += 3; inventory.fragment += 1; msg += `、💎x3、🔮x1`; playSound('medal'); }
             
             if (msg) {
@@ -1389,7 +1575,8 @@ function checkDailyReset() {
         };
 
         function loadGame() {
-            const savedData = localStorage.getItem(SAVE_KEY);
+            let savedData = null;
+            try { savedData = localStorage.getItem(SAVE_KEY); } catch(e) {}
             if (savedData) {
                 try {
                     let parsed = JSON.parse(savedData);
@@ -1417,11 +1604,13 @@ function checkDailyReset() {
                     }
                 } catch (e) { inventory = { ...defaultInv }; }
             }
+            // Always initialise UI regardless of save state
+            goHome();
         }
 
         function saveGame() {
             if(inventory.playerName) {
-                localStorage.setItem(SAVE_KEY, JSON.stringify(inventory));
+                try { localStorage.setItem(SAVE_KEY, JSON.stringify(inventory)); } catch(e) {}
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -1483,17 +1672,17 @@ function checkDailyReset() {
 
             document.getElementById('sg-w-lv').textContent = inventory.superWeaponLv;
             document.getElementById('sg-w-bonus').textContent = inventory.superWeaponLv * 5;
-            document.getElementById('sg-w-cost-m').textContent = (inventory.superWeaponLv + 1) * 20;
+            document.getElementById('sg-w-cost-m').textContent = (inventory.superWeaponLv + 1) * 10;
             document.getElementById('sg-w-cost-f').textContent = (inventory.superWeaponLv + 1) * 5;
 
             document.getElementById('sg-s-lv').textContent = inventory.superShieldLv;
             document.getElementById('sg-s-bonus').textContent = inventory.superShieldLv * 5;
-            document.getElementById('sg-s-cost-m').textContent = (inventory.superShieldLv + 1) * 20;
+            document.getElementById('sg-s-cost-m').textContent = (inventory.superShieldLv + 1) * 10;
             document.getElementById('sg-s-cost-f').textContent = (inventory.superShieldLv + 1) * 5;
 
             document.getElementById('sg-a-lv').textContent = inventory.superStoneLv;
             document.getElementById('sg-a-bonus').textContent = inventory.superStoneLv * 3;
-            document.getElementById('sg-a-cost-m').textContent = (inventory.superStoneLv + 1) * 30;
+            document.getElementById('sg-a-cost-m').textContent = (inventory.superStoneLv + 1) * 15;
             document.getElementById('sg-a-cost-f').textContent = (inventory.superStoneLv + 1) * 10;
 
             const bossBtn = document.getElementById('btn-boss-menu');
@@ -1543,11 +1732,11 @@ function checkDailyReset() {
             if (type === 'hut') {
                 if (inventory.wood < 2) return alert("❌ 需要 🪵2 木材！");
                 inventory.wood -= 2; inventory.hut++;
-                unlockAchievement('ach_build');
+                unlockAchievement('ach_build'); playSound('build');
                 alert(`✅ 建造了 🛖 木屋！目前共 ${inventory.hut} 座`);
             } else if (type === 'tower') {
                 if (inventory.stone < 2) return alert("❌ 需要 🧱2 石頭！");
-                inventory.stone -= 2; inventory.tower++;
+                inventory.stone -= 2; inventory.tower++; playSound('build');
                 alert(`✅ 建造了 🗼 石塔！目前共 ${inventory.tower} 座`);
             } else if (type === 'castle') {
                 if (inventory.hut < 2 || inventory.tower < 2) return alert("❌ 需要 🛖2 木屋 + 🗼2 石塔！");
@@ -1578,7 +1767,7 @@ function checkDailyReset() {
             if (inventory.equip[item]) return alert(`✅ 你已經擁有 ${r.label} 了！`);
             if (inventory.wood < r.wood || inventory.stone < r.stone) return alert(`❌ 材料不足！需要 🪵${r.wood} 木材、🧱${r.stone} 石頭`);
             inventory.wood -= r.wood; inventory.stone -= r.stone;
-            inventory.equip[item] = true;
+            inventory.equip[item] = true; playSound('forge');
             updateUI(); saveGame();
             alert(`✅ 成功鍛造 ${r.label}！`);
         };
@@ -1790,7 +1979,7 @@ function checkDailyReset() {
                 }, 1500); 
                 
             } else {
-                alert("❌ 數據能量（資源）不足，無法進化！請去溫習累積資源吧！");
+                alert("❌ 數據能量（資源）不足，無法進化！請去温習累積資源吧！");
             }
         }
 
@@ -1811,9 +2000,9 @@ function checkDailyReset() {
         window.exchangeCoins = function(type) {
             playSound('click');
             if (type === 'wood') {
-                if (inventory.wood >= 10) { inventory.wood -= 10; inventory.coins += 50; } else { return alert("❌ 木材不足 10 個！"); }
+                if (inventory.wood >= 10) { inventory.wood -= 10; inventory.coins += 50; playSound('coin_drop'); } else { return alert("❌ 木材不足 10 個！"); }
             } else if (type === 'stone') {
-                if (inventory.stone >= 10) { inventory.stone -= 10; inventory.coins += 50; } else { return alert("❌ 石頭不足 10 個！"); }
+                if (inventory.stone >= 10) { inventory.stone -= 10; inventory.coins += 50; playSound('coin_drop'); } else { return alert("❌ 石頭不足 10 個！"); }
             }
             document.getElementById('market-coin-display').textContent = inventory.coins;
             updateUI();
@@ -1822,7 +2011,7 @@ function checkDailyReset() {
         window.buyDropPotion = function() {
             playSound('click');
             if (inventory.coins >= 200) {
-                inventory.coins -= 200;
+                inventory.coins -= 200; playSound('purchase');
                 inventory.dropBuffLeft += 20;
                 document.getElementById('market-coin-display').textContent = inventory.coins;
                 updateUI();
@@ -1838,7 +2027,7 @@ function checkDailyReset() {
                 if(inventory.scrollBoughtDate === today) return alert("❌ 今日已售罄！");
                 if(inventory.wood >= 50 && inventory.stone >= 50 && inventory.star >= 10) {
                     inventory.wood -= 50; inventory.stone -= 50; inventory.star -= 10;
-                    inventory.hasLegendaryBuff = true; inventory.scrollBoughtDate = today;
+                    inventory.hasLegendaryBuff = true; playSound('purchase'); inventory.scrollBoughtDate = today;
                     alert("🛒 購買成功！下一次進入森林【必遇傳說怪】！"); openMarket(); 
                 } else { alert("❌ 資源不足！需要 50木材 + 50石頭 + 10星星。"); }
             }
@@ -1851,14 +2040,14 @@ function checkDailyReset() {
             let costW = 20; 
             let costG = 5;  
             
-            if (type === 'weapon') { costW = (inventory.superWeaponLv + 1) * 20; costG = (inventory.superWeaponLv + 1) * 5; }
-            else if (type === 'shield') { costW = (inventory.superShieldLv + 1) * 20; costG = (inventory.superShieldLv + 1) * 5; }
-            else if (type === 'stone') { costW = (inventory.superStoneLv + 1) * 30; costG = (inventory.superStoneLv + 1) * 10; }
+            if (type === 'weapon') { costW = (inventory.superWeaponLv + 1) * 10; costG = (inventory.superWeaponLv + 1) * 5; }
+            else if (type === 'shield') { costW = (inventory.superShieldLv + 1) * 10; costG = (inventory.superShieldLv + 1) * 5; }
+            else if (type === 'stone') { costW = (inventory.superStoneLv + 1) * 15; costG = (inventory.superStoneLv + 1) * 10; }
 
             if (inventory.wood >= costW && inventory.gem >= costG) {
                 inventory.wood -= costW; 
                 inventory.gem -= costG;
-                playSound('win');
+                playSound('forge');
                 
                 if (type === 'weapon') { inventory.superWeaponLv++; alert("🗡️ 升級成功！破題者之刃升級了！"); }
                 else if (type === 'shield') { inventory.superShieldLv++; alert("🛡️ 升級成功！絕對專注之盾升級了！"); }
@@ -1878,7 +2067,7 @@ function checkDailyReset() {
         }
 
         window.rollGacha = function() {
-            checkDailyReset(); let limit = 3;
+            playSound('gacha'); checkDailyReset(); let limit = 3;
             if (inventory.gachaDrawsToday >= limit) return alert("❌ 今天的抽獎次數用完啦！明天再來吧！");
             if (inventory.star < 1) return alert("❌ 星星不足，無法抽獎！");
             
@@ -1909,7 +2098,7 @@ function checkDailyReset() {
 
             const reorderMap = {
                 'reorder':            { tasks: reorderTasks,           title: "🌉 鋪木板過河 (重組句子)" },
-                'fa-reorder':         { tasks: faReorderTasks,         title: "📝 FA溫習 (課文重組)" },
+                'fa-reorder':         { tasks: faReorderTasks,         title: "📝 FA温習 (課文重組)" },
                 'dictation2-reorder': { tasks: dictation2ReorderTasks, title: "🌉 默書温習(二) - 重組" }
             };
 
@@ -1980,7 +2169,13 @@ function checkDailyReset() {
                 wordBank.appendChild(btn);
             });
             document.getElementById('btn-hint-reorder').onclick = () => {
-                document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 正確答案：「<b>${reorderCurrentAnswer}</b>」</span>`;
+                if (inventory.star >= 2) {
+                    inventory.star -= 2;
+                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟2）：正確答案：「<b>${reorderCurrentAnswer}</b>」</span>`;
+                    updateUI(); saveGame();
+                } else {
+                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟2 星星！</span>`;
+                }
             };
         }
 
@@ -2032,7 +2227,13 @@ function checkDailyReset() {
                 optDiv.appendChild(btn);
             });
             document.getElementById('btn-hint-mc').onclick = () => {
-                document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示：答案是「<b>${task.ans}</b>」</span>`;
+                if (inventory.star >= 2) {
+                    inventory.star -= 2;
+                    document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟2）：答案是「<b>${task.ans}</b>」</span>`;
+                    updateUI(); saveGame();
+                } else {
+                    document.getElementById('mc-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟2 星星！</span>`;
+                }
             };
         }
 
@@ -2079,8 +2280,8 @@ function checkDailyReset() {
                     alert("🌑 血月能量耗盡，天空恢復了正常...");
                 }
             } else {
-                if (isCorrect && inventory.castles >= 1 && Math.random() < 0.05) {
-                    inventory.bloodMoonActive = true;
+                if (isCorrect && inventory.castles >= 1 && Math.random() < 0.02) {
+                    inventory.bloodMoonActive = true; playSound('blood_moon');
                     inventory.bloodMoonTarget = Math.floor(Math.random() * 3) + 5; 
                     inventory.bloodMoonStreak = 1;
                     inventory.bloodMoonLeft = 15;
@@ -2127,7 +2328,7 @@ function checkDailyReset() {
             innerBox.className = 'event-box legendary-border glow-red';
             document.body.classList.add('legendary-mode');
             
-            eventTitle.innerHTML = `☄️ 遠古神獸降臨！`;
+            eventTitle.innerHTML = `${boss.name} 遠古神獸降臨！`;
             eventTitle.style.color = '#ff0000';
             eventDesc.innerHTML = `
                 <img src="${currentEvent.pic}" class="battle-pic" alt="神獸">
@@ -2167,14 +2368,14 @@ function checkDailyReset() {
             innerBox.className = 'event-box';
             fightBtn.style.display = 'inline-block';
 
-            if ((stats.atk >= 50 && stats.def >= 50 && r < 0.10) || inventory.hasLegendaryBuff) { 
+            if ((stats.atk >= 50 && stats.def >= 50 && r < 0.05) || inventory.hasLegendaryBuff) { 
                 inventory.hasLegendaryBuff = false; saveGame();
                 let isDragon = Math.random() > 0.5;
                 let digiName = isDragon ? '蒼響' : '藏瑪然特';
                 let digiPic = isDragon ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/888.png' : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/889.png';
                 currentEvent = { type: 'legendary', name: digiName, pic: digiPic };
                 
-                playSound('legendary'); innerBox.classList.add('legendary-border', 'glow-gold'); 
+                playSound('legendary'); playSound('encounter'); innerBox.classList.add('legendary-border', 'glow-gold'); 
                 eventTitle.innerHTML = `🌟 傳說降臨！皇家騎士！`; eventTitle.style.color = '#FFD700';
                 eventDesc.innerHTML = `<img src="${digiPic}" class="battle-pic"><br><span style="color:#D50000; font-size:1.4em; font-weight:bold;">${digiName}</span>！<br><span style="color:#2E7D32;">💬 必須連續答對 2 題才能獲得牠的認可！</span>`;
                 
@@ -2185,12 +2386,12 @@ function checkDailyReset() {
                     inventory.star -= 1; updateUI(); 
                     eventModal.classList.add('hidden'); startCombat('legendary', currentEvent);
                 };
-            } else if (r < 0.3) {
+            } else if (r < 0.12) {
                 // 抽出 20 款野生 Pokemon 其中一款
                 let monster = pokemonMonsters[Math.floor(Math.random() * pokemonMonsters.length)];
                 currentEvent = { type: 'virus', name: monster.name, pic: monster.pic };
                 
-                innerBox.classList.add('glow-purple');
+                innerBox.classList.add('glow-purple'); playSound('encounter');
                 eventTitle.innerHTML = "⚠️ 野生怪獸突襲！"; eventTitle.style.color = '#9C27B0';
                 eventDesc.innerHTML = `<img src="${monster.pic}" class="battle-pic"><br>一隻凶猛的<span style="color:#9C27B0; font-weight:bold;">${monster.name}</span>擋住了去路！<br><span style="color:#D50000;">💬 答對 1 題來擊退牠！</span>`;
                 
@@ -2202,7 +2403,7 @@ function checkDailyReset() {
 
             eventModal.classList.remove('hidden');
             document.getElementById('btn-event-flee').onclick = () => {
-                initAudio(); playSound('click'); alert("🏃 你急忙撤退，安全躲過了這次遭遇，但沒有獲得任何獎勵。"); eventModal.classList.add('hidden');
+                initAudio(); playSound('click'); playSound('flee'); alert('🏃 你急忙撤退，安全躲過了這次遭遇，但沒有獲得任何獎勵。'); eventModal.classList.add('hidden');
             };
         }
 
@@ -2216,6 +2417,9 @@ function checkDailyReset() {
         
         let isEnraged = false;
         let oneHitActive = false;
+        let combatFlipText = false;
+        let combatAntiHeal = false;
+        let combatSlowTime = false;
 
         window.startBossFight = function(level) {
             initAudio(); combatType = 'normal_boss'; 
@@ -2231,6 +2435,22 @@ function checkDailyReset() {
                 let boss = epicLegendaries[evtData.key];
                 combatTarget = boss.target; combatTimeLimit = boss.time;
                 setupMonsterCombatUI(`【遠古神獸】${evtData.name}`, evtData.pic, 'glow-red');
+                // 觸發神獸視覺特效
+                setTimeout(() => triggerBeastEffect(boss.effect, boss.name), 500);
+                // 特殊效果：帝牙盧卡縮短限時
+                if(boss.effect === 'slow_time') {
+                    let newTime = Math.floor(Math.random() * 4) + 5; // 5-8秒
+                    combatTimeLimit = newTime;
+                    combatAntiHeal = true; combatSlowTime = true;
+                }
+                // 特殊效果：超夢禁療＋顛倒
+                if(boss.effect === 'anti_heal_flip') {
+                    combatAntiHeal = true; combatFlipText = true;
+                }
+                // 特殊效果：阿爾宙斯禁療
+                if(boss.effect === 'one_hit') {
+                    combatAntiHeal = true;
+                }
             } else if(type === 'legendary') {
                 combatTarget = 2; combatTimeLimit = 10;
                 setupMonsterCombatUI("【傳說試煉】" + evtData.name, evtData.pic, 'glow-gold');
@@ -2250,9 +2470,24 @@ function checkDailyReset() {
             isEnraged = false; oneHitActive = false;
             document.body.classList.remove('ultimate-warning');
             baseCombatTimeLimit = combatTimeLimit;
+            // 重置神獸特效
+            fxFlipText(false);
+            combatFlipText = false;
+            combatAntiHeal = false;
+            combatSlowTime = false;
             
             document.getElementById('boss-combat-screen').classList.remove('hidden');
             document.getElementById('boss-progress-text').textContent = `目標：累積答對 0 / ${combatTarget}`;
+            // 固拉多：扣一半HP
+            if(combatType === 'epic' && currentEvent && epicLegendaries[currentEvent.key] && epicLegendaries[currentEvent.key].effect === 'half_hp') {
+                setTimeout(() => {
+                    combatHP = Math.floor(combatHP / 2);
+                    updateCombatHPBar();
+                    document.getElementById('boss-msg').innerHTML = `<span style="color:#ff4400;font-weight:bold;">🌋 大地震裂！你損失了一半的HP！</span>`;
+                }, 1200);
+            }
+            // 超夢：啟用顛倒
+            if(combatFlipText) { setTimeout(() => fxFlipText(true), 900); }
             updateCombatHPBar(); nextCombatQuestion();
         }
 
@@ -2262,6 +2497,7 @@ function checkDailyReset() {
             document.getElementById('player-hp-text').textContent = `你的 HP: ${Math.max(0, combatHP)} / ${maxCombatHP}`;
             if(combatHP <= 0) {
                 clearInterval(combatTimerInterval); playSound('error');
+                fxFlipText(false); combatFlipText = false; combatAntiHeal = false; combatSlowTime = false;
                 inventory.wood = Math.floor(inventory.wood / 2); inventory.stone = Math.floor(inventory.stone / 2);
                 updateUI();
                 alert("💀 你的 HP 歸零了！你被擊敗，並丟失了一半的木材和石頭！");
@@ -2271,13 +2507,13 @@ function checkDailyReset() {
         }
 
         window.usePotion = function() {
-            if (combatType === 'epic' && currentEvent && epicLegendaries[currentEvent.key].effect === 'anti_heal') {
+            if (combatAntiHeal) {
                 alert("🌑 禁療詛咒生效中！無法使用藥水！"); return;
             }
             if (inventory.wood >= 10 && inventory.stone >= 10) {
                 if(combatHP >= maxCombatHP) return alert("HP 已滿！");
                 inventory.wood -= 10; inventory.stone -= 10;
-                combatHP = Math.min(maxCombatHP, combatHP + 30);
+                combatHP = Math.min(maxCombatHP, combatHP + 30); playSound('heal');
                 updateCombatHPBar(); updateUI(); playSound('medal');
                 alert("🧪 飲用成功！恢復了 30 點 HP！");
             } else { alert("❌ 材料不足！需要 10🪵 + 10🪨。"); }
@@ -2315,11 +2551,11 @@ function checkDailyReset() {
 
             let potionBtn = document.getElementById('btn-combat-potion');
             if (potionBtn) {
-                if (combatType === 'epic' && epicLegendaries[currentEvent.key].effect === 'anti_heal') { potionBtn.style.display = 'none'; } 
+                if (combatAntiHeal) { potionBtn.style.display = 'none'; } 
                 else { potionBtn.style.display = 'inline-block'; }
             }
 
-            let qPool = [...fillTasks, ...matchTasks, ...connectTasks, ...punctTasks, ...faMCTasks, ...dictation2Tasks, ...advTasks, ...appearanceTasks];
+            let qPool = [...fillTasks, ...matchTasks, ...punctTasks, ...faMCTasks, ...dictation2Tasks, ...advTasks, ...appearanceTasks];
             currentCombatQ = qPool[Math.floor(Math.random() * qPool.length)];
             document.getElementById('boss-question').textContent = currentCombatQ.q;
             
@@ -2342,6 +2578,26 @@ function checkDailyReset() {
                     }
                 }, 50);
             }
+
+            // 洛奇亞：銀翼暴風 - 隨機打亂選項位置3次
+            if (combatType === 'epic' && epicLegendaries[currentEvent.key].effect === 'shuffle_options') {
+                let shuffleCount = 0;
+                const doShuffle = () => {
+                    let container = document.getElementById('boss-options');
+                    let btns = Array.from(container.querySelectorAll('.stone-chunk'));
+                    if (btns.length === 0) return;
+                    // Fisher-Yates shuffle DOM nodes
+                    for (let i = btns.length - 1; i > 0; i--) {
+                        let j = Math.floor(Math.random() * (i + 1));
+                        container.insertBefore(btns[j], btns[i]);
+                        [btns[i], btns[j]] = [btns[j], btns[i]];
+                    }
+                    shuffleCount++;
+                    document.getElementById('boss-msg').innerHTML = `<span style='color:#aaddff; font-weight:bold;'>🌀 銀翼暴風！選項被打亂了！（${shuffleCount}/3）</span>`;
+                    if (shuffleCount < 3) setTimeout(doShuffle, 600);
+                };
+                setTimeout(doShuffle, 300);
+            }
             
             let timerBar = document.getElementById('boss-timer-bar');
             timerBar.style.transition = 'none'; timerBar.style.width = '100%';
@@ -2362,7 +2618,7 @@ function checkDailyReset() {
         }
 
         function combatFail(reason) {
-            playSound('error');
+            playSound('error'); playSound('hit');
             let timerBar = document.getElementById('boss-timer-bar');
             timerBar.style.transition = 'none'; timerBar.style.width = timerBar.offsetWidth + 'px';
             let opts = document.querySelectorAll('#boss-options .stone-chunk');
@@ -2378,7 +2634,11 @@ function checkDailyReset() {
                     dmg = Math.floor(dmg * 1.5); combatHP -= dmg;
                     document.getElementById('boss-msg').innerHTML = `<span style='color:#ff0000'>🔥 真實傷害！無視防禦扣除了 ${dmg} HP！</span>`;
                 } else if (boss.effect === 'one_hit' && oneHitActive) {
-                    combatHP = 0; document.getElementById('boss-msg').innerHTML = `<span style='color:#ff0000'>☠️ 一擊必殺！你被秒殺了！</span>`;
+                    combatHP = 0; document.getElementById('boss-msg').innerHTML = `<span style='color:#ff0000'>☠️ 創世審判！你被秒殺了！</span>`;
+                } else if (boss.effect === 'one_hit' && !oneHitActive) {
+                    // 阿爾宙斯：答錯扣雙倍傷害
+                    let finalDmg = Math.max(20, (dmg - calculateStats().def) * 2); combatHP -= finalDmg;
+                    document.getElementById('boss-msg').innerHTML = `<span style='color:#ffcc00'>⭐ 創世審判！雙倍懲罰！扣除 ${finalDmg} HP！</span>`;
                 } else {
                     let finalDmg = Math.max(10, dmg - calculateStats().def); combatHP -= finalDmg;
                     document.getElementById('boss-msg').innerHTML = `<span style='color:#F44336'>💥 神獸造成了 ${finalDmg} 點傷害！</span>`;
@@ -2409,7 +2669,7 @@ function checkDailyReset() {
             document.body.classList.remove('ultimate-warning');
 
             if(selected === currentCombatQ.ans) {
-                playSound('win'); addStreak();
+                playSound('win'); playSound('block'); addStreak();
                 element.style.backgroundColor = '#4CAF50';
                 combatCorrectCount++;
                 document.getElementById('boss-progress-text').textContent = `目標：累積答對 ${combatCorrectCount} / ${combatTarget}`;
@@ -2417,6 +2677,7 @@ function checkDailyReset() {
                 
                 if(combatCorrectCount >= combatTarget) {
                     playSound('boss_win');
+                    fxFlipText(false); combatFlipText = false; combatAntiHeal = false; combatSlowTime = false;
                     setTimeout(() => {
                         if (combatType === 'epic') {
                             let ms = Math.floor(Math.random() * 201) + 100;
@@ -2449,7 +2710,7 @@ function checkDailyReset() {
                     setTimeout(() => { window.nextCombatQuestion(); }, 1500);
                 }
             } else {
-                element.style.backgroundColor = '#F44336';
+                element.style.backgroundColor = '#F44336'; playSound('hit');
                 combatFail("答錯了！");
             }
         }
@@ -2462,7 +2723,7 @@ function checkDailyReset() {
                 alert("🏃 你恐懼地逃跑了！神獸的威壓讓你損失了資源！");
                 document.body.classList.remove('legendary-mode');
             } else if(combatType === 'legendary' || combatType === 'virus') {
-                alert("🏃 你急忙逃出危險區域，安然無恙。");
+                playSound('flee'); alert('🏃 你急忙逃出危險區域，安然無恙。');
             } else {
                 inventory.wood = Math.max(0, inventory.wood - 5);
                 alert("🏃 你急忙逃出對手的巢穴，但在路上弄丟了 5 個木材！");
@@ -2471,6 +2732,128 @@ function checkDailyReset() {
         };
 
         window.onload = loadGame;
-    </script>
+    
+        // ===== 神獸視覺特效函式 =====
+
+        // 全畫面震動
+        function fxScreenShake(duration) {
+            duration = duration || 800;
+            document.body.classList.add('screen-shaking');
+            setTimeout(function(){ document.body.classList.remove('screen-shaking'); }, duration);
+        }
+
+        // 全畫面閃光（顏色、次數）
+        function fxFlashBurst(color, times) {
+            color = color || '#ffffff'; times = times || 6;
+            var overlay = document.createElement('div');
+            overlay.className = 'fx-overlay';
+            overlay.style.background = color;
+            document.body.appendChild(overlay);
+            var count = 0;
+            var iv = setInterval(function(){
+                overlay.style.opacity = (count % 2 === 0) ? '0.88' : '0';
+                count++;
+                if(count > times * 2){ overlay.remove(); clearInterval(iv); }
+            }, 75);
+        }
+
+        // 全畫面龜裂（顏色）
+        function fxCrackScreen(color) {
+            color = color || 'rgba(100,180,255,0.55)';
+            var c = document.createElement('div');
+            c.className = 'crack-overlay';
+            // SVG裂縫
+            c.innerHTML = '<svg width="100%" height="100%" viewBox="0 0 400 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><g stroke="' + color + '" stroke-width="3" fill="none" opacity="0.9"><polyline points="200,0 180,80 220,120 170,200 210,260 160,350 200,400"/><polyline points="200,0 230,60 200,120 240,180 200,260 240,350 210,400"/><polyline points="180,80 120,150 150,220 100,300"/><polyline points="220,120 280,180 250,250 300,320"/><polyline points="170,200 110,280 140,360"/><polyline points="210,260 270,330 240,420"/></g></svg>';
+            document.body.appendChild(c);
+            setTimeout(function(){ c.remove(); }, 2600);
+        }
+
+        // 粒子飄落（雪花/火花/星星）
+        function fxParticles(emoji, count, durationRange) {
+            emoji = emoji || '❄️'; count = count || 30;
+            durationRange = durationRange || [2000, 4000];
+            for(var i = 0; i < count; i++){
+                (function(){
+                    var p = document.createElement('div');
+                    p.className = 'fx-particle';
+                    p.textContent = emoji;
+                    p.style.left = Math.random() * 100 + 'vw';
+                    p.style.fontSize = (0.8 + Math.random() * 1.2) + 'em';
+                    var dur = durationRange[0] + Math.random() * (durationRange[1] - durationRange[0]);
+                    p.style.animationDuration = dur + 'ms';
+                    p.style.animationDelay = (Math.random() * 1000) + 'ms';
+                    document.body.appendChild(p);
+                    setTimeout(function(){ p.remove(); }, dur + 1200);
+                })();
+            }
+        }
+
+        // 色調覆蓋
+        function fxColorWarp(color, duration) {
+            color = color || 'rgba(180,0,0,0.4)'; duration = duration || 1200;
+            var overlay = document.createElement('div');
+            overlay.className = 'fx-overlay';
+            overlay.style.background = color;
+            overlay.style.opacity = '1';
+            overlay.style.transition = 'opacity ' + duration + 'ms ease';
+            document.body.appendChild(overlay);
+            setTimeout(function(){ overlay.style.opacity = '0'; }, duration / 3);
+            setTimeout(function(){ overlay.remove(); }, duration + 300);
+        }
+
+        // 文字顛倒開關
+        var flipTextActive = false;
+        function fxFlipText(on) {
+            flipTextActive = on;
+            if(on){ document.body.classList.add('flip-text-active'); }
+            else { document.body.classList.remove('flip-text-active'); }
+        }
+
+        // ===== 各神獸技能觸發 =====
+        function triggerBeastEffect(effect, beastName) {
+            // 重置顛倒（新戰鬥開始前清除）
+            fxFlipText(false);
+
+            if(effect === 'true_damage') {
+                // 烈空坐 / 鳳王
+                if(beastName && beastName.indexOf('鳳王') !== -1){
+                    fxFlashBurst('#ff6600', 5);
+                    fxParticles('🔥', 25, [1500, 3000]);
+                } else {
+                    fxFlashBurst('#ffffff', 7);
+                    fxParticles('☄️', 15, [800, 1600]);
+                }
+            } else if(effect === 'anti_heal_flip') {
+                // 超夢：紫閃 + 文字顛倒
+                fxFlashBurst('rgba(120,0,200,0.7)', 5);
+                fxColorWarp('rgba(80,0,150,0.35)', 1500);
+                setTimeout(function(){ fxFlipText(true); }, 800);
+            } else if(effect === 'slow_time') {
+                // 帝牙盧卡：藍色巨浪
+                fxColorWarp('rgba(0,100,220,0.5)', 1800);
+                fxFlashBurst('rgba(0,150,255,0.6)', 4);
+                fxParticles('🌊', 20, [1200, 2500]);
+            } else if(effect === 'shuffle_options') {
+                // 洛奇亞：雪花強風
+                fxColorWarp('rgba(200,230,255,0.35)', 1500);
+                fxParticles('❄️', 30, [2000, 4000]);
+                fxParticles('💨', 15, [1500, 3000]);
+            } else if(effect === 'half_hp') {
+                // 固拉多：震動 + 龜裂 + 紅色
+                fxScreenShake(1000);
+                fxCrackScreen('rgba(255,80,0,0.7)');
+                fxColorWarp('rgba(200,50,0,0.4)', 1200);
+                fxParticles('🪨', 15, [1000, 2000]);
+            } else if(effect === 'one_hit') {
+                // 阿爾宙斯：全部特效
+                fxScreenShake(1200);
+                fxFlashBurst('#ffee00', 8);
+                fxColorWarp('rgba(255,220,0,0.4)', 2000);
+                fxParticles('⭐', 40, [1000, 2500]);
+                fxParticles('✨', 20, [800, 2000]);
+            }
+        }
+
+</script>
 </body>
 </html>
