@@ -207,17 +207,27 @@
         /* ===== 神獸視覺特效 ===== */
         @keyframes screenShakeAnim {
             0%,100%{transform:translate(0,0)}
-            10%{transform:translate(-12px,-8px)}
-            20%{transform:translate(10px,10px)}
-            30%{transform:translate(-10px,6px)}
-            40%{transform:translate(8px,-10px)}
-            50%{transform:translate(-8px,8px)}
-            60%{transform:translate(10px,-6px)}
-            70%{transform:translate(-6px,10px)}
-            80%{transform:translate(8px,-8px)}
-            90%{transform:translate(-10px,6px)}
+            5%{transform:translate(-18px,-12px) rotate(-1.5deg)}
+            10%{transform:translate(20px,15px) rotate(1deg)}
+            15%{transform:translate(-22px,10px) rotate(-1deg)}
+            20%{transform:translate(18px,-18px) rotate(1.5deg)}
+            25%{transform:translate(-15px,20px) rotate(-0.5deg)}
+            30%{transform:translate(22px,-12px) rotate(1deg)}
+            35%{transform:translate(-20px,16px) rotate(-1.5deg)}
+            40%{transform:translate(16px,-20px) rotate(0.8deg)}
+            45%{transform:translate(-22px,14px) rotate(-1deg)}
+            50%{transform:translate(18px,-18px) rotate(1.2deg)}
+            55%{transform:translate(-16px,22px) rotate(-0.8deg)}
+            60%{transform:translate(20px,-14px) rotate(1deg)}
+            65%{transform:translate(-18px,18px) rotate(-1.2deg)}
+            70%{transform:translate(14px,-20px) rotate(0.6deg)}
+            75%{transform:translate(-20px,12px) rotate(-0.8deg)}
+            80%{transform:translate(18px,-16px) rotate(1deg)}
+            85%{transform:translate(-14px,20px) rotate(-0.5deg)}
+            90%{transform:translate(16px,-12px) rotate(0.8deg)}
+            95%{transform:translate(-8px,8px) rotate(-0.3deg)}
         }
-        .screen-shaking { animation: screenShakeAnim 0.8s ease-in-out; }
+        .screen-shaking { animation: screenShakeAnim 1.4s ease-in-out; }
 
         @keyframes flashAnim {
             0%,100%{opacity:0} 25%,75%{opacity:0.9} 50%{opacity:0.3}
@@ -2178,7 +2188,9 @@ function checkDailyReset() {
             document.getElementById('btn-hint-reorder').onclick = () => {
                 if (inventory.star >= 2) {
                     inventory.star -= 2;
-                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟2）：正確答案：「<b>${reorderCurrentAnswer}</b>」</span>`;
+                    let firstChar = reorderCurrentAnswer.charAt(0);
+                    document.getElementById('reorder-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟2）：答案第一個字是「<b>${firstChar}</b>」</span>`;
+                    document.getElementById('btn-hint-reorder').disabled = true;
                     updateUI(); saveGame();
                 } else {
                     document.getElementById('reorder-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟2 星星！</span>`;
@@ -2236,7 +2248,12 @@ function checkDailyReset() {
             document.getElementById('btn-hint-mc').onclick = () => {
                 if (inventory.star >= 2) {
                     inventory.star -= 2;
-                    document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟2）：答案是「<b>${task.ans}</b>」</span>`;
+                    let optDiv2 = document.getElementById('mc-options');
+                    let allBtns = [...optDiv2.querySelectorAll('button:not([disabled])')].filter(b => b.textContent !== task.ans);
+                    let toRemove = shuffle([...allBtns]).slice(0, 2);
+                    toRemove.forEach(b => b.style.display = 'none');
+                    document.getElementById('mc-msg').innerHTML = `<span style="color:#FF9800">💡 提示（消耗🌟2）：已刪去兩個錯誤答案！</span>`;
+                    document.getElementById('btn-hint-mc').disabled = true;
                     updateUI(); saveGame();
                 } else {
                     document.getElementById('mc-msg').innerHTML = `<span style="color:#F44336">❌ 提示需要 🌟2 星星！</span>`;
@@ -2799,10 +2816,11 @@ function checkDailyReset() {
                 // 持續震動模式：用 setInterval 每30ms隨機位移
                 stopContinuousShake();
                 continuousShakeInterval = setInterval(function(){
-                    var x = (Math.random() - 0.5) * 10;
-                    var y = (Math.random() - 0.5) * 10;
-                    document.body.style.transform = 'translate(' + x + 'px,' + y + 'px)';
-                }, 30);
+                    var x = (Math.random() - 0.5) * 28;
+                    var y = (Math.random() - 0.5) * 28;
+                    var r = (Math.random() - 0.5) * 3;
+                    document.body.style.transform = 'translate(' + x + 'px,' + y + 'px) rotate(' + r + 'deg)';
+                }, 18);
             } else {
                 document.body.classList.add('screen-shaking');
                 setTimeout(function(){ document.body.classList.remove('screen-shaking'); }, duration);
@@ -2886,46 +2904,85 @@ function checkDailyReset() {
 
         // ===== 各神獸技能觸發 =====
         function triggerBeastEffect(effect, beastName) {
-            // 重置顛倒（新戰鬥開始前清除）
             fxFlipText(false);
 
             if(effect === 'true_damage') {
-                // 烈空坐 / 鳳王
                 if(beastName && beastName.indexOf('鳳王') !== -1){
-                    fxFlashBurst('#ff6600', 5);
-                    fxParticles('🔥', 25, [1500, 3000]);
+                    // 🔥 鳳王：神聖烈火——震動+裂屏+猛烈火焰閃爍
+                    fxScreenShake(1800);
+                    fxCrackScreen('rgba(255,100,0,0.8)');
+                    fxFlashBurst('#ff4400', 10);
+                    fxColorWarp('rgba(220,80,0,0.5)', 2500);
+                    fxParticles('🔥', 50, [1500, 4000]);
+                    fxParticles('💥', 20, [1000, 2500]);
+                    setTimeout(function(){ fxFlashBurst('#ffaa00', 6); }, 800);
                 } else {
-                    fxFlashBurst('#ffffff', 7);
-                    fxParticles('☄️', 15, [800, 1600]);
+                    // ☄️ 烈空座：流星暴擊——強震+白閃+隕石雨
+                    fxScreenShake(2000);
+                    fxFlashBurst('#ffffff', 12);
+                    fxColorWarp('rgba(255,200,50,0.45)', 2500);
+                    fxParticles('☄️', 35, [800, 3000]);
+                    fxParticles('💥', 18, [600, 2000]);
+                    setTimeout(function(){ fxFlashBurst('rgba(255,160,0,0.7)', 6); }, 600);
+                    setTimeout(function(){ fxScreenShake(1000); }, 1200);
                 }
             } else if(effect === 'anti_heal_flip') {
-                // 超夢：紫閃 + 文字顛倒
-                fxFlashBurst('rgba(120,0,200,0.7)', 5);
-                fxColorWarp('rgba(80,0,150,0.35)', 1500);
-                setTimeout(function(){ fxFlipText(true); }, 800);
+                // 🔮 超夢：精神控制——強震+深紫閃爍+長時間顛倒+粒子
+                fxScreenShake(2200);
+                fxFlashBurst('rgba(150,0,255,0.85)', 10);
+                fxColorWarp('rgba(80,0,150,0.55)', 3000);
+                fxParticles('🔮', 30, [2000, 5000]);
+                fxParticles('💜', 20, [1500, 4000]);
+                setTimeout(function(){ fxFlipText(true); }, 600);
+                setTimeout(function(){ fxFlashBurst('rgba(200,0,255,0.6)', 6); }, 1000);
+                setTimeout(function(){ fxScreenShake(1200); }, 1500);
             } else if(effect === 'slow_time') {
-                // 帝牙盧卡：藍色巨浪
-                fxColorWarp('rgba(0,100,220,0.5)', 1800);
-                fxFlashBurst('rgba(0,150,255,0.6)', 4);
-                fxParticles('🌊', 20, [1200, 2500]);
+                // 🌊 蓋歐卡：原始海嘯——震動+藍色浪潮+冰冷
+                fxScreenShake(2500);
+                fxColorWarp('rgba(0,80,200,0.65)', 3500);
+                fxFlashBurst('rgba(0,150,255,0.75)', 9);
+                fxParticles('🌊', 45, [1500, 5000]);
+                fxParticles('💧', 25, [1200, 4000]);
+                fxParticles('🌀', 15, [2000, 5000]);
+                setTimeout(function(){ fxScreenShake(1500); }, 1000);
+                setTimeout(function(){ fxFlashBurst('rgba(100,200,255,0.5)', 5); }, 1500);
             } else if(effect === 'shuffle_options') {
-                // 洛奇亞：雪花強風
-                fxColorWarp('rgba(200,230,255,0.35)', 1500);
-                fxParticles('❄️', 30, [2000, 4000]);
-                fxParticles('💨', 15, [1500, 3000]);
+                // 🌪️ 洛奇亞：銀翼暴風——震動+暴雪+強風亂流
+                fxScreenShake(2000);
+                fxColorWarp('rgba(180,220,255,0.5)', 3000);
+                fxFlashBurst('rgba(200,240,255,0.7)', 8);
+                fxParticles('❄️', 60, [2000, 6000]);
+                fxParticles('💨', 35, [1500, 5000]);
+                fxParticles('🌨️', 20, [2500, 6000]);
+                setTimeout(function(){ fxScreenShake(1200); }, 800);
+                setTimeout(function(){ fxParticles('❄️', 30, [1500, 4000]); }, 1200);
             } else if(effect === 'half_hp') {
-                // 固拉多：震動 + 龜裂 + 紅色
-                fxScreenShake(1000);
-                fxCrackScreen('rgba(255,80,0,0.7)');
-                fxColorWarp('rgba(200,50,0,0.4)', 1200);
-                fxParticles('🪨', 15, [1000, 2000]);
+                // 🌋 固拉多：大地毀滅——超強震動+多重裂屏+熔岩
+                fxScreenShake(3000);
+                fxCrackScreen('rgba(255,80,0,0.9)');
+                fxFlashBurst('rgba(255,60,0,0.8)', 10);
+                fxColorWarp('rgba(200,50,0,0.6)', 3500);
+                fxParticles('🪨', 40, [1000, 3500]);
+                fxParticles('🌋', 20, [1500, 4000]);
+                fxParticles('🔥', 25, [1200, 3500]);
+                setTimeout(function(){ fxCrackScreen('rgba(255,120,0,0.7)'); }, 800);
+                setTimeout(function(){ fxScreenShake(1800); }, 1000);
+                setTimeout(function(){ fxFlashBurst('rgba(255,100,0,0.6)', 6); }, 1500);
             } else if(effect === 'one_hit') {
-                // 阿爾宙斯：全部特效
-                fxScreenShake(1200);
-                fxFlashBurst('#ffee00', 8);
-                fxColorWarp('rgba(255,220,0,0.4)', 2000);
-                fxParticles('⭐', 40, [1000, 2500]);
-                fxParticles('✨', 20, [800, 2000]);
+                // ✨ 阿爾宙斯：創世神——最終審判，所有特效全開
+                fxScreenShake(3500);
+                fxCrackScreen('rgba(255,220,0,0.85)');
+                fxFlashBurst('#ffee00', 14);
+                fxColorWarp('rgba(255,220,0,0.55)', 4000);
+                fxParticles('⭐', 70, [1000, 5000]);
+                fxParticles('✨', 40, [800, 4000]);
+                fxParticles('💫', 30, [1200, 4500]);
+                fxParticles('🌟', 25, [1500, 5000]);
+                setTimeout(function(){ fxFlashBurst('rgba(255,255,255,0.9)', 10); }, 500);
+                setTimeout(function(){ fxScreenShake(2000); }, 800);
+                setTimeout(function(){ fxFlashBurst('#ffee00', 8); }, 1500);
+                setTimeout(function(){ fxCrackScreen('rgba(200,180,0,0.7)'); }, 1800);
+                setTimeout(function(){ fxScreenShake(1500); }, 2500);
             }
         }
 
