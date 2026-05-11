@@ -158,7 +158,7 @@
             <button class="btn-grey" onclick="openInstructions()" style="width: 80%; margin-top: 10px;">📖 遊戲說明 (新手必看)</button>
             <hr style="width: 80%; border-top: 4px dashed #E65100;">
             
-            <h2<h2>🏕️ 選擇冒險地圖</h2>
+            <h2>🏕️ 選擇冒險地圖</h2>
             <div class="level-menu">
             <button class="btn-purple" onclick="startGame('t3_review_1')" style="border: 4px solid #FFEB3B; font-size: 1.15em;">📚 T3 温習 (詞語與偏旁)</button>
             <button class="btn-orange" onclick="startGame('t3_review_2')" style="border: 4px solid #FFEB3B; font-size: 1.15em;">📝 T3 温習二 (標點、句式)</button>
@@ -224,7 +224,10 @@
             
             <div id="monster-encounter-panel" class="hidden" style="width: 100%; text-align: center; background: rgba(0,0,0,0.05); border-radius: 10px; padding: 20px; border: 4px dashed #f44336; margin-bottom: 15px;">
                 <h2 style="color:#f44336; margin-top:0;">🚨 遭遇怪獸！</h2>
-                <div style="font-size: 6em;" id="mon-emoji">🐺</div>
+                <div id="mon-img-wrap" style="margin: 5px auto; width: 130px; height: 130px;">
+                    <img id="mon-img" src="" style="width:130px; height:130px; display:none; filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.3));">
+                    <div id="mon-emoji" style="font-size:6em; display:block;">🐺</div>
+                </div>
                 <h3 id="mon-name" style="font-size: 1.8em; margin: 5px 0;">森林狼</h3>
                 <p style="color:#333; font-size:1.2em; font-weight:bold;">⚔️ 要求攻: <span id="mon-req-atk" class="stat-atk">15</span> | 🛡️ 要求防: <span id="mon-req-def" class="stat-def">15</span></p>
                 <div id="mon-warning-msg" style="color:red; font-weight:bold; height: 25px;"></div>
@@ -399,9 +402,7 @@
                 lv1: { n: "火恐龍", p: "5", b: 10 }, 
                 lv2: { n: "噴火龍", p: "6", b: 30 }, 
                 lv3A: { n: "超級噴火龍Y (光)", p: "10035", b: 60 }, 
-                lv3B: { n: "超級噴火龍X (闇)", p: "10034", b: 80 }, 
-                lv4A: { n: "鳳王 (光極)", p: "250", b: 150 }, 
-                lv4B: { n: "固拉多 (闇極)", p: "383", b: 180 } 
+                lv3B: { n: "超級噴火龍X (闇)", p: "10034", b: 80 }
             },
             'water': {
                 title: "💧 水系搭檔", 
@@ -409,9 +410,7 @@
                 lv1: { n: "卡咪龜", p: "8", b: 10 }, 
                 lv2: { n: "水箭龜", p: "9", b: 30 }, 
                 lv3A: { n: "超級水箭龜 (光)", p: "10036", b: 60 }, 
-                lv3B: { n: "洗翠大劍鬼 (闇)", p: "10243", b: 80 }, 
-                lv4A: { n: "洛奇亞 (光極)", p: "249", b: 150 }, 
-                lv4B: { n: "蓋歐卡 (闇極)", p: "382", b: 180 }
+                lv3B: { n: "超級水箭龜 (闇)", p: "10036", b: 80 }
             },
             'grass': {
                 title: "🍃 草系搭檔", 
@@ -419,9 +418,7 @@
                 lv1: { n: "妙蛙草", p: "2", b: 10 }, 
                 lv2: { n: "妙蛙花", p: "3", b: 30 }, 
                 lv3A: { n: "超級妙蛙花 (光)", p: "10033", b: 60 }, 
-                lv3B: { n: "洗翠狙射樹梟 (闇)", p: "10244", b: 80 }, 
-                lv4A: { n: "雪拉比 (光極)", p: "251", b: 150 }, 
-                lv4B: { n: "薩戮德 (闇極)", p: "893", b: 180 } // 修改為真正的草/惡神獸
+                lv3B: { n: "超級妙蛙花 (闇)", p: "10033", b: 80 }
             },
             'electric': {
                 title: "⚡ 電系搭檔",
@@ -429,9 +426,39 @@
                 lv1: { n: "皮卡丘", p: "25", b: 10 },
                 lv2: { n: "雷丘", p: "26", b: 30 },
                 lv3A: { n: "阿羅拉雷丘 (光)", p: "10100", b: 60 },
-                lv3B: { n: "倫琴貓 (闇)", p: "405", b: 80 },
-                lv4A: { n: "捷克羅姆 (光極)", p: "644", b: 150 },
-                lv4B: { n: "捷拉奧拉 (闇極)", p: "807", b: 180 }
+                lv3B: { n: "雷丘 (闇)", p: "26", b: 80 }
+            },
+            'greninja': {
+                title: "🐸 忍蛙系搭檔",
+                lv0: { n: "呱呱泡蛙", p: "656", b: 0 },
+                lv1: { n: "呱頭蛙", p: "657", b: 10 },
+                lv2: { n: "甲賀忍蛙", p: "658", b: 30 },
+                lv3A: { n: "特性甲賀忍蛙 (光·灰)", p: "10116", b: 60 },
+                lv3B: { n: "甲賀忍蛙·極 (闇)", p: "658", b: 80 }
+            },
+            'gengar': {
+                title: "👻 耿鬼系搭檔",
+                lv0: { n: "鬼斯", p: "92", b: 0 },
+                lv1: { n: "鬼斯通", p: "93", b: 10 },
+                lv2: { n: "耿鬼", p: "94", b: 30 },
+                lv3A: { n: "超級耿鬼 (光)", p: "10040", b: 60 },
+                lv3B: { n: "超級耿鬼 (闇)", p: "10040", b: 80 }
+            },
+            'gardevoir': {
+                title: "🌸 沙奈朵系搭檔",
+                lv0: { n: "拉魯拉斯", p: "280", b: 0 },
+                lv1: { n: "奇魯莉安", p: "281", b: 10 },
+                lv2: { n: "沙奈朵", p: "282", b: 30 },
+                lv3A: { n: "超級沙奈朵 (光)", p: "10030", b: 60 },
+                lv3B: { n: "超級艾路雷朵 (闇)", p: "10031", b: 80 }
+            },
+            'tyranitar': {
+                title: "🦎 班基拉斯系搭檔",
+                lv0: { n: "幼基拉斯", p: "246", b: 0 },
+                lv1: { n: "沙基拉斯", p: "247", b: 10 },
+                lv2: { n: "班基拉斯", p: "248", b: 30 },
+                lv3A: { n: "超級班基拉斯 (光)", p: "10051", b: 60 },
+                lv3B: { n: "超級班基拉斯 (闇)", p: "10051", b: 80 }
             }
         };
 
@@ -481,6 +508,11 @@
                 
                 checkBossUnlock();
                 renderStats();
+                document.getElementById("display-name").innerText = player.name;
+                document.getElementById("player-tag").classList.remove("hidden");
+                document.getElementById("top-nav").classList.remove("hidden");
+                hideAllScreens();
+                document.getElementById("start-screen").classList.remove("hidden");
             }
         };
 
@@ -575,6 +607,13 @@
             
             pData.lv++;
             let newStage = "lv" + pData.lv + (pData.branch || "");
+            // 安全檢查：若新形態不存在則回退
+            if (!pokedex[id][newStage]) {
+                pData.lv--;
+                alert("已是最終形態！");
+                renderStats(); renderPartnerHub(); autoSave();
+                return;
+            }
             
             let oldPoke = pokedex[id][oldStage];
             let newPoke = pokedex[id][newStage];
@@ -628,6 +667,7 @@
         function setPlayerName() {
             let name = document.getElementById("input-name").value || "小冒險者";
             player.name = name;
+            document.getElementById("login-screen").classList.add("hidden");
             document.getElementById("display-name").innerText = name;
             document.getElementById("player-tag").classList.remove("hidden");
             document.getElementById("top-nav").classList.remove("hidden");
@@ -679,38 +719,49 @@
         }
 
         let currentMode = ""; let currentQuestion = null;
+        const titles = {
+            t3_review_1:  "📚 T3 温習 (詞語與偏旁)",
+            t3_review_2:  "📝 T3 温習二 (標點、句式)",
+            t3_fa2:       "🌿 T3 FA2 (詞語·課文·語文知識)",
+            reorder_fa2:  "🔤 T3 FA2 重組句子",
+            dictation:    "📝 默書尋寶",
+            reorder:      "🌉 聯句過河",
+            mining:       "⛏️ 礦洞尋寶",
+            punctuation:  "✏️ 標點練習",
+            idiom:        "📖 成語練習",
+            letter:       "🔤 字母練習"
+        };
         let onNextAction = "normal"; 
         let isMonsterFight = false; let currentMonster = null;
         let monsterCorrectCount = 0; let monsterGoal = 1;
 
         // --- 全面擴充野生 Pokémon 與神獸 ---
         const monsters = [
-            { name: "史萊姆", emoji: "🟢", atk: 10, def: 10, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
-            { name: "森林狼", emoji: "🐺", atk: 20, def: 15, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1", rewardData: {wood: 3, stone: 3, frag: 1} },
-            { name: "吸血蝠", emoji: "🦇", atk: 25, def: 20, type: "normal", rewardsStr: "💎 寶石 +1, 🔮 碎片 +1", rewardData: {gem: 1, frag: 1} },
-            { name: "毒蛇", emoji: "🐍", atk: 30, def: 25, type: "normal", rewardsStr: "🌟 星星 +1, 🔮 碎片 +1", rewardData: {star: 1, frag: 1} },
-            { name: "狂暴熊", emoji: "🐻", atk: 40, def: 35, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +2", rewardData: {gem: 2, star: 2} },
-            // 新增 20 隻各具特色的 Pokémon 
-            { name: "綠毛蟲", emoji: "🐛", atk: 12, def: 10, type: "normal", rewardsStr: "🪵 木材 +2", rewardData: {wood: 2} },
-            { name: "波波", emoji: "🐦", atk: 15, def: 12, type: "normal", rewardsStr: "🧱 石頭 +2", rewardData: {stone: 2} },
-            { name: "小拉達", emoji: "🐀", atk: 18, def: 12, type: "normal", rewardsStr: "🪵 木材 +3", rewardData: {wood: 3} },
-            { name: "胖丁", emoji: "🎤", atk: 20, def: 25, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
-            { name: "超音蝠", emoji: "🦇", atk: 22, def: 18, type: "normal", rewardsStr: "🧱 石頭 +3", rewardData: {stone: 3} },
-            { name: "走路草", emoji: "🌿", atk: 24, def: 20, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
-            { name: "喵喵", emoji: "🐱", atk: 26, def: 22, type: "normal", rewardsStr: "💎 寶石 +1", rewardData: {gem: 1} },
-            { name: "可達鴨", emoji: "🦆", atk: 28, def: 25, type: "normal", rewardsStr: "🌟 星星 +1", rewardData: {star: 1} },
-            { name: "猴怪", emoji: "🐒", atk: 35, def: 20, type: "normal", rewardsStr: "🪵 木材 +4", rewardData: {wood: 4} },
-            { name: "卡蒂狗", emoji: "🐕", atk: 32, def: 28, type: "normal", rewardsStr: "🧱 石頭 +4", rewardData: {stone: 4} },
-            { name: "蚊香蝌蚪", emoji: "🌀", atk: 25, def: 30, type: "normal", rewardsStr: "🔮 碎片 +2", rewardData: {frag: 2} },
-            { name: "腕力", emoji: "💪", atk: 45, def: 30, type: "normal", rewardsStr: "💎 寶石 +1, 🌟 星星 +1", rewardData: {gem: 1, star: 1} },
-            { name: "喇叭芽", emoji: "🌱", atk: 28, def: 20, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3", rewardData: {wood: 3, stone: 3} },
-            { name: "瑪瑙水母", emoji: "🦑", atk: 30, def: 35, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
-            { name: "小拳石", emoji: "🪨", atk: 35, def: 50, type: "normal", rewardsStr: "🧱 石頭 +5", rewardData: {stone: 5} },
-            { name: "小磁怪", emoji: "🧲", atk: 38, def: 30, type: "normal", rewardsStr: "💎 寶石 +2", rewardData: {gem: 2} },
-            { name: "大舌貝", emoji: "🐚", atk: 32, def: 45, type: "normal", rewardsStr: "🌟 星星 +2", rewardData: {star: 2} },
-            { name: "鬼斯", emoji: "👻", atk: 42, def: 25, type: "normal", rewardsStr: "🔮 碎片 +3", rewardData: {frag: 3} },
-            { name: "大岩蛇", emoji: "🗿", atk: 45, def: 55, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +1", rewardData: {gem: 2, star: 1} },
-            { name: "卡比獸", emoji: "💤", atk: 50, def: 80, type: "normal", rewardsStr: "💎 寶石 +3, 🌟 星星 +3, 📜 手稿 +3", rewardData: {gem: 3, star: 3, manu: 3} }
+            { name: "史萊姆",   emoji: "🟢",  pic: null,  atk: 10, def: 10, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
+            { name: "森林狼",   emoji: "🐺",  pic: null,  atk: 20, def: 15, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1", rewardData: {wood: 3, stone: 3, frag: 1} },
+            { name: "吸血蝠",   emoji: "🦇",  pic: null,  atk: 25, def: 20, type: "normal", rewardsStr: "💎 寶石 +1, 🔮 碎片 +1", rewardData: {gem: 1, frag: 1} },
+            { name: "毒蛇",     emoji: "🐍",  pic: null,  atk: 30, def: 25, type: "normal", rewardsStr: "🌟 星星 +1, 🔮 碎片 +1", rewardData: {star: 1, frag: 1} },
+            { name: "狂暴熊",   emoji: "🐻",  pic: null,  atk: 40, def: 35, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +2", rewardData: {gem: 2, star: 2} },
+            { name: "綠毛蟲",   emoji: "🐛",  pic: "10",  atk: 12, def: 10, type: "normal", rewardsStr: "🪵 木材 +2", rewardData: {wood: 2} },
+            { name: "波波",     emoji: "🐦",  pic: "16",  atk: 15, def: 12, type: "normal", rewardsStr: "🧱 石頭 +2", rewardData: {stone: 2} },
+            { name: "小拉達",   emoji: "🐀",  pic: "19",  atk: 18, def: 12, type: "normal", rewardsStr: "🪵 木材 +3", rewardData: {wood: 3} },
+            { name: "胖丁",     emoji: "🎤",  pic: "39",  atk: 20, def: 25, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
+            { name: "超音蝠",   emoji: "🦇",  pic: "41",  atk: 22, def: 18, type: "normal", rewardsStr: "🧱 石頭 +3", rewardData: {stone: 3} },
+            { name: "走路草",   emoji: "🌿",  pic: "43",  atk: 24, def: 20, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
+            { name: "喵喵",     emoji: "🐱",  pic: "52",  atk: 26, def: 22, type: "normal", rewardsStr: "💎 寶石 +1", rewardData: {gem: 1} },
+            { name: "可達鴨",   emoji: "🦆",  pic: "54",  atk: 28, def: 25, type: "normal", rewardsStr: "🌟 星星 +1", rewardData: {star: 1} },
+            { name: "猴怪",     emoji: "🐒",  pic: "56",  atk: 35, def: 20, type: "normal", rewardsStr: "🪵 木材 +4", rewardData: {wood: 4} },
+            { name: "卡蒂狗",   emoji: "🐕",  pic: "58",  atk: 32, def: 28, type: "normal", rewardsStr: "🧱 石頭 +4", rewardData: {stone: 4} },
+            { name: "蚊香蝌蚪", emoji: "🌀",  pic: "60",  atk: 25, def: 30, type: "normal", rewardsStr: "🔮 碎片 +2", rewardData: {frag: 2} },
+            { name: "腕力",     emoji: "💪",  pic: "66",  atk: 45, def: 30, type: "normal", rewardsStr: "💎 寶石 +1, 🌟 星星 +1", rewardData: {gem: 1, star: 1} },
+            { name: "喇叭芽",   emoji: "🌱",  pic: "69",  atk: 28, def: 20, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3", rewardData: {wood: 3, stone: 3} },
+            { name: "瑪瑙水母", emoji: "🦑",  pic: "72",  atk: 30, def: 35, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
+            { name: "小拳石",   emoji: "🪨",  pic: "74",  atk: 35, def: 50, type: "normal", rewardsStr: "🧱 石頭 +5", rewardData: {stone: 5} },
+            { name: "小磁怪",   emoji: "🧲",  pic: "81",  atk: 38, def: 30, type: "normal", rewardsStr: "💎 寶石 +2", rewardData: {gem: 2} },
+            { name: "大舌貝",   emoji: "🐚",  pic: "90",  atk: 32, def: 45, type: "normal", rewardsStr: "🌟 星星 +2", rewardData: {star: 2} },
+            { name: "鬼斯",     emoji: "👻",  pic: "92",  atk: 42, def: 25, type: "normal", rewardsStr: "🔮 碎片 +3", rewardData: {frag: 3} },
+            { name: "大岩蛇",   emoji: "🗿",  pic: "95",  atk: 45, def: 55, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +1", rewardData: {gem: 2, star: 1} },
+            { name: "卡比獸",   emoji: "💤",  pic: "143", atk: 50, def: 80, type: "normal", rewardsStr: "💎 寶石 +3, 🌟 星星 +3, 📜 手稿 +3", rewardData: {gem: 3, star: 3, manu: 3} }
         ];
 
         const mythicalBeasts = [
@@ -754,8 +805,18 @@
                 { q: "「熱、然、照、燈」這些字的共同部首是甚麼？", options: ["木", "水", "土", "火"], a: "火", hint: "底下四點代表火。" },
                 { q: "以下哪個字與「蚊」的部首相同？", options: ["碼", "螞", "桌", "靖"], a: "螞", hint: "與昆蟲有關的部首。" },
                 { q: "「孔、孫、孤」這些字的共同部首是甚麼？", options: ["木", "火", "子", "人"], a: "子", hint: "與小孩子有關。" },
-                { q: "以下哪個字是形聲字？", options: ["日", "山", "月", "胎"], a: "胎", hint: "一半表示意思，一半表示讀音。" },
-                { q: "「袋」字與以下哪個字部首不同？", options: ["裝", "裙", "展", "裳"], a: "展", hint: "展的部首是「尸」部。" }
+                
+                { q: "「袋」字與以下哪個字部首不同？", options: ["裝", "裙", "展", "裳"], a: "展", hint: "展的部首是「尸」部。" },
+                // 四、形聲字（聲符）
+                { q: "「清」字的聲符是什麼？", options: ["氵", "青", "沒有聲符"], a: "青", hint: "「青」提示讀音，「氵」表示與水有關。" },
+                { q: "「晴」字的聲符是什麼？", options: ["日", "青", "沒有聲符"], a: "青", hint: "「青」提示讀音，「日」表示與太陽有關。" },
+                { q: "「跑」字的聲符是什麼？", options: ["足", "包", "沒有聲符"], a: "包", hint: "「包」提示讀音，「足」表示與腳有關。" },
+                { q: "「媽」字的聲符是什麼？", options: ["女", "馬", "沒有聲符"], a: "馬", hint: "「馬」提示讀音，「女」表示與女性有關。" },
+                { q: "「抱」字的聲符是什麼？", options: ["扌", "包", "沒有聲符"], a: "包", hint: "「包」提示讀音，「扌」表示與手有關。" },
+                { q: "「近」字的聲符是什麼？", options: ["辶", "斤", "沒有聲符"], a: "斤", hint: "「斤」提示讀音，「辶」表示與行走有關。" },
+                { q: "「爸」字的聲符是什麼？", options: ["父", "巴", "沒有聲符"], a: "巴", hint: "「巴」提示讀音，「父」表示與父親有關。" },
+                { q: "「日」字的聲符是什麼？", options: ["口是聲符", "沒有聲符（它不是形聲字）", "一是聲符"], a: "沒有聲符（它不是形聲字）", hint: "「日」是象形字，不是形聲字，沒有聲符。" },
+                { q: "「山」字的聲符是什麼？", options: ["沒有聲符（它不是形聲字）", "「山」本身就是聲符", "中間的「丨」是聲符"], a: "沒有聲符（它不是形聲字）", hint: "「山」是象形字，不是形聲字，沒有聲符。" }
             ],
             t3_review_2: [ // 30 題 (標點、句式、書信、反問句)
                 { q: "引號（「　」）的作用是甚麼？", options: ["標示書本名稱", "標示説話內容或特別詞語", "標示地名", "表示句子結束"], a: "標示説話內容或特別詞語", hint: "把別人説的話括起來。" },
@@ -819,27 +880,24 @@
                 { q: "22. 課文中指出，愛護郊野公園是誰的責任？", options: ["老師的責任", "家長的責任", "人人都有責任", "校工的責任"], a: "人人都有責任", hint: "課文最後一句有答案。" },
                 { q: "23. 「紅着臉兒」最可能表示人物感到怎樣？", options: ["驕傲", "害羞／不好意思", "生氣", "開心得跳起來"], a: "害羞／不好意思", hint: "通常和不好意思有關。" },
                 { q: "24. 根據課文內容，正確的做法是：", options: ["在郊野公園亂拋垃圾", "看見失物不理會", "帶走自己的垃圾", "把垃圾藏起來"], a: "帶走自己的垃圾", hint: "要愛護環境。" },
-                // 四、形符聲符
-                { q: "25. 下列哪一個字的左邊部分最可能是形符？", options: ["清", "裝", "伯", "想"], a: "清", hint: "「氵」通常和字義有關。" },
-                { q: "26. 在「伯」字中，右邊的「白」通常提示讀音，屬於（　　）。", options: ["形符", "聲符", "部首", "筆畫"], a: "聲符", hint: "和讀音線索有關。" },
-                { q: "27. 老師叫同學把字中的聲符圈出來，目的是找出字的（　　）。", options: ["意思線索", "顏色", "讀音線索", "筆順"], a: "讀音線索", hint: "聲符提示讀音。" },
-                // 五、左右結構詞語
-                { q: "28. 下列哪一個詞語兩個字都是左右結構？", options: ["討論", "公園", "責任", "明白"], a: "討論", hint: "兩個字都要符合左右結構。" },
-                { q: "29. 下列哪一個詞語符合「組成的字均需要為左右結構」的要求？", options: ["特別", "垃圾", "郊野", "公共"], a: "特別", hint: "兩個字都屬左右結構。" },
-                { q: "30. 下列哪一個詞語最適合寫在「挑戰站」答案中？", options: ["輪流", "責任", "明白", "愛護"], a: "輪流", hint: "兩個字均屬左右結構。" }
+                // 四、形聲字（聲符）
+                { q: "「清」字的聲符是什麼？", options: ["氵", "青", "沒有聲符"], a: "青", hint: "「青」提示讀音，「氵」表示與水有關。" },
+                { q: "「晴」字的聲符是什麼？", options: ["日", "青", "沒有聲符"], a: "青", hint: "「青」提示讀音，「日」表示與太陽有關。" },
+                { q: "「跑」字的聲符是什麼？", options: ["足", "包", "沒有聲符"], a: "包", hint: "「包」提示讀音，「足」表示與腳有關。" },
+                { q: "「媽」字的聲符是什麼？", options: ["女", "馬", "沒有聲符"], a: "馬", hint: "「馬」提示讀音，「女」表示與女性有關。" },
+                { q: "「抱」字的聲符是什麼？", options: ["扌", "包", "沒有聲符"], a: "包", hint: "「包」提示讀音，「扌」表示與手有關。" },
+                { q: "「近」字的聲符是什麼？", options: ["辶", "斤", "沒有聲符"], a: "斤", hint: "「斤」提示讀音，「辶」表示與行走有關。" },
+                { q: "「爸」字的聲符是什麼？", options: ["父", "巴", "沒有聲符"], a: "巴", hint: "「巴」提示讀音，「父」表示與父親有關。" },
+                { q: "「日」字的聲符是什麼？", options: ["口是聲符", "沒有聲符（它不是形聲字）", "一是聲符"], a: "沒有聲符（它不是形聲字）", hint: "「日」是象形字，不是形聲字，沒有聲符。" },
+                { q: "「山」字的聲符是什麼？", options: ["沒有聲符（它不是形聲字）", "「山」本身就是聲符", "中間的「丨」是聲符"], a: "沒有聲符（它不是形聲字）", hint: "「山」是象形字，不是形聲字，沒有聲符。" }
             ],
             // --------- T3 FA2 重組句子題庫 ---------
             reorder_fa2: [
-                { q: "把下面詞語排成句子：
-我們／紅着臉兒／領回／「失物」", options: ["我們紅着臉兒領回「失物」。", "紅着臉兒我們領回「失物」。", "領回「失物」我們紅着臉兒。", "我們領回紅着臉兒「失物」。"], a: "我們紅着臉兒領回「失物」。", hint: "主語先行，然後描述動作。" },
-                { q: "把下面詞語排成句子：
-各自／自己的／帶走／垃圾／我們", options: ["我們各自帶走自己的垃圾。", "各自我們帶走自己的垃圾。", "我們帶走各自自己的垃圾。", "垃圾我們各自帶走自己的。"], a: "我們各自帶走自己的垃圾。", hint: "主語是「我們」。" },
-                { q: "把下面詞語排成句子：
-這次／讓我／經歷／明白到", options: ["這次經歷讓我明白到。", "讓我這次經歷明白到。", "明白到這次讓我經歷。", "這次讓我明白到經歷。"], a: "這次經歷讓我明白到。", hint: "「這次經歷」是主語。" },
-                { q: "把下面詞語排成句子：
-愛護／人人／郊野公園／都有／責任", options: ["愛護郊野公園，人人都有責任。", "人人愛護郊野公園都有責任。", "責任人人都有愛護郊野公園。", "郊野公園人人都有愛護責任。"], a: "愛護郊野公園，人人都有責任。", hint: "先說要做甚麼，再說是誰的責任。" },
-                { q: "把下面詞語排成完整句子：
-這次／經歷／讓我／明白到／愛護／郊野公園／人人／都有責任呢", options: ["這次經歷讓我明白到，愛護郊野公園，人人都有責任呢！", "讓我明白到這次經歷，人人都有責任愛護郊野公園呢！", "人人都有責任呢，這次經歷讓我明白到愛護郊野公園。", "愛護郊野公園這次經歷讓我明白到人人都有責任呢！"], a: "這次經歷讓我明白到，愛護郊野公園，人人都有責任呢！", hint: "課文最後兩句合在一起。" }
+                { q: "把下面詞語排成句子：我們／紅着臉兒／領回／「失物」", options: ["我們紅着臉兒領回「失物」。", "紅着臉兒我們領回「失物」。", "領回「失物」我們紅着臉兒。", "我們領回紅着臉兒「失物」。"], a: "我們紅着臉兒領回「失物」。", hint: "主語先行，然後描述動作。" },
+                { q: "把下面詞語排成句子：各自／自己的／帶走／垃圾／我們", options: ["我們各自帶走自己的垃圾。", "各自我們帶走自己的垃圾。", "我們帶走各自自己的垃圾。", "垃圾我們各自帶走自己的。"], a: "我們各自帶走自己的垃圾。", hint: "主語是「我們」。" },
+                { q: "把下面詞語排成句子：這次／讓我／經歷／明白到", options: ["這次經歷讓我明白到。", "讓我這次經歷明白到。", "明白到這次讓我經歷。", "這次讓我明白到經歷。"], a: "這次經歷讓我明白到。", hint: "「這次經歷」是主語。" },
+                { q: "把下面詞語排成句子：愛護／人人／郊野公園／都有／責任", options: ["愛護郊野公園，人人都有責任。", "人人愛護郊野公園都有責任。", "責任人人都有愛護郊野公園。", "郊野公園人人都有愛護責任。"], a: "愛護郊野公園，人人都有責任。", hint: "先說要做甚麼，再說是誰的責任。" },
+                { q: "把下面詞語排成完整句子：這次／經歷／讓我／明白到／愛護／郊野公園／人人／都有責任呢", options: ["這次經歷讓我明白到，愛護郊野公園，人人都有責任呢！", "讓我明白到這次經歷，人人都有責任愛護郊野公園呢！", "人人都有責任呢，這次經歷讓我明白到愛護郊野公園。", "愛護郊野公園這次經歷讓我明白到人人都有責任呢！"], a: "這次經歷讓我明白到，愛護郊野公園，人人都有責任呢！", hint: "課文最後兩句合在一起。" }
             ],
 // --------- 舊題庫保留 ---------
             dictation: [
@@ -1006,18 +1064,7 @@
             ]
         };
 
-        const titles = { 
-            t3_review_1: "📚 T3 温習 (詞語與偏旁)",
-            t3_review_2: "📝 T3 温習二 (標點、句式與語文知識)",
-            t3_fa2: "🌿 T3 FA2 選擇題",
-            reorder_fa2: "🔤 T3 FA2 重組句子",
-            dictation: "📝 默書尋寶 (測考範圍)",
-            reorder: "🌉 聯句過河", 
-            mining: "⛏️ 礦洞尋寶", 
-            punctuation: "🖋️ 標點尋寶", 
-            idiom: "🐉 語文神廟", 
-            letter: "✉️ 書信神探" 
-        };
+        
 
         function hideAllScreens() { document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden')); }
         function goHome() { 
@@ -1068,7 +1115,17 @@
                 playSound('monster');
             }
 
-            document.getElementById("mon-emoji").innerText = currentMonster.emoji;
+            const monImg = document.getElementById("mon-img");
+                const monEmoji = document.getElementById("mon-emoji");
+                if (currentMonster.pic) {
+                    monImg.src = getPokePic(currentMonster.pic);
+                    monImg.style.display = "block";
+                    monEmoji.style.display = "none";
+                } else {
+                    monImg.style.display = "none";
+                    monEmoji.style.display = "block";
+                    monEmoji.innerText = currentMonster.emoji;
+                }
             document.getElementById("mon-name").innerText = (isMythical ? "【神獸】" : "") + currentMonster.name;
             document.getElementById("mon-req-atk").innerText = currentMonster.atk;
             document.getElementById("mon-req-def").innerText = currentMonster.def;
@@ -1358,7 +1415,7 @@
         }
 
         function nextBossQuestion() {
-            let allQs = [...questions.mining, ...questions.punctuation, ...questions.reorder, ...questions.idiom, ...questions.letter, ...questions.dictation, ...questions.t3_review_1, ...questions.t3_review_2];
+            let allQs = [...questions.t3_review_1, ...questions.t3_review_2, ...questions.t3_fa2, ...questions.reorder_fa2, ...questions.dictation, ...questions.mining, ...questions.punctuation, ...questions.reorder, ...questions.idiom, ...questions.letter];
             currentQuestion = allQs[Math.floor(Math.random() * allQs.length)];
             
             document.getElementById("boss-question").innerText = currentQuestion.q;
