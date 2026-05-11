@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中文寫作練習｜介紹一位你欣賞／尊敬的家人</title>
+  <style>
+    :root{
+      --bg:#f0f7ff;--panel:#fff;--panel-soft:#e8f4ff;
+      --text:#1e3a5f;--muted:#5f7285;
+      --primary:#4d9ff5;--primary-dark:#2b7de0;
+      --accent:#ffd76a;--good:#39b36b;--warn:#ff9f43;--bad:#ef5b5b;
+      --border:#c8e0f5;--shadow:0 12px 36px rgba(30,80,160,.11);--radius:22px;
+    }
+    body.theme-green{
+      --bg:#f0fff5;--panel:#fff;--panel-soft:#e5fff0;
+      --text:#1a3d28;--muted:#4d7060;
+      --primary:#48c27a;--primary-dark:#2e9e5c;--border:#c2e8d0;
+    }
+    body.theme-pink{
+      --bg:#fff0f8;--panel:#fff;--panel-soft:#ffe5f3;
+      --text:#4a1a33;--muted:#8a5070;
+      --primary:#f070b8;--primary-dark:#c8408e;--border:#f5c8e2;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html,body{font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+      background:var(--bg);color:var(--text);min-height:100vh;}
+
+    #stageOverlay{
+      position:fixed;inset:0;z-index:9999;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,#1a3d7c,#4d9ff5);
+      opacity:0;pointer-events:none;transition:opacity .3s ease;
+    }
+    #stageOverlay.show{opacity:1;pointer-events:all;}
+    .overlay-star-field{position:absolute;inset:0;overflow:hidden;}
+    .overlay-star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 1.5s infinite;}
+    @keyframes twinkle{0%,100%{opacity:.3}50%{opacity:1}}
+    .overlay-badge{
+      background:rgba(255,255,255,.15);border:3px solid rgba(255,255,255,.4);
+      border-radius:24px;padding:28px 40px;text-align:center;color:#fff;
+      position:relative;z-index:1;
+      animation:badgePop .4s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes badgePop{from{transform:scale(0) rotate(-8deg);opacity:0}to{transform:scale(1);opacity:1}}
+    .overlay-num{font-size:80px;font-weight:900;line-height:1;}
+    .overlay-title{font-size:26px;margin-top:8px;}
+    .overlay-stars{font-size:36px;margin-top:12px;}
+    .overlay-tip{margin-top:14px;font-size:15px;opacity:.88;padding:10px 14px;
+      background:rgba(255,255,255,.1);border-radius:12px;}
+    .star-item{opacity:0;transform:scale(0);display:inline-block;animation:starPop .4s ease forwards;}
+    @keyframes starPop{to{opacity:1;transform:scale(1);}}
+
+    .confetti-piece{
+      position:fixed;top:-20px;border-radius:4px;
+      animation:confettiFall linear forwards;z-index:10000;pointer-events:none;
+    }
+    @keyframes confettiFall{to{transform:translateY(110vh) rotate(540deg);opacity:0;}}
+
+    #spiritContainer{
+      position:fixed;bottom:20px;right:20px;z-index:800;
+      display:flex;flex-direction:column;align-items:flex-end;max-width:240px;
+    }
+    #spiritBubble{
+      background:#fff;border:2px solid var(--border);
+      border-radius:18px 18px 4px 18px;
+      padding:12px 14px;font-size:14px;line-height:1.7;
+      color:var(--text);box-shadow:var(--shadow);
+      margin-bottom:8px;max-width:240px;text-align:right;
+      animation:bubblePop .3s ease;
+    }
+    @keyframes bubblePop{from{transform:scale(.8) translateY(10px);opacity:0}to{transform:scale(1);opacity:1}}
+    #spiritFace{
+      font-size:48px;cursor:pointer;align-self:flex-end;
+      filter:drop-shadow(0 4px 8px rgba(0,0,0,.15));
+      animation:spiritBounce 2.5s ease-in-out infinite;
+      user-select:none;display:block;transition:transform .2s;
+    }
+    #spiritFace:hover{transform:scale(1.15) rotate(10deg);}
+    @keyframes spiritBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+    .app{max-width:1440px;margin:0 auto;padding:16px;}
+    .header{
+      background:linear-gradient(135deg,#fff,var(--panel-soft));
+      border:2px solid var(--border);border-radius:26px;
+      box-shadow:var(--shadow);padding:20px;margin-bottom:16px;
+      position:relative;overflow:hidden;
+    }
+    .header::before{
+      content:'';position:absolute;top:-40px;right:-40px;
+      width:180px;height:180px;border-radius:50%;
+      background:radial-gradient(circle,var(--primary),transparent 70%);opacity:.2;
+    }
+    .header-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+    .school{font-size:13px;color:var(--muted);margin-bottom:4px;}
+    h1{font-size:28px;line-height:1.2;color:var(--primary-dark);}
+    .subtitle{font-size:17px;font-weight:700;margin-top:6px;}
+
+    .theme-switcher{display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:relative;z-index:10;}
+    .theme-dot{
+      width:42px;height:42px;border-radius:999px;
+      border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25);
+      cursor:pointer;transition:transform .2s;outline:none;display:inline-block;
+    }
+    .theme-dot:hover{transform:scale(1.25);}
+    .theme-dot:active{transform:scale(.9);}
+    .theme-blue-btn{background:#4d9ff5;}
+    .theme-green-btn{background:#48c27a;}
+    .theme-pink-btn{background:#f070b8;}
+
+    .progress-wrap{margin-top:16px;}
+    .progress-info-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+    .progress-info{font-size:15px;font-weight:800;color:var(--primary-dark);}
+    .progress-bar{height:20px;background:#dde8f5;border-radius:999px;overflow:hidden;border:1px solid var(--border);}
+    .progress-fill{height:100%;width:0%;
+      background:linear-gradient(90deg,var(--primary),var(--accent),#ff9f43);
+      border-radius:999px;transition:width .5s cubic-bezier(.34,1.2,.64,1);}
+    .stage-dots{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+    .stage-dot{
+      width:36px;height:36px;border-radius:50%;
+      border:2px solid var(--border);background:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:700;color:var(--muted);transition:.2s;
+    }
+    .stage-dot.done{background:var(--good);border-color:#25905a;color:#fff;}
+    .stage-dot.current{
+      background:var(--primary);border-color:var(--primary-dark);color:#fff;
+      box-shadow:0 0 0 4px rgba(77,159,245,.25);transform:scale(1.12);
+    }
+
+    .layout{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:start;}
+    .left-col,.right-col{display:flex;flex-direction:column;gap:16px;}
+
+    .card{background:var(--panel);border:2px solid var(--border);
+      border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;}
+    .card.glow{border-color:var(--primary);animation:cardGlow 1.5s ease infinite alternate;}
+    @keyframes cardGlow{
+      from{box-shadow:var(--shadow),0 0 0 3px rgba(77,159,245,.1);}
+      to{box-shadow:var(--shadow),0 0 0 8px rgba(77,159,245,.2);}
+    }
+    .stage-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:linear-gradient(90deg,var(--primary),var(--primary-dark));
+      color:#fff;border-radius:999px;padding:8px 16px;
+      font-size:14px;font-weight:700;margin-bottom:14px;
+      box-shadow:0 4px 12px rgba(77,159,245,.35);
+    }
+    .question-title{font-size:24px;margin-bottom:10px;line-height:1.35;}
+    .hint{
+      background:linear-gradient(135deg,#fff8dd,#fff3c4);
+      border-left:5px solid var(--accent);border-radius:14px;
+      padding:12px 14px;color:#5a4200;margin-bottom:14px;font-size:15px;line-height:1.75;
+    }
+    .section-label{margin:16px 0 8px;font-size:15px;font-weight:800;color:var(--primary-dark);}
+    .options{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+    .option{
+      border:2px solid var(--border);background:#fafcff;border-radius:18px;
+      padding:11px 16px;cursor:pointer;transition:.18s ease;font-size:15px;
+      display:flex;align-items:center;justify-content:center;text-align:center;user-select:none;
+    }
+    .option:hover{transform:translateY(-2px);border-color:var(--primary);box-shadow:0 4px 12px rgba(77,159,245,.18);}
+    .option.active{
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+      color:#fff;border-color:var(--primary-dark);font-weight:700;
+      box-shadow:0 6px 16px rgba(77,159,245,.35);transform:translateY(-1px) scale(1.03);
+    }
+    .option-block{
+      border:2px solid var(--border);background:#fafcff;border-radius:18px;
+      padding:13px 16px;cursor:pointer;transition:.18s ease;font-size:15px;
+      text-align:left;line-height:1.8;user-select:none;width:100%;display:block;
+      white-space:normal;
+    }
+    .option-block:hover{border-color:var(--primary);background:#f0f8ff;transform:translateX(3px);}
+    .option-block.active{
+      background:linear-gradient(135deg,#eaf4ff,#d8ecff);
+      border-color:var(--primary);border-width:2.5px;font-weight:700;color:var(--primary-dark);
+    }
+    select{
+      width:100%;border:2px solid var(--border);border-radius:16px;
+      padding:12px 14px;font-size:15px;outline:none;
+      background:#fff;color:var(--text);transition:.2s;font-family:inherit;
+    }
+    select:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(77,159,245,.14);}
+    textarea{
+      width:100%;border:2px solid var(--border);border-radius:16px;
+      padding:12px 14px;font-size:15px;outline:none;
+      background:#fff;color:var(--text);transition:.2s;font-family:inherit;
+      min-height:88px;resize:vertical;
+    }
+    textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(77,159,245,.14);}
+    .inline-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .three-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .sentence-box{
+      background:linear-gradient(135deg,#f7fbff,#eef6ff);
+      border:2px dashed var(--primary);border-radius:18px;
+      padding:16px;margin:10px 0;line-height:1.9;min-height:76px;font-size:15px;
+      position:relative;
+    }
+    .sentence-box::before{content:'✏️';position:absolute;top:10px;right:12px;font-size:18px;opacity:.4;}
+    button{
+      border:none;border-radius:18px;padding:13px 18px;
+      font-size:15px;cursor:pointer;font-weight:700;transition:.2s ease;font-family:inherit;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+      color:#fff;box-shadow:0 6px 18px rgba(77,159,245,.35);
+    }
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(77,159,245,.45);}
+    .btn-soft{background:#f0f6ff;color:var(--text);border:2px solid var(--border);}
+    .btn-soft:hover{border-color:var(--primary);transform:translateY(-1px);}
+    .btn-warn{background:#fff6e0;color:#8a5a00;border:2px solid #ffd897;}
+    .btn-danger{background:#fff0f0;color:#a33;border:2px solid #ffcccc;}
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+    .footer-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+    .mini{font-size:14px;padding:10px 14px;border-radius:14px;}
+
+    .preview-title{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+    .count-chip{
+      display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;
+      background:var(--panel-soft);border:1px solid var(--border);
+      font-weight:700;color:var(--primary-dark);font-size:14px;
+    }
+    .count-chip.ok{background:#ecfff5;border-color:#8bddaf;color:#196e3d;}
+    .count-chip.warn{background:#fff7e8;border-color:#ffd088;color:#7a4f00;}
+    .essay-board{
+      min-height:460px;white-space:pre-wrap;line-height:2.2;
+      background:
+        linear-gradient(rgba(255,255,255,.88),rgba(255,255,255,.88)),
+        repeating-linear-gradient(to bottom,#fff 0,#fff 37px,#d8eaf7 38px,#fff 39px);
+      border:2px solid var(--border);border-radius:20px;padding:20px;font-size:17px;
+    }
+    .essay-para{animation:paraSlideIn .4s ease;margin-bottom:1em;}
+    @keyframes paraSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+    .checklist{display:grid;gap:8px;margin-top:10px;}
+    .check-item{
+      display:flex;gap:10px;align-items:flex-start;
+      padding:10px 12px;border-radius:14px;background:#fafcff;border:1px solid var(--border);
+    }
+    .check-item.ok{background:#f0fff7;border-color:#a8dfc2;}
+    .check-item.bad{background:#fff8f8;border-color:#f5c0c0;}
+    .msg{margin-top:10px;padding:12px 14px;border-radius:14px;font-size:14px;line-height:1.75;}
+    .msg.good{background:#edfff4;color:#17693c;border:1px solid #a7e6c2;}
+    .msg.warn{background:#fff9e0;color:#8a5a00;border:1px solid #f5da89;}
+    .msg.bad{background:#fff3f3;color:#a33;border:1px solid #f2b8b8;}
+    .small-note{color:var(--muted);font-size:13px;line-height:1.7;margin-top:6px;}
+    .tag{display:inline-block;padding:6px 11px;border-radius:999px;
+      background:var(--panel-soft);border:1px solid var(--border);margin:3px;font-size:13px;}
+    .hidden{display:none !important;}
+
+    @media(max-width:980px){
+      .layout{grid-template-columns:1fr;}
+      .essay-board{min-height:280px;}
+      #spiritContainer{display:none;}
+    }
+    @media(max-width:680px){
+      h1{font-size:22px;}.question-title{font-size:20px;}
+      .inline-grid,.three-grid,.two-col{grid-template-columns:1fr;}
+      .toolbar,.footer-actions{display:grid;grid-template-columns:1fr 1fr;}
+    }
+    @media print{
+      body{background:#fff;}
+      .no-print{display:none !important;}
+      #spiritContainer,#stageOverlay{display:none !important;}
+      .app{max-width:none;padding:0;}
+      .layout{grid-template-columns:1fr;}
+      .card,.header{box-shadow:none;border:1px solid #bbb;}
+      .essay-board{background:#fff;border:1px solid #999;min-height:auto;}
+    }
+  </style>
+</head>
+<body class="theme-blue">
+
+<div id="stageOverlay">
+  <div class="overlay-star-field" id="overlayStarField"></div>
+  <div class="overlay-badge">
+    <div class="overlay-num" id="overlayNum">2</div>
+    <div class="overlay-title" id="overlayTitle">選人物和性格</div>
+    <div class="overlay-stars" id="overlayStars">⭐</div>
+    <div class="overlay-tip" id="overlayTip">加油！</div>
+  </div>
+</div>
+
+<div id="spiritContainer" class="no-print">
+  <div id="spiritBubble">👋 你好！我是寫作小精靈，點我打氣！</div>
+  <span id="spiritFace" onclick="changeSpiritMood()">🐱</span>
+</div>
+
+<div class="app">
+  <div class="header no-print">
+    <div class="header-top">
+      <div>
+        <div class="school">勵志會梁李秀娛紀念小學 ｜ 中文科寫作小天地</div>
+        <h1>中文寫作互動闖關遊戲 🏆</h1>
+        <div class="subtitle">題目：《介紹一位你欣賞／尊敬的家人》</div>
+      </div>
+      <div class="theme-switcher">
+        <span class="small-note">主題色：</span>
+        <span class="theme-dot theme-blue-btn" title="藍色" onclick="applyTheme('blue')"></span>
+        <span class="theme-dot theme-green-btn" title="綠色" onclick="applyTheme('green')"></span>
+        <span class="theme-dot theme-pink-btn" title="粉色" onclick="applyTheme('pink')"></span>
+      </div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-info-row">
+        <div class="progress-info" id="progressText">第 1 關 / 共 7 關</div>
+        <div class="count-chip" id="saveChip">草稿已儲存 ✓</div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="stage-dots" id="stageDots"></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="left-col">
+      <div class="card glow no-print">
+        <div class="stage-badge" id="stageBadge">第 1 關｜先看清題目</div>
+        <div id="questionCard"></div>
+        <div class="toolbar">
+          <button class="btn-soft" onclick="prevStage()">⬅ 上一步</button>
+          <button class="btn-soft" onclick="resetCurrentStage()">🔄 重新選擇</button>
+          <button class="btn-primary" onclick="nextStage()">下一步 ➡</button>
+        </div>
+        <div id="stageMsg" class="hidden"></div>
+      </div>
+
+      <div class="card no-print">
+        <div class="section-label">功能按鈕</div>
+        <div class="footer-actions">
+          <button class="btn-soft mini" onclick="prevStage()">⬅ 上一步</button>
+          <button class="btn-primary mini" onclick="nextStage()">下一步 ➡</button>
+          <button class="btn-soft mini" onclick="resetCurrentStage()">🔄 重新選擇</button>
+          <button class="btn-danger mini" onclick="resetAll()">🗑 重設全文</button>
+          <button class="btn-soft mini" onclick="copyEssay()">📋 複製全文</button>
+          <button class="btn-warn mini" onclick="window.print()">🖨 列印作文</button>
+        </div>
+        <p class="small-note">草稿自動儲存，下次打開仍保留進度。列印時自動隱藏提示和按鈕。</p>
+      </div>
+
+      <div class="card">
+        <div class="section-label">完成檢查清單</div>
+        <div class="checklist" id="checklist"></div>
+        <div id="finalMessage" class="hidden"></div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="card">
+        <div class="preview-title">
+          <div>
+            <div class="section-label" style="margin:0">📄 作文預覽區</div>
+            <div class="small-note">每完成一關，作文即時更新。</div>
+          </div>
+          <div class="count-chip" id="wordCountChip">字數：<span id="wordCount">0</span></div>
+        </div>
+        <div class="essay-board" id="essayBoard">（你的作文會在這裏一步一步完成。）</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── 主題（獨立儲存，不受 loadDraft 影響）──
+const THEME_KEY="fam_essay_theme_v4";
+function applyTheme(t){
+  document.body.classList.remove("theme-blue","theme-green","theme-pink");
+  document.body.classList.add("theme-"+t);
+  localStorage.setItem(THEME_KEY,t);
+}
+(function(){
+  const t=localStorage.getItem(THEME_KEY)||"blue";
+  document.body.classList.remove("theme-blue","theme-green","theme-pink");
+  document.body.classList.add("theme-"+t);
+})();
+
+// ── 資料 ──
+const STORAGE_KEY="fam_essay_data_v4";
+const TOTAL=7;
+const data={
+  currentStage:1,
+  s1:{ans1:"",ans2:""},
+  s2:{person:"",trait1:"",trait2:"",introIdx:0},
+  s3:{body:"",hair:"",face:"",eyes:"",mouth:"",hand:"",appIdx:0},
+  s4:{tone:"",expression:"",quotePreset:"",quoteCustom:"",useCustom:false,speechIdx:0},
+  s5:{eventType:"",act1:"",act2:"",act3:"",actIdx:0},
+  s6:{event2Type:"",event2Detail:"",ev2Idx:0},
+  s7:{feeling:""}
+};
+function save(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+  const el=document.getElementById("saveChip");
+  if(el) el.textContent="草稿已儲存 ✓";
+}
+function loadDraft(){
+  const raw=localStorage.getItem(STORAGE_KEY);
+  if(!raw) return;
+  try{ Object.assign(data,JSON.parse(raw)); }catch(e){}
+}
+
+// ── 詞庫 ──
+const OPTS={
+  person:["媽媽","爸爸","爺爺","奶奶","哥哥","姐姐","弟弟","妹妹"],
+  traits:["勤勞","細心","嚴肅","樂於助人","有責任感","有耐心","善良"],
+  body:[
+    "身形高大結實","身材高挑纖細","體型微胖，看來很有福氣",
+    "身形嬌小玲瓏","身材適中，看起來很健壯","略帶圓潤，總給人一種温暖感覺"
+  ],
+  hair:[
+    "一頭烏黑的短髮","一頭銀白的頭髮","柔順的長髮",
+    "整齊的短髮","微微捲曲的頭髮","夾雜着銀絲的頭髮"
+  ],
+  face:[
+    "一張圓圓的臉","一張慈祥的臉","白裏透紅的臉龐",
+    "佈滿細紋卻和藹的臉","臉上常常帶着温柔的神情","臉上總是掛着親切的笑容"
+  ],
+  eyes:[
+    "眉毛濃而有神","眉毛彎彎，像月牙一樣","一雙明亮有神的眼睛",
+    "炯炯有神的眼睛","眼神温柔，令人感到安心","眼睛像星星般閃着光芒"
+  ],
+  mouth:[
+    "鼻子挺直","小巧的鼻子","嘴角常常微微上揚",
+    "嘴巴不大，笑起來卻特別燦爛","笑起來有兩個小小的酒窩","笑容温柔，讓人看了心裏暖暖的"
+  ],
+  hand:[
+    "一雙粗糙厚實的手","一雙温暖有力的大手","一雙靈巧細緻的手",
+    "一雙佈滿歲月痕跡的手","一雙因長年勞動而略顯粗糙的手","一雙總是温暖的手"
+  ],
+  tones:["温柔地説","輕聲地説","笑着説","親切地説","耐心地説","認真地説","嚴肅地説","關心地説","安慰地説","鼓勵地説","提醒地説"],
+  expressions:["面帶笑容","眼睛彎成一條線","神情温柔","一臉認真","眉頭微微皺起","慈祥地望着我"],
+  quotes:[
+    "「別怕，我在這裏陪着你。」",
+    "「只要你努力，就一定會進步的。」",
+    "「天氣涼了，記得穿外套哦。」",
+    "「先把功課做好，再去玩吧。」",
+    "「做人要有責任感，答應了的事就要做到。」",
+    "「沒有甚麼解決不了的事，慢慢來。」"
+  ],
+  events:["照顧我生病","為家人準備早餐","幫鄰居修理水管","整理家務","陪我做功課"],
+  actionsMap:{
+    "照顧我生病":["守在我牀邊","輕輕替我敷上額頭","不停地替我拍背","仔細地量體温","倒了一杯温水給我","輕輕替我蓋好被子"],
+    "為家人準備早餐":["仔細地洗菜","切好食材","耐心地煮粥","倒好一杯温熱的牛奶","把食物整齊地擺在桌上","清潔好廚房"],
+    "幫鄰居修理水管":["拿起工具箱","立刻趕到鄰居家","跪在地上細心檢查","一絲不苟地擰緊螺絲","換上新的膠墊","對鄰居擺擺手説不用謝"],
+    "整理家務":["仔細地整理房間","認真地擦地板","清潔廚房每個角落","把衣服疊得整整齊齊","倒掉垃圾","把家裏打掃得乾乾淨淨"],
+    "陪我做功課":["靜靜地坐在我身旁","拿起我的課本細心翻看","仔細地看清楚題目","耐心地一步一步講解","幫我逐題檢查答案","鼓勵地拍拍我的肩膀"]
+  },
+  event2DetailMap:{
+    "照顧我生病":[
+      "整夜守在我牀邊，不時替我量體温，一刻也不離開",
+      "不停地替我敷額頭，輕聲問我哪裏不舒服",
+      "細心地替我倒好温水，還幫我蓋好被子，叫我好好休息",
+      "一直陪在我身旁，看我吃完藥才放心離開",
+      "半夜也起來看我的情況，臉上帶着擔心的神情"
+    ],
+    "為家人準備早餐":[
+      "天未亮便起牀，仔細地洗菜切肉，把食物煮得熱騰騰",
+      "每天都準時為我們準備早餐，從來不會偷懶",
+      "認真地把食物擺放整齊，還問我們喜歡吃甚麼",
+      "一絲不苟地煮好粥，特意為每個人準備不同的食物",
+      "每天早起為家人做早餐，從不抱怨，臉上總是掛着笑容"
+    ],
+    "幫鄰居修理水管":[
+      "立刻拿起工具箱，二話不説便跑去幫忙",
+      "跪在地上仔細檢查每一個位置，直到找出問題所在",
+      "耐心地一步一步把水管修好，絲毫不嫌麻煩",
+      "幫忙修好後，對鄰居擺擺手説不用謝，令人十分感動",
+      "不計辛苦，花了很長時間才把問題解決，令鄰居十分感激"
+    ],
+    "整理家務":[
+      "仔細地把每個角落都打掃乾淨，一塵不染",
+      "把衣服疊得整整齊齊，把家裏收拾得井井有條",
+      "每天下班回來還要整理家務，從不喊累",
+      "認真地擦地板，還把家具都排列得整整齊齊",
+      "不需要別人催促，自動自覺地把家裏打掃得乾乾淨淨"
+    ],
+    "陪我做功課":[
+      "耐心地坐在我身旁，一題一題慢慢講解，從不感到不耐煩",
+      "仔細地幫我檢查每一道題目，找出我的錯誤並加以解釋",
+      "不論多忙，每天都抽時間陪我溫習，讓我感到十分安心",
+      "當我遇到困難時，用簡單易明的方法幫我理解，令我茅塞頓開",
+      "陪我做完所有功課才休息，還鼓勵我繼續努力"
+    ]
+  },
+
+  // ── 感想句：感受 + 立意雙句合一版本 ──
+  feelings:[
+    // 他（男性）
+    "從他身上，我感受到深深的温暖和無私的關愛，令我無比感動。我以後也要像他一樣，做一個勤勞善良、有愛心的人，好好孝順家人。",
+    "我從他身上學會了責任感，明白做事要認真，答應別人的事一定要做到。我希望將來長大後，也能像他一樣，默默為家人付出，成為家人的依靠。",
+    "我明白到家人的愛是無私的，他多年來默默付出，從不求回報，這種精神令我十分感動。我要好好學習他的品格，將來用同樣的愛回報家人。",
+    "看着他為家人付出的身影，我心裏充滿感激，也暗暗下定決心，要努力讀書，用優異的成績報答他的辛勞，並且做一個有責任感的人。",
+    // 她（女性）
+    "從她身上，我感受到深深的温暖和無私的關愛，令我無比感動。我以後也要像她一樣，做一個勤勞善良、有愛心的人，好好孝順家人。",
+    "我從她身上學會了責任感，明白做事要認真，答應別人的事一定要做到。我希望將來長大後，也能像她一樣，默默為家人付出，成為家人的依靠。",
+    "我明白到家人的愛是無私的，她多年來默默付出，從不求回報，這種精神令我十分感動。我要好好學習她的品格，將來用同樣的愛回報家人。",
+    "看着她為家人付出的身影，我心裏充滿感激，也暗暗下定決心，要努力讀書，用優異的成績報答她的辛勞，並且做一個有責任感的人。"
+  ],
+  traitMap:{
+    "勤勞":["為家人準備早餐","整理家務"],
+    "細心":["照顧我生病","陪我做功課","為家人準備早餐","整理家務"],
+    "樂於助人":["幫鄰居修理水管","照顧我生病"],
+    "有責任感":["為家人準備早餐","陪我做功課","整理家務"],
+    "有耐心":["陪我做功課","照顧我生病"],
+    "善良":["照顧我生病","幫鄰居修理水管"],
+    "嚴肅":["陪我做功課","整理家務"]
+  }
+};
+
+// ── 精靈 ──
+const spiritMsgs=[
+  "📚 寫作不難，一步一步來，你一定做得到！",
+  "🌟 你選得好！試試換一句看看效果？",
+  "✨ 加油！完成這關，作文就更完整了！",
+  "💡 記得加入具體細節，人物會更生動！",
+  "🎉 做得非常好！越來越像一篇完整作文了！",
+  "🐱 繼續加油！你的寫作小精靈為你打氣！",
+  "📝 每一段都完成，你就是今天的寫作之星！",
+  "🌈 換一句試試，每個人的作文都可以不一樣！"
+];
+const spiritFaces=["🐱","🐶","🐰","🦊","🐻","🐼","🐸","🦄"];
+let spiritIdx=0;
+function changeSpiritMood(){
+  spiritIdx=(spiritIdx+1)%spiritFaces.length;
+  document.getElementById("spiritFace").textContent=spiritFaces[spiritIdx];
+  const q=["嗨！我是新形態！一起闖關吧！","汪汪！你做得很好，繼續努力！","蹦蹦！你的作文越來越漂亮了！","我看了你的作文，覺得很感動呢！","加油！完成最後一關就大功告成！","我最愛幫小朋友寫作了！","呱～你是寫作小天才！","我是獨角獸！你的作文閃閃發光！"];
+  setSpiritMsg(q[spiritIdx]);
+}
+function setSpiritMsg(msg){
+  const el=document.getElementById("spiritBubble");
+  el.style.animation="none"; void el.offsetWidth;
+  el.style.animation="bubblePop .3s ease";
+  el.textContent=msg;
+}
+function randomSpirit(){ setSpiritMsg(spiritMsgs[Math.floor(Math.random()*spiritMsgs.length)]); }
+
+// ── 關卡過場 ──
+const stageTitles={1:"先看清題目",2:"選人物和性格",3:"外貌描寫",4:"人物説話",5:"人物動作",6:"性格和事例配對",7:"完成五段作文"};
+const stageTips={1:"想清楚這篇文章要寫甚麼！",2:"選了人物和性格，第一段自動生成！",3:"由上而下描寫外貌，清楚又有條理！",4:"把他／她説過的話寫出來，更有感情！",5:"用先、再、最後，動作描寫更精彩！",6:"事例和性格要對應，才更有説服力！",7:"最後一關！感想一寫，大功告成！"};
+
+function showStageTransition(num,title,tip,cb){
+  const ov=document.getElementById("stageOverlay");
+  document.getElementById("overlayNum").textContent=num;
+  document.getElementById("overlayTitle").textContent=title;
+  document.getElementById("overlayTip").textContent=tip;
+  const sf=document.getElementById("overlayStarField"); sf.innerHTML="";
+  for(let i=0;i<40;i++){
+    const s=document.createElement("div"); s.className="overlay-star";
+    const sz=2+Math.random()*5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*1.5}s;animation-duration:${1+Math.random()}s;`;
+    sf.appendChild(s);
+  }
+  document.getElementById("overlayStars").innerHTML=
+    Array.from({length:Math.min(num,7)},(_,i)=>`<span class="star-item" style="animation-delay:${i*.12}s">⭐</span>`).join("");
+  ov.classList.add("show"); spawnConfetti();
+  setTimeout(()=>{ ov.classList.remove("show"); if(cb)cb(); },2000);
+}
+function spawnConfetti(){
+  const colors=["#ffd76a","#5aa9ff","#ff9f43","#39b36b","#f070b8","#fff"];
+  for(let i=0;i<60;i++){
+    const el=document.createElement("div"); el.className="confetti-piece";
+    const delay=Math.random()*.8,dur=.8+Math.random();
+    el.style.cssText=`left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${dur}s;animation-delay:${delay}s;width:${8+Math.random()*8}px;height:${10+Math.random()*14}px;transform:rotate(${Math.random()*360}deg);`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),(delay+dur)*1000+300);
+  }
+}
+
+// ── 導航 ──
+function prevStage(){ if(data.currentStage>1){ data.currentStage--; save(); render(); } }
+function nextStage(){
+  if(!validate(data.currentStage,true)) return;
+  if(data.currentStage<TOTAL){
+    const next=data.currentStage+1;
+    showStageTransition(next,stageTitles[next],stageTips[next],()=>{
+      data.currentStage=next; randomSpirit(); save(); render();
+    });
+  } else { render(); showTempMsg("🎉 恭喜你完成全部7關！作文已生成！","good"); }
+}
+function resetCurrentStage(){
+  const i=data.currentStage;
+  if(i===1) data.s1={ans1:"",ans2:""};
+  else if(i===2) data.s2={person:"",trait1:"",trait2:"",introIdx:0};
+  else if(i===3) data.s3={body:"",hair:"",face:"",eyes:"",mouth:"",hand:"",appIdx:0};
+  else if(i===4) data.s4={tone:"",expression:"",quotePreset:"",quoteCustom:"",useCustom:false,speechIdx:0};
+  else if(i===5) data.s5={eventType:"",act1:"",act2:"",act3:"",actIdx:0};
+  else if(i===6) data.s6={event2Type:"",event2Detail:"",ev2Idx:0};
+  else if(i===7) data.s7={feeling:""};
+  save(); render();
+}
+function resetAll(){
+  if(!confirm("確定要重設全文嗎？所有進度都會清除。")) return;
+  localStorage.removeItem(STORAGE_KEY); location.reload();
+}
+function copyEssay(){
+  navigator.clipboard.writeText(buildEssay())
+    .then(()=>showTempMsg("已複製！可貼到任何文件中。","good"))
+    .catch(()=>showTempMsg("請手動選取作文內容複製。","warn"));
+}
+function showTempMsg(msg,type){
+  const el=document.getElementById("stageMsg");
+  el.className="msg "+type; el.textContent=msg; el.classList.remove("hidden");
+  setTimeout(()=>el.classList.add("hidden"),2400);
+}
+
+// ── 驗證 ──
+function validate(stage,showMsg){
+  let ok=true,msg="";
+  if(stage===1){
+    if(data.s1.ans1!=="家人"){ok=false;msg="這篇文章的主角應該是家人哦，再想想！";}
+    else if(data.s1.ans2!=="以上皆是"){ok=false;msg="這篇作文要同時寫外貌、性格和事例！";}
+  }
+  if(stage===2){
+    if(!data.s2.person||!data.s2.trait1||!data.s2.trait2){ok=false;msg="請選人物和兩個不同性格。";}
+    else if(data.s2.trait1===data.s2.trait2){ok=false;msg="兩個性格要不同，文章才更豐富！";}
+  }
+  if(stage===3){
+    const s=data.s3;
+    if(!s.body||!s.hair||!s.face||!s.eyes||!s.mouth||!s.hand){ok=false;msg="請完成外貌的每個部分描寫。";}
+  }
+  if(stage===4){
+    const q=data.s4.useCustom?data.s4.quoteCustom.trim():data.s4.quotePreset.trim();
+    if(!data.s4.tone||!data.s4.expression||!q){ok=false;msg="請選語氣、神態，並完成人物説話。";}
+  }
+  if(stage===5){
+    if(!data.s5.eventType||!data.s5.act1||!data.s5.act2||!data.s5.act3){ok=false;msg="請選事情類型和三個連續動作。";}
+  }
+  if(stage===6){
+    if(!data.s6.event2Type){ok=false;msg="請為第二個性格選一個合適的事例。";}
+    else if(!data.s6.event2Detail.trim()){ok=false;msg="請選一個具體細節描述。";}
+    else{ const m=checkTraitMatch(data.s2.trait2,data.s6.event2Type); if(!m.ok){ok=false;msg=m.msg;} }
+  }
+  if(stage===7){
+    if(!data.s7.feeling){ok=false;msg="請選一個感想句，為作文畫上完美句號。";}
+  }
+  if(showMsg&&!ok) showTempMsg(msg,"warn");
+  return ok;
+}
+function checkTraitMatch(trait,event){
+  const gl=OPTS.traitMap[trait]||[];
+  const ok=gl.includes(event);
+  return{ok,msg:"這件事和性格「"+trait+"」的關係不夠明顯，換一件更能表現這個性格的事情吧！"};
+}
+
+// ── 輔助 ──
+function pronoun(){ return ["媽媽","奶奶","姐姐","妹妹"].includes(data.s2.person)?"她":"他"; }
+function name(){ return data.s2.person||"這位家人"; }
+function esc(s){ return s.replace(/\\/g,"\\\\").replace(/'/g,"\\'"); }
+
+// ── 生成句子 ──
+function genIntro(){
+  const p=name(),t1=data.s2.trait1||"善良",t2=data.s2.trait2||"有耐心",pr=pronoun();
+  const tpl=[
+    `在我的家人之中，我最欣賞的人是${p}。${pr}不但${t1}，還十分${t2}，每次看到${pr}為家人默默付出，我都覺得十分感動。在我眼中，${pr}是一位值得尊敬的好${p}。`,
+    `${p}是我最欣賞的一位家人。${pr}有着${t1}和${t2}的好品格，無論在甚麼時候都默默付出，從不抱怨。正因如此，我一直很尊敬${pr}，希望有一天能像${pr}一樣。`,
+    `如果要我介紹一位我最尊敬的家人，我會毫不猶豫地選${p}。${pr}既${t1}，又${t2}，一直以來都給了我很深刻的印象，也讓我從${pr}身上學到很多做人的道理。`,
+    `每當我想起最值得敬佩的家人，腦海中第一個浮現的，就是${p}。${pr}是個${t1}又${t2}的人，總是默默地照顧我們，令家裏充滿温暖，讓我非常感恩。`,
+    `在我們家，我最佩服的人就是${p}。${pr}不但做事${t1}，對家人也十分${t2}，是我心目中最理想的長輩。我希望將來也能夠像${pr}一樣，成為一個好人。`,
+    `説起讓我最欣賞的家人，我的答案一定是${p}。${pr}身上有着${t1}和${t2}兩個最美好的品格，每一天都用行動告訴我甚麼叫做愛，讓我一直以${pr}為榮。`
+  ];
+  return tpl[data.s2.introIdx%tpl.length];
+}
+function genAppearance(){
+  const p=name(),s=data.s3,pr=pronoun();
+  const tpl=[
+    `${p}的外貌給我留下了深刻印象。${pr}${s.body}，走起路來穩穩當當。頭上留着${s.hair}，總是整整齊齊。${pr}有着${s.face}，看起來非常親切；${s.eyes}，再加上${s.mouth}，讓人感到十分温暖。最讓我難以忘記的，是${p}那${s.hand}——每次看到那雙手，我都明白到${pr}為這個家付出了多少。`,
+    `${p}${s.body}，整個人看起來很有精神。${pr}留着${s.hair}，配上${s.face}，令人覺得親切可靠。走近細看，${s.eyes}，${s.mouth}，眼神和笑容都充滿温柔。此外，${p}還有${s.hand}，那雙手見證了${pr}多年來對家人的默默付出。`,
+    `${p}${s.body}，給人一種踏實可靠的感覺。${pr}留着${s.hair}，配上${s.face}，令人一見就覺得親切。仔細看${pr}的五官，${s.eyes}，${s.mouth}，整個人散發出一種令人安心的氣息。而那${s.hand}，默默訴説着${pr}多年來為家人的付出與辛勞。`
+  ];
+  return tpl[data.s3.appIdx%tpl.length];
+}
+function genSpeech(){
+  const pr=pronoun(),t=data.s4.tone||"温柔地説",ex=data.s4.expression||"神情温柔";
+  const raw=(data.s4.useCustom?(data.s4.quoteCustom||""):data.s4.quotePreset)||"";
+  const q=raw.replace(/[「」]/g,"");
+  const tpl=[
+    `${pr}${ex}地望着我，然後${t}：「${q}」這句話令我心裏暖暖的，我把它牢牢地記在心中，時常提醒自己。`,
+    `我還清楚記得，${pr}當時${ex}，輕輕拍着我的肩膀，${t}：「${q}」那一刻，我感到一股暖流悄悄流過心頭。`,
+    `${pr}一邊${ex}，一邊${t}對我説：「${q}」${pr}説的話不多，但每一句都能説到我的心坎裏，讓我久久難忘。`,
+    `那次，${pr}看見我的情況，便${ex}地走到我身旁，${t}：「${q}」聽到這番話，我眼眶頓時紅了，心裏充滿感激。`
+  ];
+  return tpl[data.s4.speechIdx%tpl.length];
+}
+function genAction(){
+  const pr=pronoun(),ev=data.s5.eventType||"照顧我";
+  const a1=data.s5.act1,a2=data.s5.act2,a3=data.s5.act3;
+  const tpl=[
+    `有一次，我遇到困難，${pr}二話不説，立刻開始幫忙：先${a1}，再${a2}，然後${a3}，整個過程有條不紊，一點也不馬虎。看着${pr}忙碌的身影，我心裏既感激又感動，不知道該説甚麼才好。`,
+    `記得有一回，為了「${ev}」，${pr}先${a1}，再${a2}，最後${a3}，把所有事情都安排得妥妥當當。${pr}做每一個步驟都那麼認真，令我非常感動，這件事深深地印在我的腦海中。`,
+    `那天，${pr}看到情況後，立刻採取行動，先${a1}，然後${a2}，最後仔細地${a3}。整個過程，${pr}神情專注，動作輕柔，令我十分佩服，也讓我感到無比温暖。`,
+    `那件事讓我記憶猶新。${pr}先${a1}，接着${a2}，最後才${a3}，絲毫不覺得麻煩。看着${pr}認真的樣子，我真的由衷地佩服，也深深體會到甚麼叫做愛。`
+  ];
+  return tpl[data.s5.actIdx%tpl.length];
+}
+function genEvent2(){
+  const pr=pronoun(),t2=data.s2.trait2||"善良";
+  const ev=data.s6.event2Type||"整理家務";
+  const det=data.s6.event2Detail.trim()||"默默幫家人分擔工作，從不計較";
+  const tpl=[
+    `此外，${pr}的${t2}也常常在生活的細節中流露出來。記得有一次「${ev}」時，${pr}${det}，從頭到尾都沒有抱怨半句。這件事讓我更深深體會到${pr}的可貴之處。`,
+    `除了以上的事情，讓我難忘的還有另一件事——在「${ev}」的時候，${pr}${det}。這件事清楚地表現出${pr}${t2}的一面，令我由心裏感到感激。`,
+    `${pr}的${t2}不只在大事上表現出來，就連日常「${ev}」這樣的小事，${pr}也${det}，從來不需要別人催促。這一切，都讓我更加敬愛${pr}。`,
+    `另一件令我印象深刻的事，是有一次「${ev}」時，${pr}${det}，讓旁邊的人都感到十分温暖。這件事充分表現出${pr}${t2}的品格，給我留下了深刻的印象。`
+  ];
+  return tpl[data.s6.ev2Idx%tpl.length];
+}
+
+// ── 作文組合 ──
+function buildEssay(){
+  const parts=[];
+  if(data.s2.person&&data.s2.trait1&&data.s2.trait2) parts.push(genIntro());
+  const s=data.s3;
+  if(s.body&&s.hair&&s.face&&s.eyes&&s.mouth&&s.hand) parts.push(genAppearance());
+  const q=(data.s4.useCustom?data.s4.quoteCustom:data.s4.quotePreset)||"";
+  if(data.s5.eventType&&data.s5.act1&&data.s5.act2&&data.s5.act3&&data.s4.tone&&data.s4.expression&&q.trim())
+    parts.push(genAction()+"\n　　"+genSpeech());
+  if(data.s6.event2Type&&data.s6.event2Detail.trim()) parts.push(genEvent2());
+  if(data.s7.feeling) parts.push(data.s7.feeling);
+  return parts.filter(Boolean).join("\n\n");
+}
+function charCount(t){ return t.replace(/\s/g,"").length; }
+
+// ── 渲染 ──
+function render(){
+  document.getElementById("progressFill").style.width=(data.currentStage/TOTAL*100)+"%";
+  document.getElementById("progressText").textContent=`第 ${data.currentStage} 關 / 共 ${TOTAL} 關`;
+  document.getElementById("stageBadge").textContent=`第 ${data.currentStage} 關｜${stageTitles[data.currentStage]}`;
+  document.getElementById("stageDots").innerHTML=
+    Array.from({length:TOTAL},(_,i)=>{
+      const n=i+1,cls=n<data.currentStage?"done":n===data.currentStage?"current":"";
+      return `<div class="stage-dot ${cls}">${n<data.currentStage?"✓":n}</div>`;
+    }).join("");
+  document.getElementById("questionCard").innerHTML=renderStage(data.currentStage);
+  bindEvents();
+  renderEssay();
+}
+function renderEssay(){
+  const essay=buildEssay(),cnt=charCount(essay);
+  const board=document.getElementById("essayBoard");
+  board.innerHTML=essay
+    ? essay.split("\n\n").map((p,i)=>`<div class="essay-para" style="animation-delay:${i*.08}s">${p.replace(/\n/g,"<br>")}</div>`).join("")
+    : "（你的作文會在這裏一步一步完成。）";
+  const chip=document.getElementById("wordCountChip");
+  chip.className=cnt>=300?"count-chip ok":cnt>=180?"count-chip warn":"count-chip";
+  chip.innerHTML=`字數：<span id="wordCount">${cnt}</span>`;
+  renderChecklist(cnt);
+  save();
+}
+function renderChecklist(cnt){
+  cnt=cnt||charCount(buildEssay());
+  const s=data.s3;
+  const checks=[
+    {l:"有寫清楚人物",ok:!!data.s2.person},
+    {l:"有外貌描寫",ok:!!(s.body&&s.hair&&s.face&&s.eyes&&s.mouth&&s.hand)},
+    {l:"有兩個不同性格",ok:!!(data.s2.trait1&&data.s2.trait2&&data.s2.trait1!==data.s2.trait2)},
+    {l:"有具體事例",ok:!!(data.s5.eventType&&data.s6.event2Type)},
+    {l:"有語言描寫",ok:!!(data.s4.tone&&data.s4.expression&&(data.s4.quotePreset||data.s4.quoteCustom))},
+    {l:"有行為描寫（動作）",ok:!!(data.s5.act1&&data.s5.act2&&data.s5.act3)},
+    {l:"有感想",ok:!!data.s7.feeling},
+    {l:"字數達標（300字或以上）",ok:cnt>=300}
+  ];
+  document.getElementById("checklist").innerHTML=checks.map(c=>
+    `<div class="check-item ${c.ok?"ok":"bad"}">${c.ok?"✅":"⚠️"} ${c.l}</div>`
+  ).join("");
+  const fm=document.getElementById("finalMessage");
+  if(data.currentStage===7){
+    const tips=[];
+    if(!data.s2.trait2) tips.push("還未加入第二個性格。");
+    if(!data.s7.feeling) tips.push("還未有感想句。");
+    if(cnt<300) tips.push("目前字數未達300字，可補充外貌細節或事例。");
+    if(tips.length===0){
+      fm.className="msg good";
+      fm.innerHTML="🎉 <b>恭喜你完成作文！</b>內容已包括人物、外貌、兩個性格、事例、語言描寫、行為描寫和感想，非常完整！";
+    }else{
+      fm.className="msg warn"; fm.textContent=tips.join(" ");
+    }
+    fm.classList.remove("hidden");
+  }else{ fm.classList.add("hidden"); }
+}
+
+// ── 關卡 HTML ──
+function renderStage(stage){
+  if(stage===1) return `
+    <h2 class="question-title">先看清題目 🔍</h2>
+    <div class="hint">🌟 仔細讀一讀題目，想清楚這篇作文要寫甚麼，才能下筆！</div>
+    <div class="section-label">這篇文章的主角是誰？</div>
+    <div class="options">
+      ${["家人","同學","老師"].map(x=>`<div class="option ${data.s1.ans1===x?"active":""}" onclick="sv('s1.ans1','${x}')">${x}</div>`).join("")}
+    </div>
+    <div class="section-label">這篇文章要突出人物的甚麼？</div>
+    <div class="options">
+      ${["外貌","性格","行為","以上皆是"].map(x=>`<div class="option ${data.s1.ans2===x?"active":""}" onclick="sv('s1.ans2','${x}')">${x}</div>`).join("")}
+    </div>
+    ${data.s1.ans1==="家人"&&data.s1.ans2==="以上皆是"?`<div class="msg good">✅ 答對了！這篇作文要同時寫家人的<b>外貌、性格和事例</b>。你真聰明！🎉</div>`:""}
+    <p class="small-note" style="margin-top:10px">小提示：這一關是熱身任務，幫你看清楚寫作要求！</p>
+  `;
+
+  if(stage===2) return `
+    <h2 class="question-title">選人物和兩個性格 👨‍👩‍👧</h2>
+    <div class="hint">🌟 想一想：你最想介紹哪一位家人？再選兩個最能代表他／她的性格吧！</div>
+    <div class="section-label">1. 你要介紹誰？</div>
+    <div class="options">
+      ${OPTS.person.map(x=>`<div class="option ${data.s2.person===x?"active":""}" onclick="sv('s2.person','${x}')">${x}</div>`).join("")}
+    </div>
+    <div class="inline-grid">
+      <div>
+        <div class="section-label">2. 第一個性格</div>
+        <div class="options" style="flex-direction:column">
+          ${OPTS.traits.map(x=>`<div class="option ${data.s2.trait1===x?"active":""}" onclick="sv('s2.trait1','${x}')" style="width:100%;justify-content:flex-start">${x}</div>`).join("")}
+        </div>
+      </div>
+      <div>
+        <div class="section-label">3. 第二個性格</div>
+        <div class="options" style="flex-direction:column">
+          ${OPTS.traits.map(x=>`<div class="option ${data.s2.trait2===x?"active":""}" onclick="sv('s2.trait2','${x}')" style="width:100%;justify-content:flex-start">${x}</div>`).join("")}
+        </div>
+      </div>
+    </div>
+    <div class="section-label">即時生成的第一段開頭</div>
+    <div class="sentence-box">${data.s2.person&&data.s2.trait1&&data.s2.trait2?genIntro():"請先選人物和兩個不同性格。"}</div>
+    <button class="btn-soft mini" style="margin-top:6px" onclick="cycle('intro')">🔄 換一句</button>
+  `;
+
+  if(stage===3){
+    const sel=(label,key,arr)=>`
+      <div>
+        <div class="section-label">${label}</div>
+        <select onchange="sv('s3.${key}',this.value)">
+          <option value="">請選擇</option>
+          ${arr.map(x=>`<option ${data.s3[key]===x?"selected":""}>${x}</option>`).join("")}
+        </select>
+      </div>`;
+    return `
+      <h2 class="question-title">外貌描寫 👀</h2>
+      <div class="hint">🌟 試回憶一下，他／她的外表有甚麼最明顯的特點？記得「先整體後局部，由上而下」！</div>
+      <div class="three-grid">
+        ${sel("① 整體身形","body",OPTS.body)}
+        ${sel("② 頭髮","hair",OPTS.hair)}
+        ${sel("③ 臉","face",OPTS.face)}
+        ${sel("④ 眉毛和眼睛","eyes",OPTS.eyes)}
+        ${sel("⑤ 嘴巴和笑容","mouth",OPTS.mouth)}
+        ${sel("⑥ 手","hand",OPTS.hand)}
+      </div>
+      <div class="section-label">即時生成的外貌段</div>
+      <div class="sentence-box">${data.s3.body&&data.s3.hair&&data.s3.face&&data.s3.eyes&&data.s3.mouth&&data.s3.hand?genAppearance():"請完成外貌描寫各部分。"}</div>
+      <button class="btn-soft mini" style="margin-top:6px" onclick="cycle('appearance')">🔄 換一句</button>
+    `;
+  }
+
+  if(stage===4) return `
+    <h2 class="question-title">人物説話 💬</h2>
+    <div class="hint">🌟 想想他／她曾説過甚麼令你難忘的話。把語氣和神態也寫進去，句子會更生動！</div>
+    <div class="two-col">
+      <div>
+        <div class="section-label">語氣</div>
+        <select onchange="sv('s4.tone',this.value)">
+          <option value="">請選擇</option>
+          ${OPTS.tones.map(x=>`<option ${data.s4.tone===x?"selected":""}>${x}</option>`).join("")}
+        </select>
+      </div>
+      <div>
+        <div class="section-label">神態</div>
+        <select onchange="sv('s4.expression',this.value)">
+          <option value="">請選擇</option>
+          ${OPTS.expressions.map(x=>`<option ${data.s4.expression===x?"selected":""}>${x}</option>`).join("")}
+        </select>
+      </div>
+    </div>
+    <div class="section-label">對話方式</div>
+    <div class="options">
+      <div class="option ${!data.s4.useCustom?"active":""}" onclick="setQuoteMode(false)">選提供的句子</div>
+      <div class="option ${data.s4.useCustom?"active":""}" onclick="setQuoteMode(true)">自己輸入句子</div>
+    </div>
+    ${!data.s4.useCustom?`
+      <div class="options" style="flex-direction:column;margin-top:4px">
+        ${OPTS.quotes.map(x=>`<div class="option-block ${data.s4.quotePreset===x?"active":""}" onclick="sv('s4.quotePreset','${esc(x)}')">${x}</div>`).join("")}
+      </div>
+    `:`<textarea id="customQ" placeholder="輸入人物説的話，例如：別怕，我在這裏陪着你。">${data.s4.quoteCustom||""}</textarea>`}
+    <div class="section-label">即時生成的語言描寫句</div>
+    <div class="sentence-box">${data.s4.tone&&data.s4.expression&&(data.s4.quotePreset||data.s4.quoteCustom)?genSpeech():"請先完成語氣、神態和人物説話。"}</div>
+    <button class="btn-soft mini" style="margin-top:6px" onclick="cycle('speech')">🔄 換一句</button>
+  `;
+
+  if(stage===5){
+    const acts=data.s5.eventType?(OPTS.actionsMap[data.s5.eventType]||[]):[];
+    const actSel=(label,key)=>`
+      <div>
+        <div class="section-label">${label}</div>
+        <select onchange="sv('s5.${key}',this.value)">
+          <option value="">請選擇</option>
+          ${acts.map(x=>`<option ${data.s5[key]===x?"selected":""}>${x}</option>`).join("")}
+        </select>
+      </div>`;
+    return `
+      <h2 class="question-title">人物動作 🏃</h2>
+      <div class="hint">🌟 寫動作時，用「先、再、最後」讓句子更清楚！選一件最能表現性格的事情。</div>
+      <div class="section-label">選事情類型</div>
+      <div class="options">
+        ${OPTS.events.map(x=>`<div class="option ${data.s5.eventType===x?"active":""}" onclick="selectEvent1('${esc(x)}')">${x}</div>`).join("")}
+      </div>
+      ${data.s5.eventType?`
+        <div class="three-grid" style="margin-top:4px">
+          ${actSel("先做甚麼？","act1")}
+          ${actSel("再做甚麼？","act2")}
+          ${actSel("最後做甚麼？","act3")}
+        </div>
+      `:`<p class="small-note" style="margin-top:10px">請先選一件事情，才可選動作。</p>`}
+      <div class="section-label">即時生成的行為描寫句</div>
+      <div class="sentence-box">${data.s5.eventType&&data.s5.act1&&data.s5.act2&&data.s5.act3?genAction():"請先選事情和三個動作。"}</div>
+      <button class="btn-soft mini" style="margin-top:6px" onclick="cycle('action')">🔄 換一句</button>
+    `;
+  }
+
+  if(stage===6){
+    const m=data.s6.event2Type?checkTraitMatch(data.s2.trait2,data.s6.event2Type):null;
+    const detailList=data.s6.event2Type?(OPTS.event2DetailMap[data.s6.event2Type]||[]):[];
+    return `
+      <h2 class="question-title">性格和事例配對 🔗</h2>
+      <div class="hint">🌟 第二個事例要清楚表現第二個性格，才能令讀者信服！</div>
+      <div class="section-label">第二個性格：<span class="tag">${data.s2.trait2||"未選"}</span></div>
+      <div class="section-label">選一件能表現「${data.s2.trait2||"這個性格"}」的事情</div>
+      <div class="options">
+        ${OPTS.events.map(x=>`<div class="option ${data.s6.event2Type===x?"active":""}" onclick="selectEvent2('${esc(x)}')">${x}</div>`).join("")}
+      </div>
+      ${m?`<div class="msg ${m.ok?"good":"warn"}">${m.ok?"✅ 這個事例和性格很配合，做得好！":"⚠️ "+m.msg}</div>`:""}
+      ${data.s6.event2Type?`
+        <div class="section-label">選一個具體細節描述</div>
+        <div class="options" style="flex-direction:column;gap:10px">
+          ${detailList.map(x=>`<div class="option-block ${data.s6.event2Detail===x?"active":""}" onclick="sv('s6.event2Detail','${esc(x)}')">${x}</div>`).join("")}
+        </div>
+      `:`<p class="small-note" style="margin-top:10px">請先選一件事情，才可選具體細節。</p>`}
+      <div class="section-label">即時生成的第四段</div>
+      <div class="sentence-box">${data.s6.event2Type&&data.s6.event2Detail.trim()?genEvent2():"請先選第二個事例，再選具體細節。"}</div>
+      <button class="btn-soft mini" style="margin-top:6px" onclick="cycle('event2')">🔄 換一句</button>
+    `;
+  }
+
+  if(stage===7){
+    const cnt=charCount(buildEssay());
+    return `
+      <h2 class="question-title">完成五段作文 🎉</h2>
+      <div class="hint">🌟 最後一段要寫感想。先寫你從這位家人身上學到甚麼，再寫你立下的心願！</div>
+      <div class="section-label">選一個感想句（感受 + 立意）</div>
+      <div class="options" style="flex-direction:column;gap:12px">
+        ${OPTS.feelings.map(x=>`<div class="option-block ${data.s7.feeling===x?"active":""}" onclick="sv('s7.feeling','${esc(x)}')" style="line-height:1.9">${x}</div>`).join("")}
+      </div>
+      <div class="msg ${cnt>=300&&cnt<=450?"good":cnt>=180?"warn":"bad"}" style="margin-top:14px">
+        目前字數：${cnt} 字。
+        ${cnt<300?"建議補充更多細節，令字數接近300字以上。":""}
+        ${cnt>450?"字數稍多，可刪去重複內容，令文章更精練。":""}
+        ${cnt>=300&&cnt<=450?"字數非常合適！做得好！":""}
+      </div>
+    `;
+  }
+  return "";
+}
+
+// ── 互動函數 ──
+function sv(path,value){
+  const keys=path.split(".");
+  let obj=data;
+  while(keys.length>1) obj=obj[keys.shift()];
+  obj[keys[0]]=value;
+  save(); render();
+}
+function cycle(section){
+  const map={intro:"s2.introIdx",appearance:"s3.appIdx",speech:"s4.speechIdx",action:"s5.actIdx",event2:"s6.ev2Idx"};
+  if(map[section]){
+    const keys=map[section].split(".");
+    let obj=data;
+    while(keys.length>1) obj=obj[keys.shift()];
+    obj[keys[0]]=(obj[keys[0]]+1)%6;
+  }
+  save(); render();
+}
+function selectEvent1(type){
+  data.s5.eventType=type; data.s5.act1=data.s5.act2=data.s5.act3="";
+  save(); render();
+}
+function selectEvent2(type){
+  data.s6.event2Type=type; data.s6.event2Detail="";
+  save(); render();
+}
+function setQuoteMode(custom){ data.s4.useCustom=custom; save(); render(); }
+function bindEvents(){
+  const cq=document.getElementById("customQ");
+  if(cq) cq.addEventListener("input",e=>{ data.s4.quoteCustom=e.target.value; save(); renderEssay(); });
+}
+
+// ── 啟動 ──
+loadDraft();
+render();
+</script>
+</body>
+</html>
