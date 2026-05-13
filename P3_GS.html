@@ -356,48 +356,337 @@
         </div>
 
         <div id="start-screen" class="screen hidden">
-            
-            <button id="btn-starter-pack" onclick="claimStarterPack()">🎁 領取新手禮包</button>
-            <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#607D8B;">📖 遊戲說明 (新手必看)</button>
 
-            <hr style="width: 80%; border-top: 4px dashed #006064;">
-            
-            <h2>🗺️ 選擇探索地區</h2>
-            <p style="margin:0; font-weight:bold; color:#006064;">不同地區有較高機率遇到對應屬性的野生寶可夢！</p>
-            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
-                <button class="btn-blue" onclick="startGame('hk')">🌊 香港是我家 (蔚藍之海)</button>
-                <button class="btn-green" onclick="startGame('house')">🌳 安居樂 (豐饒之森)</button>
-                <button class="btn-orange" onclick="startGame('energy')">🌋 能源世界 (烈焰火山)</button>
-                <button class="btn-grey" style="background:#795548;" onclick="startGame('freedom')">⛰️ 自由與守規 (雷霆高原)</button>
-                <button class="btn-purple" onclick="startGame('culture')">🔮 文化交融 (幻影遺跡)</button>
-            </div>
-            
-            <hr style="width: 80%; border-top: 4px dashed #006064;">
-            
-            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
-                <button class="btn-gold" style="background:#FFC107; color:#333; border-color:#FFA000;" onclick="openAlbum()">🎴 圖鑑與閃卡紀念冊</button>
-                <button class="btn-gold" onclick="openGacha()">🎰 每日抽獎</button>
-                <button class="btn-black" style="background:#424242;" onclick="openSecretMarket()">⛺ llsy市場 </button>
-                <button class="btn-red" style="background:#D32F2F;" onclick="openPartnerHub()">🐾 寶可夢進化中心</button>
+<style>
+/* ===== MAP SCREEN STYLES ===== */
+#map-scroll-wrapper {
+    width: 95%;
+    max-width: 900px;
+    overflow-x: auto;
+    padding: 10px 0 20px;
+    -webkit-overflow-scrolling: touch;
+}
+#map-road {
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    padding: 20px 30px 30px;
+    background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 40%, #228B22 40%, #4CAF50 60%, #8BC34A 100%);
+    border-radius: 20px;
+    border: 6px solid #33691E;
+    box-shadow: 0 8px 0 #1B5E20;
+    min-width: 1100px;
+    position: relative;
+    min-height: 280px;
+}
+/* Dotted path on ground */
+#map-road::before {
+    content: '';
+    position: absolute;
+    bottom: 55px;
+    left: 30px;
+    right: 30px;
+    height: 12px;
+    background: repeating-linear-gradient(90deg, #FFF8DC 0px, #FFF8DC 30px, transparent 30px, transparent 50px);
+    border-radius: 6px;
+    opacity: 0.7;
+}
+.map-location {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    min-width: 110px;
+    margin: 0 10px;
+    transition: transform 0.15s;
+}
+.map-location:active { transform: translateY(4px); }
+.map-location.locked { cursor: not-allowed; opacity: 0.6; filter: grayscale(0.5); }
 
-                <button class="btn-gold" onclick="openShop()">🛒 藥水商店</button>
-                <button class="btn-purple" onclick="openSuperForge()">👑 神器祭壇</button>
-                <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊</button>
-                <button class="btn-blue" style="background-color: #00796B;" onclick="openBuildZone()">🔨 進入建築工坊</button>
-            </div>
-            
-            <hr style="width: 80%; border-top: 4px dashed #006064;">
-            <h2>🗺️ 終極 Boss 挑戰區 (需建大城堡)</h2>
-            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;" id="boss-menu-area">
-                <button class="btn-black" id="btn-boss-1" onclick="startBossFight(1)" disabled>🔒 Boss 1 (20秒)</button>
-                <button class="btn-black" id="btn-boss-2" onclick="startBossFight(2)" disabled>🔒 Boss 2 (需20連勝)</button>
-                <button class="btn-black" id="btn-boss-3" onclick="startBossFight(3)" disabled>🔒 Boss 3 (需50連勝)</button>
-                <button class="btn-black" id="btn-boss-4" onclick="startBossFight(4)" disabled>🔒 Boss 4 (需100連勝)</button>
-                <button class="btn-black" id="btn-boss-5" onclick="startBossFight(5)" disabled>🔒 Boss 5 (需150連勝)</button>
-            </div>
+.map-pin {
+    font-size: 3em;
+    background: rgba(255,255,255,0.92);
+    border-radius: 50%;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 5px solid #FFF;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.25), 0 0 0 3px rgba(255,255,255,0.4);
+    margin-bottom: 6px;
+    transition: transform 0.2s;
+    position: relative;
+    z-index: 2;
+}
+.map-location:not(.locked):hover .map-pin {
+    transform: translateY(-6px) scale(1.08);
+}
+.map-pin.pin-blue   { border-color: #1565C0; background: linear-gradient(135deg,#E3F2FD,#BBDEFB); box-shadow: 0 6px 0 #0D47A1, 0 0 15px rgba(33,150,243,0.5); }
+.map-pin.pin-green  { border-color: #2E7D32; background: linear-gradient(135deg,#E8F5E9,#C8E6C9); box-shadow: 0 6px 0 #1B5E20, 0 0 15px rgba(76,175,80,0.5); }
+.map-pin.pin-orange { border-color: #E65100; background: linear-gradient(135deg,#FFF3E0,#FFE0B2); box-shadow: 0 6px 0 #BF360C, 0 0 15px rgba(255,152,0,0.5); }
+.map-pin.pin-brown  { border-color: #4E342E; background: linear-gradient(135deg,#EFEBE9,#D7CCC8); box-shadow: 0 6px 0 #3E2723, 0 0 15px rgba(121,85,72,0.5); }
+.map-pin.pin-purple { border-color: #6A1B9A; background: linear-gradient(135deg,#F3E5F5,#E1BEE7); box-shadow: 0 6px 0 #4A148C, 0 0 15px rgba(156,39,176,0.5); }
+.map-pin.pin-gold   { border-color: #F57F17; background: linear-gradient(135deg,#FFFDE7,#FFF9C4); box-shadow: 0 6px 0 #E65100, 0 0 15px rgba(255,193,7,0.6); animation: map-glow-gold 2s infinite; }
+.map-pin.pin-dark   { border-color: #212121; background: linear-gradient(135deg,#424242,#212121); box-shadow: 0 6px 0 #000, 0 0 15px rgba(0,0,0,0.6); }
+.map-pin.pin-red    { border-color: #B71C1C; background: linear-gradient(135deg,#FFEBEE,#FFCDD2); box-shadow: 0 6px 0 #7F0000, 0 0 15px rgba(244,67,54,0.5); }
+.map-pin.pin-teal   { border-color: #004D40; background: linear-gradient(135deg,#E0F2F1,#B2DFDB); box-shadow: 0 6px 0 #00251A, 0 0 15px rgba(0,150,136,0.5); }
+.map-pin.pin-boss   { border-color: #B71C1C; background: linear-gradient(135deg,#212121,#3e0000); box-shadow: 0 6px 0 #000, 0 0 20px rgba(244,67,54,0.7); animation: map-glow-boss 1.5s infinite; }
+
+@keyframes map-glow-gold {
+    0%,100% { box-shadow: 0 6px 0 #E65100, 0 0 10px rgba(255,193,7,0.4); }
+    50%      { box-shadow: 0 6px 0 #E65100, 0 0 25px rgba(255,193,7,0.9); }
+}
+@keyframes map-glow-boss {
+    0%,100% { box-shadow: 0 6px 0 #000, 0 0 10px rgba(244,67,54,0.5); }
+    50%      { box-shadow: 0 6px 0 #000, 0 0 30px rgba(244,67,54,1); }
+}
+
+.map-label {
+    font-size: 0.7em;
+    font-weight: bold;
+    color: #FFF;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    text-align: center;
+    line-height: 1.3;
+    max-width: 100px;
+}
+.map-sublabel {
+    font-size: 0.6em;
+    color: #FFF9C4;
+    text-shadow: 1px 1px 0 #000;
+    text-align: center;
+    margin-top: 2px;
+}
+.map-lock-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #B71C1C;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75em;
+    border: 2px solid #FFF;
+    z-index: 3;
+}
+.map-divider {
+    font-size: 1.8em;
+    align-self: center;
+    opacity: 0.6;
+    min-width: 30px;
+    text-align: center;
+    flex-shrink: 0;
+}
+.map-section-title {
+    color: #FFD700;
+    font-size: 0.95em;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #000;
+    text-align: center;
+    background: rgba(0,0,0,0.5);
+    border-radius: 8px;
+    padding: 2px 8px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+}
+.map-boss-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    background: rgba(0,0,0,0.5);
+    border: 4px solid #B71C1C;
+    border-radius: 15px;
+    padding: 10px 8px;
+    min-width: 130px;
+    position: relative;
+}
+.map-boss-zone h4 {
+    color: #FF5252;
+    margin: 0 0 5px;
+    font-size: 0.85em;
+    text-shadow: 0 0 8px #FF5252;
+    text-align: center;
+}
+
+/* Scroll hint arrow */
+.map-scroll-hint {
+    text-align: center;
+    color: #FFF9C4;
+    font-size: 0.85em;
+    margin-top: 6px;
+    animation: hint-blink 2s infinite;
+}
+@keyframes hint-blink {
+    0%,100% { opacity: 1; } 50% { opacity: 0.4; }
+}
+</style>
+
+<button id="btn-starter-pack" onclick="claimStarterPack()">🎁 領取新手禮包</button>
+<button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#607D8B;">📖 遊戲說明 (新手必看)</button>
+
+<div id="map-scroll-wrapper">
+    <div id="map-road">
+
+        <!-- ===== ZONE 1: EXPLORE AREAS ===== -->
+        <div class="map-location" onclick="startGame('hk')" title="香港是我家">
+            <div class="map-section-title">🗺️ 探索地區</div>
+            <div class="map-pin pin-blue">🌊</div>
+            <div class="map-label">香港是我家</div>
+            <div class="map-sublabel">蔚藍之海</div>
         </div>
 
-        <div id="instruction-screen" class="screen hidden">
+        <div class="map-divider">➜</div>
+
+        <div class="map-location" onclick="startGame('house')" title="安居樂業">
+            <div class="map-pin pin-green">🌳</div>
+            <div class="map-label">安居樂業</div>
+            <div class="map-sublabel">豐饒之森</div>
+        </div>
+
+        <div class="map-divider">➜</div>
+
+        <div class="map-location" onclick="startGame('energy')" title="能源世界">
+            <div class="map-pin pin-orange">🌋</div>
+            <div class="map-label">能源世界</div>
+            <div class="map-sublabel">烈焰火山</div>
+        </div>
+
+        <div class="map-divider">➜</div>
+
+        <div class="map-location" onclick="startGame('freedom')" title="自由與守規">
+            <div class="map-pin pin-brown">⛰️</div>
+            <div class="map-label">自由與守規</div>
+            <div class="map-sublabel">雷霆高原</div>
+        </div>
+
+        <div class="map-divider">➜</div>
+
+        <div class="map-location" onclick="startGame('culture')" title="文化交融">
+            <div class="map-pin pin-purple">🔮</div>
+            <div class="map-label">文化交融</div>
+            <div class="map-sublabel">幻影遺跡</div>
+        </div>
+
+        <!-- Separator -->
+        <div style="width:4px; background:rgba(255,255,255,0.3); height:120px; border-radius:2px; align-self:center; margin:0 15px; flex-shrink:0;"></div>
+
+        <!-- ===== ZONE 2: FACILITIES ===== -->
+        <div class="map-location" onclick="openAlbum()" title="圖鑑">
+            <div class="map-section-title">🏙️ 設施區</div>
+            <div class="map-pin pin-gold">🎴</div>
+            <div class="map-label">圖鑑紀念冊</div>
+            <div class="map-sublabel">閃卡收集</div>
+        </div>
+
+        <div class="map-divider">·</div>
+
+        <div class="map-location" onclick="openGacha()" title="每日抽獎">
+            <div class="map-pin pin-gold">🎰</div>
+            <div class="map-label">幸運抽獎</div>
+            <div class="map-sublabel">每日限定</div>
+        </div>
+
+        <div class="map-divider">·</div>
+
+        <div class="map-location" onclick="openPartnerHub()" title="進化中心">
+            <div class="map-pin pin-red">🐾</div>
+            <div class="map-label">進化中心</div>
+            <div class="map-sublabel">拍檔升級</div>
+        </div>
+
+        <div class="map-divider">·</div>
+
+        <div class="map-location" onclick="openShop()" title="藥水商店">
+            <div class="map-pin pin-green">🛒</div>
+            <div class="map-label">藥水商店</div>
+            <div class="map-sublabel">補充補品</div>
+        </div>
+
+        <!-- Separator -->
+        <div style="width:4px; background:rgba(255,255,255,0.3); height:120px; border-radius:2px; align-self:center; margin:0 15px; flex-shrink:0;"></div>
+
+        <!-- ===== ZONE 3: CRAFTING ===== -->
+        <div class="map-location" onclick="openForgeZone()" title="裝備鍛造">
+            <div class="map-section-title">⚒️ 工坊區</div>
+            <div class="map-pin pin-orange">⚔️</div>
+            <div class="map-label">裝備鍛造坊</div>
+            <div class="map-sublabel">武器&防具</div>
+        </div>
+
+        <div class="map-divider">·</div>
+
+        <div class="map-location" onclick="openSuperForge()" title="神器祭壇">
+            <div class="map-pin pin-gold">👑</div>
+            <div class="map-label">神器祭壇</div>
+            <div class="map-sublabel">超極裝備</div>
+        </div>
+
+        <div class="map-divider">·</div>
+
+        <div class="map-location" onclick="openBuildZone()" title="建築工坊">
+            <div class="map-pin pin-teal">🔨</div>
+            <div class="map-label">建築工坊</div>
+            <div class="map-sublabel">城堡&建設</div>
+        </div>
+
+        <div class="map-divider">·</div>
+
+        <div class="map-location" onclick="openSecretMarket()" title="神秘市場">
+            <div class="map-pin pin-dark">⛺</div>
+            <div class="map-label">神秘市場</div>
+            <div class="map-sublabel">稀有交換</div>
+        </div>
+
+        <!-- Separator -->
+        <div style="width:4px; background:rgba(255,255,255,0.3); height:120px; border-radius:2px; align-self:center; margin:0 15px; flex-shrink:0;"></div>
+
+        <!-- ===== ZONE 4: BOSS AREA ===== -->
+        <div class="map-boss-zone">
+            <h4>💀 終極 Boss 挑戰區</h4>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;">
+                <div class="map-location" id="map-boss-1" onclick="startBossFight(1)" style="min-width:80px; margin:0;">
+                    <div class="map-pin pin-boss" style="width:55px;height:55px;font-size:2em;">☠️</div>
+                    <div class="map-label" style="font-size:0.65em;">Boss 1</div>
+                    <div class="map-lock-badge" id="map-lock-1">🔒</div>
+                </div>
+                <div class="map-location" id="map-boss-2" onclick="startBossFight(2)" style="min-width:80px; margin:0;">
+                    <div class="map-pin pin-boss" style="width:55px;height:55px;font-size:2em;">💀</div>
+                    <div class="map-label" style="font-size:0.65em;">Boss 2</div>
+                    <div class="map-lock-badge" id="map-lock-2">🔒</div>
+                </div>
+                <div class="map-location" id="map-boss-3" onclick="startBossFight(3)" style="min-width:80px; margin:0;">
+                    <div class="map-pin pin-boss" style="width:55px;height:55px;font-size:2em;">🐉</div>
+                    <div class="map-label" style="font-size:0.65em;">Boss 3</div>
+                    <div class="map-lock-badge" id="map-lock-3">🔒</div>
+                </div>
+                <div class="map-location" id="map-boss-4" onclick="startBossFight(4)" style="min-width:80px; margin:0;">
+                    <div class="map-pin pin-boss" style="width:55px;height:55px;font-size:2em;">👹</div>
+                    <div class="map-label" style="font-size:0.65em;">Boss 4</div>
+                    <div class="map-lock-badge" id="map-lock-4">🔒</div>
+                </div>
+                <div class="map-location" id="map-boss-5" onclick="startBossFight(5)" style="min-width:80px; margin:0;">
+                    <div class="map-pin pin-boss" style="width:55px;height:55px;font-size:2em;">⭐</div>
+                    <div class="map-label" style="font-size:0.65em;">Boss 5</div>
+                    <div class="map-lock-badge" id="map-lock-5">🔒</div>
+                </div>
+            </div>
+            <div style="color:#FF8A80;font-size:0.65em;text-align:center;margin-top:4px;">需建大城堡解鎖</div>
+        </div>
+
+    </div><!-- end map-road -->
+    <div class="map-scroll-hint">← 左右滑動查看更多地點 →</div>
+</div><!-- end map-scroll-wrapper -->
+
+</div>
+
+<div id="instruction-screen" class="screen hidden">
             <h2>📖 冒險者終極指南</h2>
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #4CAF50; max-height: 400px; overflow-y: auto;">
                 <h3 style="color:#B71C1C; margin-top:0;">🩸 血月異變與 7 大神獸降臨 (極限難度)</h3>
