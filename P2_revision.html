@@ -106,6 +106,118 @@
             width: 88%;
         }
 
+        
+        /* ══ 新手禮包翻牌動畫 ══ */
+        #newbie-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92); z-index: 3000;
+            display: none; flex-direction: column;
+            justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        #newbie-modal.show {
+            display: flex;
+        }
+        #newbie-modal.show { opacity: 1; display: flex; }
+        #newbie-modal h2 {
+            color: #FFD700; font-size: 1.8em; margin-bottom: 5px;
+            text-shadow: 0 0 20px #FFD700, 0 0 40px #FF8C00;
+            animation: titlePulse 1.5s infinite alternate;
+        }
+        #newbie-modal .subtitle {
+            color: #FFF9C4; font-size: 1em; margin-bottom: 25px; opacity: 0.85;
+        }
+        @keyframes titlePulse {
+            from { text-shadow: 0 0 10px #FFD700; transform: scale(1); }
+            to   { text-shadow: 0 0 30px #FFD700, 0 0 60px #FF8C00; transform: scale(1.05); }
+        }
+        .card-grid {
+            display: grid; grid-template-columns: repeat(3, 110px);
+            gap: 16px; margin-bottom: 28px;
+        }
+        .flip-card {
+            width: 110px; height: 130px;
+            perspective: 800px; cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.55s cubic-bezier(.4,2,.6,1);
+        }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 14px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-size: 1em; font-weight: bold;
+        }
+        .flip-card-front {
+            background: linear-gradient(135deg, #1a237e, #4a148c);
+            border: 3px solid #7C4DFF;
+            box-shadow: 0 0 18px #7C4DFF88;
+            animation: cardShimmer 2s infinite alternate;
+        }
+        .flip-card-front .question-mark {
+            font-size: 2.8em; color: #CE93D8;
+            text-shadow: 0 0 12px #CE93D8;
+        }
+        .flip-card-front .tap-hint {
+            font-size: 0.65em; color: #B39DDB; margin-top: 6px;
+        }
+        @keyframes cardShimmer {
+            from { box-shadow: 0 0 12px #7C4DFF88; border-color: #7C4DFF; }
+            to   { box-shadow: 0 0 28px #E040FB99; border-color: #E040FB; }
+        }
+        .flip-card-back {
+            background: linear-gradient(135deg, #1B5E20, #F57F17);
+            border: 3px solid #FFD700;
+            transform: rotateY(180deg);
+            box-shadow: 0 0 20px #FFD70088;
+            gap: 6px;
+        }
+        .flip-card-back .reward-emoji { font-size: 2.6em; }
+        .flip-card-back .reward-name  { font-size: 0.78em; color: #FFF9C4; }
+        .flip-card-back .reward-amt   { font-size: 1em; color: #FFD700; font-weight: bold; }
+        .flip-card.flipped .flip-card-front { animation: none; }
+
+        /* celebrate shake after all flipped */
+        @keyframes celebShake {
+            0%,100%{ transform: rotateY(180deg) translateX(0); }
+            25%    { transform: rotateY(180deg) translateX(-6px) rotate(-3deg); }
+            75%    { transform: rotateY(180deg) translateX(6px) rotate(3deg); }
+        }
+        .flip-card.celebrate .flip-card-inner {
+            animation: celebShake 0.4s ease 3;
+        }
+
+        /* confetti particles */
+        .confetti-piece {
+            position: fixed; width: 10px; height: 14px;
+            top: -20px; opacity: 1;
+            animation: confettiFall linear forwards;
+            border-radius: 2px; z-index: 3100;
+        }
+        @keyframes confettiFall {
+            0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+
+        #newbie-confirm-btn {
+            display: none; padding: 14px 50px;
+            background: linear-gradient(135deg, #FFD700, #FF8C00);
+            color: #000; font-size: 1.3em; font-weight: bold;
+            border: none; border-radius: 30px; cursor: pointer;
+            box-shadow: 0 0 20px #FFD70088;
+            animation: btnPop 0.5s cubic-bezier(.4,2,.6,1);
+            transform-origin: center;
+        }
+        @keyframes btnPop {
+            from { transform: scale(0); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+        #newbie-confirm-btn:hover { transform: scale(1.08); }
+
         </style>
 </head>
 <body>
@@ -518,20 +630,106 @@
 
         function claimNewbiePack() {
             if (player.claimedNewbiePack) { alert("你已經領取過新手禮包了！"); return; }
-            player.inv.wood += 50; player.inv.stone += 50; player.inv.gem += 50;
-            player.inv.star += 50; player.inv.manu += 50; player.inv.frag += 50;
+
+            const rewards = [
+                { emoji: "🪵", name: "木材",   key: "wood",  amt: 50, bg: "linear-gradient(135deg,#2E7D32,#66BB6A)" },
+                { emoji: "🧱", name: "石頭",   key: "stone", amt: 50, bg: "linear-gradient(135deg,#37474F,#90A4AE)" },
+                { emoji: "💎", name: "寶石",   key: "gem",   amt: 50, bg: "linear-gradient(135deg,#0D47A1,#42A5F5)" },
+                { emoji: "🌟", name: "星星",   key: "star",  amt: 50, bg: "linear-gradient(135deg,#F57F17,#FFD54F)" },
+                { emoji: "📜", name: "手稿",   key: "manu",  amt: 50, bg: "linear-gradient(135deg,#BF360C,#FF8A65)" },
+                { emoji: "🔮", name: "碎片",   key: "frag",  amt: 50, bg: "linear-gradient(135deg,#4A148C,#CE93D8)" },
+            ];
+
+            // Build card grid
+            const grid = document.getElementById('newbie-card-grid');
+            grid.innerHTML = '';
+            rewards.forEach((r, i) => {
+                const card = document.createElement('div');
+                card.className = 'flip-card';
+                card.id = 'ncard-' + i;
+                card.innerHTML =
+                    '<div class="flip-card-inner">' +
+                    '<div class="flip-card-front">' +
+                    '<div class="question-mark">？</div>' +
+                    '<div class="tap-hint">點我揭開</div>' +
+                    '</div>' +
+                    '<div class="flip-card-back" style="background:' + r.bg + '">' +
+                    '<div class="reward-emoji">' + r.emoji + '</div>' +
+                    '<div class="reward-name">' + r.name + '</div>' +
+                    '<div class="reward-amt">+' + r.amt + '</div>' +
+                    '</div></div>';
+                let flipped = false;
+                card.onclick = function() {
+                    if (flipped) return;
+                    flipped = true;
+                    card.classList.add('flipped');
+                    playSound('correct');
+                    // Give reward on flip
+                    player.inv[r.key] += r.amt;
+                    renderStats();
+                    // Check if all flipped
+                    const allFlipped = rewards.every((_, j) =>
+                        document.getElementById('ncard-' + j)?.classList.contains('flipped')
+                    );
+                    if (allFlipped) {
+                        setTimeout(() => {
+                            // Celebrate shake all cards
+                            rewards.forEach((_, j) => {
+                                const c = document.getElementById('ncard-' + j);
+                                if (c) c.classList.add('celebrate');
+                            });
+                            launchConfetti();
+                            playSound('win');
+                            document.getElementById('newbie-confirm-btn').style.display = 'inline-block';
+                        }, 300);
+                    }
+                };
+                grid.appendChild(card);
+            });
+
+            // Show modal
+            const modal = document.getElementById('newbie-modal');
+            modal.style.display = 'flex';
+            modal.style.opacity = '0';
+            setTimeout(() => { modal.style.opacity = '1'; modal.classList.add('show'); }, 10);
+
             player.claimedNewbiePack = true;
-            
-            playSound('win');
-            alert("🎁 領取成功！獲得所有材料 +50！快去升級裝備和建築吧！");
-            
-            let btn = document.getElementById('btn-newbie-pack');
-            btn.disabled = true; btn.innerText = "🎁 新手禮包 (已領取)";
-            btn.style.borderColor = "#9E9E9E"; btn.classList.replace('btn-gold', 'btn-grey');
-            
+            autoSave();
+        }
+
+        function launchConfetti() {
+            const colors = ['#FFD700','#FF4081','#00E5FF','#76FF03','#FF6D00','#E040FB','#FFFF00','#00BFA5'];
+            for (let i = 0; i < 80; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + 'vw';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.width = (8 + Math.random() * 8) + 'px';
+                piece.style.height = (10 + Math.random() * 10) + 'px';
+                piece.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+                piece.style.animationDelay = (Math.random() * 0.8) + 's';
+                piece.style.transform = 'rotate(' + (Math.random()*360) + 'deg)';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 4000);
+            }
+        }
+
+        function closeNewbieModal() {
+            const modal = document.getElementById('newbie-modal');
+            modal.classList.remove('show');
+            setTimeout(() => { modal.style.display = 'none'; modal.style.opacity = '0'; }, 400);
+            // Disable button
+            const btn = document.getElementById('btn-newbie-pack');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = "🎁 新手禮包 (已領取)";
+                btn.style.borderColor = "#9E9E9E";
+                btn.classList.replace('btn-gold', 'btn-grey');
+            }
             renderStats(); autoSave();
         }
 
+        
         function getPartnerBonus() {
             if (!player.partnerId) return 0;
             let pData = player.partners[player.partnerId];
@@ -1515,5 +1713,14 @@
             nextBossQuestion();
         }
     </script>
+
+    <!-- ══ 新手禮包翻牌 Modal ══ -->
+    <div id="newbie-modal">
+        <h2>🎁 新手禮包</h2>
+        <p class="subtitle">點擊每張卡牌揭開你的獎勵！</p>
+        <div class="card-grid" id="newbie-card-grid"></div>
+        <button id="newbie-confirm-btn" onclick="closeNewbieModal()">🚀 出發冒險！</button>
+    </div>
+
 </body>
 </html>
