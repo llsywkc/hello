@@ -2,18 +2,22 @@
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox：森林大冒險 (2年級中文冒險)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
         body {
-            font-family: 'Nunito', "Microsoft JhengHei", sans-serif;
-            background: #FF9800; 
-            background-image: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.15) 75%, rgba(255,255,255,0.15)), 
-                              linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.15) 75%, rgba(255,255,255,0.15));
-            background-size: 40px 40px; background-position: 0 0, 20px 20px;
-            margin: 0; padding: 6px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #333;
+            font-family: 'Noto Sans TC', 'Nunito', "Microsoft JhengHei", sans-serif;
+            background: #0d0d20;
+            background-image:
+                radial-gradient(ellipse at 15% 40%, rgba(40,0,100,0.55) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 20%, rgba(0,30,100,0.45) 0%, transparent 50%),
+                radial-gradient(ellipse at 55% 85%, rgba(80,0,80,0.35) 0%, transparent 50%);
+            margin: 0; padding: 6px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; color: #e8e0ff; overflow-x: hidden;
         }
         
         h1 { color: #FFF; text-transform: uppercase; letter-spacing: 2px; text-shadow: 4px 4px 0 #E65100, -2px -2px 0 #E65100, 2px -2px 0 #E65100, -2px 2px 0 #E65100; font-size: 1.9em; text-align: center; margin: 5px 0; }
@@ -31,22 +35,30 @@
         .partner-badge { background: #FFEB3B; color: #333; padding: 5px 15px; border-radius: 20px; font-weight: bold; border: 2px solid #FBC02D; display: inline-flex; align-items: center; gap: 8px; }
         .partner-icon { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #FFF; background: #E1F5FE; vertical-align: middle; object-fit: contain; }
 
-        .container { background-color: #FFF3E0; border: 8px solid #E65100; border-radius: 12px; padding: 12px; width: 96%; max-width: 800px; box-shadow: 0 12px 0 #BF360C; text-align: center; position: relative; }
+        .container {
+            background: linear-gradient(160deg, #13112e 0%, #1c1245 50%, #0e1a30 100%);
+            border: 2px solid rgba(180,140,255,0.3);
+            border-radius: 20px; padding: 14px;
+            width: 96%; max-width: 800px;
+            box-shadow: 0 0 50px rgba(100,50,255,0.2), 0 8px 0 #06040f,
+                        inset 0 1px 0 rgba(255,255,255,0.07);
+            text-align: center; position: relative;
+        }
 
         input[type="text"] { font-size: 1.5em; padding: 10px; border: 4px solid #333; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; margin-bottom: 15px; font-weight: bold; }
         button { font-family: inherit; font-size: 1.05em; font-weight: bold; padding: 9px 14px; margin: 6px 4px; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: all 0.1s; border: 4px solid rgba(0,0,0,0.2); }
         button:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent !important; }
         button:disabled { cursor: not-allowed; opacity: 0.6; filter: grayscale(100%); }
         
-        .btn-green { background-color: #4CAF50; color: white; box-shadow: 0 6px 0 #2E7D32; }
-        .btn-blue { background-color: #2196F3; color: white; box-shadow: 0 6px 0 #1565C0; }
-        .btn-orange { background-color: #FF9800; color: white; box-shadow: 0 6px 0 #E65100; }
-        .btn-grey { background-color: #9E9E9E; color: white; box-shadow: 0 6px 0 #616161; }
-        .btn-red { background-color: #f44336; color: white; box-shadow: 0 6px 0 #b71c1c; }
-        .btn-purple { background-color: #9C27B0; color: white; box-shadow: 0 6px 0 #6A1B9A; }
-        .btn-gold { background-color: #FFB300; color: white; box-shadow: 0 6px 0 #FF8F00; }
+        .btn-green { background: linear-gradient(135deg,#66BB6A,#2E7D32); color:#fff; box-shadow: 0 6px 0 #1B5E20, 0 0 15px rgba(76,175,80,0.4); border:none; position:relative; overflow:hidden; }
+        .btn-blue { background: linear-gradient(135deg,#42A5F5,#1565C0); color:#fff; box-shadow: 0 6px 0 #0D47A1, 0 0 15px rgba(33,150,243,0.4); border:none; position:relative; overflow:hidden; }
+        .btn-orange { background: linear-gradient(135deg,#FF8C00,#FF5722); color:#fff; box-shadow: 0 6px 0 #BF360C, 0 0 15px rgba(255,140,0,0.4); border:none; position:relative; overflow:hidden; }
+        .btn-grey { background: linear-gradient(135deg,#BDBDBD,#757575); color:#fff; box-shadow: 0 6px 0 #424242; border:none; position:relative; overflow:hidden; }
+        .btn-red { background: linear-gradient(135deg,#EF5350,#B71C1C); color:#fff; box-shadow: 0 6px 0 #7F0000, 0 0 15px rgba(244,67,54,0.4); border:none; position:relative; overflow:hidden; }
+        .btn-purple { background: linear-gradient(135deg,#CE93D8,#7B1FA2); color:#fff; box-shadow: 0 6px 0 #4A148C, 0 0 18px rgba(156,39,176,0.45); border:none; position:relative; overflow:hidden; }
+        .btn-gold { background: linear-gradient(135deg,#FFD700,#FFA000); color:#1a0a00; box-shadow: 0 6px 0 #E65100, 0 0 18px rgba(255,210,0,0.45); border:none; position:relative; overflow:hidden; }
         .btn-black { background-color: #212121; color: white; box-shadow: 0 6px 0 #000000; border: 4px solid #757575; }
-        .btn-teal { background-color: #009688; color: white; box-shadow: 0 6px 0 #00695C; }
+        .btn-teal { background: linear-gradient(135deg,#26A69A,#00695C); color:#fff; box-shadow: 0 6px 0 #004D40, 0 0 15px rgba(0,150,136,0.4); border:none; position:relative; overflow:hidden; }
 
         .hidden { display: none !important; }
         .screen { display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -217,6 +229,157 @@
             to   { transform: scale(1); opacity: 1; }
         }
         #newbie-confirm-btn:hover { transform: scale(1.08); }
+
+        
+        /* ══ Starfield background particles ══ */
+        body::before {
+            content: '';
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image:
+                radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.7) 0%, transparent 100%),
+                radial-gradient(1px 1px at 25% 60%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 40% 30%, rgba(255,255,255,0.8) 0%, transparent 100%),
+                radial-gradient(1px 1px at 55% 80%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 70% 10%, rgba(255,255,255,0.7) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 80% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 90% 75%, rgba(255,255,255,0.8) 0%, transparent 100%),
+                radial-gradient(1px 1px at 15% 90%, rgba(200,180,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 60% 45%, rgba(200,180,255,0.5) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 35% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 92% 25%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 5% 50%, rgba(200,180,255,0.5) 0%, transparent 100%);
+            pointer-events: none; z-index: 0;
+            animation: starsTwinkle 6s ease-in-out infinite alternate;
+        }
+        @keyframes starsTwinkle {
+            0%   { opacity: 0.6; }
+            50%  { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        /* ══ Button ripple effect ══ */
+        button.ripple-effect::after {
+            content: ''; position: absolute;
+            width: 200%; height: 200%;
+            top: -50%; left: -50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+            transform: scale(0); opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            pointer-events: none; border-radius: 50%;
+        }
+        button:active::after {
+            transform: scale(1); opacity: 1;
+            transition: 0s;
+        }
+
+        /* ══ Button hover lift ══ */
+        button:not(:disabled):hover {
+            transform: translateY(-3px) scale(1.02);
+            transition: transform 0.15s ease;
+        }
+        button:not(:disabled):active {
+            transform: translateY(2px) scale(0.98);
+        }
+
+        /* ══ Heading gold glow ══ */
+        h1 {
+            color: #FFD700;
+            text-shadow: 0 0 20px rgba(255,210,0,0.6), 0 0 40px rgba(255,150,0,0.3);
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+        h2 {
+            color: #E8D5FF;
+            text-shadow: 0 0 12px rgba(180,140,255,0.5);
+            font-weight: 700;
+        }
+
+        /* ══ Screen card inner glow ══ */
+        .screen {
+            background: rgba(255,255,255,0.03);
+            border-radius: 14px;
+            padding: 10px;
+        }
+
+        /* ══ Stats / inventory items ══ */
+        .stat-item, .inv-item {
+            background: rgba(255,255,255,0.06) !important;
+            border: 1px solid rgba(180,140,255,0.2) !important;
+            border-radius: 10px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ══ Word chunks (answer buttons) hover ══ */
+        .word-chunk {
+            background: linear-gradient(135deg, #2a1a5e, #1a2a5e) !important;
+            color: #e8e0ff !important;
+            border: 2px solid rgba(180,140,255,0.4) !important;
+            box-shadow: 0 4px 0 #0a0520, 0 0 10px rgba(120,80,255,0.2) !important;
+            transition: all 0.15s ease !important;
+        }
+        .word-chunk:hover {
+            background: linear-gradient(135deg, #3d2a7a, #2a3d7a) !important;
+            border-color: rgba(220,180,255,0.7) !important;
+            box-shadow: 0 4px 0 #0a0520, 0 0 18px rgba(160,120,255,0.4) !important;
+            transform: translateY(-3px) scale(1.03);
+        }
+        .word-chunk.correct {
+            background: linear-gradient(135deg, #1B5E20, #2E7D32) !important;
+            border-color: #76FF03 !important;
+            box-shadow: 0 4px 0 #0a2010, 0 0 20px rgba(118,255,3,0.5) !important;
+        }
+        .word-chunk.wrong {
+            background: linear-gradient(135deg, #7F0000, #B71C1C) !important;
+            border-color: #FF5252 !important;
+            box-shadow: 0 4px 0 #3a0000, 0 0 20px rgba(255,82,82,0.5) !important;
+        }
+
+        /* ══ Input field ══ */
+        input[type="text"] {
+            background: rgba(255,255,255,0.08) !important;
+            border: 2px solid rgba(180,140,255,0.4) !important;
+            color: #e8e0ff !important;
+            border-radius: 12px !important;
+            padding: 10px 16px !important;
+            font-size: 1.1em !important;
+            outline: none !important;
+            box-shadow: 0 0 12px rgba(120,80,255,0.15) !important;
+            transition: border-color 0.2s, box-shadow 0.2s !important;
+        }
+        input[type="text"]:focus {
+            border-color: rgba(220,180,255,0.8) !important;
+            box-shadow: 0 0 20px rgba(160,100,255,0.35) !important;
+        }
+        input[type="text"]::placeholder { color: rgba(200,180,255,0.5) !important; }
+
+        /* ══ HR dividers ══ */
+        hr { border-color: rgba(180,140,255,0.2) !important; }
+
+        /* ══ Question text ══ */
+        #question-text, #boss-question-text {
+            color: #e8e0ff;
+            text-shadow: 0 1px 8px rgba(120,80,255,0.3);
+        }
+
+        /* ══ Feedback messages ══ */
+        #feedback-msg, #boss-feedback-msg {
+            border-radius: 10px;
+            padding: 6px 12px;
+        }
+
+        /* ══ Player tag / top badge ══ */
+        #player-tag {
+            background: linear-gradient(135deg, rgba(40,20,80,0.9), rgba(20,40,80,0.9)) !important;
+            border: 1px solid rgba(180,140,255,0.3) !important;
+            border-radius: 20px !important;
+            backdrop-filter: blur(8px) !important;
+            color: #FFD700 !important;
+        }
+
+        /* ══ Level menu buttons hover lift ══ */
+        .level-menu button {
+            transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+        }
 
         </style>
 </head>
@@ -1712,7 +1875,57 @@
         function handleBossNextQuestion() {
             nextBossQuestion();
         }
-    </script>
+    
+        // ── Floating star particle system ──────────────────────────
+        (function() {
+            const canvas = document.getElementById('star-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let W, H, stars = [];
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            function initStars(n) {
+                stars = [];
+                for (let i = 0; i < n; i++) {
+                    stars.push({
+                        x: Math.random() * W, y: Math.random() * H,
+                        r: Math.random() * 1.5 + 0.3,
+                        a: Math.random(),
+                        speed: Math.random() * 0.003 + 0.001,
+                        drift: (Math.random() - 0.5) * 0.15,
+                        color: Math.random() > 0.7 ? '#c8b4ff' : '#ffffff'
+                    });
+                }
+            }
+            initStars(120);
+
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+                stars.forEach(s => {
+                    s.a += s.speed;
+                    s.x += s.drift;
+                    if (s.x < 0) s.x = W;
+                    if (s.x > W) s.x = 0;
+                    const alpha = (Math.sin(s.a) + 1) / 2 * 0.8 + 0.1;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = s.color;
+                    ctx.globalAlpha = alpha;
+                    ctx.fill();
+                });
+                ctx.globalAlpha = 1;
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+
+        </script>
 
     <!-- ══ 新手禮包翻牌 Modal ══ -->
     <div id="newbie-modal">
@@ -1721,6 +1934,10 @@
         <div class="card-grid" id="newbie-card-grid"></div>
         <button id="newbie-confirm-btn" onclick="closeNewbieModal()">🚀 出發冒險！</button>
     </div>
+
+
+    <!-- ══ Floating star particles ══ -->
+    <canvas id="star-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.5;"></canvas>
 
 </body>
 </html>
