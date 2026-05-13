@@ -267,16 +267,16 @@
 
         /* ===== F7: Answer Result Pop Card ===== */
         .answer-result-card {
-            position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%,-50%) scale(0);
-            background: #fff; border-radius: 20px;
-            padding: 24px 32px; z-index: 9999;
-            text-align: center; min-width: 260px; max-width: 90vw;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-            transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s;
+            position: fixed; bottom: 90px; right: 16px;
+            transform: translateX(120%) scale(0.85);
+            background: #fff; border-radius: 16px;
+            padding: 14px 18px; z-index: 9999;
+            text-align: left; min-width: 200px; max-width: 78vw;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
             opacity: 0; pointer-events: none;
         }
-        .answer-result-card.show { transform: translate(-50%,-50%) scale(1); opacity:1; pointer-events:auto; }
+        .answer-result-card.show { transform: translateX(0) scale(1); opacity:1; pointer-events:auto; }
         .answer-result-card.correct { border:5px solid #4CAF50; background:linear-gradient(135deg,#E8F5E9,#fff); }
         .answer-result-card.wrong   { border:5px solid #F44336; background:linear-gradient(135deg,#FFEBEE,#fff); }
         .answer-result-card .arc-emoji  { font-size:3em; margin-bottom:6px; }
@@ -416,6 +416,57 @@
             100% { opacity: 0; transform: translateY(300px) rotate(720deg); }
         }
 
+        
+        /* ===== Menu Tabs ===== */
+        .menu-tabs {
+            display: flex; gap: 0; width: 100%;
+            background: rgba(0,0,0,0.12); border-radius: 14px;
+            padding: 4px; margin-bottom: 14px; box-sizing: border-box;
+        }
+        .menu-tab {
+            flex: 1; padding: 10px 4px; border: none; border-radius: 10px;
+            background: transparent; color: rgba(255,255,255,0.6);
+            font-family: inherit; font-size: 0.88em; font-weight: bold;
+            cursor: pointer; transition: all 0.2s; white-space: nowrap;
+        }
+        .menu-tab.active {
+            background: #fff; color: #4A148C;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .menu-tab:hover:not(.active) { color: #fff; background: rgba(255,255,255,0.15); }
+
+        .menu-tab-content { display: none; width: 100%; animation: tabFadeIn 0.25s ease; }
+        .menu-tab-content.active { display: block; }
+        @keyframes tabFadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+        /* ===== Menu Card Grid ===== */
+        .menu-card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px; width: 100%; margin-bottom: 10px;
+        }
+        .menu-card {
+            background: rgba(255,255,255,0.92);
+            border: 3px solid #9C27B0; border-radius: 14px;
+            padding: 14px 8px; text-align: center;
+            cursor: pointer; transition: transform 0.18s, box-shadow 0.18s;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+            user-select: none;
+        }
+        .menu-card:hover  { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .menu-card:active { transform: translateY(0);    box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
+        .menu-card-lg { grid-column: 1 / -1; padding: 16px 8px; }
+        .mc-icon  { font-size: 2em; margin-bottom: 4px; }
+        .mc-title { font-size: 0.9em; font-weight: 900; color: #212121; line-height: 1.2; }
+        .mc-sub   { font-size: 0.72em; color: #757575; margin-top: 2px; }
+
+        .menu-section-label {
+            width: 100%; text-align: left;
+            font-size: 0.82em; font-weight: bold; color: #CE93D8;
+            margin: 6px 0 6px; padding-left: 4px;
+            border-left: 3px solid #CE93D8;
+        }
+
         </style>
 </head>
 <body>
@@ -457,76 +508,171 @@
         </div>
 
         <div id="start-screen" class="screen hidden">
-            <div style="width: 100%; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;">
-                <button class="btn-grey" onclick="logout()" style="font-size: 0.9em; padding: 8px 12px; margin: 0;">🔄 更改名字/登出</button>
-                <button class="btn-gold" onclick="claimGift()" style="font-size: 0.9em; padding: 8px 12px; margin: 0;">🎁 老玩家禮包</button>
-                <button class="btn-blue" onclick="openAlbum()" style="font-size: 0.9em; padding: 8px 12px; margin: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 2px solid #fff;">📖 閃卡紀念冊</button>
+
+            <!-- ══ TOP BAR ══ -->
+            <div style="width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+                <button class="btn-grey" onclick="logout()" style="font-size:0.82em;padding:7px 11px;margin:0;">🔄 更名/登出</button>
+                <div style="display:flex;gap:6px;">
+                    <button class="btn-gold"  onclick="claimGift()"  style="font-size:0.82em;padding:7px 11px;margin:0;">🎁 禮包</button>
+                    <button class="btn-blue"  onclick="openAlbum()"  style="font-size:0.82em;padding:7px 11px;margin:0;">📖 紀念冊</button>
+                    <button class="btn-gold"  onclick="openAchievements()" style="font-size:0.82em;padding:7px 11px;margin:0;">🏆 成就</button>
+                </div>
             </div>
 
-            <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; width: 100%; border: 2px dashed #9C27B0;">
-                <h3 style="margin-top:0; color:#4A148C;">🌟 勇者系統</h3>
-                <button class="btn-gold" onclick="openGacha()">🎰 幸運轉盤 (耗 1 🌟)</button>
-                <button class="btn-orange" onclick="openMarket()" style="animation: pulse 2s infinite;">🛒 秘密市場 & 銀行 (支援金幣)</button>
-            </div>
-
-            <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#6A1B9A; margin-top: 15px;">📖 遊戲指南 (神獸與機制介紹)</button>
-            
-            <!-- ✅ 每日任務面板 -->
-            <div class="quest-panel" id="daily-quest-panel">
-                <h3>📋 每日任務 <span id="quest-reset-hint" style="font-size:0.75em; color:#90CAF9;">(每日重置)</span></h3>
+            <!-- ══ DAILY QUEST (always visible) ══ -->
+            <div class="quest-panel" id="daily-quest-panel" style="margin-bottom:10px;">
+                <h3 style="margin:0 0 6px;">📋 每日任務 <span id="quest-reset-hint" style="font-size:0.75em;color:#90CAF9;">(每日重置)</span></h3>
                 <div id="quest-list"></div>
             </div>
-            <!-- ✅ 成就按鈕 -->
-            <button class="btn-gold" onclick="openAchievements()" style="width:100%; font-size:0.9em; padding:8px; margin-bottom:8px;">🏆 成就徽章</button>
 
-<hr style="width: 80%; border-top: 4px dashed #6A1B9A;">
-            
-            <h2>🏕️ 選擇冒險關卡 (特訓區)</h2>
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
-                <button class="btn-green" onclick="startGame('fill')">⛏️ 礦洞尋寶 (填充題)</button>
-                <button class="btn-blue" onclick="startGame('match-word')">🔮 符文解密 (配詞題)</button>
-                <button class="btn-grey" onclick="startGame('punct')">📜 古卷修復 (標點題)</button>
-                <button class="btn-purple" onclick="startGame('reorder')">🌉 鋪木板過河 (重組句子)</button>
-                
-                <button class="btn-red" onclick="startGame('fa-mc')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA温習 (綜合題)</button>
-                <button class="btn-red" onclick="startGame('fa-reorder')" style="background-color: #D50000; box-shadow: 0 6px 0 #8E0000;">📝 FA温習 (課文重組)</button>
-            </div>
-            
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 10px; padding: 10px; background: #FFF3E0; border-radius: 8px; border: 2px dashed #FF9800;">
-                <h3 style="width:100%; margin:0 0 5px 0; color:#E65100;">📙 最新進度：副詞與外貌描寫</h3>
-                <button class="btn-orange" onclick="startGame('adv-mc')" style="box-shadow: 0 6px 0 #E65100;">⏳ 副詞特訓 (初/高階)</button>
-                <button class="btn-gold" onclick="startGame('appearance-mc')" style="box-shadow: 0 6px 0 #FF8F00;">👤 外貌描寫特訓</button>
+            <!-- ══ TABS ══ -->
+            <div class="menu-tabs" id="menu-tabs">
+                <button class="menu-tab active" onclick="switchTab('training')">🏕️ 特訓</button>
+                <button class="menu-tab" onclick="switchTab('boss')">⚔️ Boss</button>
+                <button class="menu-tab" onclick="switchTab('partner')">🐾 夥伴</button>
+                <button class="menu-tab" onclick="switchTab('system')">🎒 系統</button>
             </div>
 
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 10px; padding: 10px; background: #E0F2F1; border-radius: 8px; border: 2px dashed #00897B;">
-                <h3 style="width:100%; margin:0 0 5px 0; color:#00695C;">📘 最新進度：默書温習(二)</h3>
-                <button class="btn-green" onclick="startGame('dictation2-mc')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">📖 默書温習(二) - 填充</button>
-                <button class="btn-purple" onclick="startGame('dictation2-reorder')" style="background-color: #00897B; box-shadow: 0 6px 0 #004D40;">🌉 默書温習(二) - 重組</button>
+            <!-- ══ TAB: TRAINING ══ -->
+            <div class="menu-tab-content active" id="tab-training">
+                <div class="menu-card-grid">
+                    <div class="menu-card" onclick="startGame('reorder')" style="border-color:#9C27B0;">
+                        <div class="mc-icon">🌉</div>
+                        <div class="mc-title">鋪木板過河</div>
+                        <div class="mc-sub">重組句子</div>
+                    </div>
+                    <div class="menu-card" onclick="startGame('fill')" style="border-color:#4CAF50;">
+                        <div class="mc-icon">⛏️</div>
+                        <div class="mc-title">礦洞尋寶</div>
+                        <div class="mc-sub">填充題</div>
+                    </div>
+                    <div class="menu-card" onclick="startGame('match-word')" style="border-color:#2196F3;">
+                        <div class="mc-icon">🔮</div>
+                        <div class="mc-title">符文解密</div>
+                        <div class="mc-sub">配詞題</div>
+                    </div>
+                    <div class="menu-card" onclick="startGame('punct')" style="border-color:#9E9E9E;">
+                        <div class="mc-icon">📜</div>
+                        <div class="mc-title">古卷修復</div>
+                        <div class="mc-sub">標點題</div>
+                    </div>
+                    <div class="menu-card" onclick="startGame('fa-mc')" style="border-color:#D50000;">
+                        <div class="mc-icon">📝</div>
+                        <div class="mc-title">FA 温習</div>
+                        <div class="mc-sub">綜合題</div>
+                    </div>
+                    <div class="menu-card" onclick="startGame('fa-reorder')" style="border-color:#D50000;">
+                        <div class="mc-icon">📝</div>
+                        <div class="mc-title">FA 温習</div>
+                        <div class="mc-sub">課文重組</div>
+                    </div>
+                </div>
+
+                <div class="menu-section-label">📙 最新進度</div>
+                <div class="menu-card-grid">
+                    <div class="menu-card" onclick="startGame('adv-mc')" style="border-color:#FF9800;">
+                        <div class="mc-icon">⏳</div>
+                        <div class="mc-title">副詞特訓</div>
+                        <div class="mc-sub">初/高階</div>
+                    </div>
+                    <div class="menu-card" onclick="startGame('appearance-mc')" style="border-color:#FFC107;">
+                        <div class="mc-icon">👤</div>
+                        <div class="mc-title">外貌描寫</div>
+                        <div class="mc-sub">特訓</div>
+                    </div>
+                    <div class="menu-card" onclick="startGame('dictation2-mc')" style="border-color:#00897B;">
+                        <div class="mc-icon">📖</div>
+                        <div class="mc-title">默書(二)</div>
+                        <div class="mc-sub">填充</div>
+                    </div>
+                    <div class="menu-card" onclick="startGame('dictation2-reorder')" style="border-color:#00897B;">
+                        <div class="mc-icon">🌉</div>
+                        <div class="mc-title">默書(二)</div>
+                        <div class="mc-sub">重組</div>
+                    </div>
+                    <div class="menu-card" onclick="startGame('term3-vocab')" style="border-color:#F9A825;">
+                        <div class="mc-icon">📚</div>
+                        <div class="mc-title">T3詞語</div>
+                        <div class="mc-sub">温習</div>
+                    </div>
+                </div>
+                <p style="font-size:0.82em;color:#8E24AA;margin:6px 0 0;">(連續答題有機率遇到「傳說怪」！)</p>
             </div>
 
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 10px; padding: 10px; background: #FFF8E1; border-radius: 8px; border: 2px dashed #F9A825;">
-                <h3 style="width:100%; margin:0 0 5px 0; color:#F57F17;">📚 最新進度：第三學期詞語温習</h3>
-                <button class="btn-gold" onclick="startGame('term3-vocab')" style="background-color: #F9A825; box-shadow: 0 6px 0 #F57F17;">📚 第三學期詞語温習</button>
+            <!-- ══ TAB: BOSS ══ -->
+            <div class="menu-tab-content" id="tab-boss">
+                <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
+                    <div class="menu-card menu-card-lg" onclick="openBossSelect()" style="border-color:#D50000;grid-column:1/-1;">
+                        <div class="mc-icon">⚔️</div>
+                        <div class="mc-title">挑戰 Boss</div>
+                        <div class="mc-sub">Lv1–8 終極神獸</div>
+                    </div>
+                    <div class="menu-card" onclick="openSuperForge()" style="border-color:#FFD700;">
+                        <div class="mc-icon">👑</div>
+                        <div class="mc-title">神器升級</div>
+                        <div class="mc-sub">提升戰力</div>
+                    </div>
+                    <div class="menu-card" onclick="openForgeZone()" style="border-color:#FF5722;">
+                        <div class="mc-icon">⚔️</div>
+                        <div class="mc-title">裝備鍛造</div>
+                        <div class="mc-sub">攻防加成</div>
+                    </div>
+                    <div class="menu-card" onclick="openBuildZone()" style="border-color:#2196F3;">
+                        <div class="mc-icon">🔨</div>
+                        <div class="mc-title">建築工坊</div>
+                        <div class="mc-sub">建造設施</div>
+                    </div>
+                    <div class="menu-card" onclick="openLeaderboard()" style="border-color:#FFD700;">
+                        <div class="mc-icon">🏆</div>
+                        <div class="mc-title">排行榜</div>
+                        <div class="mc-sub">全班排名</div>
+                    </div>
+                </div>
             </div>
 
-            <p style="font-size: 0.9em; font-weight: bold; color: #8E24AA;">(連續答題提升攻防值，有機率遇到隱藏的「傳說怪」！)</p>
-            
-            <hr style="width: 80%; border-top: 4px dashed #6A1B9A;">
-            
-            <button class="btn-purple" onclick="openPartnerZone()" style="box-shadow: 0 6px 0 #6A1B9A; animation: pulse 2s infinite;">🐾 搭檔精靈 (全圖鑑系統)</button>
-            <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇 (基礎戰力)</button>
-            
-            <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:5px;">
-                <button class="btn-red" onclick="openForgeZone()" style="font-size:1em;">⚔️ 裝備鍛造</button>
-                <button class="btn-blue" onclick="openBuildZone()" style="font-size:1em;">🔨 建築工坊</button>
-                <button class="btn-black" id="btn-boss-menu" onclick="openBossSelect()" disabled style="font-size:1em;">🔒 終極 Boss</button>
-                <button class="btn-gold" onclick="openLeaderboard()" style="font-size:1em;">🏆 排行榜</button>
+            <!-- ══ TAB: PARTNER ══ -->
+            <div class="menu-tab-content" id="tab-partner">
+                <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
+                    <div class="menu-card menu-card-lg" onclick="openPartnerZone()" style="border-color:#9C27B0;grid-column:1/-1;animation:pulse 2s infinite;">
+                        <div class="mc-icon">🐾</div>
+                        <div class="mc-title">搭檔精靈</div>
+                        <div class="mc-sub">全圖鑑 · 進化 · 感情值</div>
+                    </div>
+                    <div class="menu-card" onclick="openGacha()" style="border-color:#FFB300;">
+                        <div class="mc-icon">🎰</div>
+                        <div class="mc-title">幸運轉盤</div>
+                        <div class="mc-sub">耗 1 🌟</div>
+                    </div>
+                    <div class="menu-card" onclick="openMarket()" style="border-color:#FF9800;animation:pulse 2s infinite;">
+                        <div class="mc-icon">🛒</div>
+                        <div class="mc-title">秘密市場</div>
+                        <div class="mc-sub">& 銀行</div>
+                    </div>
+                </div>
             </div>
-            <div style="margin-top:8px;">
-                <input id="cheat-input" type="password" placeholder="🔑 輸入密碼..." style="width:140px;padding:6px 10px;border-radius:20px;border:2px solid #888;font-size:0.85em;background:rgba(0,0,0,0.3);color:white;text-align:center;" onkeydown="if(event.key==='Enter') activateCheat()">
-                <button class="btn-grey" onclick="activateCheat()" style="font-size:0.8em;padding:6px 12px;">🔑</button>
+
+            <!-- ══ TAB: SYSTEM ══ -->
+            <div class="menu-tab-content" id="tab-system">
+                <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
+                    <div class="menu-card" onclick="openInstructions()" style="border-color:#6A1B9A;">
+                        <div class="mc-icon">📖</div>
+                        <div class="mc-title">遊戲指南</div>
+                        <div class="mc-sub">神獸與機制</div>
+                    </div>
+                    <div class="menu-card" onclick="openLeaderboard()" style="border-color:#FFD700;">
+                        <div class="mc-icon">🏆</div>
+                        <div class="mc-title">排行榜</div>
+                        <div class="mc-sub">上傳成績</div>
+                    </div>
+                </div>
+                <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;">
+                    <input id="cheat-input" type="password" placeholder="🔑" style="width:80px;padding:6px;border-radius:8px;border:2px solid #9C27B0;font-size:0.9em;">
+                    <button class="btn-purple" onclick="activateCheat()" style="font-size:0.8em;padding:6px 12px;">🔑</button>
+                </div>
             </div>
+
         </div>
+
 
         <div id="cheat-menu-screen" class="screen hidden">
             <h2 style="color:#FFD700;">🔑 開發者模式</h2>
@@ -3779,6 +3925,17 @@ function checkDailyReset() {
         function claimVictory() {
             document.getElementById('victory-modal').classList.remove('show');
             if (_victoryCallback) { _victoryCallback(); _victoryCallback = null; }
+        }
+
+
+        // ===== Menu Tab Switcher =====
+        function switchTab(tab) {
+            document.querySelectorAll('.menu-tab').forEach(function(b){ b.classList.remove('active'); });
+            document.querySelectorAll('.menu-tab-content').forEach(function(c){ c.classList.remove('active'); });
+            var btn = document.querySelector('.menu-tab[onclick*="' + tab + '"]');
+            var panel = document.getElementById('tab-' + tab);
+            if (btn)   btn.classList.add('active');
+            if (panel) panel.classList.add('active');
         }
 
         // ==================== END CHEAT ====================
