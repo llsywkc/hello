@@ -10,20 +10,20 @@
         
         body {
             font-family: 'Noto Sans TC', 'Nunito', "Microsoft JhengHei", sans-serif;
-            background: #0d0d20;
+            background: #E3F2FD;
             background-image:
-                radial-gradient(ellipse at 15% 40%, rgba(40,0,100,0.55) 0%, transparent 55%),
-                radial-gradient(ellipse at 85% 20%, rgba(0,30,100,0.45) 0%, transparent 50%),
-                radial-gradient(ellipse at 55% 85%, rgba(80,0,80,0.35) 0%, transparent 50%);
+                radial-gradient(ellipse at 20% 20%, rgba(255,236,153,0.5) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(187,222,251,0.6) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.3) 0%, transparent 60%);
             margin: 0; padding: 6px;
             display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; color: #e8e0ff; overflow-x: hidden;
+            min-height: 100vh; color: #1a237e; overflow-x: hidden;
         }
         
-        h1 { color: #FFF; text-transform: uppercase; letter-spacing: 2px; text-shadow: 4px 4px 0 #E65100, -2px -2px 0 #E65100, 2px -2px 0 #E65100, -2px 2px 0 #E65100; font-size: 1.9em; text-align: center; margin: 5px 0; }
+        h1 { color: #E65100; text-transform: uppercase; letter-spacing: 2px; text-shadow: 3px 3px 0 #FFD54F, -1px -1px 0 #FFD54F; font-size: 1.9em; text-align: center; margin: 5px 0; }
 
-        .player-info { background: #FFEB3B; color: #333; font-size: 1.2em; font-weight: bold; padding: 5px 20px; border-radius: 20px; border: 4px solid #FBC02D; margin-bottom: 5px; box-shadow: 0 4px 0 #F57F17; }
-        .inventory-bar { background-color: #333; color: white; border: 4px solid #222; border-radius: 8px; padding: 7px 14px; font-size: 1em; font-weight: bold; display: flex; gap: 10px; margin-bottom: 4px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; align-items: center; }
+        .player-info { background: linear-gradient(135deg,#26C6DA,#00838F); color: #fff; font-size: 1.1em; font-weight: bold; padding: 5px 20px; border-radius: 20px; border: 3px solid #006064; margin-bottom: 5px; box-shadow: 0 4px 0 #F57F17; }
+        .inventory-bar { background: linear-gradient(135deg,#FF8F00,#F57F17); color: white; border: 3px solid #E65100; border-radius: 12px; padding: 7px 14px; font-size: 1em; font-weight: bold; display: flex; gap: 10px; margin-bottom: 4px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; align-items: center; }
         
         .gem-text { color: #E040FB; text-shadow: 1px 1px 2px #000; }
         .star-text { color: #FFC107; text-shadow: 1px 1px 2px #000; }
@@ -36,16 +36,15 @@
         .partner-icon { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #FFF; background: #E1F5FE; vertical-align: middle; object-fit: contain; }
 
         .container {
-            background: linear-gradient(160deg, #13112e 0%, #1c1245 50%, #0e1a30 100%);
-            border: 2px solid rgba(180,140,255,0.3);
-            border-radius: 20px; padding: 14px;
+            background: #FFFFFF;
+            border: 3px solid #FFD54F;
+            border-radius: 24px; padding: 14px;
             width: 96%; max-width: 800px;
-            box-shadow: 0 0 50px rgba(100,50,255,0.2), 0 8px 0 #06040f,
-                        inset 0 1px 0 rgba(255,255,255,0.07);
+            box-shadow: 0 8px 32px rgba(255,160,0,0.18), 0 4px 0 #FFB300;
             text-align: center; position: relative;
         }
 
-        input[type="text"] { font-size: 1.5em; padding: 10px; border: 4px solid #333; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; margin-bottom: 15px; font-weight: bold; }
+        input[type="text"] { font-size: 1.4em; padding: 10px; border: 3px solid #FFB300; border-radius: 12px; text-align: center; width: 80%; max-width: 300px; margin-bottom: 15px; font-weight: bold; color: #1a237e; background:#FFFDE7; }
         button { font-family: inherit; font-size: 1.05em; font-weight: bold; padding: 9px 14px; margin: 6px 4px; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: all 0.1s; border: 4px solid rgba(0,0,0,0.2); }
         button:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent !important; }
         button:disabled { cursor: not-allowed; opacity: 0.6; filter: grayscale(100%); }
@@ -64,12 +63,12 @@
         .screen { display: flex; flex-direction: column; align-items: center; gap: 10px; }
         
         .word-bank { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; min-height: 80px; padding: 15px; background: rgba(0,0,0,0.05); border-radius: 10px; border: 4px inset rgba(0,0,0,0.1); box-sizing: border-box; }
-        .word-chunk { background-color: #FFEB3B; border: 4px solid #FBC02D; box-shadow: 0 6px 0 #F57F17; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; color: #333; transition: transform 0.1s; }
+        .word-chunk { background: linear-gradient(135deg,#FFF9C4,#FFEE58); border: 3px solid #F9A825; box-shadow: 0 5px 0 #E65100; padding: 12px 18px; border-radius: 12px; font-weight: 900; font-size: 1.2em; cursor: pointer; color: #1a237e; transition: transform 0.1s; }
         .word-chunk:active { transform: translateY(4px); box-shadow: 0 2px 0 #F57F17; }
-        .question-text { font-size: 1.5em; font-weight: bold; background: #FFF; padding: 15px; border: 4px solid #B0BEC5; border-radius: 8px; line-height: 1.5; width: 90%; box-sizing: border-box; transition: all 0.3s; }
-        .hint-text { color: #E65100; font-weight: bold; font-size: 1.2em; min-height: 30px; margin: 5px 0; background: #FFF3E0; padding: 10px; border-radius: 8px; border: 2px dashed #FF9800; width: 90%; }
+        .question-text { font-size: 1.4em; font-weight: 900; background: #FFFDE7; padding: 15px; border: 3px solid #FFD54F; border-radius: 14px; line-height: 1.6; color: #1a237e;; width: 90%; box-sizing: border-box; transition: all 0.3s; }
+        .hint-text { color: #BF360C; font-weight: bold; font-size: 1.1em; min-height: 30px; margin: 5px 0; background: #FFF8E1; padding: 10px; border-radius: 8px; border: 2px dashed #FF9800; width: 90%; }
         
-        .feedback-box { background: #E8F5E9; border: 4px solid #4CAF50; border-radius: 10px; padding: 20px; width: 90%; box-sizing: border-box; }
+        .feedback-box { background: #F1F8E9; border: 3px solid #7CB342; border-radius: 14px; padding: 16px; width: 90%; box-sizing: border-box; }
         .feedback-box.error { background: #FFEBEE; border-color: #F44336; }
 
         .boss-hp-bar-container { width: 90%; background: #333; border: 4px solid #222; border-radius: 10px; height: 30px; position: relative; overflow: hidden; margin-bottom: 10px; }
@@ -296,7 +295,7 @@
 
         /* ══ Screen card inner glow ══ */
         .screen {
-            background: rgba(255,255,255,0.03);
+            background: transparent;
             border-radius: 14px;
             padding: 10px;
         }
@@ -401,6 +400,139 @@
         /* ══ Options 2x2 ══ */
         #options-area .word-chunk { width:100%; box-sizing:border-box; padding:12px 8px; font-size:1.05em; text-align:center; border-radius:10px; }
 
+        
+        /* ══ LIGHT THEME OVERRIDES ══ */
+
+        /* Stars canvas - hide on light theme */
+        #star-canvas { display: none !important; }
+        body::before { display: none !important; }
+
+        /* h1 glow override */
+        h1 { color: #E65100 !important; text-shadow: 2px 2px 0 #FFD54F !important; font-weight: 900 !important; }
+        h2 { color: #1a237e !important; text-shadow: none !important; font-weight: 700 !important; }
+
+        /* Buttons - keep gradients but add border for child clarity */
+        button { border-radius: 12px !important; font-weight: 900 !important; font-size: 1em !important; letter-spacing: 0.3px !important; }
+        .btn-orange { background: linear-gradient(135deg,#FF8C00,#FF5722) !important; color:#fff !important; border: 3px solid #BF360C !important; }
+        .btn-gold   { background: linear-gradient(135deg,#FFD700,#FFA000) !important; color:#1a0a00 !important; border: 3px solid #E65100 !important; }
+        .btn-blue   { background: linear-gradient(135deg,#42A5F5,#1565C0) !important; color:#fff !important; border: 3px solid #0D47A1 !important; }
+        .btn-green  { background: linear-gradient(135deg,#66BB6A,#2E7D32) !important; color:#fff !important; border: 3px solid #1B5E20 !important; }
+        .btn-purple { background: linear-gradient(135deg,#AB47BC,#6A1B9A) !important; color:#fff !important; border: 3px solid #4A148C !important; }
+        .btn-red    { background: linear-gradient(135deg,#EF5350,#B71C1C) !important; color:#fff !important; border: 3px solid #7F0000 !important; }
+        .btn-teal   { background: linear-gradient(135deg,#26A69A,#00695C) !important; color:#fff !important; border: 3px solid #004D40 !important; }
+        .btn-grey   { background: linear-gradient(135deg,#78909C,#455A64) !important; color:#fff !important; border: 3px solid #263238 !important; }
+        .btn-black  { background: linear-gradient(135deg,#546E7A,#37474F) !important; color:#fff !important; border: 3px solid #263238 !important; }
+
+        /* word-chunk answer options */
+        .word-chunk {
+            background: linear-gradient(135deg,#FFFDE7,#FFF9C4) !important;
+            color: #1a237e !important;
+            border: 3px solid #F9A825 !important;
+            box-shadow: 0 5px 0 #E65100 !important;
+            font-weight: 900 !important;
+            font-size: 1.15em !important;
+            border-radius: 12px !important;
+        }
+        .word-chunk:hover {
+            background: linear-gradient(135deg,#FFF9C4,#FFEE58) !important;
+            border-color: #FF6F00 !important;
+            transform: translateY(-3px) scale(1.03) !important;
+            box-shadow: 0 8px 0 #E65100 !important;
+        }
+        .word-chunk.correct {
+            background: linear-gradient(135deg,#C8E6C9,#A5D6A7) !important;
+            color: #1B5E20 !important;
+            border-color: #2E7D32 !important;
+            box-shadow: 0 5px 0 #1B5E20 !important;
+        }
+        .word-chunk.wrong {
+            background: linear-gradient(135deg,#FFCDD2,#EF9A9A) !important;
+            color: #B71C1C !important;
+            border-color: #C62828 !important;
+            box-shadow: 0 5px 0 #B71C1C !important;
+        }
+
+        /* Question card */
+        #question-text {
+            color: #1a237e !important;
+            background: #FFFDE7 !important;
+            text-shadow: none !important;
+            font-size: 1.35em !important;
+            font-weight: 900 !important;
+        }
+        /* Question panel wrapper */
+        #question-panel > div:nth-child(3) {
+            background: #FFFDE7 !important;
+            border: 3px solid #FFD54F !important;
+            border-left: 5px solid #FF8F00 !important;
+        }
+
+        /* Streak + progress bar area */
+        #streak-display { color: #E65100 !important; }
+        #q-progress-bar { background: linear-gradient(90deg,#FF8F00,#FFD600) !important; }
+        #q-progress-text { color: #5c3d00 !important; }
+        #q-progress-bar-bg { background: rgba(0,0,0,0.1) !important; }
+
+        /* Monster fight status */
+        #monster-fight-status { background: rgba(156,39,176,0.08) !important; color: #6A1B9A !important; border-left-color: #9C27B0 !important; }
+
+        /* Feedback */
+        .feedback-box { background: #F1F8E9 !important; border-color: #7CB342 !important; color: #1B5E20 !important; }
+        .feedback-box.error { background: #FFEBEE !important; border-color: #E53935 !important; color: #B71C1C !important; }
+        #feedback-msg { color: #1B5E20 !important; }
+        #reward-msg { color: #E65100 !important; }
+
+        /* Hint */
+        .hint-text { background: #FFF8E1 !important; color: #E65100 !important; border: 2px dashed #FFB300 !important; }
+
+        /* Input */
+        input[type="text"] { background: #FFFDE7 !important; border: 3px solid #FFB300 !important; color: #1a237e !important; }
+        input[type="text"]:focus { border-color: #E65100 !important; box-shadow: 0 0 12px rgba(255,140,0,0.3) !important; }
+        input[type="text"]::placeholder { color: rgba(26,35,126,0.4) !important; }
+
+        /* Map cards - light */
+        .map-card {
+            background: linear-gradient(145deg,#ffffff,#f8f9fa) !important;
+            border: 2px solid rgba(0,0,0,0.1) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+        }
+        .map-card:hover {
+            border-color: var(--cc,#9C27B0) !important;
+            box-shadow: 0 8px 20px var(--cg,rgba(156,39,176,0.3)) !important;
+        }
+        .map-card-title { color: #1a237e !important; font-weight: 900 !important; }
+        .map-card-sub   { color: #546E7A !important; }
+
+        /* Top nav / inventory bar */
+        .inventory-bar { background: linear-gradient(135deg,#FF8F00,#E65100) !important; color:#fff !important; border-color: #BF360C !important; }
+        .player-info   { background: linear-gradient(135deg,#26C6DA,#006064) !important; color: #fff !important; border-color: #006064 !important; }
+
+        /* Game title */
+        #game-title { color: #1a237e !important; text-shadow: none !important; font-size: 1.4em !important; }
+
+        /* Mythical question box */
+        .mythical-question { box-shadow: 0 0 30px rgba(156,39,176,0.4) !important; }
+
+        /* Bottom controls */
+        #bottom-controls { margin-top: 8px !important; }
+
+        /* HR dividers */
+        hr { border-color: #FFD54F !important; }
+
+        /* Boss hp bar */
+        .boss-hp-bar-container { background: #E0E0E0 !important; border-color: #BDBDBD !important; }
+        .boss-hp-bar { background: linear-gradient(90deg,#4CAF50,#8BC34A) !important; }
+
+        /* World grid */
+        .world-grid { background: #FFF9C4 !important; border-color: #FFB300 !important; }
+
+        /* Partner hub cards */
+        #partner-list > div { background: #E3F2FD !important; border-color: #1565C0 !important; }
+
+        /* Flash animations on light bg */
+        @keyframes flashGreen { 0%{box-shadow:inset 0 0 0 6px rgba(76,175,80,0);}   30%{box-shadow:inset 0 0 0 6px rgba(76,175,80,0.5);}   100%{box-shadow:inset 0 0 0 6px rgba(76,175,80,0);}   }
+        @keyframes flashRed   { 0%{box-shadow:inset 0 0 0 6px rgba(229,57,53,0);}   30%{box-shadow:inset 0 0 0 6px rgba(229,57,53,0.5);}   100%{box-shadow:inset 0 0 0 6px rgba(229,57,53,0);}   }
+
         </style>
 </head>
 <body>
@@ -451,7 +583,7 @@
                 <button class="btn-teal" onclick="openPartnerHub()" style="flex:1;min-width:130px;">🐾 搭檔中心</button>
                 <button class="btn-grey" onclick="openInstructions()" style="flex:1;min-width:80px;">📖 說明</button>
             </div>
-            <div style="width:100%;background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:16px;padding:12px;margin-bottom:10px;">
+            <div style="width:100%;background:#FFF8E1;border:2px solid #FFD54F;border-radius:16px;padding:12px;margin-bottom:10px;">
                 <h2 style="margin:0 0 10px 0;font-size:1.1em;color:#FFD700;text-shadow:0 0 12px rgba(255,210,0,0.5);">🗺️ 選擇冒險地圖</h2>
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;">
                     <div class="map-card" onclick="startGame('t3_review_1')" style="--cc:#9C27B0;--cg:rgba(156,39,176,0.45);"><div class="map-card-icon">📚</div><div class="map-card-title">T3 温習一</div><div class="map-card-sub">詞語與偏旁</div><div class="map-card-stars">⭐⭐⭐</div></div>
@@ -463,7 +595,7 @@
                     <div class="map-card" onclick="startGame('mining')" style="--cc:#795548;--cg:rgba(121,85,72,0.45);"><div class="map-card-icon">⛏️</div><div class="map-card-title">礦洞尋寶</div><div class="map-card-sub">挖礦採集</div><div class="map-card-stars">⭐</div></div>
                 </div>
             </div>
-            <hr style="width:95%;border:none;border-top:1px solid rgba(180,140,255,0.15);margin:2px 0 8px 0;">
+            <hr style="width:95%;border:none;border-top:2px dashed #FFD54F;margin:2px 0 8px 0;">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;">
                 <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇</button>
                 <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊</button>
@@ -535,13 +667,13 @@
             <div id="question-panel">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;width:100%;gap:8px;">
                     <div id="streak-display" style="font-size:0.95em;color:#FFD700;font-weight:700;text-shadow:0 0 8px rgba(255,200,0,0.5);min-width:55px;text-align:left;white-space:nowrap;"></div>
-                    <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:20px;height:8px;overflow:hidden;">
+                    <div style="flex:1;background:rgba(0,0,0,0.1);border-radius:20px;height:8px;overflow:hidden;">
                         <div id="q-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#7C4DFF,#E040FB);border-radius:20px;transition:width 0.4s ease;"></div>
                     </div>
                     <div id="q-progress-text" style="font-size:0.78em;color:rgba(200,180,255,0.7);min-width:36px;text-align:right;white-space:nowrap;"></div>
                 </div>
                 <div id="monster-fight-status" class="hidden" style="color:#CE93D8;font-weight:bold;font-size:0.95em;margin-bottom:6px;padding:6px 12px;background:rgba(156,39,176,0.15);border-radius:8px;border-left:3px solid #9C27B0;text-align:left;"></div>
-                <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(180,140,255,0.2);border-left:4px solid #7C4DFF;border-radius:12px;padding:14px 16px;margin-bottom:10px;text-align:left;">
+                <div style="background:#FFFDE7;border:3px solid #FFD54F;border-left:5px solid #FF8F00;border-radius:14px;padding:14px 16px;margin-bottom:10px;text-align:left;">
                     <div class="question-text" id="question-text" style="font-size:1.15em;line-height:1.6;">題目加載中...</div>
                 </div>
                 <div class="word-bank" id="options-area" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px;min-height:80px;background:transparent;border:none;"></div>
