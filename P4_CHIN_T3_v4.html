@@ -3249,35 +3249,27 @@ function checkDailyReset() {
             const myName = inventory.playerName;
             list.innerHTML = sorted.map((e, i) => {
                 const isMe = e.name === myName;
-                const rank = medals[i] || `#${i+1}`;
+                const rank = medals[i] || ('#' + (i+1));
                 const bg   = isMe ? 'background:rgba(255,215,0,0.15);border:1px solid #FFD700;' : 'background:rgba(255,255,255,0.06);';
                 const time = e.timestamp ? new Date(e.timestamp).toLocaleDateString('zh-HK') : '';
-                // Boss level badges
-                const bwd = e.bossWinsDetail || {};
+                const bwd  = e.bossWinsDetail || {};
                 const bossBadges = [
-                    bwd.lv1||bwd.lv2||bwd.lv3 ? `⚔️Lv1-3` : '',
-                    bwd.lv4||bwd.lv5||bwd.lv6 ? `🌑Lv4-6` : '',
-                    bwd.lv7 ? `🔫Lv7` : '',
-                    bwd.lv8 ? `⚡Lv8` : ''
+                    (bwd.lv1||bwd.lv2||bwd.lv3) ? '⚔️Lv1-3' : '',
+                    (bwd.lv4||bwd.lv5||bwd.lv6) ? '🌑Lv4-6' : '',
+                    bwd.lv7 ? '🔫Lv7' : '',
+                    bwd.lv8 ? '⚡Lv8' : ''
                 ].filter(Boolean).join(' ');
-                const partnerTag = e.partnerLv ? `🐾Lv${e.partnerLv}` : '';
-                return \`<div style="\${bg}border-radius:10px;padding:9px 12px;margin-bottom:5px;display:flex;align-items:center;gap:8px;">
-                    <span style="font-size:1.3em;min-width:34px;text-align:center;">\${rank}</span>
-                    <div style="flex:1;text-align:left;">
-                        <div style="font-weight:bold;font-size:0.92em;">\${e.name}\${isMe?' 👈':''}
-                            <span style="color:#FFD700;margin-left:6px;">⭐\${e.score}分</span>
-                        </div>
-                        <div style="font-size:0.72em;color:#ccc;margin-top:2px;">
-                            📝答對\${e.correctAnswers||0}題 &nbsp;|&nbsp; 🏆Boss\${e.bossWins||0}次 &nbsp;|&nbsp; 🔥最高\${e.maxStreak||0}連勝 &nbsp;|&nbsp; \${partnerTag}
-                        </div>
-                        <div style="font-size:0.68em;color:#aaa;margin-top:1px;">
-                            \${bossBadges ? bossBadges + ' &nbsp;|&nbsp; ' : ''}夥伴:\${e.partner||'-'} · \${time}
-                        </div>
-                    </div>
-                </div>\`;
+                const partnerTag = e.partnerLv ? ('🐾Lv' + e.partnerLv) : '';
+                return '<div style="' + bg + 'border-radius:10px;padding:9px 12px;margin-bottom:5px;display:flex;align-items:center;gap:8px;">'
+                     + '<span style="font-size:1.3em;min-width:34px;text-align:center;">' + rank + '</span>'
+                     + '<div style="flex:1;text-align:left;">'
+                     + '<div style="font-weight:bold;font-size:0.92em;">' + e.name + (isMe ? ' 👈' : '')
+                     + ' <span style="color:#FFD700;margin-left:6px;">⭐' + e.score + '分</span></div>'
+                     + '<div style="font-size:0.72em;color:#ccc;margin-top:2px;">📝答對' + (e.correctAnswers||0) + '題 &nbsp;|&nbsp; 🏆Boss' + (e.bossWins||0) + '次 &nbsp;|&nbsp; 🔥最高' + (e.maxStreak||0) + '連勝 &nbsp;|&nbsp; ' + partnerTag + '</div>'
+                     + '<div style="font-size:0.68em;color:#aaa;margin-top:1px;">' + (bossBadges ? bossBadges + ' &nbsp;|&nbsp; ' : '') + '夥伴:' + (e.partner||'-') + ' · ' + time + '</div>'
+                     + '</div></div>';
             }).join('');
         }
-
         async function submitScore() {
             const status = document.getElementById('lb-status');
             if (!inventory.playerName) { alert('請先設定冒險者名字！'); return; }
