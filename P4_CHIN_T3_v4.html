@@ -177,7 +177,7 @@
         .quest-panel h3 { color: #E8EAF6; margin: 0 0 8px 0; font-size: 1em; text-align: center; }
         .quest-item { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.08); border-radius: 8px; padding: 6px 10px; margin-bottom: 5px; font-size: 0.85em; color: #E8EAF6; flex-wrap: wrap; }
         .quest-item.done { background: rgba(76,175,80,0.25); color: #A5D6A7; }
-        .quest-item.claimed { background: rgba(100,100,100,0.2); color: #777; text-decoration: line-through; }
+        .quest-item.claimed { background: rgba(100,100,100,0.2); color: #aaa; text-decoration: line-through; }
         .quest-progress { font-size: 0.75em; color: #90CAF9; margin-left: auto; font-weight: bold; }
         .quest-mini-bar-bg { background: rgba(255,255,255,0.15); border-radius: 4px; height: 6px; width: 60px; }
         .quest-mini-bar-fill { background: #42A5F5; height: 100%; border-radius: 4px; transition: width 0.4s; }
@@ -264,20 +264,99 @@
             display:inline-block;
             transform: rotate(180deg);
         }
-</style>
+
+        /* ===== F7: Answer Result Pop Card ===== */
+        .answer-result-card {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%,-50%) scale(0);
+            background: #fff; border-radius: 20px;
+            padding: 24px 32px; z-index: 9999;
+            text-align: center; min-width: 260px; max-width: 90vw;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s;
+            opacity: 0; pointer-events: none;
+        }
+        .answer-result-card.show { transform: translate(-50%,-50%) scale(1); opacity:1; pointer-events:auto; }
+        .answer-result-card.correct { border:5px solid #4CAF50; background:linear-gradient(135deg,#E8F5E9,#fff); }
+        .answer-result-card.wrong   { border:5px solid #F44336; background:linear-gradient(135deg,#FFEBEE,#fff); }
+        .answer-result-card .arc-emoji  { font-size:3em; margin-bottom:6px; }
+        .answer-result-card .arc-title  { font-size:1.4em; font-weight:900; margin-bottom:8px; }
+        .answer-result-card .arc-answer { font-size:1.1em; border-radius:10px; padding:8px 14px; margin-top:6px; font-weight:bold; }
+
+        /* ===== F8: FAB ===== */
+        #fab-home {
+            position:fixed; bottom:24px; right:20px;
+            width:52px; height:52px; border-radius:50%;
+            background:linear-gradient(135deg,#9C27B0,#6A1B9A);
+            color:#fff; font-size:1.5em; border:none;
+            box-shadow:0 6px 20px rgba(106,27,154,0.5);
+            cursor:pointer; z-index:9990;
+            display:flex; align-items:center; justify-content:center;
+            transition:transform 0.2s, box-shadow 0.2s;
+        }
+        #fab-home:hover { transform:scale(1.12) translateY(-3px); box-shadow:0 12px 28px rgba(106,27,154,0.7); }
+
+        /* ===== F9: Theme Switcher ===== */
+        #theme-switcher {
+            position:fixed; top:12px; right:12px; z-index:9991;
+            display:flex; gap:6px;
+            background:rgba(255,255,255,0.18); backdrop-filter:blur(6px);
+            border-radius:20px; padding:5px 8px;
+        }
+        .theme-dot { width:22px; height:22px; border-radius:50%; cursor:pointer; border:3px solid rgba(255,255,255,0.4); transition:transform 0.2s,border-color 0.2s; }
+        .theme-dot:hover, .theme-dot.active { transform:scale(1.3); border-color:#fff; }
+        .theme-dot.t-purple { background:#7B1FA2; }
+        .theme-dot.t-blue   { background:#1565C0; }
+        .theme-dot.t-green  { background:#2E7D32; }
+        .theme-dot.t-dark   { background:#212121; }
+        .theme-dot.t-pink   { background:#C2185B; }
+        .theme-dot.t-yellow { background:#F9A825; }
+        body.theme-pink  { background:#880E4F !important; }
+        body.theme-pink  .container   { border-color:#C2185B !important; box-shadow:0 12px 0 #880E4F !important; background:#FCE4EC !important; }
+        body.theme-pink  .player-info { background:#F8BBD9 !important; border-color:#E91E63 !important; }
+        body.theme-pink  h1 { color:#FCE4EC !important; }
+        body.theme-pink  .quest-panel { background:linear-gradient(135deg,#880E4F,#AD1457) !important; }
+        body.theme-yellow { background:#E65100 !important; }
+        body.theme-yellow .container   { border-color:#F9A825 !important; box-shadow:0 12px 0 #E65100 !important; background:#FFFDE7 !important; }
+        body.theme-yellow .player-info { background:#FFF9C4 !important; border-color:#F9A825 !important; }
+        body.theme-yellow h1 { color:#FFF9C4 !important; }
+        body.theme-yellow .quest-panel { background:linear-gradient(135deg,#E65100,#EF6C00) !important; }
+        body.theme-blue  { background:#0D47A1 !important; }
+        body.theme-blue  .container   { border-color:#1565C0 !important; box-shadow:0 12px 0 #0D47A1 !important; }
+        body.theme-blue  .player-info { background:#BBDEFB !important; border-color:#1976D2 !important; }
+        body.theme-blue  h1 { color:#BBDEFB !important; }
+        body.theme-green { background:#1B5E20 !important; }
+        body.theme-green .container   { border-color:#2E7D32 !important; box-shadow:0 12px 0 #1B5E20 !important; }
+        body.theme-green .player-info { background:#C8E6C9 !important; border-color:#388E3C !important; }
+        body.theme-green h1 { color:#C8E6C9 !important; }
+        body.theme-dark  { background:#0D0D1A !important; }
+        body.theme-dark  .container   { background:rgba(25,25,45,0.95) !important; border-color:#7C4DFF !important; box-shadow:0 12px 0 #000 !important; color:#E0E0E0; }
+        body.theme-dark  .player-info { background:rgba(60,20,80,0.85) !important; border-color:#9C27B0 !important; color:#E1BEE7; }
+        body.theme-dark  h1 { color:#CE93D8 !important; }
+        body.theme-dark  .quest-panel { background:linear-gradient(135deg,#0D0D1A,#1A1A2E) !important; }
+        body.theme-dark  .quest-item  { color:#E8EAF6; }
+
+        /* ===== F10: Empty State ===== */
+        .empty-state { padding:28px 20px; text-align:center; }
+        .empty-state .es-art   { font-size:3.2em; line-height:1.3; margin-bottom:8px; }
+        .empty-state .es-title { font-size:1.05em; font-weight:bold; color:#7E57C2; margin-bottom:4px; }
+        .empty-state .es-sub   { font-size:0.82em; color:#BDBDBD; }
+
+        </style>
 </head>
 <body>
 
     <h1>🟪 森林大冒險：4A中文練習 🟪</h1>
 
-    <div id="player-tag" class="player-info hidden">
+    <div id="player-tag" class="player-info hidden" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
         <span>冒險者：<span id="display-name"></span></span> 
-        <span id="streak-counter" style="color:#6A1B9A; margin-left: 10px;">🔥 連對: 0</span>
+        <span id="streak-counter" style="color:#fff;background:#6A1B9A;border-radius:10px;padding:1px 8px;margin-left:10px;font-size:0.9em;">🔥 連對: 0</span>
         <span id="buff-indicator" style="color: #E65100; font-weight: bold; margin-left: 10px; animation: blink 2s infinite;"></span>
+        <span id="partner-tag-mini" style="margin-left:auto;display:flex;align-items:center;gap:4px;font-size:0.85em;"></span>
     </div>
 
     <div id="medal-bar" class="inventory-bar hidden">
-        <span style="color:#FFEB3B;">🎖️ 榮譽勳章牆：</span>
+        <span style="color:#FFD54F;font-weight:bold;text-shadow:0 1px 2px #000;">🎖️ 榮譽勳章牆：</span>
         <span id="medal-container"></span>
     </div>
 
@@ -454,7 +533,7 @@
                 
                 <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 15px; border: 4px dashed #9C27B0; text-align: center; width: 90%; max-width: 500px;">
                     <img id="partner-pic" class="status-pic" src="">
-                    <h3 id="partner-name" style="color: #4A148C; font-size: 2em; margin: 10px 0; text-shadow: 1px 1px 0 #E1BEE7;">Name</h3>
+                    <h3 id="partner-name" style="color: #6A1B9A; font-size: 2em; margin: 10px 0; text-shadow: 1px 1px 0 #CE93D8, 0 0 8px rgba(106,27,154,0.3);">Name</h3>
                     <p style="font-size: 1.3em; font-weight: bold; color: #2E7D32; margin-bottom:5px;">✨ 目前搭檔加成: <br>+<span id="partner-buff" style="font-size:1.8em; color:#D50000;">0</span> 攻防</p>
                     <p style="font-size: 0.8em; color: #666; margin-top:0;">(只有當前選擇的搭檔會提供戰力加成)</p>
                     <!-- ✅ 感情值 -->
@@ -1324,7 +1403,7 @@
             
             if (msg) {
                 let el = document.querySelector('.screen:not(.hidden) .status-msg');
-                if (el) el.innerHTML += `<br><span style="color:#FFD700;font-weight:bold;">${msg}</span>`;
+                if (el) el.innerHTML += `<br><span style="color:#fff;background:#E65100;padding:2px 8px;border-radius:6px;font-weight:bold;">${msg}</span>`;
             }
             // ✅ 每日任務 & 成就 & 感情值
             inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers || 0) + 1;
@@ -1392,6 +1471,11 @@
                 `;
                 container.appendChild(div);
             });
+            if (!inventory.dailyQuests || inventory.dailyQuests.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="es-art">📋<br>✨</div><div class="es-title">今日尚無任務</div><div class="es-sub">明天再來挑戰吧！</div></div>';
+            } else if ((inventory.dailyQuests || []).every(q => q.claimed)) {
+                container.innerHTML += '<div class="empty-state" style="margin-top:6px;"><div class="es-art">🎉</div><div class="es-title">全部任務完成！</div><div class="es-sub">你真的太厲害了！明天繼續加油 💪</div></div>';
+            }
         }
 
         function claimQuest(idx) {
@@ -1732,6 +1816,22 @@ function checkDailyReset() {
                 buffEl.textContent = `🧪 雙倍掉落 (剩 ${inventory.dropBuffLeft} 題)`;
             } else {
                 buffEl.textContent = '';
+            }
+
+            // Partner mini tag in player-tag bar
+            const miniTag = document.getElementById('partner-tag-mini');
+            if (miniTag) {
+                if (inventory.partnerId && inventory.partnerLv > 0) {
+                    const pInfo = getPartnerInfo(inventory.partnerId, inventory.partnerLv, inventory.partnerBranch);
+                    const picSrc = pInfo.p ? (pInfo.p.startsWith('http') ? pInfo.p : 'https://digimon.net/cimages/digimon/' + pInfo.p) : '';
+                    if (picSrc) {
+                        miniTag.innerHTML = '<img src="' + picSrc + '" style="width:30px;height:30px;object-fit:contain;border-radius:50%;border:2px solid #AB47BC;background:#fff;"> <span style="color:#4A148C;font-weight:bold;font-size:0.9em;">' + pInfo.n + '</span>';
+                    } else {
+                        miniTag.innerHTML = '';
+                    }
+                } else {
+                    miniTag.innerHTML = '<span style="color:#aaa;font-size:0.8em;">（未有夥伴）</span>';
+                }
             }
 
             const stats = calculateStats();
@@ -2226,13 +2326,21 @@ function checkDailyReset() {
                 btn.onclick = () => {
                     (btn.parentNode === wordBank ? answerArea : wordBank).appendChild(btn);
                     let cur = [...answerArea.children].map(b => b.textContent).join('');
+                    const allPlaced = answerArea.children.length === words.length;
                     if (cur === reorderCurrentAnswer) {
-                        document.getElementById('reorder-msg').innerHTML = '<span style="color:#4CAF50">✅ 正確！</span>';
+                        document.getElementById('reorder-msg').innerHTML = '<span style="color:#4CAF50">✅ 正確！</span> <span style="color:#fff;background:#388E3C;padding:2px 8px;border-radius:6px;font-weight:bold;">📖 答案：' + answer + '</span>';
+                        showAnswerCard(true, answer);
                         [...answerArea.children].forEach(b => b.disabled = true);
                         playSound('win'); addStreak();
                         let epicTriggered = handleBloodMoon(true);
                         if(!epicTriggered) { checkInvasion(); }
-                        document.getElementById('btn-next-reorder').classList.remove('hidden'); 
+                        document.getElementById('btn-next-reorder').classList.remove('hidden');
+                    } else if (allPlaced) {
+                        document.getElementById('reorder-msg').innerHTML = '<span style="color:#F44336">❌ 排列有誤！</span> <span style="color:#fff;background:#C62828;padding:2px 8px;border-radius:6px;font-weight:bold;">📖 正確答案：' + answer + '</span>';
+                        showAnswerCard(false, answer, 2500);
+                        playSound('error'); inventory.streak = 0; handleBloodMoon(false); updateUI(); saveGame();
+                    } else {
+                        document.getElementById('reorder-msg').textContent = '';
                     }
                 };
                 wordBank.appendChild(btn);
@@ -2284,13 +2392,15 @@ function checkDailyReset() {
                     [...optDiv.children].forEach(b => b.disabled = true);
                     if (opt === task.ans) {
                         btn.style.backgroundColor = '#4CAF50';
-                        document.getElementById('mc-msg').innerHTML = '<span style="color:#4CAF50">✅ 答對了！</span>';
+                        document.getElementById('mc-msg').innerHTML = '<span style="color:#4CAF50">✅ 答對了！</span> <span style="color:#fff;background:#388E3C;padding:2px 8px;border-radius:6px;font-weight:bold;">📖 答案：' + task.ans + '</span>';
+                        showAnswerCard(true, task.ans);
                         playSound('win'); addStreak(); 
                         let epicTriggered = handleBloodMoon(true);
                         if(!epicTriggered) { checkInvasion(); }
                     } else {
                         btn.style.backgroundColor = '#F44336';
                         document.getElementById('mc-msg').innerHTML = `<span style="color:#F44336">❌ 答錯！正確答案：<b>${task.ans}</b></span>`;
+                        showAnswerCard(false, task.ans, 2500);
                         playSound('error'); inventory.streak = 0; handleBloodMoon(false); updateUI(); saveGame();
                     }
                     document.getElementById('btn-next-mc').classList.remove('hidden');
@@ -3246,7 +3356,7 @@ function checkDailyReset() {
         function renderLeaderboardList(entries) {
             const list = document.getElementById('lb-list');
             if (!entries || entries.length === 0) {
-                list.innerHTML = '<div style="color:#aaa;padding:20px;">暫無記錄，成為第一個上榜的冒險者！</div>';
+                list.innerHTML = '<div class="empty-state"><div class="es-art">🏆<br>🌟✨</div><div class="es-title">排行榜空空如也！</div><div class="es-sub">成為第一個上榜的冒險者！</div></div>';
                 return;
             }
             const sorted = [...entries].sort((a,b) => b.score - a.score);
@@ -3269,7 +3379,7 @@ function checkDailyReset() {
                      + '<span style="font-size:1.3em;min-width:34px;text-align:center;">' + rank + '</span>'
                      + '<div style="flex:1;text-align:left;">'
                      + '<div style="font-weight:bold;font-size:0.92em;">' + e.name + (isMe ? ' 👈' : '')
-                     + ' <span style="color:#FFD700;margin-left:6px;">⭐' + e.score + '分</span></div>'
+                     + ' <span style="color:#FFD700;margin-left:6px;text-shadow:0 1px 3px #000;">⭐' + e.score + '分</span></div>'
                      + '<div style="font-size:0.72em;color:#ccc;margin-top:2px;">📝答對' + (e.correctAnswers||0) + '題 &nbsp;|&nbsp; 🏆Boss' + (e.bossWins||0) + '次 &nbsp;|&nbsp; 🔥最高' + (e.maxStreak||0) + '連勝 &nbsp;|&nbsp; ' + partnerTag + '</div>'
                      + '<div style="font-size:0.68em;color:#aaa;margin-top:1px;">' + (bossBadges ? bossBadges + ' &nbsp;|&nbsp; ' : '') + '夥伴:' + (e.partner||'-') + ' · ' + time + '</div>'
                      + '</div></div>';
@@ -3442,8 +3552,62 @@ function checkDailyReset() {
         function cheatStartBoss(level) {
             startBossFight(level);
         }
+
+        // ===== F7: Answer Result Pop Card =====
+        function showAnswerCard(isCorrect, answerText, autoHideMs) {
+            autoHideMs = autoHideMs || 1800;
+            const card  = document.getElementById('answer-result-card');
+            const emoji = document.getElementById('arc-emoji');
+            const title = document.getElementById('arc-title');
+            const ans   = document.getElementById('arc-answer');
+            card.classList.remove('correct','wrong','show');
+            emoji.textContent = isCorrect ? '✅' : '❌';
+            title.textContent = isCorrect ? '答對了！' : '答錯了！';
+            title.style.color = isCorrect ? '#2E7D32' : '#C62828';
+            ans.textContent   = '📖 正確答案：' + answerText;
+            ans.style.background = isCorrect ? 'rgba(76,175,80,0.12)' : 'rgba(244,67,54,0.12)';
+            void card.offsetWidth;
+            card.classList.add(isCorrect ? 'correct' : 'wrong', 'show');
+            clearTimeout(card._hideTimer);
+            card._hideTimer = setTimeout(function(){ card.classList.remove('show'); }, autoHideMs);
+            card.onclick = function(){ clearTimeout(card._hideTimer); card.classList.remove('show'); };
+        }
+
+        // ===== F9: Theme Switcher =====
+        function setTheme(theme) {
+            document.body.className = document.body.className.replace(/theme-\S+/g,'').trim();
+            if (theme !== 'purple') document.body.classList.add('theme-' + theme);
+            document.querySelectorAll('.theme-dot').forEach(function(d){ d.classList.remove('active'); });
+            var map = { purple:'t-purple', blue:'t-blue', green:'t-green', pink:'t-pink', yellow:'t-yellow', dark:'t-dark' };
+            var dot = document.querySelector('.' + map[theme]);
+            if (dot) dot.classList.add('active');
+            try { localStorage.setItem('gameTheme', theme); } catch(e) {}
+        }
+        (function initTheme(){
+            try { var s = localStorage.getItem('gameTheme'); if(s) setTheme(s); } catch(e) {}
+        })();
+
         // ==================== END CHEAT ====================
 
         </script>
+
+    <!-- F7: Answer Result Card -->
+    <div id="answer-result-card" class="answer-result-card">
+        <div class="arc-emoji" id="arc-emoji">✅</div>
+        <div class="arc-title" id="arc-title">答對了！</div>
+        <div class="arc-answer" id="arc-answer"></div>
+    </div>
+    <!-- F8: FAB -->
+    <button id="fab-home" onclick="goHome()" title="返回主頁">🏠</button>
+    <!-- F9: Theme Switcher -->
+    <div id="theme-switcher">
+        <div class="theme-dot t-purple active" onclick="setTheme('purple')" title="紫色"></div>
+        <div class="theme-dot t-blue"          onclick="setTheme('blue')"   title="藍色"></div>
+        <div class="theme-dot t-green"         onclick="setTheme('green')"  title="綠色"></div>
+        <div class="theme-dot t-pink"          onclick="setTheme('pink')"   title="粉紅色"></div>
+        <div class="theme-dot t-yellow"        onclick="setTheme('yellow')" title="黃色"></div>
+        <div class="theme-dot t-dark"          onclick="setTheme('dark')"   title="深色"></div>
+    </div>
+
 </body>
 </html>
