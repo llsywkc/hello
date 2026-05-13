@@ -358,331 +358,240 @@
         <div id="start-screen" class="screen hidden">
 
 <style>
-/* ===== MAP SCREEN STYLES ===== */
-#map-scroll-wrapper {
+/* ===== TAB LAYOUT ===== */
+#tab-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 0;
     width: 95%;
-    max-width: 900px;
-    overflow-x: auto;
-    padding: 10px 0 20px;
-    -webkit-overflow-scrolling: touch;
+    max-width: 800px;
+    flex-wrap: nowrap;
 }
-#map-road {
-    display: flex;
-    align-items: flex-end;
-    gap: 0;
-    padding: 20px 30px 30px;
-    background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 40%, #228B22 40%, #4CAF50 60%, #8BC34A 100%);
-    border-radius: 20px;
-    border: 6px solid #33691E;
-    box-shadow: 0 8px 0 #1B5E20;
-    min-width: 1100px;
-    position: relative;
-    min-height: 280px;
-}
-/* Dotted path on ground */
-#map-road::before {
-    content: '';
-    position: absolute;
-    bottom: 55px;
-    left: 30px;
-    right: 30px;
-    height: 12px;
-    background: repeating-linear-gradient(90deg, #FFF8DC 0px, #FFF8DC 30px, transparent 30px, transparent 50px);
-    border-radius: 6px;
-    opacity: 0.7;
-}
-.map-location {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    cursor: pointer;
-    min-width: 110px;
-    margin: 0 10px;
-    transition: transform 0.15s;
-}
-.map-location:active { transform: translateY(4px); }
-.map-location.locked { cursor: not-allowed; opacity: 0.6; filter: grayscale(0.5); }
-
-.map-pin {
-    font-size: 3em;
-    background: rgba(255,255,255,0.92);
-    border-radius: 50%;
-    width: 72px;
-    height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 5px solid #FFF;
-    box-shadow: 0 6px 0 rgba(0,0,0,0.25), 0 0 0 3px rgba(255,255,255,0.4);
-    margin-bottom: 6px;
-    transition: transform 0.2s;
-    position: relative;
-    z-index: 2;
-}
-.map-location:not(.locked):hover .map-pin {
-    transform: translateY(-6px) scale(1.08);
-}
-.map-pin.pin-blue   { border-color: #1565C0; background: linear-gradient(135deg,#E3F2FD,#BBDEFB); box-shadow: 0 6px 0 #0D47A1, 0 0 15px rgba(33,150,243,0.5); }
-.map-pin.pin-green  { border-color: #2E7D32; background: linear-gradient(135deg,#E8F5E9,#C8E6C9); box-shadow: 0 6px 0 #1B5E20, 0 0 15px rgba(76,175,80,0.5); }
-.map-pin.pin-orange { border-color: #E65100; background: linear-gradient(135deg,#FFF3E0,#FFE0B2); box-shadow: 0 6px 0 #BF360C, 0 0 15px rgba(255,152,0,0.5); }
-.map-pin.pin-brown  { border-color: #4E342E; background: linear-gradient(135deg,#EFEBE9,#D7CCC8); box-shadow: 0 6px 0 #3E2723, 0 0 15px rgba(121,85,72,0.5); }
-.map-pin.pin-purple { border-color: #6A1B9A; background: linear-gradient(135deg,#F3E5F5,#E1BEE7); box-shadow: 0 6px 0 #4A148C, 0 0 15px rgba(156,39,176,0.5); }
-.map-pin.pin-gold   { border-color: #F57F17; background: linear-gradient(135deg,#FFFDE7,#FFF9C4); box-shadow: 0 6px 0 #E65100, 0 0 15px rgba(255,193,7,0.6); animation: map-glow-gold 2s infinite; }
-.map-pin.pin-dark   { border-color: #212121; background: linear-gradient(135deg,#424242,#212121); box-shadow: 0 6px 0 #000, 0 0 15px rgba(0,0,0,0.6); }
-.map-pin.pin-red    { border-color: #B71C1C; background: linear-gradient(135deg,#FFEBEE,#FFCDD2); box-shadow: 0 6px 0 #7F0000, 0 0 15px rgba(244,67,54,0.5); }
-.map-pin.pin-teal   { border-color: #004D40; background: linear-gradient(135deg,#E0F2F1,#B2DFDB); box-shadow: 0 6px 0 #00251A, 0 0 15px rgba(0,150,136,0.5); }
-.map-pin.pin-boss   { border-color: #B71C1C; background: linear-gradient(135deg,#212121,#3e0000); box-shadow: 0 6px 0 #000, 0 0 20px rgba(244,67,54,0.7); animation: map-glow-boss 1.5s infinite; }
-
-@keyframes map-glow-gold {
-    0%,100% { box-shadow: 0 6px 0 #E65100, 0 0 10px rgba(255,193,7,0.4); }
-    50%      { box-shadow: 0 6px 0 #E65100, 0 0 25px rgba(255,193,7,0.9); }
-}
-@keyframes map-glow-boss {
-    0%,100% { box-shadow: 0 6px 0 #000, 0 0 10px rgba(244,67,54,0.5); }
-    50%      { box-shadow: 0 6px 0 #000, 0 0 30px rgba(244,67,54,1); }
-}
-
-.map-label {
-    font-size: 0.7em;
+.tab-btn {
+    flex: 1;
+    padding: 10px 4px;
+    font-size: 1em;
     font-weight: bold;
-    color: #FFF;
-    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    font-family: inherit;
+    border: 4px solid transparent;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    cursor: pointer;
+    background: rgba(0,0,0,0.3);
+    color: rgba(255,255,255,0.6);
+    transition: all 0.15s;
     text-align: center;
     line-height: 1.3;
-    max-width: 100px;
 }
-.map-sublabel {
-    font-size: 0.6em;
-    color: #FFF9C4;
-    text-shadow: 1px 1px 0 #000;
-    text-align: center;
-    margin-top: 2px;
-}
-.map-lock-badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: #B71C1C;
-    color: white;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75em;
-    border: 2px solid #FFF;
-    z-index: 3;
-}
-.map-divider {
-    font-size: 1.8em;
-    align-self: center;
-    opacity: 0.6;
-    min-width: 30px;
-    text-align: center;
-    flex-shrink: 0;
-}
-.map-section-title {
-    color: #FFD700;
-    font-size: 0.95em;
-    font-weight: bold;
-    text-shadow: 1px 1px 0 #000;
-    text-align: center;
-    background: rgba(0,0,0,0.5);
-    border-radius: 8px;
-    padding: 2px 8px;
-    margin-bottom: 4px;
-    white-space: nowrap;
-}
-.map-boss-zone {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    background: rgba(0,0,0,0.5);
-    border: 4px solid #B71C1C;
-    border-radius: 15px;
-    padding: 10px 8px;
-    min-width: 130px;
+.tab-btn:hover { background: rgba(255,255,255,0.2); color: #FFF; }
+.tab-btn.active {
+    background: #FFF;
+    color: #333;
+    border-color: #006064;
+    transform: translateY(4px);
+    z-index: 2;
     position: relative;
 }
-.map-boss-zone h4 {
-    color: #FF5252;
-    margin: 0 0 5px;
-    font-size: 0.85em;
-    text-shadow: 0 0 8px #FF5252;
-    text-align: center;
+.tab-btn .tab-emoji { font-size: 1.4em; display: block; }
+.tab-btn .tab-label { font-size: 0.7em; display: block; }
+
+#tab-panel-wrapper {
+    width: 95%;
+    max-width: 800px;
+    background: #FFF;
+    border: 4px solid #006064;
+    border-radius: 0 0 16px 16px;
+    padding: 20px 16px;
+    box-shadow: 0 8px 0 #00363A;
+    position: relative;
+    z-index: 1;
 }
 
-/* Scroll hint arrow */
-.map-scroll-hint {
-    text-align: center;
-    color: #FFF9C4;
-    font-size: 0.85em;
-    margin-top: 6px;
-    animation: hint-blink 2s infinite;
+.tab-panel { display: none; flex-direction: column; align-items: center; gap: 12px; }
+.tab-panel.active { display: flex; }
+
+/* Big action buttons inside panels */
+.map-action-btn {
+    width: 100%;
+    max-width: 480px;
+    padding: 16px 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: inherit;
+    border-radius: 12px;
+    cursor: pointer;
+    border: 4px solid rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    transition: all 0.1s;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.2);
 }
-@keyframes hint-blink {
-    0%,100% { opacity: 1; } 50% { opacity: 0.4; }
+.map-action-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.2) !important; }
+.map-action-btn:disabled { opacity: 0.45; filter: grayscale(0.6); cursor: not-allowed; }
+.map-action-btn .btn-icon { font-size: 2em; flex-shrink: 0; }
+.map-action-btn .btn-text { display: flex; flex-direction: column; }
+.map-action-btn .btn-title { font-size: 1em; font-weight: bold; }
+.map-action-btn .btn-sub { font-size: 0.7em; opacity: 0.8; font-weight: normal; }
+
+/* Colour themes */
+.mab-blue   { background:#1565C0; color:#FFF; box-shadow: 0 6px 0 #0D47A1; }
+.mab-green  { background:#2E7D32; color:#FFF; box-shadow: 0 6px 0 #1B5E20; }
+.mab-orange { background:#E65100; color:#FFF; box-shadow: 0 6px 0 #BF360C; }
+.mab-brown  { background:#4E342E; color:#FFF; box-shadow: 0 6px 0 #3E2723; }
+.mab-purple { background:#6A1B9A; color:#FFF; box-shadow: 0 6px 0 #4A148C; }
+.mab-gold   { background:#F9A825; color:#333; box-shadow: 0 6px 0 #E65100; border-color:#FFD54F; }
+.mab-red    { background:#C62828; color:#FFF; box-shadow: 0 6px 0 #7F0000; }
+.mab-teal   { background:#00695C; color:#FFF; box-shadow: 0 6px 0 #004D40; }
+.mab-dark   { background:#212121; color:#FFF; box-shadow: 0 6px 0 #000; }
+.mab-boss   { background: linear-gradient(135deg,#3e0000,#212121); color:#FF8A80; box-shadow: 0 6px 0 #000; border-color:#B71C1C; }
+
+.tab-section-title {
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    align-self: flex-start;
+    margin-top: 4px;
+    margin-bottom: -4px;
+}
+
+.boss-unlock-hint {
+    font-size: 0.78em;
+    color: #B71C1C;
+    background: #FFEBEE;
+    border: 2px dashed #EF9A9A;
+    border-radius: 8px;
+    padding: 6px 14px;
+    text-align: center;
+    width: 100%;
+    max-width: 480px;
 }
 </style>
 
+<!-- Top utility buttons -->
 <button id="btn-starter-pack" onclick="claimStarterPack()">🎁 領取新手禮包</button>
-<button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#607D8B;">📖 遊戲說明 (新手必看)</button>
+<button class="btn-grey" onclick="openInstructions()" style="width:80%;background-color:#607D8B;margin-bottom:10px;">📖 遊戲說明 (新手必看)</button>
 
-<div id="map-scroll-wrapper">
-    <div id="map-road">
+<!-- Tab Bar -->
+<div id="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('explore')">
+        <span class="tab-emoji">🗺️</span>
+        <span class="tab-label">探索地區</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('facility')">
+        <span class="tab-emoji">🏙️</span>
+        <span class="tab-label">設施中心</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('craft')">
+        <span class="tab-emoji">⚒️</span>
+        <span class="tab-label">工坊製作</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('boss')">
+        <span class="tab-emoji">💀</span>
+        <span class="tab-label">Boss 挑戰</span>
+    </button>
+</div>
 
-        <!-- ===== ZONE 1: EXPLORE AREAS ===== -->
-        <div class="map-location" onclick="startGame('hk')" title="香港是我家">
-            <div class="map-section-title">🗺️ 探索地區</div>
-            <div class="map-pin pin-blue">🌊</div>
-            <div class="map-label">香港是我家</div>
-            <div class="map-sublabel">蔚藍之海</div>
-        </div>
+<!-- Tab Panels -->
+<div id="tab-panel-wrapper">
 
-        <div class="map-divider">➜</div>
+    <!-- PANEL 1: Explore -->
+    <div class="tab-panel active" id="panel-explore">
+        <div class="tab-section-title">選擇答題地區 — 不同地區有不同野生精靈！</div>
+        <button class="map-action-btn mab-blue" onclick="startGame('hk')">
+            <span class="btn-icon">🌊</span>
+            <span class="btn-text"><span class="btn-title">香港是我家</span><span class="btn-sub">蔚藍之海 · 海洋系精靈出沒</span></span>
+        </button>
+        <button class="map-action-btn mab-green" onclick="startGame('house')">
+            <span class="btn-icon">🌳</span>
+            <span class="btn-text"><span class="btn-title">安居樂業</span><span class="btn-sub">豐饒之森 · 草系精靈出沒</span></span>
+        </button>
+        <button class="map-action-btn mab-orange" onclick="startGame('energy')">
+            <span class="btn-icon">🌋</span>
+            <span class="btn-text"><span class="btn-title">能源世界</span><span class="btn-sub">烈焰火山 · 火系精靈出沒</span></span>
+        </button>
+        <button class="map-action-btn mab-brown" onclick="startGame('freedom')">
+            <span class="btn-icon">⛰️</span>
+            <span class="btn-text"><span class="btn-title">自由與守規</span><span class="btn-sub">雷霆高原 · 格鬥系精靈出沒</span></span>
+        </button>
+        <button class="map-action-btn mab-purple" onclick="startGame('culture')">
+            <span class="btn-icon">🔮</span>
+            <span class="btn-text"><span class="btn-title">文化交融</span><span class="btn-sub">幻影遺跡 · 超能系精靈出沒</span></span>
+        </button>
+    </div>
 
-        <div class="map-location" onclick="startGame('house')" title="安居樂業">
-            <div class="map-pin pin-green">🌳</div>
-            <div class="map-label">安居樂業</div>
-            <div class="map-sublabel">豐饒之森</div>
-        </div>
+    <!-- PANEL 2: Facility -->
+    <div class="tab-panel" id="panel-facility">
+        <div class="tab-section-title">遊戲設施 — 強化角色、收集寶物</div>
+        <button class="map-action-btn mab-gold" onclick="openAlbum()">
+            <span class="btn-icon">🎴</span>
+            <span class="btn-text"><span class="btn-title">圖鑑與閃卡紀念冊</span><span class="btn-sub">收集已擊敗的精靈</span></span>
+        </button>
+        <button class="map-action-btn mab-gold" onclick="openGacha()">
+            <span class="btn-icon">🎰</span>
+            <span class="btn-text"><span class="btn-title">星星幸運抽獎</span><span class="btn-sub">每日限定 · 消耗⭐星星</span></span>
+        </button>
+        <button class="map-action-btn mab-red" onclick="openPartnerHub()">
+            <span class="btn-icon">🐾</span>
+            <span class="btn-text"><span class="btn-title">寶可夢進化中心</span><span class="btn-sub">升級拍檔，解鎖強力形態</span></span>
+        </button>
+        <button class="map-action-btn mab-green" onclick="openShop()">
+            <span class="btn-icon">🛒</span>
+            <span class="btn-text"><span class="btn-title">藥水商店</span><span class="btn-sub">購買HP藥水、攻防補品</span></span>
+        </button>
+        <button class="map-action-btn mab-dark" onclick="openSecretMarket()">
+            <span class="btn-icon">⛺</span>
+            <span class="btn-text"><span class="btn-title">神秘市場</span><span class="btn-sub">稀有道具兌換</span></span>
+        </button>
+    </div>
 
-        <div class="map-divider">➜</div>
+    <!-- PANEL 3: Craft -->
+    <div class="tab-panel" id="panel-craft">
+        <div class="tab-section-title">工坊製作 — 打造裝備與建築</div>
+        <button class="map-action-btn mab-orange" onclick="openForgeZone()">
+            <span class="btn-icon">⚔️</span>
+            <span class="btn-text"><span class="btn-title">裝備鍛造坊</span><span class="btn-sub">用木材/石頭打造武器與防具</span></span>
+        </button>
+        <button class="map-action-btn mab-gold" onclick="openSuperForge()">
+            <span class="btn-icon">👑</span>
+            <span class="btn-text"><span class="btn-title">神器祭壇</span><span class="btn-sub">升級超極神兵，突破極限</span></span>
+        </button>
+        <button class="map-action-btn mab-teal" onclick="openBuildZone()">
+            <span class="btn-icon">🔨</span>
+            <span class="btn-text"><span class="btn-title">建築工坊</span><span class="btn-sub">建造小屋、城堡、摩天輪</span></span>
+        </button>
+    </div>
 
-        <div class="map-location" onclick="startGame('energy')" title="能源世界">
-            <div class="map-pin pin-orange">🌋</div>
-            <div class="map-label">能源世界</div>
-            <div class="map-sublabel">烈焰火山</div>
-        </div>
+    <!-- PANEL 4: Boss -->
+    <div class="tab-panel" id="panel-boss">
+        <div class="tab-section-title">終極 Boss 挑戰 — 需建大城堡才可解鎖</div>
+        <button class="map-action-btn mab-boss" id="btn-boss-1" onclick="startBossFight(1)" disabled>
+            <span class="btn-icon">☠️</span>
+            <span class="btn-text"><span class="btn-title" id="boss-label-1">🔒 Boss 1</span><span class="btn-sub">限時 20 秒答題</span></span>
+        </button>
+        <button class="map-action-btn mab-boss" id="btn-boss-2" onclick="startBossFight(2)" disabled>
+            <span class="btn-icon">💀</span>
+            <span class="btn-text"><span class="btn-title" id="boss-label-2">🔒 Boss 2</span><span class="btn-sub">需達成 20 連勝</span></span>
+        </button>
+        <button class="map-action-btn mab-boss" id="btn-boss-3" onclick="startBossFight(3)" disabled>
+            <span class="btn-icon">🐉</span>
+            <span class="btn-text"><span class="btn-title" id="boss-label-3">🔒 Boss 3</span><span class="btn-sub">需達成 50 連勝</span></span>
+        </button>
+        <button class="map-action-btn mab-boss" id="btn-boss-4" onclick="startBossFight(4)" disabled>
+            <span class="btn-icon">👹</span>
+            <span class="btn-text"><span class="btn-title" id="boss-label-4">🔒 Boss 4</span><span class="btn-sub">需達成 100 連勝</span></span>
+        </button>
+        <button class="map-action-btn mab-boss" id="btn-boss-5" onclick="startBossFight(5)" disabled>
+            <span class="btn-icon">⭐</span>
+            <span class="btn-text"><span class="btn-title" id="boss-label-5">🔒 Boss 5</span><span class="btn-sub">需達成 150 連勝 · 終極挑戰</span></span>
+        </button>
+        <div class="boss-unlock-hint">💡 前往「⚒️ 工坊製作」→「建築工坊」建造大城堡即可解鎖</div>
+    </div>
 
-        <div class="map-divider">➜</div>
-
-        <div class="map-location" onclick="startGame('freedom')" title="自由與守規">
-            <div class="map-pin pin-brown">⛰️</div>
-            <div class="map-label">自由與守規</div>
-            <div class="map-sublabel">雷霆高原</div>
-        </div>
-
-        <div class="map-divider">➜</div>
-
-        <div class="map-location" onclick="startGame('culture')" title="文化交融">
-            <div class="map-pin pin-purple">🔮</div>
-            <div class="map-label">文化交融</div>
-            <div class="map-sublabel">幻影遺跡</div>
-        </div>
-
-        <!-- Separator -->
-        <div style="width:4px; background:rgba(255,255,255,0.3); height:120px; border-radius:2px; align-self:center; margin:0 15px; flex-shrink:0;"></div>
-
-        <!-- ===== ZONE 2: FACILITIES ===== -->
-        <div class="map-location" onclick="openAlbum()" title="圖鑑">
-            <div class="map-section-title">🏙️ 設施區</div>
-            <div class="map-pin pin-gold">🎴</div>
-            <div class="map-label">圖鑑紀念冊</div>
-            <div class="map-sublabel">閃卡收集</div>
-        </div>
-
-        <div class="map-divider">·</div>
-
-        <div class="map-location" onclick="openGacha()" title="每日抽獎">
-            <div class="map-pin pin-gold">🎰</div>
-            <div class="map-label">幸運抽獎</div>
-            <div class="map-sublabel">每日限定</div>
-        </div>
-
-        <div class="map-divider">·</div>
-
-        <div class="map-location" onclick="openPartnerHub()" title="進化中心">
-            <div class="map-pin pin-red">🐾</div>
-            <div class="map-label">進化中心</div>
-            <div class="map-sublabel">拍檔升級</div>
-        </div>
-
-        <div class="map-divider">·</div>
-
-        <div class="map-location" onclick="openShop()" title="藥水商店">
-            <div class="map-pin pin-green">🛒</div>
-            <div class="map-label">藥水商店</div>
-            <div class="map-sublabel">補充補品</div>
-        </div>
-
-        <!-- Separator -->
-        <div style="width:4px; background:rgba(255,255,255,0.3); height:120px; border-radius:2px; align-self:center; margin:0 15px; flex-shrink:0;"></div>
-
-        <!-- ===== ZONE 3: CRAFTING ===== -->
-        <div class="map-location" onclick="openForgeZone()" title="裝備鍛造">
-            <div class="map-section-title">⚒️ 工坊區</div>
-            <div class="map-pin pin-orange">⚔️</div>
-            <div class="map-label">裝備鍛造坊</div>
-            <div class="map-sublabel">武器&防具</div>
-        </div>
-
-        <div class="map-divider">·</div>
-
-        <div class="map-location" onclick="openSuperForge()" title="神器祭壇">
-            <div class="map-pin pin-gold">👑</div>
-            <div class="map-label">神器祭壇</div>
-            <div class="map-sublabel">超極裝備</div>
-        </div>
-
-        <div class="map-divider">·</div>
-
-        <div class="map-location" onclick="openBuildZone()" title="建築工坊">
-            <div class="map-pin pin-teal">🔨</div>
-            <div class="map-label">建築工坊</div>
-            <div class="map-sublabel">城堡&建設</div>
-        </div>
-
-        <div class="map-divider">·</div>
-
-        <div class="map-location" onclick="openSecretMarket()" title="神秘市場">
-            <div class="map-pin pin-dark">⛺</div>
-            <div class="map-label">神秘市場</div>
-            <div class="map-sublabel">稀有交換</div>
-        </div>
-
-        <!-- Separator -->
-        <div style="width:4px; background:rgba(255,255,255,0.3); height:120px; border-radius:2px; align-self:center; margin:0 15px; flex-shrink:0;"></div>
-
-        <!-- ===== ZONE 4: BOSS AREA ===== -->
-        <div class="map-boss-zone">
-            <h4>💀 終極 Boss 挑戰區</h4>
-            <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;">
-                <div class="map-location" id="map-boss-1" onclick="startBossFight(1)" style="min-width:80px; margin:0;">
-                    <div class="map-pin pin-boss" style="width:55px;height:55px;font-size:2em;">☠️</div>
-                    <div class="map-label" style="font-size:0.65em;">Boss 1</div>
-                    <div class="map-lock-badge" id="map-lock-1">🔒</div>
-                </div>
-                <div class="map-location" id="map-boss-2" onclick="startBossFight(2)" style="min-width:80px; margin:0;">
-                    <div class="map-pin pin-boss" style="width:55px;height:55px;font-size:2em;">💀</div>
-                    <div class="map-label" style="font-size:0.65em;">Boss 2</div>
-                    <div class="map-lock-badge" id="map-lock-2">🔒</div>
-                </div>
-                <div class="map-location" id="map-boss-3" onclick="startBossFight(3)" style="min-width:80px; margin:0;">
-                    <div class="map-pin pin-boss" style="width:55px;height:55px;font-size:2em;">🐉</div>
-                    <div class="map-label" style="font-size:0.65em;">Boss 3</div>
-                    <div class="map-lock-badge" id="map-lock-3">🔒</div>
-                </div>
-                <div class="map-location" id="map-boss-4" onclick="startBossFight(4)" style="min-width:80px; margin:0;">
-                    <div class="map-pin pin-boss" style="width:55px;height:55px;font-size:2em;">👹</div>
-                    <div class="map-label" style="font-size:0.65em;">Boss 4</div>
-                    <div class="map-lock-badge" id="map-lock-4">🔒</div>
-                </div>
-                <div class="map-location" id="map-boss-5" onclick="startBossFight(5)" style="min-width:80px; margin:0;">
-                    <div class="map-pin pin-boss" style="width:55px;height:55px;font-size:2em;">⭐</div>
-                    <div class="map-label" style="font-size:0.65em;">Boss 5</div>
-                    <div class="map-lock-badge" id="map-lock-5">🔒</div>
-                </div>
-            </div>
-            <div style="color:#FF8A80;font-size:0.65em;text-align:center;margin-top:4px;">需建大城堡解鎖</div>
-        </div>
-
-    </div><!-- end map-road -->
-    <div class="map-scroll-hint">← 左右滑動查看更多地點 →</div>
-</div><!-- end map-scroll-wrapper -->
+</div><!-- end tab-panel-wrapper -->
 
 </div>
 
@@ -2051,7 +1960,19 @@
         }
 
         window.onload = loadGame;
-    </script>
+    
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        const tabs = ['explore','facility','craft','boss'];
+        btn.classList.toggle('active', tabs[i] === tabName);
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById('panel-' + tabName);
+    if (panel) panel.classList.add('active');
+    playSound('click');
+}
+
+</script>
 
     <!-- 新手禮包彈出視窗 -->
     <div id="starter-pack-modal" class="hidden">
