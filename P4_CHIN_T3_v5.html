@@ -544,11 +544,9 @@
         
         <div id="boss-select-screen" class="screen hidden">
             <h2 style="color:#9C27B0;">🗺️ 終極 Boss 挑戰區</h2>
-            <p>警告：答錯或超時將扣除血量(HP)與已收集的元素！</p>
-            <button class="btn-green" onclick="startBossFight(1)">【成熟期】暴龍獸 (限時15秒)</button>
-            <button class="btn-orange" onclick="startBossFight(2)">【完全體】機械暴龍獸 (限時10秒)</button>
-            <button class="btn-red" onclick="startBossFight(3)">【究極體】戰鬥暴龍獸 (限時5秒)</button>
-            <button class="btn-grey" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
+            <p style="color:#F44336;font-size:0.85em;">⚠️ 答錯或超時將扣除HP！量力而為！</p>
+            <div id="boss-level-list" style="display:flex;flex-direction:column;gap:8px;width:95%;margin:0 auto;"></div>
+            <button class="btn-grey" onclick="goHome()" style="margin-top:16px;">🏠 返回主畫面</button>
         </div>
 
         <div id="boss-combat-screen" class="screen hidden">
@@ -1166,13 +1164,13 @@
 
         // ================== 🌟 史詩神獸 / Boss 更新 ==================
         const epicLegendaries = {
-            'mewtwo':   { id: 'epic_mewtwo',   name: "🔮 超夢",     target: 5, time: 10, effect: "anti_heal_flip", desc: "精神擊破！禁療詛咒＋所有題目文字上下顛倒！",                          img: "150", hpPenalty: 40 },
-            'rayquaza': { id: 'epic_rayquaza', name: "☄️ 烈空坐",   target: 4, time: 12, effect: "true_damage",    desc: "畫龍點睛！無視防禦造成巨額真實傷害＋全畫面白色爆閃！",             img: "384", hpPenalty: 30 },
-            'kyogre':   { id: 'epic_kyogre',   name: "🌊 帝牙盧卡", target: 5, time: 10, effect: "slow_time",      desc: "海嘯裂地！整場戰鬥答題限時縮短至5-8秒＋禁療＋藍色巨浪！",         img: "382", hpPenalty: 35 },
-            'ho_oh':    { id: 'epic_ho_oh',    name: "🔥 鳳王",     target: 5, time: 12, effect: "true_damage",    desc: "神聖之火！無視防禦造成巨額真實傷害＋火焰爆發！",                   img: "250", hpPenalty: 35 },
-            'lugia':    { id: 'epic_lugia',    name: "🌀 洛奇亞",   target: 5, time: 11, effect: "shuffle_options", desc: "銀翼暴風！選項按鈕隨機打亂位置3次＋全畫面雪花強風！",              img: "249", hpPenalty: 30 },
-            'groudon':  { id: 'epic_groudon',  name: "🌋 固拉多",   target: 5, time: 12, effect: "half_hp",        desc: "大地震裂！戰鬥開始扣一半HP＋全畫面震動龜裂！",                    img: "383", hpPenalty: 40 },
-            'arceus':   { id: 'epic_arceus',   name: "⭐ 阿爾宙斯", target: 6, time:  8, effect: "one_hit",        desc: "創世審判！限時強制3秒＋答錯扣雙倍傷害＋禁療＋全畫面震動金閃！", img: "493", hpPenalty: 60 }
+            'mewtwo':   { id: 'epic_mewtwo',   name: "🔮 超夢",     target: 5, time: 10, effect: "anti_heal_flip", desc: "精神擊破！文字永久顛倒＋禁療＋紫閃衝擊（整場持續）！",             img: "150", hpPenalty: 20 },
+            'rayquaza': { id: 'epic_rayquaza', name: "☄️ 烈空坐",   target: 5, time: 10, effect: "true_damage",    desc: "流星暴擊！無視防禦真實傷害＋綠閃×8超速＋震動±20px＋隕石整場！", img: "384", hpPenalty: 18 },
+            'kyogre':   { id: 'epic_kyogre',   name: "🌊 帝牙盧卡", target: 5, time: 10, effect: "slow_time",      desc: "原始海嘯！限時縮短＋藍閃×5＋畫面傾斜±5deg＋水波整場！",          img: "382", hpPenalty: 17 },
+            'ho_oh':    { id: 'epic_ho_oh',    name: "🔥 鳳王",     target: 5, time: 10, effect: "true_damage",    desc: "神聖烈火！無視防禦真實傷害＋橙紅閃×6＋橙色濾鏡＋火焰整場！",     img: "250", hpPenalty: 18 },
+            'lugia':    { id: 'epic_lugia',    name: "🌀 洛奇亞",   target: 5, time: 10, effect: "shuffle_options", desc: "銀翼暴風！選項隨機打亂×3＋震動＋寒風粒子（整場持續）！",           img: "249", hpPenalty: 20 },
+            'groudon':  { id: 'epic_groudon',  name: "🌋 固拉多",   target: 5, time: 12, effect: "half_hp",        desc: "大地毀滅！全框震動±15px（整場）＋岩石粒子（整場）！",              img: "383", hpPenalty: 19 },
+            'arceus':   { id: 'epic_arceus',   name: "⭐ 阿爾宙斯", target: 7, time:  7, effect: "one_hit",        desc: "創世審判！全畫面±70px震動＋金閃×7＋反色＋選項閃消＋額外-15HP！",  img: "493", hpPenalty: 34 }
         };
 
         const evoCosts = {
@@ -1228,7 +1226,12 @@
             { id: 'wild_惡魔獸', name: '惡魔獸', pic: 'https://digimon.net/cimages/digimon/devimon.jpg', type: 'normal' },
             { id: 'wild_古加獸', name: '古加獸', pic: 'https://digimon.net/cimages/digimon/kuwagamon.jpg', type: 'normal' },
             { id: 'boss_1', name: '暴龍獸', pic: 'https://digimon.net/cimages/digimon/greymon.jpg', type: 'boss' },
-            { id: 'boss_3', name: '戰鬥暴龍獸', pic: 'https://digimon.net/cimages/digimon/wargreymon.jpg', type: 'boss' }
+            { id: 'boss_3', name: '戰鬥暴龍獸', pic: 'https://digimon.net/cimages/digimon/wargreymon.jpg', type: 'boss' },
+            { id: 'boss_4', name: '奈克洛茲瑪',  pic: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/800.png', type: 'boss' },
+            { id: 'boss_5', name: '帝牙卡',       pic: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/483.png', type: 'boss' },
+            { id: 'boss_6', name: '帕路奇亞',     pic: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/484.png', type: 'boss' },
+            { id: 'boss_7', name: '貝利亞魔獸',   pic: 'https://digimon.net/cimages/digimon/beelzebumon.jpg', type: 'boss' },
+            { id: 'boss_8', name: '蘇薩諾獸',     pic: 'https://digimon.net/cimages/digimon/susanoomon.jpg',  type: 'boss' }
         ];
 
         // 將神獸加入 Album
@@ -1248,7 +1251,7 @@
             streak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
             equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], 
             partnerLv: 0, partnerId: "", partnerBranch: "A", partners: {}, lastGachaDate: "",
-            achievements: [], totalCorrectAnswers: 0, totalBossWins: 0,
+            achievements: [], totalCorrectAnswers: 0, totalBossWins: 0, bossWins: {},
             dailyQuestDate: "", dailyQuests: [], dailyQuestProgress: {}, gachaDrawsToday: 0, 
             scrollBoughtDate: "", hasLegendaryBuff: false,
             bloodMoonActive: false, bloodMoonTarget: 0, bloodMoonStreak: 0, bloodMoonLeft: 0, unlockedCards: [], cardStats: {}, potions: 0
@@ -1606,6 +1609,7 @@ function checkDailyReset() {
                     if (!inventory.achievements) inventory.achievements = [];
                     if (inventory.totalCorrectAnswers === undefined) inventory.totalCorrectAnswers = 0;
                     if (inventory.totalBossWins === undefined) inventory.totalBossWins = 0;
+                    if (!inventory.bossWins) inventory.bossWins = {};
                     if (!inventory.dailyQuests) inventory.dailyQuests = [];
                     if (!inventory.dailyQuestProgress) inventory.dailyQuestProgress = {};
                     
@@ -1740,7 +1744,7 @@ function checkDailyReset() {
         function openSuperForge() { playSound('click'); hideAll(); document.getElementById('super-forge-zone').classList.remove('hidden'); }
         function openForgeZone() { playSound('click'); hideAll(); document.getElementById('forge-zone').classList.remove('hidden'); }
         function openBuildZone() { playSound('click'); hideAll(); restoreBuildings(); document.getElementById('build-zone').classList.remove('hidden'); }
-        function openBossSelect() { playSound('click'); hideAll(); document.getElementById('boss-select-screen').classList.remove('hidden'); }
+        function openBossSelect() { playSound('click'); hideAll(); document.getElementById('boss-select-screen').classList.remove('hidden'); renderBossSelect(); }
         window.closeModal = function(id) { document.getElementById(id).classList.add('hidden'); }
 
         // ================== 建築工坊邏輯 ==================
@@ -2445,11 +2449,81 @@ function checkDailyReset() {
         let combatAntiHeal = false;
         let combatSlowTime = false;
 
+        const normalBosses = {
+            1: { name:'【成熟期】暴龍獸',     pic:'https://digimon.net/cimages/digimon/greymon.jpg',     target:3, time:15, dmg:20, effect:null,
+                 reward:{gem:3,star:3,manuscript:0,coins:50,wood:5,stone:0,fragment:0},
+                 unlock: inv => (inv.castles>=1||inv.flyingCastle>=1),
+                 unlockHint:'需要：🏰城堡或🛸空中城堡' },
+            2: { name:'【完全體】機械暴龍獸', pic:'https://digimon.net/cimages/digimon/metalgreymon.jpg', target:4, time:10, dmg:20, effect:null,
+                 reward:{gem:5,star:5,manuscript:0,coins:80,wood:0,stone:5,fragment:0},
+                 unlock: inv => ((inv.bossWins||{})[1]>=1),
+                 unlockHint:'需要：擊敗成熟期暴龍獸' },
+            3: { name:'【究極體】戰鬥暴龍獸', pic:'https://digimon.net/cimages/digimon/wargreymon.jpg',  target:5, time:5,  dmg:20, effect:null,
+                 reward:{gem:8,star:8,manuscript:1,coins:120,wood:5,stone:5,fragment:0},
+                 unlock: inv => ((inv.bossWins||{})[2]>=1),
+                 unlockHint:'需要：擊敗完全體機械暴龍獸' },
+            4: { name:'【暗黑】奈克洛茲瑪',   pic:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/800.png', target:5, time:12, dmg:15, effect:'dark_screen',
+                 reward:{gem:5,star:8,manuscript:1,coins:150,wood:10,stone:0,fragment:0},
+                 unlock: inv => ((inv.bossWins||{})[3]>=1 && (inv.totalCorrectAnswers||0)>=50),
+                 unlockHint:'需要：擊敗究極體戰鬥暴龍獸 + 累積答對50題' },
+            5: { name:'【時間】帝牙卡',        pic:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/483.png', target:5, time:12, dmg:18, effect:'shrink_time',
+                 reward:{gem:8,star:10,manuscript:2,coins:200,wood:0,stone:0,fragment:5},
+                 unlock: inv => ((inv.bossWins||{})[4]>=1 && (inv.gem||0)>=15),
+                 unlockHint:'需要：擊敗暗黑奈克洛茲瑪 + 💎×15' },
+            6: { name:'【空間】帕路奇亞',      pic:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/484.png', target:5, time:10, dmg:20, effect:'mirror_damage',
+                 reward:{gem:10,star:12,manuscript:2,coins:250,wood:0,stone:5,fragment:5},
+                 unlock: inv => ((inv.bossWins||{})[5]>=1 && (inv.partnerLv||0)>=3),
+                 unlockHint:'需要：擊敗時間帝牙卡 + 夥伴進化Lv3+' },
+            7: { name:'【惡魔】貝利亞魔獸',    pic:'https://digimon.net/cimages/digimon/beelzebumon.jpg', target:6, time:9, dmg:23, effect:'blind_options',
+                 reward:{gem:12,star:15,manuscript:3,coins:300,wood:0,stone:0,fragment:10},
+                 unlock: inv => ((inv.bossWins||{})[6]>=1 && (inv.totalBossWins||0)>=5),
+                 unlockHint:'需要：擊敗空間帕路奇亞 + 累積Boss勝利5次' },
+            8: { name:'【終極】蘇薩諾獸',      pic:'https://digimon.net/cimages/digimon/susanoomon.jpg',  target:7, time:7,  dmg:34, effect:'one_hit',
+                 reward:{gem:15,star:20,manuscript:5,coins:500,wood:10,stone:10,fragment:5},
+                 unlock: inv => ((inv.bossWins||{})[7]>=1 && (inv.hut||0)>=1 && (inv.tower||0)>=1 && (inv.castles||0)>=1 && (inv.ferrisWheel||0)>=1 && (inv.flyingCastle||0)>=10),
+                 unlockHint:'需要：擊敗惡魔貝利亞魔獸 + 擁有全部5種建築 + 🛸空中城堡×10' }
+        };
+
+        function renderBossSelect() {
+            const list = document.getElementById('boss-level-list');
+            if (!list) return;
+            list.innerHTML = '';
+            if (!inventory.bossWins) inventory.bossWins = {};
+            const btnColors = {1:'btn-green',2:'btn-green',3:'btn-orange',4:'btn-red',5:'btn-black',6:'btn-purple',7:'btn-red',8:'btn-orange'};
+            const effectLabel = {dark_screen:'🌑暗黑畫面',shrink_time:'⏳限時遞減',mirror_damage:'🌀答對扣血',blind_options:'🔲選項變???',one_hit:'⚡終極審判'};
+            for (let lv = 1; lv <= 8; lv++) {
+                const b = normalBosses[lv];
+                const unlocked = b.unlock(inventory);
+                const won = (inventory.bossWins[lv]||0) >= 1;
+                const wonTag = won ? ' ✅' : '';
+                const effTag = b.effect ? `<span style="font-size:0.7em;background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:8px;margin-left:6px;">${effectLabel[b.effect]}</span>` : '';
+                if (unlocked) {
+                    const btn = document.createElement('button');
+                    btn.className = btnColors[lv] || 'btn-red';
+                    btn.style.cssText = 'width:100%;text-align:left;padding:10px 14px;font-size:0.88em;';
+                    btn.innerHTML = `Lv${lv} ${b.name}${wonTag}${effTag}<br><small style="opacity:0.85;">📋 ${b.target}題 / ⏱${b.time}秒 / 💥答錯-${b.dmg}HP</small>`;
+                    btn.onclick = () => startBossFight(lv);
+                    list.appendChild(btn);
+                } else {
+                    const div = document.createElement('div');
+                    div.style.cssText = 'background:rgba(0,0,0,0.18);border-radius:12px;padding:10px 14px;color:#aaa;font-size:0.82em;text-align:left;';
+                    div.innerHTML = `🔒 Lv${lv} ${b.name}<br><small style="color:#888;">${b.unlockHint}</small>`;
+                    list.appendChild(div);
+                }
+            }
+        }
+
         window.startBossFight = function(level) {
-            initAudio(); combatType = 'normal_boss'; 
-            if(level === 1) { combatTarget = 3; combatTimeLimit = 15; setupMonsterCombatUI("【成熟期】暴龍獸", albumData.find(c=>c.id==='boss_1').pic, 'glow-red'); currentEvent = {level:1}; }
-            else if(level === 2) { combatTarget = 4; combatTimeLimit = 10; setupMonsterCombatUI("【完全體】機械暴龍獸", albumData.find(c=>c.id==='boss_2')?.pic || 'https://digimon.net/cimages/digimon/metalgreymon.jpg', 'glow-red'); currentEvent = {level:2}; }
-            else { combatTarget = 5; combatTimeLimit = 5; setupMonsterCombatUI("【究極體】戰鬥暴龍獸", albumData.find(c=>c.id==='boss_3').pic, 'glow-red'); currentEvent = {level:3}; }
+            initAudio();
+            if (!inventory.bossWins) inventory.bossWins = {};
+            const b = normalBosses[level];
+            if (!b || !b.unlock(inventory)) { alert('🔒 尚未解鎖此關卡！'); return; }
+            combatType = 'normal_boss';
+            combatTarget = b.target;
+            combatTimeLimit = b.time;
+            baseCombatTimeLimit = b.time;
+            currentEvent = { level: level, bossEffect: b.effect, shrinkTime: b.time };
+            setupMonsterCombatUI(b.name, b.pic, 'glow-red');
             startCombatScreen();
         }
 
@@ -2463,8 +2537,6 @@ function checkDailyReset() {
                 setTimeout(() => triggerBeastEffect(boss.effect, boss.name), 500);
                 // 特殊效果：帝牙盧卡縮短限時
                 if(boss.effect === 'slow_time') {
-                    let newTime = Math.floor(Math.random() * 4) + 5; // 5-8秒
-                    combatTimeLimit = newTime;
                     combatAntiHeal = true; combatSlowTime = true;
                 }
                 // 特殊效果：超夢禁療＋顛倒
@@ -2570,6 +2642,48 @@ function checkDailyReset() {
                     if (!isEnraged) { isEnraged = true; alert(`⚠️ 警告！對手進入狂暴狀態！限時縮短 30%！`); }
                     currentLimit = Math.ceil(baseCombatTimeLimit * 0.7);
                 }
+                // 新Boss特效 per-question
+                if (currentEvent && currentEvent.bossEffect) {
+                    const eff = currentEvent.bossEffect;
+                    if (eff === 'dark_screen') {
+                        fxColorWarp('rgba(0,0,0,0.88)', 2500);
+                        fxParticles('🌑', 15, [3000, 6000]);
+                        const dsOpts = document.querySelectorAll('#boss-options .stone-chunk');
+                        dsOpts.forEach(b => { b.style.visibility='hidden'; });
+                        setTimeout(() => dsOpts.forEach(b => { b.style.visibility='visible'; }), 2000);
+                    } else if (eff === 'shrink_time') {
+                        if (combatCorrectCount > 0) {
+                            currentEvent.shrinkTime = Math.max(3, (currentEvent.shrinkTime||currentLimit) - 2);
+                            currentLimit = currentEvent.shrinkTime;
+                        }
+                        fxParticles('⏳', 8, [2000, 4000]);
+                        fxColorWarp('rgba(80,0,180,0.25)', 1500);
+                    } else if (eff === 'mirror_damage') {
+                        fxParticles('🌀', 10, [2500, 5000]);
+                        fxColorWarp('rgba(100,0,200,0.2)', 1500);
+                    } else if (eff === 'blind_options') {
+                        const boOpts = document.querySelectorAll('#boss-options .stone-chunk');
+                        const realTexts = [...boOpts].map(b => b.textContent);
+                        boOpts.forEach(b => { b.textContent='???'; b.style.color='#aaa'; });
+                        if (!isEnraged) {
+                            let fc=0;
+                            const flashIv = setInterval(() => {
+                                fc++; const showing=fc%2===1;
+                                boOpts.forEach((b,i) => { b.textContent=showing?realTexts[i]:'???'; b.style.color=showing?'':'#aaa'; });
+                                if(fc>=6) clearInterval(flashIv);
+                            }, 1500);
+                        }
+                        fxParticles('🔫', 12, [2500, 5500]);
+                    } else if (eff === 'one_hit') {
+                        fxScreenShake(0, true);
+                        fxFlashBurst('rgba(255,220,0,0.8)', 7);
+                        fxParticles('⚡', 25, [2000, 5000]);
+                        fxParticles('💫', 15, [2500, 5500]);
+                        var bsCs = document.getElementById('boss-combat-screen');
+                        bsCs.style.filter='invert(1)';
+                        setTimeout(function(){ bsCs.style.filter=''; }, 1800);
+                    }
+                }
             }
             combatTimeLimit = currentLimit;
 
@@ -2631,40 +2745,60 @@ function checkDailyReset() {
                 let bossNm  = epicLegendaries[currentEvent.key].name;
                 let roll = Math.random();
 
-                if (bossEff === 'true_damage' && roll < 0.70) {
-                    // 烈空坐(70%) / 鳳王(70%)
+                if (bossEff === 'true_damage') {
+                    // 烈空座(100%) / 鳳王(100%)
                     if (bossNm.indexOf('鳳王') !== -1) {
-                        fxFlashBurst('rgba(255,80,0,0.55)', 3);
-                        fxParticles('🔥', 14, [3000, 6000]);
-                        fxParticles('🌋', 6, [3500, 6000]);
+                        fxFlashBurst('rgba(255,80,0,0.75)', 6);
+                        fxColorWarp('rgba(200,80,0,0.35)', 3000);
+                        fxParticles('🔥', 25, [3000, 7000]);
+                        fxParticles('💥', 10, [2500, 5500]);
                     } else {
-                        fxFlashBurst('rgba(255,255,255,0.75)', 4);
-                        fxParticles('☄️', 12, [3000, 5500]);
+                        fxFlashBurst('rgba(100,255,100,0.8)', 8);
+                        fxScreenShake(1200);
+                        fxParticles('☄️', 25, [2500, 6000]);
+                        fxParticles('💥', 12, [2000, 5000]);
                     }
                 } else if (bossEff === 'anti_heal_flip') {
-                    // 超夢(100%)：紫閃每題
-                    fxFlashBurst('rgba(100,0,180,0.45)', 2);
-                    fxParticles('🔮', 8, [3500, 6000]);
-                } else if (bossEff === 'slow_time' && roll < 0.60) {
-                    // 帝牙盧卡(60%)：藍光脈衝
-                    fxFlashBurst('rgba(0,120,255,0.35)', 2);
-                    fxParticles('🌊', 12, [3000, 6000]);
-                    fxParticles('💧', 8, [3500, 6000]);
+                    // 超夢(100%)
+                    fxFlashBurst('rgba(150,0,255,0.7)', 6);
+                    fxColorWarp('rgba(80,0,150,0.4)', 3000);
+                    fxParticles('🔮', 20, [3000, 7000]);
+                    fxParticles('💜', 15, [2500, 6000]);
+                    setTimeout(function(){ fxFlipText(true); }, 200);
+                } else if (bossEff === 'slow_time' && roll < 0.90) {
+                    // 帝牙盧卡(90%)
+                    fxFlashBurst('rgba(0,120,255,0.6)', 5);
+                    fxColorWarp('rgba(0,80,200,0.4)', 3500);
+                    fxParticles('🌊', 25, [2500, 6000]);
+                    fxParticles('💧', 15, [2000, 5500]);
+                    var sc = document.getElementById('boss-combat-screen');
+                    var tilt = (Math.random()-0.5)*10;
+                    sc.style.transition = 'transform 0.3s ease';
+                    sc.style.transform = 'rotate(' + tilt + 'deg)';
+                    setTimeout(function(){ sc.style.transform = 'rotate(0deg)'; }, 3500);
                 } else if (bossEff === 'shuffle_options') {
-                    // 洛奇亞(100%)：雪花強風持續
-                    fxParticles('❄️', 16, [3500, 6000]);
-                    fxParticles('💨', 10, [3000, 5500]);
+                    // 洛奇亞(100%)
+                    fxScreenShake(1500);
+                    fxFlashBurst('rgba(200,240,255,0.6)', 5);
+                    fxParticles('❄️', 30, [3000, 7000]);
+                    fxParticles('💨', 20, [2500, 6000]);
+                    fxParticles('🌨️', 15, [3000, 6500]);
                 } else if (bossEff === 'half_hp' && roll < 0.70) {
-                    // 固拉多(70%)：持續震動整題
+                    // 固拉多(70%)
                     fxScreenShake(0, true);
-                    fxParticles('🪨', 12, [3000, 6000]);
-                    fxParticles('💥', 6, [2500, 5000]);
-                } else if (bossEff === 'one_hit' && roll < 0.80) {
-                    // 阿爾宙斯(80%)：持續震動 + 金閃
+                    fxParticles('🪨', 25, [2500, 7000]);
+                    fxParticles('🌋', 12, [3000, 6000]);
+                } else if (bossEff === 'one_hit') {
+                    // 阿爾宙斯(100%)
                     fxScreenShake(0, true);
-                    fxFlashBurst('rgba(255,220,0,0.5)', 3);
-                    fxParticles('⭐', 18, [3000, 6000]);
-                    fxParticles('✨', 10, [3500, 6000]);
+                    fxFlashBurst('rgba(255,220,0,0.8)', 7);
+                    fxColorWarp('rgba(255,220,0,0.3)', 4000);
+                    fxParticles('⭐', 35, [2500, 7000]);
+                    fxParticles('✨', 20, [2000, 6000]);
+                    fxParticles('💫', 15, [3000, 7000]);
+                    var cs = document.getElementById('boss-combat-screen');
+                    cs.style.filter = 'invert(1)';
+                    setTimeout(function(){ cs.style.filter = ''; }, 2000);
                 }
             }
 
@@ -2707,9 +2841,11 @@ function checkDailyReset() {
                 } else if (boss.effect === 'one_hit' && oneHitActive) {
                     combatHP = 0; document.getElementById('boss-msg').innerHTML = `<span style='color:#ff0000'>☠️ 創世審判！你被秒殺了！</span>`;
                 } else if (boss.effect === 'one_hit' && !oneHitActive) {
-                    // 阿爾宙斯：答錯扣雙倍傷害
-                    let finalDmg = Math.max(20, (dmg - calculateStats().def) * 2); combatHP -= finalDmg;
-                    document.getElementById('boss-msg').innerHTML = `<span style='color:#ffcc00'>⭐ 創世審判！雙倍懲罰！扣除 ${finalDmg} HP！</span>`;
+                    // 阿爾宙斯：答錯扣雙倍傷害＋額外-15HP
+                    let finalDmg = Math.max(20, (dmg - calculateStats().def) * 2);
+                    combatHP -= finalDmg;
+                    combatHP -= 15;
+                    document.getElementById('boss-msg').innerHTML = `<span style='color:#ffcc00'>⭐ 創世審判！雙倍懲罰＋大招！扣除 ${finalDmg}+15 HP！</span>`;
                 } else {
                     let finalDmg = Math.max(10, dmg - calculateStats().def); combatHP -= finalDmg;
                     document.getElementById('boss-msg').innerHTML = `<span style='color:#F44336'>💥 神獸造成了 ${finalDmg} 點傷害！</span>`;
@@ -2724,8 +2860,12 @@ function checkDailyReset() {
                 inventory.streak = 0; inventory.wood = Math.max(0, inventory.wood - 2); inventory.stone = Math.max(0, inventory.stone - 2); updateUI();
                 alert(`💥 ${reason} 野生怪把你打傷了！損失 2 木材和 2 石頭。`); goHome();
             } else {
-                combatHP -= 20; updateCombatHPBar();
-                document.getElementById('boss-msg').innerHTML = `<span style='color:#F44336'>💥 ${reason} 對手對你造成了 20 點傷害！</span>`;
+                if (!inventory.bossWins) inventory.bossWins = {};
+                const nb2 = normalBosses[currentEvent && currentEvent.level];
+                let nbDmg = nb2 ? nb2.dmg : 20;
+                if (nb2 && nb2.effect === 'one_hit') nbDmg += 15;
+                combatHP -= nbDmg; updateCombatHPBar();
+                document.getElementById('boss-msg').innerHTML = `<span style='color:#F44336'>💥 ${reason} 對手造成了 ${nbDmg} 點傷害！</span>`;
                 document.getElementById('btn-next-boss-q').classList.remove('hidden');
             }
         }
@@ -2768,8 +2908,21 @@ function checkDailyReset() {
                             alert(`🏆 勝利！你擊退了野生怪，獲得 5 顆寶石、50金幣！\n📖 閃卡已登錄至紀念冊！`);
                             unlockCard('wild_' + currentEvent.name);
                         } else {
-                            inventory.gem += 10; inventory.star += 10; inventory.coins += 100; updateUI(); 
-                            alert("🏆 恭喜你擊敗了對手！獲得 10 顆寶石、10 顆星星、100金幣！\n📖 閃卡已登錄至紀念冊！");
+                            if (!inventory.bossWins) inventory.bossWins = {};
+                            const nb = normalBosses[currentEvent.level];
+                            if (nb) {
+                                const r = nb.reward;
+                                inventory.gem += r.gem; inventory.star += r.star;
+                                inventory.manuscript = (inventory.manuscript||0) + r.manuscript;
+                                inventory.coins += r.coins; inventory.wood += r.wood;
+                                inventory.stone += r.stone; inventory.fragment = (inventory.fragment||0) + r.fragment;
+                                inventory.bossWins[currentEvent.level] = (inventory.bossWins[currentEvent.level]||0) + 1;
+                                alert(`🏆 擊敗 ${nb.name}！\n獲得 💎${r.gem} ⭐${r.star} 📜${r.manuscript} 💰${r.coins}\n🪵+${r.wood} 🪨+${r.stone} 💎碎片+${r.fragment}\n📖 閃卡已登錄至紀念冊！`);
+                            } else {
+                                inventory.gem += 10; inventory.star += 10; inventory.coins += 100;
+                                alert('🏆 恭喜你擊敗了對手！');
+                            }
+                            updateUI();
                             inventory.totalBossWins = (inventory.totalBossWins || 0) + 1;
                             updateQuestProgress('boss');
                             unlockAchievement('ach_boss1');
@@ -2780,6 +2933,12 @@ function checkDailyReset() {
                     }, 1000);
                 } else {
                     document.getElementById('btn-boss-flee').classList.add('hidden');
+                    // mirror_damage: 答對也扣血
+                    if (combatType === 'normal_boss' && currentEvent && currentEvent.bossEffect === 'mirror_damage') {
+                        const mirrorDmg = isEnraged ? 8 : 5;
+                        combatHP -= mirrorDmg; updateCombatHPBar();
+                        document.getElementById('boss-msg').innerHTML += ` <span style='color:#ff80ff'>🌀 鏡像反噬 -${mirrorDmg}HP！</span>`;
+                    }
                     setTimeout(() => { window.nextCombatQuestion(); }, 1500);
                 }
             } else {
@@ -2870,7 +3029,7 @@ function checkDailyReset() {
                     p.className = 'fx-particle';
                     p.textContent = emoji;
                     p.style.left = Math.random() * 100 + 'vw';
-                    p.style.fontSize = (0.8 + Math.random() * 1.4) + 'em';
+                    p.style.fontSize = (5 + Math.random() * 2) + 'em';
                     var delay = Math.random() * 2000;
                     var dur = durationRange[0] + Math.random() * (durationRange[1] - durationRange[0]);
                     p.style.animationDuration = dur + 'ms';
