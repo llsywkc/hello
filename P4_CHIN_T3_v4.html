@@ -1287,7 +1287,7 @@
 
         // ================== 存檔與資料設定 ==================
         const defaultInv = { 
-            playerName: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, 
+            playerName: "", playerId: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, 
             coins: 0, dropBuffLeft: 0, 
             streak: 0, maxStreak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
             equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], 
@@ -1612,8 +1612,12 @@ function checkDailyReset() {
             const name = document.getElementById('input-name').value.trim();
             if (!name) return alert("請輸入名字！");
             inventory.playerName = name;
+            // 生成唯一 ID（只在第一次設定名字時建立）
+            if (!inventory.playerId) {
+                inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+            }
             document.getElementById('display-name').textContent = name;
-            goHome();
+            saveGame(); goHome();
         }
         
         window.logout = function() {
@@ -1653,6 +1657,7 @@ function checkDailyReset() {
                     if (inventory.totalBossWins === undefined) inventory.totalBossWins = 0;
                     if (!inventory.bossWins) inventory.bossWins = {};
                     if (inventory.maxStreak === undefined) inventory.maxStreak = 0;
+                    if (!inventory.playerId) inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
                     if (!inventory.dailyQuests) inventory.dailyQuests = [];
                     if (!inventory.dailyQuestProgress) inventory.dailyQuestProgress = {};
                     
@@ -3192,8 +3197,8 @@ function checkDailyReset() {
 
         // ==================== 排行榜系統 (JSONBin) ====================
         // 🔧 請填入你的 JSONBin 資料:
-        const JSONBIN_BIN_ID  = '6a0469df250b1311c3441343';
-        const JSONBIN_API_KEY = '$2a$10$FevxiJnMNJEBleJYfQu5f.njJDhOlnqcuQE4NrFEAmfLEecQMMPSe';
+        const JSONBIN_BIN_ID  = '6a046f05c0954111d819549a';
+        const JSONBIN_API_KEY = '$2a$10$cFbR9Wmg5JLCo.6pnqDNSOMRa2WiTyhHXeDj7hTlUs5WVK3wP5qCa';
         const JSONBIN_URL     = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
         function calcScore() {
@@ -3291,6 +3296,7 @@ function checkDailyReset() {
                 const bwSnap = inventory.bossWins || {};
                 const myEntry = {
                     name:           inventory.playerName,
+                    playerId:       inventory.playerId || '',
                     score:          calcScore(),
                     correctAnswers: inventory.totalCorrectAnswers || 0,
                     bossWins:       inventory.totalBossWins || 0,
@@ -3304,13 +3310,25 @@ function checkDailyReset() {
                     partner:        getPartnerDisplayName(),
                     timestamp:      new Date().toISOString()
                 };
-                const existIdx = entries.findIndex(e => e.name === inventory.playerName);
+                const existIdx = entries.findIndex(e => e.playerId === inventory.playerId || e.name === inventory.playerName);
                 if (existIdx >= 0) {
                     // Only update if new score is higher
                     if (myEntry.score >= entries[existIdx].score) {
                         entries[existIdx] = myEntry;
                     } else {
-                        status.textContent = `⚠️ 你的最高分 ${entries[existIdx].score} 已在榜上，本次未更新。`;
+                        // If name changed, update name even if score not higher
+                        if (entries[existIdx].name !== inventory.playerName) {
+                            entries[existIdx].name = inventory.playerName;
+                            entries[existIdx].playerId = inventory.playerId;
+                            const putResName = await fetch(JSONBIN_URL, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+                                body: JSON.stringify({ entries })
+                            });
+                            status.textContent = '✅ 名字已更新至排行榜！分數保持最高紀錄。';
+                        } else {
+                            status.textContent = `⚠️ 你的最高分 ${entries[existIdx].score} 已在榜上，本次未更新。`;
+                        }
                         fetchLeaderboard(); return;
                     }
                 } else {
