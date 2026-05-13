@@ -1217,9 +1217,15 @@
                         if(inventory.streak % 3 === 0) inventory.fragment += 20;
                         
                         checkMedalUnlock();
-                        document.getElementById('mining-msg').innerHTML = "<span style='color:#4CAF50'>✅ 答對了！獲得 3石頭、3木材、20手稿 與 5金幣！</span>";
+                        document.getElementById('mining-msg').innerHTML = `<span style='color:#4CAF50'>✅ 答對了！獲得 3石頭、3木材、20手稿 與 5金幣！</span><br><span style='color:#1565C0;font-size:0.95em;'>📖 正確答案：<b style='color:#2E7D32;background:#E8F5E9;padding:2px 8px;border-radius:6px;'>${t.ans}</b></span>`;
                         document.getElementById('btn-hint-mining').classList.add('hidden');
-                        document.getElementById('mining-options').innerHTML = ''; 
+                        // Re-show all options with correct highlighted
+                        let reviewHtml = '';
+                        t.options.forEach(o => {
+                            let isAns = (o === t.ans);
+                            reviewHtml += `<div class='stone-chunk' style='cursor:default;opacity:${isAns?1:0.4};background:${isAns?"#C8E6C9":"#eee"};border:${isAns?"2px solid #4CAF50":"1px solid #ccc"};color:${isAns?"#1B5E20":"#888"};'>${isAns?"✅ ":""}${o}</div>`;
+                        });
+                        document.getElementById('mining-options').innerHTML = reviewHtml;
                         
                         let bossTriggered = false;
                         if (inventory.bloodMoonActive) bossTriggered = handleBloodMoon(true);
@@ -1227,8 +1233,23 @@
                         
                         if (!bossTriggered) document.getElementById('btn-next-mining').classList.remove('hidden');
                     } else {
-                        playSound('error'); inventory.streak = 0; updateUI(); c.style.visibility = 'hidden'; 
-                        document.getElementById('mining-msg').innerHTML = "<span style='color:#b71c1c'>❌ 錯了！(連勝中斷)</span>";
+                        playSound('error'); inventory.streak = 0; updateUI(); c.style.visibility = 'hidden';
+                        document.getElementById('mining-msg').innerHTML = `<span style='color:#b71c1c'>❌ 錯了！(連勝中斷)</span><br><span style='color:#1565C0;font-size:0.95em;'>📖 正確答案：<b style='color:#2E7D32;background:#E8F5E9;padding:2px 8px;border-radius:6px;'>${t.ans}</b></span>`;
+                        // Show all options with correct highlighted
+                        let allOpts = document.getElementById('mining-options').querySelectorAll('.stone-chunk');
+                        allOpts.forEach(el => {
+                            el.style.cursor = 'default';
+                            el.onclick = null;
+                            if (el.textContent === t.ans) {
+                                el.style.background = '#C8E6C9';
+                                el.style.border = '2px solid #4CAF50';
+                                el.style.color = '#1B5E20';
+                                el.textContent = '✅ ' + el.textContent;
+                            } else {
+                                el.style.opacity = '0.4';
+                            }
+                        });
+                        document.getElementById('btn-next-mining').classList.remove('hidden');
                         if (inventory.bloodMoonActive) handleBloodMoon(false);
                     }
                 };
@@ -1536,10 +1557,10 @@
                 
                 if (bossProgress >= Math.floor(currentBossData.target / 2) && !bossEnraged && currentBossData.effect) {
                     bossEnraged = true;
-                    document.getElementById('boss-msg').innerHTML = `<span style='color:#FF9800'>✅ 攻擊成功！<br>⚠️ 神獸血量見底，進入狂暴狀態！</span>`;
+                    document.getElementById('boss-msg').innerHTML = `<span style='color:#FF9800'>✅ 攻擊成功！<br>⚠️ 神獸血量見底，進入狂暴狀態！</span><br><span style='color:#1565C0;font-size:0.9em;'>📖 正確答案：<b style='color:#2E7D32;background:#E8F5E9;padding:2px 6px;border-radius:5px;'>${currentBossTask.ans}</b></span>`;
                     playSound('legendary');
                 } else {
-                    document.getElementById('boss-msg').innerHTML = `<span style='color:#4CAF50'>✅ 攻擊成功！</span>`;
+                    document.getElementById('boss-msg').innerHTML = `<span style='color:#4CAF50'>✅ 攻擊成功！</span><br><span style='color:#1565C0;font-size:0.9em;'>📖 正確答案：<b style='color:#2E7D32;background:#E8F5E9;padding:2px 6px;border-radius:5px;'>${currentBossTask.ans}</b></span>`;
                 }
 
                 updateBossHP(); 
@@ -1576,7 +1597,7 @@
                 failMsg = `❌ ${failMsg} 被攻擊扣除 HP！`;
             }
 
-            document.getElementById('boss-msg').innerHTML = `<span style='color:#B71C1C'>${failMsg}</span>`;
+            document.getElementById('boss-msg').innerHTML = `<span style='color:#B71C1C'>${failMsg}</span><br><span style='color:#1565C0;font-size:0.9em;'>📖 正確答案：<b style='color:#2E7D32;background:#E8F5E9;padding:2px 6px;border-radius:5px;'>${currentBossTask.ans}</b></span>`;
             updateUI(true); updateBossHP();
             
             if (playerHP <= 0) { setTimeout(() => bossDefeat(), 1500); return; }
