@@ -342,6 +342,80 @@
         .empty-state .es-title { font-size:1.05em; font-weight:bold; color:#7E57C2; margin-bottom:4px; }
         .empty-state .es-sub   { font-size:0.82em; color:#BDBDBD; }
 
+        
+        /* ===== Victory Modal ===== */
+        #victory-modal {
+            position: fixed; inset: 0; z-index: 10000;
+            background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+            display: flex; align-items: flex-end; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.4s;
+        }
+        #victory-modal.show { opacity: 1; pointer-events: auto; }
+        #victory-modal-box {
+            background: linear-gradient(160deg, #1a0533 0%, #2d0a4e 60%, #1a0533 100%);
+            border: 3px solid #FFD700;
+            border-radius: 28px 28px 0 0;
+            padding: 28px 24px 36px;
+            width: 100%; max-width: 520px;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.45s cubic-bezier(0.34,1.4,0.64,1);
+            box-shadow: 0 -10px 60px rgba(255,215,0,0.25);
+            max-height: 90vh; overflow-y: auto;
+        }
+        #victory-modal.show #victory-modal-box { transform: translateY(0); }
+        .vm-boss-img {
+            width: 110px; height: 110px; object-fit: contain;
+            border-radius: 50%; border: 4px solid #FFD700;
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 30px rgba(255,215,0,0.5);
+            animation: vmGlow 2s ease-in-out infinite;
+        }
+        @keyframes vmGlow {
+            0%,100% { box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+            50%      { box-shadow: 0 0 50px rgba(255,215,0,0.9), 0 0 80px rgba(255,150,0,0.4); }
+        }
+        .vm-title {
+            font-size: 2em; font-weight: 900; color: #FFD700;
+            text-shadow: 0 0 20px #FF8C00, 2px 2px 0 #000;
+            margin: 12px 0 4px; letter-spacing: 2px;
+        }
+        .vm-subtitle { font-size: 0.95em; color: #CE93D8; margin-bottom: 16px; }
+        .vm-rewards {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 8px; margin: 14px 0;
+        }
+        .vm-reward-chip {
+            background: rgba(255,255,255,0.1); border: 2px solid rgba(255,215,0,0.4);
+            border-radius: 20px; padding: 6px 14px;
+            font-size: 1em; font-weight: bold; color: #fff;
+            opacity: 0; transform: translateX(30px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .vm-reward-chip.in { opacity: 1; transform: translateX(0); }
+        .vm-stats { font-size: 0.82em; color: #B0BEC5; margin: 10px 0 18px; line-height: 1.8; }
+        .vm-claim-btn {
+            background: linear-gradient(135deg, #FFB300, #FF6F00);
+            color: #fff; border: none; border-radius: 16px;
+            padding: 14px 40px; font-size: 1.2em; font-weight: 900;
+            cursor: pointer; width: 90%;
+            box-shadow: 0 6px 0 #E65100;
+            transition: transform 0.15s, box-shadow 0.15s;
+            animation: pulse 1.5s infinite;
+        }
+        .vm-claim-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #E65100; }
+        .vm-confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; border-radius: 28px 28px 0 0; }
+        .vm-confetti span {
+            position: absolute; top: -10px; width: 10px; height: 10px;
+            border-radius: 2px; opacity: 0;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(300px) rotate(720deg); }
+        }
+
         </style>
 </head>
 <body>
@@ -3053,18 +3127,52 @@ function checkDailyReset() {
                         if (combatType === 'epic') {
                             let ms = Math.floor(Math.random() * 201) + 100;
                             inventory.gem += 50; inventory.star += 30; inventory.manuscript += ms; inventory.wood += 50; inventory.fragment += 5; inventory.coins += 200; updateUI();
-                            alert(`🎉 奇蹟！你擊敗了遠古神獸【${currentEvent.name}】！\n🎁 獲得 50寶石、30星星、${ms}手稿、🪵50木材、🔮5碎片、200金幣！\n📖 閃卡已登錄至紀念冊！`);
                             unlockCard(epicLegendaries[currentEvent.key].id);
                             document.body.classList.remove('legendary-mode');
+                            showVictoryModal({
+                                title: '🌟 奇蹟！遠古神獸已倒下！',
+                                subtitle: '你擊敗了【' + currentEvent.name + '】',
+                                imgSrc: currentEvent.pic || '',
+                                rewards: [
+                                    {icon:'💎', label:'寶石 ×50'}, {icon:'⭐', label:'星星 ×30'},
+                                    {icon:'📜', label:'手稿 ×' + ms}, {icon:'🪵', label:'木材 ×50'},
+                                    {icon:'🔮', label:'碎片 ×5'}, {icon:'💰', label:'金幣 ×200'},
+                                    {icon:'📖', label:'新閃卡解鎖！'}
+                                ],
+                                stats: '⚔️ 答對 ' + combatCorrectCount + ' 題 &nbsp;|&nbsp; 🔥 連勝記錄：' + (inventory.maxStreak||0),
+                                onClaim: goHome
+                            });
                         } else if(combatType === 'legendary') {
                             let ms = Math.floor(Math.random() * 101) + 100;
                             inventory.gem += 20; inventory.star += 20; inventory.manuscript += ms; inventory.wood += 30; inventory.fragment += 2; inventory.coins += 100; updateUI();
-                            alert(`🌟 奇蹟！你成功收服了傳說怪【${currentEvent.name}】！\n🎁 獲得 20寶石、20星星、${ms}手稿、🪵30木材、🔮2碎片、100金幣！\n📖 閃卡已登錄至紀念冊！`);
                             unlockCard('leg_' + currentEvent.name);
+                            showVictoryModal({
+                                title: '🌟 傳說怪已收服！',
+                                subtitle: '【' + currentEvent.name + '】 加入了你的紀念冊',
+                                imgSrc: currentEvent.pic || '',
+                                rewards: [
+                                    {icon:'💎', label:'寶石 ×20'}, {icon:'⭐', label:'星星 ×20'},
+                                    {icon:'📜', label:'手稿 ×' + ms}, {icon:'🪵', label:'木材 ×30'},
+                                    {icon:'🔮', label:'碎片 ×2'}, {icon:'💰', label:'金幣 ×100'},
+                                    {icon:'📖', label:'新閃卡解鎖！'}
+                                ],
+                                stats: '⚔️ 答對 ' + combatCorrectCount + ' 題',
+                                onClaim: goHome
+                            });
                         } else if (combatType === 'virus') {
-                            inventory.coins += 50; inventory.gem += 5; updateUI(); 
-                            alert(`🏆 勝利！你擊退了野生怪，獲得 5 顆寶石、50金幣！\n📖 閃卡已登錄至紀念冊！`);
+                            inventory.coins += 50; inventory.gem += 5; updateUI();
                             unlockCard('wild_' + currentEvent.name);
+                            showVictoryModal({
+                                title: '🏆 野生怪擊退！',
+                                subtitle: currentEvent.name + ' 已逃跑',
+                                imgSrc: currentEvent.pic || '',
+                                rewards: [
+                                    {icon:'💎', label:'寶石 ×5'}, {icon:'💰', label:'金幣 ×50'},
+                                    {icon:'📖', label:'新閃卡解鎖！'}
+                                ],
+                                stats: '⚔️ 答對 ' + combatCorrectCount + ' 題',
+                                onClaim: goHome
+                            });
                         } else {
                             if (!inventory.bossWins) inventory.bossWins = {};
                             const nb = normalBosses[currentEvent.level];
@@ -3075,19 +3183,42 @@ function checkDailyReset() {
                                 inventory.coins += r.coins; inventory.wood += r.wood;
                                 inventory.stone += r.stone; inventory.fragment = (inventory.fragment||0) + r.fragment;
                                 inventory.bossWins[currentEvent.level] = (inventory.bossWins[currentEvent.level]||0) + 1;
-                                alert(`🏆 擊敗 ${nb.name}！\n獲得 💎${r.gem} ⭐${r.star} 📜${r.manuscript} 💰${r.coins}\n🪵+${r.wood} 🪨+${r.stone} 💎碎片+${r.fragment}\n📖 閃卡已登錄至紀念冊！`);
+                                updateUI();
+                                inventory.totalBossWins = (inventory.totalBossWins || 0) + 1;
+                                updateQuestProgress('boss');
+                                unlockAchievement('ach_boss1');
+                                if (inventory.totalBossWins >= 5) unlockAchievement('ach_boss5');
+                                unlockCard('boss_' + currentEvent.level);
+                                showVictoryModal({
+                                    title: '🏆 VICTORY!',
+                                    subtitle: 'Lv' + currentEvent.level + ' ' + nb.name + ' 已被擊敗！',
+                                    imgSrc: nb.pic || '',
+                                    rewards: [
+                                        {icon:'💎', label:'寶石 ×' + r.gem},
+                                        {icon:'⭐', label:'星星 ×' + r.star},
+                                        {icon:'📜', label:'手稿 ×' + r.manuscript},
+                                        {icon:'💰', label:'金幣 ×' + r.coins},
+                                        {icon:'🪵', label:'木材 ×' + r.wood},
+                                        {icon:'🧱', label:'石頭 ×' + r.stone},
+                                        {icon:'🔮', label:'碎片 ×' + r.fragment},
+                                        {icon:'📖', label:'新閃卡解鎖！'}
+                                    ],
+                                    stats: '⚔️ 答對 ' + combatCorrectCount + ' 題 &nbsp;|&nbsp; 🏆 Boss總勝：' + (inventory.totalBossWins||0) + ' 次',
+                                    onClaim: goHome
+                                });
                             } else {
                                 inventory.gem += 10; inventory.star += 10; inventory.coins += 100;
-                                alert('🏆 恭喜你擊敗了對手！');
+                                updateUI();
+                                showVictoryModal({
+                                    title: '🏆 VICTORY!',
+                                    subtitle: '恭喜你擊敗了對手！',
+                                    imgSrc: '',
+                                    rewards: [{icon:'💎', label:'寶石 ×10'}, {icon:'⭐', label:'星星 ×10'}, {icon:'💰', label:'金幣 ×100'}],
+                                    stats: '',
+                                    onClaim: goHome
+                                });
                             }
-                            updateUI();
-                            inventory.totalBossWins = (inventory.totalBossWins || 0) + 1;
-                            updateQuestProgress('boss');
-                            unlockAchievement('ach_boss1');
-                            if (inventory.totalBossWins >= 5) unlockAchievement('ach_boss5');
-                            unlockCard('boss_' + currentEvent.level);
                         }
-                        goHome();
                     }, 1000);
                 } else {
                     document.getElementById('btn-boss-flee').classList.add('hidden');
@@ -3587,6 +3718,69 @@ function checkDailyReset() {
             try { var s = localStorage.getItem('gameTheme'); if(s) setTheme(s); } catch(e) {}
         })();
 
+
+        // ===== Victory Modal =====
+        let _victoryCallback = null;
+
+        function showVictoryModal(opts) {
+            // opts: { title, subtitle, imgSrc, rewards: [{icon,label}], stats, onClaim }
+            const modal    = document.getElementById('victory-modal');
+            const titleEl  = document.getElementById('vm-title');
+            const subEl    = document.getElementById('vm-subtitle');
+            const imgEl    = document.getElementById('vm-boss-img');
+            const rewardsEl= document.getElementById('vm-rewards');
+            const statsEl  = document.getElementById('vm-stats');
+
+            titleEl.textContent  = opts.title    || '🏆 VICTORY!';
+            subEl.textContent    = opts.subtitle || '';
+            imgEl.src            = opts.imgSrc   || '';
+            imgEl.style.display  = opts.imgSrc   ? 'inline-block' : 'none';
+            statsEl.innerHTML    = opts.stats    || '';
+            _victoryCallback     = opts.onClaim  || null;
+
+            // Build reward chips
+            rewardsEl.innerHTML = '';
+            (opts.rewards || []).forEach(function(r) {
+                var chip = document.createElement('span');
+                chip.className = 'vm-reward-chip';
+                chip.textContent = r.icon + ' ' + r.label;
+                rewardsEl.appendChild(chip);
+            });
+
+            // Show modal
+            modal.classList.add('show');
+
+            // Animate chips in sequence
+            var chips = rewardsEl.querySelectorAll('.vm-reward-chip');
+            chips.forEach(function(c, i) {
+                setTimeout(function(){ c.classList.add('in'); }, 300 + i * 120);
+            });
+
+            // Confetti
+            spawnConfetti();
+        }
+
+        function spawnConfetti() {
+            var container = document.getElementById('vm-confetti');
+            container.innerHTML = '';
+            var colors = ['#FFD700','#FF6B6B','#4CAF50','#42A5F5','#CE93D8','#FF9800'];
+            for (var i = 0; i < 28; i++) {
+                var s = document.createElement('span');
+                s.style.left     = Math.random() * 100 + '%';
+                s.style.background = colors[Math.floor(Math.random() * colors.length)];
+                s.style.width    = (Math.random() * 8 + 6) + 'px';
+                s.style.height   = (Math.random() * 8 + 6) + 'px';
+                s.style.animationDuration  = (Math.random() * 1.5 + 1.2) + 's';
+                s.style.animationDelay     = (Math.random() * 0.8) + 's';
+                container.appendChild(s);
+            }
+        }
+
+        function claimVictory() {
+            document.getElementById('victory-modal').classList.remove('show');
+            if (_victoryCallback) { _victoryCallback(); _victoryCallback = null; }
+        }
+
         // ==================== END CHEAT ====================
 
         </script>
@@ -3607,6 +3801,20 @@ function checkDailyReset() {
         <div class="theme-dot t-pink"          onclick="setTheme('pink')"   title="粉紅色"></div>
         <div class="theme-dot t-yellow"        onclick="setTheme('yellow')" title="黃色"></div>
         <div class="theme-dot t-dark"          onclick="setTheme('dark')"   title="深色"></div>
+    </div>
+
+
+    <!-- Victory Modal -->
+    <div id="victory-modal">
+        <div id="victory-modal-box" style="position:relative;">
+            <div class="vm-confetti" id="vm-confetti"></div>
+            <img id="vm-boss-img" class="vm-boss-img" src="" alt="">
+            <div class="vm-title" id="vm-title">🏆 VICTORY!</div>
+            <div class="vm-subtitle" id="vm-subtitle"></div>
+            <div class="vm-rewards" id="vm-rewards"></div>
+            <div class="vm-stats" id="vm-stats"></div>
+            <button class="vm-claim-btn" onclick="claimVictory()">✨ 領取獎勵！</button>
+        </div>
     </div>
 
 </body>
