@@ -381,6 +381,26 @@
             transition: transform 0.15s ease, box-shadow 0.15s ease !important;
         }
 
+        
+        /* ══ Map Cards ══ */
+        .map-card { background:linear-gradient(145deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)); border:2px solid rgba(255,255,255,0.1); border-radius:14px; padding:14px 10px; cursor:pointer; text-align:center; transition:transform 0.18s ease,box-shadow 0.18s ease,border-color 0.18s ease; position:relative; overflow:hidden; }
+        .map-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--cc,#9C27B0); border-radius:14px 14px 0 0; }
+        .map-card:hover { transform:translateY(-5px) scale(1.03); border-color:var(--cc,#9C27B0); box-shadow:0 8px 24px var(--cg,rgba(156,39,176,0.4)),0 0 0 1px var(--cc,#9C27B0); }
+        .map-card:active { transform:translateY(-1px) scale(0.99); }
+        .map-card-icon { font-size:2em; margin-bottom:4px; }
+        .map-card-title { font-size:0.95em; font-weight:700; color:#e8e0ff; margin-bottom:2px; }
+        .map-card-sub { font-size:0.68em; color:rgba(200,180,255,0.65); margin-bottom:6px; }
+        .map-card-stars { font-size:0.72em; letter-spacing:1px; }
+        /* ══ btn-black ══ */
+        .btn-black { background:linear-gradient(135deg,#37474F,#212121); color:#9E9E9E; box-shadow:0 6px 0 #000; border:2px solid #555; position:relative; overflow:hidden; }
+        /* ══ Screen flash ══ */
+        @keyframes flashGreen { 0%{box-shadow:inset 0 0 0 5px rgba(118,255,3,0);} 30%{box-shadow:inset 0 0 0 5px rgba(118,255,3,0.7);} 100%{box-shadow:inset 0 0 0 5px rgba(118,255,3,0);} }
+        @keyframes flashRed   { 0%{box-shadow:inset 0 0 0 5px rgba(255,82,82,0);}  30%{box-shadow:inset 0 0 0 5px rgba(255,82,82,0.7);}  100%{box-shadow:inset 0 0 0 5px rgba(255,82,82,0);}  }
+        .flash-correct { animation:flashGreen 0.5s ease; }
+        .flash-wrong   { animation:flashRed   0.5s ease; }
+        /* ══ Options 2x2 ══ */
+        #options-area .word-chunk { width:100%; box-sizing:border-box; padding:12px 8px; font-size:1.05em; text-align:center; border-radius:10px; }
+
         </style>
 </head>
 <body>
@@ -426,30 +446,30 @@
         </div>
 
         <div id="start-screen" class="screen hidden">
-            <button id="btn-newbie-pack" class="btn-gold" onclick="claimNewbiePack()" style="width: 80%; border: 4px dashed #FFF; margin-bottom: 10px;">🎁 領取新手禮包 (所有材料+50)</button>
-
-            <button class="btn-teal" onclick="openPartnerHub()" style="width: 80%; border: 4px solid #004D40; font-size: 1.3em;">🐾 寶可夢搭檔中心 (進化與切換)</button>
-            
-            <button class="btn-grey" onclick="openInstructions()" style="width: 80%; margin-top: 10px;">📖 遊戲說明 (新手必看)</button>
-            <hr style="width: 80%; border-top: 4px dashed #E65100;">
-            
-            <h2>🏕️ 選擇冒險地圖</h2>
-            <div class="level-menu">
-            <button class="btn-purple" onclick="startGame('t3_review_1')" style="border: 4px solid #FFEB3B; font-size: 1.15em;">📚 T3 温習 (詞語與偏旁)</button>
-            <button class="btn-orange" onclick="startGame('t3_review_2')" style="border: 4px solid #FFEB3B; font-size: 1.15em;">📝 T3 温習二 (標點、句式)</button>
-            <button class="btn-teal" onclick="startGame('t3_fa2')" style="border: 4px solid #FFEB3B; font-size: 1.15em;">🌿 T3 FA2 (詞語·課文·語文知識)</button>
-            <button class="btn-green" onclick="startGame('reorder_fa2')" style="border: 3px solid #FFEB3B; font-size: 1em;">🔤 T3 FA2 重組句子</button>
-            <button class="btn-green" onclick="startGame('dictation')" style="font-size:1em;">📝 默書尋寶</button>
-            <button class="btn-blue" onclick="startGame('reorder')" style="font-size:1em;">🌉 聯句過河</button>
-            <button class="btn-grey" onclick="startGame('mining')" style="font-size:1em;">⛏️ 礦洞尋寶</button>
+            <div style="display:flex;gap:8px;width:100%;margin-bottom:10px;flex-wrap:wrap;justify-content:center;">
+                <button id="btn-newbie-pack" class="btn-gold" onclick="claimNewbiePack()" style="flex:1;min-width:130px;border:2px dashed rgba(255,255,255,0.35);">🎁 新手禮包</button>
+                <button class="btn-teal" onclick="openPartnerHub()" style="flex:1;min-width:130px;">🐾 搭檔中心</button>
+                <button class="btn-grey" onclick="openInstructions()" style="flex:1;min-width:80px;">📖 說明</button>
             </div>
-            
-            <hr style="width: 80%; border-top: 4px dashed #E65100;">
-            
-            <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇 (無限戰力)</button>
-            <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊 (基礎防具)</button>
-            <button class="btn-purple" onclick="openBuildZone()">🔨 進入建築工坊 (解鎖高級建築)</button>
-            <button class="btn-black" id="btn-boss-menu" onclick="openBossSelect()" disabled>🔒 終極 Boss 挑戰 (需建豪華城堡)</button>
+            <div style="width:100%;background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:16px;padding:12px;margin-bottom:10px;">
+                <h2 style="margin:0 0 10px 0;font-size:1.1em;color:#FFD700;text-shadow:0 0 12px rgba(255,210,0,0.5);">🗺️ 選擇冒險地圖</h2>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;">
+                    <div class="map-card" onclick="startGame('t3_review_1')" style="--cc:#9C27B0;--cg:rgba(156,39,176,0.45);"><div class="map-card-icon">📚</div><div class="map-card-title">T3 温習一</div><div class="map-card-sub">詞語與偏旁</div><div class="map-card-stars">⭐⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('t3_review_2')" style="--cc:#FF9800;--cg:rgba(255,152,0,0.45);"><div class="map-card-icon">📝</div><div class="map-card-title">T3 温習二</div><div class="map-card-sub">標點與句式</div><div class="map-card-stars">⭐⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('t3_fa2')" style="--cc:#009688;--cg:rgba(0,150,136,0.45);"><div class="map-card-icon">🌿</div><div class="map-card-title">T3 FA2</div><div class="map-card-sub">詞語·課文·語文</div><div class="map-card-stars">⭐⭐⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('reorder_fa2')" style="--cc:#2196F3;--cg:rgba(33,150,243,0.45);"><div class="map-card-icon">🔤</div><div class="map-card-title">FA2 重組</div><div class="map-card-sub">重組句子</div><div class="map-card-stars">⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('dictation')" style="--cc:#4CAF50;--cg:rgba(76,175,80,0.45);"><div class="map-card-icon">✏️</div><div class="map-card-title">默書尋寶</div><div class="map-card-sub">詞語默書</div><div class="map-card-stars">⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('reorder')" style="--cc:#03A9F4;--cg:rgba(3,169,244,0.45);"><div class="map-card-icon">🌉</div><div class="map-card-title">聯句過河</div><div class="map-card-sub">句子重組</div><div class="map-card-stars">⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('mining')" style="--cc:#795548;--cg:rgba(121,85,72,0.45);"><div class="map-card-icon">⛏️</div><div class="map-card-title">礦洞尋寶</div><div class="map-card-sub">挖礦採集</div><div class="map-card-stars">⭐</div></div>
+                </div>
+            </div>
+            <hr style="width:95%;border:none;border-top:1px solid rgba(180,140,255,0.15);margin:2px 0 8px 0;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;">
+                <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇</button>
+                <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊</button>
+                <button class="btn-purple" onclick="openBuildZone()">🔨 建築工坊</button>
+                <button class="btn-black" id="btn-boss-menu" onclick="openBossSelect()" disabled>🔒 Boss 挑戰</button>
+            </div>
         </div>
 
         <div id="partner-hub-screen" class="screen hidden">
@@ -513,22 +533,30 @@
             </div>
 
             <div id="question-panel">
-                <div id="monster-fight-status" class="hidden" style="color:#9C27B0; font-weight:bold; font-size:1.2em; margin-bottom:10px;"></div>
-                <div class="question-text" id="question-text">題目加載中...</div>
-                <div class="word-bank" id="options-area"></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;width:100%;gap:8px;">
+                    <div id="streak-display" style="font-size:0.95em;color:#FFD700;font-weight:700;text-shadow:0 0 8px rgba(255,200,0,0.5);min-width:55px;text-align:left;white-space:nowrap;"></div>
+                    <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:20px;height:8px;overflow:hidden;">
+                        <div id="q-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#7C4DFF,#E040FB);border-radius:20px;transition:width 0.4s ease;"></div>
+                    </div>
+                    <div id="q-progress-text" style="font-size:0.78em;color:rgba(200,180,255,0.7);min-width:36px;text-align:right;white-space:nowrap;"></div>
+                </div>
+                <div id="monster-fight-status" class="hidden" style="color:#CE93D8;font-weight:bold;font-size:0.95em;margin-bottom:6px;padding:6px 12px;background:rgba(156,39,176,0.15);border-radius:8px;border-left:3px solid #9C27B0;text-align:left;"></div>
+                <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(180,140,255,0.2);border-left:4px solid #7C4DFF;border-radius:12px;padding:14px 16px;margin-bottom:10px;text-align:left;">
+                    <div class="question-text" id="question-text" style="font-size:1.15em;line-height:1.6;">題目加載中...</div>
+                </div>
+                <div class="word-bank" id="options-area" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px;min-height:80px;background:transparent;border:none;"></div>
             </div>
-            
-            <div id="feedback-area" class="feedback-box hidden">
-                <h3 id="feedback-msg" style="margin-top: 0; color: #2E7D32;">✅ 答對了！</h3>
-                <p id="reward-msg" style="color: #E65100; font-weight: bold;"></p>
-                <button class="btn-green" onclick="handleNextAction()">下一題 ➡️</button>
+            <div id="feedback-area" class="feedback-box hidden" style="border-radius:12px;padding:10px 14px;margin-top:6px;width:95%;box-sizing:border-box;">
+                <h3 id="feedback-msg" style="margin-top:0;font-size:1em;">✅ 答對了！</h3>
+                <p id="reward-msg" style="color:#FFD700;font-weight:bold;margin:4px 0;font-size:0.9em;"></p>
+                <button class="btn-green" onclick="handleNextAction()" style="margin-top:4px;">下一題 ➡️</button>
             </div>
-
             <div id="hint-area" class="hint-text hidden">💡 提示加載中...</div>
             <div id="bottom-controls">
                 <button class="btn-gold" onclick="showHint()">💡 顯示提示</button>
                 <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
             </div>
+
         </div>
 
         <div id="forge-zone" class="screen hidden">
@@ -1454,6 +1482,8 @@
         function openBuildZone() { hideAllScreens(); document.getElementById("build-zone").classList.remove("hidden"); }
 
         function startGame(mode) {
+            window._qCount = 0;
+            window._qTotal = (questions[mode]||[]).length || 20;
             currentMode = mode;
             isMonsterFight = false;
             hideAllScreens();
@@ -1581,6 +1611,16 @@
         }
 
         function loadQuestion() {
+            // streak display
+            const _sd = document.getElementById('streak-display');
+            if (_sd) _sd.innerText = player.streak > 0 ? '🔥 ×' + player.streak : '';
+            // progress bar
+            if (window._qCount === undefined) window._qCount = 0;
+            window._qCount = Math.min(window._qCount + 1, window._qTotal || 20);
+            const _pb = document.getElementById('q-progress-bar');
+            const _pt = document.getElementById('q-progress-text');
+            if (_pb) _pb.style.width = (window._qCount / (window._qTotal||20) * 100) + '%';
+            if (_pt) _pt.innerText = window._qCount + '/' + (window._qTotal||20);
             isMonsterFight = false;
             document.getElementById("monster-encounter-panel").classList.add("hidden");
             let qPanel = document.getElementById("question-panel");
@@ -1648,6 +1688,7 @@
             } else {
                 if (ans === currentQuestion.a) {
                     playSound('correct'); 
+            { const _mc=document.getElementById('main-container'); if(_mc){ _mc.classList.add('flash-correct'); setTimeout(()=>_mc.classList.remove('flash-correct'),520); } }
                     player.streak++;
                     checkStreakBadge();
                     
@@ -1668,6 +1709,7 @@
                     renderStats(); autoSave();
                 } else {
                     playSound('wrong'); 
+            { const _mc=document.getElementById('main-container'); if(_mc){ _mc.classList.add('flash-wrong'); setTimeout(()=>_mc.classList.remove('flash-wrong'),520); } }
                     player.streak = 0; 
                     fbArea.classList.remove("hidden"); fbArea.classList.add("error");
                     document.getElementById("feedback-msg").innerHTML = `❌ 答錯了！正確答案是：<span style="color:#F44336;">${currentQuestion.a}</span>`;
