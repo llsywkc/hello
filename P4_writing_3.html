@@ -3,70 +3,67 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>🖊️ 4A寫作練習：記敍文</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+<title>🖊️ 記敍文闖關遊戲</title>
 <style>
-/* ─── Reset & Base ─── */
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
-  background:#f0f4ff;color:#1e2340;min-height:100vh;
+  font-family:"PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  background:#eef1ff;color:#1e2340;min-height:100vh;
   background-image:
-    radial-gradient(circle at 10% 20%, rgba(147,114,255,.12) 0%, transparent 50%),
-    radial-gradient(circle at 90% 80%, rgba(99,179,255,.12) 0%, transparent 50%);
+    radial-gradient(circle at 8% 15%,rgba(147,114,255,.13) 0%,transparent 45%),
+    radial-gradient(circle at 92% 85%,rgba(99,179,255,.13) 0%,transparent 45%);
 }
 button,input{font-family:inherit}
-
-/* ─── Layout ─── */
 .app{max-width:1400px;margin:0 auto;padding:16px 16px 100px}
 
-/* ─── Top Hero Bar ─── */
-.hero{
+/* ── Hero topbar ── */
+.topbar{
   background:linear-gradient(135deg,#6c63ff 0%,#4facfe 100%);
-  border-radius:28px;padding:22px 28px;margin-bottom:16px;
+  border-radius:26px;padding:22px 26px 18px;margin-bottom:14px;
   color:#fff;position:relative;overflow:hidden;
-  box-shadow:0 20px 60px rgba(108,99,255,.35);
+  box-shadow:0 18px 54px rgba(108,99,255,.32);
 }
-.hero::before{
-  content:"";position:absolute;top:-40px;right:-40px;
-  width:220px;height:220px;border-radius:50%;
-  background:rgba(255,255,255,.08);
-}
-.hero::after{
-  content:"";position:absolute;bottom:-60px;right:80px;
-  width:160px;height:160px;border-radius:50%;
-  background:rgba(255,255,255,.06);
-}
-.hero-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px}
-.hero-title{position:relative;z-index:1}
-.hero-title h1{font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:900;letter-spacing:.04em;margin-bottom:6px}
-.hero-school{font-size:.9rem;opacity:.85;margin-bottom:10px}
-.hero-tags{display:flex;flex-wrap:wrap;gap:8px}
-.htag{
-  background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);
-  border-radius:999px;padding:5px 12px;font-size:.82rem;backdrop-filter:blur(4px);
-}
+.topbar::before{content:"";position:absolute;top:-50px;right:-50px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.07)}
+.topbar::after{content:"";position:absolute;bottom:-70px;right:90px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.05)}
+.title-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;position:relative;z-index:1}
+.title-wrap h1{font-size:clamp(1.4rem,2.3vw,2rem);font-weight:900;letter-spacing:.04em;margin-bottom:5px}
+.school-name{font-size:.88rem;opacity:.82;margin-bottom:10px}
+.subtitle{display:flex;flex-wrap:wrap;gap:7px}
+.subtitle .pill{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.32);border-radius:999px;padding:4px 11px;font-size:.8rem;backdrop-filter:blur(6px);color:#fff}
 
-/* ─── Theme + Mode Switchers ─── */
-.switches{display:flex;flex-direction:column;gap:10px;position:relative;z-index:1}
-.sw-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.sw-lbl{font-size:.78rem;opacity:.8;white-space:nowrap;margin-right:2px}
-.sw-btn{
-  padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.4);
-  background:rgba(255,255,255,.15);color:#fff;cursor:pointer;font-size:.82rem;
-  transition:.2s;backdrop-filter:blur(4px);
-}
-.sw-btn:hover{background:rgba(255,255,255,.28)}
-.sw-btn.on{background:rgba(255,255,255,.9);color:#5b4de8;font-weight:700;border-color:transparent;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+/* ── Switcher toolbar ── */
+.toolbar{display:flex;flex-direction:column;gap:9px;position:relative;z-index:1}
+.sw-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.sw-label{font-size:.78rem;opacity:.82;margin-right:2px;white-space:nowrap;color:#fff}
 
-/* ─── Progress ─── */
-.prog-wrap{margin-top:18px;position:relative;z-index:1}
-.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:.88rem;opacity:.9}
-.prog-track{
-  height:14px;border-radius:999px;background:rgba(255,255,255,.2);
-  overflow:hidden;border:1px solid rgba(255,255,255,.25);
+/* Colour circles for theme */
+.theme-circle{
+  width:28px;height:28px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.38);
+  cursor:pointer;transition:.2s;padding:0;
+  box-shadow:0 2px 8px rgba(0,0,0,.18);
 }
+.theme-circle:hover{transform:scale(1.18)}
+.theme-circle.on{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.55),0 2px 10px rgba(0,0,0,.2);transform:scale(1.18)}
+.tc-sky{background:linear-gradient(135deg,#6c63ff,#4facfe)}
+.tc-forest{background:linear-gradient(135deg,#1fa86a,#38f9d7)}
+.tc-sunset{background:linear-gradient(135deg,#ff6b35,#f9c74f)}
+
+/* Mode toggles */
+.tgl{
+  padding:7px 14px;border-radius:999px;
+  border:1.5px solid rgba(255,255,255,.38);
+  background:rgba(255,255,255,.15);color:#fff;
+  cursor:pointer;font-size:.82rem;transition:.2s;backdrop-filter:blur(4px);
+}
+.tgl:hover{background:rgba(255,255,255,.28)}
+.tgl.on{background:rgba(255,255,255,.92);color:#5b4de8;font-weight:700;border-color:transparent;box-shadow:0 4px 14px rgba(0,0,0,.14)}
+
+/* ── Progress ── */
+.progress-wrap{margin-top:16px;position:relative;z-index:1}
+.prog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;font-size:.87rem;color:rgba(255,255,255,.9)}
+.prog-bar{height:13px;border-radius:999px;background:rgba(255,255,255,.2);overflow:hidden;border:1px solid rgba(255,255,255,.22)}
 .prog-fill{
   height:100%;width:0%;border-radius:999px;
   background:linear-gradient(90deg,#ffe55a,#ff9a3c);
@@ -74,502 +71,370 @@ button,input{font-family:inherit}
 }
 .prog-fill::after{
   content:"";position:absolute;inset:0;border-radius:999px;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.5) 50%,transparent 100%);
-  animation:shimmer 2s linear infinite;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+  animation:shimmer 2.2s linear infinite;
 }
 @keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 
-/* ─── Stage Nav Pills ─── */
-.stage-nav{
-  display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;position:relative;z-index:1;
-}
-.sn-pill{
+/* ── Stage nav ── */
+.stage-nav{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;position:relative;z-index:1}
+.s-tab{
   display:flex;flex-direction:column;align-items:center;gap:2px;
-  padding:8px 14px;border-radius:16px;cursor:pointer;
-  border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.15);
-  color:rgba(255,255,255,.85);font-size:.82rem;transition:.2s;min-width:72px;
+  padding:8px 13px;border-radius:14px;cursor:pointer;
+  border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);
+  color:rgba(255,255,255,.88);font-size:.8rem;transition:.2s;min-width:70px;
   backdrop-filter:blur(4px);
 }
-.sn-pill strong{font-size:.88rem}
-.sn-pill:hover{background:rgba(255,255,255,.28)}
-.sn-pill.act{
+.s-tab strong{font-size:.86rem}
+.s-tab:hover{background:rgba(255,255,255,.27);transform:translateY(-1px)}
+.s-tab.act{
   background:#fff;color:#5b4de8;border-color:transparent;
-  box-shadow:0 6px 20px rgba(0,0,0,.2);transform:translateY(-2px);font-weight:700;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);transform:translateY(-2px);font-weight:700;
 }
-.sn-pill.dn{background:rgba(100,255,170,.25);border-color:rgba(100,255,170,.5);color:#e0fff0}
-.sn-pill.act.dn{background:#fff;color:#1a8f5a}
+.s-tab.dn{background:rgba(90,255,170,.22);border-color:rgba(90,255,170,.45);color:#e0fff0}
+.s-tab.act.dn{background:#fff;color:#1a8f5a}
+.s-mini{font-size:.74rem}
 
-/* ─── Main 2-col layout ─── */
-.main{display:grid;grid-template-columns:1fr 440px;gap:16px;align-items:start}
+/* ── Main layout ── */
+.main{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr);gap:14px;align-items:start}
 
-/* ─── Card ─── */
-.card{
-  background:#fff;border-radius:24px;
-  box-shadow:0 8px 32px rgba(30,35,64,.08);overflow:hidden;
-}
-.card-head{
-  padding:20px 22px 14px;
-  border-bottom:2px solid #f0f2ff;
-  display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;
-}
-.card-head h2{font-size:1.15rem;font-weight:800;color:#2d2060}
-.card-sub{font-size:.88rem;color:#7a82b0;margin-top:5px;line-height:1.5}
-.card-body{padding:22px}
+/* ── Panel ── */
+.panel{background:#fff;border-radius:22px;box-shadow:0 8px 30px rgba(30,35,80,.08);overflow:hidden;border:1.5px solid rgba(200,210,255,.5)}
 
-/* ─── Stage badge ─── */
-.stage-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  background:linear-gradient(135deg,#6c63ff,#4facfe);
-  color:#fff;border-radius:999px;padding:5px 14px;font-size:.82rem;font-weight:700;
+/* ── Panel head ── */
+.p-head{
+  padding:18px 20px 12px;border-bottom:2px solid #f0f2ff;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;
 }
+.p-head h2{margin:0;font-size:1.12rem;font-weight:800;color:#2d2060}
+.p-sub{color:#7a82b0;font-size:.87rem;margin-top:4px;line-height:1.5}
+.p-body{padding:20px}
 
-/* ─── Goal pill ─── */
-.goal-pill{
-  background:#eff0ff;color:#5b4de8;border-radius:999px;
-  padding:5px 12px;font-size:.8rem;font-weight:600;
-}
+/* Preview panel pills */
+.pill{background:#f0f2ff;border:1.5px solid #dde3ff;border-radius:999px;padding:5px 12px;font-size:.82rem;color:#5b4de8;font-weight:600}
+.ctr{display:flex;gap:8px;flex-wrap:wrap}
+.ctr .pill{background:#fff}
 
-/* ─── Target box ─── */
-.tgt-box{
-  background:linear-gradient(135deg,#f8f9ff,#eef2ff);
-  border:1.5px solid #dde3ff;border-radius:18px;
-  padding:16px;margin-bottom:18px;
-}
-.tgt-box h3{font-size:.95rem;font-weight:700;color:#4a4480;margin-bottom:7px}
-.tgt-box p{font-size:.88rem;color:#6870a8;line-height:1.65}
+/* Goal pill */
+.goal-pill{background:#eff0ff;color:#5b4de8;border-radius:999px;padding:5px 12px;font-size:.79rem;font-weight:600;white-space:nowrap;border:1.5px solid #dde3ff}
 
-/* ─── Sentence frame ─── */
-.frame-box{
-  background:linear-gradient(135deg,#fffbee,#fff8dd);
-  border:1.5px solid #f0d98a;border-radius:18px;
-  padding:14px 16px;margin-bottom:18px;
-}
-.frame-ttl{
-  display:flex;align-items:center;gap:6px;font-size:.82rem;
-  font-weight:700;color:#9a7800;margin-bottom:10px;
-}
-.frame-ttl::before{content:"📋";font-size:.9rem}
-.frame-ln{
-  font-size:.95rem;color:#7a6200;line-height:1.9;
-  border-bottom:1px dashed rgba(154,120,0,.2);padding-bottom:4px;margin-bottom:4px;
-}
+/* ── Stage content elements ── */
+.tgt{background:linear-gradient(135deg,#f6f8ff,#edf0ff);border:1.5px solid #dde3ff;border-radius:16px;padding:14px;margin-bottom:16px}
+.tgt h3{font-size:.93rem;font-weight:700;color:#4a4480;margin-bottom:6px}
+.tgt p{font-size:.87rem;color:#6870a8;line-height:1.65;margin:0}
+
+.frame{background:linear-gradient(135deg,#fffcee,#fff8dc);border:1.5px solid #eedd88;border-radius:16px;padding:13px 15px;margin-bottom:16px}
+.frame-ttl{font-size:.82rem;font-weight:700;color:#9a7800;margin-bottom:8px}
+.frame-ln{font-size:.93rem;color:#7a6200;line-height:1.9;border-bottom:1px dashed rgba(154,120,0,.18);padding-bottom:3px;margin-bottom:3px}
 .frame-ln:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
 
-/* ─── Field group ─── */
-.fg{margin-bottom:18px}
-.flbl{
-  display:flex;align-items:center;gap:7px;
-  font-weight:700;margin-bottom:10px;font-size:.95rem;color:#2d2060;
-}
-.flbl-num{
-  width:22px;height:22px;border-radius:50%;
-  background:linear-gradient(135deg,#6c63ff,#4facfe);
-  color:#fff;display:inline-flex;align-items:center;justify-content:center;
-  font-size:.72rem;font-weight:900;flex-shrink:0;
-}
-.fhelp{font-size:.82rem;color:#9098c0;margin-top:8px;line-height:1.5;padding-left:2px}
+.fg{margin-bottom:16px}
+.flbl{display:block;font-weight:700;margin-bottom:9px;font-size:.93rem;color:#2d2060}
+.fhelp{font-size:.81rem;color:#9098c0;margin-top:7px;line-height:1.5}
 
-/* ─── Choice buttons ─── */
-.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choices{display:flex;flex-wrap:wrap;gap:7px}
 .c-btn{
-  border:1.5px solid #dde3ff;background:#f8f9ff;color:#4a4a6e;
-  border-radius:14px;padding:9px 14px;cursor:pointer;font-size:.88rem;
+  border:1.5px solid #dde3ff;background:#f6f8ff;color:#4a4a70;
+  border-radius:13px;padding:9px 13px;cursor:pointer;font-size:.88rem;
   transition:.18s;font-weight:500;
 }
-.c-btn:hover{border-color:#6c63ff;background:#f0eeff;color:#5b4de8;transform:translateY(-1px)}
+.c-btn:hover{border-color:#6c63ff;background:#eeecff;color:#5b4de8;transform:translateY(-1px)}
 .c-btn.on{
   background:linear-gradient(135deg,#6c63ff,#4facfe);color:#fff;
-  border-color:transparent;box-shadow:0 6px 18px rgba(108,99,255,.3);
+  border-color:transparent;box-shadow:0 6px 16px rgba(108,99,255,.28);
   transform:translateY(-1px);font-weight:700;
 }
 
-/* ─── Text input ─── */
 .t-in{
-  width:100%;min-height:50px;border:1.5px solid #dde3ff;border-radius:16px;
-  background:#f8f9ff;padding:13px 16px;font-size:.95rem;color:#2d2060;
+  width:100%;min-height:48px;border:1.5px solid #dde3ff;border-radius:14px;
+  background:#f6f8ff;padding:12px 15px;font-size:.93rem;color:#2d2060;
   outline:none;transition:.2s;
 }
-.t-in:focus{
-  border-color:#6c63ff;background:#fff;
-  box-shadow:0 0 0 4px rgba(108,99,255,.1);
-}
-.t-in::placeholder{color:#b0b8d8}
+.t-in:focus{border-color:#6c63ff;background:#fff;box-shadow:0 0 0 4px rgba(108,99,255,.1)}
+.t-in::placeholder{color:#b4bcd8}
 
-/* ─── Hint chips ─── */
-.h-chips-wrap{margin-top:10px}
-.h-chips-lbl{font-size:.78rem;color:#9098c0;margin-bottom:6px}
-.h-chips{display:flex;flex-wrap:wrap;gap:6px}
+.h-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
 .h-chip{
-  border:1px solid #d8ddff;background:#eef0ff;color:#5b5aaa;
-  border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.82rem;
-  transition:.15s;
+  border:1px solid #d5daff;background:#eef0ff;color:#5558a8;
+  border-radius:999px;padding:6px 11px;cursor:pointer;font-size:.82rem;transition:.15s;
 }
 .h-chip:hover{background:#6c63ff;color:#fff;border-color:transparent;transform:translateY(-1px)}
 
-/* ─── 2-col grid ─── */
-.sp2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sp2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-/* ─── Action bar ─── */
 .act-bar{
-  display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;
-  align-items:center;margin-top:24px;padding-top:18px;
-  border-top:2px dashed #e8ebff;
+  display:flex;flex-wrap:wrap;gap:9px;justify-content:space-between;align-items:center;
+  margin-top:22px;padding-top:16px;border-top:2px dashed #e6eaff;
 }
-.act-hint{font-size:.82rem;color:#9098c0;display:flex;align-items:center;gap:5px}
-.act-hint::before{content:"💡";font-size:.88rem}
-.nav-btns{display:flex;gap:10px}
+.s-btns{display:flex;gap:8px;flex-wrap:wrap}
+.s-txt{color:#9098c0;font-size:.82rem}
 
-/* ─── Buttons ─── */
+/* ── Buttons ── */
 .btn{
-  border:none;border-radius:14px;padding:11px 18px;cursor:pointer;
+  border:none;border-radius:13px;padding:10px 17px;cursor:pointer;
   font-size:.9rem;font-weight:700;transition:.18s;
+  box-shadow:0 6px 16px rgba(108,99,255,.22);
 }
-.btn-primary{
-  background:linear-gradient(135deg,#6c63ff,#4facfe);color:#fff;
-  box-shadow:0 8px 20px rgba(108,99,255,.3);
-}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(108,99,255,.4)}
-.btn-sec{background:#f0f2ff;color:#5b4de8;border:1.5px solid #dde3ff}
-.btn-sec:hover{background:#e8ebff}
-.btn-warn{background:linear-gradient(135deg,#ff6b6b,#ff8e53);color:#fff;box-shadow:0 6px 16px rgba(255,107,107,.3)}
-.btn-good{background:linear-gradient(135deg,#43e97b,#38f9d7);color:#1a5c3a;box-shadow:0 6px 16px rgba(67,233,123,.3)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(108,99,255,.3)}
+.btn:active{transform:translateY(1px)}
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+/* default = primary gradient */
+.btn{background:linear-gradient(135deg,#6c63ff,#4facfe);color:#fff}
+.btn.sec{background:#f0f2ff;color:#5b4de8;border:1.5px solid #dde3ff;box-shadow:none}
+.btn.sec:hover{background:#e8ebff;box-shadow:none}
+.btn.wrn{background:linear-gradient(135deg,#ff6b6b,#ff8e53);color:#fff;box-shadow:0 6px 16px rgba(255,107,107,.28)}
+.btn.gd{background:linear-gradient(135deg,#43e97b,#38f9d7);color:#1a5c3a;box-shadow:0 6px 16px rgba(67,233,123,.25)}
 
-/* ─── Tool row ─── */
-.tool-row{
-  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;
-  gap:10px;margin-bottom:14px;
-}
-.tool-grp{display:flex;gap:8px;flex-wrap:wrap}
-.tool-btn{
-  border:1.5px solid #dde3ff;background:#fff;color:#5b5aaa;
-  border-radius:12px;padding:8px 14px;cursor:pointer;font-size:.82rem;
-  font-weight:600;transition:.15s;
-}
-.tool-btn:hover{background:#f0eeff;border-color:#6c63ff;color:#5b4de8}
-.tool-btn.danger{border-color:#ffd0d0;color:#e05050}
-.tool-btn.danger:hover{background:#fff0f0;border-color:#ff8080}
-.tool-btn.success{border-color:#c3f0da;color:#1a7a50}
-.tool-btn.success:hover{background:#e8fff2}
+/* ── Preview tools ── */
+.prev-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 
-/* ─── Paper (essay preview) ─── */
-.paper-wrap{
-  background:linear-gradient(180deg,#fffdf5 0%,#fffef9 100%);
-  border-radius:20px;border:1.5px solid #ede8d0;
-  min-height:620px;position:relative;overflow:hidden;
-  box-shadow:inset 0 2px 8px rgba(0,0,0,.04);
+/* ── Paper ── */
+.paper{
+  background:
+    linear-gradient(transparent 31px,rgba(170,195,255,.28) 32px),
+    linear-gradient(90deg,rgba(255,140,140,.35) 0,rgba(255,140,140,.35) 1px,transparent 1px);
+  background-size:100% 32px,42px 100%;
+  background-position:0 0,26px 0;
+  background-color:#fffef9;
+  border-radius:20px;border:1.5px solid #ede8d0;min-height:660px;
+  padding:24px 24px 28px 54px;position:relative;overflow:hidden;
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.03);
 }
-.paper-lines{
-  position:absolute;inset:0;pointer-events:none;
-  background:repeating-linear-gradient(
-    180deg,
-    transparent 0px,
-    transparent 31px,
-    rgba(180,200,255,.35) 32px
-  );
-}
-.paper-margin{
-  position:absolute;top:0;left:52px;bottom:0;width:2px;
-  background:rgba(255,150,150,.4);pointer-events:none;
-}
-.paper-inner{padding:28px 24px 32px 66px;position:relative;z-index:1}
-.e-title{text-align:center;font-size:1.4rem;font-weight:900;margin:0 0 6px;letter-spacing:.08em;color:#2d2060}
-.e-meta{text-align:center;color:#9098c0;font-size:.82rem;margin-bottom:18px}
-.placeholder{color:#b8bede;line-height:2.2;font-size:.95rem;text-align:center;padding-top:30px}
-.placeholder .ph-emoji{font-size:3rem;display:block;margin-bottom:12px}
-.e-para{text-indent:2em;line-height:2.2;margin:0 0 16px;font-size:.98rem;word-break:break-word;color:#2a2f50}
-.hl{
-  background:linear-gradient(135deg,#fff176,#ffee58);
-  border-radius:6px;padding:1px 5px;color:#5a4200;font-weight:700;
-}
+.paper::before{content:"";position:absolute;top:0;left:36px;width:2px;height:100%;background:rgba(255,140,140,.4)}
+.e-title{text-align:center;font-size:1.38rem;font-weight:900;margin:4px 0 14px;letter-spacing:.07em;color:#2d2060}
+.e-meta{text-align:center;color:#9098c0;font-size:.82rem;margin-bottom:14px}
+.placeholder{color:#b8bede;line-height:2.2;font-size:.93rem;text-align:center;padding-top:28px}
+.e-para{text-indent:2em;line-height:2.2;margin:0 0 14px;font-size:.97rem;word-break:break-word;color:#2a2f50}
+.hl{background:linear-gradient(135deg,#fff176,#ffee58);border-radius:5px;padding:1px 5px;color:#5a4200;font-weight:700}
 
-/* ─── Stats row ─── */
-.stats-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.stat-pill{
-  background:#f0f2ff;border:1.5px solid #dde3ff;border-radius:999px;
-  padding:6px 14px;font-size:.82rem;color:#5b4de8;font-weight:600;
-}
-.stat-pill.green{background:#eafff4;border-color:#b8f0d4;color:#1a7a50}
-
-/* ─── Checklist ─── */
-.chklist{
-  margin-top:16px;background:#f8f9ff;
-  border:1.5px solid #e8ebff;border-radius:20px;padding:16px;
-}
-.chklist-ttl{
-  font-size:.9rem;font-weight:800;color:#4a4480;
-  margin-bottom:12px;display:flex;align-items:center;gap:6px;
-}
-.chklist-ttl::before{content:"✅";font-size:.9rem}
-.chklist ul{list-style:none;display:grid;gap:8px}
+/* ── Checklist ── */
+.chklist{margin-top:14px;background:#f6f8ff;border:1.5px solid #e4e8ff;border-radius:18px;padding:14px}
+.chklist h3{margin:0 0 10px;font-size:.9rem;font-weight:800;color:#4a4480}
+.chklist ul{list-style:none;display:grid;gap:7px}
 .ci{
-  display:flex;gap:10px;align-items:center;
-  padding:9px 12px;border-radius:12px;background:#fff;
-  border:1.5px solid #e8ebff;transition:.2s;font-size:.88rem;color:#7a82b0;
+  display:flex;gap:9px;align-items:center;padding:9px 12px;
+  border-radius:11px;background:#fff;border:1.5px solid #e4e8ff;
+  font-size:.87rem;color:#7a82b0;transition:.2s;
 }
-.ci.dn{color:#1a7a50;border-color:#c3f0da;background:#eafff4}
+.ci.dn{color:#1a7a50;border-color:#b8f0d4;background:#eafff4}
 .ci-ico{
   width:24px;height:24px;flex-shrink:0;border-radius:50%;
-  display:grid;place-items:center;font-size:.8rem;
-  background:#e8ebff;color:#9098c0;font-weight:900;
+  display:grid;place-items:center;font-size:.78rem;
+  background:#e4e8ff;color:#9098c0;font-weight:900;
 }
 .ci.dn .ci-ico{background:linear-gradient(135deg,#43e97b,#38f9d7);color:#fff}
 
-/* ─── Alert box ─── */
-.alert-bx{
-  background:linear-gradient(135deg,#fff0f0,#fff8ff);
-  border:1.5px solid #ffd0d0;border-radius:18px;
-  padding:24px;text-align:center;
-}
-.alert-bx .alert-emoji{font-size:2.5rem;display:block;margin-bottom:10px}
-.alert-bx p{font-size:.95rem;color:#c05050;line-height:1.65;margin-bottom:16px}
+/* ── Alert ── */
+.alert-bx{background:linear-gradient(135deg,#fff0f0,#fff8ff);border:1.5px solid #ffd0d0;border-radius:16px;padding:22px;text-align:center}
+.alert-bx p{font-size:.93rem;color:#c05050;line-height:1.65;margin:0 0 14px}
 
-/* ─── Mini note ─── */
-.mini-note{
-  background:#fffbee;border:1px solid #f0d98a;border-radius:12px;
-  padding:10px 14px;font-size:.82rem;color:#8a6f00;
-  margin-top:10px;line-height:1.5;
-}
-.mini-note::before{content:"💡 "}
+/* ── Mini note ── */
+.mini-note{background:#fffbee;border:1px solid #f0d98a;border-radius:11px;padding:10px 13px;font-size:.81rem;color:#8a6f00;margin-top:10px;line-height:1.5}
+.mini-note::before{content:"💡  "}
 
-/* ─── Legend ─── */
-.leg{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.leg-item{
-  background:#f8f9ff;border:1px solid #dde3ff;
-  border-radius:999px;padding:6px 12px;font-size:.82rem;color:#6870a8;
-}
+/* ── Legend ── */
+.leg{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.leg span{background:#f6f8ff;border:1px solid #dde3ff;border-radius:999px;padding:5px 11px;font-size:.81rem;color:#6870a8}
 
-/* ─── Helper sprite ─── */
-.hlp-box{
-  position:fixed;right:20px;bottom:20px;z-index:50;
-  display:flex;align-items:flex-end;gap:10px;
-  max-width:min(90vw,360px);
-}
+/* ── Helper sprite ── */
+.hlp-box{position:fixed;right:18px;bottom:18px;z-index:50;display:flex;align-items:flex-end;gap:10px;max-width:min(92vw,360px)}
 .hlp-bbl{
-  background:#fff;border:1.5px solid #dde3ff;border-radius:20px 20px 4px 20px;
-  box-shadow:0 12px 40px rgba(30,35,64,.15);
-  padding:14px 16px;line-height:1.65;color:#2d2060;
-  min-width:200px;opacity:0;transform:translateY(12px);
+  background:#fff;border:1.5px solid #dde3ff;border-radius:18px 18px 4px 18px;
+  box-shadow:0 12px 40px rgba(30,35,80,.15);
+  padding:13px 15px;line-height:1.65;color:#2d2060;
+  min-width:190px;opacity:0;transform:translateY(12px);
   pointer-events:none;transition:.25s;font-size:.9rem;
 }
 .hlp-bbl.show{opacity:1;transform:translateY(0);pointer-events:auto}
 .hlp-btn{
-  width:76px;height:76px;border:none;border-radius:50%;cursor:pointer;
+  width:72px;height:72px;border:none;border-radius:50%;cursor:pointer;
   background:linear-gradient(135deg,#ffe55a,#ffb347);
-  box-shadow:0 12px 32px rgba(255,180,50,.4);
-  font-size:2.2rem;display:grid;place-items:center;
-  animation:bob 3s ease-in-out infinite;
-  transition:.2s;
+  box-shadow:0 12px 30px rgba(255,180,50,.38);
+  font-size:2.1rem;display:grid;place-items:center;
+  animation:bob 3s ease-in-out infinite;transition:.2s;
 }
-.hlp-btn:hover{transform:scale(1.08)}
+.hlp-btn:hover{transform:scale(1.1)}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 
-/* ─── Toast ─── */
+/* ── Toast ── */
 .toast{
-  position:fixed;left:50%;bottom:24px;
-  transform:translateX(-50%) translateY(20px);
-  opacity:0;pointer-events:none;
-  background:rgba(30,35,64,.95);color:#fff;
-  border-radius:16px;padding:12px 20px;z-index:100;
-  transition:.25s cubic-bezier(.4,0,.2,1);
-  max-width:min(90vw,580px);text-align:center;
-  line-height:1.5;font-size:.9rem;
-  box-shadow:0 20px 40px rgba(0,0,0,.2);
-  backdrop-filter:blur(8px);
+  position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(18px);
+  opacity:0;pointer-events:none;background:rgba(28,33,64,.94);color:#fff;
+  border-radius:14px;padding:11px 18px;z-index:100;transition:.25s;
+  max-width:min(92vw,580px);text-align:center;line-height:1.5;font-size:.9rem;
+  box-shadow:0 18px 36px rgba(0,0,0,.18);backdrop-filter:blur(8px);
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ─── Responsive ─── */
-@media(max-width:1100px){
-  .main{grid-template-columns:1fr}
-  .paper-wrap{min-height:480px}
+/* ── Theme: forest (green) ── */
+body.theme-forest{
+  background:#edfff6;
+  background-image:radial-gradient(circle at 8% 15%,rgba(67,233,123,.13) 0%,transparent 45%),
+    radial-gradient(circle at 92% 85%,rgba(56,249,215,.12) 0%,transparent 45%);
 }
-@media(max-width:780px){
-  .stage-nav{gap:6px}
-  .sn-pill{min-width:60px;padding:7px 10px}
+body.theme-forest .topbar{background:linear-gradient(135deg,#1fa86a 0%,#38f9d7 100%);box-shadow:0 18px 54px rgba(31,168,106,.3)}
+body.theme-forest .s-tab.act{color:#1fa86a}
+body.theme-forest .tgl.on{color:#1fa86a}
+body.theme-forest .c-btn.on{background:linear-gradient(135deg,#1fa86a,#38f9d7);box-shadow:0 6px 16px rgba(31,168,106,.28)}
+body.theme-forest .prog-fill{background:linear-gradient(90deg,#43e97b,#38f9d7)}
+body.theme-forest .btn:not(.sec):not(.wrn):not(.gd){background:linear-gradient(135deg,#1fa86a,#38f9d7);box-shadow:0 8px 20px rgba(31,168,106,.28)}
+body.theme-forest .goal-pill{background:#e0fff2;color:#1a7a50;border-color:#b8f0d4}
+body.theme-forest .p-head{border-color:#d8f5e8}
+body.theme-forest .p-head h2{color:#0d4a2e}
+body.theme-forest .tgt{background:linear-gradient(135deg,#f0fff8,#e0fff2);border-color:#b8f0d4}
+body.theme-forest .tgt h3{color:#1a5c3a}
+
+/* ── Theme: sunset (orange) ── */
+body.theme-sunset{
+  background:#fff8f0;
+  background-image:radial-gradient(circle at 8% 15%,rgba(255,154,58,.13) 0%,transparent 45%),
+    radial-gradient(circle at 92% 85%,rgba(255,200,100,.12) 0%,transparent 45%);
+}
+body.theme-sunset .topbar{background:linear-gradient(135deg,#ff6b35 0%,#f9c74f 100%);box-shadow:0 18px 54px rgba(255,107,53,.3)}
+body.theme-sunset .s-tab.act{color:#c04a00}
+body.theme-sunset .tgl.on{color:#c04a00}
+body.theme-sunset .c-btn.on{background:linear-gradient(135deg,#ff6b35,#f9c74f);box-shadow:0 6px 16px rgba(255,107,53,.28)}
+body.theme-sunset .prog-fill{background:linear-gradient(90deg,#ff6b35,#f9c74f)}
+body.theme-sunset .btn:not(.sec):not(.wrn):not(.gd){background:linear-gradient(135deg,#ff6b35,#f9c74f);box-shadow:0 8px 20px rgba(255,107,53,.28)}
+body.theme-sunset .goal-pill{background:#fff0e8;color:#c04a00;border-color:#ffd0a8}
+body.theme-sunset .p-head{border-color:#ffe8d6}
+body.theme-sunset .p-head h2{color:#7a2e00}
+body.theme-sunset .tgt{background:linear-gradient(135deg,#fff8f0,#fff0e0);border-color:#ffd0a0}
+body.theme-sunset .tgt h3{color:#7a2e00}
+
+/* ── Responsive ── */
+@media(max-width:1100px){.main{grid-template-columns:1fr}.paper{min-height:500px}}
+@media(max-width:820px){
+  .stage-nav{gap:5px}
+  .s-tab{min-width:62px;padding:7px 9px}
   .sp2{grid-template-columns:1fr}
-  .main{gap:12px}
-  .card-body{padding:16px}
+  .p-body{padding:15px}
 }
 @media(max-width:520px){
   .app{padding:10px 10px 90px}
-  .hero{padding:16px 18px;border-radius:22px}
-  .hero-title h1{font-size:1.3rem}
-  .sn-pill{min-width:48px;font-size:.75rem;padding:6px 8px}
-  .paper-inner{padding:22px 14px 26px 48px}
-  .paper-margin{left:38px}
+  .topbar{padding:15px 16px;border-radius:20px}
+  .title-wrap h1{font-size:1.28rem}
+  .stage-nav{display:grid;grid-template-columns:repeat(4,1fr)}
+  .s-tab{min-width:0;font-size:.75rem}
+  .paper{border-radius:16px;padding:20px 14px 22px 40px}
+  .paper::before{left:28px}
+  .e-title{font-size:1.2rem}
+  .btn{font-size:.85rem;padding:9px 13px}
+  .c-btn{font-size:.84rem}
+  .tgl{font-size:.78rem;padding:6px 11px}
 }
-
-/* ─── Print ─── */
 @media print{
   body{background:#fff}
   .no-print,.hlp-box,.toast{display:none !important}
   .app{max-width:none;padding:0}
-  .hero,.left-col,.tool-row,.chklist{display:none !important}
+  .topbar,.left-panel,.prev-tools,.chklist{display:none !important}
   .main{display:block}
-  .card{border:none;box-shadow:none}
-  .card-head{display:none}
-  .card-body{padding:0}
-  .paper-wrap{border:none;box-shadow:none;min-height:auto}
-  .paper-lines,.paper-margin{display:none}
-  .paper-inner{padding:10px 16px 20px 20px}
+  .panel{border:none;box-shadow:none}
+  .p-head{display:none}
+  .p-body{padding:0}
+  .paper{border:none;box-shadow:none;min-height:auto;padding:18px 20px 22px 44px;background-color:#fff}
+  .paper::before{display:none}
   .e-title{margin-top:0}
 }
-
-/* ─── Theme variants ─── */
-body.theme-green{
-  background:#f0fff8;
-  background-image:radial-gradient(circle at 10% 20%,rgba(67,233,123,.1) 0%,transparent 50%),
-    radial-gradient(circle at 90% 80%,rgba(56,249,215,.1) 0%,transparent 50%);
-}
-body.theme-green .hero{background:linear-gradient(135deg,#1fa86a,#38f9d7)}
-body.theme-green .sw-btn.on{color:#1fa86a}
-body.theme-green .sn-pill.act{color:#1fa86a}
-body.theme-green .stage-badge{background:linear-gradient(135deg,#1fa86a,#38f9d7)}
-body.theme-green .c-btn.on{background:linear-gradient(135deg,#1fa86a,#38f9d7)}
-body.theme-green .prog-fill{background:linear-gradient(90deg,#43e97b,#38f9d7)}
-body.theme-green .btn-primary{background:linear-gradient(135deg,#1fa86a,#38f9d7);box-shadow:0 8px 20px rgba(31,168,106,.3)}
-body.theme-green .card-head{border-color:#d8fff0}
-body.theme-green .card-head h2{color:#0d4a2e}
-body.theme-green .goal-pill{background:#e0fff2;color:#1a7a50}
-body.theme-green .tgt-box{background:linear-gradient(135deg,#f0fff8,#e0fff2);border-color:#b8f0d4}
-body.theme-green .flbl{color:#0d4a2e}
-
-body.theme-orange{
-  background:#fff8f0;
-  background-image:radial-gradient(circle at 10% 20%,rgba(255,154,58,.12) 0%,transparent 50%),
-    radial-gradient(circle at 90% 80%,rgba(255,200,100,.1) 0%,transparent 50%);
-}
-body.theme-orange .hero{background:linear-gradient(135deg,#ff6b35,#f9c74f)}
-body.theme-orange .sw-btn.on{color:#e05a00}
-body.theme-orange .sn-pill.act{color:#e05a00}
-body.theme-orange .stage-badge{background:linear-gradient(135deg,#ff6b35,#f9c74f)}
-body.theme-orange .c-btn.on{background:linear-gradient(135deg,#ff6b35,#f9c74f)}
-body.theme-orange .prog-fill{background:linear-gradient(90deg,#ff6b35,#f9c74f)}
-body.theme-orange .btn-primary{background:linear-gradient(135deg,#ff6b35,#f9c74f);color:#fff;box-shadow:0 8px 20px rgba(255,107,53,.3)}
-body.theme-orange .card-head{border-color:#ffe8d6}
-body.theme-orange .card-head h2{color:#7a2e00}
-body.theme-orange .goal-pill{background:#fff0e8;color:#c04a00}
-body.theme-orange .tgt-box{background:linear-gradient(135deg,#fff8f0,#fff0e0);border-color:#ffd0a0}
-body.theme-orange .flbl{color:#7a2e00}
 </style>
 </head>
-<body class="theme-blue">
-
+<body class="theme-sky">
 <div class="app">
 
-  <!-- ── HERO TOPBAR ── -->
-  <header class="hero no-print">
-    <div class="hero-top">
-      <div class="hero-title">
+  <!-- ── TOPBAR ── -->
+  <header class="topbar no-print">
+    <div class="title-row">
+      <div class="title-wrap">
         <h1>🖊️ 中文記敍文互動闖關遊戲</h1>
-        <div class="hero-school">勵志會梁李秀娛紀念小學</div>
-        <div class="hero-tags">
-          <span class="htag">📖 三段式記敍文</span>
-          <span class="htag">🏆 7 關完成作文</span>
-          <span class="htag">🛟 高支援句框</span>
-          <span class="htag">👁️ 即時作文預覽</span>
+        <div class="school-name">勵志會梁李秀娛紀念小學</div>
+        <div class="subtitle">
+          <span class="pill">📖 三段式記敍文</span>
+          <span class="pill">🏆 7 關完成作文</span>
+          <span class="pill">🛟 高支援句框</span>
+          <span class="pill">👁️ 即時作文預覽</span>
         </div>
       </div>
-      <div class="switches">
-        <div class="sw-row">
-          <span class="sw-lbl">🎨 主題：</span>
-          <button class="sw-btn on" data-theme="blue" id="themeSwitch" type="button">藍色</button>
-          <button class="sw-btn" data-theme="green" id="themeSwitch" type="button">綠色</button>
-          <button class="sw-btn" data-theme="orange" id="themeSwitch" type="button">橙色</button>
+      <div class="toolbar">
+        <div class="sw-group" id="themeSwitch">
+          <div class="sw-label">🎨 主題色</div>
+          <button class="theme-circle tc-sky on" data-theme="sky" type="button" title="天空藍"></button>
+          <button class="theme-circle tc-forest" data-theme="forest" type="button" title="森林綠"></button>
+          <button class="theme-circle tc-sunset" data-theme="sunset" type="button" title="暖日橙"></button>
         </div>
-        <div class="sw-row">
-          <span class="sw-lbl">⚡ 難度：</span>
-          <button class="sw-btn on" data-mode="basic" id="modeSwitch" type="button">基礎版</button>
-          <button class="sw-btn" data-mode="standard" id="modeSwitch" type="button">標準版</button>
-          <button class="sw-btn" data-mode="challenge" id="modeSwitch" type="button">挑戰版</button>
+        <div class="sw-group" id="modeSwitch">
+          <div class="sw-label">⚡ 難度</div>
+          <button class="tgl on" data-mode="basic" type="button">基礎版</button>
+          <button class="tgl" data-mode="standard" type="button">標準版</button>
+          <button class="tgl" data-mode="challenge" type="button">挑戰版</button>
         </div>
       </div>
     </div>
 
-    <div class="prog-wrap">
-      <div class="prog-row">
-        <span id="stageLabel">第 1 關 / 共 7 關</span>
-        <span id="saveStatus">草稿未儲存</span>
+    <div class="progress-wrap">
+      <div class="prog-head">
+        <div id="stageLabel">第 1 關 / 共 7 關</div>
+        <div id="saveStatus">草稿未儲存</div>
       </div>
-      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+      <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
     </div>
-
-    <nav class="stage-nav" id="stageNav"></nav>
+    <div class="stage-nav" id="stageNav"></div>
   </header>
 
   <!-- ── MAIN ── -->
   <main class="main">
 
-    <!-- LEFT: stage panel -->
-    <section class="card left-col no-print">
-      <div class="card-head">
+    <!-- LEFT panel -->
+    <section class="panel left-panel no-print">
+      <div class="p-head">
         <div>
-          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
-            <span class="stage-badge" id="stageBadge">第 1 關</span>
-            <h2 id="leftTitle">選題型</h2>
-          </div>
-          <div class="card-sub" id="leftSub">先選一個寫作方向，系統會按題型提供不同提示。</div>
+          <h2 id="leftTitle">第 1 關：選題型</h2>
+          <div class="p-sub" id="leftSub">先選一個寫作方向，系統會按題型提供不同提示。</div>
         </div>
-        <span class="goal-pill" id="goalPill">學習重點</span>
+        <span class="goal-pill" id="goalPill">學習重點：先定題型</span>
       </div>
-      <div class="card-body" id="stageContent"></div>
+      <div class="p-body" id="stageContent"></div>
     </section>
 
-    <!-- RIGHT: preview panel -->
-    <section class="card right-col">
-      <div class="card-head">
+    <!-- RIGHT panel -->
+    <section class="panel right-panel">
+      <div class="p-head">
         <div>
           <h2>📄 作文預覽區</h2>
-          <div class="card-sub">你的作文會在這裏一步一步完成。</div>
+          <div class="p-sub">你的作文會在這裏一步一步完成。</div>
+        </div>
+        <div class="ctr">
+          <span class="pill" id="topicTag">題目：未選擇</span>
+          <span class="pill" id="wcTag">字數：0</span>
         </div>
       </div>
-      <div class="card-body">
-
-        <!-- stats + tools -->
-        <div class="stats-row no-print">
-          <span class="stat-pill" id="topicTag">📌 題目：未選擇</span>
-          <span class="stat-pill" id="wcTag">✍️ 字數：0</span>
-        </div>
-        <div class="tool-row no-print">
-          <div class="tool-grp">
-            <button class="tool-btn danger" id="resetStageBtn" type="button">↺ 重設本關</button>
-            <button class="tool-btn danger" id="resetAllBtn" type="button">🗑 重設全文</button>
+      <div class="p-body">
+        <div class="prev-tools no-print">
+          <div class="s-btns">
+            <button class="btn sec" id="resetStageBtn" type="button">↺ 重設本關</button>
+            <button class="btn wrn" id="resetAllBtn" type="button">🗑 重設全文</button>
           </div>
-          <div class="tool-grp">
-            <button class="tool-btn" id="copyBtn" type="button">📋 複製全文</button>
-            <button class="tool-btn success" id="printBtn" type="button">🖨 列印作文</button>
+          <div class="s-btns">
+            <button class="btn sec" id="copyBtn" type="button">📋 複製全文</button>
+            <button class="btn gd" id="printBtn" type="button">🖨 列印作文</button>
           </div>
         </div>
-
-        <!-- paper -->
-        <div class="paper-wrap">
-          <div class="paper-lines"></div>
-          <div class="paper-margin"></div>
-          <div class="paper-inner">
-            <div class="e-title" id="essayTitle">未選擇題目</div>
-            <div class="e-meta" id="essayMeta">模式：基礎版</div>
-            <div id="essayContent">
-              <div class="placeholder">
-                <span class="ph-emoji">✏️</span>
-                你的作文會在這裏一步一步完成。<br>先到左邊開始闖關吧！
-              </div>
-            </div>
+        <article class="paper">
+          <div class="e-title" id="essayTitle">未選擇題目</div>
+          <div class="e-meta" id="essayMeta">模式：基礎版</div>
+          <div id="essayContent">
+            <div class="placeholder">✏️<br><br>你的作文會在這裏一步一步完成。<br>先到左邊開始闖關吧！</div>
           </div>
-        </div>
-
-        <!-- checklist -->
-        <div class="chklist no-print">
-          <div class="chklist-ttl">完成檢查清單</div>
+        </article>
+        <section class="chklist no-print">
+          <h3>完成檢查清單</h3>
           <ul id="checklist"></ul>
-        </div>
-
+        </section>
       </div>
     </section>
   </main>
 </div>
 
-<!-- helper sprite -->
+<!-- helper -->
 <div class="hlp-box no-print">
   <div class="hlp-bbl" id="hlpBbl"></div>
   <button class="hlp-btn" id="hlpBtn" type="button" aria-label="小精靈提示">🌟</button>
@@ -582,7 +447,7 @@ const PACKS = { family:{ key:'family', topic:'《記一次和家人外出的
 const ECHO_TPLS = [ '現在回想起來，我仍然覺得[ECHO]。', '回想那一天，我還是覺得[ECHO]。', '直到現在，每當想起這件事，我仍覺得[ECHO]。', '每當想起這件事，我都覺得[ECHO]。' ]; const ECHO_LABELS = [ '現在回想起來，我仍然覺得＿＿。', '回想那一天，我還是覺得＿＿。', '直到現在，每當想起這件事，我仍覺得＿＿。', '每當想起這件事，我都覺得＿＿。' ];
 const STAGE_INFO = [ {title:'選題型',sub:'先選一個寫作題目。',mini:'題型'}, {title:'開頭',sub:'交代時間、地點、人物和起因。',mini:'開頭'}, {title:'經過一',sub:'寫事情開始時做了甚麼。',mini:'經過一'}, {title:'經過二',sub:'按次序寫經過，重點練習過渡詞。',mini:'經過二'}, {title:'高潮',sub:'寫最難忘的一刻和感受。',mini:'高潮'}, {title:'結尾',sub:'寫結果和感受。',mini:'結尾'}, {title:'立意＋呼應',sub:'完成首尾呼應和尾段立意。',mini:'立意'} ];
 const PROC_TRANS = ['首先','一開始','那天早上']; const MID_TRANS = ['接着','然後','後來','最後']; const FEEL5 = ['緊張','害怕','感動','開心','激動','驚訝']; const FEEL6 = ['開心','滿足','感恩','難忘','自豪','放鬆']; const TIME_OPTS = ['六上午','六下午','假日早上','放學後','午飯後','假期裏']; const MOOD_OPTS = ['開心','期待','興奮','緊張','好奇','雀躍']; const DIFF_TXT = {basic:'基礎版',standard:'標準版',challenge:'挑戰版'}; const GOAL_TEXT = { 1:'學習重點：先定題型', 2:'學習重點：時間、地點、人物、起因', 3:'學習重點：事情開始的次序', 4:'學習重點：過渡詞（預覽區高亮顯示）', 5:'學習重點：高潮與感受', 6:'學習重點：結果與感受', 7:'學習重點：首尾呼應、尾段立意' };
-function defState(){ return { theme:'blue', difficulty:'basic', currentStage:1, category:'', s2:{time:'',place:'',people:'',activity:'',mood:''}, s3:{transition:'首先',action1:'',extra:''}, s4:{transition:'接着',action2:'',action3:'',detail:''}, s5:{climax:'',feeling:'',thought:''}, s6:{result:'',feeling:'',reason:''}, s7:{echoTpl:ECHO_TPLS[0],idea:'',echoContent:''}, savedAt:'' }; }
+function defState(){ return { theme:'sky', difficulty:'basic', currentStage:1, category:'', s2:{time:'',place:'',people:'',activity:'',mood:''}, s3:{transition:'首先',action1:'',extra:''}, s4:{transition:'接着',action2:'',action3:'',detail:''}, s5:{climax:'',feeling:'',thought:''}, s6:{result:'',feeling:'',reason:''}, s7:{echoTpl:ECHO_TPLS[0],idea:'',echoContent:''}, savedAt:'' }; }
 let ST = loadState();
 applyTheme(ST.theme); syncToggle('themeSwitch','data-theme',ST.theme); syncToggle('modeSwitch','data-mode',ST.difficulty); renderAll();
 document.getElementById('themeSwitch').addEventListener('click', e => { const b = e.target.closest('[data-theme]'); if(!b) return; ST.theme = b.dataset.theme; applyTheme(ST.theme); syncToggle('themeSwitch','data-theme',ST.theme); saveState(); });
@@ -591,9 +456,8 @@ document.getElementById('resetStageBtn').addEventListener('click', resetStage);�
 document.getElementById('hlpBtn').addEventListener('click', () => { const tips = [ '先想清楚事情發生的先後次序！', '記得加「首先、接着、然後、最後」！', '結尾要寫出你的感受和明白到甚麼！', '開頭和結尾要互相呼應呀！', '你已經寫得很好，繼續加油！', '寫高潮時，可以加一句心裏的想法！' ]; const bbl = document.getElementById('hlpBbl'); bbl.textContent = tips[Math.floor(Math.random()*tips.length)]; bbl.classList.add('show'); clearTimeout(window._helperTimer); window._helperTimer = setTimeout(() => bbl.classList.remove('show'), 3200); });
 function renderAll(){ renderNav(); renderStage(); renderPreview(); renderChecklist(); updateTop(); }
 function renderNav(){ const nav = document.getElementById('stageNav'); nav.innerHTML = STAGE_INFO.map((info,i)=>{ const n = i+1; const act = ST.currentStage===n ? 'act' : ''; const dn = isComplete(n) ? 'dn' : ''; return `<button class="s-tab ${act} ${dn}" type="button" data-stage="${n}"> <strong>第 ${n} 關</strong><span class="s-mini">${info.mini}</span> </button>`; }).join(''); nav.querySelectorAll('[data-stage]').forEach(btn=>{ btn.addEventListener('click', ()=>{ ST.currentStage = Number(btn.dataset.stage); renderAll(); saveState(); }); }); }
-function renderStage(){ const info = STAGE_INFO[ST.currentStage-1]; document.getElementById('stageBadge').textContent = `第 ${ST.currentStage} 關`;
-  document.getElementById('leftTitle').textContent = info.title; document.getElementById('leftSub').textContent = info.sub; document.getElementById('goalPill').textContent = GOAL_TEXT[ST.currentStage]; const box = document.getElementById('stageContent');
-if(ST.currentStage > 1 && !ST.category){ box.innerHTML = ` <div class="alert-bx"> <p>請先完成<strong>第 1 關</strong>，選擇一個寫作題型，系統才可以顯示相關提示。</p> <button class="btn btn-primary" id="goS1Btn" type="button">去第 1 關選題型</button> </div> `; document.getElementById('goS1Btn').addEventListener('click', ()=>{ ST.currentStage = 1; renderAll(); saveState(); }); return; }
+function renderStage(){ const info = STAGE_INFO[ST.currentStage-1]; document.getElementById('leftTitle').textContent = `第 ${ST.currentStage} 關：${info.title}`; document.getElementById('leftSub').textContent = info.sub; document.getElementById('goalPill').textContent = GOAL_TEXT[ST.currentStage]; const box = document.getElementById('stageContent');
+if(ST.currentStage > 1 && !ST.category){ box.innerHTML = ` <div class="alert-bx"> <p>請先完成<strong>第 1 關</strong>，選擇一個寫作題型，系統才可以顯示相關提示。</p> <button class="btn" id="goS1Btn" type="button">去第 1 關選題型</button> </div> `; document.getElementById('goS1Btn').addEventListener('click', ()=>{ ST.currentStage = 1; renderAll(); saveState(); }); return; }
 if(ST.currentStage===1) return renderS1(); if(ST.currentStage===2) return renderS2(); if(ST.currentStage===3) return renderS3(); if(ST.currentStage===4) return renderS4(); if(ST.currentStage===5) return renderS5(); if(ST.currentStage===6) return renderS6(); if(ST.currentStage===7) return renderS7(); }
 function renderS1(){ const box = document.getElementById('stageContent'); box.innerHTML = ` <div class="tgt"> <h3>這一關要做甚麼？</h3> <p>請先選一個題型。選好後，系統會自動換上相關場景、活動、動作和立意提示。</p> </div> <div class="fg"> <label class="flbl">選擇題型</label> <div class="choices"> ${Object.values(PACKS).map(p=>` <button class="c-btn ${ST.category===p.key?'on':''}" type="button" data-path="category" data-val="${escAttr(p.key)}"> ${escHtml(p.short)} <small>${escHtml(p.topic)}</small> </button> `).join('')} </div> <div class="fhelp">小提示：先選你最熟悉的生活經驗，寫起來會更容易。</div> </div> <div class="leg"> <span>家庭生活類：和家人外出</span> <span>校園生活類：學校發生的事</span> <span>成長經歷類：學會一件事</span> </div> ${actionBar()} `; bindStage(); }
 function renderS2(){ const pk = getPack(); const box = document.getElementById('stageContent'); box.innerHTML = ` <div class="tgt"> <h3>這一關要做甚麼？</h3> <p>先交代時間、地點、人物，再寫你準備做甚麼。這樣讀者一開始就知道事情背景。</p> </div> <div class="frame"> <div class="frame-ttl">句框提示</div> <div class="frame-ln">上星期＿＿，我和＿＿到＿＿，準備＿＿。</div> <div class="frame-ln">那天，我感到很＿＿。</div> </div> ${choiceGroup('時間','s2.time',TIME_OPTS,'可先選一個簡單時間。')} ${choiceGroup('地點','s2.place',pk.scenes,'按題型選地點。')} ${choiceGroup('人物','s2.people',pk.people,'想一想你和誰一起。')} ${textField('活動／事情名稱','s2.activity',phActivity(),pk.activities,'可按提示帶入，也可自己輸入。')} ${textField('心情','s2.mood','例如：開心、期待',MOOD_OPTS,'1 至 2 字已經可以。')} ${actionBar()} `; bindStage(); }
@@ -602,7 +466,7 @@ function renderS4(){ const pk = getPack(); const box = document.getElementBy
 function renderS5(){ const pk = getPack(); const box = document.getElementById('stageContent'); box.innerHTML = ` <div class="tgt"> <h3>這一關要做甚麼？</h3> <p>寫出最難忘的一刻。你可以先選事件和感受，再寫一句心裏想的話。</p> </div> <div class="frame"> <div class="frame-ttl">句框提示</div> <div class="frame-ln">最令我難忘的是＿＿。</div> <div class="frame-ln">當時，我感到十分＿＿。</div> <div class="frame-ln">我心想：「＿＿。」</div> </div> ${choiceGroup('最難忘的一刻','s5.climax',pk.climaxes,'選一件最深刻的事。')} ${choiceGroup('感受詞','s5.feeling',FEEL5,'選出當時的感受。')} ${textField('內心想法','s5.thought',phThought(),pk.thoughtHints,helpThought())} ${actionBar()} `; bindStage(); }
 function renderS6(){ const pk = getPack(); const box = document.getElementById('stageContent'); box.innerHTML = ` <div class="tgt"> <h3>這一關要做甚麼？</h3> <p>把事情收束，交代結果，再寫你的感受和原因。</p> </div> <div class="frame"> <div class="frame-ttl">句框提示</div> <div class="frame-ln">最後，＿＿。</div> <div class="frame-ln">我感到很＿＿，因為＿＿。</div> </div> ${choiceGroup('結果','s6.result',pk.results,'事情最後怎樣了？')} ${choiceGroup('感受','s6.feeling',FEEL6,'選出結尾心情。')} ${textField('因為＿＿','s6.reason',phReason(),pk.reasonHints,'3 至 10 字即可。')} ${actionBar()} `; bindStage(); }
 function renderS7(){ const pk = getPack(); const box = document.getElementById('stageContent'); box.innerHTML = ` <div class="tgt"> <h3>這一關要做甚麼？</h3> <p>這一關最重要：要做到首尾呼應，並寫出你明白到甚麼。這一關未完成，不可過關。</p> </div> <div class="frame"> <div class="frame-ttl">句框提示</div> <div class="frame-ln">現在回想起來，我仍然覺得＿＿。</div> <div class="frame-ln">經過這件事，我明白到＿＿。</div> <div class="frame-ln">這次經歷讓我學會了＿＿。</div> </div> ${echoChoiceGroup()} ${choiceGroup('立意句選項','s7.idea',pk.meanings,'選一句最合適的立意句。')} ${textField('最後關鍵內容','s7.echoContent',phEcho(),pk.echoHints,helpEcho())} <div class="mini-note">小提示：開頭寫了甚麼心情或場景，結尾可以再回想一次，這就是「首尾呼應」。</div> ${actionBar(true)} `; bindStage(); }
-function actionBar(last=false){ const prevDis = ST.currentStage===1 ? 'disabled' : ''; const nextTxt = (ST.currentStage===7 || last) ? '完成本關 ✓' : '下一關 →'; return ` <div class="act-bar"> <span class="s-txt">可自由返回前面修改，資料不會消失。</span> <div class="s-btns"> <button class="btn btn-sec" type="button" id="prevBtn" ${prevDis}>← 上一關</button> <button class="btn btn-primary" type="button" id="nextBtn">${nextTxt}</button> </div> </div> `; }
+function actionBar(last=false){ const prevDis = ST.currentStage===1 ? 'disabled' : ''; const nextTxt = (ST.currentStage===7 || last) ? '完成本關 ✓' : '下一關 →'; return ` <div class="act-bar"> <span class="s-txt">可自由返回前面修改，資料不會消失。</span> <div class="s-btns"> <button class="btn sec" type="button" id="prevBtn" ${prevDis}>← 上一關</button> <button class="btn" type="button" id="nextBtn">${nextTxt}</button> </div> </div> `; }
 function choiceGroup(label,path,opts,help=''){ const cur = getByPath(path); return ` <div class="fg"> <label class="flbl">${label}</label> <div class="choices"> ${opts.map(o=>` <button class="c-btn ${cur===o?'on':''}" type="button" data-path="${escAttr(path)}" data-val="${escAttr(o)}">${escHtml(o)}</button> `).join('')} </div> ${help ? <div class="fhelp">${help}</div> : ''} </div> `; }
 function echoChoiceGroup(){ const cur = ST.s7.echoTpl; return ` <div class="fg"> <label class="flbl">呼應句型</label> <div class="choices"> ${ECHO_TPLS.map((tpl,i)=>` <button class="c-btn ${cur===tpl?'on':''}" type="button" data-path="s7.echoTpl" data-val="${escAttr(tpl)}">${escHtml(ECHO_LABELS[i])}</button> `).join('')} </div> <div class="fhelp">選一個和開頭呼應的句型。</div> </div> `; }
 function textField(label,path,ph,hints,help=''){ const val = getByPath(path) || ''; return ` <div class="fg"> <label class="flbl">${label}</label> <input class="t-in j-in" type="text" data-path="${escAttr(path)}" value="${escAttr(val)}" placeholder="${escAttr(ph)}" /> <div class="h-chips"> ${hints.slice(0,6).map(h=>` <button class="h-chip" type="button" data-ipath="${escAttr(path)}" data-ival="${escAttr(h)}">${escHtml(h)}</button> `).join('')} </div> ${help ? <div class="fhelp">${help}</div> : ''} </div> `; }
