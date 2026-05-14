@@ -621,10 +621,10 @@
         <span class="super-text">📜 手稿: <span id="inv-manu">0</span></span>
         <span class="super-text">🔮 碎片: <span id="inv-frag">0</span></span>
         
-        <span id="partner-display" class="partner-badge hidden">
+        <div id="partner-display" class="partner-badge hidden" style="display:none;">
             <img id="partner-icon-img" class="partner-icon" src="">
             <span id="partner-name-text">搭檔</span>
-        </span>
+        </div>
     </div>
 
     <div id="main-container" class="container">
@@ -1172,7 +1172,20 @@
         }
 
         function setPartner(id) {
-            player.partnerId = id; playSound('craft'); renderStats(); renderPartnerHub(); autoSave();
+            player.partnerId = id;
+            playSound('craft');
+            renderStats();
+            renderPartnerHub();
+            autoSave();
+            // Toast confirmation
+            const _toast = document.createElement('div');
+            _toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1B5E20;color:#fff;padding:10px 28px;border-radius:24px;font-weight:bold;z-index:9999;font-size:1.05em;box-shadow:0 4px 16px rgba(0,0,0,0.25);pointer-events:none;';
+            const _fam = pokedex[id];
+            const _pData = player.partners[id];
+            const _stage = 'lv' + _pData.lv + (_pData.branch || '');
+            _toast.innerText = '✅ 已設為搭檔：' + _fam[_stage].n;
+            document.body.appendChild(_toast);
+            setTimeout(() => _toast.remove(), 2500);
         }
 
         function evolvePartner(id, branchChoice) {
@@ -1280,9 +1293,10 @@
                 let currentPoke = fam[stage];
                 
                 badge.classList.remove("hidden");
+                badge.style.display = "inline-flex";
                 document.getElementById("partner-icon-img").src = getPokePic(currentPoke.p);
                 document.getElementById("partner-name-text").innerText = currentPoke.n;
-            } else { badge.classList.add("hidden"); }
+            } else { badge.classList.add("hidden"); badge.style.display = "none"; }
         }
 
         // --- 優化版：連勝 Badge 系統 ---
@@ -1319,11 +1333,11 @@
 
         // --- 全面擴充野生 Pokémon 與神獸 ---
         const monsters = [
-            { name: "史萊姆",   emoji: "🟢",  pic: null,  atk: 10, def: 10, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
-            { name: "森林狼",   emoji: "🐺",  pic: null,  atk: 20, def: 15, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1", rewardData: {wood: 3, stone: 3, frag: 1} },
-            { name: "吸血蝠",   emoji: "🦇",  pic: null,  atk: 25, def: 20, type: "normal", rewardsStr: "💎 寶石 +1, 🔮 碎片 +1", rewardData: {gem: 1, frag: 1} },
-            { name: "毒蛇",     emoji: "🐍",  pic: null,  atk: 30, def: 25, type: "normal", rewardsStr: "🌟 星星 +1, 🔮 碎片 +1", rewardData: {star: 1, frag: 1} },
-            { name: "狂暴熊",   emoji: "🐻",  pic: null,  atk: 40, def: 35, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +2", rewardData: {gem: 2, star: 2} },
+            { name: "史萊姆",   emoji: "🟢",  pic: "132",  atk: 10, def: 10, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
+            { name: "森林狼",   emoji: "🐺",  pic: "262",  atk: 20, def: 15, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1", rewardData: {wood: 3, stone: 3, frag: 1} },
+            { name: "吸血蝠",   emoji: "🦇",  pic: "169",  atk: 25, def: 20, type: "normal", rewardsStr: "💎 寶石 +1, 🔮 碎片 +1", rewardData: {gem: 1, frag: 1} },
+            { name: "毒蛇",     emoji: "🐍",  pic: "336",  atk: 30, def: 25, type: "normal", rewardsStr: "🌟 星星 +1, 🔮 碎片 +1", rewardData: {star: 1, frag: 1} },
+            { name: "狂暴熊",   emoji: "🐻",  pic: "217",  atk: 40, def: 35, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +2", rewardData: {gem: 2, star: 2} },
             { name: "綠毛蟲",   emoji: "🐛",  pic: "10",  atk: 12, def: 10, type: "normal", rewardsStr: "🪵 木材 +2", rewardData: {wood: 2} },
             { name: "波波",     emoji: "🐦",  pic: "16",  atk: 15, def: 12, type: "normal", rewardsStr: "🧱 石頭 +2", rewardData: {stone: 2} },
             { name: "小拉達",   emoji: "🐀",  pic: "19",  atk: 18, def: 12, type: "normal", rewardsStr: "🪵 木材 +3", rewardData: {wood: 3} },
@@ -1347,13 +1361,12 @@
         ];
 
         const mythicalBeasts = [
-            { name: "青龍", emoji: "🐉", atk: 100, def: 100, type: "mythical", rewardsStr: "💎 寶石 +10, 🌟 星星 +10, 📜 手稿 +10", rewardData: {gem: 10, star: 10, manu: 10} },
-            { name: "朱雀", emoji: "🦚", atk: 120, def: 90, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +15", rewardData: {gem: 15, star: 15} },
-            // 新增 4 隻究極神獸
-            { name: "超夢", emoji: "🧬", atk: 150, def: 120, type: "mythical", rewardsStr: "💎 寶石 +20, 🌟 星星 +20, 🔮 碎片 +10", rewardData: {gem: 20, star: 20, frag: 10} },
-            { name: "洛奇亞", emoji: "🌪️", atk: 130, def: 150, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +25, 🪵 木材 +50", rewardData: {gem: 15, star: 25, wood: 50} },
-            { name: "烈空坐", emoji: "🐉", atk: 180, def: 110, type: "mythical", rewardsStr: "💎 寶石 +25, 🌟 星星 +15, 🧱 石頭 +50", rewardData: {gem: 25, star: 15, stone: 50} },
-            { name: "阿爾宙斯", emoji: "✨", atk: 200, def: 200, type: "mythical", rewardsStr: "💎 寶石 +50, 🌟 星星 +50, 📜 手稿 +50, 🔮 碎片 +50", rewardData: {gem: 50, star: 50, manu: 50, frag: 50} }
+            { name: "青龍", emoji: "🐉", pic: "384", atk: 100, def: 100, type: "mythical", rewardsStr: "💎 寶石 +10, 🌟 星星 +10, 📜 手稿 +10", rewardData: {gem: 10, star: 10, manu: 10} },
+            { name: "朱雀", emoji: "🦚", pic: "250", atk: 120, def: 90, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +15", rewardData: {gem: 15, star: 15} },
+            { name: "超夢", emoji: "🧬", pic: "150", atk: 150, def: 120, type: "mythical", rewardsStr: "💎 寶石 +20, 🌟 星星 +20, 🔮 碎片 +10", rewardData: {gem: 20, star: 20, frag: 10} },
+            { name: "洛奇亞", emoji: "🌪️", pic: "249", atk: 130, def: 150, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +25, 🪵 木材 +50", rewardData: {gem: 15, star: 25, wood: 50} },
+            { name: "烈空坐", emoji: "🐉", pic: "384", atk: 180, def: 110, type: "mythical", rewardsStr: "💎 寶石 +25, 🌟 星星 +15, 🧱 石頭 +50", rewardData: {gem: 25, star: 15, stone: 50} },
+            { name: "阿爾宙斯", emoji: "✨", pic: "493", atk: 200, def: 200, type: "mythical", rewardsStr: "💎 寶石 +50, 🌟 星星 +50, 📜 手稿 +50, 🔮 碎片 +50", rewardData: {gem: 50, star: 50, manu: 50, frag: 50} }
         ];
 
         // --- 題庫 ---
@@ -2226,9 +2239,17 @@
             const ep = document.getElementById('monster-encounter-panel');
             ep.classList.remove('hidden');
             ep.classList.add('mythical-encounter');
-            document.getElementById('mon-emoji').innerText = currentMonster.emoji;
-            document.getElementById('mon-emoji').style.display = 'block';
-            document.getElementById('mon-img').style.display = 'none';
+            const _smi = document.getElementById('mon-img');
+            const _sme = document.getElementById('mon-emoji');
+            if (currentMonster.pic) {
+                _smi.src = getPokePic(currentMonster.pic);
+                _smi.style.display = 'block';
+                _sme.style.display = 'none';
+            } else {
+                _sme.innerText = currentMonster.emoji;
+                _sme.style.display = 'block';
+                _smi.style.display = 'none';
+            }
             document.getElementById('mon-name').innerText = currentMonster.name;
             document.getElementById('mon-req-atk').innerText = currentMonster.atk;
             document.getElementById('mon-req-def').innerText = currentMonster.def;
