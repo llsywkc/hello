@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>roblox：4A中文練習 </title>
+    <title>數碼冒險：4A中文練習 </title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         /* 引入點陣像素字體，用於進化文字 */
@@ -2942,6 +2942,11 @@ function checkDailyReset() {
             def += (inventory.superShieldLv * 5) + (inventory.superStoneLv * 3);
             
             if(inventory.partnerId) {
+                // 🔧 Fix: sync partnerLv with selected partner's saved level
+                if (inventory.partners && inventory.partners[inventory.partnerId]) {
+                    inventory.partnerLv = inventory.partners[inventory.partnerId].lv || 0;
+                    inventory.partnerBranch = inventory.partners[inventory.partnerId].branch || 'A';
+                }
                 let pLevel = inventory.partnerLv || 0;
                 if (pLevel > 4) pLevel = 4;
                 let info = getPartnerInfo(inventory.partnerId, pLevel, inventory.partnerBranch);
@@ -3180,6 +3185,11 @@ function checkDailyReset() {
         }
 
         function updatePartnerUI() {
+            // 🔧 Fix: sync partnerLv with selected partner's saved level
+            if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                inventory.partnerLv = inventory.partners[inventory.partnerId].lv || 0;
+                inventory.partnerBranch = inventory.partners[inventory.partnerId].branch || 'A';
+            }
             let pLevel = inventory.partnerLv || 0;
             let info = getPartnerInfo(inventory.partnerId, pLevel, inventory.partnerBranch);
 
@@ -3235,6 +3245,11 @@ function checkDailyReset() {
 
         window.evolvePartner = function(chosenBranch = 'A') {
             playSound('click');
+            // 🔧 Fix: sync partnerLv with selected partner's saved level
+            if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                inventory.partnerLv = inventory.partners[inventory.partnerId].lv || 0;
+                inventory.partnerBranch = inventory.partners[inventory.partnerId].branch || 'A';
+            }
             let pLevel = inventory.partnerLv || 0;
             if (pLevel >= 4) return;
 
@@ -3278,7 +3293,17 @@ function checkDailyReset() {
                     
                     setTimeout(() => {
                         inventory.partnerLv++;
-                        if(pLevel === 2) inventory.partnerBranch = chosenBranch;
+                        // 🔧 Fix: keep partners[id] in sync with partnerLv
+                        if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                            inventory.partners[inventory.partnerId].lv = inventory.partnerLv;
+                        }
+                        if(pLevel === 2) {
+                            inventory.partnerBranch = chosenBranch;
+                            // 🔧 Fix: save branch to partners[id] too
+                            if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                                inventory.partners[inventory.partnerId].branch = chosenBranch;
+                            }
+                        }
                         unlockAchievement('ach_evo1');
                         if (inventory.partnerLv >= 4) unlockAchievement('ach_evo4');
                         let newInfo = getPartnerInfo(inventory.partnerId, inventory.partnerLv, inventory.partnerBranch);
