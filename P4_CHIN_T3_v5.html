@@ -592,6 +592,98 @@
             font-size: 1em !important;
         }
 
+        
+        /* ══════════════════════════════════
+           STATUS BAR + LAYOUT CLARITY v2
+           ══════════════════════════════════ */
+
+        /* Status bar */
+        .player-info {
+            background: linear-gradient(135deg, #4A148C, #6A1B9A) !important;
+            border: none !important;
+            border-bottom: 3px solid #AB47BC !important;
+            border-radius: 0 !important;
+            padding: 10px 16px !important;
+            margin-bottom: 0 !important;
+            box-shadow: 0 3px 10px rgba(74,20,140,0.3) !important;
+        }
+        .status-bar-inner {
+            display: flex; align-items: center;
+            justify-content: space-between; gap: 8px; flex-wrap: wrap;
+        }
+        .status-left  { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+        .status-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+        .status-name  { color:#fff; font-size:1em; font-weight:900;
+                        text-shadow:1px 1px 0 #311B92; white-space:nowrap; }
+        .status-streak { background:rgba(255,255,255,0.2); color:#FFE082;
+                         border-radius:20px; padding:3px 10px;
+                         font-size:0.82em; font-weight:bold; white-space:nowrap; }
+        .status-buff   { color:#FFB74D; font-weight:bold; font-size:0.82em;
+                         animation: blink 2s infinite; }
+
+        /* Partner in status bar */
+        #partner-tag-mini img {
+            width:36px; height:36px; object-fit:contain;
+            border-radius:50%; border:2px solid #CE93D8;
+            background:#fff; vertical-align:middle;
+        }
+        #partner-tag-mini span {
+            color:#E1BEE7; font-size:0.82em; font-weight:bold;
+            white-space:nowrap;
+        }
+
+        /* Container improvements */
+        .container {
+            padding: 0 0 28px 0 !important;
+            border-radius: 20px !important;
+        }
+        .container-banner {
+            padding: 16px 20px 14px !important;
+            border-radius: 14px 14px 0 0;
+        }
+        .container-banner h1 { font-size: 1.4em !important; }
+
+        /* Start screen inner padding */
+        #start-screen { padding: 14px 14px 0 !important; }
+
+        /* TOP BAR buttons — cleaner */
+        #start-screen > div:first-child button {
+            border-radius: 8px !important;
+            font-size: 0.8em !important;
+            padding: 6px 10px !important;
+            margin: 0 !important;
+        }
+
+        /* Quest panel clarity */
+        .quest-panel {
+            border-radius: 12px !important;
+            margin-bottom: 12px !important;
+        }
+        .quest-panel h3 { font-size: 1em !important; color: #E3F2FD !important; margin:0 0 8px !important; }
+
+        /* Tab bar polish */
+        .menu-tabs { margin-bottom: 12px !important; }
+
+        /* Card grid: tighter on mobile */
+        .menu-card-grid { gap: 10px !important; }
+        .menu-card { padding: 12px 6px !important; border-radius: 14px !important; }
+        .mc-icon  { font-size: 1.9em !important; margin-bottom: 4px !important; }
+        .mc-title { font-size: 0.88em !important; }
+        .mc-sub   { font-size: 0.7em !important; }
+
+        /* Section label */
+        .menu-section-label {
+            margin: 8px 0 6px !important;
+            font-size: 0.8em !important;
+        }
+
+        /* Trailing note */
+        #tab-training > p {
+            font-size:0.78em !important; color:#9C27B0 !important;
+            background:rgba(156,39,176,0.08);
+            border-radius:8px; padding:6px 10px; margin:4px 0 0 !important;
+        }
+
         </style>
 </head>
 <body>
@@ -600,11 +692,15 @@
         <h1>🟪 森林大冒險：4A中文練習 🟪</h1>
     </div>
 
-    <div id="player-tag" class="player-info hidden" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-        <span>冒險者：<span id="display-name"></span></span> 
-        <span id="streak-counter" style="color:#fff;background:#6A1B9A;border-radius:10px;padding:1px 8px;margin-left:10px;font-size:0.9em;">🔥 連對: 0</span>
-        <span id="buff-indicator" style="color: #E65100; font-weight: bold; margin-left: 10px; animation: blink 2s infinite;"></span>
-        <span id="partner-tag-mini" style="margin-left:auto;display:flex;align-items:center;gap:4px;font-size:0.85em;"></span>
+    <div id="player-tag" class="player-info hidden">
+        <div class="status-bar-inner">
+            <div class="status-left">
+                <span class="status-name">🧙 <span id="display-name"></span></span>
+                <span id="streak-counter" class="status-streak">🔥 連對: 0</span>
+                <span id="buff-indicator" class="status-buff"></span>
+            </div>
+            <div class="status-right" id="partner-tag-mini"></div>
+        </div>
     </div>
 
     <div id="medal-bar" class="inventory-bar hidden">
@@ -2121,12 +2217,14 @@ function checkDailyReset() {
             let dex = digidex[id];
             if (!dex) return { n: '???', p: '', b: 0 };
             let key;
+            const br = branch || 'A';
             if (lv <= 2) {
                 key = 'lv' + lv;
             } else {
-                key = 'lv' + lv + branch; // e.g. 'lv3A', 'lv3B', 'lv4A', 'lv4B'
+                key = 'lv' + lv + br;
             }
-            return dex[key] || { n: '???', p: '', b: 0 };
+            // fallback: try lv+A, then lv, then lv0
+            return dex[key] || dex['lv' + lv + 'A'] || dex['lv' + lv] || dex['lv0'] || { n: '???', p: '', b: 0 };
         }
 
         function calculateStats() {
@@ -2172,13 +2270,13 @@ function checkDailyReset() {
                     const pLv = inventory.partnerLv || 0;
                     const pInfo = getPartnerInfo(inventory.partnerId, pLv, inventory.partnerBranch);
                     const picSrc = pInfo.p ? (pInfo.p.startsWith('http') ? pInfo.p : 'https://digimon.net/cimages/digimon/' + pInfo.p) : '';
-                    if (picSrc && pInfo.n !== '???') {
-                        miniTag.innerHTML = '<img src="' + picSrc + '" onerror="this.style.display=\'none\'" style="width:32px;height:32px;object-fit:contain;border-radius:50%;border:2px solid #AB47BC;background:#fff;vertical-align:middle;"> <span style="color:#4A148C;font-weight:bold;font-size:0.88em;vertical-align:middle;">' + pInfo.n + ' Lv' + pLv + '</span>';
+                    if (picSrc) {
+                        miniTag.innerHTML = '<img src="' + picSrc + '" onerror="this.style.display=\'none\'" alt=""> <span>' + pInfo.n + ' Lv' + pLv + '</span>';
                     } else {
-                        miniTag.innerHTML = '<span style="color:#aaa;font-size:0.8em;">（未選夥伴）</span>';
+                        miniTag.innerHTML = '<span style="color:rgba(255,255,255,0.5);font-size:0.78em;">（未選夥伴）</span>';
                     }
                 } else {
-                    miniTag.innerHTML = '<span style="color:#aaa;font-size:0.8em;">（未選夥伴）</span>';
+                    miniTag.innerHTML = '<span style="color:rgba(255,255,255,0.5);font-size:0.78em;">（未選夥伴）</span>';
                 }
             }
 
