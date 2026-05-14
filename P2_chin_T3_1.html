@@ -2,24 +2,28 @@
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox：森林大冒險 (2年級中文冒險)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
         body {
-            font-family: 'Nunito', "Microsoft JhengHei", sans-serif;
-            background: #FF9800; 
-            background-image: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.15) 75%, rgba(255,255,255,0.15)), 
-                              linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.15) 75%, rgba(255,255,255,0.15));
-            background-size: 40px 40px; background-position: 0 0, 20px 20px;
-            margin: 0; padding: 6px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #333;
+            font-family: 'Noto Sans TC', 'Nunito', "Microsoft JhengHei", sans-serif;
+            background: #E3F2FD;
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(255,236,153,0.5) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(187,222,251,0.6) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.3) 0%, transparent 60%);
+            margin: 0; padding: 6px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; color: #1a237e; overflow-x: hidden;
         }
         
-        h1 { color: #FFF; text-transform: uppercase; letter-spacing: 2px; text-shadow: 4px 4px 0 #E65100, -2px -2px 0 #E65100, 2px -2px 0 #E65100, -2px 2px 0 #E65100; font-size: 1.9em; text-align: center; margin: 5px 0; }
+        h1 { color: #E65100; text-transform: uppercase; letter-spacing: 2px; text-shadow: 3px 3px 0 #FFD54F, -1px -1px 0 #FFD54F; font-size: 1.9em; text-align: center; margin: 5px 0; }
 
-        .player-info { background: #FFEB3B; color: #333; font-size: 1.2em; font-weight: bold; padding: 5px 20px; border-radius: 20px; border: 4px solid #FBC02D; margin-bottom: 5px; box-shadow: 0 4px 0 #F57F17; }
-        .inventory-bar { background-color: #333; color: white; border: 4px solid #222; border-radius: 8px; padding: 7px 14px; font-size: 1em; font-weight: bold; display: flex; gap: 10px; margin-bottom: 4px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; align-items: center; }
+        .player-info { background: linear-gradient(135deg,#26C6DA,#00838F); color: #fff; font-size: 1.1em; font-weight: bold; padding: 5px 20px; border-radius: 20px; border: 3px solid #006064; margin-bottom: 5px; box-shadow: 0 4px 0 #F57F17; }
+        .inventory-bar { background: linear-gradient(135deg,#FF8F00,#F57F17); color: white; border: 3px solid #E65100; border-radius: 12px; padding: 7px 14px; font-size: 1em; font-weight: bold; display: flex; gap: 10px; margin-bottom: 4px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; align-items: center; }
         
         .gem-text { color: #E040FB; text-shadow: 1px 1px 2px #000; }
         .star-text { color: #FFC107; text-shadow: 1px 1px 2px #000; }
@@ -31,33 +35,40 @@
         .partner-badge { background: #FFEB3B; color: #333; padding: 5px 15px; border-radius: 20px; font-weight: bold; border: 2px solid #FBC02D; display: inline-flex; align-items: center; gap: 8px; }
         .partner-icon { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #FFF; background: #E1F5FE; vertical-align: middle; object-fit: contain; }
 
-        .container { background-color: #FFF3E0; border: 8px solid #E65100; border-radius: 12px; padding: 12px; width: 96%; max-width: 800px; box-shadow: 0 12px 0 #BF360C; text-align: center; position: relative; }
+        .container {
+            background: #FFFFFF;
+            border: 3px solid #FFD54F;
+            border-radius: 24px; padding: 14px;
+            width: 96%; max-width: 800px;
+            box-shadow: 0 8px 32px rgba(255,160,0,0.18), 0 4px 0 #FFB300;
+            text-align: center; position: relative;
+        }
 
-        input[type="text"] { font-size: 1.5em; padding: 10px; border: 4px solid #333; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; margin-bottom: 15px; font-weight: bold; }
+        input[type="text"] { font-size: 1.4em; padding: 10px; border: 3px solid #FFB300; border-radius: 12px; text-align: center; width: 80%; max-width: 300px; margin-bottom: 15px; font-weight: bold; color: #1a237e; background:#FFFDE7; }
         button { font-family: inherit; font-size: 1.05em; font-weight: bold; padding: 9px 14px; margin: 6px 4px; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: all 0.1s; border: 4px solid rgba(0,0,0,0.2); }
         button:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent !important; }
         button:disabled { cursor: not-allowed; opacity: 0.6; filter: grayscale(100%); }
         
-        .btn-green { background-color: #4CAF50; color: white; box-shadow: 0 6px 0 #2E7D32; }
-        .btn-blue { background-color: #2196F3; color: white; box-shadow: 0 6px 0 #1565C0; }
-        .btn-orange { background-color: #FF9800; color: white; box-shadow: 0 6px 0 #E65100; }
-        .btn-grey { background-color: #9E9E9E; color: white; box-shadow: 0 6px 0 #616161; }
-        .btn-red { background-color: #f44336; color: white; box-shadow: 0 6px 0 #b71c1c; }
-        .btn-purple { background-color: #9C27B0; color: white; box-shadow: 0 6px 0 #6A1B9A; }
-        .btn-gold { background-color: #FFB300; color: white; box-shadow: 0 6px 0 #FF8F00; }
+        .btn-green { background: linear-gradient(135deg,#66BB6A,#2E7D32); color:#fff; box-shadow: 0 6px 0 #1B5E20, 0 0 15px rgba(76,175,80,0.4); border:none; position:relative; overflow:hidden; }
+        .btn-blue { background: linear-gradient(135deg,#42A5F5,#1565C0); color:#fff; box-shadow: 0 6px 0 #0D47A1, 0 0 15px rgba(33,150,243,0.4); border:none; position:relative; overflow:hidden; }
+        .btn-orange { background: linear-gradient(135deg,#FF8C00,#FF5722); color:#fff; box-shadow: 0 6px 0 #BF360C, 0 0 15px rgba(255,140,0,0.4); border:none; position:relative; overflow:hidden; }
+        .btn-grey { background: linear-gradient(135deg,#BDBDBD,#757575); color:#fff; box-shadow: 0 6px 0 #424242; border:none; position:relative; overflow:hidden; }
+        .btn-red { background: linear-gradient(135deg,#EF5350,#B71C1C); color:#fff; box-shadow: 0 6px 0 #7F0000, 0 0 15px rgba(244,67,54,0.4); border:none; position:relative; overflow:hidden; }
+        .btn-purple { background: linear-gradient(135deg,#CE93D8,#7B1FA2); color:#fff; box-shadow: 0 6px 0 #4A148C, 0 0 18px rgba(156,39,176,0.45); border:none; position:relative; overflow:hidden; }
+        .btn-gold { background: linear-gradient(135deg,#FFD700,#FFA000); color:#1a0a00; box-shadow: 0 6px 0 #E65100, 0 0 18px rgba(255,210,0,0.45); border:none; position:relative; overflow:hidden; }
         .btn-black { background-color: #212121; color: white; box-shadow: 0 6px 0 #000000; border: 4px solid #757575; }
-        .btn-teal { background-color: #009688; color: white; box-shadow: 0 6px 0 #00695C; }
+        .btn-teal { background: linear-gradient(135deg,#26A69A,#00695C); color:#fff; box-shadow: 0 6px 0 #004D40, 0 0 15px rgba(0,150,136,0.4); border:none; position:relative; overflow:hidden; }
 
         .hidden { display: none !important; }
         .screen { display: flex; flex-direction: column; align-items: center; gap: 10px; }
         
         .word-bank { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; min-height: 80px; padding: 15px; background: rgba(0,0,0,0.05); border-radius: 10px; border: 4px inset rgba(0,0,0,0.1); box-sizing: border-box; }
-        .word-chunk { background-color: #FFEB3B; border: 4px solid #FBC02D; box-shadow: 0 6px 0 #F57F17; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1.3em; cursor: pointer; color: #333; transition: transform 0.1s; }
+        .word-chunk { background: linear-gradient(135deg,#FFF9C4,#FFEE58); border: 3px solid #F9A825; box-shadow: 0 5px 0 #E65100; padding: 12px 18px; border-radius: 12px; font-weight: 900; font-size: 1.2em; cursor: pointer; color: #1a237e; transition: transform 0.1s; }
         .word-chunk:active { transform: translateY(4px); box-shadow: 0 2px 0 #F57F17; }
-        .question-text { font-size: 1.5em; font-weight: bold; background: #FFF; padding: 15px; border: 4px solid #B0BEC5; border-radius: 8px; line-height: 1.5; width: 90%; box-sizing: border-box; transition: all 0.3s; }
-        .hint-text { color: #E65100; font-weight: bold; font-size: 1.2em; min-height: 30px; margin: 5px 0; background: #FFF3E0; padding: 10px; border-radius: 8px; border: 2px dashed #FF9800; width: 90%; }
+        .question-text { font-size: 1.4em; font-weight: 900; background: #FFFDE7; padding: 15px; border: 3px solid #FFD54F; border-radius: 14px; line-height: 1.6; color: #1a237e;; width: 90%; box-sizing: border-box; transition: all 0.3s; }
+        .hint-text { color: #BF360C; font-weight: bold; font-size: 1.1em; min-height: 30px; margin: 5px 0; background: #FFF8E1; padding: 10px; border-radius: 8px; border: 2px dashed #FF9800; width: 90%; }
         
-        .feedback-box { background: #E8F5E9; border: 4px solid #4CAF50; border-radius: 10px; padding: 20px; width: 90%; box-sizing: border-box; }
+        .feedback-box { background: #F1F8E9; border: 3px solid #7CB342; border-radius: 14px; padding: 16px; width: 90%; box-sizing: border-box; }
         .feedback-box.error { background: #FFEBEE; border-color: #F44336; }
 
         .boss-hp-bar-container { width: 90%; background: #333; border: 4px solid #222; border-radius: 10px; height: 30px; position: relative; overflow: hidden; margin-bottom: 10px; }
@@ -106,6 +117,483 @@
             width: 88%;
         }
 
+        
+        /* ══ 新手禮包翻牌動畫 ══ */
+        #newbie-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92); z-index: 3000;
+            display: none; flex-direction: column;
+            justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        #newbie-modal.show {
+            display: flex;
+        }
+        #newbie-modal.show { opacity: 1; display: flex; }
+        #newbie-modal h2 {
+            color: #FFD700; font-size: 1.8em; margin-bottom: 5px;
+            text-shadow: 0 0 20px #FFD700, 0 0 40px #FF8C00;
+            animation: titlePulse 1.5s infinite alternate;
+        }
+        #newbie-modal .subtitle {
+            color: #FFF9C4; font-size: 1em; margin-bottom: 25px; opacity: 0.85;
+        }
+        @keyframes titlePulse {
+            from { text-shadow: 0 0 10px #FFD700; transform: scale(1); }
+            to   { text-shadow: 0 0 30px #FFD700, 0 0 60px #FF8C00; transform: scale(1.05); }
+        }
+        .card-grid {
+            display: grid; grid-template-columns: repeat(3, 110px);
+            gap: 16px; margin-bottom: 28px;
+        }
+        .flip-card {
+            width: 110px; height: 130px;
+            perspective: 800px; cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.55s cubic-bezier(.4,2,.6,1);
+        }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 14px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-size: 1em; font-weight: bold;
+        }
+        .flip-card-front {
+            background: linear-gradient(135deg, #1a237e, #4a148c);
+            border: 3px solid #7C4DFF;
+            box-shadow: 0 0 18px #7C4DFF88;
+            animation: cardShimmer 2s infinite alternate;
+        }
+        .flip-card-front .question-mark {
+            font-size: 2.8em; color: #CE93D8;
+            text-shadow: 0 0 12px #CE93D8;
+        }
+        .flip-card-front .tap-hint {
+            font-size: 0.65em; color: #B39DDB; margin-top: 6px;
+        }
+        @keyframes cardShimmer {
+            from { box-shadow: 0 0 12px #7C4DFF88; border-color: #7C4DFF; }
+            to   { box-shadow: 0 0 28px #E040FB99; border-color: #E040FB; }
+        }
+        .flip-card-back {
+            background: linear-gradient(135deg, #1B5E20, #F57F17);
+            border: 3px solid #FFD700;
+            transform: rotateY(180deg);
+            box-shadow: 0 0 20px #FFD70088;
+            gap: 6px;
+        }
+        .flip-card-back .reward-emoji { font-size: 2.6em; }
+        .flip-card-back .reward-name  { font-size: 0.78em; color: #FFF9C4; }
+        .flip-card-back .reward-amt   { font-size: 1em; color: #FFD700; font-weight: bold; }
+        .flip-card.flipped .flip-card-front { animation: none; }
+
+        /* celebrate shake after all flipped */
+        @keyframes celebShake {
+            0%,100%{ transform: rotateY(180deg) translateX(0); }
+            25%    { transform: rotateY(180deg) translateX(-6px) rotate(-3deg); }
+            75%    { transform: rotateY(180deg) translateX(6px) rotate(3deg); }
+        }
+        .flip-card.celebrate .flip-card-inner {
+            animation: celebShake 0.4s ease 3;
+        }
+
+        /* confetti particles */
+        .confetti-piece {
+            position: fixed; width: 10px; height: 14px;
+            top: -20px; opacity: 1;
+            animation: confettiFall linear forwards;
+            border-radius: 2px; z-index: 3100;
+        }
+        @keyframes confettiFall {
+            0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+
+        #newbie-confirm-btn {
+            display: none; padding: 14px 50px;
+            background: linear-gradient(135deg, #FFD700, #FF8C00);
+            color: #000; font-size: 1.3em; font-weight: bold;
+            border: none; border-radius: 30px; cursor: pointer;
+            box-shadow: 0 0 20px #FFD70088;
+            animation: btnPop 0.5s cubic-bezier(.4,2,.6,1);
+            transform-origin: center;
+        }
+        @keyframes btnPop {
+            from { transform: scale(0); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+        #newbie-confirm-btn:hover { transform: scale(1.08); }
+
+        
+        /* ══ Starfield background particles ══ */
+        body::before {
+            content: '';
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image:
+                radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.7) 0%, transparent 100%),
+                radial-gradient(1px 1px at 25% 60%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 40% 30%, rgba(255,255,255,0.8) 0%, transparent 100%),
+                radial-gradient(1px 1px at 55% 80%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 70% 10%, rgba(255,255,255,0.7) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 80% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 90% 75%, rgba(255,255,255,0.8) 0%, transparent 100%),
+                radial-gradient(1px 1px at 15% 90%, rgba(200,180,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 60% 45%, rgba(200,180,255,0.5) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 35% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 92% 25%, rgba(255,255,255,0.6) 0%, transparent 100%),
+                radial-gradient(1px 1px at 5% 50%, rgba(200,180,255,0.5) 0%, transparent 100%);
+            pointer-events: none; z-index: 0;
+            animation: starsTwinkle 6s ease-in-out infinite alternate;
+        }
+        @keyframes starsTwinkle {
+            0%   { opacity: 0.6; }
+            50%  { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        /* ══ Button ripple effect ══ */
+        button.ripple-effect::after {
+            content: ''; position: absolute;
+            width: 200%; height: 200%;
+            top: -50%; left: -50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+            transform: scale(0); opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            pointer-events: none; border-radius: 50%;
+        }
+        button:active::after {
+            transform: scale(1); opacity: 1;
+            transition: 0s;
+        }
+
+        /* ══ Button hover lift ══ */
+        button:not(:disabled):hover {
+            transform: translateY(-3px) scale(1.02);
+            transition: transform 0.15s ease;
+        }
+        button:not(:disabled):active {
+            transform: translateY(2px) scale(0.98);
+        }
+
+        /* ══ Heading gold glow ══ */
+        h1 {
+            color: #FFD700;
+            text-shadow: 0 0 20px rgba(255,210,0,0.6), 0 0 40px rgba(255,150,0,0.3);
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+        h2 {
+            color: #E8D5FF;
+            text-shadow: 0 0 12px rgba(180,140,255,0.5);
+            font-weight: 700;
+        }
+
+        /* ══ Screen card inner glow ══ */
+        .screen {
+            background: transparent;
+            border-radius: 14px;
+            padding: 10px;
+        }
+
+        /* ══ Stats / inventory items ══ */
+        .stat-item, .inv-item {
+            background: rgba(255,255,255,0.06) !important;
+            border: 1px solid rgba(180,140,255,0.2) !important;
+            border-radius: 10px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ══ Word chunks (answer buttons) hover ══ */
+        .word-chunk {
+            background: linear-gradient(135deg, #2a1a5e, #1a2a5e) !important;
+            color: #e8e0ff !important;
+            border: 2px solid rgba(180,140,255,0.4) !important;
+            box-shadow: 0 4px 0 #0a0520, 0 0 10px rgba(120,80,255,0.2) !important;
+            transition: all 0.15s ease !important;
+        }
+        .word-chunk:hover {
+            background: linear-gradient(135deg, #3d2a7a, #2a3d7a) !important;
+            border-color: rgba(220,180,255,0.7) !important;
+            box-shadow: 0 4px 0 #0a0520, 0 0 18px rgba(160,120,255,0.4) !important;
+            transform: translateY(-3px) scale(1.03);
+        }
+        .word-chunk.correct {
+            background: linear-gradient(135deg, #1B5E20, #2E7D32) !important;
+            border-color: #76FF03 !important;
+            box-shadow: 0 4px 0 #0a2010, 0 0 20px rgba(118,255,3,0.5) !important;
+        }
+        .word-chunk.wrong {
+            background: linear-gradient(135deg, #7F0000, #B71C1C) !important;
+            border-color: #FF5252 !important;
+            box-shadow: 0 4px 0 #3a0000, 0 0 20px rgba(255,82,82,0.5) !important;
+        }
+
+        /* ══ Input field ══ */
+        input[type="text"] {
+            background: rgba(255,255,255,0.08) !important;
+            border: 2px solid rgba(180,140,255,0.4) !important;
+            color: #e8e0ff !important;
+            border-radius: 12px !important;
+            padding: 10px 16px !important;
+            font-size: 1.1em !important;
+            outline: none !important;
+            box-shadow: 0 0 12px rgba(120,80,255,0.15) !important;
+            transition: border-color 0.2s, box-shadow 0.2s !important;
+        }
+        input[type="text"]:focus {
+            border-color: rgba(220,180,255,0.8) !important;
+            box-shadow: 0 0 20px rgba(160,100,255,0.35) !important;
+        }
+        input[type="text"]::placeholder { color: rgba(200,180,255,0.5) !important; }
+
+        /* ══ HR dividers ══ */
+        hr { border-color: rgba(180,140,255,0.2) !important; }
+
+        /* ══ Question text ══ */
+        #question-text, #boss-question-text {
+            color: #e8e0ff;
+            text-shadow: 0 1px 8px rgba(120,80,255,0.3);
+        }
+
+        /* ══ Feedback messages ══ */
+        #feedback-msg, #boss-feedback-msg {
+            border-radius: 10px;
+            padding: 6px 12px;
+        }
+
+        /* ══ Player tag / top badge ══ */
+        #player-tag {
+            background: linear-gradient(135deg, rgba(40,20,80,0.9), rgba(20,40,80,0.9)) !important;
+            border: 1px solid rgba(180,140,255,0.3) !important;
+            border-radius: 20px !important;
+            backdrop-filter: blur(8px) !important;
+            color: #FFD700 !important;
+        }
+
+        /* ══ Level menu buttons hover lift ══ */
+        .level-menu button {
+            transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+        }
+
+        
+        /* ══ Map Cards ══ */
+        .map-card { background:linear-gradient(145deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)); border:2px solid rgba(255,255,255,0.1); border-radius:14px; padding:14px 10px; cursor:pointer; text-align:center; transition:transform 0.18s ease,box-shadow 0.18s ease,border-color 0.18s ease; position:relative; overflow:hidden; }
+        .map-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--cc,#9C27B0); border-radius:14px 14px 0 0; }
+        .map-card:hover { transform:translateY(-5px) scale(1.03); border-color:var(--cc,#9C27B0); box-shadow:0 8px 24px var(--cg,rgba(156,39,176,0.4)),0 0 0 1px var(--cc,#9C27B0); }
+        .map-card:active { transform:translateY(-1px) scale(0.99); }
+        .map-card-icon { font-size:2em; margin-bottom:4px; }
+        .map-card-title { font-size:0.95em; font-weight:700; color:#e8e0ff; margin-bottom:2px; }
+        .map-card-sub { font-size:0.68em; color:rgba(200,180,255,0.65); margin-bottom:6px; }
+        .map-card-stars { font-size:0.72em; letter-spacing:1px; }
+        /* ══ btn-black ══ */
+        .btn-black { background:linear-gradient(135deg,#37474F,#212121); color:#9E9E9E; box-shadow:0 6px 0 #000; border:2px solid #555; position:relative; overflow:hidden; }
+        /* ══ Screen flash ══ */
+        @keyframes flashGreen { 0%{box-shadow:inset 0 0 0 5px rgba(118,255,3,0);} 30%{box-shadow:inset 0 0 0 5px rgba(118,255,3,0.7);} 100%{box-shadow:inset 0 0 0 5px rgba(118,255,3,0);} }
+        @keyframes flashRed   { 0%{box-shadow:inset 0 0 0 5px rgba(255,82,82,0);}  30%{box-shadow:inset 0 0 0 5px rgba(255,82,82,0.7);}  100%{box-shadow:inset 0 0 0 5px rgba(255,82,82,0);}  }
+        .flash-correct { animation:flashGreen 0.5s ease; }
+        .flash-wrong   { animation:flashRed   0.5s ease; }
+        /* ══ Options 2x2 ══ */
+        #options-area .word-chunk { width:100%; box-sizing:border-box; padding:12px 8px; font-size:1.05em; text-align:center; border-radius:10px; }
+
+        
+        /* ══ LIGHT THEME OVERRIDES ══ */
+
+        /* Stars canvas - hide on light theme */
+        #star-canvas { display: none !important; }
+        body::before { display: none !important; }
+
+        /* h1 glow override */
+        h1 { color: #E65100 !important; text-shadow: 2px 2px 0 #FFD54F !important; font-weight: 900 !important; }
+        h2 { color: #1a237e !important; text-shadow: none !important; font-weight: 700 !important; }
+
+        /* Buttons - keep gradients but add border for child clarity */
+        button { border-radius: 12px !important; font-weight: 900 !important; font-size: 1em !important; letter-spacing: 0.3px !important; }
+        .btn-orange { background: linear-gradient(135deg,#FF8C00,#FF5722) !important; color:#fff !important; border: 3px solid #BF360C !important; }
+        .btn-gold   { background: linear-gradient(135deg,#FFD700,#FFA000) !important; color:#1a0a00 !important; border: 3px solid #E65100 !important; }
+        .btn-blue   { background: linear-gradient(135deg,#42A5F5,#1565C0) !important; color:#fff !important; border: 3px solid #0D47A1 !important; }
+        .btn-green  { background: linear-gradient(135deg,#66BB6A,#2E7D32) !important; color:#fff !important; border: 3px solid #1B5E20 !important; }
+        .btn-purple { background: linear-gradient(135deg,#AB47BC,#6A1B9A) !important; color:#fff !important; border: 3px solid #4A148C !important; }
+        .btn-red    { background: linear-gradient(135deg,#EF5350,#B71C1C) !important; color:#fff !important; border: 3px solid #7F0000 !important; }
+        .btn-teal   { background: linear-gradient(135deg,#26A69A,#00695C) !important; color:#fff !important; border: 3px solid #004D40 !important; }
+        .btn-grey   { background: linear-gradient(135deg,#78909C,#455A64) !important; color:#fff !important; border: 3px solid #263238 !important; }
+        .btn-black  { background: linear-gradient(135deg,#546E7A,#37474F) !important; color:#fff !important; border: 3px solid #263238 !important; }
+
+        /* word-chunk answer options */
+        .word-chunk {
+            background: linear-gradient(135deg,#FFFDE7,#FFF9C4) !important;
+            color: #1a237e !important;
+            border: 3px solid #F9A825 !important;
+            box-shadow: 0 5px 0 #E65100 !important;
+            font-weight: 900 !important;
+            font-size: 1.15em !important;
+            border-radius: 12px !important;
+        }
+        .word-chunk:hover {
+            background: linear-gradient(135deg,#FFF9C4,#FFEE58) !important;
+            border-color: #FF6F00 !important;
+            transform: translateY(-3px) scale(1.03) !important;
+            box-shadow: 0 8px 0 #E65100 !important;
+        }
+        .word-chunk.correct {
+            background: linear-gradient(135deg,#C8E6C9,#A5D6A7) !important;
+            color: #1B5E20 !important;
+            border-color: #2E7D32 !important;
+            box-shadow: 0 5px 0 #1B5E20 !important;
+        }
+        .word-chunk.wrong {
+            background: linear-gradient(135deg,#FFCDD2,#EF9A9A) !important;
+            color: #B71C1C !important;
+            border-color: #C62828 !important;
+            box-shadow: 0 5px 0 #B71C1C !important;
+        }
+
+        /* Question card */
+        #question-text {
+            color: #1a237e !important;
+            background: #FFFDE7 !important;
+            text-shadow: none !important;
+            font-size: 1.35em !important;
+            font-weight: 900 !important;
+        }
+        /* Question panel wrapper */
+        #question-panel > div:nth-child(3) {
+            background: #FFFDE7 !important;
+            border: 3px solid #FFD54F !important;
+            border-left: 5px solid #FF8F00 !important;
+        }
+
+        /* Streak + progress bar area */
+        #streak-display { color: #E65100 !important; }
+        #q-progress-bar { background: linear-gradient(90deg,#FF8F00,#FFD600) !important; }
+        #q-progress-text { color: #5c3d00 !important; }
+        #q-progress-bar-bg { background: rgba(0,0,0,0.1) !important; }
+
+        /* Monster fight status */
+        #monster-fight-status { background: rgba(156,39,176,0.08) !important; color: #6A1B9A !important; border-left-color: #9C27B0 !important; }
+
+        /* Feedback */
+        .feedback-box { background: #F1F8E9 !important; border-color: #7CB342 !important; color: #1B5E20 !important; }
+        .feedback-box.error { background: #FFEBEE !important; border-color: #E53935 !important; color: #B71C1C !important; }
+        #feedback-msg { color: #1B5E20 !important; }
+        #reward-msg { color: #E65100 !important; }
+
+        /* Hint */
+        .hint-text { background: #FFF8E1 !important; color: #E65100 !important; border: 2px dashed #FFB300 !important; }
+
+        /* Input */
+        input[type="text"] { background: #FFFDE7 !important; border: 3px solid #FFB300 !important; color: #1a237e !important; }
+        input[type="text"]:focus { border-color: #E65100 !important; box-shadow: 0 0 12px rgba(255,140,0,0.3) !important; }
+        input[type="text"]::placeholder { color: rgba(26,35,126,0.4) !important; }
+
+        /* Map cards - light */
+        .map-card {
+            background: linear-gradient(145deg,#ffffff,#f8f9fa) !important;
+            border: 2px solid rgba(0,0,0,0.1) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+        }
+        .map-card:hover {
+            border-color: var(--cc,#9C27B0) !important;
+            box-shadow: 0 8px 20px var(--cg,rgba(156,39,176,0.3)) !important;
+        }
+        .map-card-title { color: #1a237e !important; font-weight: 900 !important; }
+        .map-card-sub   { color: #546E7A !important; }
+
+        /* Top nav / inventory bar */
+        .inventory-bar { background: linear-gradient(135deg,#FF8F00,#E65100) !important; color:#fff !important; border-color: #BF360C !important; }
+        .player-info   { background: linear-gradient(135deg,#26C6DA,#006064) !important; color: #fff !important; border-color: #006064 !important; }
+
+        /* Game title */
+        #game-title { color: #1a237e !important; text-shadow: none !important; font-size: 1.4em !important; }
+
+        /* Mythical question box */
+        .mythical-question { box-shadow: 0 0 30px rgba(156,39,176,0.4) !important; }
+
+        /* Bottom controls */
+        #bottom-controls { margin-top: 8px !important; }
+
+        /* HR dividers */
+        hr { border-color: #FFD54F !important; }
+
+        /* Boss hp bar */
+        .boss-hp-bar-container { background: #E0E0E0 !important; border-color: #BDBDBD !important; }
+        .boss-hp-bar { background: linear-gradient(90deg,#4CAF50,#8BC34A) !important; }
+
+        /* World grid */
+        .world-grid { background: #FFF9C4 !important; border-color: #FFB300 !important; }
+
+        /* Partner hub cards */
+        #partner-list > div { background: #E3F2FD !important; border-color: #1565C0 !important; }
+
+        /* Flash animations on light bg */
+        @keyframes flashGreen { 0%{box-shadow:inset 0 0 0 6px rgba(76,175,80,0);}   30%{box-shadow:inset 0 0 0 6px rgba(76,175,80,0.5);}   100%{box-shadow:inset 0 0 0 6px rgba(76,175,80,0);}   }
+        @keyframes flashRed   { 0%{box-shadow:inset 0 0 0 6px rgba(229,57,53,0);}   30%{box-shadow:inset 0 0 0 6px rgba(229,57,53,0.5);}   100%{box-shadow:inset 0 0 0 6px rgba(229,57,53,0);}   }
+
+        
+        /* ══ Sensei Cheat Panel ══ */
+        #sensei-panel {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75);
+            z-index: 9999;
+            justify-content: center; align-items: center;
+        }
+        #sensei-panel.show { display: flex; }
+        #sensei-box {
+            background: linear-gradient(145deg,#1a237e,#283593);
+            border: 3px solid #FFD700;
+            border-radius: 20px; padding: 20px 24px;
+            width: 90%; max-width: 480px;
+            color: #fff; position: relative;
+            box-shadow: 0 0 40px rgba(255,215,0,0.4);
+            text-align: center;
+        }
+        #sensei-box h2 {
+            color: #FFD700 !important; font-size: 1.3em !important;
+            margin: 0 0 4px 0 !important; text-shadow: 0 0 12px rgba(255,215,0,0.6) !important;
+        }
+        #sensei-box .s-sub {
+            font-size: 0.8em; color: rgba(255,255,255,0.6);
+            margin-bottom: 16px;
+        }
+        #sensei-close {
+            position: absolute; top: 10px; right: 14px;
+            background: none; border: none; color: rgba(255,255,255,0.6);
+            font-size: 1.4em; cursor: pointer; padding: 2px 6px;
+            line-height: 1;
+        }
+        #sensei-close:hover { color: #fff; }
+        .sensei-section {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,215,0,0.25);
+            border-radius: 12px; padding: 12px; margin-bottom: 10px;
+            text-align: left;
+        }
+        .sensei-section h3 {
+            margin: 0 0 8px 0; font-size: 0.95em;
+            color: #FFD700; text-align: center;
+        }
+        .sensei-row {
+            display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+        }
+        .sensei-select {
+            width: 100%; padding: 8px 10px; border-radius: 8px;
+            border: 2px solid #FFD700; background: rgba(255,255,255,0.1);
+            color: #fff; font-size: 1em; font-family: inherit;
+            margin-bottom: 8px; cursor: pointer;
+        }
+        .sensei-select option { background: #1a237e; color: #fff; }
+        #sensei-indicator {
+            position: fixed; bottom: 12px; right: 14px;
+            font-size: 0.65em; color: rgba(0,0,0,0.15);
+            pointer-events: none; z-index: 1000;
+            font-family: monospace; letter-spacing: 1px;
+        }
+
         </style>
 </head>
 <body>
@@ -151,30 +639,30 @@
         </div>
 
         <div id="start-screen" class="screen hidden">
-            <button id="btn-newbie-pack" class="btn-gold" onclick="claimNewbiePack()" style="width: 80%; border: 4px dashed #FFF; margin-bottom: 10px;">🎁 領取新手禮包 (所有材料+50)</button>
-
-            <button class="btn-teal" onclick="openPartnerHub()" style="width: 80%; border: 4px solid #004D40; font-size: 1.3em;">🐾 寶可夢搭檔中心 (進化與切換)</button>
-            
-            <button class="btn-grey" onclick="openInstructions()" style="width: 80%; margin-top: 10px;">📖 遊戲說明 (新手必看)</button>
-            <hr style="width: 80%; border-top: 4px dashed #E65100;">
-            
-            <h2>🏕️ 選擇冒險地圖</h2>
-            <div class="level-menu">
-            <button class="btn-purple" onclick="startGame('t3_review_1')" style="border: 4px solid #FFEB3B; font-size: 1.15em;">📚 T3 温習 (詞語與偏旁)</button>
-            <button class="btn-orange" onclick="startGame('t3_review_2')" style="border: 4px solid #FFEB3B; font-size: 1.15em;">📝 T3 温習二 (標點、句式)</button>
-            <button class="btn-teal" onclick="startGame('t3_fa2')" style="border: 4px solid #FFEB3B; font-size: 1.15em;">🌿 T3 FA2 (詞語·課文·語文知識)</button>
-            <button class="btn-green" onclick="startGame('reorder_fa2')" style="border: 3px solid #FFEB3B; font-size: 1em;">🔤 T3 FA2 重組句子</button>
-            <button class="btn-green" onclick="startGame('dictation')" style="font-size:1em;">📝 默書尋寶</button>
-            <button class="btn-blue" onclick="startGame('reorder')" style="font-size:1em;">🌉 聯句過河</button>
-            <button class="btn-grey" onclick="startGame('mining')" style="font-size:1em;">⛏️ 礦洞尋寶</button>
+            <div style="display:flex;gap:8px;width:100%;margin-bottom:10px;flex-wrap:wrap;justify-content:center;">
+                <button id="btn-newbie-pack" class="btn-gold" onclick="claimNewbiePack()" style="flex:1;min-width:130px;border:2px dashed rgba(255,255,255,0.35);">🎁 新手禮包</button>
+                <button class="btn-teal" onclick="openPartnerHub()" style="flex:1;min-width:130px;">🐾 搭檔中心</button>
+                <button class="btn-grey" onclick="openInstructions()" style="flex:1;min-width:80px;">📖 說明</button>
             </div>
-            
-            <hr style="width: 80%; border-top: 4px dashed #E65100;">
-            
-            <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇 (無限戰力)</button>
-            <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊 (基礎防具)</button>
-            <button class="btn-purple" onclick="openBuildZone()">🔨 進入建築工坊 (解鎖高級建築)</button>
-            <button class="btn-black" id="btn-boss-menu" onclick="openBossSelect()" disabled>🔒 終極 Boss 挑戰 (需建豪華城堡)</button>
+            <div style="width:100%;background:#FFF8E1;border:2px solid #FFD54F;border-radius:16px;padding:12px;margin-bottom:10px;">
+                <h2 style="margin:0 0 10px 0;font-size:1.1em;color:#FFD700;text-shadow:0 0 12px rgba(255,210,0,0.5);">🗺️ 選擇冒險地圖</h2>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;">
+                    <div class="map-card" onclick="startGame('t3_review_1')" style="--cc:#9C27B0;--cg:rgba(156,39,176,0.45);"><div class="map-card-icon">📚</div><div class="map-card-title">T3 温習一</div><div class="map-card-sub">詞語與偏旁</div><div class="map-card-stars">⭐⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('t3_review_2')" style="--cc:#FF9800;--cg:rgba(255,152,0,0.45);"><div class="map-card-icon">📝</div><div class="map-card-title">T3 温習二</div><div class="map-card-sub">標點與句式</div><div class="map-card-stars">⭐⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('t3_fa2')" style="--cc:#009688;--cg:rgba(0,150,136,0.45);"><div class="map-card-icon">🌿</div><div class="map-card-title">T3 FA2</div><div class="map-card-sub">詞語·課文·語文</div><div class="map-card-stars">⭐⭐⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('reorder_fa2')" style="--cc:#2196F3;--cg:rgba(33,150,243,0.45);"><div class="map-card-icon">🔤</div><div class="map-card-title">FA2 重組</div><div class="map-card-sub">重組句子</div><div class="map-card-stars">⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('dictation')" style="--cc:#4CAF50;--cg:rgba(76,175,80,0.45);"><div class="map-card-icon">✏️</div><div class="map-card-title">默書尋寶</div><div class="map-card-sub">詞語默書</div><div class="map-card-stars">⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('reorder')" style="--cc:#03A9F4;--cg:rgba(3,169,244,0.45);"><div class="map-card-icon">🌉</div><div class="map-card-title">聯句過河</div><div class="map-card-sub">句子重組</div><div class="map-card-stars">⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('mining')" style="--cc:#795548;--cg:rgba(121,85,72,0.45);"><div class="map-card-icon">⛏️</div><div class="map-card-title">礦洞尋寶</div><div class="map-card-sub">挖礦採集</div><div class="map-card-stars">⭐</div></div>
+                </div>
+            </div>
+            <hr style="width:95%;border:none;border-top:2px dashed #FFD54F;margin:2px 0 8px 0;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;">
+                <button class="btn-gold" onclick="openSuperForge()">👑 神器升級祭壇</button>
+                <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊</button>
+                <button class="btn-purple" onclick="openBuildZone()">🔨 建築工坊</button>
+                <button class="btn-black" id="btn-boss-menu" onclick="openBossSelect()" disabled>🔒 Boss 挑戰</button>
+            </div>
         </div>
 
         <div id="partner-hub-screen" class="screen hidden">
@@ -224,7 +712,10 @@
             
             <div id="monster-encounter-panel" class="hidden" style="width: 100%; text-align: center; background: rgba(0,0,0,0.05); border-radius: 10px; padding: 20px; border: 4px dashed #f44336; margin-bottom: 15px;">
                 <h2 style="color:#f44336; margin-top:0;">🚨 遭遇怪獸！</h2>
-                <div style="font-size: 6em;" id="mon-emoji">🐺</div>
+                <div id="mon-img-wrap" style="margin: 5px auto; width: 130px; height: 130px;">
+                    <img id="mon-img" src="" style="width:130px; height:130px; display:none; filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.3));">
+                    <div id="mon-emoji" style="font-size:6em; display:block;">🐺</div>
+                </div>
                 <h3 id="mon-name" style="font-size: 1.8em; margin: 5px 0;">森林狼</h3>
                 <p style="color:#333; font-size:1.2em; font-weight:bold;">⚔️ 要求攻: <span id="mon-req-atk" class="stat-atk">15</span> | 🛡️ 要求防: <span id="mon-req-def" class="stat-def">15</span></p>
                 <div id="mon-warning-msg" style="color:red; font-weight:bold; height: 25px;"></div>
@@ -235,22 +726,30 @@
             </div>
 
             <div id="question-panel">
-                <div id="monster-fight-status" class="hidden" style="color:#9C27B0; font-weight:bold; font-size:1.2em; margin-bottom:10px;"></div>
-                <div class="question-text" id="question-text">題目加載中...</div>
-                <div class="word-bank" id="options-area"></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;width:100%;gap:8px;">
+                    <div id="streak-display" style="font-size:0.95em;color:#FFD700;font-weight:700;text-shadow:0 0 8px rgba(255,200,0,0.5);min-width:55px;text-align:left;white-space:nowrap;"></div>
+                    <div style="flex:1;background:rgba(0,0,0,0.1);border-radius:20px;height:8px;overflow:hidden;">
+                        <div id="q-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#7C4DFF,#E040FB);border-radius:20px;transition:width 0.4s ease;"></div>
+                    </div>
+                    <div id="q-progress-text" style="font-size:0.78em;color:rgba(200,180,255,0.7);min-width:36px;text-align:right;white-space:nowrap;"></div>
+                </div>
+                <div id="monster-fight-status" class="hidden" style="color:#CE93D8;font-weight:bold;font-size:0.95em;margin-bottom:6px;padding:6px 12px;background:rgba(156,39,176,0.15);border-radius:8px;border-left:3px solid #9C27B0;text-align:left;"></div>
+                <div style="background:#FFFDE7;border:3px solid #FFD54F;border-left:5px solid #FF8F00;border-radius:14px;padding:14px 16px;margin-bottom:10px;text-align:left;">
+                    <div class="question-text" id="question-text" style="font-size:1.15em;line-height:1.6;">題目加載中...</div>
+                </div>
+                <div class="word-bank" id="options-area" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px;min-height:80px;background:transparent;border:none;"></div>
             </div>
-            
-            <div id="feedback-area" class="feedback-box hidden">
-                <h3 id="feedback-msg" style="margin-top: 0; color: #2E7D32;">✅ 答對了！</h3>
-                <p id="reward-msg" style="color: #E65100; font-weight: bold;"></p>
-                <button class="btn-green" onclick="handleNextAction()">下一題 ➡️</button>
+            <div id="feedback-area" class="feedback-box hidden" style="border-radius:12px;padding:10px 14px;margin-top:6px;width:95%;box-sizing:border-box;">
+                <h3 id="feedback-msg" style="margin-top:0;font-size:1em;">✅ 答對了！</h3>
+                <p id="reward-msg" style="color:#FFD700;font-weight:bold;margin:4px 0;font-size:0.9em;"></p>
+                <button class="btn-green" onclick="handleNextAction()" style="margin-top:4px;">下一題 ➡️</button>
             </div>
-
             <div id="hint-area" class="hint-text hidden">💡 提示加載中...</div>
             <div id="bottom-controls">
                 <button class="btn-gold" onclick="showHint()">💡 顯示提示</button>
                 <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
             </div>
+
         </div>
 
         <div id="forge-zone" class="screen hidden">
@@ -427,8 +926,8 @@
             },
             'greninja': {
                 title: "🐸 忍蛙系搭檔",
-                lv0: { n: "青蛙小子", p: "656", b: 0 },
-                lv1: { n: "呱呱泡蛙", p: "657", b: 10 },
+                lv0: { n: "呱呱泡蛙", p: "656", b: 0 },
+                lv1: { n: "呱頭蛙", p: "657", b: 10 },
                 lv2: { n: "甲賀忍蛙", p: "658", b: 30 },
                 lv3A: { n: "特性甲賀忍蛙 (光·灰)", p: "10116", b: 60 },
                 lv3B: { n: "甲賀忍蛙·極 (闇)", p: "658", b: 80 }
@@ -438,8 +937,8 @@
                 lv0: { n: "鬼斯", p: "92", b: 0 },
                 lv1: { n: "鬼斯通", p: "93", b: 10 },
                 lv2: { n: "耿鬼", p: "94", b: 30 },
-                lv3A: { n: "超級耿鬼 (光)", p: "10038", b: 60 },
-                lv3B: { n: "超級耿鬼 (闇)", p: "10038", b: 80 }
+                lv3A: { n: "超級耿鬼 (光)", p: "10040", b: 60 },
+                lv3B: { n: "超級耿鬼 (闇)", p: "10040", b: 80 }
             },
             'gardevoir': {
                 title: "🌸 沙奈朵系搭檔",
@@ -454,8 +953,8 @@
                 lv0: { n: "幼基拉斯", p: "246", b: 0 },
                 lv1: { n: "沙基拉斯", p: "247", b: 10 },
                 lv2: { n: "班基拉斯", p: "248", b: 30 },
-                lv3A: { n: "超級班基拉斯 (光)", p: "10050", b: 60 },
-                lv3B: { n: "超級班基拉斯 (闇)", p: "10050", b: 80 }
+                lv3A: { n: "超級班基拉斯 (光)", p: "10051", b: 60 },
+                lv3B: { n: "超級班基拉斯 (闇)", p: "10051", b: 80 }
             }
         };
 
@@ -515,20 +1014,106 @@
 
         function claimNewbiePack() {
             if (player.claimedNewbiePack) { alert("你已經領取過新手禮包了！"); return; }
-            player.inv.wood += 50; player.inv.stone += 50; player.inv.gem += 50;
-            player.inv.star += 50; player.inv.manu += 50; player.inv.frag += 50;
+
+            const rewards = [
+                { emoji: "🪵", name: "木材",   key: "wood",  amt: 50, bg: "linear-gradient(135deg,#2E7D32,#66BB6A)" },
+                { emoji: "🧱", name: "石頭",   key: "stone", amt: 50, bg: "linear-gradient(135deg,#37474F,#90A4AE)" },
+                { emoji: "💎", name: "寶石",   key: "gem",   amt: 50, bg: "linear-gradient(135deg,#0D47A1,#42A5F5)" },
+                { emoji: "🌟", name: "星星",   key: "star",  amt: 50, bg: "linear-gradient(135deg,#F57F17,#FFD54F)" },
+                { emoji: "📜", name: "手稿",   key: "manu",  amt: 50, bg: "linear-gradient(135deg,#BF360C,#FF8A65)" },
+                { emoji: "🔮", name: "碎片",   key: "frag",  amt: 50, bg: "linear-gradient(135deg,#4A148C,#CE93D8)" },
+            ];
+
+            // Build card grid
+            const grid = document.getElementById('newbie-card-grid');
+            grid.innerHTML = '';
+            rewards.forEach((r, i) => {
+                const card = document.createElement('div');
+                card.className = 'flip-card';
+                card.id = 'ncard-' + i;
+                card.innerHTML =
+                    '<div class="flip-card-inner">' +
+                    '<div class="flip-card-front">' +
+                    '<div class="question-mark">？</div>' +
+                    '<div class="tap-hint">點我揭開</div>' +
+                    '</div>' +
+                    '<div class="flip-card-back" style="background:' + r.bg + '">' +
+                    '<div class="reward-emoji">' + r.emoji + '</div>' +
+                    '<div class="reward-name">' + r.name + '</div>' +
+                    '<div class="reward-amt">+' + r.amt + '</div>' +
+                    '</div></div>';
+                let flipped = false;
+                card.onclick = function() {
+                    if (flipped) return;
+                    flipped = true;
+                    card.classList.add('flipped');
+                    playSound('correct');
+                    // Give reward on flip
+                    player.inv[r.key] += r.amt;
+                    renderStats();
+                    // Check if all flipped
+                    const allFlipped = rewards.every((_, j) =>
+                        document.getElementById('ncard-' + j)?.classList.contains('flipped')
+                    );
+                    if (allFlipped) {
+                        setTimeout(() => {
+                            // Celebrate shake all cards
+                            rewards.forEach((_, j) => {
+                                const c = document.getElementById('ncard-' + j);
+                                if (c) c.classList.add('celebrate');
+                            });
+                            launchConfetti();
+                            playSound('win');
+                            document.getElementById('newbie-confirm-btn').style.display = 'inline-block';
+                        }, 300);
+                    }
+                };
+                grid.appendChild(card);
+            });
+
+            // Show modal
+            const modal = document.getElementById('newbie-modal');
+            modal.style.display = 'flex';
+            modal.style.opacity = '0';
+            setTimeout(() => { modal.style.opacity = '1'; modal.classList.add('show'); }, 10);
+
             player.claimedNewbiePack = true;
-            
-            playSound('win');
-            alert("🎁 領取成功！獲得所有材料 +50！快去升級裝備和建築吧！");
-            
-            let btn = document.getElementById('btn-newbie-pack');
-            btn.disabled = true; btn.innerText = "🎁 新手禮包 (已領取)";
-            btn.style.borderColor = "#9E9E9E"; btn.classList.replace('btn-gold', 'btn-grey');
-            
+            autoSave();
+        }
+
+        function launchConfetti() {
+            const colors = ['#FFD700','#FF4081','#00E5FF','#76FF03','#FF6D00','#E040FB','#FFFF00','#00BFA5'];
+            for (let i = 0; i < 80; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + 'vw';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.width = (8 + Math.random() * 8) + 'px';
+                piece.style.height = (10 + Math.random() * 10) + 'px';
+                piece.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+                piece.style.animationDelay = (Math.random() * 0.8) + 's';
+                piece.style.transform = 'rotate(' + (Math.random()*360) + 'deg)';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 4000);
+            }
+        }
+
+        function closeNewbieModal() {
+            const modal = document.getElementById('newbie-modal');
+            modal.classList.remove('show');
+            setTimeout(() => { modal.style.display = 'none'; modal.style.opacity = '0'; }, 400);
+            // Disable button
+            const btn = document.getElementById('btn-newbie-pack');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = "🎁 新手禮包 (已領取)";
+                btn.style.borderColor = "#9E9E9E";
+                btn.classList.replace('btn-gold', 'btn-grey');
+            }
             renderStats(); autoSave();
         }
 
+        
         function getPartnerBonus() {
             if (!player.partnerId) return 0;
             let pData = player.partners[player.partnerId];
@@ -734,32 +1319,31 @@
 
         // --- 全面擴充野生 Pokémon 與神獸 ---
         const monsters = [
-            { name: "史萊姆", emoji: "🟢", atk: 10, def: 10, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
-            { name: "森林狼", emoji: "🐺", atk: 20, def: 15, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1", rewardData: {wood: 3, stone: 3, frag: 1} },
-            { name: "吸血蝠", emoji: "🦇", atk: 25, def: 20, type: "normal", rewardsStr: "💎 寶石 +1, 🔮 碎片 +1", rewardData: {gem: 1, frag: 1} },
-            { name: "毒蛇", emoji: "🐍", atk: 30, def: 25, type: "normal", rewardsStr: "🌟 星星 +1, 🔮 碎片 +1", rewardData: {star: 1, frag: 1} },
-            { name: "狂暴熊", emoji: "🐻", atk: 40, def: 35, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +2", rewardData: {gem: 2, star: 2} },
-            // 新增 20 隻各具特色的 Pokémon 
-            { name: "綠毛蟲", emoji: "🐛", atk: 12, def: 10, type: "normal", rewardsStr: "🪵 木材 +2", rewardData: {wood: 2} },
-            { name: "波波", emoji: "🐦", atk: 15, def: 12, type: "normal", rewardsStr: "🧱 石頭 +2", rewardData: {stone: 2} },
-            { name: "小拉達", emoji: "🐀", atk: 18, def: 12, type: "normal", rewardsStr: "🪵 木材 +3", rewardData: {wood: 3} },
-            { name: "胖丁", emoji: "🎤", atk: 20, def: 25, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
-            { name: "超音蝠", emoji: "🦇", atk: 22, def: 18, type: "normal", rewardsStr: "🧱 石頭 +3", rewardData: {stone: 3} },
-            { name: "走路草", emoji: "🌿", atk: 24, def: 20, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
-            { name: "喵喵", emoji: "🐱", atk: 26, def: 22, type: "normal", rewardsStr: "💎 寶石 +1", rewardData: {gem: 1} },
-            { name: "可達鴨", emoji: "🦆", atk: 28, def: 25, type: "normal", rewardsStr: "🌟 星星 +1", rewardData: {star: 1} },
-            { name: "猴怪", emoji: "🐒", atk: 35, def: 20, type: "normal", rewardsStr: "🪵 木材 +4", rewardData: {wood: 4} },
-            { name: "卡蒂狗", emoji: "🐕", atk: 32, def: 28, type: "normal", rewardsStr: "🧱 石頭 +4", rewardData: {stone: 4} },
-            { name: "蚊香蝌蚪", emoji: "🌀", atk: 25, def: 30, type: "normal", rewardsStr: "🔮 碎片 +2", rewardData: {frag: 2} },
-            { name: "腕力", emoji: "💪", atk: 45, def: 30, type: "normal", rewardsStr: "💎 寶石 +1, 🌟 星星 +1", rewardData: {gem: 1, star: 1} },
-            { name: "喇叭芽", emoji: "🌱", atk: 28, def: 20, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3", rewardData: {wood: 3, stone: 3} },
-            { name: "瑪瑙水母", emoji: "🦑", atk: 30, def: 35, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
-            { name: "小拳石", emoji: "🪨", atk: 35, def: 50, type: "normal", rewardsStr: "🧱 石頭 +5", rewardData: {stone: 5} },
-            { name: "小磁怪", emoji: "🧲", atk: 38, def: 30, type: "normal", rewardsStr: "💎 寶石 +2", rewardData: {gem: 2} },
-            { name: "大舌貝", emoji: "🐚", atk: 32, def: 45, type: "normal", rewardsStr: "🌟 星星 +2", rewardData: {star: 2} },
-            { name: "鬼斯", emoji: "👻", atk: 42, def: 25, type: "normal", rewardsStr: "🔮 碎片 +3", rewardData: {frag: 3} },
-            { name: "大岩蛇", emoji: "🗿", atk: 45, def: 55, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +1", rewardData: {gem: 2, star: 1} },
-            { name: "卡比獸", emoji: "💤", atk: 50, def: 80, type: "normal", rewardsStr: "💎 寶石 +3, 🌟 星星 +3, 📜 手稿 +3", rewardData: {gem: 3, star: 3, manu: 3} }
+            { name: "史萊姆",   emoji: "🟢",  pic: null,  atk: 10, def: 10, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
+            { name: "森林狼",   emoji: "🐺",  pic: null,  atk: 20, def: 15, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1", rewardData: {wood: 3, stone: 3, frag: 1} },
+            { name: "吸血蝠",   emoji: "🦇",  pic: null,  atk: 25, def: 20, type: "normal", rewardsStr: "💎 寶石 +1, 🔮 碎片 +1", rewardData: {gem: 1, frag: 1} },
+            { name: "毒蛇",     emoji: "🐍",  pic: null,  atk: 30, def: 25, type: "normal", rewardsStr: "🌟 星星 +1, 🔮 碎片 +1", rewardData: {star: 1, frag: 1} },
+            { name: "狂暴熊",   emoji: "🐻",  pic: null,  atk: 40, def: 35, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +2", rewardData: {gem: 2, star: 2} },
+            { name: "綠毛蟲",   emoji: "🐛",  pic: "10",  atk: 12, def: 10, type: "normal", rewardsStr: "🪵 木材 +2", rewardData: {wood: 2} },
+            { name: "波波",     emoji: "🐦",  pic: "16",  atk: 15, def: 12, type: "normal", rewardsStr: "🧱 石頭 +2", rewardData: {stone: 2} },
+            { name: "小拉達",   emoji: "🐀",  pic: "19",  atk: 18, def: 12, type: "normal", rewardsStr: "🪵 木材 +3", rewardData: {wood: 3} },
+            { name: "胖丁",     emoji: "🎤",  pic: "39",  atk: 20, def: 25, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
+            { name: "超音蝠",   emoji: "🦇",  pic: "41",  atk: 22, def: 18, type: "normal", rewardsStr: "🧱 石頭 +3", rewardData: {stone: 3} },
+            { name: "走路草",   emoji: "🌿",  pic: "43",  atk: 24, def: 20, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
+            { name: "喵喵",     emoji: "🐱",  pic: "52",  atk: 26, def: 22, type: "normal", rewardsStr: "💎 寶石 +1", rewardData: {gem: 1} },
+            { name: "可達鴨",   emoji: "🦆",  pic: "54",  atk: 28, def: 25, type: "normal", rewardsStr: "🌟 星星 +1", rewardData: {star: 1} },
+            { name: "猴怪",     emoji: "🐒",  pic: "56",  atk: 35, def: 20, type: "normal", rewardsStr: "🪵 木材 +4", rewardData: {wood: 4} },
+            { name: "卡蒂狗",   emoji: "🐕",  pic: "58",  atk: 32, def: 28, type: "normal", rewardsStr: "🧱 石頭 +4", rewardData: {stone: 4} },
+            { name: "蚊香蝌蚪", emoji: "🌀",  pic: "60",  atk: 25, def: 30, type: "normal", rewardsStr: "🔮 碎片 +2", rewardData: {frag: 2} },
+            { name: "腕力",     emoji: "💪",  pic: "66",  atk: 45, def: 30, type: "normal", rewardsStr: "💎 寶石 +1, 🌟 星星 +1", rewardData: {gem: 1, star: 1} },
+            { name: "喇叭芽",   emoji: "🌱",  pic: "69",  atk: 28, def: 20, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3", rewardData: {wood: 3, stone: 3} },
+            { name: "瑪瑙水母", emoji: "🦑",  pic: "72",  atk: 30, def: 35, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
+            { name: "小拳石",   emoji: "🪨",  pic: "74",  atk: 35, def: 50, type: "normal", rewardsStr: "🧱 石頭 +5", rewardData: {stone: 5} },
+            { name: "小磁怪",   emoji: "🧲",  pic: "81",  atk: 38, def: 30, type: "normal", rewardsStr: "💎 寶石 +2", rewardData: {gem: 2} },
+            { name: "大舌貝",   emoji: "🐚",  pic: "90",  atk: 32, def: 45, type: "normal", rewardsStr: "🌟 星星 +2", rewardData: {star: 2} },
+            { name: "鬼斯",     emoji: "👻",  pic: "92",  atk: 42, def: 25, type: "normal", rewardsStr: "🔮 碎片 +3", rewardData: {frag: 3} },
+            { name: "大岩蛇",   emoji: "🗿",  pic: "95",  atk: 45, def: 55, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +1", rewardData: {gem: 2, star: 1} },
+            { name: "卡比獸",   emoji: "💤",  pic: "143", atk: 50, def: 80, type: "normal", rewardsStr: "💎 寶石 +3, 🌟 星星 +3, 📜 手稿 +3", rewardData: {gem: 3, star: 3, manu: 3} }
         ];
 
         const mythicalBeasts = [
@@ -803,8 +1387,25 @@
                 { q: "「熱、然、照、燈」這些字的共同部首是甚麼？", options: ["木", "水", "土", "火"], a: "火", hint: "底下四點代表火。" },
                 { q: "以下哪個字與「蚊」的部首相同？", options: ["碼", "螞", "桌", "靖"], a: "螞", hint: "與昆蟲有關的部首。" },
                 { q: "「孔、孫、孤」這些字的共同部首是甚麼？", options: ["木", "火", "子", "人"], a: "子", hint: "與小孩子有關。" },
-                { q: "以下哪個字是形聲字？", options: ["日", "山", "月", "胎"], a: "胎", hint: "一半表示意思，一半表示讀音。" },
-                { q: "「袋」字與以下哪個字部首不同？", options: ["裝", "裙", "展", "裳"], a: "展", hint: "展的部首是「尸」部。" }
+                
+                { q: "「袋」字與以下哪個字部首不同？", options: ["裝", "裙", "展", "裳"], a: "展", hint: "展的部首是「尸」部。" },
+                // 四、形聲字（聲符）
+                { q: "「清」字的聲符是什麼？", options: ["氵", "青", "沒有聲符"], a: "青", hint: "「青」提示讀音，「氵」表示與水有關。" },
+                { q: "「晴」字的聲符是什麼？", options: ["日", "青", "沒有聲符"], a: "青", hint: "「青」提示讀音，「日」表示與太陽有關。" },
+                { q: "「跑」字的聲符是什麼？", options: ["足", "包", "沒有聲符"], a: "包", hint: "「包」提示讀音，「足」表示與腳有關。" },
+                { q: "「媽」字的聲符是什麼？", options: ["女", "馬", "沒有聲符"], a: "馬", hint: "「馬」提示讀音，「女」表示與女性有關。" },
+                { q: "「抱」字的聲符是什麼？", options: ["扌", "包", "沒有聲符"], a: "包", hint: "「包」提示讀音，「扌」表示與手有關。" },
+                { q: "「近」字的聲符是什麼？", options: ["辶", "斤", "沒有聲符"], a: "斤", hint: "「斤」提示讀音，「辶」表示與行走有關。" },
+                { q: "「爸」字的聲符是什麼？", options: ["父", "巴", "沒有聲符"], a: "巴", hint: "「巴」提示讀音，「父」表示與父親有關。" },
+                { q: "「日」字的聲符是什麼？", options: ["口是聲符", "沒有聲符（它不是形聲字）", "一是聲符"], a: "沒有聲符（它不是形聲字）", hint: "「日」是象形字，不是形聲字，沒有聲符。" },
+                { q: "「山」字的聲符是什麼？", options: ["沒有聲符（它不是形聲字）", "「山」本身就是聲符", "中間的「丨」是聲符"], a: "沒有聲符（它不是形聲字）", hint: "「山」是象形字，不是形聲字，沒有聲符。" },
+                { q: "「褲」字的聲符是什麼？", options: ["衤", "庫", "沒有聲符"], a: "庫", hint: "「庫」提示讀音，「衤」表示與衣物有關。" },
+                { q: "「油」字的聲符是什麼？", options: ["氵", "由", "沒有聲符"], a: "由", hint: "「由」提示讀音，「氵」表示與液體有關。" },
+                { q: "「箱」字的聲符是什麼？", options: ["竹", "相", "沒有聲符"], a: "相", hint: "「相」提示讀音，「竹」表示與竹製品有關。" },
+                { q: "「榮」字的聲符是什麼？", options: ["木是聲符", "沒有聲符（它不是形聲字）", "火是聲符"], a: "沒有聲符（它不是形聲字）", hint: "「榮」是會意字，沒有聲符。" },
+                { q: "「恐」字的聲符是什麼？", options: ["工是聲符", "心是聲符", "沒有聲符（它不是形聲字）"], a: "沒有聲符（它不是形聲字）", hint: "「恐」是會意字，沒有聲符。" },
+                { q: "「到」字的聲符是什麼？", options: ["刀是聲符", "至是聲符", "沒有聲符（它不是形聲字）"], a: "沒有聲符（它不是形聲字）", hint: "「到」是會意字，沒有聲符。" },
+                { q: "「慧」字的聲符是什麼？", options: ["心是聲符", "彗是聲符", "沒有聲符（它不是形聲字）"], a: "沒有聲符（它不是形聲字）", hint: "「慧」是會意字，沒有聲符。" }
             ],
             t3_review_2: [ // 30 題 (標點、句式、書信、反問句)
                 { q: "引號（「　」）的作用是甚麼？", options: ["標示書本名稱", "標示説話內容或特別詞語", "標示地名", "表示句子結束"], a: "標示説話內容或特別詞語", hint: "把別人説的話括起來。" },
@@ -868,14 +1469,23 @@
                 { q: "22. 課文中指出，愛護郊野公園是誰的責任？", options: ["老師的責任", "家長的責任", "人人都有責任", "校工的責任"], a: "人人都有責任", hint: "課文最後一句有答案。" },
                 { q: "23. 「紅着臉兒」最可能表示人物感到怎樣？", options: ["驕傲", "害羞／不好意思", "生氣", "開心得跳起來"], a: "害羞／不好意思", hint: "通常和不好意思有關。" },
                 { q: "24. 根據課文內容，正確的做法是：", options: ["在郊野公園亂拋垃圾", "看見失物不理會", "帶走自己的垃圾", "把垃圾藏起來"], a: "帶走自己的垃圾", hint: "要愛護環境。" },
-                // 四、形符聲符
-                { q: "25. 下列哪一個字的左邊部分最可能是形符？", options: ["清", "裝", "伯", "想"], a: "清", hint: "「氵」通常和字義有關。" },
-                { q: "26. 在「伯」字中，右邊的「白」通常提示讀音，屬於（　　）。", options: ["形符", "聲符", "部首", "筆畫"], a: "聲符", hint: "和讀音線索有關。" },
-                { q: "27. 老師叫同學把字中的聲符圈出來，目的是找出字的（　　）。", options: ["意思線索", "顏色", "讀音線索", "筆順"], a: "讀音線索", hint: "聲符提示讀音。" },
-                // 五、左右結構詞語
-                { q: "28. 下列哪一個詞語兩個字都是左右結構？", options: ["討論", "公園", "責任", "明白"], a: "討論", hint: "兩個字都要符合左右結構。" },
-                { q: "29. 下列哪一字是左右結構？", options: ["上", "早", "郊", "公"], a: "郊", hint: "左右都有部件。" },
-                
+                // 四、形聲字（聲符）
+                { q: "「清」字的聲符是什麼？", options: ["氵", "青", "沒有聲符"], a: "青", hint: "「青」提示讀音，「氵」表示與水有關。" },
+                { q: "「晴」字的聲符是什麼？", options: ["日", "青", "沒有聲符"], a: "青", hint: "「青」提示讀音，「日」表示與太陽有關。" },
+                { q: "「跑」字的聲符是什麼？", options: ["足", "包", "沒有聲符"], a: "包", hint: "「包」提示讀音，「足」表示與腳有關。" },
+                { q: "「媽」字的聲符是什麼？", options: ["女", "馬", "沒有聲符"], a: "馬", hint: "「馬」提示讀音，「女」表示與女性有關。" },
+                { q: "「抱」字的聲符是什麼？", options: ["扌", "包", "沒有聲符"], a: "包", hint: "「包」提示讀音，「扌」表示與手有關。" },
+                { q: "「近」字的聲符是什麼？", options: ["辶", "斤", "沒有聲符"], a: "斤", hint: "「斤」提示讀音，「辶」表示與行走有關。" },
+                { q: "「爸」字的聲符是什麼？", options: ["父", "巴", "沒有聲符"], a: "巴", hint: "「巴」提示讀音，「父」表示與父親有關。" },
+                { q: "「日」字的聲符是什麼？", options: ["口是聲符", "沒有聲符（它不是形聲字）", "一是聲符"], a: "沒有聲符（它不是形聲字）", hint: "「日」是象形字，不是形聲字，沒有聲符。" },
+                { q: "「山」字的聲符是什麼？", options: ["沒有聲符（它不是形聲字）", "「山」本身就是聲符", "中間的「丨」是聲符"], a: "沒有聲符（它不是形聲字）", hint: "「山」是象形字，不是形聲字，沒有聲符。" },
+                { q: "「褲」字的聲符是什麼？", options: ["衤", "庫", "沒有聲符"], a: "庫", hint: "「庫」提示讀音，「衤」表示與衣物有關。" },
+                { q: "「油」字的聲符是什麼？", options: ["氵", "由", "沒有聲符"], a: "由", hint: "「由」提示讀音，「氵」表示與液體有關。" },
+                { q: "「箱」字的聲符是什麼？", options: ["竹", "相", "沒有聲符"], a: "相", hint: "「相」提示讀音，「竹」表示與竹製品有關。" },
+                { q: "「榮」字的聲符是什麼？", options: ["木是聲符", "沒有聲符（它不是形聲字）", "火是聲符"], a: "沒有聲符（它不是形聲字）", hint: "「榮」是會意字，沒有聲符。" },
+                { q: "「恐」字的聲符是什麼？", options: ["工是聲符", "心是聲符", "沒有聲符（它不是形聲字）"], a: "沒有聲符（它不是形聲字）", hint: "「恐」是會意字，沒有聲符。" },
+                { q: "「到」字的聲符是什麼？", options: ["刀是聲符", "至是聲符", "沒有聲符（它不是形聲字）"], a: "沒有聲符（它不是形聲字）", hint: "「到」是會意字，沒有聲符。" },
+                { q: "「慧」字的聲符是什麼？", options: ["心是聲符", "彗是聲符", "沒有聲符（它不是形聲字）"], a: "沒有聲符（它不是形聲字）", hint: "「慧」是會意字，沒有聲符。" }
             ],
             // --------- T3 FA2 重組句子題庫 ---------
             reorder_fa2: [
@@ -1065,6 +1675,8 @@
         function openBuildZone() { hideAllScreens(); document.getElementById("build-zone").classList.remove("hidden"); }
 
         function startGame(mode) {
+            window._qCount = 0;
+            window._qTotal = (questions[mode]||[]).length || 20;
             currentMode = mode;
             isMonsterFight = false;
             hideAllScreens();
@@ -1101,7 +1713,17 @@
                 playSound('monster');
             }
 
-            document.getElementById("mon-emoji").innerText = currentMonster.emoji;
+            const monImg = document.getElementById("mon-img");
+                const monEmoji = document.getElementById("mon-emoji");
+                if (currentMonster.pic) {
+                    monImg.src = getPokePic(currentMonster.pic);
+                    monImg.style.display = "block";
+                    monEmoji.style.display = "none";
+                } else {
+                    monImg.style.display = "none";
+                    monEmoji.style.display = "block";
+                    monEmoji.innerText = currentMonster.emoji;
+                }
             document.getElementById("mon-name").innerText = (isMythical ? "【神獸】" : "") + currentMonster.name;
             document.getElementById("mon-req-atk").innerText = currentMonster.atk;
             document.getElementById("mon-req-def").innerText = currentMonster.def;
@@ -1182,6 +1804,16 @@
         }
 
         function loadQuestion() {
+            // streak display
+            const _sd = document.getElementById('streak-display');
+            if (_sd) _sd.innerText = player.streak > 0 ? '🔥 ×' + player.streak : '';
+            // progress bar
+            if (window._qCount === undefined) window._qCount = 0;
+            window._qCount = Math.min(window._qCount + 1, window._qTotal || 20);
+            const _pb = document.getElementById('q-progress-bar');
+            const _pt = document.getElementById('q-progress-text');
+            if (_pb) _pb.style.width = (window._qCount / (window._qTotal||20) * 100) + '%';
+            if (_pt) _pt.innerText = window._qCount + '/' + (window._qTotal||20);
             isMonsterFight = false;
             document.getElementById("monster-encounter-panel").classList.add("hidden");
             let qPanel = document.getElementById("question-panel");
@@ -1249,6 +1881,7 @@
             } else {
                 if (ans === currentQuestion.a) {
                     playSound('correct'); 
+            { const _mc=document.getElementById('main-container'); if(_mc){ _mc.classList.add('flash-correct'); setTimeout(()=>_mc.classList.remove('flash-correct'),520); } }
                     player.streak++;
                     checkStreakBadge();
                     
@@ -1269,6 +1902,7 @@
                     renderStats(); autoSave();
                 } else {
                     playSound('wrong'); 
+            { const _mc=document.getElementById('main-container'); if(_mc){ _mc.classList.add('flash-wrong'); setTimeout(()=>_mc.classList.remove('flash-wrong'),520); } }
                     player.streak = 0; 
                     fbArea.classList.remove("hidden"); fbArea.classList.add("error");
                     document.getElementById("feedback-msg").innerHTML = `❌ 答錯了！正確答案是：<span style="color:#F44336;">${currentQuestion.a}</span>`;
@@ -1476,6 +2110,222 @@
         function handleBossNextQuestion() {
             nextBossQuestion();
         }
-    </script>
+    
+        // ── Floating star particle system ──────────────────────────
+        (function() {
+            const canvas = document.getElementById('star-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let W, H, stars = [];
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            function initStars(n) {
+                stars = [];
+                for (let i = 0; i < n; i++) {
+                    stars.push({
+                        x: Math.random() * W, y: Math.random() * H,
+                        r: Math.random() * 1.5 + 0.3,
+                        a: Math.random(),
+                        speed: Math.random() * 0.003 + 0.001,
+                        drift: (Math.random() - 0.5) * 0.15,
+                        color: Math.random() > 0.7 ? '#c8b4ff' : '#ffffff'
+                    });
+                }
+            }
+            initStars(120);
+
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+                stars.forEach(s => {
+                    s.a += s.speed;
+                    s.x += s.drift;
+                    if (s.x < 0) s.x = W;
+                    if (s.x > W) s.x = 0;
+                    const alpha = (Math.sin(s.a) + 1) / 2 * 0.8 + 0.1;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = s.color;
+                    ctx.globalAlpha = alpha;
+                    ctx.fill();
+                });
+                ctx.globalAlpha = 1;
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+
+        
+        // ── Sensei Cheat Code ─────────────────────────────────────
+        (function() {
+            const CODE = 'sensei2026';
+            let typed = '';
+            const indicator = document.getElementById('sensei-indicator');
+
+            document.addEventListener('keydown', function(e) {
+                // Only track printable chars
+                if (e.key.length === 1) {
+                    typed += e.key.toLowerCase();
+                    if (typed.length > CODE.length) typed = typed.slice(-CODE.length);
+                    // Visual feedback: show progress dots (subtle)
+                    if (indicator) {
+                        const match = CODE.startsWith(typed) ? typed.length : 0;
+                        indicator.innerText = match > 0 ? '●'.repeat(match) + '○'.repeat(CODE.length - match) : '⬛';
+                    }
+                    if (typed === CODE) {
+                        typed = '';
+                        if (indicator) indicator.innerText = '🎓';
+                        openSenseiPanel();
+                    }
+                }
+            });
+        })();
+
+        function openSenseiPanel() {
+            console.log('🎓 Teacher mode activated — sensei2026');
+            document.getElementById('sensei-panel').classList.add('show');
+        }
+
+        function closeSenseiPanel() {
+            document.getElementById('sensei-panel').classList.remove('show');
+            const ind = document.getElementById('sensei-indicator');
+            if (ind) ind.innerText = '⬛';
+        }
+
+        function senseiStartBoss(level) {
+            closeSenseiPanel();
+            // Force unlock boss
+            player.buildings.castle = Math.max(player.buildings.castle || 0, 1);
+            // Set mode for boss questions
+            if (!currentMode || !questions[currentMode]) currentMode = 't3_review_1';
+            hideAllScreens();
+            startBossFight(level);
+        }
+
+        function senseiSummonBeast() {
+            const _sel = document.getElementById('sensei-beast-select');
+            const beastIdx = _sel ? parseInt(_sel.value) || 0 : 0;
+            const mode = document.getElementById('sensei-mode-select').value;
+            closeSenseiPanel();
+            currentMode = mode;
+            window._qCount = 0;
+            window._qTotal = (questions[mode]||[]).length || 20;
+            // Set the chosen mythical beast as currentMonster
+            currentMonster = mythicalBeasts[beastIdx];
+            isMonsterFight = false;
+            hideAllScreens();
+            const gameScreen = document.getElementById('game-screen');
+            gameScreen.classList.remove('hidden');
+            document.getElementById('game-title').innerText = '🐉 神獸降臨！';
+            // Show encounter panel directly
+            const ep = document.getElementById('monster-encounter-panel');
+            ep.classList.remove('hidden');
+            ep.classList.add('mythical-encounter');
+            document.getElementById('mon-emoji').innerText = currentMonster.emoji;
+            document.getElementById('mon-emoji').style.display = 'block';
+            document.getElementById('mon-img').style.display = 'none';
+            document.getElementById('mon-name').innerText = currentMonster.name;
+            document.getElementById('mon-req-atk').innerText = currentMonster.atk;
+            document.getElementById('mon-req-def').innerText = currentMonster.def;
+            document.getElementById('mon-warning-msg').innerText = '⚠️ 神獸！需答對 3 題！';
+            document.getElementById('btn-mon-fight').disabled = false;
+            document.getElementById('question-panel').classList.add('hidden');
+            document.getElementById('feedback-area').classList.add('hidden');
+            document.getElementById('bottom-controls').classList.add('hidden');
+            playSound('mythicalspawn');
+            renderStats();
+        }
+
+        function senseiAddResources() {
+            player.inv.wood  += 999; player.inv.stone += 999;
+            player.inv.gem   += 999; player.inv.star  += 999;
+            player.inv.manu  += 999; player.inv.frag  += 999;
+            renderStats(); autoSave();
+            const btn = event.target;
+            btn.innerText = '✅ 已補充！'; btn.disabled = true;
+            setTimeout(() => { btn.innerText = '+999 所有材料'; btn.disabled = false; }, 2000);
+        }
+
+        function senseiUnlockAll() {
+            player.buildings.castle = Math.max(player.buildings.castle||0, 1);
+            player.buildings.base   = Math.max(player.buildings.base||0, 1);
+            const bossBtn = document.getElementById('btn-boss-menu');
+            if (bossBtn) { bossBtn.disabled = false; bossBtn.innerText = '👑 終極 Boss 挑戰'; }
+            renderStats(); autoSave();
+            const btn = event.target;
+            btn.innerText = '✅ 已解鎖！'; btn.disabled = true;
+            setTimeout(() => { btn.innerText = '🔓 解鎖所有功能'; btn.disabled = false; }, 2000);
+        }
+        // ── End Sensei Cheat Code ──────────────────────────────────
+
+        </script>
+
+    <!-- ══ 新手禮包翻牌 Modal ══ -->
+    <div id="newbie-modal">
+        <h2>🎁 新手禮包</h2>
+        <p class="subtitle">點擊每張卡牌揭開你的獎勵！</p>
+        <div class="card-grid" id="newbie-card-grid"></div>
+        <button id="newbie-confirm-btn" onclick="closeNewbieModal()">🚀 出發冒險！</button>
+    </div>
+
+
+    <!-- ══ Floating star particles ══ -->
+    <canvas id="star-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.5;"></canvas>
+
+
+    <!-- ══ Sensei Cheat Panel ══ -->
+    <div id="sensei-panel">
+        <div id="sensei-box">
+            <button id="sensei-close" onclick="closeSenseiPanel()">✕</button>
+            <h2>🎓 教師展示模式</h2>
+            <p class="s-sub">⌨️ sensei2026 已啟動</p>
+
+            <!-- Boss Section -->
+            <div class="sensei-section">
+                <h3>⚔️ Boss 展示對戰</h3>
+                <div class="sensei-row">
+                    <button class="btn-green" onclick="senseiStartBoss(1)" style="flex:1;">🟢 Boss 1<br><small>15秒/題</small></button>
+                    <button class="btn-orange" onclick="senseiStartBoss(2)" style="flex:1;">🟡 Boss 2<br><small>10秒/題</small></button>
+                    <button class="btn-red" onclick="senseiStartBoss(3)" style="flex:1;">🔴 Boss 3<br><small>5秒/題</small></button>
+                </div>
+            </div>
+
+            <!-- Mythical Beast Section -->
+            <div class="sensei-section">
+                <h3>🐉 召喚神獸對戰</h3>
+                <select id="sensei-beast-select" class="sensei-select">
+                    <option value="0">🐉 青龍 (ATK:100 DEF:100)</option>
+                    <option value="1">🦚 朱雀 (ATK:120 DEF:90)</option>
+                    <option value="2">🧬 超夢 (ATK:150 DEF:120)</option>
+                    <option value="3">🌪️ 洛奇亞 (ATK:130 DEF:150)</option>
+                    <option value="4">🐉 烈空坐 (ATK:180 DEF:110)</option>
+                    <option value="5">✨ 阿爾宙斯 (ATK:200 DEF:200)</option>
+                </select>
+                <select id="sensei-mode-select" class="sensei-select">
+                    <option value="t3_review_1">📚 T3 温習一（詞語與偏旁）</option>
+                    <option value="t3_review_2">📝 T3 温習二（標點與句式）</option>
+                    <option value="t3_fa2">🌿 T3 FA2</option>
+                    <option value="reorder_fa2">🔤 FA2 重組句子</option>
+                </select>
+                <button class="btn-purple" onclick="senseiSummonBeast()" style="width:100%;">🐉 立即召喚神獸</button>
+            </div>
+
+            <!-- Resources Section -->
+            <div class="sensei-section">
+                <h3>⚡ 一鍵補滿資源</h3>
+                <div class="sensei-row">
+                    <button class="btn-teal" onclick="senseiAddResources()" style="flex:1;">+999 所有材料</button>
+                    <button class="btn-blue" onclick="senseiUnlockAll()" style="flex:1;">🔓 解鎖所有功能</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="sensei-indicator">⬛</div>
+
 </body>
 </html>
