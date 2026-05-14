@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中文記敍文互動闖關遊戲</title>
+  <!-- 本頁採用 localStorage 自動保存草稿，並以 @media print 和 window.print() 控制列印時隱藏介面元素。 --> [telerik](https://www.telerik.com/blogs/save-for-later-feature-in-forms-using-localstorage)
+  <style>
+    :root{
+      --bg:#f5f7ff;
+      --card:#ffffff;
+      --card-soft:#f8fbff;
+      --text:#2f3552;
+      --sub:#66708f;
+      --line:#dbe3ff;
+      --primary:#6b8cff;
+      --primary-2:#89a5ff;
+      --accent:#ffb86b;
+      --good:#31b77a;
+      --warn:#ff8b78;
+      --shadow:0 12px 30px rgba(65,88,160,.12);
+      --paper-line:#d9e4ff;
+      --highlight:#fff1a8;
+    }
+    body.theme-forest{
+      --bg:#f4fbf7;
+      --card:#ffffff;
+      --card-soft:#f6fffa;
+      --text:#29443a;
+      --sub:#5f7c72;
+      --line:#d7efe3;
+      --primary:#4db27e;
+      --primary-2:#7fd0a9;
+      --accent:#f4b860;
+      --good:#24956a;
+      --warn:#ef8b7b;
+      --shadow:0 12px 30px rgba(44,105,76,.12);
+      --paper-line:#dcefe6;
+      --highlight:#fff1a8;
+    }
+    body.theme-sunset{
+      --bg:#fff8f4;
+      --card:#ffffff;
+      --card-soft:#fffaf7;
+      --text:#5b3c36;
+      --sub:#8a655c;
+      --line:#f0ddd7;
+      --primary:#ef8e72;
+      --primary-2:#f5ac95;
+      --accent:#6f9dfc;
+      --good:#47a86d;
+      --warn:#ff7d6d;
+      --shadow:0 12px 30px rgba(145,84,66,.12);
+      --paper-line:#f1e1da;
+      --highlight:#fff1a8;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: "PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.85), transparent 28%),
+        linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    .app{
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 18px 18px 90px;
+    }
+
+    .topbar{
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+      position: sticky;
+      top: 8px;
+      z-index: 30;
+      backdrop-filter: blur(8px);
+    }
+
+    .title-row{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+
+    .title-wrap h1{
+      margin:0 0 6px;
+      font-size: clamp(1.45rem, 2vw, 2rem);
+      letter-spacing:.03em;
+    }
+
+    .school-name{
+      color:var(--sub);
+      font-size:.98rem;
+      margin-bottom:10px;
+    }
+
+    .subtitle{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      color:var(--sub);
+      font-size:.95rem;
+    }
+
+    .pill{
+      background: var(--card-soft);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+    }
+
+    .toolbar{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:flex-end;
+      min-width: 320px;
+      flex:1;
+    }
+
+    .switch-group{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .switch-group .group-label{
+      width:100%;
+      text-align:right;
+      color:var(--sub);
+      font-size:.9rem;
+      margin-bottom:-2px;
+    }
+
+    button, input{
+      font-family: inherit;
+    }
+
+    .btn{
+      border:none;
+      background:var(--primary);
+      color:#fff;
+      border-radius:14px;
+      padding:10px 14px;
+      cursor:pointer;
+      transition:.2s transform,.2s opacity,.2s background,.2s box-shadow;
+      box-shadow: 0 10px 18px rgba(89,114,205,.15);
+      font-size:.96rem;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{
+      background:var(--card-soft);
+      color:var(--text);
+      border:1px solid var(--line);
+      box-shadow:none;
+    }
+    .btn.ghost{
+      background:transparent;
+      color:var(--primary);
+      border:1px dashed var(--primary);
+      box-shadow:none;
+    }
+    .btn.warn{
+      background: var(--warn);
+    }
+    .btn.good{
+      background: var(--good);
+    }
+
+    .toggle-btn{
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:var(--card-soft);
+      color:var(--text);
+      cursor:pointer;
+      transition:.2s;
+      font-size:.92rem;
+    }
+    .toggle-btn.active{
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:#fff;
+      border-color:transparent;
+      box-shadow:0 10px 20px rgba(90,110,190,.18);
+    }
+
+    .progress-wrap{
+      margin-top:16px;
+    }
+
+    .progress-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:8px;
+      font-size:.95rem;
+      color:var(--sub);
+    }
+
+    .progress-bar{
+      height:16px;
+      border-radius:999px;
+      background: var(--card-soft);
+      border:1px solid var(--line);
+      overflow:hidden;
+      position:relative;
+    }
+    .progress-fill{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg,var(--primary),var(--accent));
+      border-radius:999px;
+      transition: width .35s ease;
+      position:relative;
+    }
+    .progress-fill::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+      animation:shine 2.8s linear infinite;
+    }
+    @keyframes shine{
+      from{transform:translateX(-120%)}
+      to{transform:translateX(120%)}
+    }
+
+    .stage-nav{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap:8px;
+    }
+    .stage-tab{
+      border:1px solid var(--line);
+      background:var(--card-soft);
+      color:var(--sub);
+      border-radius:16px;
+      padding:10px 8px;
+      cursor:pointer;
+      text-align:center;
+      transition:.2s;
+      min-height:64px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+    }
+    .stage-tab strong{
+      color:inherit;
+      font-size:1rem;
+    }
+    .stage-tab.active{
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:#fff;
+      border-color:transparent;
+      box-shadow:0 12px 22px rgba(89,114,205,.18);
+      transform:translateY(-1px);
+    }
+    .stage-tab.done{
+      border-color:rgba(49,183,122,.35);
+      background:linear-gradient(180deg,rgba(49,183,122,.14),rgba(49,183,122,.06));
+      color:var(--good);
+    }
+    .stage-tab.active.done{
+      color:#fff;
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+    }
+    .stage-mini{
+      font-size:.78rem;
+    }
+
+    .main{
+      display:grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(340px, .95fr);
+      gap:16px;
+      align-items:start;
+    }
+
+    .panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .panel-head{
+      padding:18px 18px 8px;
+      border-bottom:1px solid rgba(0,0,0,.03);
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .panel-head h2{
+      margin:0;
+      font-size:1.2rem;
+    }
+
+    .panel-sub{
+      color:var(--sub);
+      font-size:.95rem;
+      margin-top:6px;
+      line-height:1.5;
+    }
+
+    .panel-body{
+      padding:18px;
+    }
+
+    .target-box{
+      background:linear-gradient(180deg,var(--card-soft),transparent);
+      border:1px dashed var(--line);
+      border-radius:18px;
+      padding:14px 14px 12px;
+      margin-bottom:14px;
+    }
+    .target-box h3{
+      margin:0 0 8px;
+      font-size:1rem;
+    }
+    .target-box p{
+      margin:0;
+      color:var(--sub);
+      line-height:1.65;
+      font-size:.95rem;
+    }
+
+    .frame-box{
+      background:#fffefb;
+      border:1px solid #f0e8d0;
+      border-radius:18px;
+      padding:12px 14px;
+      margin-bottom:16px;
+    }
+    .frame-title{
+      font-size:.92rem;
+      color:#8a7243;
+      margin-bottom:8px;
+    }
+    .frame-line{
+      line-height:1.8;
+      font-size:1rem;
+      color:#6f5c34;
+    }
+
+    .field-group{
+      margin-bottom:16px;
+    }
+    .field-label{
+      display:block;
+      font-weight:700;
+      margin-bottom:8px;
+      font-size:1rem;
+    }
+    .field-help{
+      font-size:.88rem;
+      color:var(--sub);
+      margin-top:6px;
+      line-height:1.5;
+    }
+
+    .choices{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .choice-btn{
+      border:1px solid var(--line);
+      background:var(--card-soft);
+      color:var(--text);
+      border-radius:999px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-size:.95rem;
+      transition:.2s;
+    }
+    .choice-btn:hover{
+      transform:translateY(-1px);
+      border-color:var(--primary);
+    }
+    .choice-btn.active{
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:#fff;
+      border-color:transparent;
+      box-shadow:0 8px 18px rgba(89,114,205,.18);
+    }
+
+    .input-row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .text-input{
+      width:100%;
+      min-height:48px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      padding:12px 14px;
+      font-size:1rem;
+      color:var(--text);
+      outline:none;
+      transition:.2s;
+    }
+    .text-input:focus{
+      border-color:var(--primary);
+      box-shadow:0 0 0 4px rgba(106,140,255,.12);
+    }
+
+    .hint-chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .hint-chip{
+      border:none;
+      background:#eef3ff;
+      color:#4760b8;
+      border-radius:999px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-size:.88rem;
+      transition:.18s;
+    }
+    .hint-chip:hover{
+      transform:translateY(-1px);
+      filter:brightness(.98);
+    }
+    body.theme-forest .hint-chip{
+      background:#eaf8f1;
+      color:#34795b;
+    }
+    body.theme-sunset .hint-chip{
+      background:#fff0ea;
+      color:#b0644d;
+    }
+
+    .split-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .action-bar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:22px;
+      padding-top:16px;
+      border-top:1px dashed var(--line);
+    }
+
+    .stage-btns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .status-text{
+      color:var(--sub);
+      font-size:.92rem;
+    }
+
+    .paper{
+      background:
+        linear-gradient(transparent 31px, var(--paper-line) 32px),
+        linear-gradient(90deg, rgba(255,153,153,.38) 0, rgba(255,153,153,.38) 1px, transparent 1px);
+      background-size:100% 32px, 42px 100%;
+      background-position:0 0, 26px 0;
+      background-color:#fffefc;
+      border-radius:22px;
+      border:1px solid #efe9dc;
+      min-height: 680px;
+      padding: 24px 26px 28px 54px;
+      position:relative;
+      overflow:hidden;
+    }
+    .paper::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:36px;
+      width:2px;
+      height:100%;
+      background:rgba(255,153,153,.45);
+    }
+
+    .essay-title{
+      text-align:center;
+      font-size:1.45rem;
+      margin:6px 0 16px;
+      letter-spacing:.06em;
+    }
+    .essay-meta{
+      text-align:center;
+      color:var(--sub);
+      font-size:.92rem;
+      margin-bottom:14px;
+    }
+
+    .placeholder{
+      color:#98a1bf;
+      line-height:2;
+      padding-top:16px;
+      font-size:1.02rem;
+    }
+
+    .essay-paragraph{
+      text-indent:2em;
+      line-height:2;
+      margin:0 0 14px;
+      font-size:1.04rem;
+      white-space:normal;
+      word-break:break-word;
+    }
+
+    .hl-transition{
+      background:var(--highlight);
+      border-radius:6px;
+      padding:0 4px;
+      box-shadow: inset 0 -1px 0 rgba(0,0,0,.04);
+    }
+
+    .preview-tools{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .counter{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .counter .pill{
+      background:#fff;
+    }
+
+    .checklist{
+      margin-top:16px;
+      background:var(--card-soft);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:14px;
+    }
+    .checklist h3{
+      margin:0 0 10px;
+      font-size:1rem;
+    }
+    .checklist ul{
+      list-style:none;
+      margin:0;
+      padding:0;
+      display:grid;
+      gap:10px;
+    }
+    .check-item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      color:var(--sub);
+      line-height:1.5;
+      font-size:.95rem;
+      transition:.2s;
+    }
+    .check-icon{
+      width:24px;
+      height:24px;
+      flex:0 0 24px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#fff;
+      border:1px solid var(--line);
+      color:#a0a8c2;
+      font-weight:700;
+      margin-top:1px;
+    }
+    .check-item.done{
+      color:var(--text);
+    }
+    .check-item.done .check-icon{
+      background:rgba(49,183,122,.14);
+      color:var(--good);
+      border-color:rgba(49,183,122,.28);
+    }
+
+    .helper-box{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:40;
+      display:flex;
+      align-items:flex-end;
+      gap:10px;
+      max-width:min(92vw, 350px);
+    }
+
+    .helper-bubble{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px 20px 6px 20px;
+      box-shadow:var(--shadow);
+      padding:12px 14px;
+      line-height:1.6;
+      color:var(--text);
+      min-width:200px;
+      opacity:0;
+      transform:translateY(10px);
+      pointer-events:none;
+      transition:.25s;
+    }
+    .helper-bubble.show{
+      opacity:1;
+      transform:translateY(0);
+      pointer-events:auto;
+    }
+    .helper-btn{
+      width:74px;
+      height:74px;
+      border:none;
+      border-radius:50%;
+      cursor:pointer;
+      box-shadow:0 16px 28px rgba(80,98,170,.18);
+      background:
+        radial-gradient(circle at 30% 30%, #fff, #fff8d8 22%, #ffe27a 48%, #ffcf49 70%, #f4bb1f 100%);
+      color:#7a5600;
+      display:grid;
+      place-items:center;
+      font-size:2rem;
+      animation:floaty 2.6s ease-in-out infinite;
+    }
+    @keyframes floaty{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-6px)}
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%) translateY(16px);
+      opacity:0;
+      pointer-events:none;
+      background:rgba(48,57,93,.94);
+      color:#fff;
+      border-radius:14px;
+      padding:11px 14px;
+      z-index:100;
+      transition:.25s;
+      max-width:min(92vw,560px);
+      text-align:center;
+      line-height:1.5;
+      box-shadow:0 18px 26px rgba(0,0,0,.18);
+      font-size:.95rem;
+    }
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    .mini-note{
+      color:var(--sub);
+      font-size:.9rem;
+      line-height:1.5;
+      margin-top:8px;
+    }
+
+    .legend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+      font-size:.9rem;
+      color:var(--sub);
+    }
+
+    .legend span{
+      background:var(--card-soft);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+    }
+
+    @media (max-width: 1100px){
+      .main{
+        grid-template-columns:1fr;
+      }
+      .paper{
+        min-height: 540px;
+      }
+    }
+
+    @media (max-width: 820px){
+      .stage-nav{
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .split-2{
+        grid-template-columns:1fr;
+      }
+      .toolbar{
+        align-items:flex-start;
+        min-width:auto;
+      }
+      .switch-group{
+        justify-content:flex-start;
+      }
+      .switch-group .group-label{
+        text-align:left;
+      }
+      .paper{
+        padding:22px 18px 24px 44px;
+      }
+      .helper-box{
+        right:12px;
+        bottom:12px;
+      }
+      .helper-btn{
+        width:66px;
+        height:66px;
+      }
+    }
+
+    @media (max-width: 520px){
+      .app{
+        padding:12px 12px 90px;
+      }
+      .topbar,.panel{
+        border-radius:18px;
+      }
+      .panel-head,.panel-body{
+        padding:14px;
+      }
+      .stage-nav{
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .paper{
+        border-radius:18px;
+        padding:20px 14px 20px 38px;
+      }
+      .paper::before{
+        left:26px;
+      }
+      .essay-title{
+        font-size:1.25rem;
+      }
+      .stage-tab{
+        min-height:58px;
+      }
+      .choice-btn,.toggle-btn,.btn{
+        font-size:.92rem;
+      }
+    }
+
+    @media print{
+      body{
+        background:#fff;
+      }
+      .no-print,
+      .helper-box,
+      .toast{
+        display:none !important;
+      }
+      .app{
+        max-width:none;
+        padding:0;
+      }
+      .topbar,
+      .left-panel,
+      .preview-tools,
+      .checklist{
+        display:none !important;
+      }
+      .main{
+        display:block;
+      }
+      .right-panel{
+        border:none;
+        box-shadow:none;
+      }
+      .panel{
+        border:none;
+        box-shadow:none;
+      }
+      .panel-head{
+        display:none;
+      }
+      .panel-body{
+        padding:0;
+      }
+      .paper{
+        border:none;
+        box-shadow:none;
+        min-height:auto;
+        padding:18px 24px 24px 44px;
+      }
+      .essay-title{
+        margin-top:0;
+      }
+    }
+  </style>
+</head>
+<body class="theme-sky">
+  <div class="app">
+    <header class="topbar no-print">
+      <div class="title-row">
+        <div class="title-wrap">
+          <h1>中文記敍文互動闖關遊戲</h1>
+          <div class="school-name">勵志會梁李秀娛紀念小學</div>
+          <div class="subtitle">
+            <span class="pill">三段式記敍文</span>
+            <span class="pill">7 關完成作文</span>
+            <span class="pill">高支援句框</span>
+            <span class="pill">即時作文預覽</span>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="switch-group" id="themeSwitch">
+            <div class="group-label">主題色切換</div>
+            <button class="toggle-btn active" data-theme="sky" type="button">天空藍</button>
+            <button class="toggle-btn" data-theme="forest" type="button">森林綠</button>
+            <button class="toggle-btn" data-theme="sunset" type="button">暖日橙</button>
+          </div>
+
+          <div class="switch-group" id="modeSwitch">
+            <div class="group-label">難度模式</div>
+            <button class="toggle-btn active" data-mode="basic" type="button">基礎版</button>
+            <button class="toggle-btn" data-mode="standard" type="button">標準版</button>
+            <button class="toggle-btn" data-mode="challenge" type="button">挑戰版</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-head">
+          <div id="stageLabel">第 1 關 / 共 7 關</div>
+          <div id="saveStatus">草稿未儲存</div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="stage-nav" id="stageNav"></div>
+    </header>
+
+    <main class="main">
+      <section class="panel left-panel no-print">
+        <div class="panel-head">
+          <div>
+            <h2 id="leftTitle">第 1 關：選題型</h2>
+            <div class="panel-sub" id="leftSub">先選一個寫作方向，系統會按題型提供不同提示。</div>
+          </div>
+          <div class="pill" id="goalPill">學習重點：段落過渡詞、首尾呼應、尾段立意</div>
+        </div>
+        <div class="panel-body" id="stageContent"></div>
+      </section>
+
+      <section class="panel right-panel">
+        <div class="panel-head">
+          <div>
+            <h2>作文預覽區</h2>
+            <div class="panel-sub">你的作文會在這裏一步一步完成。</div>
+          </div>
+          <div class="counter">
+            <span class="pill" id="selectedTopicTag">題目：未選擇</span>
+            <span class="pill" id="wordCountTag">字數：0</span>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <div class="preview-tools no-print">
+            <div class="stage-btns">
+              <button class="btn secondary" id="resetStageBtn" type="button">重設單關</button>
+              <button class="btn warn" id="resetAllBtn" type="button">重設全文</button>
+            </div>
+            <div class="stage-btns">
+              <button class="btn secondary" id="copyBtn" type="button">複製全文</button>
+              <button class="btn good" id="printBtn" type="button">列印作文</button>
+            </div>
+          </div>
+
+          <article class="paper" id="paper">
+            <div class="essay-title" id="essayTitle">未選擇題目</div>
+            <div class="essay-meta" id="essayMeta">模式：基礎版</div>
+            <div id="essayContent">
+              <div class="placeholder">你的作文會在這裏一步一步完成。先到左邊開始闖關吧！</div>
+            </div>
+          </article>
+
+          <section class="checklist no-print">
+            <h3>完成檢查清單</h3>
+            <ul id="checklist"></ul>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="helper-box no-print">
+    <div class="helper-bubble" id="helperBubble">先想清楚事情發生的先後次序！</div>
+    <button class="helper-btn" id="helperBtn" type="button" aria-label="小精靈提示">✨</button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STORAGE_KEY = 'narrative-writing-game-v1';
+
+    const dataPacks = {
+      family: {
+        key: 'family',
+        topic: '《記一次和家人外出的經過》',
+        short: '家庭生活類',
+        scenes: ['海灘','公園','郊野公園','酒樓','商場'],
+        activities: ['野餐','遊玩','慶祝生日','散步','吃東西'],
+        actions: ['出發','乘車','到達','拍照','吃東西','玩遊戲','回家'],
+        climaxes: ['看到美麗景色','家人照顧我','大家一起玩','我不小心跌倒'],
+        results: ['我們帶着笑容回家','這一天很快便結束了','我感到十分開心'],
+        meanings: [
+          '我感受到家人的關愛。',
+          '我學會了珍惜和家人相處的時光。',
+          '這次外出讓我明白到陪伴很重要。',
+          '這真是一次難忘的經歷。'
+        ],
+        people: ['爸爸媽媽','家人','哥哥和姐姐','表哥表姐','外公外婆'],
+        echoHints: ['很溫暖','十分開心','這天很難忘','很想再去一次','一家人在一起真好'],
+        thoughtHints: ['有家人真好','我要小心一點','大家真開心','這裏真美麗','我想拍多幾張照片'],
+        reasonHints: ['可以和家人在一起','大家都很照顧我','我們玩得很盡興','這次外出很有意義']
+      },
+      school: {
+        key: 'school',
+        topic: '《記一次在學校發生的事》',
+        short: '校園生活類',
+        scenes: ['課室','操場','禮堂','圖書館'],
+        activities: ['小息玩耍','學校活動','老師安排','小組合作','幫助同學'],
+        actions: ['集合','排隊','參加活動','幫助同學','完成任務','一起討論','分享成果'],
+        climaxes: ['同學跌倒了','我被老師叫去回答問題','我成功完成任務','老師稱讚我'],
+        results: ['事情終於解決了','我們順利完成活動','我覺得很開心','我從中學到很多'],
+        meanings: [
+          '我明白到同學之間要互相幫助。',
+          '這次經歷讓我學會了合作。',
+          '我感受到老師和同學的關心。',
+          '這真是一件難忘的校園小事。'
+        ],
+        people: ['同學們','老師和同學','班主任','好朋友','小組同學'],
+        echoHints: ['十分深刻','很有意思','仍然很難忘','讓我記到現在','我還記得很清楚'],
+        thoughtHints: ['我要冷靜回答','我要幫助同學','我們一定做得到','原來合作很重要','我要更努力'],
+        reasonHints: ['大家一起努力','老師鼓勵了我','我幫到別人','我學會了合作']
+      },
+      growth: {
+        key: 'growth',
+        topic: '《記一次我學會一件事的經過》',
+        short: '成長經歷類',
+        scenes: ['家裏','操場','公園','興趣班','學校'],
+        activities: ['學踩單車','學游泳','學綁鞋帶','學做手工','學打球'],
+        actions: ['嘗試','失敗','再試','練習','請教別人','改正方法','終於成功'],
+        climaxes: ['我失敗了很多次','我差點想放棄','家人鼓勵我','最後我成功做到'],
+        results: ['我終於學會了','我充滿成功感','我對自己更有信心'],
+        meanings: [
+          '我明白到做事要有耐心。',
+          '我學會了只要努力，就會有進步。',
+          '這次經歷讓我知道失敗後不要放棄。',
+          '我以後會繼續勇敢面對困難。'
+        ],
+        people: ['媽媽','爸爸','老師','教練','家人'],
+        echoHints: ['很有成功感','仍然很自豪','這件事很難忘','我更相信自己','我真的進步了'],
+        thoughtHints: ['我不要放棄','再試一次吧','我一定可以做到','慢慢來就行了','我要學好它'],
+        reasonHints: ['我終於克服困難','我比以前進步了','努力真的有用','別人的鼓勵幫助了我']
+      }
+    };
+
+    const stageInfo = [
+      { title:'選題型', sub:'先選一個寫作題目。', mini:'題型' },
+      { title:'開頭', sub:'交代時間、地點、人物和起因。', mini:'開頭' },
+      { title:'經過一', sub:'寫事情開始時做了甚麼。', mini:'經過一' },
+      { title:'經過二', sub:'按次序寫經過，重點練習過渡詞。', mini:'經過二' },
+      { title:'高潮', sub:'寫最難忘的一刻和感受。', mini:'高潮' },
+      { title:'結尾', sub:'寫結果和感受。', mini:'結尾' },
+      { title:'立意＋呼應', sub:'完成首尾呼應和尾段立意。', mini:'立意' }
+    ];
+
+    const difficultyText = {
+      basic: '基礎版',
+      standard: '標準版',
+      challenge: '挑戰版'
+    };
+
+    const timeOptions = ['六上午','六下午','日早上','假期裏','放學後','午飯後'];
+    const moodOpenOptions = ['開心','期待','興奮','緊張','好奇'];
+    const processTransitions = ['首先','一開始','那天早上'];
+    const middleTransitions = ['接着','然後','後來','最後'];
+    const feelingStage5 = ['緊張','害怕','感動','開心','激動','驚訝'];
+    const feelingStage6 = ['開心','滿足','感恩','難忘','自豪','放鬆'];
+    const echoTemplates = [
+      '現在回想起來，我仍然覺得{content}。',
+      '回想那一天，我還是覺得{content}。',
+      '直到現在，我一想起這件事，仍覺得{content}。',
+      '每當想起這件事，我都覺得{content}。'
+    ];
+
+    const defaultState = () => ({
+      theme: 'sky',
+      difficulty: 'basic',
+      currentStage: 1,
+      category: '',
+      stage2: { time:'', place:'', people:'', activity:'', mood:'' },
+      stage3: { transition:'首先', action1:'', extra:'' },
+      stage4: { transition:'接着', action2:'', action3:'', detail:'' },
+      stage5: { climax:'', feeling:'', thought:'' },
+      stage6: { result:'', feeling:'', reason:'' },
+      stage7: { echoTemplate: echoTemplates, idea:'', echoContent:'' },
+      savedAt: ''
+    });
+
+    let state = loadState();
+    applyTheme(state.theme);
+    syncModeButtons();
+    syncThemeButtons();
+
+    const stageNav = document.getElementById('stageNav');
+    const stageContent = document.getElementById('stageContent');
+    const leftTitle = document.getElementById('leftTitle');
+    const leftSub = document.getElementById('leftSub');
+    const goalPill = document.getElementById('goalPill');
+    const progressFill = document.getElementById('progressFill');
+    const stageLabel = document.getElementById('stageLabel');
+    const saveStatus = document.getElementById('saveStatus');
+    const selectedTopicTag = document.getElementById('selectedTopicTag');
+    const wordCountTag = document.getElementById('wordCountTag');
+    const essayTitle = document.getElementById('essayTitle');
+    const essayMeta = document.getElementById('essayMeta');
+    const essayContent = document.getElementById('essayContent');
+    const checklist = document.getElementById('checklist');
+    const helperBubble = document.getElementById('helperBubble');
+    const toast = document.getElementById('toast');
+
+    renderAll();
+
+    document.getElementById('themeSwitch').addEventListener('click', (e)=>{
+      const btn = e.target.closest('[data-theme]');
+      if(!btn) return;
+      state.theme = btn.dataset.theme;
+      applyTheme(state.theme);
+      syncThemeButtons();
+      saveState();
+    });
+
+    document.getElementById('modeSwitch').addEventListener('click', (e)=>{
+      const btn = e.target.closest('[data-mode]');
+      if(!btn) return;
+      state.difficulty = btn.dataset.mode;
+      syncModeButtons();
+      renderAll();
+      saveState();
+      showToast(`已切換到「${difficultyText[state.difficulty]}」`);
+    });
+
+    document.getElementById('resetStageBtn').addEventListener('click', resetCurrentStage);
+    document.getElementById('resetAllBtn').addEventListener('click', resetAll);
+    document.getElementById('copyBtn').addEventListener('click', copyEssay);
+    document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+
+    document.getElementById('helperBtn').addEventListener('click', ()=>{
+      const tips = [
+        '先想清楚事情發生的先後次序！',
+        '記得加「首先、接着、然後、最後」！',
+        '結尾要寫出你的感受和明白到甚麼！',
+        '開頭和結尾要互相呼應呀！',
+        '你已經寫得很好，繼續加油！'
+      ];
+      helperBubble.textContent = tips[Math.floor(Math.random() * tips.length)];
+      helperBubble.classList.add('show');
+      clearTimeout(window.__helperTimer);
+      window.__helperTimer = setTimeout(() => helperBubble.classList.remove('show'), 3200);
+    });
+
+    function renderAll(){
+      renderStageNav();
+      renderStage();
+      renderPreview();
+      renderChecklist();
+      updateTopStatus();
+    }
+
+    function renderStageNav(){
+      stageNav.innerHTML = stageInfo.map((item, index)=>{
+        const no = index + 1;
+        const active = state.currentStage === no ? 'active' : '';
+        const done = isStageComplete(no) ? 'done' : '';
+        return `
+          <button class="stage-tab ${active} ${done}" type="button" data-stage="${no}">
+            <strong>第 ${no} 關</strong>
+            <span class="stage-mini">${item.mini}</span>
+          </button>
+        `;
+      }).join('');
+
+      [...stageNav.querySelectorAll('.stage-tab')].forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          state.currentStage = Number(btn.dataset.stage);
+          renderAll();
+          saveState();
+        });
+      });
+    }
+
+    function renderStage(){
+      const info = stageInfo[state.currentStage - 1];
+      leftTitle.textContent = `第 ${state.currentStage} 關：${info.title}`;
+      leftSub.textContent = info.sub;
+      goalPill.textContent = getGoalText(state.currentStage);
+
+      if(state.currentStage === 1) return renderStage1();
+      if(state.currentStage === 2) return renderStage2();
+      if(state.currentStage === 3) return renderStage3();
+      if(state.currentStage === 4) return renderStage4();
+      if(state.currentStage === 5) return renderStage5();
+      if(state.currentStage === 6) return renderStage6();
+      if(state.currentStage === 7) return renderStage7();
+    }
+
+    function renderStage1(){
+      stageContent.innerHTML = `
+        <div class="target-box">
+          <h3>這一關要做甚麼？</h3>
+          <p>請先選一個題型。選好後，系統會自動換上相關場景、活動、動作和立意提示。</p>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">選擇題型</label>
+          <div class="choices">
+            ${Object.values(dataPacks).map(pack => `
+              <button class="choice-btn ${state.category === pack.key ? 'active' : ''}" type="button" data-path="category" data-value="${pack.key}">
+                ${pack.short}<br>${pack.topic}
+              </button>
+            `).join('')}
+          </div>
+          <div class="field-help">小提示：先選你最熟悉的生活經驗，寫起來會更容易。</div>
+        </div>
+
+        <div class="legend">
+          <span>家庭生活類：和家人外出</span>
+          <span>校園生活類：學校發生的事</span>
+          <span>成長經歷類：學會一件事</span>
+        </div>
+
+        ${renderActionBar()}
+      `;
+      bindChoiceButtons();
+      bindNavButtons();
+    }
+
+    function renderStage2(){
+      const pack = getPack();
+      stageContent.innerHTML = `
+        <div class="target-box">
+          <h3>這一關要做甚麼？</h3>
+          <p>先交代時間、地點、人物，再寫你準備做甚麼。這樣讀者一開始就知道事情背景。</p>
+        </div>
+
+        <div class="frame-box">
+          <div class="frame-title">句框提示</div>
+          <div class="frame-line">上星期＿＿，我和＿＿到＿＿，準備＿＿。</div>
+          <div class="frame-line">那天，我感到很＿＿。</div>
+        </div>
+
+        ${renderChoiceGroup('時間','stage2.time',timeOptions,'可先選一個簡單時間。')}
+        ${renderChoiceGroup('地點','stage2.place',pack.scenes,'按題型選地點。')}
+        ${renderChoiceGroup('人物','stage2.people',pack.people,'想一想你和誰一起。')}
+        ${renderTextField('活動／事情名稱','stage2.activity', getActivityPlaceholder(), pack.activities, '可按提示帶入，也可自己輸入。')}
+        ${renderTextField('心情','stage2.mood', '例如：開心、期待', moodOpenOptions, '1 至 2 字已經可以。')}
+
+        ${renderActionBar()}
+      `;
+      bindChoiceButtons();
+      bindTextFields();
+      bindNavButtons();
+      bindHintButtons();
+    }
+
+    function renderStage3(){
+      const pack = getPack();
+      stageContent.innerHTML = `
+        <div class="target-box">
+          <h3>這一關要做甚麼？</h3>
+          <p>寫事情一開始發生的動作。記得使用起首過渡詞，讓事情有次序。</p>
+        </div>
+
+        <div class="frame-box">
+          <div class="frame-title">句框提示</div>
+          <div class="frame-line">首先，我們＿＿，然後＿＿。</div>
+          <div class="frame-line">一開始，我＿＿，準備＿＿。</div>
+        </div>
+
+        ${renderChoiceGroup('起首過渡詞','stage3.transition',processTransitions,'先選一句開頭過渡詞。')}
+        ${renderChoiceGroup('第一個大動作','stage3.action1',pack.actions,'先選最先做的事。')}
+        ${renderTextField('補充短語','stage3.extra', getExtraPlaceholder(), getExtraHints(), '2 至 6 字就可以。')}
+
+        ${renderActionBar()}
+      `;
+      bindChoiceButtons();
+      bindTextFields();
+      bindNavButtons();
+      bindHintButtons();
+    }
+
+    function renderStage4(){
+      const pack = getPack();
+      stageContent.innerHTML = `
+        <div class="target-box">
+          <h3>這一關要做甚麼？</h3>
+          <p>這一關重點練習過渡詞。請按事情先後，寫第二個動作、細節和最後一個動作。</p>
+        </div>
+
+        <div class="frame-box">
+          <div class="frame-title">句框提示</div>
+          <div class="frame-line">接着，我＿＿。</div>
+          <div class="frame-line">然後，我看見＿＿。</div>
+          <div class="frame-line">最後，我們＿＿。</div>
+        </div>
+
+        ${renderChoiceGroup('過渡詞','stage4.transition',middleTransitions,'預覽區會把過渡詞高亮顯示。')}
+        <div class="split-2">
+          ${renderChoiceGroup('第二個動作','stage4.action2',pack.actions,'按先後次序選。')}
+          ${renderChoiceGroup('第三個動作','stage4.action3',pack.actions,'最後做甚麼呢？')}
+        </div>
+        ${renderTextField('看見或聽到的細節','stage4.detail', getDetailPlaceholder(), getDetailHints(), '可寫景色、聲音或同學的說話。')}
+
+        ${renderActionBar()}
+      `;
+      bindChoiceButtons();
+      bindTextFields();
+      bindNavButtons();
+      bindHintButtons();
+    }
+
+    function renderStage5(){
+      const pack = getPack();
+      stageContent.innerHTML = `
+        <div class="target-box">
+          <h3>這一關要做甚麼？</h3>
+          <p>寫出最難忘的一刻。你可以先選事件和感受，再寫一句心裏想的話。</p>
+        </div>
+
+        <div class="frame-box">
+          <div class="frame-title">句框提示</div>
+          <div class="frame-line">最令我難忘的是＿＿。</div>
+          <div class="frame-line">當時，我感到十分＿＿。</div>
+          <div class="frame-line">我心想：「＿＿。」</div>
+        </div>
+
+        ${renderChoiceGroup('最難忘的一刻','stage5.climax',pack.climaxes,'選一件最深刻的事。')}
+        ${renderChoiceGroup('感受詞','stage5.feeling',feelingStage5,'選出當時的感受。')}
+        ${renderTextField('內心想法','stage5.thought', getThoughtPlaceholder(), pack.thoughtHints, getThoughtHelp())}
+
+        ${renderActionBar()}
+      `;
+      bindChoiceButtons();
+      bindTextFields();
+      bindNavButtons();
+      bindHintButtons();
+    }
+
+    function renderStage6(){
+      const pack = getPack();
+      stageContent.innerHTML = `
+        <div class="target-box">
+          <h3>這一關要做甚麼？</h3>
+          <p>把事情收束，交代結果，再寫你的感受和原因。</p>
+        </div>
+
+        <div class="frame-box">
+          <div class="frame-title">句框提示</div>
+          <div class="frame-line">最後，＿＿。</div>
+          <div class="frame-line">我感到很＿＿，因為＿＿。</div>
+        </div>
+
+        ${renderChoiceGroup('結果','stage6.result',pack.results,'事情最後怎樣了？')}
+        ${renderChoiceGroup('感受','stage6.feeling',feelingStage6,'選出結尾心情。')}
+        ${renderTextField('因為＿＿','stage6.reason', getReasonPlaceholder(), pack.reasonHints, '3 至 10 字即可。')}
+
+        ${renderActionBar()}
+      `;
+      bindChoiceButtons();
+      bindTextFields();
+      bindNavButtons();
+      bindHintButtons();
+    }
+
+    function renderStage7(){
+      const pack = getPack();
+      stageContent.innerHTML = `
+        <div class="target-box">
+          <h3>這一關要做甚麼？</h3>
+          <p>這一關最重要：要做到首尾呼應，並寫出你明白到甚麼。這一關未完成，不可過關。</p>
+        </div>
+
+        <div class="frame-box">
+          <div class="frame-title">句框提示</div>
+          <div class="frame-line">現在回想起來，我仍然覺得＿＿。</div>
+          <div class="frame-line">經過這件事，我明白到＿＿。</div>
+          <div class="frame-line">這次經歷讓我學會了＿＿。</div>
+        </div>
+
+        ${renderChoiceGroup('呼應句型','stage7.echoTemplate',echoTemplates,'選一個和開頭呼應的句型。')}
+        ${renderChoiceGroup('立意句選項','stage7.idea',pack.meanings,'選一句最合適的立意句。')}
+        ${renderTextField('最後關鍵內容','stage7.echoContent', getEchoPlaceholder(), pack.echoHints, getEchoHelp())}
+
+        <div class="mini-note">小提示：開頭寫了甚麼心情或場景，結尾可以再回想一次，這就是「首尾呼應」。</div>
+
+        ${renderActionBar(true)}
+      `;
+      bindChoiceButtons();
+      bindTextFields();
+      bindNavButtons();
+      bindHintButtons();
+    }
+
+    function renderActionBar(forceLast = false){
+      const prevDisabled = state.currentStage === 1 ? 'disabled' : '';
+      const nextText = state.currentStage === 7 || forceLast ? '完成本關' : '下一關';
+      return `
+        <div class="action-bar">
+          <div class="status-text">可自由返回前面修改，資料不會消失。</div>
+          <div class="stage-btns">
+            <button class="btn secondary" type="button" id="prevStageBtn" ${prevDisabled}>上一關</button>
+            <button class="btn" type="button" id="nextStageBtn">${nextText}</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderChoiceGroup(label, path, options, help=''){
+      return `
+        <div class="field-group">
+          <label class="field-label">${label}</label>
+          <div class="choices">
+            ${options.map(item => `
+              <button class="choice-btn ${getByPath(path) === item ? 'active' : ''}" type="button" data-path="${path}" data-value="${escapeAttr(item)}">${item}</button>
+            `).join('')}
+          </div>
+          ${help ? `<div class="field-help">${help}</div>` : ''}
+        </div>
+      `;
+    }
+
+    function renderTextField(label, path, placeholder, hints, help=''){
+      return `
+        <div class="field-group">
+          <label class="field-label">${label}</label>
+          <div class="input-row">
+            <input class="text-input js-input" type="text" data-path="${path}" value="${escapeAttr(getByPath(path) || '')}" placeholder="${escapeAttr(placeholder)}" />
+          </div>
+          <div class="hint-chips">
+            ${hints.slice(0,6).map(h => `
+              <button class="hint-chip" type="button" data-insert-path="${path}" data-insert-value="${escapeAttr(h)}">${h}</button>
+            `).join('')}
+          </div>
+          ${help ? `<div class="field-help">${help}</div>` : ''}
+        </div>
+      `;
+    }
+
+    function bindChoiceButtons(){
+      [...stageContent.querySelectorAll('[data-path][data-value]')].forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          setByPath(btn.dataset.path, btn.dataset.value);
+          if(btn.dataset.path === 'category'){
+            const pack = getPack();
+            state.stage2.place = state.stage2.place && pack.scenes.includes(state.stage2.place) ? state.stage2.place : '';
+            state.stage2.people = state.stage2.people && pack.people.includes(state.stage2.people) ? state.stage2.people : '';
+            state.stage3.action1 = state.stage3.action1 && pack.actions.includes(state.stage3.action1) ? state.stage3.action1 : '';
+            state.stage4.action2 = state.stage4.action2 && pack.actions.includes(state.stage4.action2) ? state.stage4.action2 : '';
+            state.stage4.action3 = state.stage4.action3 && pack.actions.includes(state.stage4.action3) ? state.stage4.action3 : '';
+            state.stage5.climax = state.stage5.climax && pack.climaxes.includes(state.stage5.climax) ? state.stage5.climax : '';
+            state.stage6.result = state.stage6.result && pack.results.includes(state.stage6.result) ? state.stage6.result : '';
+            state.stage7.idea = state.stage7.idea && pack.meanings.includes(state.stage7.idea) ? state.stage7.idea : '';
+          }
+          renderAll();
+          saveState();
+        });
+      });
+    }
+
+    function bindTextFields(){
+      [...stageContent.querySelectorAll('.js-input')].forEach(input=>{
+        input.addEventListener('input', ()=>{
+          setByPath(input.dataset.path, input.value.trim());
+          renderPreview();
+          renderChecklist();
+          updateTopStatus();
+          saveState();
+        });
+      });
+    }
+
+    function bindHintButtons(){
+      [...stageContent.querySelectorAll('[data-insert-path]')].forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const path = btn.dataset.insertPath;
+          setByPath(path, btn.dataset.insertValue);
+          renderAll();
+          saveState();
+        });
+      });
+    }
+
+    function bindNavButtons(){
+      const prevBtn = document.getElementById('prevStageBtn');
+      const nextBtn = document.getElementById('nextStageBtn');
+      if(prevBtn){
+        prevBtn.addEventListener('click', ()=>{
+          if(state.currentStage > 1){
+            state.currentStage -= 1;
+            renderAll();
+            saveState();
+          }
+        });
+      }
+      if(nextBtn){
+        nextBtn.addEventListener('click', ()=>{
+          const ok = validateStage(state.currentStage, true);
+          if(!ok) return;
+          if(state.currentStage < 7){
+            state.currentStage += 1;
+            renderAll();
+            saveState();
+          }else{
+            showToast('太好了！你已完成全部 7 關，作文已完成。');
+            renderAll();
+            saveState();
+          }
+        });
+      }
+    }
+
+    function renderPreview(){
+      const pack = getPack();
+      essayTitle.textContent = pack ? pack.topic : '未選擇題目';
+      essayMeta.textContent = `模式：${difficultyText[state.difficulty]}　｜　類別：${pack ? pack.short : '未選擇'}`;
+      selectedTopicTag.textContent = `題目：${pack ? pack.topic : '未選擇'}`;
+
+      const paragraphs = buildEssayParagraphs();
+      if(paragraphs.length === 0){
+        essayContent.innerHTML = `<div class="placeholder">你的作文會在這裏一步一步完成。先到左邊開始闖關吧！</div>`;
+      }else{
+        essayContent.innerHTML = paragraphs.map(p => `<p class="essay-paragraph">${p}</p>`).join('');
+      }
+
+      wordCountTag.textContent = `字數：${countWords(stripHtml(paragraphs.join('')))}`
+    }
+
+    function buildEssayParagraphs(){
+      const pack = getPack();
+      const parts = [];
+
+      if(state.category && hasAny(state.stage2)){
+        parts.push(buildParagraph1(pack));
+      }
+      if(state.category && (hasAny(state.stage3) || hasAny(state.stage4) || hasAny(state.stage5))){
+        parts.push(buildParagraph2(pack));
+      }
+      if(state.category && (hasAny(state.stage6) || hasAny(state.stage7))){
+        parts.push(buildParagraph3(pack));
+      }
+
+      return parts.filter(Boolean);
+    }
+
+    function buildParagraph1(pack){
+      const s2 = state.stage2;
+      const t = sanitize(s2.time);
+      const p = sanitize(s2.people);
+      const place = sanitize(s2.place);
+      const act = sanitize(s2.activity);
+      const mood = sanitize(s2.mood);
+
+      const templates = [
+        `上星期${t || '＿＿'}，我和${p || '＿＿'}到${place || '＿＿'}，準備${act || '＿＿'}。那天，我感到很${mood || '＿＿'}。`,
+        `上星期${t || '＿＿'}，我跟${p || '＿＿'}一起去了${place || '＿＿'}，想去${act || '＿＿'}。開始的時候，我的心情很${mood || '＿＿'}。`,
+        `上星期${t || '＿＿'}，我和${p || '＿＿'}來到${place || '＿＿'}，打算${act || '＿＿'}。那一天，我覺得十分${mood || '＿＿'}。`
+      ];
+      return chooseTemplate(templates, pack ? pack.key : 'x');
+    }
+
+    function buildParagraph2(pack){
+      const s3 = state.stage3;
+      const s4 = state.stage4;
+      const s5 = state.stage5;
+
+      const t1 = highlightWord(sanitize(s3.transition || '首先'));
+      const t2 = highlightWord(sanitize(s4.transition || '接着'));
+      const t3 = highlightWord('然後');
+      const t4 = highlightWord('最後');
+
+      const a1 = sanitize(s3.action1 || '＿＿');
+      const extra = sanitize(s3.extra || '＿＿');
+      const a2 = sanitize(s4.action2 || '＿＿');
+      const a3 = sanitize(s4.action3 || '＿＿');
+      const detail = sanitize(s4.detail || '＿＿');
+      const climax = sanitize(s5.climax || '＿＿');
+      const feel = sanitize(s5.feeling || '＿＿');
+      const thought = sanitize(s5.thought || '＿＿');
+
+      const sentenceA = state.difficulty === 'basic'
+        ? `${t1}，我們${a1}，然後${extra}。`
+        : `${t1}，我先${a1}，準備${extra}。`;
+
+      const templates = [
+        `${sentenceA}${t2}，我${a2}。${t3}，我看見${detail}。${t4}，我們${a3}。最令我難忘的是${climax}。當時，我感到十分${feel}。我心想：「${thought}。」`,
+        `${sentenceA}${t2}，我們繼續${a2}。${t3}，我看見${detail}。${t4}，大家一起${a3}。其中，最令我難忘的是${climax}。那一刻，我感到十分${feel}，心裏想：「${thought}。」`,
+        `${sentenceA}${t2}，我接着${a2}。${t3}，耳邊傳來${detail}。${t4}，我們便${a3}。最深刻的一刻是${climax}。當時，我十分${feel}，我心想：「${thought}。」`
+      ];
+
+      return chooseTemplate(templates, (pack ? pack.key : 'x') + state.difficulty);
+    }
+
+    function buildParagraph3(pack){
+      const s6 = state.stage6;
+      const s7 = state.stage7;
+
+      const result = sanitize(s6.result || '＿＿');
+      const feel = sanitize(s6.feeling || '＿＿');
+      const reason = sanitize(s6.reason || '＿＿');
+      const echo = sanitize(s7.echoContent || '＿＿');
+      const echoSentence = (s7.echoTemplate || echoTemplates).replace('{content}', echo);
+      const ideaSentence = sanitize(s7.idea || '＿＿');
+
+      const templates = [
+        `最後，${result}。我感到很${feel}，因為${reason}。${echoSentence}${ideaSentence}`,
+        `事情結束後，${result}。我覺得很${feel}，因為${reason}。${echoSentence}${ideaSentence}`,
+        `到了最後，${result}。我心裏感到很${feel}，因為${reason}。${echoSentence}${ideaSentence}`
+      ];
+      return chooseTemplate(templates, (pack ? pack.key : 'x') + 'end');
+    }
+
+    function renderChecklist(){
+      const paragraphs = buildEssayParagraphs();
+      const text = stripHtml(paragraphs.join(''));
+      const count = countWords(text);
+      const goal = getWordGoal();
+
+      const items = [
+        { text:'我有選擇題目。', done: !!state.category },
+        { text:'我有交代時間、地點、人物。', done: !!state.stage2.time && !!state.stage2.place && !!state.stage2.people },
+        { text:'我有按次序寫事情經過。', done: !!state.stage3.action1 && !!state.stage4.action2 && !!state.stage4.action3 },
+        { text:'我有使用過渡詞。', done: !!state.stage3.transition && !!state.stage4.transition },
+        { text:'我有寫最難忘的一刻。', done: !!state.stage5.climax && !!state.stage5.thought },
+        { text:'我有寫結果和感受。', done: !!state.stage6.result && !!state.stage6.feeling && !!state.stage6.reason },
+        { text:'我有做到首尾呼應。', done: !!state.stage7.echoTemplate && !!state.stage7.echoContent },
+        { text:'我有寫出立意。', done: !!state.stage7.idea },
+        { text:`我的文章已有一定字數。`, done: count >= goal }
+      ];
+
+      checklist.innerHTML = items.map(item => `
+        <li class="check-item ${item.done ? 'done' : ''}">
+          <span class="check-icon">${item.done ? '✓' : '○'}</span>
+          <span>${item.text}${item.text.includes('字數') ? `（目標：約 ${goal} 字）` : ''}</span>
+        </li>
+      `).join('');
+    }
+
+    function updateTopStatus(){
+      const completedCount =.filter(isStageComplete).length; [raymondcamden](https://www.raymondcamden.com/2011/09/11/Using-Local-Storage-to-keep-a-draft-of-form-data)
+      const percent = Math.round((completedCount / 7) * 100);
+      progressFill.style.width = percent + '%';
+      stageLabel.textContent = `第 ${state.currentStage} 關 / 共 7 關`;
+      saveStatus.textContent = state.savedAt ? `已自動儲存：${state.savedAt}` : '草稿未儲存';
+    }
+
+    function isStageComplete(no){
+      return validateStage(no, false);
+    }
+
+    function validateStage(no, showMessage){
+      let message = '';
+      if(no === 1){
+        if(!state.category) message = '請先選擇一個題型。';
+      }
+      if(no === 2){
+        const s = state.stage2;
+        if(!s.time || !s.place || !s.people || !s.activity || !s.mood){
+          message = '請完成時間、地點、人物、活動和心情。';
+        }
+      }
+      if(no === 3){
+        const s = state.stage3;
+        if(!s.transition || !s.action1 || !s.extra){
+          message = '請選起首過渡詞、第一個大動作，並輸入補充短語。';
+        }
+      }
+      if(no === 4){
+        const s = state.stage4;
+        if(!s.transition || !s.action2 || !s.action3 || !s.detail){
+          message = '請完成過渡詞、第二個動作、第三個動作和細節。';
+        }
+      }
+      if(no === 5){
+        const s = state.stage5;
+        if(!s.climax || !s.feeling || !s.thought){
+          message = '請完成最難忘的一刻、感受詞和內心想法。';
+        }
+      }
+      if(no === 6){
+        const s = state.stage6;
+        if(!s.result || !s.feeling || !s.reason){
+          message = '請完成結果、感受和原因。';
+        }
+      }
+      if(no === 7){
+        const s = state.stage7;
+        if(!s.echoTemplate || !s.idea || !s.echoContent){
+          message = '第 7 關必須完成首尾呼應和立意內容。';
+        }
+      }
+      if(message && showMessage){
+        showToast(message);
+      }
+      return !message;
+    }
+
+    function getGoalText(stage){
+      const map = {
+        1:'學習重點：先定題型',
+        2:'學習重點：交代時間、地點、人物、起因',
+        3:'學習重點：事情開始的次序',
+        4:'學習重點：過渡詞',
+        5:'學習重點：高潮與感受',
+        6:'學習重點：結果與感受',
+        7:'學習重點：首尾呼應、尾段立意'
+      };
+      return map[stage];
+    }
+
+    function getPack(){
+      return dataPacks[state.category] || null;
+    }
+
+    function getByPath(path){
+      return path.split('.').reduce((obj,key)=> obj ? obj[key] : '', state);
+    }
+
+    function setByPath(path, value){
+      const keys = path.split('.');
+      let obj = state;
+      for(let i=0;i<keys.length-1;i++){
+        obj = obj[keys[i]];
+      }
+      obj[keys[keys.length-1]] = value;
+    }
+
+    function chooseTemplate(arr, seed){
+      const idx = Math.abs(hashCode(seed)) % arr.length;
+      return arr[idx];
+    }
+
+    function hashCode(str){
+      let h = 0;
+      for(let i=0;i<str.length;i++){
+        h = ((h << 5) - h) + str.charCodeAt(i);
+        h |= 0;
+      }
+      return h;
+    }
+
+    function stripHtml(html){
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      return div.textContent || div.innerText || '';
+    }
+
+    function countWords(text){
+      return (text || '').replace(/\s+/g,'').length;
+    }
+
+    function hasAny(obj){
+      return Object.values(obj).some(v => String(v || '').trim() !== '');
+    }
+
+    function sanitize(text){
+      return escapeHtml(String(text || '').trim());
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#39;');
+    }
+
+    function escapeAttr(str){
+      return escapeHtml(str).replace(/"/g,'&quot;');
+    }
+
+    function highlightWord(word){
+      return `<span class="hl-transition">${escapeHtml(word)}</span>`;
+    }
+
+    function applyTheme(theme){
+      document.body.classList.remove('theme-sky','theme-forest','theme-sunset');
+      document.body.classList.add(`theme-${theme}`);
+    }
+
+    function syncThemeButtons(){
+      document.querySelectorAll('[data-theme]').forEach(btn=>{
+        btn.classList.toggle('active', btn.dataset.theme === state.theme);
+      });
+    }
+
+    function syncModeButtons(){
+      document.querySelectorAll('[data-mode]').forEach(btn=>{
+        btn.classList.toggle('active', btn.dataset.mode === state.difficulty);
+      });
+    }
+
+    function getWordGoal(){
+      if(state.difficulty === 'basic') return 60;
+      if(state.difficulty === 'standard') return 80;
+      return 100;
+    }
+
+    function getActivityPlaceholder(){
+      if(state.difficulty === 'basic') return '例如：野餐';
+      if(state.difficulty === 'standard') return '輸入活動名稱，1 至 4 字';
+      return '輸入事情名稱，盡量準確';
+    }
+
+    function getExtraPlaceholder(){
+      if(state.difficulty === 'basic') return '例如：準備野餐';
+      if(state.difficulty === 'standard') return '例如：找位置坐下';
+      return '請寫較完整短語，例如：準備開始活動';
+    }
+
+    function getDetailPlaceholder(){
+      if(state.difficulty === 'basic') return '例如：很多人歡笑';
+      if(state.difficulty === 'standard') return '例如：藍藍的天空';
+      return '請寫 3 至 8 字細節，例如：同學大聲為我打氣';
+    }
+
+    function getThoughtPlaceholder(){
+      if(state.difficulty === 'basic') return '例如：我要加油';
+      if(state.difficulty === 'standard') return '例如：原來我做得到';
+      return '請輸入完整短句，例如：只要再試一次，我一定做得到';
+    }
+
+    function getThoughtHelp(){
+      if(state.difficulty === 'challenge'){
+        return '挑戰版：請盡量輸入完整短句。';
+      }
+      return '可按提示帶入，也可自己輸入。';
+    }
+
+    function getReasonPlaceholder(){
+      if(state.difficulty === 'basic') return '例如：大家都很照顧我';
+      if(state.difficulty === 'standard') return '例如：我學會了合作';
+      return '請寫清楚原因，例如：我終於克服了原本害怕的事情';
+    }
+
+    function getEchoPlaceholder(){
+      if(state.difficulty === 'basic') return '例如：很開心';
+      if(state.difficulty === 'standard') return '例如：這天很難忘';
+      return '請輸入完整短句，例如：那份溫暖一直留在我心中';
+    }
+
+    function getEchoHelp(){
+      if(state.difficulty === 'challenge'){
+        return '挑戰版：這裏建議輸入完整短句，讓結尾更完整。';
+      }
+      return '可先寫心情或回想，也可按提示字詞。';
+    }
+
+    function getExtraHints(){
+      const pack = getPack();
+      const base = pack ? pack.activities.slice() : ['準備出發','開始活動','找好位置','先去看看'];
+      if(state.difficulty === 'challenge'){
+        return [...base, '想把事情做好', '先跟大家商量'];
+      }
+      return [...base, '準備開始', '先四處看看'];
+    }
+
+    function getDetailHints(){
+      const pack = getPack();
+      const generic = pack && pack.key === 'family'
+        ? ['藍藍的天空','海風吹過來','大家笑得很開心','食物很香']
+        : pack && pack.key === 'school'
+        ? ['同學大聲歡呼','老師正在微笑','操場很熱鬧','大家一起拍手']
+        : ['我有點緊張','旁邊有人鼓勵我','我聽到加油聲','陽光很猛烈'];
+      return generic;
+    }
+
+    function resetCurrentStage(){
+      if(!confirm(`要重設第 ${state.currentStage} 關的內容嗎？`)) return;
+      if(state.currentStage === 1){
+        state.category = '';
+      }
+      if(state.currentStage === 2){
+        state.stage2 = { time:'', place:'', people:'', activity:'', mood:'' };
+      }
+      if(state.currentStage === 3){
+        state.stage3 = { transition:'首先', action1:'', extra:'' };
+      }
+      if(state.currentStage === 4){
+        state.stage4 = { transition:'接着', action2:'', action3:'', detail:'' };
+      }
+      if(state.currentStage === 5){
+        state.stage5 = { climax:'', feeling:'', thought:'' };
+      }
+      if(state.currentStage === 6){
+        state.stage6 = { result:'', feeling:'', reason:'' };
+      }
+      if(state.currentStage === 7){
+        state.stage7 = { echoTemplate: echoTemplates, idea:'', echoContent:'' };
+      }
+      renderAll();
+      saveState();
+      showToast(`第 ${state.currentStage} 關已重設。`);
+    }
+
+    function resetAll(){
+      if(!confirm('要重設全文嗎？所有關卡內容都會清除。')) return;
+      state = defaultState();
+      applyTheme(state.theme);
+      syncModeButtons();
+      syncThemeButtons();
+      renderAll();
+      localStorage.removeItem(STORAGE_KEY);
+      saveState(true);
+      showToast('全文已重設。');
+    }
+
+    async function copyEssay(){
+      const paragraphs = buildEssayParagraphs();
+      if(paragraphs.length === 0){
+        showToast('請先完成一些內容，才可以複製全文。');
+        return;
+      }
+      const text = `${essayTitle.textContent}\n\n${paragraphs.map(stripHtml).join('\n\n')}`;
+      try{
+        await navigator.clipboard.writeText(text);
+        showToast('作文全文已複製。');
+      }catch(e){
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text){
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try{
+        document.execCommand('copy');
+        showToast('作文全文已複製。');
+      }catch(e){
+        showToast('未能複製，請手動選取文字。');
+      }
+      textarea.remove();
+    }
+
+    function showToast(message){
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(()=> toast.classList.remove('show'), 2400);
+    }
+
+    function saveState(resetSavedAt = false){
+      const now = new Date();
+      state.savedAt = resetSavedAt ? formatTime(new Date()) : formatTime(now);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateTopStatus();
+    }
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return defaultState();
+        const parsed = JSON.parse(raw);
+        return {
+          ...defaultState(),
+          ...parsed,
+          stage2: { ...defaultState().stage2, ...(parsed.stage2 || {}) },
+          stage3: { ...defaultState().stage3, ...(parsed.stage3 || {}) },
+          stage4: { ...defaultState().stage4, ...(parsed.stage4 || {}) },
+          stage5: { ...defaultState().stage5, ...(parsed.stage5 || {}) },
+          stage6: { ...defaultState().stage6, ...(parsed.stage6 || {}) },
+          stage7: { ...defaultState().stage7, ...(parsed.stage7 || {}) }
+        };
+      }catch(e){
+        return defaultState();
+      }
+    }
+
+    function formatTime(date){
+      const h = String(date.getHours()).padStart(2,'0');
+      const m = String(date.getMinutes()).padStart(2,'0');
+      return `${h}:${m}`;
+    }
+  </script>
+</body>
+</html>
