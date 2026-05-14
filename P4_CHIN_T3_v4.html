@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>數碼冒險：4A中文練習 </title>
+    <title>數碼冒險：4A森林大作戰 </title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         /* 引入點陣像素字體，用於進化文字 */
@@ -5008,8 +5008,19 @@ function checkDailyReset() {
                 });
             }
             optBtns.forEach(b => b.disabled = true);
+            // 🔧 Give immediate reward per correct answer (mirrors addStreak)
+            if (isCorrect) {
+                inventory.star       = (inventory.star       || 0) + 1;
+                inventory.wood       = (inventory.wood       || 0) + 2;
+                inventory.stone      = (inventory.stone      || 0) + 2;
+                inventory.manuscript = (inventory.manuscript || 0) + 2;
+                inventory.fragment   = (inventory.fragment   || 0) + 2;
+                inventory.coins      = (inventory.coins      || 0) + 2;
+                inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers || 0) + 1;
+                saveGame(); updateUI();
+            }
             const fb = document.getElementById('exam-feedback');
-            fb.textContent = isCorrect ? '✅ 答對了！' : '❌ 答錯了，正確答案是：' + correct;
+            fb.textContent = isCorrect ? '✅ 答對了！＋⭐×1  📜×2  🪵×2  🪨×2  🔮×2  🪙×2' : '❌ 答錯了，正確答案是：' + correct;
             fb.style.background = isCorrect ? '#E8F5E9' : '#FFEBEE';
             fb.style.color = isCorrect ? '#1B5E20' : '#B71C1C';
             fb.classList.remove('hidden');
@@ -5036,27 +5047,17 @@ function checkDailyReset() {
             else if (pct >= 50) msg = '💪 繼續努力，你可以的！';
             else msg = '📖 多温習課文，下次一定更好！';
             document.getElementById('exam-result-msg').textContent = msg;
-            // Exam reward: 1 ⭐ per correct + all materials x2 bonus
-            const starsEarned = correct;
-            const woodBonus    = correct * 2;
-            const stoneBonus   = correct * 2;
+            // Rewards already given per question in examAnswer — just show summary
+            const starsEarned     = correct;
+            const woodBonus       = correct * 2;
             const manuscriptBonus = correct * 2;
             const fragmentBonus   = correct * 2;
             const coinsBonus      = correct * 2;
 
-            inventory.star       = (inventory.star       || 0) + starsEarned;
-            inventory.wood       = (inventory.wood       || 0) + woodBonus;
-            inventory.stone      = (inventory.stone      || 0) + stoneBonus;
-            inventory.manuscript = (inventory.manuscript || 0) + manuscriptBonus;
-            inventory.fragment   = (inventory.fragment   || 0) + fragmentBonus;
-            inventory.coins      = (inventory.coins      || 0) + coinsBonus;
-            inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers || 0) + correct;
-            saveGame(); updateUI();
-
-            const rewardMsg = '獲得 ⭐×' + starsEarned
+            const rewardMsg = '本關已獲得 ⭐×' + starsEarned
                 + '  📜×' + manuscriptBonus
                 + '  🪵×' + woodBonus
-                + '  🪨×' + stoneBonus
+                + '  🪨×' + starsEarned
                 + '  🔮×' + fragmentBonus
                 + '  🪙×' + coinsBonus;
             document.getElementById('exam-result-msg').textContent += '\n' + rewardMsg;
