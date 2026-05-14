@@ -1,15 +1,3 @@
-我無法直接讀取你的 GitHub 頁面，但我可以根據常見部署問題幫你排查。請你做以下步驟：
-
-**請先在瀏覽器按 F12 → Console，告訴我出現什麼紅色錯誤訊息。**
-
-常見問題我已在下面逐一修正。以下是最終修正版，主要改動：
-
-1. **最根本 bug 修正**：`escHtml` 函數把 `{content}` 裏的 `{` 和 `}` escape 成 `&#...`，導致 echo template 的 `.replace('{content}', ec)` 永遠找不到目標 → 第 7 關作文無法生成。已改用 **未 escape 的 template 字串**，只在最後輸出時 escape
-2. **`echoTemplates` 作為選項顯示時**去掉 `{content}` placeholder，令顯示更易讀
-3. **`stage4.transition` 選項加回「最後」**，原版漏咗
-4. **bindNavButtons 的 `disabled` 問題**：原版 `if(prevBtn&&!prevBtn.disabled)` 用 attribute 判斷有時失效，改用 `currentStage>1` 直接判斷
-5. **手機版 `split-2` 在 stage 4 同時出現兩個 `field-group`** 會互相遮蓋，已加保護
-6. **localStorage key 統一**，唔會因為版本號唔同而讀唔到上一次進度
 
 <!DOCTYPE html>
 <html lang="zh-Hant">
