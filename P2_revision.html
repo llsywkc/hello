@@ -533,6 +533,67 @@
         @keyframes flashGreen { 0%{box-shadow:inset 0 0 0 6px rgba(76,175,80,0);}   30%{box-shadow:inset 0 0 0 6px rgba(76,175,80,0.5);}   100%{box-shadow:inset 0 0 0 6px rgba(76,175,80,0);}   }
         @keyframes flashRed   { 0%{box-shadow:inset 0 0 0 6px rgba(229,57,53,0);}   30%{box-shadow:inset 0 0 0 6px rgba(229,57,53,0.5);}   100%{box-shadow:inset 0 0 0 6px rgba(229,57,53,0);}   }
 
+        
+        /* ══ Sensei Cheat Panel ══ */
+        #sensei-panel {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75);
+            z-index: 9999;
+            justify-content: center; align-items: center;
+        }
+        #sensei-panel.show { display: flex; }
+        #sensei-box {
+            background: linear-gradient(145deg,#1a237e,#283593);
+            border: 3px solid #FFD700;
+            border-radius: 20px; padding: 20px 24px;
+            width: 90%; max-width: 480px;
+            color: #fff; position: relative;
+            box-shadow: 0 0 40px rgba(255,215,0,0.4);
+            text-align: center;
+        }
+        #sensei-box h2 {
+            color: #FFD700 !important; font-size: 1.3em !important;
+            margin: 0 0 4px 0 !important; text-shadow: 0 0 12px rgba(255,215,0,0.6) !important;
+        }
+        #sensei-box .s-sub {
+            font-size: 0.8em; color: rgba(255,255,255,0.6);
+            margin-bottom: 16px;
+        }
+        #sensei-close {
+            position: absolute; top: 10px; right: 14px;
+            background: none; border: none; color: rgba(255,255,255,0.6);
+            font-size: 1.4em; cursor: pointer; padding: 2px 6px;
+            line-height: 1;
+        }
+        #sensei-close:hover { color: #fff; }
+        .sensei-section {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,215,0,0.25);
+            border-radius: 12px; padding: 12px; margin-bottom: 10px;
+            text-align: left;
+        }
+        .sensei-section h3 {
+            margin: 0 0 8px 0; font-size: 0.95em;
+            color: #FFD700; text-align: center;
+        }
+        .sensei-row {
+            display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+        }
+        .sensei-select {
+            width: 100%; padding: 8px 10px; border-radius: 8px;
+            border: 2px solid #FFD700; background: rgba(255,255,255,0.1);
+            color: #fff; font-size: 1em; font-family: inherit;
+            margin-bottom: 8px; cursor: pointer;
+        }
+        .sensei-select option { background: #1a237e; color: #fff; }
+        #sensei-indicator {
+            position: fixed; bottom: 12px; right: 14px;
+            font-size: 0.65em; color: rgba(0,0,0,0.15);
+            pointer-events: none; z-index: 1000;
+            font-family: monospace; letter-spacing: 1px;
+        }
+
         </style>
 </head>
 <body>
@@ -2099,6 +2160,109 @@
             draw();
         })();
 
+        
+        // ── Sensei Cheat Code ─────────────────────────────────────
+        (function() {
+            const CODE = 'sensei2026';
+            let typed = '';
+            const indicator = document.getElementById('sensei-indicator');
+
+            document.addEventListener('keydown', function(e) {
+                // Only track printable chars
+                if (e.key.length === 1) {
+                    typed += e.key.toLowerCase();
+                    if (typed.length > CODE.length) typed = typed.slice(-CODE.length);
+                    // Visual feedback: show progress dots (subtle)
+                    if (indicator) {
+                        const match = CODE.startsWith(typed) ? typed.length : 0;
+                        indicator.innerText = match > 0 ? '●'.repeat(match) + '○'.repeat(CODE.length - match) : '⬛';
+                    }
+                    if (typed === CODE) {
+                        typed = '';
+                        if (indicator) indicator.innerText = '🎓';
+                        openSenseiPanel();
+                    }
+                }
+            });
+        })();
+
+        function openSenseiPanel() {
+            console.log('🎓 Teacher mode activated — sensei2026');
+            document.getElementById('sensei-panel').classList.add('show');
+        }
+
+        function closeSenseiPanel() {
+            document.getElementById('sensei-panel').classList.remove('show');
+            const ind = document.getElementById('sensei-indicator');
+            if (ind) ind.innerText = '⬛';
+        }
+
+        function senseiStartBoss(level) {
+            closeSenseiPanel();
+            // Force unlock boss
+            player.buildings.castle = Math.max(player.buildings.castle || 0, 1);
+            // Set mode for boss questions
+            if (!currentMode || !questions[currentMode]) currentMode = 't3_review_1';
+            hideAllScreens();
+            startBossFight(level);
+        }
+
+        function senseiSummonBeast() {
+            const _sel = document.getElementById('sensei-beast-select');
+            const beastIdx = _sel ? parseInt(_sel.value) || 0 : 0;
+            const mode = document.getElementById('sensei-mode-select').value;
+            closeSenseiPanel();
+            currentMode = mode;
+            window._qCount = 0;
+            window._qTotal = (questions[mode]||[]).length || 20;
+            // Set the chosen mythical beast as currentMonster
+            currentMonster = mythicalBeasts[beastIdx];
+            isMonsterFight = false;
+            hideAllScreens();
+            const gameScreen = document.getElementById('game-screen');
+            gameScreen.classList.remove('hidden');
+            document.getElementById('game-title').innerText = '🐉 神獸降臨！';
+            // Show encounter panel directly
+            const ep = document.getElementById('monster-encounter-panel');
+            ep.classList.remove('hidden');
+            ep.classList.add('mythical-encounter');
+            document.getElementById('mon-emoji').innerText = currentMonster.emoji;
+            document.getElementById('mon-emoji').style.display = 'block';
+            document.getElementById('mon-img').style.display = 'none';
+            document.getElementById('mon-name').innerText = currentMonster.name;
+            document.getElementById('mon-req-atk').innerText = currentMonster.atk;
+            document.getElementById('mon-req-def').innerText = currentMonster.def;
+            document.getElementById('mon-warning-msg').innerText = '⚠️ 神獸！需答對 3 題！';
+            document.getElementById('btn-mon-fight').disabled = false;
+            document.getElementById('question-panel').classList.add('hidden');
+            document.getElementById('feedback-area').classList.add('hidden');
+            document.getElementById('bottom-controls').classList.add('hidden');
+            playSound('mythicalspawn');
+            renderStats();
+        }
+
+        function senseiAddResources() {
+            player.inv.wood  += 999; player.inv.stone += 999;
+            player.inv.gem   += 999; player.inv.star  += 999;
+            player.inv.manu  += 999; player.inv.frag  += 999;
+            renderStats(); autoSave();
+            const btn = event.target;
+            btn.innerText = '✅ 已補充！'; btn.disabled = true;
+            setTimeout(() => { btn.innerText = '+999 所有材料'; btn.disabled = false; }, 2000);
+        }
+
+        function senseiUnlockAll() {
+            player.buildings.castle = Math.max(player.buildings.castle||0, 1);
+            player.buildings.base   = Math.max(player.buildings.base||0, 1);
+            const bossBtn = document.getElementById('btn-boss-menu');
+            if (bossBtn) { bossBtn.disabled = false; bossBtn.innerText = '👑 終極 Boss 挑戰'; }
+            renderStats(); autoSave();
+            const btn = event.target;
+            btn.innerText = '✅ 已解鎖！'; btn.disabled = true;
+            setTimeout(() => { btn.innerText = '🔓 解鎖所有功能'; btn.disabled = false; }, 2000);
+        }
+        // ── End Sensei Cheat Code ──────────────────────────────────
+
         </script>
 
     <!-- ══ 新手禮包翻牌 Modal ══ -->
@@ -2112,6 +2276,56 @@
 
     <!-- ══ Floating star particles ══ -->
     <canvas id="star-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.5;"></canvas>
+
+
+    <!-- ══ Sensei Cheat Panel ══ -->
+    <div id="sensei-panel">
+        <div id="sensei-box">
+            <button id="sensei-close" onclick="closeSenseiPanel()">✕</button>
+            <h2>🎓 教師展示模式</h2>
+            <p class="s-sub">⌨️ sensei2026 已啟動</p>
+
+            <!-- Boss Section -->
+            <div class="sensei-section">
+                <h3>⚔️ Boss 展示對戰</h3>
+                <div class="sensei-row">
+                    <button class="btn-green" onclick="senseiStartBoss(1)" style="flex:1;">🟢 Boss 1<br><small>15秒/題</small></button>
+                    <button class="btn-orange" onclick="senseiStartBoss(2)" style="flex:1;">🟡 Boss 2<br><small>10秒/題</small></button>
+                    <button class="btn-red" onclick="senseiStartBoss(3)" style="flex:1;">🔴 Boss 3<br><small>5秒/題</small></button>
+                </div>
+            </div>
+
+            <!-- Mythical Beast Section -->
+            <div class="sensei-section">
+                <h3>🐉 召喚神獸對戰</h3>
+                <select id="sensei-beast-select" class="sensei-select">
+                    <option value="0">🐉 青龍 (ATK:100 DEF:100)</option>
+                    <option value="1">🦚 朱雀 (ATK:120 DEF:90)</option>
+                    <option value="2">🧬 超夢 (ATK:150 DEF:120)</option>
+                    <option value="3">🌪️ 洛奇亞 (ATK:130 DEF:150)</option>
+                    <option value="4">🐉 烈空坐 (ATK:180 DEF:110)</option>
+                    <option value="5">✨ 阿爾宙斯 (ATK:200 DEF:200)</option>
+                </select>
+                <select id="sensei-mode-select" class="sensei-select">
+                    <option value="t3_review_1">📚 T3 温習一（詞語與偏旁）</option>
+                    <option value="t3_review_2">📝 T3 温習二（標點與句式）</option>
+                    <option value="t3_fa2">🌿 T3 FA2</option>
+                    <option value="reorder_fa2">🔤 FA2 重組句子</option>
+                </select>
+                <button class="btn-purple" onclick="senseiSummonBeast()" style="width:100%;">🐉 立即召喚神獸</button>
+            </div>
+
+            <!-- Resources Section -->
+            <div class="sensei-section">
+                <h3>⚡ 一鍵補滿資源</h3>
+                <div class="sensei-row">
+                    <button class="btn-teal" onclick="senseiAddResources()" style="flex:1;">+999 所有材料</button>
+                    <button class="btn-blue" onclick="senseiUnlockAll()" style="flex:1;">🔓 解鎖所有功能</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="sensei-indicator">⬛</div>
 
 </body>
 </html>
