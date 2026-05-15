@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+＼<!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
@@ -313,6 +313,119 @@
         .shake-extreme { animation: shake-extreme 0.08s infinite; }
         .gold-border-flash { animation: gold-border-pulse 0.5s infinite; border: 4px solid #FFD700 !important; }
 
+        
+        /* ===== VICTORY MODAL ===== */
+        #victory-modal {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            z-index: 5000; display: flex; justify-content: center; align-items: center;
+            flex-direction: column;
+            background: rgba(0,0,0,0);
+            pointer-events: none;
+            transition: background 0.4s ease;
+        }
+        #victory-modal.active {
+            background: rgba(0,0,0,0.88);
+            pointer-events: all;
+        }
+        #victory-box {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            border: 6px solid #FFD700;
+            border-radius: 20px;
+            padding: 28px 24px 20px;
+            max-width: 420px; width: 90%;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(255,215,0,0.5), 0 20px 40px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+            transform: scale(0);
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        #victory-modal.active #victory-box { transform: scale(1); }
+
+        /* Boss-type colour themes */
+        #victory-box.vtype-legendary { border-color: #EA80FC; background: linear-gradient(135deg,#1a0033,#4a148c); box-shadow: 0 0 80px rgba(234,128,252,0.6); }
+        #victory-box.vtype-boss1 { border-color: #69F0AE; background: linear-gradient(135deg,#003300,#1B5E20); }
+        #victory-box.vtype-boss2 { border-color: #FF9800; background: linear-gradient(135deg,#2B1500,#E65100); }
+        #victory-box.vtype-boss3 { border-color: #AA00FF; background: linear-gradient(135deg,#1a0033,#4a148c); }
+        #victory-box.vtype-boss4 { border-color: #FF1744; background: linear-gradient(135deg,#3e0000,#b71c1c); }
+        #victory-box.vtype-boss5 { border-color: #FFD700; background: linear-gradient(135deg,#1a0a00,#3E2723); box-shadow: 0 0 100px rgba(255,215,0,0.8); }
+        #victory-box.vtype-wild  { border-color: #4CAF50; background: linear-gradient(135deg,#001a00,#1B5E20); }
+
+        .v-title {
+            font-size: 2.2em; font-weight: bold; color: #FFD700;
+            text-shadow: 0 0 20px #FFD700, 2px 2px 0 #000;
+            margin: 0 0 6px;
+            animation: v-pulse-title 1.5s infinite alternate;
+        }
+        @keyframes v-pulse-title {
+            0%  { text-shadow: 0 0 10px #FFD700, 2px 2px 0 #000; }
+            100%{ text-shadow: 0 0 35px #FFD700, 0 0 60px #FF8F00, 2px 2px 0 #000; }
+        }
+        .v-subtitle { color: #FFF9C4; font-size: 1em; margin-bottom: 12px; opacity: 0.9; }
+
+        /* Boss image fly-out then reappear */
+        #v-boss-img {
+            width: 140px; height: 140px; object-fit: contain;
+            border-radius: 12px; border: 4px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.08);
+            margin: 0 auto 10px;
+            display: block;
+            filter: drop-shadow(0 0 16px rgba(255,255,255,0.6));
+        }
+        #v-boss-img.fly-out {
+            animation: v-fly-out 0.6s ease-in forwards;
+        }
+        #v-boss-img.fade-in {
+            animation: v-fade-in 0.5s ease-out forwards;
+        }
+        @keyframes v-fly-out {
+            0%   { transform: translateX(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateX(200%) rotate(30deg); opacity: 0; }
+        }
+        @keyframes v-fade-in {
+            0%   { transform: scale(0.5); opacity: 0; filter: brightness(5) drop-shadow(0 0 30px white); }
+            100% { transform: scale(1);   opacity: 1; filter: drop-shadow(0 0 16px rgba(255,255,255,0.6)); }
+        }
+
+        /* Rewards pop in */
+        .v-rewards-grid {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+            margin: 12px 0;
+        }
+        .v-reward-chip {
+            background: rgba(255,255,255,0.12);
+            border: 3px solid rgba(255,215,0,0.5);
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 1.1em; font-weight: bold; color: #FFD700;
+            text-shadow: 1px 1px 2px #000;
+            transform: translateY(30px); opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .v-reward-chip.show { transform: translateY(0); opacity: 1; }
+
+        .v-confirm-btn {
+            margin-top: 14px;
+            background: linear-gradient(135deg,#FFD700,#FF8F00);
+            color: #000; font-weight: bold; font-size: 1.2em;
+            border: none; border-radius: 30px;
+            padding: 12px 40px; cursor: pointer;
+            box-shadow: 0 6px 0 #E65100;
+            font-family: inherit;
+            transform: translateY(20px); opacity: 0;
+            transition: all 0.3s ease 0.8s, box-shadow 0.1s, transform 0.1s;
+        }
+        .v-confirm-btn.show { transform: translateY(0); opacity: 1; }
+        .v-confirm-btn:active { transform: translateY(4px) !important; box-shadow: 0 2px 0 #E65100 !important; }
+
+        /* White flash overlay */
+        #v-flash {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: white; opacity: 0; pointer-events: none; z-index: 4999;
+            transition: opacity 0.15s;
+        }
+        #v-flash.flash { opacity: 0.9; }
+
         </style>
 </head>
 <body>
@@ -356,246 +469,48 @@
         </div>
 
         <div id="start-screen" class="screen hidden">
+            
+            <button id="btn-starter-pack" onclick="claimStarterPack()">🎁 領取新手禮包</button>
+            <button class="btn-grey" onclick="openInstructions()" style="width: 80%; background-color:#607D8B;">📖 遊戲說明 (新手必看)</button>
 
-<style>
-/* ===== TAB LAYOUT ===== */
-#tab-bar {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 0;
-    width: 95%;
-    max-width: 800px;
-    flex-wrap: nowrap;
-}
-.tab-btn {
-    flex: 1;
-    padding: 10px 4px;
-    font-size: 1em;
-    font-weight: bold;
-    font-family: inherit;
-    border: 4px solid transparent;
-    border-bottom: none;
-    border-radius: 12px 12px 0 0;
-    cursor: pointer;
-    background: rgba(0,0,0,0.3);
-    color: rgba(255,255,255,0.6);
-    transition: all 0.15s;
-    text-align: center;
-    line-height: 1.3;
-}
-.tab-btn:hover { background: rgba(255,255,255,0.2); color: #FFF; }
-.tab-btn.active {
-    background: #FFF;
-    color: #333;
-    border-color: #006064;
-    transform: translateY(4px);
-    z-index: 2;
-    position: relative;
-}
-.tab-btn .tab-emoji { font-size: 1.4em; display: block; }
-.tab-btn .tab-label { font-size: 0.7em; display: block; }
+            <hr style="width: 80%; border-top: 4px dashed #006064;">
+            
+            <h2>🗺️ 選擇探索地區</h2>
+            <p style="margin:0; font-weight:bold; color:#006064;">不同地區有較高機率遇到對應屬性的野生寶可夢！</p>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+                <button class="btn-blue" onclick="startGame('hk')">🌊 香港是我家 (蔚藍之海)</button>
+                <button class="btn-green" onclick="startGame('house')">🌳 安居樂 (豐饒之森)</button>
+                <button class="btn-orange" onclick="startGame('energy')">🌋 能源世界 (烈焰火山)</button>
+                <button class="btn-grey" style="background:#795548;" onclick="startGame('freedom')">⛰️ 自由與守規 (雷霆高原)</button>
+                <button class="btn-purple" onclick="startGame('culture')">🔮 文化交融 (幻影遺跡)</button>
+            </div>
+            
+            <hr style="width: 80%; border-top: 4px dashed #006064;">
+            
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
+                <button class="btn-gold" style="background:#FFC107; color:#333; border-color:#FFA000;" onclick="openAlbum()">🎴 圖鑑與閃卡紀念冊</button>
+                <button class="btn-gold" onclick="openGacha()">🎰 每日抽獎</button>
+                <button class="btn-black" style="background:#424242;" onclick="openSecretMarket()">⛺ llsy市場 </button>
+                <button class="btn-red" style="background:#D32F2F;" onclick="openPartnerHub()">🐾 寶可夢進化中心</button>
 
-#tab-panel-wrapper {
-    width: 95%;
-    max-width: 800px;
-    background: #FFF;
-    border: 4px solid #006064;
-    border-radius: 0 0 16px 16px;
-    padding: 20px 16px;
-    box-shadow: 0 8px 0 #00363A;
-    position: relative;
-    z-index: 1;
-}
+                <button class="btn-gold" onclick="openShop()">🛒 藥水商店</button>
+                <button class="btn-purple" onclick="openSuperForge()">👑 神器祭壇</button>
+                <button class="btn-red" onclick="openForgeZone()">⚔️ 裝備鍛造坊</button>
+                <button class="btn-blue" style="background-color: #00796B;" onclick="openBuildZone()">🔨 進入建築工坊</button>
+            </div>
+            
+            <hr style="width: 80%; border-top: 4px dashed #006064;">
+            <h2>🗺️ 終極 Boss 挑戰區 (需建大城堡)</h2>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;" id="boss-menu-area">
+                <button class="btn-black" id="btn-boss-1" onclick="startBossFight(1)" disabled>🔒 Boss 1 (20秒)</button>
+                <button class="btn-black" id="btn-boss-2" onclick="startBossFight(2)" disabled>🔒 Boss 2 (需20連勝)</button>
+                <button class="btn-black" id="btn-boss-3" onclick="startBossFight(3)" disabled>🔒 Boss 3 (需50連勝)</button>
+                <button class="btn-black" id="btn-boss-4" onclick="startBossFight(4)" disabled>🔒 Boss 4 (需100連勝)</button>
+                <button class="btn-black" id="btn-boss-5" onclick="startBossFight(5)" disabled>🔒 Boss 5 (需150連勝)</button>
+            </div>
+        </div>
 
-.tab-panel { display: none; flex-direction: column; align-items: center; gap: 12px; }
-.tab-panel.active { display: flex; }
-
-/* Big action buttons inside panels */
-.map-action-btn {
-    width: 100%;
-    max-width: 480px;
-    padding: 16px 20px;
-    font-size: 1.2em;
-    font-weight: bold;
-    font-family: inherit;
-    border-radius: 12px;
-    cursor: pointer;
-    border: 4px solid rgba(0,0,0,0.15);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    text-align: left;
-    transition: all 0.1s;
-    box-shadow: 0 6px 0 rgba(0,0,0,0.2);
-}
-.map-action-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.2) !important; }
-.map-action-btn:disabled { opacity: 0.45; filter: grayscale(0.6); cursor: not-allowed; }
-.map-action-btn .btn-icon { font-size: 2em; flex-shrink: 0; }
-.map-action-btn .btn-text { display: flex; flex-direction: column; }
-.map-action-btn .btn-title { font-size: 1em; font-weight: bold; }
-.map-action-btn .btn-sub { font-size: 0.7em; opacity: 0.8; font-weight: normal; }
-
-/* Colour themes */
-.mab-blue   { background:#1565C0; color:#FFF; box-shadow: 0 6px 0 #0D47A1; }
-.mab-green  { background:#2E7D32; color:#FFF; box-shadow: 0 6px 0 #1B5E20; }
-.mab-orange { background:#E65100; color:#FFF; box-shadow: 0 6px 0 #BF360C; }
-.mab-brown  { background:#4E342E; color:#FFF; box-shadow: 0 6px 0 #3E2723; }
-.mab-purple { background:#6A1B9A; color:#FFF; box-shadow: 0 6px 0 #4A148C; }
-.mab-gold   { background:#F9A825; color:#333; box-shadow: 0 6px 0 #E65100; border-color:#FFD54F; }
-.mab-red    { background:#C62828; color:#FFF; box-shadow: 0 6px 0 #7F0000; }
-.mab-teal   { background:#00695C; color:#FFF; box-shadow: 0 6px 0 #004D40; }
-.mab-dark   { background:#212121; color:#FFF; box-shadow: 0 6px 0 #000; }
-.mab-boss   { background: linear-gradient(135deg,#3e0000,#212121); color:#FF8A80; box-shadow: 0 6px 0 #000; border-color:#B71C1C; }
-
-.tab-section-title {
-    font-size: 0.8em;
-    font-weight: bold;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    align-self: flex-start;
-    margin-top: 4px;
-    margin-bottom: -4px;
-}
-
-.boss-unlock-hint {
-    font-size: 0.78em;
-    color: #B71C1C;
-    background: #FFEBEE;
-    border: 2px dashed #EF9A9A;
-    border-radius: 8px;
-    padding: 6px 14px;
-    text-align: center;
-    width: 100%;
-    max-width: 480px;
-}
-</style>
-
-<!-- Top utility buttons -->
-<button id="btn-starter-pack" onclick="claimStarterPack()">🎁 領取新手禮包</button>
-<button class="btn-grey" onclick="openInstructions()" style="width:80%;background-color:#607D8B;margin-bottom:10px;">📖 遊戲說明 (新手必看)</button>
-
-<!-- Tab Bar -->
-<div id="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('explore')">
-        <span class="tab-emoji">🗺️</span>
-        <span class="tab-label">探索地區</span>
-    </button>
-    <button class="tab-btn" onclick="switchTab('facility')">
-        <span class="tab-emoji">🏙️</span>
-        <span class="tab-label">設施中心</span>
-    </button>
-    <button class="tab-btn" onclick="switchTab('craft')">
-        <span class="tab-emoji">⚒️</span>
-        <span class="tab-label">工坊製作</span>
-    </button>
-    <button class="tab-btn" onclick="switchTab('boss')">
-        <span class="tab-emoji">💀</span>
-        <span class="tab-label">Boss 挑戰</span>
-    </button>
-</div>
-
-<!-- Tab Panels -->
-<div id="tab-panel-wrapper">
-
-    <!-- PANEL 1: Explore -->
-    <div class="tab-panel active" id="panel-explore">
-        <div class="tab-section-title">選擇答題地區 — 不同地區有不同野生精靈！</div>
-        <button class="map-action-btn mab-blue" onclick="startGame('hk')">
-            <span class="btn-icon">🌊</span>
-            <span class="btn-text"><span class="btn-title">香港是我家</span><span class="btn-sub">蔚藍之海 · 海洋系精靈出沒</span></span>
-        </button>
-        <button class="map-action-btn mab-green" onclick="startGame('house')">
-            <span class="btn-icon">🌳</span>
-            <span class="btn-text"><span class="btn-title">安居樂業</span><span class="btn-sub">豐饒之森 · 草系精靈出沒</span></span>
-        </button>
-        <button class="map-action-btn mab-orange" onclick="startGame('energy')">
-            <span class="btn-icon">🌋</span>
-            <span class="btn-text"><span class="btn-title">能源世界</span><span class="btn-sub">烈焰火山 · 火系精靈出沒</span></span>
-        </button>
-        <button class="map-action-btn mab-brown" onclick="startGame('freedom')">
-            <span class="btn-icon">⛰️</span>
-            <span class="btn-text"><span class="btn-title">自由與守規</span><span class="btn-sub">雷霆高原 · 格鬥系精靈出沒</span></span>
-        </button>
-        <button class="map-action-btn mab-purple" onclick="startGame('culture')">
-            <span class="btn-icon">🔮</span>
-            <span class="btn-text"><span class="btn-title">文化交融</span><span class="btn-sub">幻影遺跡 · 超能系精靈出沒</span></span>
-        </button>
-    </div>
-
-    <!-- PANEL 2: Facility -->
-    <div class="tab-panel" id="panel-facility">
-        <div class="tab-section-title">遊戲設施 — 強化角色、收集寶物</div>
-        <button class="map-action-btn mab-gold" onclick="openAlbum()">
-            <span class="btn-icon">🎴</span>
-            <span class="btn-text"><span class="btn-title">圖鑑與閃卡紀念冊</span><span class="btn-sub">收集已擊敗的精靈</span></span>
-        </button>
-        <button class="map-action-btn mab-gold" onclick="openGacha()">
-            <span class="btn-icon">🎰</span>
-            <span class="btn-text"><span class="btn-title">星星幸運抽獎</span><span class="btn-sub">每日限定 · 消耗⭐星星</span></span>
-        </button>
-        <button class="map-action-btn mab-red" onclick="openPartnerHub()">
-            <span class="btn-icon">🐾</span>
-            <span class="btn-text"><span class="btn-title">寶可夢進化中心</span><span class="btn-sub">升級拍檔，解鎖強力形態</span></span>
-        </button>
-        <button class="map-action-btn mab-green" onclick="openShop()">
-            <span class="btn-icon">🛒</span>
-            <span class="btn-text"><span class="btn-title">藥水商店</span><span class="btn-sub">購買HP藥水、攻防補品</span></span>
-        </button>
-        <button class="map-action-btn mab-dark" onclick="openSecretMarket()">
-            <span class="btn-icon">⛺</span>
-            <span class="btn-text"><span class="btn-title">神秘市場</span><span class="btn-sub">稀有道具兌換</span></span>
-        </button>
-    </div>
-
-    <!-- PANEL 3: Craft -->
-    <div class="tab-panel" id="panel-craft">
-        <div class="tab-section-title">工坊製作 — 打造裝備與建築</div>
-        <button class="map-action-btn mab-orange" onclick="openForgeZone()">
-            <span class="btn-icon">⚔️</span>
-            <span class="btn-text"><span class="btn-title">裝備鍛造坊</span><span class="btn-sub">用木材/石頭打造武器與防具</span></span>
-        </button>
-        <button class="map-action-btn mab-gold" onclick="openSuperForge()">
-            <span class="btn-icon">👑</span>
-            <span class="btn-text"><span class="btn-title">神器祭壇</span><span class="btn-sub">升級超極神兵，突破極限</span></span>
-        </button>
-        <button class="map-action-btn mab-teal" onclick="openBuildZone()">
-            <span class="btn-icon">🔨</span>
-            <span class="btn-text"><span class="btn-title">建築工坊</span><span class="btn-sub">建造小屋、城堡、摩天輪</span></span>
-        </button>
-    </div>
-
-    <!-- PANEL 4: Boss -->
-    <div class="tab-panel" id="panel-boss">
-        <div class="tab-section-title">終極 Boss 挑戰 — 需建大城堡才可解鎖</div>
-        <button class="map-action-btn mab-boss" id="btn-boss-1" onclick="startBossFight(1)" disabled>
-            <span class="btn-icon">☠️</span>
-            <span class="btn-text"><span class="btn-title" id="boss-label-1">🔒 Boss 1</span><span class="btn-sub">限時 20 秒答題</span></span>
-        </button>
-        <button class="map-action-btn mab-boss" id="btn-boss-2" onclick="startBossFight(2)" disabled>
-            <span class="btn-icon">💀</span>
-            <span class="btn-text"><span class="btn-title" id="boss-label-2">🔒 Boss 2</span><span class="btn-sub">需達成 20 連勝</span></span>
-        </button>
-        <button class="map-action-btn mab-boss" id="btn-boss-3" onclick="startBossFight(3)" disabled>
-            <span class="btn-icon">🐉</span>
-            <span class="btn-text"><span class="btn-title" id="boss-label-3">🔒 Boss 3</span><span class="btn-sub">需達成 50 連勝</span></span>
-        </button>
-        <button class="map-action-btn mab-boss" id="btn-boss-4" onclick="startBossFight(4)" disabled>
-            <span class="btn-icon">👹</span>
-            <span class="btn-text"><span class="btn-title" id="boss-label-4">🔒 Boss 4</span><span class="btn-sub">需達成 100 連勝</span></span>
-        </button>
-        <button class="map-action-btn mab-boss" id="btn-boss-5" onclick="startBossFight(5)" disabled>
-            <span class="btn-icon">⭐</span>
-            <span class="btn-text"><span class="btn-title" id="boss-label-5">🔒 Boss 5</span><span class="btn-sub">需達成 150 連勝 · 終極挑戰</span></span>
-        </button>
-        <div class="boss-unlock-hint">💡 前往「⚒️ 工坊製作」→「建築工坊」建造大城堡即可解鎖</div>
-    </div>
-
-</div><!-- end tab-panel-wrapper -->
-
-</div>
-
-<div id="instruction-screen" class="screen hidden">
+        <div id="instruction-screen" class="screen hidden">
             <h2>📖 冒險者終極指南</h2>
             <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #4CAF50; max-height: 400px; overflow-y: auto;">
                 <h3 style="color:#B71C1C; margin-top:0;">🩸 血月異變與 7 大神獸降臨 (極限難度)</h3>
@@ -772,6 +687,20 @@
             </div>
         </div>
     </div>
+
+    <!-- VICTORY MODAL -->
+    <div id="v-flash"></div>
+    <div id="victory-modal">
+        <div id="victory-box">
+            <div class="v-title" id="v-title">🎉 勝利！</div>
+            <div class="v-subtitle" id="v-subtitle">你成功擊敗了</div>
+            <img id="v-boss-img" src="" alt="boss">
+            <div class="v-rewards-grid" id="v-rewards-grid"></div>
+            <button class="v-confirm-btn" id="v-confirm-btn" onclick="closeVictoryModal()">✅ 確認領取獎勵</button>
+        </div>
+    </div>
+
+
 
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1913,36 +1842,112 @@
             return msg;
         }
 
-        function bossVictory() {
+                function bossVictory() {
             playSound('boss_win');
-            document.getElementById('boss-image').style.filter = "none";
+            document.getElementById('boss-image').style.filter = 'none';
             let dropMsg = grantBattleRewards(currentBoss !== 'normalBeast' && currentBossData.effect);
 
             if (currentBossData.effect) {
                 if (!inventory.album.legendary[currentLegendaryId]) inventory.album.legendary[currentLegendaryId] = { count: 0, firstDate: new Date().toLocaleDateString() };
                 inventory.album.legendary[currentLegendaryId].count += 1;
-                
                 inventory.artifacts += 1; inventory.gem += 20; inventory.star += 20;
-                alert(`🎉 史詩級勝利！\n你成功擊敗了遠古神獸【${currentBossData.name}】！\n獲得 20 寶石，20 星星，並在紀念冊解鎖了【傳說神獸閃卡】！\n額外獲得 1 顆【滅世神石】！\n\n` + dropMsg);
+                let rewards = [
+                    { icon: '💎', label: '寶石 ×20' },
+                    { icon: '⭐', label: '星星 ×20' },
+                    { icon: '🔴', label: '滅世神石 ×1' },
+                    { icon: '🎴', label: '傳說閃卡解鎖！' }
+                ];
+                if (dropMsg) rewards.push({ icon: '🎁', label: dropMsg });
+                showVictoryModal('legendary', currentBossData.name, '史詩級勝利！遠古神獸已臣服！', currentBossData.img, rewards);
                 resetWeather();
             } else if (currentBoss === 'normalBeast') {
                 if (!inventory.album.wild[currentWildBeastId]) inventory.album.wild[currentWildBeastId] = { count: 0, firstDate: new Date().toLocaleDateString() };
                 inventory.album.wild[currentWildBeastId].count += 1;
-
-                inventory.gem += 2; 
-                alert(`🎉 成功擊退了【${currentBossData.name}】！\n獲得 2 寶石！並且已將其記錄到圖鑑中！\n\n` + dropMsg);
+                inventory.gem += 2;
+                let rewards = [{ icon: '💎', label: '寶石 ×2' }, { icon: '🎴', label: '圖鑑已更新！' }];
+                if (dropMsg) rewards.push({ icon: '🎁', label: dropMsg });
+                showVictoryModal('wild', currentBossData.name, '野生精靈已被擊退！', currentBossData.imgId || currentWildBeastId, rewards);
             } else {
-                if ([1, 2, 3, 4, 5].includes(currentBoss)) {
+                if ([1,2,3,4,5].includes(currentBoss)) {
                     if (!inventory.album.boss[currentBoss]) inventory.album.boss[currentBoss] = { count: 0, firstDate: new Date().toLocaleDateString() };
                     inventory.album.boss[currentBoss].count += 1;
                 }
-
-                let rewards = { 1: { gem: 5, star: 5 }, 2: { gem: 10, star: 10 }, 3: { gem: 20, star: 20 }, 4: { gem: 30, star: 30 }, 5: { gem: 50, star: 50 } };
-                inventory.gem += rewards[currentBoss].gem; inventory.star += rewards[currentBoss].star; 
-                alert(`🎉 恭喜！擊敗了【${currentBossData.name}】！\n獲得 ${rewards[currentBoss].gem}寶石，${rewards[currentBoss].star}星星！已將首領記錄到圖鑑中！\n\n` + dropMsg);
+                let rewardTable = { 1:{gem:5,star:5}, 2:{gem:10,star:10}, 3:{gem:20,star:20}, 4:{gem:30,star:30}, 5:{gem:50,star:50} };
+                let r = rewardTable[currentBoss];
+                inventory.gem += r.gem; inventory.star += r.star;
+                let rewards = [
+                    { icon: '💎', label: `寶石 ×${r.gem}` },
+                    { icon: '⭐', label: `星星 ×${r.star}` },
+                    { icon: '🎴', label: '首領圖鑑解鎖！' }
+                ];
+                if (dropMsg) rewards.push({ icon: '🎁', label: dropMsg });
+                let typeMap = { 1:'boss1', 2:'boss2', 3:'boss3', 4:'boss4', 5:'boss5' };
+                showVictoryModal(typeMap[currentBoss] || 'boss1', currentBossData.name, `終極 Boss ${currentBoss} 已被擊敗！`, currentBossData.img, rewards);
             }
+        }
+
+        function showVictoryModal(type, bossName, subtitle, imgId, rewards) {
+            // Step 1: white flash
+            const flash = document.getElementById('v-flash');
+            flash.classList.add('flash');
+            setTimeout(() => flash.classList.remove('flash'), 200);
+
+            // Step 2: animate boss image flying out
+            const bossImg = document.getElementById('boss-image');
+            bossImg.classList.add('blow-away');
+
+            // Step 3: set modal content
+            const box = document.getElementById('victory-box');
+            box.className = 'vtype-' + type;
+            document.getElementById('v-title').textContent = type === 'legendary' ? '⚡ 史詩勝利！' : type === 'wild' ? '✅ 擊退成功！' : `🏆 Boss ${type.replace('boss','')} 擊敗！`;
+            document.getElementById('v-subtitle').textContent = subtitle + '　【' + bossName + '】';
+
+            // Boss image in modal
+            const vi = document.getElementById('v-boss-img');
+            vi.className = '';
+            vi.src = typeof imgId === 'string' && imgId.startsWith('http') ? imgId : getPokePic(imgId);
+
+            // Rewards
+            const grid = document.getElementById('v-rewards-grid');
+            grid.innerHTML = '';
+            rewards.forEach(r => {
+                let chip = document.createElement('div');
+                chip.className = 'v-reward-chip';
+                chip.textContent = r.icon + ' ' + r.label;
+                grid.appendChild(chip);
+            });
+
+            // Reset confirm button
+            const btn = document.getElementById('v-confirm-btn');
+            btn.className = 'v-confirm-btn';
+
+            // Step 4: show modal after brief delay
+            setTimeout(() => {
+                const modal = document.getElementById('victory-modal');
+                modal.classList.add('active');
+                playSound('bosswin');
+
+                // Animate boss img fade in
+                setTimeout(() => { vi.classList.add('fade-in'); }, 300);
+
+                // Pop in reward chips
+                const chips = grid.querySelectorAll('.v-reward-chip');
+                chips.forEach((chip, i) => {
+                    setTimeout(() => { chip.classList.add('show'); playSound('win'); }, 400 + i * 180);
+                });
+
+                // Show confirm button
+                setTimeout(() => { btn.classList.add('show'); }, 400 + rewards.length * 180 + 200);
+
+            }, 350);
+        }
+
+        function closeVictoryModal() {
+            playSound('click');
+            document.getElementById('victory-modal').classList.remove('active');
             endCombat();
         }
+
 
         function bossDefeat() { 
             playSound('error'); 
@@ -1960,19 +1965,7 @@
         }
 
         window.onload = loadGame;
-    
-function switchTab(tabName) {
-    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-        const tabs = ['explore','facility','craft','boss'];
-        btn.classList.toggle('active', tabs[i] === tabName);
-    });
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    const panel = document.getElementById('panel-' + tabName);
-    if (panel) panel.classList.add('active');
-    playSound('click');
-}
-
-</script>
+    </script>
 
     <!-- 新手禮包彈出視窗 -->
     <div id="starter-pack-modal" class="hidden">
