@@ -728,13 +728,15 @@
             <p>請輸入冒險者名稱：</p>
             <input type="text" id="input-name" maxlength="10" placeholder="輸入名字...">
             <button class="btn-purple" onclick="setPlayerName()">🚀 開始遊戲</button>
+            <p style="margin-top:24px;"><button onclick="teacherReset()" style="background:none;border:none;color:#bbb;font-size:0.75em;cursor:pointer;text-decoration:underline;">🔑 老師重設</button></p>
         </div>
 
         <div id="start-screen" class="screen hidden">
 
             <!-- ══ TOP BAR ══ -->
             <div style="width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
-                <button class="btn-grey" onclick="logout()" style="font-size:0.82em;padding:7px 11px;margin:0;">🔄 更名/登出</button>
+                <button class="btn-grey" onclick="logout()" style="font-size:0.82em;padding:7px 11px;margin:0;">✏️ 更名/登出</button>
+                <button class="btn-grey" onclick="teacherReset()" style="font-size:0.82em;padding:7px 11px;margin:0;background:#795548;border-color:#795548;">🔑 老師</button>
                 <div style="display:flex;gap:6px;">
                     <button class="btn-gold"  onclick="claimGift()"  style="font-size:0.82em;padding:7px 11px;margin:0;">🎁 禮包</button>
                     <button class="btn-blue"  onclick="openAlbum()"  style="font-size:0.82em;padding:7px 11px;margin:0;">📖 紀念冊</button>
@@ -2513,7 +2515,7 @@
 
         // ================== 存檔與資料設定 ==================
         const defaultInv = { 
-            playerName: "", playerId: "", giftClaimed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, 
+            playerName: "", playerId: "", giftClaimed: false, nameChangeUsed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, 
             coins: 0, dropBuffLeft: 0, 
             streak: 0, maxStreak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
             equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], 
@@ -2841,7 +2843,24 @@ function checkDailyReset() {
         function setPlayerName() {
             initAudio(); playSound('click');
             const name = document.getElementById('input-name').value.trim();
-            if (!name) return alert("請輸入名字！");
+            if (!name) return alert('請輸入名字！');
+
+            const isChanging = !!inventory.playerName; // already had a name = changing
+
+            // 🔧 One-change limit
+            if (isChanging && inventory.nameChangeUsed) {
+                alert('❌ 改名機會已用盡！\n如需更改名字，請聯絡老師重設。');
+                goHome(); return;
+            }
+
+            // First-time confirmation
+            if (!isChanging) {
+                if (!confirm('確定使用「' + name + '」作為冒險者名字？\n⚠️ 名字設定後只可更改一次，請確認！')) return;
+            } else {
+                if (!confirm('確定把名字改為「' + name + '」？\n⚠️ 此為最後一次改名機會！')) return;
+                inventory.nameChangeUsed = true;  // mark change used
+            }
+
             inventory.playerName = name;
             // 生成唯一 ID（只在第一次設定名字時建立）
             if (!inventory.playerId) {
@@ -2852,7 +2871,16 @@ function checkDailyReset() {
         }
         
         window.logout = function() {
-            playSound('click'); inventory.playerName = ""; saveGame(); hideAll();
+            playSound('click');
+            // 🔧 Warn if no name changes left
+            if (inventory.nameChangeUsed) {
+                const go = confirm('⚠️ 你已用過改名機會！\n登出後將無法再更改名字。\n確定要繼續嗎？');
+                if (!go) return;
+            } else if (inventory.playerName) {
+                const go = confirm('✏️ 登出後可更改名字（僅限一次）。\n確定登出嗎？');
+                if (!go) return;
+            }
+            inventory.playerName = ""; saveGame(); hideAll();
             document.getElementById('player-tag').classList.add('hidden');
             document.getElementById('top-nav').classList.add('hidden');
             document.getElementById('medal-bar').classList.add('hidden');
@@ -4652,7 +4680,7 @@ function checkDailyReset() {
                     partner:        getPartnerDisplayName(),
                     timestamp:      new Date().toISOString()
                 };
-                const existIdx = entries.findIndex(e => e.playerId === inventory.playerId || e.name === inventory.playerName);
+                const existIdx = entries.findIndex(e => e.playerId && e.playerId === inventory.playerId); // 🔧 playerId only — prevents name spoofing
                 if (existIdx >= 0) {
                     // Only update if new score is higher
                     if (myEntry.score >= entries[existIdx].score) {
@@ -4700,6 +4728,53 @@ function checkDailyReset() {
             fetchLeaderboard();
         }
         // ==================== END 排行榜 ====================
+
+        
+        // ==================== 老師密碼重設功能 ====================
+        const TEACHER_PASSWORD = 'teacher2025';
+
+        function teacherReset() {
+            const pwd = prompt('🔑 請輸入老師密碼：');
+            if (pwd === null) return; // cancelled
+            if (pwd !== TEACHER_PASSWORD) {
+                alert('❌ 密碼錯誤！');
+                return;
+            }
+            // Show reset options
+            const choice = confirm(
+                '✅ 老師驗證成功！\n\n' +
+                '選擇重設項目：\n' +
+                '✅ 確定 → 重設【名字 + 改名次數】（保留所有遊戲進度）\n' +
+                '❌ 取消 → 完全重設【所有資料】（慎用！）'
+            );
+            if (choice) {
+                // Soft reset: name + nameChangeUsed only
+                inventory.playerName = '';
+                inventory.nameChangeUsed = false;
+                saveGame();
+                hideAll();
+                document.getElementById('player-tag').classList.add('hidden');
+                document.getElementById('top-nav').classList.add('hidden');
+                document.getElementById('medal-bar') && document.getElementById('medal-bar').classList.add('hidden');
+                document.getElementById('login-screen').classList.remove('hidden');
+                alert('✅ 已重設名字！學生可重新輸入名字（改名機會重設為 1 次）。');
+            } else {
+                const confirm2 = prompt('⚠️ 確定要完全重設所有資料？\n此操作不可復原！\n請輸入「確認重設」繼續：');
+                if (confirm2 === '確認重設') {
+                    localStorage.removeItem('digiAdventureV3Save');
+                    inventory = { ...defaultInv };
+                    hideAll();
+                    document.getElementById('player-tag') && document.getElementById('player-tag').classList.add('hidden');
+                    document.getElementById('top-nav') && document.getElementById('top-nav').classList.add('hidden');
+                    document.getElementById('medal-bar') && document.getElementById('medal-bar').classList.add('hidden');
+                    document.getElementById('login-screen').classList.remove('hidden');
+                    alert('✅ 已完全重設所有遊戲資料。');
+                } else {
+                    alert('❌ 取消重設。');
+                }
+            }
+        }
+        // ==================== END 老師密碼重設功能 ====================
 
         // ==================== CHEAT CODE SYSTEM ====================
         const CHEAT_CODE = 'sensei2025';
