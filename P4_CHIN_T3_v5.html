@@ -695,7 +695,7 @@
     <div id="player-tag" class="player-info hidden">
         <div class="status-bar-inner">
             <div class="status-left">
-                <span class="status-name">🧙 <span id="display-name"></span></span>
+                <span class="status-name">🧙 <span id="display-name"></span> <span class="player-lv-display" style="color:#FFD700;font-size:0.8em;font-weight:bold;">Lv 1</span></span>
                 <span id="streak-counter" class="status-streak">🔥 連對: 0</span>
                 <span id="buff-indicator" class="status-buff"></span>
             </div>
@@ -718,6 +718,16 @@
         <span class="star-text">🌟 星星: <span id="inv-star">0</span></span>
         <span class="super-text">📜 手稿: <span id="inv-manu">0</span></span>
         <span class="super-text">🔮 碎片: <span id="inv-frag">0</span></span>
+        <span style="color:#FFD700;font-weight:bold;">✨ <span class="player-lv-display">Lv 1</span></span>
+    </div>
+    <div id="exp-bar-wrap" class="hidden" style="width:100%;background:#1a1a2e;padding:3px 10px;box-sizing:border-box;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+            <span style="color:#FFD700;font-size:0.78em;font-weight:bold;">✨ <span class="player-lv-display">Lv 1</span></span>
+            <span id="exp-bar-text" style="color:#aaa;font-size:0.72em;">0 / 10</span>
+        </div>
+        <div style="background:#333;border-radius:6px;height:8px;overflow:hidden;">
+            <div id="exp-bar-fill" style="height:100%;background:linear-gradient(90deg,#FFD700,#FF8C00);width:0%;transition:width 0.4s;"></div>
+        </div>
     </div>
     <div id="save-indicator" class="save-indicator hidden">💾 遊戲進度已自動讀取</div>
 
@@ -984,6 +994,17 @@
 
             <div id="partner-status-screen" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
                 <h2 style="color: #9C27B0; margin-bottom: 5px;">🐾 我的當前搭檔</h2>
+                <!-- Player EXP card -->
+                <div style="background:#1a1a2e;border-radius:12px;padding:10px 16px;width:90%;max-width:400px;margin-bottom:12px;box-sizing:border-box;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+                        <span style="color:#FFD700;font-weight:bold;">✨ 冒險者等級：<span class="player-lv-display">Lv 1</span></span>
+                        <span id="exp-bar-text-2" style="color:#aaa;font-size:0.8em;">0 / 10</span>
+                    </div>
+                    <div style="background:#333;border-radius:6px;height:10px;overflow:hidden;">
+                        <div id="exp-bar-fill-2" style="height:100%;background:linear-gradient(90deg,#FFD700,#FF8C00);width:0%;transition:width 0.4s;"></div>
+                    </div>
+                    <div style="font-size:0.72em;color:#888;margin-top:4px;text-align:right;">每次答題 +1 EXP｜模擬考試 +3 EXP｜Boss勝利 +10~50 EXP</div>
+                </div>
                 <p id="partner-path-name" style="margin-top:0; font-weight:bold; color:#6A1B9A;">路線</p>
                 
                 <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 15px; border: 4px dashed #9C27B0; text-align: center; width: 90%; max-width: 500px;">
@@ -2515,7 +2536,7 @@
 
         // ================== 存檔與資料設定 ==================
         const defaultInv = { 
-            playerName: "", playerId: "", giftClaimed: false, nameChangeUsed: false, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, 
+            playerName: "", playerId: "", giftClaimed: false, nameChangeUsed: false, playerExp: 0, playerLv: 1, examCompletedCount: 0, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, 
             coins: 0, dropBuffLeft: 0, 
             streak: 0, maxStreak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
             equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], 
@@ -2547,8 +2568,11 @@
 
             let msg = `🔥 ${s}連對！獲得 📜x${mGain}`;
             inventory.wood += 2 * mult; if (s % 3 === 0) { inventory.wood += 10 * mult; inventory.stone += 5 * mult; msg += `、🪵x${(2+10)*mult}、🧱x${5*mult}`; } else { msg += `、🪵x${2*mult}`; }
-            if (s % 5 === 0) { inventory.star += 1; inventory.fragment += 1; msg += `、🌟x1、🔮x1`; playSound('star_gain'); }
-            if (s % 10 === 0) { inventory.gem += 3; inventory.fragment += 2; msg += `、💎x3、🔮x2`; playSound('medal'); }
+            if (s % 5 === 0) { inventory.star += 1; inventory.fragment += 1; msg += `、🌟x1、🔮x1`; playSound('star_gain'); gainExp(3, '5連對'); unlockAchievement('ach_streak5'); }
+            if (s % 10 === 0) { inventory.gem += 3; inventory.fragment += 2; msg += `、💎x3、🔮x2`; playSound('medal'); gainExp(8, '10連對'); }
+            if (s >= 30) unlockAchievement('ach_streak30');
+            if (s >= 50) unlockAchievement('ach_streak50');
+            gainExp(1, '答題');
             
             if (msg) {
                 let el = document.querySelector('.screen:not(.hidden) .status-msg');
@@ -2665,7 +2689,18 @@
             { id: 'ach_cards10',       icon: '📖', name: '收藏家',   desc: '解鎖 10 張圖鑑卡' },
             { id: 'ach_affection50',   icon: '💕', name: '心靈相通', desc: '搭檔感情值達 50' },
             { id: 'ach_affection200',  icon: '💖', name: '永遠搭檔', desc: '搭檔感情值達 200' },
-            { id: 'ach_quest1',        icon: '📋', name: '任務達成', desc: '完成第一個每日任務' },
+            { id: 'ach_quest1',        icon: '📋', name: '任務達成',   desc: '完成第一個每日任務' },
+            // ── 連對成就 ──
+            { id: 'ach_streak5',       icon: '❄️',  name: '穩定發揮',   desc: '達成 5 連對' },
+            { id: 'ach_streak30',      icon: '🌪️', name: '答題旋風',   desc: '達成 30 連對' },
+            { id: 'ach_streak50',      icon: '⚡',  name: '不可阻擋',   desc: '達成 50 連對' },
+            // ── 模擬考試成就 ──
+            { id: 'ach_exam10',        icon: '📋',  name: '考試達人',   desc: '完成模擬考試 10 次' },
+            { id: 'ach_exam_perfect',  icon: '🎓',  name: '滿分挑戰',   desc: '模擬考試某關卡全部答對' },
+            // ── 等級成就 ──
+            { id: 'ach_lv10',          icon: '🌱',  name: '初階冒險者', desc: '達到 Lv 10' },
+            { id: 'ach_lv50',          icon: '🌟',  name: '資深冒險者', desc: '達到 Lv 50' },
+            { id: 'ach_lv100',         icon: '👑',  name: '傳説冒險者', desc: '達到 Lv 100' },
         ];
 
         function unlockAchievement(id) {
@@ -2882,7 +2917,7 @@ function checkDailyReset() {
             }
             inventory.playerName = ""; saveGame(); hideAll();
             document.getElementById('player-tag').classList.add('hidden');
-            document.getElementById('top-nav').classList.add('hidden');
+            document.getElementById('top-nav').classList.add('hidden'); document.getElementById('exp-bar-wrap') && document.getElementById('exp-bar-wrap').classList.add('hidden');
             document.getElementById('medal-bar').classList.add('hidden');
             document.getElementById('login-screen').classList.remove('hidden');
         };
@@ -2919,6 +2954,11 @@ function checkDailyReset() {
                     if (!inventory.playerId) inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
                     if (!inventory.dailyQuests) inventory.dailyQuests = [];
                     if (!inventory.dailyQuestProgress) inventory.dailyQuestProgress = {};
+                    // EXP system migration
+                    if (inventory.playerExp === undefined)  inventory.playerExp  = 0;
+                    if (!inventory.playerLv || inventory.playerLv < 1) inventory.playerLv = 1;
+                    if (inventory.examCompletedCount === undefined) inventory.examCompletedCount = 0;
+                    if (inventory.nameChangeUsed === undefined) inventory.nameChangeUsed = false;
                     
                     if(!inventory.partners) {
                         inventory.partners = {};
@@ -2984,6 +3024,7 @@ function checkDailyReset() {
         }
 
         function updateUI(doSave = true) {
+            updateExpUI();
             document.getElementById('inv-wood').textContent = inventory.wood;
             document.getElementById('inv-stone').textContent = inventory.stone;
             document.getElementById('inv-gem').textContent = inventory.gem;
@@ -3065,7 +3106,7 @@ function checkDailyReset() {
             } else {
                 document.getElementById('start-screen').classList.remove('hidden');
                 document.getElementById('player-tag').classList.remove('hidden');
-                document.getElementById('top-nav').classList.remove('hidden');
+                document.getElementById('top-nav').classList.remove('hidden'); document.getElementById('exp-bar-wrap').classList.remove('hidden');
                 if(inventory.medals.length > 0) document.getElementById('medal-bar').classList.remove('hidden');
                 renderBloodMoonUI(); 
             }
@@ -3479,7 +3520,7 @@ function checkDailyReset() {
                 document.getElementById('reorder-title').textContent = reorderMap[type].title;
                 document.getElementById('game-reorder').classList.remove('hidden');
                 document.getElementById('player-tag').classList.remove('hidden');
-                document.getElementById('top-nav').classList.remove('hidden');
+                document.getElementById('top-nav').classList.remove('hidden'); document.getElementById('exp-bar-wrap').classList.remove('hidden');
                 startReorderSession(reorderMap[type].tasks);
                 return;
             }
@@ -3489,7 +3530,7 @@ function checkDailyReset() {
                 document.getElementById('mc-title').textContent = mcConfigs[type].title;
                 document.getElementById('game-mc').classList.remove('hidden');
                 document.getElementById('player-tag').classList.remove('hidden');
-                document.getElementById('top-nav').classList.remove('hidden');
+                document.getElementById('top-nav').classList.remove('hidden'); document.getElementById('exp-bar-wrap').classList.remove('hidden');
                 startMCSession(type);
                 return;
             }
@@ -4256,6 +4297,7 @@ function checkDailyReset() {
                         if (combatType === 'epic') {
                             let ms = Math.floor(Math.random() * 201) + 100;
                             inventory.gem += 50; inventory.star += 30; inventory.manuscript += ms; inventory.wood += 50; inventory.fragment += 5; inventory.coins += 200; updateUI();
+                            gainExp(40, '遠古神獸');
                             unlockCard(epicLegendaries[currentEvent.key].id);
                             document.body.classList.remove('legendary-mode');
                             showVictoryModal({
@@ -4268,12 +4310,13 @@ function checkDailyReset() {
                                     {icon:'🔮', label:'碎片 ×5'}, {icon:'💰', label:'金幣 ×200'},
                                     {icon:'📖', label:'新閃卡解鎖！'}
                                 ],
-                                stats: '⚔️ 答對 ' + combatCorrectCount + ' 題 &nbsp;|&nbsp; 🔥 連勝記錄：' + (inventory.maxStreak||0),
+                                stats: '⚔️ 答對 ' + combatCorrectCount + ' 題 &nbsp;|&nbsp; 🔥 連勝記錄：' + (inventory.maxStreak||0) + ' &nbsp;|&nbsp; ✨ Lv ' + (inventory.playerLv||1),
                                 onClaim: goHome
                             });
                         } else if(combatType === 'legendary') {
                             let ms = Math.floor(Math.random() * 101) + 100;
                             inventory.gem += 20; inventory.star += 20; inventory.manuscript += ms; inventory.wood += 30; inventory.fragment += 2; inventory.coins += 100; updateUI();
+                            gainExp(20, '傳説怪');
                             unlockCard('leg_' + currentEvent.name);
                             showVictoryModal({
                                 title: '🌟 傳説怪已收服！',
@@ -4317,6 +4360,10 @@ function checkDailyReset() {
                                 updateQuestProgress('boss');
                                 unlockAchievement('ach_boss1');
                                 if (inventory.totalBossWins >= 5) unlockAchievement('ach_boss5');
+                                // EXP by boss level
+                                const _bossLv = currentEvent.level || 1;
+                                const _bossExp = _bossLv <= 3 ? 10 : _bossLv <= 6 ? 20 : _bossLv === 7 ? 30 : 50;
+                                gainExp(_bossExp, 'Boss Lv' + _bossLv);
                                 unlockCard('boss_' + currentEvent.level);
                                 showVictoryModal({
                                     title: '🏆 VICTORY!',
@@ -4330,7 +4377,8 @@ function checkDailyReset() {
                                         {icon:'🪵', label:'木材 ×' + r.wood},
                                         {icon:'🧱', label:'石頭 ×' + r.stone},
                                         {icon:'🔮', label:'碎片 ×' + r.fragment},
-                                        {icon:'📖', label:'新閃卡解鎖！'}
+                                        {icon:'📖', label:'新閃卡解鎖！'},
+                                        {icon:'✨', label:'EXP +' + (_bossLv<=3?10:_bossLv<=6?20:_bossLv===7?30:50)}
                                     ],
                                     stats: '⚔️ 答對 ' + combatCorrectCount + ' 題 &nbsp;|&nbsp; 🏆 Boss總勝：' + (inventory.totalBossWins||0) + ' 次',
                                     onClaim: goHome
@@ -4639,6 +4687,7 @@ function checkDailyReset() {
                      + '<span style="font-size:1.3em;min-width:34px;text-align:center;">' + rank + '</span>'
                      + '<div style="flex:1;text-align:left;">'
                      + '<div style="font-weight:bold;font-size:0.92em;">' + e.name + (isMe ? ' 👈' : '')
+                     + (e.playerLv ? ' <span style="color:#90CAF9;font-size:0.82em;">Lv' + e.playerLv + '</span>' : '')
                      + ' <span style="color:#FFD700;margin-left:6px;text-shadow:0 1px 3px #000;">⭐' + e.score + '分</span></div>'
                      + '<div style="font-size:0.72em;color:#ccc;margin-top:2px;">📝答對' + (e.correctAnswers||0) + '題 &nbsp;|&nbsp; 🏆Boss' + (e.bossWins||0) + '次 &nbsp;|&nbsp; 🔥最高' + (e.maxStreak||0) + '連勝 &nbsp;|&nbsp; ' + partnerTag + '</div>'
                      + '<div style="font-size:0.68em;color:#aaa;margin-top:1px;">' + (bossBadges ? bossBadges + ' &nbsp;|&nbsp; ' : '') + '夥伴:' + (e.partner||'-') + ' · ' + time + '</div>'
@@ -4667,6 +4716,7 @@ function checkDailyReset() {
                 const myEntry = {
                     name:           inventory.playerName,
                     playerId:       inventory.playerId || '',
+                    playerLv:       inventory.playerLv || 1,
                     score:          calcScore(),
                     correctAnswers: inventory.totalCorrectAnswers || 0,
                     bossWins:       inventory.totalBossWins || 0,
@@ -4754,7 +4804,7 @@ function checkDailyReset() {
                 saveGame();
                 hideAll();
                 document.getElementById('player-tag').classList.add('hidden');
-                document.getElementById('top-nav').classList.add('hidden');
+                document.getElementById('top-nav').classList.add('hidden'); document.getElementById('exp-bar-wrap') && document.getElementById('exp-bar-wrap').classList.add('hidden');
                 document.getElementById('medal-bar') && document.getElementById('medal-bar').classList.add('hidden');
                 document.getElementById('login-screen').classList.remove('hidden');
                 alert('✅ 已重設名字！學生可重新輸入名字（改名機會重設為 1 次）。');
@@ -4765,7 +4815,7 @@ function checkDailyReset() {
                     inventory = { ...defaultInv };
                     hideAll();
                     document.getElementById('player-tag') && document.getElementById('player-tag').classList.add('hidden');
-                    document.getElementById('top-nav') && document.getElementById('top-nav').classList.add('hidden');
+                    document.getElementById('top-nav') && document.getElementById('top-nav').classList.add('hidden'); document.getElementById('exp-bar-wrap') && document.getElementById('exp-bar-wrap').classList.add('hidden');
                     document.getElementById('medal-bar') && document.getElementById('medal-bar').classList.add('hidden');
                     document.getElementById('login-screen').classList.remove('hidden');
                     alert('✅ 已完全重設所有遊戲資料。');
@@ -4775,6 +4825,108 @@ function checkDailyReset() {
             }
         }
         // ==================== END 老師密碼重設功能 ====================
+
+        
+        // ══════════════════════════════════════
+        // EXP & LEVEL SYSTEM (Lv 1-100)
+        // ══════════════════════════════════════
+        function expToNextLevel(lv) {
+            if (lv >= 100) return Infinity;
+            if (lv <= 10)  return 10;
+            if (lv <= 30)  return 20;
+            if (lv <= 60)  return 40;
+            if (lv <= 90)  return 80;
+            return 150; // lv 91-99
+        }
+
+        function gainExp(amount, source) {
+            if (!amount || amount <= 0) return;
+            if (!inventory.playerLv) inventory.playerLv = 1;
+            if (!inventory.playerExp) inventory.playerExp = 0;
+            if (inventory.playerLv >= 100) return; // capped
+
+            inventory.playerExp += amount;
+
+            // Check level up(s)
+            let levelled = false;
+            while (inventory.playerLv < 100 && inventory.playerExp >= expToNextLevel(inventory.playerLv)) {
+                inventory.playerExp -= expToNextLevel(inventory.playerLv);
+                inventory.playerLv++;
+                levelled = true;
+                onLevelUp(inventory.playerLv);
+            }
+            if (inventory.playerLv >= 100) inventory.playerExp = 0;
+
+            updateExpUI();
+            if (!levelled) {
+                // Show small EXP toast
+                showExpGain(amount, source);
+            }
+            saveGame();
+        }
+
+        function onLevelUp(newLv) {
+            playSound('medal');
+            // Milestone rewards every 10 levels
+            let bonusMsg = '';
+            if (newLv % 10 === 0) {
+                inventory.gem    = (inventory.gem    || 0) + 5;
+                inventory.manuscript = (inventory.manuscript || 0) + 50;
+                bonusMsg = '\n🎁 里程碑獎勵：💎×5  📜×50';
+            }
+            // Achievement checks
+            if (newLv >= 10)  unlockAchievement('ach_lv10');
+            if (newLv >= 50)  unlockAchievement('ach_lv50');
+            if (newLv >= 100) unlockAchievement('ach_lv100');
+
+            // Level up toast
+            let toast = document.getElementById('levelup-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'levelup-toast';
+                toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#FFD700,#FF8C00);color:#fff;font-size:1.4em;font-weight:bold;padding:18px 28px;border-radius:16px;z-index:9999;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.4);pointer-events:none;opacity:0;transition:opacity 0.4s;';
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = '🎉 升級！<br>Lv ' + (newLv-1) + ' → <span style="font-size:1.3em;color:#FFF176;">Lv ' + newLv + '</span>' + (bonusMsg ? '<br><span style="font-size:0.7em;">' + bonusMsg + '</span>' : '');
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+            updateExpUI();
+        }
+
+        function showExpGain(amount, source) {
+            let el = document.querySelector('.screen:not(.hidden) .status-msg');
+            if (!el) return;
+            const lv = inventory.playerLv || 1;
+            const cur = inventory.playerExp || 0;
+            const need = expToNextLevel(lv);
+            el.innerHTML += '<br><span style="color:#FFD700;font-size:0.85em;">✨ +' + amount + ' EXP' + (source ? ' (' + source + ')' : '') + '  [Lv' + lv + ': ' + cur + '/' + need + ']</span>';
+        }
+
+        function updateExpUI() {
+            const lv  = inventory.playerLv  || 1;
+            const exp = inventory.playerExp || 0;
+            const need = expToNextLevel(lv);
+            const pct  = lv >= 100 ? 100 : Math.min(100, Math.floor(exp / need * 100));
+            const txt  = lv >= 100 ? 'MAX' : exp + ' / ' + need;
+
+            // Update all level display elements
+            document.querySelectorAll('.player-lv-display').forEach(el => { el.textContent = 'Lv ' + lv; });
+
+            // Top nav EXP bar
+            const bar = document.getElementById('exp-bar-fill');
+            if (bar) bar.style.width = pct + '%';
+            const expTxt = document.getElementById('exp-bar-text');
+            if (expTxt) expTxt.textContent = txt;
+
+            // Partner zone EXP bar
+            const bar2 = document.getElementById('exp-bar-fill-2');
+            if (bar2) bar2.style.width = pct + '%';
+            const expTxt2 = document.getElementById('exp-bar-text-2');
+            if (expTxt2) expTxt2.textContent = txt;
+        }
+        // ══════════════════════════════════════
+        // END EXP SYSTEM
+        // ══════════════════════════════════════
 
         // ==================== CHEAT CODE SYSTEM ====================
         const CHEAT_CODE = 'sensei2025';
@@ -5092,6 +5244,7 @@ function checkDailyReset() {
                 inventory.fragment   = (inventory.fragment   || 0) + 2;
                 inventory.coins      = (inventory.coins      || 0) + 2;
                 inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers || 0) + 1;
+                gainExp(3, '模擬考試');
                 saveGame(); updateUI();
             }
             const fb = document.getElementById('exam-feedback');
@@ -5122,6 +5275,12 @@ function checkDailyReset() {
             else if (pct >= 50) msg = '💪 繼續努力，你可以的！';
             else msg = '📖 多温習課文，下次一定更好！';
             document.getElementById('exam-result-msg').textContent = msg;
+            // Track exam completions for achievement
+            inventory.examCompletedCount = (inventory.examCompletedCount || 0) + 1;
+            if (inventory.examCompletedCount >= 10) unlockAchievement('ach_exam10');
+            // Check perfect score
+            if (correct === total && total >= 3) unlockAchievement('ach_exam_perfect');
+            saveGame();
             // Rewards already given per question in examAnswer — just show summary
             const starsEarned     = correct;
             const woodBonus       = correct * 2;
@@ -5135,7 +5294,8 @@ function checkDailyReset() {
                 + '  🪨×' + starsEarned
                 + '  🔮×' + fragmentBonus
                 + '  🪙×' + coinsBonus;
-            document.getElementById('exam-result-msg').textContent += '\n' + rewardMsg;
+            const expEarned = correct * 3;
+            document.getElementById('exam-result-msg').textContent += '\n' + rewardMsg + '  ✨+' + expEarned + ' EXP';
         }
 
         function examRetry() {
