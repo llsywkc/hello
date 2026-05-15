@@ -819,9 +819,19 @@
                         <div class="mc-sub">温習</div>
                     </div>
                 </div>
-                <p style="font-size:0.82em;color:#8E24AA;margin:6px 0 0;">(連續答題有機率遇到「傳說怪」！)</p>
+                <p style="font-size:0.82em;color:#8E24AA;margin:6px 0 0;">(連續答題有機率遇到「傳説怪」！)</p>
             </div>
 
+                <div class="menu-section-label">📝 考試練習模式</div>
+                <div class="menu-card-grid">
+                    <div class="menu-card" onclick="openExamMode()" style="border-color:#E53935;">
+                        <div class="mc-icon">📋</div>
+                        <div class="mc-title">模擬考試</div>
+                        <div class="mc-sub">12關卡 61題｜⭐獎勵</div>
+                    </div>
+                </div>
+
+            
             <!-- ══ TAB: BOSS ══ -->
             <div class="menu-tab-content" id="tab-boss" style="padding:4px 0;">
                 <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
@@ -1167,7 +1177,7 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="btn-red" id="btn-buy-scroll" onclick="buyItem('scroll')">📜 傳說卷軸 (必遇傳說怪) <br>💰 50🪵 + 50🪨 + 10⭐</button>
+                <button class="btn-red" id="btn-buy-scroll" onclick="buyItem('scroll')">📜 傳説卷軸 (必遇傳説怪) <br>💰 50🪵 + 50🪨 + 10⭐</button>
             </div>
             <button class="btn-grey" style="margin-top: 20px;" onclick="closeModal('market-modal')">❌ 離開</button>
         </div>
@@ -1521,10 +1531,10 @@
             { q: "由於不小心扭傷了腳踝，志明只好無奈地宣佈 ______ 這次的田徑比賽。", ans: "退出", options: ["退出", "康復", "支持", "生效"] },
             { q: "我們遇到困難時應該勇敢面對，絕對不能輕言 ______ 。", ans: "退出", options: ["退出", "准許", "集合", "宣佈"] },
             { q: "即使在比賽的下半場落後了十分，隊員們的 ______ 依然高昂，沒有放棄。", ans: "鬥志", options: ["鬥志", "勇氣", "心情", "精神"] },
-            { q: "教練的一番鼓勵說話，瞬間激發起全隊球員必勝的 ______ 。", ans: "鬥志", options: ["鬥志", "力量", "信心", "興趣"] },
+            { q: "教練的一番鼓勵説話，瞬間激發起全隊球員必勝的 ______ 。", ans: "鬥志", options: ["鬥志", "力量", "信心", "興趣"] },
             { q: "天空突然變得烏雲密佈， ______ 待會兒又要下起傾盆大雨來嗎？", ans: "難道", options: ["難道", "當然", "其實", "也許"] },
             { q: "你把這件事一直藏在心裡， ______ 就不打算告訴爸爸媽媽嗎？", ans: "難道", options: ["難道", "究竟", "反而", "竟然"] },
-            { q: "無論我將來想做甚麼職業，父母都說會默默地 ______ 我的決定。", ans: "支持", options: ["支持", "退出", "准許", "宣佈"] },
+            { q: "無論我將來想做甚麼職業，父母都説會默默地 ______ 我的決定。", ans: "支持", options: ["支持", "退出", "准許", "宣佈"] },
             { q: "為了 ______ 學校的環保週活動，全班同學都堅持自備餐具回校吃午飯。", ans: "支持", options: ["支持", "集合", "康復", "生效"] },
             { q: "老師宣佈，新的圖書館借閱規則將於下星期一正式 ______。", ans: "生效", options: ["生效", "宣佈", "准許", "集合"] },
             { q: "校長在早會上 ______ 了一個好消息，全校同學都歡呼起來。", ans: "宣佈", options: ["宣佈", "生效", "集合", "支持"] },
@@ -1546,7 +1556,7 @@
             { q: "這瓶果汁的味道很特別，______ 了蘋果和檸檬的香氣。", ans: "夾雜", options: ["稀疏", "夾雜", "羨慕", "秀麗"] },
             { q: "她穿了一件藍色的裙子，跟她的膚色很 ______。", ans: "相稱", options: ["相稱", "怪裏怪氣", "口吻", "稀疏"] },
             { q: "老師用温和的 ______ 鼓勵我們不要害怕失敗。", ans: "口吻", options: ["秀麗", "羨慕", "口吻", "稀疏"] },
-            { q: "他用開玩笑的 ______ 對我說：「你是不是又忘了帶作業？」", ans: "口吻", options: ["相稱", "口吻", "夾雜", "怪裏怪氣"] },
+            { q: "他用開玩笑的 ______ 對我説：「你是不是又忘了帶作業？」", ans: "口吻", options: ["相稱", "口吻", "夾雜", "怪裏怪氣"] },
             { q: "姐姐長得十分 ______，就像古裝劇裏的美人一樣。", ans: "秀麗", options: ["怪裏怪氣", "相稱", "秀麗", "夾雜"] },
             { q: "弟弟戴上爸爸的眼鏡後，作出 ______ 的鬼臉，逗得全家哈哈大笑。", ans: "怪裏怪氣", options: ["馬馬虎虎", "怪裏怪氣", "啼笑皆非", "羨慕"] },
             { q: "這條街上有一間小店，裝潢得 ______，十分引人注目。", ans: "怪裏怪氣", options: ["秀麗", "怪裏怪氣", "稀疏", "口吻"] },
@@ -1555,12 +1565,12 @@
             { q: "小明幫媽媽洗碗，卻打破了兩個盤子，讓媽媽 ______。", ans: "啼笑皆非", options: ["馬馬虎虎", "羨慕", "啼笑皆非", "秀麗"] },
             { q: "秋天一到，樹上的葉子漸漸變得 ______，不再像夏天那樣茂密。", ans: "稀疏", options: ["稀疏", "相稱", "口吻", "秀麗"] },
             { q: "小美穿了一條紅裙子和一雙白皮鞋，打扮和她的年紀很 ______。", ans: "相稱", options: ["夾雜", "相稱", "馬馬虎虎", "怪裏怪氣"] },
-            { q: "看見同學有新買的文具套裝，我 ______ 地說：「真希望能擁有一套。」", ans: "羨慕", options: ["相稱", "稀少", "羨慕", "怪裏怪氣"] },
+            { q: "看見同學有新買的文具套裝，我 ______ 地説：「真希望能擁有一套。」", ans: "羨慕", options: ["相稱", "稀少", "羨慕", "怪裏怪氣"] },
             { q: "奶奶第一次用手機拍照，竟然把手指也拍進去，大家看了都 ______。", ans: "啼笑皆非", options: ["啼笑皆非", "秀麗", "稀疏", "口吻"] },
             { q: "從山頂遠望，景色 ______ 得像一幅畫，令人心情舒暢。", ans: "秀麗", options: ["口吻", "秀麗", "馬馬虎虎", "啼笑皆非"] },
             { q: "經過一個月的練習，我 ______ 學會了騎單車，心裏高興極了。", ans: "終於", options: ["居然", "終於", "已經", "曾經"] },
             { q: "弟弟把冰淇淋掉在地上，只能 ______ 嘆氣，看着它慢慢融化。", ans: "無奈", options: ["不滿", "居然", "無奈", "果然"] },
-            { q: "說好了輪流玩，哥哥卻一直佔着電腦，妹妹 ______ 抗議：「你怎麼可以這樣！」", ans: "不滿", options: ["不滿", "無奈", "幸好", "依然"] },
+            { q: "説好了輪流玩，哥哥卻一直佔着電腦，妹妹 ______ 抗議：「你怎麼可以這樣！」", ans: "不滿", options: ["不滿", "無奈", "幸好", "依然"] },
             { q: "平時害羞的小美，今天 ______ 主動報名參加講故事比賽，大家都嚇了一跳。", ans: "居然", options: ["果然", "居然", "不滿", "無奈"] },
             { q: "出門前天色很暗，我就帶了傘，後來 ______ 下起了大雨。", ans: "果然", options: ["居然", "幸好", "果然", "曾經"] },
             { q: "______ 有你陪我練習，不然我一個人還真不敢上台演講。", ans: "幸好", options: ["無奈", "不滿", "果然", "幸好"] },
@@ -1568,8 +1578,8 @@
             { q: "妹妹的性格很特別，______ 像個小大人，有時卻又非常孩子氣。", ans: "有時", options: ["曾經", "有時", "將來", "依然"] },
             { q: "我 ______ 把全部功課都做完了，現在可以看課外書了。", ans: "已經", options: ["將來", "曾經", "依然", "已經"] },
             { q: "媽媽 ______ 告訴我，她小時候家裏也有這樣一個鐵皮玩具。", ans: "曾經", options: ["已經", "曾經", "有時", "將來"] },
-            { q: "班上在討論 ______ 想要從事的職業，小華說他想當獸醫。", ans: "將來", options: ["將來", "已經", "依然", "有時"] },
-            { q: "聽他說話的 ______，好像對這次考試很有信心。", ans: "口吻", options: ["口吻", "稀疏", "相稱", "語氣"] },
+            { q: "班上在討論 ______ 想要從事的職業，小華説他想當獸醫。", ans: "將來", options: ["將來", "已經", "依然", "有時"] },
+            { q: "聽他説話的 ______，好像對這次考試很有信心。", ans: "口吻", options: ["口吻", "稀疏", "相稱", "語氣"] },
             { q: "這篇文章以小孩的 ______ 來描寫大自然，讀起來十分有趣。", ans: "口吻", options: ["口吻", "秀麗", "怪裏怪氣", "羨慕"] },
             { q: "客人用不禮貌的 ______ 對待店員，令旁邊的人感到很不舒服。", ans: "口吻", options: ["夾雜", "相稱", "口吻", "馬馬虎虎"] },
             { q: "媽媽變老了，她瘦削的 ______ 上，兩道皺紋橫在眉毛之間。", ans: "面龐", options: ["面龐", "臉頰", "額頭", "下巴"] },
@@ -1584,7 +1594,7 @@
             { q: "「我___要上班去了，請把桌子上的公事包遞給我。」", ans: "馬上", options: ["馬上", "曾經", "不時", "始終"] },
             { q: "「他___不肯改過，你不要對他抱太大的期望。」", ans: "始終", options: ["快要", "已經", "始終", "頓時"] },
             { q: "「老師一走進教室，大家___安靜下來。」", ans: "頓時", options: ["經常", "依然", "快要", "頓時"] },
-            { q: "「妹妹給我們講故事，說着說着，___大笑起來。」", ans: "忽然", options: ["馬上", "忽然", "始終", "已經"] },
+            { q: "「妹妹給我們講故事，説着説着，___大笑起來。」", ans: "忽然", options: ["馬上", "忽然", "始終", "已經"] },
             { q: "「他___給我很大的幫助，我怎會忘記他呢？」", ans: "曾經", options: ["曾經", "終於", "頓時", "立刻"] },
             { q: "「因為我經常遲到，所以___給老師責罰。」", ans: "不時", options: ["已經", "忽然", "不時", "頓時"] },
             { q: "「我猜姐姐___回來了，你看見她，立刻向她認錯吧。」", ans: "快要", options: ["依然", "始終", "曾經", "快要"] },
@@ -1742,6 +1752,700 @@
             3: { A: { m: 1000, f: 15, s: 30, g: 0, title: "⭐ 光明進化" }, B: { m: 1000, f: 15, s: 0, g: 30, title: "💎 闇黑進化" } },
             4: { A: { m: 2000, f: 30, s: 50, g: 0, title: "⭐ 究極光明" }, B: { m: 2000, f: 30, s: 0, g: 50, title: "💎 究極闇黑" } }
         };
+
+        // ══════════════════════════════════════
+        // EXAM QUESTION BANK (T3 考試題目)
+        // 12 關卡，共 61 題
+        // ══════════════════════════════════════
+        const examQuestions = [
+  {
+    "level": "關卡1：選詞填充（副詞）",
+    "q": "天空＿＿變暗了，媽媽叫我們快點回家。",
+    "ans": "忽然",
+    "options": [
+      "忽然",
+      "曾經",
+      "將來",
+      "往往"
+    ]
+  },
+  {
+    "level": "關卡1：選詞填充（副詞）",
+    "q": "弟弟＿＿地把門關上，不想吵醒熟睡的爸爸。",
+    "ans": "輕輕",
+    "options": [
+      "輕輕",
+      "重重",
+      "忽然",
+      "居然"
+    ]
+  },
+  {
+    "level": "關卡1：選詞填充（副詞）",
+    "q": "天氣＿＿變涼了，樹葉也開始變黃。",
+    "ans": "漸漸",
+    "options": [
+      "漸漸",
+      "將來",
+      "曾經",
+      "每天"
+    ]
+  },
+  {
+    "level": "關卡1：選詞填充（副詞）",
+    "q": "他平時不喜歡讀書，＿＿在考試中考了第一名！",
+    "ans": "竟然",
+    "options": [
+      "竟然",
+      "漸漸",
+      "輕輕",
+      "即將"
+    ]
+  },
+  {
+    "level": "關卡1：選詞填充（副詞）",
+    "q": "小貓＿＿地趴在窗邊，盯着窗外的小鳥。",
+    "ans": "靜靜",
+    "options": [
+      "靜靜",
+      "曾經",
+      "忽然",
+      "居然"
+    ]
+  },
+  {
+    "level": "關卡1：選詞填充（副詞）",
+    "q": "妹妹不想讓人知道，所以＿＿把禮物藏在床底下。",
+    "ans": "悄悄",
+    "options": [
+      "悄悄",
+      "漸漸",
+      "忽然",
+      "竟然"
+    ]
+  },
+  {
+    "level": "關卡1：選詞填充（副詞）",
+    "q": "老婆婆走路＿＿的，每一步都很小心。",
+    "ans": "慢慢",
+    "options": [
+      "慢慢",
+      "靜靜",
+      "居然",
+      "忽然"
+    ]
+  },
+  {
+    "level": "關卡1：選詞填充（副詞）",
+    "q": "他把功課忘了在家裏，只好＿＿打電話給媽媽，讓她送來。",
+    "ans": "趕緊",
+    "options": [
+      "居然",
+      "漸漸",
+      "曾經",
+      "趕緊"
+    ]
+  },
+  {
+    "level": "關卡2：詞語填充",
+    "q": "收養小動物前，我們要先想清楚自己有沒有時間＿＿牠們。",
+    "ans": "照顧",
+    "options": [
+      "照顧",
+      "欣賞",
+      "裝飾",
+      "發明"
+    ]
+  },
+  {
+    "level": "關卡2：詞語填充",
+    "q": "戴上虛擬實景眼鏡後，我彷彿＿＿在遊戲世界裏。",
+    "ans": "沉浸",
+    "options": [
+      "沉醉",
+      "沉浸",
+      "沉睡",
+      "沉重"
+    ]
+  },
+  {
+    "level": "關卡2：詞語填充",
+    "q": "交流團結束後，我＿＿了很多新朋友。",
+    "ans": "結識",
+    "options": [
+      "結識",
+      "結束",
+      "結冰",
+      "結果"
+    ]
+  },
+  {
+    "level": "關卡2：詞語填充",
+    "q": "媽媽叫我回家時順便＿＿去超市買牛奶。",
+    "ans": "順手",
+    "options": [
+      "順路",
+      "順手",
+      "順耳",
+      "順意"
+    ]
+  },
+  {
+    "level": "關卡2：詞語填充",
+    "q": "要不是我＿＿所見，我也不會相信這件事是真的。",
+    "ans": "親眼",
+    "options": [
+      "親手",
+      "親耳",
+      "親眼",
+      "親口"
+    ]
+  },
+  {
+    "level": "關卡2：詞語填充",
+    "q": "網上的世界很吸引人，但我們不應過分＿＿其中。",
+    "ans": "沉迷",
+    "options": [
+      "沉迷",
+      "沉默",
+      "沉着",
+      "沉思"
+    ]
+  },
+  {
+    "level": "關卡3：配詞完句",
+    "q": "母親的（　）抱讓我感到十分温暖。",
+    "ans": "擁",
+    "options": [
+      "擁",
+      "抱",
+      "摟",
+      "環"
+    ]
+  },
+  {
+    "level": "關卡3：配詞完句",
+    "q": "這個社區的設施已經十分完（　）。",
+    "ans": "備",
+    "options": [
+      "美",
+      "成",
+      "備",
+      "整"
+    ]
+  },
+  {
+    "level": "關卡3：配詞完句",
+    "q": "爸爸常提醒我要培（　）責任感。",
+    "ans": "養",
+    "options": [
+      "養",
+      "植",
+      "種",
+      "生"
+    ]
+  },
+  {
+    "level": "關卡3：配詞完句",
+    "q": "明天去旅行，大家都興（　）勃勃。",
+    "ans": "致",
+    "options": [
+      "高",
+      "趣",
+      "致",
+      "奮"
+    ]
+  },
+  {
+    "level": "關卡4：擴寫句子",
+    "q": "下列哪一句最能把「小鳥停在樹上」擴寫得完整？",
+    "ans": "那隻可愛的小鳥停在高高的大樹上。",
+    "options": [
+      "小鳥停在樹上。",
+      "小鳥停在高。",
+      "那隻可愛的小鳥停在高高的大樹上。",
+      "那隻小鳥可愛。"
+    ]
+  },
+  {
+    "level": "關卡4：擴寫句子",
+    "q": "下列哪一句最能把「消防員跳進火場救人」擴寫得完整？",
+    "ans": "勇敢的消防員跳進熊熊燃燒的火場救人。",
+    "options": [
+      "勇敢的消防員跳進熊熊燃燒的火場救人。",
+      "消防員在火場。",
+      "火場裏有消防員。",
+      "消防員救人很勇敢。"
+    ]
+  },
+  {
+    "level": "關卡4：擴寫句子",
+    "q": "下列哪一句是較完整的擴寫句子？",
+    "ans": "那位瘦小的同學在操場上飛快地跑步。",
+    "options": [
+      "同學跑步。",
+      "那位瘦小的同學在操場上飛快地跑步。",
+      "同學在操場。",
+      "跑步的同學很快。"
+    ]
+  },
+  {
+    "level": "關卡5：改寫句子（既……也……）",
+    "q": "「閲讀圖書可以增廣見聞。閲讀圖書可以提高語文能力。」改寫成「既……也……」，哪一句正確？",
+    "ans": "閲讀圖書既可以增廣見聞，也可以提高語文能力。",
+    "options": [
+      "閲讀圖書既可以增廣見聞，也可以提高語文能力。",
+      "閲讀圖書既增廣見聞，也提高語文能力可以。",
+      "既閲讀圖書可以增廣見聞，也提高語文能力。",
+      "閲讀圖書可以既增廣見聞，也可以提高語文能力。"
+    ]
+  },
+  {
+    "level": "關卡5：改寫句子（既……也……）",
+    "q": "「運動可以強身健體。運動可以減輕壓力。」哪一句改寫正確？",
+    "ans": "運動既可以強身健體，也可以減輕壓力。",
+    "options": [
+      "運動既可以強身健體，也可以減輕壓力。",
+      "運動可以既強身健體，也減輕壓力。",
+      "既運動可以強身健體，也可以減輕壓力。",
+      "運動既強身健體，也減輕壓力可以。"
+    ]
+  },
+  {
+    "level": "關卡6：排句成段",
+    "q": "甲：最後，我們到達博物館門口。乙：今天，我們一起去參觀博物館。丙：接着，我們沿着大路一直向前走。丁：首先，我們在地鐵站集合。排列成段，哪個次序最恰當？",
+    "ans": "乙丁丙甲",
+    "options": [
+      "乙丁丙甲",
+      "丁乙甲丙",
+      "乙丙丁甲",
+      "丁丙乙甲"
+    ]
+  },
+  {
+    "level": "關卡6：排句成段",
+    "q": "甲：後來，我們一起分享成果。乙：老師先講解活動規則。丙：最後，全班都感到很開心。丁：同學們分組討論。排列成段，哪個次序最恰當？",
+    "ans": "乙丁甲丙",
+    "options": [
+      "乙丁甲丙",
+      "丁乙甲丙",
+      "乙甲丁丙",
+      "丁甲乙丙"
+    ]
+  },
+  {
+    "level": "關卡7：重組句子",
+    "q": "「下課的／鐘聲／一響起／同學們／便／收拾／迫不及待地／書包」，重組後哪一句正確？",
+    "ans": "下課的鐘聲一響起，同學們便迫不及待地收拾書包。",
+    "options": [
+      "下課的鐘聲一響起，同學們便迫不及待地收拾書包。",
+      "同學們下課的鐘聲一響起，便收拾迫不及待地書包。",
+      "一響起下課的鐘聲，同學們迫不及待地便收拾。",
+      "書包下課的鐘聲一響起，同學們便迫不及待地收拾。"
+    ]
+  },
+  {
+    "level": "關卡7：重組句子",
+    "q": "「地震／過後／災區的／居民／都因此／失去了／許多／家園」，重組後哪一句正確？",
+    "ans": "地震過後，災區的許多居民都因此失去了家園。",
+    "options": [
+      "地震過後，災區的許多居民都因此失去了家園。",
+      "災區的居民過後地震都因此失去了許多家園。",
+      "許多地震過後，災區的居民失去了都因此家園。",
+      "家園過後，災區的居民地震都因此失去了。"
+    ]
+  },
+  {
+    "level": "關卡7：重組句子",
+    "q": "「公園裏／在／愉快地／小朋友／玩耍／星期天／下午」，重組後哪一句正確？",
+    "ans": "星期天下午，小朋友在公園裏愉快地玩耍。",
+    "options": [
+      "星期天下午，小朋友在公園裏愉快地玩耍。",
+      "小朋友星期天下午愉快地在玩耍公園裏。",
+      "在公園裏星期天下午小朋友愉快地。",
+      "玩耍的小朋友星期天下午在公園裏愉快地。"
+    ]
+  },
+  {
+    "level": "關卡8：標點符號",
+    "q": "下列哪一句的標點符號使用正確？",
+    "ans": "媽媽説：「你做完功課了嗎？」",
+    "options": [
+      "媽媽説：「你做完功課了嗎？」",
+      "媽媽説「你做完功課了嗎」？",
+      "媽媽説，你做完功課了嗎？",
+      "媽媽説：「你做完功課了嗎」。"
+    ]
+  },
+  {
+    "level": "關卡8：標點符號",
+    "q": "下列哪一句書名號使用正確？",
+    "ans": "孫悟空是《西遊記》的主角。",
+    "options": [
+      "孫悟空是《西遊記》的主角。",
+      "孫悟空是「西遊記」的主角。",
+      "孫悟空是（西遊記）的主角。",
+      "孫悟空是，西遊記，的主角。"
+    ]
+  },
+  {
+    "level": "關卡8：標點符號",
+    "q": "下列哪一句標點符號使用正確？",
+    "ans": "今天，天氣很好，我們一起去郊遊。",
+    "options": [
+      "今天，天氣很好，我們一起去郊遊。",
+      "今天天氣很好，我們一起去郊遊、",
+      "今天天氣很好；我們一起去郊遊？",
+      "今天天氣很好我們一起去郊遊。"
+    ]
+  },
+  {
+    "level": "關卡8：標點符號",
+    "q": "老師説＿「同學們，請把功課放在桌上。」",
+    "ans": "：",
+    "options": [
+      "：",
+      "，",
+      "。",
+      "！"
+    ]
+  },
+  {
+    "level": "關卡8：標點符號",
+    "q": "媽媽問我：「你今天在學校開心嗎＿」",
+    "ans": "？",
+    "options": [
+      "？",
+      "！",
+      "，",
+      "。"
+    ]
+  },
+  {
+    "level": "關卡8：標點符號",
+    "q": "他跑得很快＿一下子就衝到終點線。",
+    "ans": "，",
+    "options": [
+      "，",
+      "：",
+      "！",
+      "？"
+    ]
+  },
+  {
+    "level": "關卡8：標點符號",
+    "q": "天上的星星十分漂亮＿我忍不住多看了幾眼。",
+    "ans": "，",
+    "options": [
+      "，",
+      "：",
+      "！",
+      "？"
+    ]
+  },
+  {
+    "level": "關卡8：標點符號",
+    "q": "爸爸笑着説＿「我們今天去公園玩吧！」",
+    "ans": "：",
+    "options": [
+      "：",
+      "，",
+      "。",
+      "！"
+    ]
+  },
+  {
+    "level": "關卡9：句式續寫",
+    "q": "下列哪一句最適合續寫「儘管今天下着大雨，但……」？",
+    "ans": "但我仍然準時回校上課。",
+    "options": [
+      "但我仍然準時回校上課。",
+      "但今天下着大雨。",
+      "但我很喜歡下雨天，因為。",
+      "但所以我沒有帶雨傘。"
+    ]
+  },
+  {
+    "level": "關卡9：句式續寫",
+    "q": "下列哪一句最適合續寫「與其整天玩手機，……」？",
+    "ans": "不如多看幾本有益的圖書。",
+    "options": [
+      "不如多看幾本有益的圖書。",
+      "與其我很喜歡玩手機。",
+      "不如因為手機很好玩。",
+      "可是我還是玩手機。"
+    ]
+  },
+  {
+    "level": "關卡10：詞語運用",
+    "q": "下列哪一句最適合用「保護」來造句？",
+    "ans": "我們要保護環境，保持校園清潔。",
+    "options": [
+      "我們要保護環境，保持校園清潔。",
+      "保護很開心去旅行。",
+      "今天保護了所以我回家。",
+      "我看見保護在跑步。"
+    ]
+  },
+  {
+    "level": "關卡10：詞語運用",
+    "q": "下列哪一句最適合運用「繁多」和「賞心悅目」？",
+    "ans": "花園裏花木繁多，景色十分賞心悅目。",
+    "options": [
+      "花園裏花木繁多，景色十分賞心悅目。",
+      "我今天繁多地賞心悅目。",
+      "繁多和賞心悅目在説話。",
+      "花園很繁多，所以賞心悅目地走路。"
+    ]
+  },
+  {
+    "level": "關卡11：詞義辨析",
+    "q": "高錕的研究成果（　）了很多年輕科學家。",
+    "ans": "啟發",
+    "options": [
+      "啟發",
+      "揭發",
+      "發揮",
+      "開發"
+    ]
+  },
+  {
+    "level": "關卡11：詞義辨析",
+    "q": "長者中心希望為長者的生活（　）更多樂趣。",
+    "ans": "增添",
+    "options": [
+      "增強",
+      "增添",
+      "增值",
+      "增進"
+    ]
+  },
+  {
+    "level": "關卡11：詞義辨析",
+    "q": "這本相簿（　）着我成長的點滴。",
+    "ans": "記錄",
+    "options": [
+      "描寫",
+      "描繪",
+      "記錄",
+      "形容"
+    ]
+  },
+  {
+    "level": "關卡11：詞義辨析",
+    "q": "經過一晚的（　），我終於決定參加朗誦比賽。",
+    "ans": "深思熟慮",
+    "options": [
+      "胡思亂想",
+      "靈機一動",
+      "深思熟慮",
+      "左搖右擺"
+    ]
+  },
+  {
+    "level": "關卡11：詞義辨析",
+    "q": "這家店把假貨混在真貨裏，想達到（　）的目的。",
+    "ans": "以假亂真",
+    "options": [
+      "栩栩如生",
+      "千奇百怪",
+      "形形色色",
+      "以假亂真"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "小明一直很想學踩單車。起初，他一坐上單車就東歪西倒，差點兒跌倒，所以感到很害怕。可是，爸爸在旁邊不停鼓勵他，又耐心地教他怎樣保持平衡。小明練習了一次又一次，終於能慢慢向前騎了。雖然他滿頭大汗，雙腿也很累，但是他心裏非常高興，因為他終於學會了踩單車。",
+    "q": "小明起初學踩單車時有甚麼表現？",
+    "ans": "東歪西倒，差點跌倒",
+    "options": [
+      "騎得很快",
+      "東歪西倒，差點跌倒",
+      "一下子就學會了",
+      "完全不害怕"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "小明一直很想學踩單車。起初，他一坐上單車就東歪西倒，差點兒跌倒，所以感到很害怕。可是，爸爸在旁邊不停鼓勵他，又耐心地教他怎樣保持平衡。小明練習了一次又一次，終於能慢慢向前騎了。雖然他滿頭大汗，雙腿也很累，但是他心裏非常高興，因為他終於學會了踩單車。",
+    "q": "爸爸怎樣幫助小明？",
+    "ans": "在旁鼓勵他，耐心教他",
+    "options": [
+      "幫他買新單車",
+      "替他踩單車",
+      "在旁鼓勵他，耐心教他",
+      "叫他不要學了"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "小明一直很想學踩單車。起初，他一坐上單車就東歪西倒，差點兒跌倒，所以感到很害怕。可是，爸爸在旁邊不停鼓勵他，又耐心地教他怎樣保持平衡。小明練習了一次又一次，終於能慢慢向前騎了。雖然他滿頭大汗，雙腿也很累，但是他心裏非常高興，因為他終於學會了踩單車。",
+    "q": "小明最後心情怎樣？",
+    "ans": "高興",
+    "options": [
+      "生氣",
+      "難過",
+      "高興",
+      "緊張"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "小明一直很想學踩單車。起初，他一坐上單車就東歪西倒，差點兒跌倒，所以感到很害怕。可是，爸爸在旁邊不停鼓勵他，又耐心地教他怎樣保持平衡。小明練習了一次又一次，終於能慢慢向前騎了。雖然他滿頭大汗，雙腿也很累，但是他心裏非常高興，因為他終於學會了踩單車。",
+    "q": "這篇短文主要帶出甚麼道理？",
+    "ans": "只要努力練習，就有機會成功",
+    "options": [
+      "做事要依靠別人",
+      "只要努力練習，就有機會成功",
+      "踩單車十分危險",
+      "流汗是一件辛苦的事"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "上星期六，學校舉行了「環保日」活動。那天早上，同學們一回到學校，便到操場集合。老師先向我們講解活動流程，然後把我們分成幾組，安排不同的工作。我和組員負責清理花圃。我們先把地上的枯葉和垃圾拾起來，再把雜草拔掉。起初，我覺得這項工作又累又髒，心裏有點不願意。可是，當我看見原本凌亂的花圃慢慢變得整潔時，便感到十分滿足。完成清理後，老師還帶領我們把一些可以回收的廢物分類，例如廢紙、膠樽和鋁罐。老師説，如果大家平日都能做好垃圾分類，就能減少浪費，保護環境。聽了老師的話，我明白到環保不是一句口號，而是要從生活中的小事做起。活動結束時，大家雖然滿頭大汗，卻都露出了笑容。這次活動不但令校園變得更整潔，也讓我學會了珍惜環境和愛護校園。",
+    "q": "學校在上星期六舉行了甚麼活動？",
+    "ans": "環保日",
+    "options": [
+      "旅行日",
+      "環保日",
+      "運動會",
+      "閲讀日"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "上星期六，學校舉行了「環保日」活動。那天早上，同學們一回到學校，便到操場集合。老師先向我們講解活動流程，然後把我們分成幾組，安排不同的工作。我和組員負責清理花圃。我們先把地上的枯葉和垃圾拾起來，再把雜草拔掉。起初，我覺得這項工作又累又髒，心裏有點不願意。可是，當我看見原本凌亂的花圃慢慢變得整潔時，便感到十分滿足。完成清理後，老師還帶領我們把一些可以回收的廢物分類，例如廢紙、膠樽和鋁罐。老師説，如果大家平日都能做好垃圾分類，就能減少浪費，保護環境。聽了老師的話，我明白到環保不是一句口號，而是要從生活中的小事做起。活動結束時，大家雖然滿頭大汗，卻都露出了笑容。這次活動不但令校園變得更整潔，也讓我學會了珍惜環境和愛護校園。",
+    "q": "作者和組員負責做甚麼工作？",
+    "ans": "清理花圃",
+    "options": [
+      "打掃課室",
+      "清理操場",
+      "清理花圃",
+      "種植小樹"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "上星期六，學校舉行了「環保日」活動。那天早上，同學們一回到學校，便到操場集合。老師先向我們講解活動流程，然後把我們分成幾組，安排不同的工作。我和組員負責清理花圃。我們先把地上的枯葉和垃圾拾起來，再把雜草拔掉。起初，我覺得這項工作又累又髒，心裏有點不願意。可是，當我看見原本凌亂的花圃慢慢變得整潔時，便感到十分滿足。完成清理後，老師還帶領我們把一些可以回收的廢物分類，例如廢紙、膠樽和鋁罐。老師説，如果大家平日都能做好垃圾分類，就能減少浪費，保護環境。聽了老師的話，我明白到環保不是一句口號，而是要從生活中的小事做起。活動結束時，大家雖然滿頭大汗，卻都露出了笑容。這次活動不但令校園變得更整潔，也讓我學會了珍惜環境和愛護校園。",
+    "q": "作者一開始對這項工作有甚麼感覺？",
+    "ans": "有點不願意",
+    "options": [
+      "十分興奮",
+      "有點不願意",
+      "非常害怕",
+      "毫不在意"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "上星期六，學校舉行了「環保日」活動。那天早上，同學們一回到學校，便到操場集合。老師先向我們講解活動流程，然後把我們分成幾組，安排不同的工作。我和組員負責清理花圃。我們先把地上的枯葉和垃圾拾起來，再把雜草拔掉。起初，我覺得這項工作又累又髒，心裏有點不願意。可是，當我看見原本凌亂的花圃慢慢變得整潔時，便感到十分滿足。完成清理後，老師還帶領我們把一些可以回收的廢物分類，例如廢紙、膠樽和鋁罐。老師説，如果大家平日都能做好垃圾分類，就能減少浪費，保護環境。聽了老師的話，我明白到環保不是一句口號，而是要從生活中的小事做起。活動結束時，大家雖然滿頭大汗，卻都露出了笑容。這次活動不但令校園變得更整潔，也讓我學會了珍惜環境和愛護校園。",
+    "q": "下列哪一項不是文中提到的可回收物？",
+    "ans": "玻璃杯",
+    "options": [
+      "廢紙",
+      "膠樽",
+      "鋁罐",
+      "玻璃杯"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "上星期六，學校舉行了「環保日」活動。那天早上，同學們一回到學校，便到操場集合。老師先向我們講解活動流程，然後把我們分成幾組，安排不同的工作。我和組員負責清理花圃。我們先把地上的枯葉和垃圾拾起來，再把雜草拔掉。起初，我覺得這項工作又累又髒，心裏有點不願意。可是，當我看見原本凌亂的花圃慢慢變得整潔時，便感到十分滿足。完成清理後，老師還帶領我們把一些可以回收的廢物分類，例如廢紙、膠樽和鋁罐。老師説，如果大家平日都能做好垃圾分類，就能減少浪費，保護環境。聽了老師的話，我明白到環保不是一句口號，而是要從生活中的小事做起。活動結束時，大家雖然滿頭大汗，卻都露出了笑容。這次活動不但令校園變得更整潔，也讓我學會了珍惜環境和愛護校園。",
+    "q": "作者從這次活動中明白到甚麼？",
+    "ans": "環保要從生活中的小事做起",
+    "options": [
+      "做清潔工作很辛苦，所以不用再做",
+      "環保只是學校活動的一部分",
+      "環保要從生活中的小事做起",
+      "只要老師要求，學生才需要分類垃圾"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "上星期六，學校舉行了「環保日」活動。那天早上，同學們一回到學校，便到操場集合。老師先向我們講解活動流程，然後把我們分成幾組，安排不同的工作。我和組員負責清理花圃。我們先把地上的枯葉和垃圾拾起來，再把雜草拔掉。起初，我覺得這項工作又累又髒，心裏有點不願意。可是，當我看見原本凌亂的花圃慢慢變得整潔時，便感到十分滿足。完成清理後，老師還帶領我們把一些可以回收的廢物分類，例如廢紙、膠樽和鋁罐。老師説，如果大家平日都能做好垃圾分類，就能減少浪費，保護環境。聽了老師的話，我明白到環保不是一句口號，而是要從生活中的小事做起。活動結束時，大家雖然滿頭大汗，卻都露出了笑容。這次活動不但令校園變得更整潔，也讓我學會了珍惜環境和愛護校園。",
+    "q": "哪一句最能概括本文的中心思想？",
+    "ans": "這次活動讓作者明白要愛護環境和校園。",
+    "options": [
+      "校園的花圃很髒亂。",
+      "老師安排了很多工作給同學。",
+      "這次活動讓作者明白要愛護環境和校園。",
+      "同學們都不喜歡做清潔工作。"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "今天放學後，我和同學一起到圖書館做功課。圖書館裏十分安靜，只聽到翻書和寫字的聲音。大家都專心地坐在座位上，有的低頭閲讀，有的輕聲討論，有的正在查字典。我本來覺得做功課很沉悶，可是當我遇到不明白的地方時，圖書館管理員耐心地指導我，又教我怎樣查找資料。經過她的幫助，我終於明白了那道難題，心裏感到十分高興。做完功課後，我順便在書架上挑選圖書。我找到一本介紹動物的圖書，內容十分有趣，令我看得入神。原來，閲讀不但可以幫助我增長知識，還可以帶來不少樂趣。回家的路上，我心裏想：以後我要多到圖書館看書和做功課，養成勤奮學習的好習慣。",
+    "q": "放學後，作者和同學到哪裏去？",
+    "ans": "圖書館",
+    "options": [
+      "操場",
+      "禮堂",
+      "圖書館",
+      "公園"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "今天放學後，我和同學一起到圖書館做功課。圖書館裏十分安靜，只聽到翻書和寫字的聲音。大家都專心地坐在座位上，有的低頭閲讀，有的輕聲討論，有的正在查字典。我本來覺得做功課很沉悶，可是當我遇到不明白的地方時，圖書館管理員耐心地指導我，又教我怎樣查找資料。經過她的幫助，我終於明白了那道難題，心裏感到十分高興。做完功課後，我順便在書架上挑選圖書。我找到一本介紹動物的圖書，內容十分有趣，令我看得入神。原來，閲讀不但可以幫助我增長知識，還可以帶來不少樂趣。回家的路上，我心裏想：以後我要多到圖書館看書和做功課，養成勤奮學習的好習慣。",
+    "q": "圖書館裏的環境怎樣？",
+    "ans": "十分安靜",
+    "options": [
+      "十分熱鬧",
+      "十分安靜",
+      "十分擠迫",
+      "十分骯髒"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "今天放學後，我和同學一起到圖書館做功課。圖書館裏十分安靜，只聽到翻書和寫字的聲音。大家都專心地坐在座位上，有的低頭閲讀，有的輕聲討論，有的正在查字典。我本來覺得做功課很沉悶，可是當我遇到不明白的地方時，圖書館管理員耐心地指導我，又教我怎樣查找資料。經過她的幫助，我終於明白了那道難題，心裏感到十分高興。做完功課後，我順便在書架上挑選圖書。我找到一本介紹動物的圖書，內容十分有趣，令我看得入神。原來，閲讀不但可以幫助我增長知識，還可以帶來不少樂趣。回家的路上，我心裏想：以後我要多到圖書館看書和做功課，養成勤奮學習的好習慣。",
+    "q": "作者遇到不明白的地方時，誰幫助了他？",
+    "ans": "圖書館管理員",
+    "options": [
+      "同學",
+      "老師",
+      "媽媽",
+      "圖書館管理員"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "今天放學後，我和同學一起到圖書館做功課。圖書館裏十分安靜，只聽到翻書和寫字的聲音。大家都專心地坐在座位上，有的低頭閲讀，有的輕聲討論，有的正在查字典。我本來覺得做功課很沉悶，可是當我遇到不明白的地方時，圖書館管理員耐心地指導我，又教我怎樣查找資料。經過她的幫助，我終於明白了那道難題，心裏感到十分高興。做完功課後，我順便在書架上挑選圖書。我找到一本介紹動物的圖書，內容十分有趣，令我看得入神。原來，閲讀不但可以幫助我增長知識，還可以帶來不少樂趣。回家的路上，我心裏想：以後我要多到圖書館看書和做功課，養成勤奮學習的好習慣。",
+    "q": "作者後來找到了一本甚麼類型的圖書？",
+    "ans": "介紹動物的圖書",
+    "options": [
+      "介紹植物的圖書",
+      "介紹歷史的圖書",
+      "介紹動物的圖書",
+      "介紹地理的圖書"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "今天放學後，我和同學一起到圖書館做功課。圖書館裏十分安靜，只聽到翻書和寫字的聲音。大家都專心地坐在座位上，有的低頭閲讀，有的輕聲討論，有的正在查字典。我本來覺得做功課很沉悶，可是當我遇到不明白的地方時，圖書館管理員耐心地指導我，又教我怎樣查找資料。經過她的幫助，我終於明白了那道難題，心裏感到十分高興。做完功課後，我順便在書架上挑選圖書。我找到一本介紹動物的圖書，內容十分有趣，令我看得入神。原來，閲讀不但可以幫助我增長知識，還可以帶來不少樂趣。回家的路上，我心裏想：以後我要多到圖書館看書和做功課，養成勤奮學習的好習慣。",
+    "q": "根據文章內容，閲讀有甚麼好處？",
+    "ans": "可以增長知識，也可以帶來樂趣",
+    "options": [
+      "只可以幫助完成家課",
+      "只可以消磨時間",
+      "可以增長知識，也可以帶來樂趣",
+      "可以令人不用上學"
+    ]
+  },
+  {
+    "level": "關卡12：閲讀理解",
+    "passage": "今天放學後，我和同學一起到圖書館做功課。圖書館裏十分安靜，只聽到翻書和寫字的聲音。大家都專心地坐在座位上，有的低頭閲讀，有的輕聲討論，有的正在查字典。我本來覺得做功課很沉悶，可是當我遇到不明白的地方時，圖書館管理員耐心地指導我，又教我怎樣查找資料。經過她的幫助，我終於明白了那道難題，心裏感到十分高興。做完功課後，我順便在書架上挑選圖書。我找到一本介紹動物的圖書，內容十分有趣，令我看得入神。原來，閲讀不但可以幫助我增長知識，還可以帶來不少樂趣。回家的路上，我心裏想：以後我要多到圖書館看書和做功課，養成勤奮學習的好習慣。",
+    "q": "哪一句最能概括本文的中心思想？",
+    "ans": "作者明白到閲讀和學習是有益和有趣的。",
+    "options": [
+      "圖書館裏有很多座位。",
+      "作者明白到閲讀和學習是有益和有趣的。",
+      "做功課是一件十分沉悶的事。",
+      "圖書館管理員很忙碌。"
+    ]
+  }
+];
 
         const digidex = {
             'agu': { title: "亞古獸路線", desc: "經典主角，攻擊力最強的龍型精靈。", lv0: { n: "滾球獸", p: "koromon.jpg", b: 0 }, lv1: { n: "亞古獸", p: "agumon.jpg", b: 20 }, lv2: { n: "暴龍獸", p: "greymon.jpg", b: 50 }, lv3A: { n: "機械暴龍獸", p: "metalgreymon.jpg", b: 100 }, lv3B: { n: "喪屍暴龍獸", p: "skullgreymon.jpg", b: 120 }, lv4A: { n: "戰鬥暴龍獸", p: "wargreymon.jpg", b: 200 }, lv4B: { n: "無限龍獸", p: "mugendramon.jpg", b: 220 } },
@@ -2238,6 +2942,11 @@ function checkDailyReset() {
             def += (inventory.superShieldLv * 5) + (inventory.superStoneLv * 3);
             
             if(inventory.partnerId) {
+                // 🔧 Fix: sync partnerLv with selected partner's saved level
+                if (inventory.partners && inventory.partners[inventory.partnerId]) {
+                    inventory.partnerLv = inventory.partners[inventory.partnerId].lv || 0;
+                    inventory.partnerBranch = inventory.partners[inventory.partnerId].branch || 'A';
+                }
                 let pLevel = inventory.partnerLv || 0;
                 if (pLevel > 4) pLevel = 4;
                 let info = getPartnerInfo(inventory.partnerId, pLevel, inventory.partnerBranch);
@@ -2476,6 +3185,11 @@ function checkDailyReset() {
         }
 
         function updatePartnerUI() {
+            // 🔧 Fix: sync partnerLv with selected partner's saved level
+            if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                inventory.partnerLv = inventory.partners[inventory.partnerId].lv || 0;
+                inventory.partnerBranch = inventory.partners[inventory.partnerId].branch || 'A';
+            }
             let pLevel = inventory.partnerLv || 0;
             let info = getPartnerInfo(inventory.partnerId, pLevel, inventory.partnerBranch);
 
@@ -2531,6 +3245,11 @@ function checkDailyReset() {
 
         window.evolvePartner = function(chosenBranch = 'A') {
             playSound('click');
+            // 🔧 Fix: sync partnerLv with selected partner's saved level
+            if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                inventory.partnerLv = inventory.partners[inventory.partnerId].lv || 0;
+                inventory.partnerBranch = inventory.partners[inventory.partnerId].branch || 'A';
+            }
             let pLevel = inventory.partnerLv || 0;
             if (pLevel >= 4) return;
 
@@ -2574,7 +3293,17 @@ function checkDailyReset() {
                     
                     setTimeout(() => {
                         inventory.partnerLv++;
-                        if(pLevel === 2) inventory.partnerBranch = chosenBranch;
+                        // 🔧 Fix: keep partners[id] in sync with partnerLv
+                        if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                            inventory.partners[inventory.partnerId].lv = inventory.partnerLv;
+                        }
+                        if(pLevel === 2) {
+                            inventory.partnerBranch = chosenBranch;
+                            // 🔧 Fix: save branch to partners[id] too
+                            if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                                inventory.partners[inventory.partnerId].branch = chosenBranch;
+                            }
+                        }
                         unlockAchievement('ach_evo1');
                         if (inventory.partnerLv >= 4) unlockAchievement('ach_evo4');
                         let newInfo = getPartnerInfo(inventory.partnerId, inventory.partnerLv, inventory.partnerBranch);
@@ -2605,9 +3334,9 @@ function checkDailyReset() {
             let scrollBtn = document.getElementById('btn-buy-scroll');
             let today = new Date().toDateString();
             if(inventory.scrollBoughtDate === today) {
-                scrollBtn.disabled = true; scrollBtn.innerHTML = "📜 傳說卷軸 (今日已售罄)"; scrollBtn.className = "btn-grey";
+                scrollBtn.disabled = true; scrollBtn.innerHTML = "📜 傳説卷軸 (今日已售罄)"; scrollBtn.className = "btn-grey";
             } else {
-                scrollBtn.disabled = false; scrollBtn.innerHTML = "📜 傳說卷軸 (必遇傳說怪) <br>💰 50🪵 + 50🪨 + 10⭐"; scrollBtn.className = "btn-red";
+                scrollBtn.disabled = false; scrollBtn.innerHTML = "📜 傳説卷軸 (必遇傳説怪) <br>💰 50🪵 + 50🪨 + 10⭐"; scrollBtn.className = "btn-red";
             }
             document.getElementById('market-modal').classList.remove('hidden');
         }
@@ -2643,7 +3372,7 @@ function checkDailyReset() {
                 if(inventory.wood >= 50 && inventory.stone >= 50 && inventory.star >= 10) {
                     inventory.wood -= 50; inventory.stone -= 50; inventory.star -= 10;
                     inventory.hasLegendaryBuff = true; playSound('purchase'); inventory.scrollBoughtDate = today;
-                    alert("🛒 購買成功！下一次進入森林【必遇傳說怪】！"); openMarket(); 
+                    alert("🛒 購買成功！下一次進入森林【必遇傳説怪】！"); openMarket(); 
                 } else { alert("❌ 資源不足！需要 50木材 + 50石頭 + 10星星。"); }
             }
             updateUI();
@@ -3008,7 +3737,7 @@ function checkDailyReset() {
                 currentEvent = { type: 'legendary', name: digiName, pic: digiPic };
                 
                 playSound('legendary'); playSound('encounter'); innerBox.classList.add('legendary-border', 'glow-gold'); 
-                eventTitle.innerHTML = `🌟 傳說降臨！皇家騎士！`; eventTitle.style.color = '#FFD700';
+                eventTitle.innerHTML = `🌟 傳説降臨！皇家騎士！`; eventTitle.style.color = '#FFD700';
                 eventDesc.innerHTML = `<img src="${digiPic}" class="battle-pic"><br><span style="color:#D50000; font-size:1.4em; font-weight:bold;">${digiName}</span>！<br><span style="color:#2E7D32;">💬 必須連續答對 2 題才能獲得牠的認可！</span>`;
                 
                 fightBtn.innerHTML = "⚔️ 接受試煉 (-1 🌟)"; fightBtn.className = 'btn-gold';
@@ -3153,7 +3882,7 @@ function checkDailyReset() {
                 }
             } else if(type === 'legendary') {
                 combatTarget = 2; combatTimeLimit = 10;
-                setupMonsterCombatUI("【傳說試煉】" + evtData.name, evtData.pic, 'glow-gold');
+                setupMonsterCombatUI("【傳説試煉】" + evtData.name, evtData.pic, 'glow-gold');
             } else if (type === 'virus') {
                 combatTarget = 1; combatTimeLimit = 15;
                 setupMonsterCombatUI("【野生突襲】" + evtData.name, evtData.pic, 'glow-purple');
@@ -3519,7 +4248,7 @@ function checkDailyReset() {
                             inventory.gem += 20; inventory.star += 20; inventory.manuscript += ms; inventory.wood += 30; inventory.fragment += 2; inventory.coins += 100; updateUI();
                             unlockCard('leg_' + currentEvent.name);
                             showVictoryModal({
-                                title: '🌟 傳說怪已收服！',
+                                title: '🌟 傳説怪已收服！',
                                 subtitle: '【' + currentEvent.name + '】 加入了你的紀念冊',
                                 imgSrc: currentEvent.pic || '',
                                 rewards: [
@@ -4166,6 +4895,178 @@ function checkDailyReset() {
 
         // ==================== END CHEAT ====================
 
+        
+        // ══════════════════════════════════════
+        // EXAM MODE LOGIC
+        // ══════════════════════════════════════
+        let examState = { level: null, questions: [], current: 0, correct: 0, answered: false };
+
+        function openExamMode() {
+            hideAll();
+            document.getElementById('exam-screen').classList.remove('hidden');
+            document.getElementById('exam-level-select').classList.remove('hidden');
+            document.getElementById('exam-question-area').classList.add('hidden');
+            document.getElementById('exam-result-area').classList.add('hidden');
+            document.getElementById('exam-back-btn').classList.remove('hidden');
+            renderExamLevelButtons();
+        }
+
+        function renderExamLevelButtons() {
+            const levels = [...new Set(examQuestions.map(q => q.level))];
+            const container = document.getElementById('exam-level-buttons');
+            container.innerHTML = '';
+            levels.forEach((lv, i) => {
+                const count = examQuestions.filter(q => q.level === lv).length;
+                const btn = document.createElement('button');
+                btn.className = 'btn-purple';
+                btn.style.cssText = 'font-size:0.78em;padding:7px 12px;margin:0;border-radius:10px;';
+                btn.textContent = lv + '（' + count + '題）';
+                btn.onclick = () => startExamLevel(lv);
+                container.appendChild(btn);
+            });
+            // All levels button
+            const allBtn = document.createElement('button');
+            allBtn.className = 'btn-red';
+            allBtn.style.cssText = 'font-size:0.78em;padding:7px 12px;margin:0;border-radius:10px;';
+            allBtn.textContent = '🔥 全部關卡（' + examQuestions.length + '題）';
+            allBtn.onclick = () => startExamLevel('ALL');
+            container.appendChild(allBtn);
+        }
+
+        function startExamLevel(level) {
+            const qs = level === 'ALL' ? [...examQuestions] : examQuestions.filter(q => q.level === level);
+            // Shuffle
+            for (let i = qs.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [qs[i], qs[j]] = [qs[j], qs[i]];
+            }
+            examState = { level, questions: qs, current: 0, correct: 0, answered: false };
+            document.getElementById('exam-level-select').classList.add('hidden');
+            document.getElementById('exam-question-area').classList.remove('hidden');
+            document.getElementById('exam-result-area').classList.add('hidden');
+            renderExamQuestion();
+        }
+
+        function renderExamQuestion() {
+            const { questions, current } = examState;
+            if (current >= questions.length) { showExamResult(); return; }
+            const q = questions[current];
+            examState.answered = false;
+
+            document.getElementById('exam-level-label').textContent = q.level || '';
+            document.getElementById('exam-progress').textContent = '第 ' + (current+1) + ' / ' + questions.length + ' 題';
+
+            // Passage
+            const passageBox = document.getElementById('exam-passage-box');
+            if (q.passage && q.passage !== '（同上）') {
+                passageBox.textContent = q.passage;
+                passageBox.classList.remove('hidden');
+            } else {
+                passageBox.classList.add('hidden');
+            }
+
+            document.getElementById('exam-question-box').textContent = q.q;
+
+            // Options
+            const optBox = document.getElementById('exam-options-box');
+            optBox.innerHTML = '';
+            const labels = ['A','B','C','D'];
+            const opts = [...q.options];
+            opts.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.style.cssText = 'width:100%;text-align:left;padding:10px 14px;border-radius:10px;border:2px solid #CE93D8;background:#fff;font-size:0.88em;cursor:pointer;font-family:inherit;transition:all 0.15s;';
+                btn.innerHTML = '<strong>' + labels[i] + '.</strong>  ' + opt;
+                btn.onclick = () => examAnswer(opt, btn, q.ans);
+                optBox.appendChild(btn);
+            });
+
+            document.getElementById('exam-feedback').classList.add('hidden');
+            document.getElementById('exam-next-btn-wrap').classList.add('hidden');
+        }
+
+        function examAnswer(chosen, btn, correct) {
+            if (examState.answered) return;
+            examState.answered = true;
+            const optBtns = document.getElementById('exam-options-box').querySelectorAll('button');
+            const isCorrect = chosen === correct;
+            if (isCorrect) {
+                examState.correct++;
+                btn.style.background = '#E8F5E9';
+                btn.style.borderColor = '#4CAF50';
+                btn.style.color = '#1B5E20';
+            } else {
+                btn.style.background = '#FFEBEE';
+                btn.style.borderColor = '#F44336';
+                btn.style.color = '#B71C1C';
+                // Highlight correct
+                optBtns.forEach(b => {
+                    if (b.textContent.includes(correct)) {
+                        b.style.background = '#E8F5E9';
+                        b.style.borderColor = '#4CAF50';
+                        b.style.color = '#1B5E20';
+                    }
+                });
+            }
+            optBtns.forEach(b => b.disabled = true);
+            // 🔧 Give immediate reward per correct answer (mirrors addStreak)
+            if (isCorrect) {
+                inventory.star       = (inventory.star       || 0) + 1;
+                inventory.wood       = (inventory.wood       || 0) + 2;
+                inventory.stone      = (inventory.stone      || 0) + 2;
+                inventory.manuscript = (inventory.manuscript || 0) + 2;
+                inventory.fragment   = (inventory.fragment   || 0) + 2;
+                inventory.coins      = (inventory.coins      || 0) + 2;
+                inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers || 0) + 1;
+                saveGame(); updateUI();
+            }
+            const fb = document.getElementById('exam-feedback');
+            fb.textContent = isCorrect ? '✅ 答對了！＋⭐×1  📜×2  🪵×2  🪨×2  🔮×2  🪙×2' : '❌ 答錯了，正確答案是：' + correct;
+            fb.style.background = isCorrect ? '#E8F5E9' : '#FFEBEE';
+            fb.style.color = isCorrect ? '#1B5E20' : '#B71C1C';
+            fb.classList.remove('hidden');
+            document.getElementById('exam-next-btn-wrap').classList.remove('hidden');
+        }
+
+        function examNext() {
+            examState.current++;
+            renderExamQuestion();
+        }
+
+        function showExamResult() {
+            document.getElementById('exam-question-area').classList.add('hidden');
+            document.getElementById('exam-result-area').classList.remove('hidden');
+            document.getElementById('exam-back-btn').classList.add('hidden');
+            const { correct, questions } = examState;
+            const total = questions.length;
+            const pct = Math.round(correct / total * 100);
+            document.getElementById('exam-result-title').textContent = '完成！';
+            document.getElementById('exam-result-score').textContent = '得分：' + correct + ' / ' + total + '（' + pct + '%）';
+            let msg = '';
+            if (pct >= 90) msg = '🌟 非常出色！繼續保持！';
+            else if (pct >= 70) msg = '👍 表現不錯！再多練習幾次！';
+            else if (pct >= 50) msg = '💪 繼續努力，你可以的！';
+            else msg = '📖 多温習課文，下次一定更好！';
+            document.getElementById('exam-result-msg').textContent = msg;
+            // Rewards already given per question in examAnswer — just show summary
+            const starsEarned     = correct;
+            const woodBonus       = correct * 2;
+            const manuscriptBonus = correct * 2;
+            const fragmentBonus   = correct * 2;
+            const coinsBonus      = correct * 2;
+
+            const rewardMsg = '本關已獲得 ⭐×' + starsEarned
+                + '  📜×' + manuscriptBonus
+                + '  🪵×' + woodBonus
+                + '  🪨×' + starsEarned
+                + '  🔮×' + fragmentBonus
+                + '  🪙×' + coinsBonus;
+            document.getElementById('exam-result-msg').textContent += '\n' + rewardMsg;
+        }
+
+        function examRetry() {
+            startExamLevel(examState.level);
+        }
+
         </script>
 
     <!-- F7: Answer Result Card -->
@@ -4203,5 +5104,44 @@ function checkDailyReset() {
 
     <!-- Hidden btn-boss-menu for JS compatibility -->
     <button id="btn-boss-menu" class="btn-black" style="display:none;" onclick="openBossSelect()" disabled>🔒 終極 Boss</button>
+
+    <!-- ══════════════════════════════════════
+         EXAM MODE SCREEN
+         ══════════════════════════════════════ -->
+    <div id="exam-screen" class="screen hidden" style="padding:16px;">
+        <h2 style="color:#E53935;margin:0 0 8px;">📋 模擬考試</h2>
+        <div id="exam-level-select" style="margin-bottom:12px;">
+            <p style="font-size:0.88em;color:#555;margin:0 0 10px;">選擇關卡開始練習：</p>
+            <div id="exam-level-buttons" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;"></div>
+        </div>
+        <div id="exam-question-area" class="hidden">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <span id="exam-level-label" style="font-size:0.82em;color:#7B1FA2;font-weight:bold;"></span>
+                <span id="exam-progress" style="font-size:0.82em;color:#555;"></span>
+            </div>
+            <div id="exam-passage-box" class="hidden" style="background:#EDE7F6;border-left:4px solid #7B1FA2;border-radius:8px;padding:12px;margin-bottom:12px;font-size:0.85em;line-height:1.7;color:#333;text-align:left;"></div>
+            <div id="exam-question-box" style="background:#fff;border:2px solid #CE93D8;border-radius:12px;padding:14px;margin-bottom:10px;font-size:0.92em;font-weight:bold;color:#212121;text-align:left;line-height:1.6;"></div>
+            <div id="exam-options-box" style="display:flex;flex-direction:column;gap:8px;"></div>
+            <div id="exam-feedback" class="hidden" style="margin-top:10px;padding:10px 14px;border-radius:10px;font-size:0.88em;font-weight:bold;text-align:center;"></div>
+            <div id="exam-next-btn-wrap" class="hidden" style="margin-top:10px;text-align:center;">
+                <button class="btn-purple" onclick="examNext()" style="font-size:0.9em;padding:8px 24px;">下一題 ➡️</button>
+            </div>
+        </div>
+        <div id="exam-result-area" class="hidden" style="text-align:center;">
+            <div style="font-size:2.5em;margin:10px 0;">🎉</div>
+            <h3 id="exam-result-title" style="color:#E53935;"></h3>
+            <p id="exam-result-score" style="font-size:1.2em;font-weight:bold;color:#4A148C;"></p>
+            <p id="exam-result-msg" style="font-size:0.88em;color:#555;margin:6px 0 16px;"></p>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+                <button class="btn-green" onclick="examRetry()" style="font-size:0.88em;">🔄 重做此關卡</button>
+                <button class="btn-purple" onclick="openExamMode()" style="font-size:0.88em;">📋 選擇其他關卡</button>
+                <button class="btn-grey" onclick="goHome()" style="font-size:0.88em;">🏠 返回主頁</button>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:14px;">
+            <button class="btn-grey" onclick="goHome()" id="exam-back-btn" style="font-size:0.82em;padding:6px 14px;">🏠 返回主頁</button>
+        </div>
+    </div>
+
 </body>
 </html>
