@@ -754,6 +754,17 @@
                 </div>
             </div>
 
+            <!-- ══ 期間限定通知 ══ -->
+            <div id="home-bonus-notice" style="background:linear-gradient(135deg,#FF6F00,#E65100);border-radius:10px;padding:10px 14px;margin-bottom:10px;text-align:center;color:#fff;font-weight:bold;font-size:0.88em;cursor:pointer;" onclick="openMoShu()">
+              ⚡ 期間限定！<b>漢字道場・聆聽默寫</b> 每題 <span style="color:#FFD700;font-size:1.1em;">+100分</span>　截止：5月19日　點擊前往 →
+            </div>
+            <script>
+            (function(){
+              const el = document.getElementById('home-bonus-notice');
+              if (el && new Date() >= new Date('2026-05-20T00:00:00+08:00')) el.style.display='none';
+            })();
+            </script>
+
             <!-- ══ DAILY QUEST (always visible) ══ -->
             <div class="quest-panel" id="daily-quest-panel" style="margin-bottom:10px;">
                 <h3 style="margin:0 0 6px;">📋 每日任務 <span id="quest-reset-hint" style="font-size:0.75em;color:#90CAF9;">(每日重置)</span></h3>
@@ -5429,6 +5440,15 @@ function checkDailyReset() {
           <span>❤️ HP: <b id="ms-hp-display">100/100</b></span>
           <span style="margin-left:auto;color:#FFD700;font-weight:bold;font-size:0.9em;" class="player-lv-display">Lv 1</span>
         </div>
+        <!-- 期間限定橫幅 -->
+        <div id="ms-bonus-banner" style="display:none;background:linear-gradient(90deg,#FF6F00,#FFD600);padding:7px 14px;text-align:center;font-weight:bold;font-size:0.85em;color:#1a1a1a;animation:msBannerPulse 1.5s ease-in-out infinite;">
+          ⚡ 期間限定！聆聽默寫每題額外 <span style="font-size:1.1em;color:#B71C1C;">+100分</span>　截止：5月19日　把握機會！🔥
+        </div>
+        <style>
+        @keyframes msBannerPulse {
+          0%,100% { opacity:1; } 50% { opacity:0.82; }
+        }
+        </style>
         <!-- Mode tabs -->
         <div style="display:flex;border-bottom:2px solid #eee;">
           <button id="ms-tab-puzzle"     onclick="msSetMode('puzzle')"     style="flex:1;padding:10px 4px;border:none;background:#FF7043;color:#fff;font-weight:bold;font-size:0.8em;cursor:pointer;">🔊🧩 聆聽拼字</button>
@@ -5558,6 +5578,13 @@ let dictSet   = 'vocab', dictIdx   = 0;
 let hwSet     = 'vocab', hwIdx     = 0;
 let msSessionExp = 0;
 
+// ── 期間限定加分（截止：2026-05-19）──
+const MS_BONUS_DEADLINE = new Date('2026-05-20T00:00:00+08:00'); // 19日結束後自動取消
+function msDictBonusActive() {
+    return new Date() < MS_BONUS_DEADLINE;
+}
+const MS_DICT_BONUS = 100; // 聆聽默寫每題額外加分
+
 // Shuffled item caches (re-shuffle when set changes or round completes)
 let _puzzleItems = null, _dictItems = null, _hwItems = null;
 
@@ -5599,6 +5626,11 @@ function addScore(pts) {
     const expGain = mode === 'dictation' ? 4 : mode === 'handwrite' ? 3 : 2;
     if (typeof gainExp === 'function') gainExp(expGain, '漢字道場');
     msSessionExp += expGain;
+    // 期間限定：聆聽默寫 +100分
+    const dictBonus = (mode === 'dictation' && msDictBonusActive()) ? MS_DICT_BONUS : 0;
+    if (dictBonus > 0 && typeof inventory !== 'undefined') {
+        inventory.moShuCorrect = (inventory.moShuCorrect || 0) + dictBonus;
+    }
     if (typeof inventory !== 'undefined') {
         inventory.coins       = (inventory.coins      || 0) + 5;
         inventory.manuscript  = (inventory.manuscript || 0) + 3;
@@ -5614,6 +5646,8 @@ function addScore(pts) {
         if (typeof inventory !== 'undefined') inventory.manuscript += 5;
         if (expEl) expEl.textContent = '+' + msSessionExp;
         showToast('🔥 ' + streak + '連對！✨+5 EXP  📜+5');
+    } else if (dictBonus > 0) {
+        showToast('✅ 答對！✨+' + expGain + ' EXP  ⚡+' + dictBonus + '分（限定加成！）');
     } else {
         showToast('✅ 答對！✨+' + expGain + ' EXP  💰+5  📜+3');
     }
@@ -5947,6 +5981,20 @@ window.openMoShu = function() {
     if (expEl) expEl.textContent = '+0';
     updateStats();
     if (typeof updateExpUI === 'function') updateExpUI();
+    // 更新限定加分橫幅
+    const banner = document.getElementById('ms-bonus-banner');
+    if (banner) {
+        if (msDictBonusActive()) {
+            banner.style.display = 'block';
+        } else {
+            banner.style.display = 'none';
+        }
+    }
+    // 更新 dictation tab 標記
+    const dictTab = document.getElementById('ms-tab-dictation');
+    if (dictTab && msDictBonusActive()) {
+        dictTab.innerHTML = '🎧 聆聽默寫 <span style="color:#FFD700;font-size:0.85em;">🔥+100</span>';
+    }
     msSetMode('puzzle');
 };
 
