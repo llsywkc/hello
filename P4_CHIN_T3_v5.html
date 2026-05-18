@@ -834,6 +834,15 @@
                 <p style="font-size:0.82em;color:#8E24AA;margin:6px 0 0;">(連續答題有機率遇到「傳説怪」！)</p>
             </div>
 
+                <div class="menu-section-label">✍️ 默書道場</div>
+                <div class="menu-card-grid">
+                    <div class="menu-card" onclick="openMoShu()" style="border-color:#FF7043;">
+                        <div class="mc-icon">🔊</div>
+                        <div class="mc-title">漢字道場</div>
+                        <div class="mc-sub">聆聽拼字／默寫／手寫</div>
+                    </div>
+                </div>
+
                 <div class="menu-section-label">📝 考試練習模式</div>
                 <div class="menu-card-grid">
                     <div class="menu-card" onclick="openExamMode()" style="border-color:#E53935;">
@@ -5377,6 +5386,531 @@ function checkDailyReset() {
             <button class="btn-grey" onclick="goHome()" id="exam-back-btn" style="font-size:0.82em;padding:6px 14px;">🏠 返回主頁</button>
         </div>
     </div>
+
+
+    <!-- ══════════════ 漢字道場 MODAL ══════════════ -->
+    <div id="moshu-overlay" class="hidden" style="position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.85);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:10px 0 30px;">
+      <div id="moshu-panel" style="width:100%;max-width:520px;background:#fff;border-radius:18px;overflow:hidden;position:relative;margin:10px;">
+        <!-- Header -->
+        <div style="background:linear-gradient(135deg,#FF7043,#BF360C);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="color:#fff;font-size:1.15em;font-weight:900;">✍️ 漢字道場</div>
+            <div style="color:rgba(255,255,255,0.85);font-size:0.78em;">P4 默書練習 · 聆聽拼字 / 默寫 / 手寫</div>
+          </div>
+          <button onclick="closeMoShu()" style="background:rgba(255,255,255,0.25);border:none;color:#fff;font-size:1.3em;border-radius:50%;width:36px;height:36px;cursor:pointer;">✕</button>
+        </div>
+        <!-- Stats bar -->
+        <div style="background:#1a1a2e;padding:7px 14px;display:flex;gap:14px;align-items:center;font-size:0.82em;color:#eee;flex-wrap:wrap;">
+          <span>✨ 本局EXP: <b id="ms-exp-gain" style="color:#FFD700;">+0</b></span>
+          <span>🔥 連對: <b id="ms-streak-display">0</b></span>
+          <span>❤️ HP: <b id="ms-hp-display">100/100</b></span>
+          <span style="margin-left:auto;color:#FFD700;font-weight:bold;font-size:0.9em;" class="player-lv-display">Lv 1</span>
+        </div>
+        <!-- Mode tabs -->
+        <div style="display:flex;border-bottom:2px solid #eee;">
+          <button id="ms-tab-puzzle"     onclick="msSetMode('puzzle')"     style="flex:1;padding:10px 4px;border:none;background:#FF7043;color:#fff;font-weight:bold;font-size:0.8em;cursor:pointer;">🔊🧩 聆聽拼字</button>
+          <button id="ms-tab-dictation" onclick="msSetMode('dictation')"  style="flex:1;padding:10px 4px;border:none;background:#eee;color:#555;font-weight:bold;font-size:0.8em;cursor:pointer;">🎧 聆聽默寫</button>
+          <button id="ms-tab-handwrite" onclick="msSetMode('handwrite')"  style="flex:1;padding:10px 4px;border:none;background:#eee;color:#555;font-weight:bold;font-size:0.8em;cursor:pointer;">🖊️ 聆聽手寫</button>
+        </div>
+        <!-- Game area -->
+        <div id="ms-game-card" style="padding:16px;min-height:280px;background:#fafafa;"></div>
+        <!-- Reward toast -->
+        <div id="ms-reward-toast" style="display:none;position:sticky;bottom:10px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#FFD700;padding:8px 20px;border-radius:20px;font-weight:bold;font-size:0.88em;white-space:nowrap;text-align:center;margin:0 auto;width:fit-content;z-index:10;"></div>
+      </div>
+    </div>
+
+<style id="moshu-styles">
+/* ══ 漢字道場 styles (scoped via #moshu-panel) ══ */
+#moshu-panel .mode-tabs{display:flex;gap:0;border-bottom:2px solid #eee;}
+#moshu-panel .mode-tab{flex:1;padding:10px 4px;border:none;cursor:pointer;font-weight:bold;font-size:0.82em;background:#eee;color:#555;transition:background 0.2s;}
+#moshu-panel .mode-tab.active{background:#FF7043;color:#fff;}
+#moshu-panel .set-pill{margin:2px;padding:5px 10px;border-radius:20px;border:1px solid #ccc;background:#f5f5f5;cursor:pointer;font-size:0.8em;}
+#moshu-panel .set-pill.active{background:#FF7043;color:#fff;border-color:#FF7043;}
+#moshu-panel .progress-row{margin:8px 0;font-size:0.78em;color:#888;}
+#moshu-panel .progress-bar{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:3px;}
+#moshu-panel .progress-fill{height:100%;background:#FF7043;transition:width 0.3s;}
+#moshu-panel .play-btn{background:#FF7043;color:#fff;border:none;border-radius:50%;width:52px;height:52px;font-size:1.4em;cursor:pointer;margin:10px auto;display:block;}
+#moshu-panel .puzzle-pieces{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0;}
+#moshu-panel .puzzle-piece{padding:10px 16px;background:#fff;border:2px solid #FF7043;border-radius:8px;font-size:1.3em;cursor:grab;user-select:none;font-family:serif;}
+#moshu-panel .puzzle-slots{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0;}
+#moshu-panel .puzzle-slot{width:52px;height:52px;border:2px dashed #ccc;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.3em;font-family:serif;}
+#moshu-panel .puzzle-slot.filled{border-color:#FF7043;background:#FFF3E0;}
+#moshu-panel .dict-input{width:90%;padding:10px;font-size:1.2em;border:2px solid #ccc;border-radius:8px;text-align:center;font-family:serif;margin:10px auto;display:block;}
+#moshu-panel .dict-input.correct{border-color:#4CAF50;background:#E8F5E9;}
+#moshu-panel .dict-input.wrong{border-color:#F44336;background:#FFEBEE;}
+#moshu-panel .btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
+#moshu-panel .ms-btn{padding:9px 18px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:0.88em;}
+#moshu-panel .ms-btn-primary{background:#FF7043;color:#fff;}
+#moshu-panel .ms-btn-grey{background:#eee;color:#555;}
+#moshu-panel .ms-btn-green{background:#4CAF50;color:#fff;}
+#moshu-panel .hint-box{background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:10px;font-size:0.85em;color:#795548;margin:10px 0;}
+#moshu-panel .answer-box{font-size:1.8em;font-family:serif;font-weight:bold;color:#D32F2F;margin:10px 0;text-align:center;}
+#moshu-panel .hw-canvas-wrap{border:2px solid #ccc;border-radius:8px;margin:10px auto;display:block;}
+#moshu-panel canvas{touch-action:none;border-radius:6px;}
+#moshu-panel .meaning-text{font-size:0.88em;color:#666;margin:6px 0;text-align:center;}
+</style>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  漢字道場 Integrated Module  v1.1
+// ══════════════════════════════════════════════════════
+(function() {
+
+// ── Word Data ──
+// ===== WORD DATA =====
+const MS_WORD_SETS = {
+  vocab: {
+    label:'📚 詞語',
+    items:[
+      {char:'秀麗',    meaning:'秀麗 — 美麗動人',         hint:'形容景色或人的外貌'},
+      {char:'啼笑皆非', meaning:'啼笑皆非 — 哭笑不得',    hint:'形容無奈尷尬的處境'},
+      {char:'口吻',    meaning:'口吻 — 說話的語氣',        hint:'講話時的語調和措辭'},
+      {char:'稀疏',    meaning:'稀疏 — 間隔大，不密集',    hint:'形容分佈不均勻'},
+      {char:'相稱',    meaning:'相稱 — 互相配合得宜',      hint:'兩者匹配，很協調'},
+      {char:'羨慕',    meaning:'羨慕 — 希望自己也擁有',    hint:'看到別人的好而想要'},
+    ]
+  },
+  sentence: {
+    label:'📝 課文',
+    items:[
+      {char:'瘦削',        meaning:'瘦削 — 身體或臉很瘦',          hint:'課文：瘦削的面龐'},
+      {char:'面龐',        meaning:'面龐 — 臉部、臉龐',             hint:'課文：瘦削的面龐上'},
+      {char:'皺紋',        meaning:'皺紋 — 皮膚上的紋路',           hint:'課文：兩道皺紋橫在眉毛之間'},
+      {char:'眉毛',        meaning:'眉毛 — 眼睛上方的毛',           hint:'課文：橫在眉毛之間'},
+      {char:'乾澀',        meaning:'乾澀 — 乾燥粗糙',               hint:'課文：嘴巴乾澀'},
+      {char:'嘴角',        meaning:'嘴角 — 嘴巴的兩端',             hint:'課文：嘴角被皺紋牽得向後咧着'},
+      {char:'媽媽變老了',  meaning:'課文首句',                       hint:'課文開首'},
+      {char:'紅着臉兒',    meaning:'紅着臉兒 — 害羞的樣子',         hint:'課文：帶着羞愧的表情'},
+      {char:'失物',        meaning:'失物 — 遺失的東西',             hint:'課文：領回失物'},
+      {char:'垃圾',        meaning:'垃圾 — 廢棄物',                 hint:'課文：帶走自己的垃圾'},
+      {char:'郊野公園',    meaning:'郊野公園 — 大自然公園',         hint:'課文：愛護郊野公園'},
+      {char:'愛護',        meaning:'愛護 — 珍惜保護',               hint:'課文：愛護郊野公園'},
+      {char:'責任',        meaning:'責任 — 應盡的本分',             hint:'課文：人人都有責任'},
+      {char:'經歷',        meaning:'經歷 — 親身體驗',               hint:'課文：這次經歷讓我明白'},
+    ]
+  },
+  allwords: {
+    label:'🗒️ 全部詞語',
+    items:[
+      {char:'秀麗',        meaning:'秀麗 — 美麗動人',               hint:'形容景色或人的外貌'},
+      {char:'啼笑皆非',    meaning:'啼笑皆非 — 哭笑不得',           hint:'形容無奈尷尬的處境'},
+      {char:'口吻',        meaning:'口吻 — 說話的語氣',              hint:'講話時的語調和措辭'},
+      {char:'稀疏',        meaning:'稀疏 — 間隔大，不密集',          hint:'形容分佈不均勻'},
+      {char:'相稱',        meaning:'相稱 — 互相配合得宜',            hint:'兩者匹配，很協調'},
+      {char:'羨慕',        meaning:'羨慕 — 希望自己也擁有',          hint:'看到別人的好而想要'},
+      {char:'瘦削',        meaning:'瘦削 — 身體或臉很瘦',            hint:'課文：瘦削的面龐'},
+      {char:'面龐',        meaning:'面龐 — 臉部、臉龐',              hint:'課文：瘦削的面龐上'},
+      {char:'皺紋',        meaning:'皺紋 — 皮膚上的紋路',            hint:'課文：兩道皺紋橫在眉毛之間'},
+      {char:'眉毛',        meaning:'眉毛 — 眼睛上方的毛',            hint:'課文：橫在眉毛之間'},
+      {char:'乾澀',        meaning:'乾澀 — 乾燥粗糙',                hint:'課文：嘴巴乾澀'},
+      {char:'嘴角',        meaning:'嘴角 — 嘴巴的兩端',              hint:'課文：嘴角被皺紋牽得向後咧着'},
+      {char:'紅着臉兒',    meaning:'紅着臉兒 — 害羞的樣子',          hint:'課文：帶着羞愧的表情'},
+      {char:'失物',        meaning:'失物 — 遺失的東西',              hint:'課文：領回失物'},
+      {char:'垃圾',        meaning:'垃圾 — 廢棄物',                  hint:'課文：帶走自己的垃圾'},
+      {char:'郊野公園',    meaning:'郊野公園 — 大自然公園',          hint:'課文：愛護郊野公園'},
+      {char:'愛護',        meaning:'愛護 — 珍惜保護',                hint:'課文：愛護郊野公園'},
+      {char:'責任',        meaning:'責任 — 應盡的本分',              hint:'課文：人人都有責任'},
+      {char:'經歷',        meaning:'經歷 — 親身體驗',                hint:'課文：這次經歷讓我明白'},
+    ]
+  }
+};
+const WORD_SETS = MS_WORD_SETS;
+
+// ── State ──
+let mode = 'puzzle';
+let score = 0, level = 1, streak = 0, hp = 100;
+let puzzleSet = 'vocab', puzzleIdx = 0, puzzleCorrect = 0;
+let dictSet   = 'vocab', dictIdx   = 0;
+let hwSet     = 'vocab', hwIdx     = 0;
+let msSessionExp = 0;
+
+// ── Stats UI ──
+function updateStats() {
+    const s = document.getElementById('ms-streak-display');
+    const h = document.getElementById('ms-hp-display');
+    if (s) s.textContent = streak;
+    if (h) h.textContent = hp + '/100';
+}
+
+// ── Toast ──
+function showToast(msg) {
+    const t = document.getElementById('ms-reward-toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.style.display = 'block';
+    clearTimeout(t._tmr);
+    t._tmr = setTimeout(() => t.style.display = 'none', 2400);
+}
+
+// ── Scoring → main platform hooks ──
+function addScore(pts) {
+    score += pts; level = Math.floor(score / 300) + 1; streak++;
+    updateStats();
+    const expGain = mode === 'dictation' ? 4 : mode === 'handwrite' ? 3 : 2;
+    if (typeof gainExp === 'function') gainExp(expGain, '漢字道場');
+    msSessionExp += expGain;
+    if (typeof inventory !== 'undefined') {
+        inventory.coins       = (inventory.coins      || 0) + 5;
+        inventory.manuscript  = (inventory.manuscript || 0) + 3;
+        inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers || 0) + 1;
+    }
+    const expEl = document.getElementById('ms-exp-gain');
+    if (expEl) expEl.textContent = '+' + msSessionExp;
+    if (typeof updateUI === 'function') updateUI(false);
+    if (streak > 0 && streak % 5 === 0) {
+        if (typeof gainExp === 'function') gainExp(5, '漢字道場連對');
+        msSessionExp += 5;
+        if (typeof inventory !== 'undefined') inventory.manuscript += 5;
+        if (expEl) expEl.textContent = '+' + msSessionExp;
+        showToast('🔥 ' + streak + '連對！✨+5 EXP  📜+5');
+    } else {
+        showToast('✅ 答對！✨+' + expGain + ' EXP  💰+5  📜+3');
+    }
+}
+
+function loseHP(n) {
+    hp = Math.max(0, hp - n);
+    if (hp === 0) {
+        hp = 100;
+        if (typeof inventory !== 'undefined') inventory.wood = Math.max(0, (inventory.wood || 0) - 10);
+        if (typeof updateUI === 'function') updateUI(false);
+        showToast('💔 HP 耗盡！扣除 🪵×10');
+    }
+    streak = 0; updateStats();
+}
+
+// ── Render Functions (from original Mo Shu, patched) ──
+function speakWord(text){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='zh-HK'; u.rate=0.82; u.pitch=1.05;
+  const v=window.speechSynthesis.getVoices();
+  const pref=v.find(x=>x.lang==='zh-HK')||v.find(x=>x.lang==='zh-TW')||v.find(x=>x.lang.startsWith('zh'));
+  if(pref)u.voice=pref;
+  window.speechSynthesis.speak(u);
+}
+if(window.speechSynthesis){
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
+}
+
+// ===== MODE SWITCHING =====
+function setMode(m){
+  mode=m;
+  ['puzzle','dictation','handwrite'].forEach(x=>{
+    document.getElementById('tab'+x.charAt(0).toUpperCase()+x.slice(1))
+      .classList.toggle('active',x===m);
+  });
+  render();
+}
+function render(){
+  if(mode==='puzzle')renderPuzzle();
+  else if(mode==='dictation')renderDictation();
+  else renderHandwrite();
+}
+
+// ===== SET PILLS HTML =====
+function pillsHTML(activeKey,fn){
+  return Object.entries(WORD_SETS).map(([k,v])=>
+    `<button class="set-pill${k===activeKey?' active':''}" onclick="${fn}('${k}')">${v.label}</button>`
+  ).join('');
+}
+function progressHTML(idx,total){
+  const pct=total?Math.round(idx/total*100):0;
+  return `<div class="progress-row">
+    <span>第 ${idx+1} / ${total} 題</span>
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <span>${pct}%</span>
+  </div>`;
+}
+
+// ===== PLAY BUTTON =====
+function playBtnHTML(id,onclick){
+  return `<button class="play-ring" id="${id}" onclick="${onclick}" aria-label="播放讀音">🔊</button>
+  <p style="text-align:center;font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-4)">可重複播放</p>`;
+}
+function setPlaying(id,bool){
+  const b=document.getElementById(id);
+  if(b)b.classList.toggle('playing',bool);
+}
+function playSpeech(text,btnId){
+  setPlaying(btnId,true);
+  speakWord(text);
+  const t=setInterval(()=>{ if(!window.speechSynthesis.speaking){clearInterval(t);setPlaying(btnId,false);} },200);
+}
+
+// ===== PUZZLE MODE =====
+function renderPuzzle(){
+  const items=WORD_SETS[puzzleSet].items;
+  if(puzzleIdx>=items.length)puzzleIdx=0;
+  puzzleCorrect=0;
+  const ch=items[puzzleIdx];
+  const chars=ch.char.split('');
+  window._correctChars=chars;
+  // distractors
+  const pool=[...new Set(WORD_SETS[puzzleSet].items.flatMap(i=>i.char.split('')))].filter(c=>!chars.includes(c));
+  const nd=Math.min(5,Math.max(2,7-chars.length));
+  const mixed=[...chars,...pool.sort(()=>Math.random()-.5).slice(0,nd)].sort(()=>Math.random()-.5);
+  const slots=chars.map((c,i)=>`
+    <div class="puzzle-slot" id="pslot_${i}"
+      ondragover="ev.preventDefault()" ondrop="dropPiece(event,${i})" ontouchend="touchDropPuzzle(event,${i})">
+      <span id="pslotC_${i}"></span><span class="slot-num">${i+1}</span>
+    </div>`).join('');
+  const pieces=mixed.map((p,i)=>`
+    <div class="puzzle-piece" id="pp_${i}" draggable="true"
+      ondragstart="dragStart(event,'${p}',${i})"
+      ontouchstart="touchStartPiece(event,'${p}',${i})">${p}</div>`).join('');
+  document.getElementById('ms-game-card').innerHTML=`
+    <div class="set-pills">${pillsHTML(puzzleSet,'switchPuzzleSet')}</div>
+    ${progressHTML(puzzleIdx,items.length)}
+    ${playBtnHTML('playBtnP',`playSpeech('${ch.char}','playBtnP')`)}
+    <p style="text-align:center;font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-4)">
+      聽清楚後，將文字拖入正確位置 👇
+    </p>
+    <div class="puzzle-slots">${slots}</div>
+    <div style="font-size:var(--text-xs);color:var(--color-text-muted);text-align:center;margin-bottom:var(--space-3)">可用字：</div>
+    <div class="puzzle-pieces">${pieces}</div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="renderPuzzle()">重置</button>
+      <button class="btn btn-ghost" onclick="revealPuzzle()">👁 答案</button>
+      <button class="btn btn-ghost" onclick="nextPuzzle()">下一題 ⏭</button>
+    </div>
+    <div id="puzzleReveal" style="text-align:center;font-size:1.6em;font-family:var(--font-display);font-weight:900;color:var(--color-primary);margin-top:var(--space-4);min-height:30px"></div>
+  `;
+  setTimeout(()=>playSpeech(ch.char,'playBtnP'),500);
+}
+function switchPuzzleSet(k){puzzleSet=k;puzzleIdx=0;renderPuzzle();}
+function nextPuzzle(){
+  const l=WORD_SETS[puzzleSet].items.length;
+  puzzleIdx=(puzzleIdx+1)%l; renderPuzzle();
+}
+function revealPuzzle(){
+  const ans=WORD_SETS[puzzleSet].items[puzzleIdx].char;
+  document.getElementById('puzzleReveal').textContent='答案：'+ans;
+}
+function dragStart(e,p,i){dragPiece={p,i};e.dataTransfer.setData('text',p);}
+function touchStartPiece(e,p,i){touchPiece={p,i};}
+function dropPiece(e,si){e.preventDefault();if(!dragPiece)return;placePiece(dragPiece.p,dragPiece.i,si);dragPiece=null;}
+function touchDropPuzzle(e,si){if(!touchPiece)return;placePiece(touchPiece.p,touchPiece.i,si);touchPiece=null;}
+function placePiece(p,pi,si){
+  const correct=window._correctChars;
+  const slotEl=document.getElementById('pslot_'+si);
+  const cEl=document.getElementById('pslotC_'+si);
+  const pieEl=document.getElementById('pp_'+pi);
+  if(!slotEl||!cEl||!pieEl)return;
+  if(slotEl.dataset.filled==='1')return;
+  if(p===correct[si]){
+    cEl.textContent=p; slotEl.classList.add('filled'); slotEl.dataset.filled='1';
+    pieEl.classList.add('used'); puzzleCorrect++;
+    if(puzzleCorrect===correct.length){
+      const ans=WORD_SETS[puzzleSet].items[puzzleIdx].char;
+      const pts=80+streak*12;
+      addScore(pts); updateStats();
+      showToast(`✅ ${ans}
++${pts}分`,'#fff');
+      setTimeout(nextPuzzle,1600);
+    }
+  } else {
+    slotEl.classList.add('wrong'); setTimeout(()=>slotEl.classList.remove('wrong'),400);
+    loseHP(8); updateStats();
+    showToast('再試試！','#f4a261');
+  }
+}
+
+// ===== DICTATION MODE =====
+function renderDictation(){
+  const items=WORD_SETS[dictSet].items;
+  if(dictIdx>=items.length)dictIdx=0;
+  document.getElementById('ms-game-card').innerHTML=`
+    <div class="set-pills">${pillsHTML(dictSet,'switchDictSet')}</div>
+    ${progressHTML(dictIdx,items.length)}
+    ${playBtnHTML('playBtnD',`playSpeech('${items[dictIdx].char}','playBtnD')`)}
+    <div class="dict-wrap">
+      <p class="dict-note">聆聽後在下方輸入，按 Enter 或「核對」</p>
+      <input class="dict-input" id="dictInput" type="text" placeholder="輸入答案…"
+        autocomplete="off" autocorrect="off" spellcheck="false"
+        onkeydown="if(event.key==='Enter')checkDict()"/>
+      <div class="dict-result" id="dictResult"></div>
+      <div class="answer-box" id="answerBox"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="checkDict()">核對答案</button>
+      <button class="btn btn-ghost" onclick="showDictAnswer()">👁 答案</button>
+      <button class="btn btn-ghost" onclick="nextDict()">下一題 ⏭</button>
+    </div>
+  `;
+  setTimeout(()=>playSpeech(items[dictIdx].char,'playBtnD'),500);
+}
+function switchDictSet(k){dictSet=k;dictIdx=0;renderDictation();}
+function checkDict(){
+  const items=WORD_SETS[dictSet].items;
+  const ch=items[dictIdx];
+  const inp=document.getElementById('dictInput');
+  const res=document.getElementById('dictResult');
+  const ans=inp.value.trim();
+  if(!ans){res.textContent='請先輸入答案';return;}
+  if(ans===ch.char){
+    inp.classList.add('correct');inp.classList.remove('wrong');
+    const pts=70+streak*10; addScore(pts); updateStats();
+    res.innerHTML=`<span style="color:var(--color-success)">✅ 正確！</span>`;
+    document.getElementById('answerBox').textContent='';
+    showToast(`答對！
++${pts}分`,'#fff');
+    setTimeout(nextDict,1500);
+  } else {
+    inp.classList.add('wrong');inp.classList.remove('correct');
+    loseHP(10); updateStats();
+    // char-by-char feedback
+    let fb='';
+    for(let i=0;i<Math.max(ans.length,ch.char.length);i++){
+      const ok=ans[i]===ch.char[i];
+      fb+=`<span style="color:var(--color-${ok?'success':'error'})">${ch.char[i]||''}</span>`;
+    }
+    res.innerHTML=`❌ 正確：${fb}`;
+    document.getElementById('answerBox').textContent=ch.char;
+  }
+}
+function showDictAnswer(){
+  const ch=WORD_SETS[dictSet].items[dictIdx];
+  document.getElementById('answerBox').textContent=ch.char;
+}
+function nextDict(){
+  const l=WORD_SETS[dictSet].items.length;
+  dictIdx=(dictIdx+1)%l; renderDictation();
+}
+
+// ===== HANDWRITE MODE =====
+function renderHandwrite(){
+  const items=WORD_SETS[hwSet].items;
+  if(hwIdx>=items.length)hwIdx=0;
+  const ch=items[hwIdx];
+  const boxesHTML=ch.char.split('').map((_,i)=>
+    `<div class="hw-char" id="hwc_${i}">?</div>`).join('');
+  document.getElementById('ms-game-card').innerHTML=`
+    <div class="set-pills">${pillsHTML(hwSet,'switchHwSet')}</div>
+    ${progressHTML(hwIdx,items.length)}
+    ${playBtnHTML('playBtnHW',`playSpeech('${ch.char}','playBtnHW')`)}
+    <p style="text-align:center;font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-2)">
+      聽完後在下方書寫，完成後對答案
+    </p>
+    <canvas id="hwCanvas" width="340" height="200"></canvas>
+    <div class="hw-chars">${boxesHTML}</div>
+    <div class="hw-meaning" id="hwMeaning"></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="clearHW()">清除</button>
+      <button class="btn btn-primary" onclick="revealHW()">✅ 對答案</button>
+      <button class="btn btn-ghost" onclick="nextHW()">下一題 ⏭</button>
+    </div>
+  `;
+  hwCanvas=document.getElementById('hwCanvas');
+  hwCtx=hwCanvas.getContext('2d');
+  setupHWEvents();
+  setTimeout(()=>playSpeech(ch.char,'playBtnHW'),500);
+}
+function setupHWEvents(){
+  const getPos=(e)=>{
+    const r=hwCanvas.getBoundingClientRect();
+    const sx=hwCanvas.width/r.width, sy=hwCanvas.height/r.height;
+    const s=e.touches?e.touches[0]:e;
+    return [(s.clientX-r.left)*sx,(s.clientY-r.top)*sy];
+  };
+  hwCanvas.onmousedown=hwCanvas.ontouchstart=(e)=>{e.preventDefault();hwDrawing=true;[hwLX,hwLY]=getPos(e);};
+  hwCanvas.onmousemove=hwCanvas.ontouchmove=(e)=>{
+    e.preventDefault();if(!hwDrawing)return;
+    const [x,y]=getPos(e);
+    hwCtx.beginPath();hwCtx.moveTo(hwLX,hwLY);hwCtx.lineTo(x,y);
+    hwCtx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim()||'#01696f';
+    hwCtx.lineWidth=11;hwCtx.lineCap='round';hwCtx.stroke();
+    [hwLX,hwLY]=[x,y];
+  };
+  hwCanvas.onmouseup=hwCanvas.ontouchend=()=>hwDrawing=false;
+}
+function clearHW(){
+  if(hwCtx)hwCtx.clearRect(0,0,hwCanvas.width,hwCanvas.height);
+  const ch=WORD_SETS[hwSet].items[hwIdx];
+  ch.char.split('').forEach((_,i)=>{
+    const el=document.getElementById('hwc_'+i);
+    if(el){el.textContent='?';el.classList.remove('revealed');}
+  });
+  document.getElementById('hwMeaning').textContent='';
+}
+function revealHW(){
+  const ch=WORD_SETS[hwSet].items[hwIdx];
+  ch.char.split('').forEach((c,i)=>{
+    const el=document.getElementById('hwc_'+i);
+    if(el){el.textContent=c;el.classList.add('revealed');}
+  });
+  document.getElementById('hwMeaning').textContent=ch.meaning;
+}
+function switchHwSet(k){hwSet=k;hwIdx=0;renderHandwrite();}
+function nextHW(){
+  const l=WORD_SETS[hwSet].items.length;
+  hwIdx=(hwIdx+1)%l; renderHandwrite();
+}
+
+// ── Mode switcher ──
+function msSetMode(m) {
+    mode = m;
+    ['puzzle','dictation','handwrite'].forEach(x => {
+        const btn = document.getElementById('ms-tab-' + x);
+        if (!btn) return;
+        btn.style.background = (x === m) ? '#FF7043' : '#eee';
+        btn.style.color      = (x === m) ? '#fff'    : '#555';
+    });
+    render();
+}
+
+
+// ── Expose all functions globally for inline HTML event handlers ──
+window.dropPiece        = dropPiece;
+window.touchDropPuzzle  = touchDropPuzzle;
+window.dragStart        = dragStart;
+window.touchStartPiece  = touchStartPiece;
+window.renderPuzzle     = renderPuzzle;
+window.revealPuzzle     = revealPuzzle;
+window.nextPuzzle       = nextPuzzle;
+window.switchPuzzleSet  = switchPuzzleSet;
+window.checkDict        = checkDict;
+window.showDictAnswer   = showDictAnswer;
+window.nextDict         = nextDict;
+window.switchDictSet    = switchDictSet;
+window.clearHW          = clearHW;
+window.revealHW         = revealHW;
+window.nextHW           = nextHW;
+window.switchHwSet      = switchHwSet;
+window.speakWord        = speakWord;
+window.playSpeech       = playSpeech;
+window.setPlaying       = setPlaying;
+window.msSetMode        = msSetMode;
+
+
+// ── Public open/close ──
+window.openMoShu = function() {
+    score = 0; level = 1; streak = 0; hp = 100;
+    msSessionExp = 0; puzzleIdx = 0; dictIdx = 0; hwIdx = 0;
+    const overlay = document.getElementById('moshu-overlay');
+    if (overlay) overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    const expEl = document.getElementById('ms-exp-gain');
+    if (expEl) expEl.textContent = '+0';
+    updateStats();
+    if (typeof updateExpUI === 'function') updateExpUI();
+    msSetMode('puzzle');
+};
+
+window.closeMoShu = function() {
+    const overlay = document.getElementById('moshu-overlay');
+    if (overlay) overlay.classList.add('hidden');
+    document.body.style.overflow = '';
+    if (typeof updateUI === 'function') updateUI();
+    if (msSessionExp > 0 && typeof showMsg === 'function') {
+        showMsg('✍️ 漢字道場完成！共獲得 ✨' + msSessionExp + ' EXP');
+    }
+};
+
+})(); // end Mo Shu IIFE
+</script>
 
 </body>
 </html>
