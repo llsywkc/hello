@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>默書道場 - 聆聽拼字與描字練習</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  }
+  .header {
+    width: 100%; background: linear-gradient(90deg, #e63946, #f4a261);
+    padding: 12px 20px; display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,.35);
+  }
+  .header h1 { font-size: 1.3em; font-weight: 900; }
+  .stats {
+    display: flex; gap: 16px; margin: 14px 0; flex-wrap: wrap; justify-content: center;
+    background: rgba(255,255,255,.08); padding: 10px 18px; border-radius: 30px;
+    border: 1px solid rgba(255,255,255,.15);
+  }
+  .stat { text-align: center; min-width: 72px; }
+  .stat-val { font-size: 1.3em; font-weight: 900; color: #f4a261; }
+  .stat-lbl { font-size: .72em; opacity: .82; }
+  .hp-container { width: 90%; max-width: 520px; margin-bottom: 10px; }
+  .hp-label { display: flex; justify-content: space-between; font-size: .8em; margin-bottom: 4px; }
+  .hp-bar { background: rgba(255,255,255,.15); height: 16px; border-radius: 10px; overflow: hidden; }
+  .hp-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #56ef56, #38d438); transition: .35s; }
+  .hp-fill.medium { background: linear-gradient(90deg, #f4a261, #e76f51); }
+  .hp-fill.low { background: linear-gradient(90deg, #e63946, #c1121f); }
+  .mode-btns { display: flex; gap: 12px; margin: 8px 0 14px; flex-wrap: wrap; justify-content: center; }
+  .mode-btn, .btn {
+    border: none; cursor: pointer; font-family: inherit; font-weight: 700;
+    border-radius: 24px; transition: .2s; color: #fff;
+  }
+  .mode-btn {
+    padding: 9px 18px; background: rgba(255,255,255,.10); border: 2px solid rgba(255,255,255,.18);
+  }
+  .mode-btn.active, .mode-btn:hover {
+    background: linear-gradient(135deg, #e63946, #f4a261); transform: translateY(-2px);
+  }
+  .game-area {
+    width: 92%; max-width: 620px; min-height: 460px;
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14);
+    border-radius: 20px; padding: 20px; backdrop-filter: blur(8px);
+    box-shadow: 0 8px 30px rgba(0,0,0,.35);
+  }
+  .btn-primary { background: linear-gradient(135deg, #e63946, #f4a261); padding: 9px 18px; }
+  .btn-secondary { background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.2); padding: 9px 18px; }
+  .btn:hover { transform: translateY(-2px); }
+  .char-display { font-weight: 900; color: #f4a261; text-align: center; margin-bottom: 6px; }
+  .char-hint, .char-meaning { text-align: center; margin-bottom: 8px; }
+  .char-hint { font-size: .86em; opacity: .78; }
+  .char-meaning {
+    font-size: .8em; display: inline-block; padding: 4px 12px; border-radius: 20px;
+    background: rgba(244,162,97,.16); border: 1px solid rgba(244,162,97,.35);
+    width: 100%;
+  }
+  .trace-controls, .next-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+  .play-btn {
+    width: 84px; height: 84px; border-radius: 50%; border: none; cursor: pointer;
+    background: linear-gradient(135deg, #e63946, #f4a261); color: #fff; font-size: 2em;
+    box-shadow: 0 6px 18px rgba(244,162,97,.35); display: block; margin: 8px auto;
+  }
+  .play-btn.playing { animation: pulse .8s infinite alternate; }
+  @keyframes pulse { from { box-shadow: 0 6px 18px rgba(244,162,97,.35);} to { box-shadow: 0 8px 30px rgba(244,162,97,.8);} }
+  .puzzle-slots, .puzzle-pieces { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .puzzle-slots { min-height: 92px; margin: 14px 0 16px; }
+  .puzzle-slot {
+    width: 82px; height: 82px; border-radius: 12px; border: 3px dashed rgba(244,162,97,.45);
+    background: rgba(0,0,0,.25); display: flex; justify-content: center; align-items: center;
+    position: relative; font-size: 2em; color: #f4a261; font-weight: 900;
+  }
+  .puzzle-slot.filled { border-style: solid; border-color: #56ef56; background: rgba(86,239,86,.1); }
+  .puzzle-slot.wrong { border-style: solid; border-color: #e63946; animation: shake .35s; }
+  .slot-label { position: absolute; right: 5px; bottom: 2px; font-size: .35em; opacity: .6; }
+  .puzzle-piece {
+    min-width: 58px; padding: 12px 16px; border-radius: 12px; font-size: 1.5em; font-weight: 900;
+    background: linear-gradient(135deg, #2d6a4f, #40916c); border: 2px solid #52b788; cursor: grab;
+    user-select: none;
+  }
+  .puzzle-piece.used { opacity: .28; pointer-events: none; }
+  .dictation-input {
+    display: block; width: 240px; margin: 10px auto; text-align: center; font-size: 2em;
+    background: rgba(255,255,255,.08); color: #fff; border: 2px solid rgba(244,162,97,.5);
+    border-radius: 12px; padding: 10px 12px;
+  }
+  .dictation-input.correct { border-color: #56ef56; background: rgba(86,239,86,.1); }
+  .dictation-input.wrong { border-color: #e63946; background: rgba(230,57,70,.1); }
+  .answer-reveal, .dictation-result, .puzzleReveal { text-align: center; margin-top: 8px; min-height: 28px; }
+  .answer-reveal { font-size: 1.8em; color: #f4a261; font-weight: 900; }
+  .set-row { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+  .small-note { text-align: center; font-size: .76em; opacity: .68; margin-bottom: 8px; }
+  .feedback {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: rgba(0,0,0,.88); padding: 18px 24px; border-radius: 14px; font-weight: 900;
+    white-space: pre-line; z-index: 20; text-align: center; animation: fadeOut 1.4s forwards;
+  }
+  @keyframes fadeOut { 0%{opacity:1;transform:translate(-50%,-50%) scale(1)} 100%{opacity:0;transform:translate(-50%,-60%) scale(1.06)} }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+
+  #hwCanvas {
+    display: block; margin: 8px auto 0;
+    border: 3px solid rgba(244,162,97,.55); border-radius: 12px;
+    background: rgba(0,0,0,.28); touch-action: none; cursor: crosshair;
+  }
+  .hw-answer-box {
+    display: flex; gap: 10px; align-items: center; justify-content: center;
+    margin-top: 10px; flex-wrap: wrap;
+  }
+  .hw-answer-char {
+    width: 62px; height: 62px; border-radius: 10px;
+    border: 2px solid rgba(244,162,97,.4);
+    background: rgba(0,0,0,.2); display: flex; align-items: center;
+    justify-content: center; font-size: 2em; font-weight: 900; color: #f4a261;
+    transition: .3s;
+  }
+  .hw-answer-char.revealed { border-color: #56ef56; background: rgba(86,239,86,.12); }
+</style>
+</head>
+<body>
+  <div class="header"><h1>漢字道場 - 聆聽拼字與描字練習</h1></div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="scoreVal">0</div><div class="stat-lbl">分數</div></div>
+    <div class="stat"><div class="stat-val" id="levelVal">1</div><div class="stat-lbl">等級</div></div>
+    <div class="stat"><div class="stat-val" id="streakVal">0</div><div class="stat-lbl">連勝</div></div>
+  </div>
+
+  <div class="hp-container">
+    <div class="hp-label"><span>生命值</span><span id="hpText">100 / 100</span></div>
+    <div class="hp-bar"><div class="hp-fill" id="hpFill"></div></div>
+  </div>
+
+  <div class="mode-btns">
+    <button class="mode-btn" id="btnPuzzle" onclick="setMode('puzzle')">🔊🧩 聆聽拼字</button>
+    <button class="mode-btn" id="btnDictation" onclick="setMode('dictation')">🎧 聆聽默寫</button>
+    <button class="mode-btn" id="btnHandwrite" onclick="setMode('handwrite')">🖊️ 聆聽手寫</button>
+  </div>
+
+  <div class="game-area" id="gameArea"></div>
+
+<script>
+const WORD_SETS = {
+  vocab: {
+    label: '📚 課外詞語',
+    items: [
+      { char:'衣裳', meaning:'衣裳 - 衣服的總稱', hint:'穿在身上的衣物' },
+      { char:'量度', meaning:'量度 - 測量', hint:'用工具測量' },
+      { char:'形狀', meaning:'形狀 - 外形', hint:'物件的外在輪廓' },
+      { char:'寬', meaning:'寬 - 寬闊', hint:'形容空間大' },
+      { char:'乾淨', meaning:'乾淨 - 清潔', hint:'沒有污垢' },
+      { char:'談天説地', meaning:'談天説地 - 隨意閒談', hint:'輕鬆聊天' },
+      { char:'大開眼界', meaning:'大開眼界 - 增廣見聞', hint:'見識增廣' },
+      { char:'迫不及待', meaning:'迫不及待 - 很心急', hint:'等不及了' },
+      { char:'忍無可忍', meaning:'忍無可忍 - 忍耐到極限', hint:'再也忍不住' }
+    ]
+  },
+  sentence: {
+    label: '📝 課文句子',
+    items: [
+      { char:'紅着臉兒', meaning:'紅着臉兒 - 害羞的樣子', hint:'帶着羞愧的表情' },
+      { char:'失物', meaning:'失物 - 遺失的東西', hint:'丟失的物件' },
+      { char:'垃圾', meaning:'垃圾 - 廢棄物', hint:'要帶走自己的垃圾' },
+      { char:'郊野公園', meaning:'郊野公園 - 大自然公園', hint:'愛護郊野公園' },
+      { char:'愛護', meaning:'愛護 - 珍惜保護', hint:'愛護環境' },
+      { char:'責任', meaning:'責任 - 應盡的本分', hint:'人人都有責任' },
+      { char:'經歷', meaning:'經歷 - 親身體驗', hint:'這次經歷讓我明白' },
+      { char:'明白', meaning:'明白 - 理解清楚', hint:'讓我明白到' }
+    ]
+  },
+  basic: {
+    label: '🔤 基礎漢字',
+    items: [
+      { char:'山', meaning:'山 - 大山', hint:'三座山峰' },
+      { char:'水', meaning:'水 - 河流', hint:'水流動的樣子' },
+      { char:'火', meaning:'火 - 火焰', hint:'火焰的形狀' },
+      { char:'木', meaning:'木 - 樹木', hint:'一棵樹' },
+      { char:'日', meaning:'日 - 太陽', hint:'太陽的形狀' },
+      { char:'月', meaning:'月 - 月亮', hint:'彎月的形狀' },
+      { char:'人', meaning:'人 - 人類', hint:'一個人站立' },
+      { char:'口', meaning:'口 - 嘴巴', hint:'嘴巴的形狀' },
+      { char:'手', meaning:'手 - 手掌', hint:'五隻手指' },
+      { char:'心', meaning:'心 - 心臟', hint:'心臟的形狀' }
+    ]
+  }
+};
+
+let currentMode = 'puzzle';
+let score = 0, level = 1, streak = 0, hp = 100;
+let currentWordSet = 'vocab';
+let puzzleWordSet = 'vocab', puzzleIdx = 0;
+let dictWordSet = 'vocab', dictIdx = 0;
+let draggedPiece = null, touchPiece = null, puzzleCorrect = 0;
+window._puzzleCorrectChars = [];
+
+function updateStats() {
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('levelVal').textContent = level;
+  document.getElementById('streakVal').textContent = streak;
+  document.getElementById('hpText').textContent = `${hp} / 100`;
+  const fill = document.getElementById('hpFill');
+  fill.style.width = hp + '%';
+  fill.className = 'hp-fill' + (hp < 30 ? ' low' : hp < 60 ? ' medium' : '');
+}
+
+function addScore(pts) {
+  score += pts;
+  level = Math.floor(score / 500) + 1;
+  updateStats();
+}
+function loseHP(amt) {
+  hp = Math.max(0, hp - amt);
+  if (hp === 0) hp = 100;
+  updateStats();
+}
+function showFeedback(msg, color) {
+  const area = document.getElementById('gameArea');
+  area.style.position = 'relative';
+  const div = document.createElement('div');
+  div.className = 'feedback';
+  div.style.color = color;
+  div.style.border = `2px solid ${color}`;
+  div.textContent = msg;
+  area.appendChild(div);
+  setTimeout(() => div.remove(), 1400);
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('btnPuzzle').classList.toggle('active', mode === 'puzzle');
+  document.getElementById('btnDictation').classList.toggle('active', mode === 'dictation');
+  document.getElementById('btnHandwrite').classList.toggle('active', mode === 'handwrite');
+  renderGame();
+}
+function renderGame() {
+  if (currentMode === 'puzzle') renderPuzzle();
+  else if (currentMode === 'dictation') renderDictation();
+  else renderHandwrite();
+}
+
+function setButtonsHTML(activeKey, handlerName) {
+  return Object.entries(WORD_SETS).map(([k,v]) =>
+    `<button class="btn ${k===activeKey?'btn-primary':'btn-secondary'}" style="font-size:.78em;padding:6px 12px" onclick="${handlerName}('${k}')">${v.label}</button>`
+  ).join('');
+}
+
+function drawGuideChar(ctx, text, fontSize) {
+  ctx.clearRect(0, 0, 280, 280);
+  ctx.strokeStyle = 'rgba(244,162,97,.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(140,0); ctx.lineTo(140,280); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,140); ctx.lineTo(280,140); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(280,280); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(280,0); ctx.lineTo(0,280); ctx.stroke();
+  ctx.strokeRect(2,2,276,276);
+  ctx.font = `bold ${fontSize}px Noto Sans TC, serif`;
+  ctx.fillStyle = 'rgba(244,162,97,.12)';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  if (text.length > 4) {
+    const half = Math.ceil(text.length / 2);
+    ctx.fillText(text.slice(0, half), 140, 110);
+    ctx.fillText(text.slice(half), 140, 182);
+  } else {
+    ctx.fillText(text, 140, 148);
+  }
+}
+
+
+function speakWord(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'zh-HK';
+  utter.rate = 0.85;
+  utter.pitch = 1.05;
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.lang === 'zh-HK') || voices.find(v => v.lang === 'zh-TW') || voices.find(v => v.lang.startsWith('zh'));
+  if (preferred) utter.voice = preferred;
+  window.speechSynthesis.speak(utter);
+}
+if (window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+}
+
+
+function renderPuzzle() {
+  const items = WORD_SETS[puzzleWordSet].items;
+  if (puzzleIdx >= items.length) puzzleIdx = 0;
+  const ch = items[puzzleIdx];
+  const wordChars = ch.char.split('');
+  puzzleCorrect = 0;
+  const allChars = items.flatMap(i => i.char.split(''));
+  const distractors = [...new Set(allChars)].filter(c => !wordChars.includes(c));
+  const numDistractors = Math.min(4, Math.max(2, 6 - wordChars.length));
+  const mixed = [...wordChars, ...distractors.sort(() => Math.random() - 0.5).slice(0, numDistractors)].sort(() => Math.random() - 0.5);
+  window._puzzleCorrectChars = wordChars;
+  const slots = wordChars.map((c, i) => `
+    <div class="puzzle-slot" id="slot_${i}" ondragover="allowDrop(event)" ondrop="dropPiece(event,${i})" ontouchend="touchDropPuzzle(event,${i})">
+      <span id="slotContent_${i}"></span><span class="slot-label">${i+1}</span>
+    </div>`).join('');
+  const pieces = mixed.map((p, i) => `
+    <div class="puzzle-piece" id="piece_${i}" draggable="true" ondragstart="dragStart(event,'${p}',${i})" ontouchstart="touchStart(event,'${p}',${i})">${p}</div>`).join('');
+  document.getElementById('gameArea').innerHTML = `
+    <div class="set-row">${setButtonsHTML(puzzleWordSet, 'switchPuzzleSet')}</div>
+    <div class="small-note">第 ${puzzleIdx+1} / ${items.length} 題</div>
+    <button class="play-btn" id="playBtnPuzzle" onclick="playPuzzleAudio()">🔊</button>
+    <div class="small-note">聽清楚後，拖拉下方文字砌出答案</div>
+    <div class="puzzle-slots">${slots}</div>
+    <div class="small-note">可用字：</div>
+    <div class="puzzle-pieces">${pieces}</div>
+    <div class="next-row">
+      <button class="btn btn-secondary" onclick="clearPuzzle()">重置</button>
+      <button class="btn btn-secondary" onclick="revealPuzzleAnswer()">答案</button>
+      <button class="btn btn-secondary" onclick="nextPuzzle()">下一題</button>
+    </div>
+    <div class="puzzleReveal" id="puzzleReveal"></div>
+  `;
+  setTimeout(playPuzzleAudio, 500);
+}
+function switchPuzzleSet(key) { puzzleWordSet = key; puzzleIdx = 0; renderPuzzle(); }
+function playPuzzleAudio() {
+  const btn = document.getElementById('playBtnPuzzle');
+  const ch = WORD_SETS[puzzleWordSet].items[puzzleIdx];
+  if (btn) btn.classList.add('playing');
+  speakWord(ch.char);
+  const timer = setInterval(() => {
+    if (!window.speechSynthesis.speaking) {
+      clearInterval(timer);
+      if (btn) btn.classList.remove('playing');
+    }
+  }, 200);
+}
+function dragStart(e, part, idx) { draggedPiece = { part, idx }; e.dataTransfer.setData('text', part); }
+function touchStart(e, part, idx) { touchPiece = { part, idx }; }
+function allowDrop(e) { e.preventDefault(); }
+function dropPiece(e, slotIdx) { e.preventDefault(); if (!draggedPiece) return; placePiece(draggedPiece.part, draggedPiece.idx, slotIdx); draggedPiece = null; }
+function touchDropPuzzle(e, slotIdx) { if (!touchPiece) return; placePiece(touchPiece.part, touchPiece.idx, slotIdx); touchPiece = null; }
+function placePiece(part, pieceIdx, slotIdx) {
+  const correct = window._puzzleCorrectChars;
+  const slotEl = document.getElementById('slot_' + slotIdx);
+  const contentEl = document.getElementById('slotContent_' + slotIdx);
+  const pieceEl = document.getElementById('piece_' + pieceIdx);
+  if (!slotEl || !contentEl || !pieceEl) return;
+  if (slotEl.dataset.filled === '1') return;
+  if (part === correct[slotIdx]) {
+    contentEl.textContent = part;
+    slotEl.classList.add('filled');
+    slotEl.dataset.filled = '1';
+    pieceEl.classList.add('used');
+    puzzleCorrect++;
+    if (puzzleCorrect === correct.length) {
+      const ans = WORD_SETS[puzzleWordSet].items[puzzleIdx].char;
+      const pts = 100 + streak * 15;
+      addScore(pts); streak++; updateStats();
+      showFeedback(`完成：${ans}\n+${pts}分`, '#56ef56');
+      setTimeout(nextPuzzle, 1500);
+    }
+  } else {
+    slotEl.classList.add('wrong');
+    setTimeout(() => slotEl.classList.remove('wrong'), 400);
+    loseHP(8); streak = 0; updateStats();
+  }
+}
+function clearPuzzle() { renderPuzzle(); }
+function revealPuzzleAnswer() {
+  const ans = WORD_SETS[puzzleWordSet].items[puzzleIdx].char;
+  document.getElementById('puzzleReveal').textContent = '答案：' + ans;
+}
+function nextPuzzle() {
+  const items = WORD_SETS[puzzleWordSet].items;
+  puzzleIdx = (puzzleIdx + 1) % items.length;
+  renderPuzzle();
+}
+
+function renderDictation() {
+  const items = WORD_SETS[dictWordSet].items;
+  if (dictIdx >= items.length) dictIdx = 0;
+  document.getElementById('gameArea').innerHTML = `
+    <div class="set-row">${setButtonsHTML(dictWordSet, 'switchDictSet')}</div>
+    <div class="small-note">第 ${dictIdx+1} / ${items.length} 題</div>
+    <div class="small-note">🎧 聆聽後在下方默寫</div>
+    <button class="play-btn" id="playBtnDict" onclick="playDictation()">🔊</button>
+    <input class="dictation-input" id="dictInput" type="text" placeholder="在此默寫…" onkeydown="if(event.key==='Enter') checkDictation()" />
+    <div class="dictation-result" id="dictResult"></div>
+    <div class="answer-reveal" id="answerReveal"></div>
+    <div class="next-row">
+      <button class="btn btn-primary" onclick="checkDictation()">核對答案</button>
+      <button class="btn btn-secondary" onclick="revealAnswer()">顯示答案</button>
+      <button class="btn btn-secondary" onclick="nextDictation()">下一題</button>
+    </div>
+  `;
+  setTimeout(playDictation, 500);
+}
+function switchDictSet(key) { dictWordSet = key; dictIdx = 0; renderDictation(); }
+function playDictation() {
+  const btn = document.getElementById('playBtnDict');
+  const ch = WORD_SETS[dictWordSet].items[dictIdx];
+  if (btn) btn.classList.add('playing');
+  speakWord(ch.char);
+  const timer = setInterval(() => {
+    if (!window.speechSynthesis.speaking) {
+      clearInterval(timer);
+      if (btn) btn.classList.remove('playing');
+    }
+  }, 200);
+}
+function checkDictation() {
+  const ch = WORD_SETS[dictWordSet].items[dictIdx];
+  const input = document.getElementById('dictInput');
+  const result = document.getElementById('dictResult');
+  const reveal = document.getElementById('answerReveal');
+  const ans = input.value.trim();
+  if (!ans) { result.textContent = '請先作答'; return; }
+  if (ans === ch.char) {
+    input.classList.add('correct'); input.classList.remove('wrong');
+    const pts = 80 + streak * 10;
+    addScore(pts); streak++; updateStats();
+    result.innerHTML = '<span style="color:#56ef56">✅ 正確</span>';
+    reveal.textContent = '';
+    showFeedback('答對！\n+' + pts + '分', '#56ef56');
+    setTimeout(nextDictation, 1400);
+  } else {
+    input.classList.add('wrong'); input.classList.remove('correct');
+    result.innerHTML = '<span style="color:#e63946">❌ 不正確</span>';
+    reveal.textContent = ch.char;
+    loseHP(12); streak = 0; updateStats();
+  }
+}
+function revealAnswer() {
+  const ch = WORD_SETS[dictWordSet].items[dictIdx];
+  document.getElementById('answerReveal').textContent = ch.char;
+}
+function nextDictation() {
+  const items = WORD_SETS[dictWordSet].items;
+  dictIdx = (dictIdx + 1) % items.length;
+  renderDictation();
+}
+
+
+let hwWordSet = 'vocab', hwIdx = 0;
+let hwDrawing = false, hwLastX = 0, hwLastY = 0;
+let hwCanvas, hwCtx;
+let hwRevealed = false;
+
+function renderHandwrite() {
+  const items = WORD_SETS[hwWordSet].items;
+  if (hwIdx >= items.length) hwIdx = 0;
+  hwRevealed = false;
+  const ch = items[hwIdx];
+  const ansLen = ch.char.length;
+  const boxesHTML = ch.char.split('').map((c, i) =>
+    `<div class="hw-answer-char" id="hwChar_${i}">?</div>`
+  ).join('');
+
+  document.getElementById('gameArea').innerHTML = `
+    <div class="set-row">${setButtonsHTML(hwWordSet, 'switchHwSet')}</div>
+    <div class="small-note">第 ${hwIdx+1} / ${items.length} 題</div>
+    <div class="small-note">🖊️ 聆聽後在下方書寫，完成後對答案</div>
+    <button class="play-btn" id="playBtnHw" onclick="playHwAudio()">🔊</button>
+    <canvas id="hwCanvas" width="340" height="220"></canvas>
+    <div class="trace-controls" style="margin-top:10px;">
+      <button class="btn btn-secondary" onclick="clearHwCanvas()">清除</button>
+      <button class="btn btn-primary" onclick="revealHwAnswer()">✅ 對答案</button>
+      <button class="btn btn-secondary" onclick="nextHw()">下一題</button>
+    </div>
+    <div style="font-size:.82em;opacity:.65;text-align:center;margin-top:10px;margin-bottom:6px;">正確答案：</div>
+    <div class="hw-answer-box">${boxesHTML}</div>
+    <div style="font-size:.8em;color:#f4a261;text-align:center;margin-top:8px;" id="hwMeaning"></div>
+  `;
+  hwCanvas = document.getElementById('hwCanvas');
+  hwCtx = hwCanvas.getContext('2d');
+  hwCtx.fillStyle = 'rgba(0,0,0,0)';
+  setupHwEvents();
+  setTimeout(playHwAudio, 500);
+}
+
+function setupHwEvents() {
+  const getPos = (e) => {
+    const r = hwCanvas.getBoundingClientRect();
+    const sx = hwCanvas.width / r.width, sy = hwCanvas.height / r.height;
+    const src = e.touches ? e.touches[0] : e;
+    return [(src.clientX - r.left) * sx, (src.clientY - r.top) * sy];
+  };
+  hwCanvas.onmousedown = hwCanvas.ontouchstart = (e) => {
+    e.preventDefault(); hwDrawing = true;
+    [hwLastX, hwLastY] = getPos(e);
+  };
+  hwCanvas.onmousemove = hwCanvas.ontouchmove = (e) => {
+    e.preventDefault();
+    if (!hwDrawing) return;
+    const [x, y] = getPos(e);
+    hwCtx.beginPath();
+    hwCtx.moveTo(hwLastX, hwLastY); hwCtx.lineTo(x, y);
+    hwCtx.strokeStyle = '#f4a261'; hwCtx.lineWidth = 12; hwCtx.lineCap = 'round';
+    hwCtx.stroke();
+    [hwLastX, hwLastY] = [x, y];
+  };
+  hwCanvas.onmouseup = hwCanvas.ontouchend = () => hwDrawing = false;
+}
+
+function clearHwCanvas() {
+  hwCtx.clearRect(0, 0, hwCanvas.width, hwCanvas.height);
+  if (!hwRevealed) {
+    const ch = WORD_SETS[hwWordSet].items[hwIdx];
+    ch.char.split('').forEach((c, i) => {
+      const el = document.getElementById('hwChar_' + i);
+      if (el) { el.textContent = '?'; el.classList.remove('revealed'); }
+    });
+    document.getElementById('hwMeaning').textContent = '';
+  }
+}
+
+function playHwAudio() {
+  const btn = document.getElementById('playBtnHw');
+  const ch = WORD_SETS[hwWordSet].items[hwIdx];
+  if (btn) btn.classList.add('playing');
+  speakWord(ch.char);
+  const t = setInterval(() => {
+    if (!window.speechSynthesis.speaking) {
+      clearInterval(t);
+      if (btn) btn.classList.remove('playing');
+    }
+  }, 200);
+}
+
+function revealHwAnswer() {
+  const ch = WORD_SETS[hwWordSet].items[hwIdx];
+  hwRevealed = true;
+  ch.char.split('').forEach((c, i) => {
+    const el = document.getElementById('hwChar_' + i);
+    if (el) { el.textContent = c; el.classList.add('revealed'); }
+  });
+  const meaning = document.getElementById('hwMeaning');
+  if (meaning) meaning.textContent = ch.meaning;
+}
+
+function switchHwSet(key) { hwWordSet = key; hwIdx = 0; renderHandwrite(); }
+function nextHw() {
+  const items = WORD_SETS[hwWordSet].items;
+  hwIdx = (hwIdx + 1) % items.length;
+  renderHandwrite();
+}
+updateStats();
+renderGame();
+</script>
+</body>
+</html>
