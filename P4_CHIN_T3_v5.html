@@ -5473,20 +5473,17 @@ const MS_WORD_SETS = {
   sentence: {
     label:'📝 課文',
     items:[
-      {char:'瘦削',        meaning:'瘦削 — 身體或臉很瘦',          hint:'課文：瘦削的面龐'},
-      {char:'面龐',        meaning:'面龐 — 臉部、臉龐',             hint:'課文：瘦削的面龐上'},
-      {char:'皺紋',        meaning:'皺紋 — 皮膚上的紋路',           hint:'課文：兩道皺紋橫在眉毛之間'},
-      {char:'眉毛',        meaning:'眉毛 — 眼睛上方的毛',           hint:'課文：橫在眉毛之間'},
-      {char:'乾澀',        meaning:'乾澀 — 乾燥粗糙',               hint:'課文：嘴巴乾澀'},
-      {char:'嘴角',        meaning:'嘴角 — 嘴巴的兩端',             hint:'課文：嘴角被皺紋牽得向後咧着'},
-      {char:'媽媽變老了',  meaning:'課文首句',                       hint:'課文開首'},
-      {char:'紅着臉兒',    meaning:'紅着臉兒 — 害羞的樣子',         hint:'課文：帶着羞愧的表情'},
-      {char:'失物',        meaning:'失物 — 遺失的東西',             hint:'課文：領回失物'},
-      {char:'垃圾',        meaning:'垃圾 — 廢棄物',                 hint:'課文：帶走自己的垃圾'},
-      {char:'郊野公園',    meaning:'郊野公園 — 大自然公園',         hint:'課文：愛護郊野公園'},
-      {char:'愛護',        meaning:'愛護 — 珍惜保護',               hint:'課文：愛護郊野公園'},
-      {char:'責任',        meaning:'責任 — 應盡的本分',             hint:'課文：人人都有責任'},
-      {char:'經歷',        meaning:'經歷 — 親身體驗',               hint:'課文：這次經歷讓我明白'},
+      {char:'媽媽變老了',  meaning:'媽媽變老了 — 課文首句',         hint:'媽媽變老了，她瘦削的面龐上'},
+      {char:'瘦削',        meaning:'瘦削 — 身體或臉很瘦',           hint:'她瘦削的面龐上'},
+      {char:'面龐',        meaning:'面龐 — 臉部、臉龐',             hint:'她瘦削的面龐上'},
+      {char:'皺紋',        meaning:'皺紋 — 皮膚上的紋路',           hint:'兩道皺紋橫在眉毛之間'},
+      {char:'兩道皺紋',    meaning:'兩道皺紋 — 兩條皺紋',           hint:'兩道皺紋橫在眉毛之間'},
+      {char:'眉毛',        meaning:'眉毛 — 眼睛上方的毛',           hint:'橫在眉毛之間'},
+      {char:'乾澀',        meaning:'乾澀 — 乾燥粗糙',               hint:'嘴巴乾澀'},
+      {char:'嘴巴乾澀',    meaning:'嘴巴乾澀 — 嘴巴乾燥粗糙',       hint:'嘴巴乾澀'},
+      {char:'嘴角',        meaning:'嘴角 — 嘴巴的兩端',             hint:'嘴角被皺紋牽得向後咧着'},
+      {char:'向後咧着',    meaning:'向後咧着 — 向後張開',           hint:'嘴角被皺紋牽得向後咧着'},
+      {char:'牽得',        meaning:'牽得 — 被拉扯',                 hint:'嘴角被皺紋牽得向後咧着'},
     ]
   },
   allwords: {
@@ -5494,26 +5491,40 @@ const MS_WORD_SETS = {
     items:[
       {char:'秀麗',        meaning:'秀麗 — 美麗動人',               hint:'形容景色或人的外貌'},
       {char:'啼笑皆非',    meaning:'啼笑皆非 — 哭笑不得',           hint:'形容無奈尷尬的處境'},
-      {char:'口吻',        meaning:'口吻 — 說話的語氣',              hint:'講話時的語調和措辭'},
-      {char:'稀疏',        meaning:'稀疏 — 間隔大，不密集',          hint:'形容分佈不均勻'},
-      {char:'相稱',        meaning:'相稱 — 互相配合得宜',            hint:'兩者匹配，很協調'},
-      {char:'羨慕',        meaning:'羨慕 — 希望自己也擁有',          hint:'看到別人的好而想要'},
-      {char:'瘦削',        meaning:'瘦削 — 身體或臉很瘦',            hint:'課文：瘦削的面龐'},
-      {char:'面龐',        meaning:'面龐 — 臉部、臉龐',              hint:'課文：瘦削的面龐上'},
-      {char:'皺紋',        meaning:'皺紋 — 皮膚上的紋路',            hint:'課文：兩道皺紋橫在眉毛之間'},
-      {char:'眉毛',        meaning:'眉毛 — 眼睛上方的毛',            hint:'課文：橫在眉毛之間'},
-      {char:'乾澀',        meaning:'乾澀 — 乾燥粗糙',                hint:'課文：嘴巴乾澀'},
-      {char:'嘴角',        meaning:'嘴角 — 嘴巴的兩端',              hint:'課文：嘴角被皺紋牽得向後咧着'},
-      {char:'紅着臉兒',    meaning:'紅着臉兒 — 害羞的樣子',          hint:'課文：帶着羞愧的表情'},
-      {char:'失物',        meaning:'失物 — 遺失的東西',              hint:'課文：領回失物'},
-      {char:'垃圾',        meaning:'垃圾 — 廢棄物',                  hint:'課文：帶走自己的垃圾'},
-      {char:'郊野公園',    meaning:'郊野公園 — 大自然公園',          hint:'課文：愛護郊野公園'},
-      {char:'愛護',        meaning:'愛護 — 珍惜保護',                hint:'課文：愛護郊野公園'},
-      {char:'責任',        meaning:'責任 — 應盡的本分',              hint:'課文：人人都有責任'},
-      {char:'經歷',        meaning:'經歷 — 親身體驗',                hint:'課文：這次經歷讓我明白'},
+      {char:'口吻',        meaning:'口吻 — 說話的語氣',             hint:'講話時的語調和措辭'},
+      {char:'稀疏',        meaning:'稀疏 — 間隔大，不密集',         hint:'形容分佈不均勻'},
+      {char:'相稱',        meaning:'相稱 — 互相配合得宜',           hint:'兩者匹配，很協調'},
+      {char:'羨慕',        meaning:'羨慕 — 希望自己也擁有',         hint:'看到別人的好而想要'},
+      {char:'媽媽變老了',  meaning:'媽媽變老了 — 課文首句',         hint:'媽媽變老了，她瘦削的面龐上'},
+      {char:'瘦削',        meaning:'瘦削 — 身體或臉很瘦',           hint:'她瘦削的面龐上'},
+      {char:'面龐',        meaning:'面龐 — 臉部、臉龐',             hint:'她瘦削的面龐上'},
+      {char:'皺紋',        meaning:'皺紋 — 皮膚上的紋路',           hint:'兩道皺紋橫在眉毛之間'},
+      {char:'兩道皺紋',    meaning:'兩道皺紋 — 兩條皺紋',           hint:'兩道皺紋橫在眉毛之間'},
+      {char:'眉毛',        meaning:'眉毛 — 眼睛上方的毛',           hint:'橫在眉毛之間'},
+      {char:'乾澀',        meaning:'乾澀 — 乾燥粗糙',               hint:'嘴巴乾澀'},
+      {char:'嘴巴乾澀',    meaning:'嘴巴乾澀 — 嘴巴乾燥粗糙',       hint:'嘴巴乾澀'},
+      {char:'嘴角',        meaning:'嘴角 — 嘴巴的兩端',             hint:'嘴角被皺紋牽得向後咧着'},
+      {char:'向後咧着',    meaning:'向後咧着 — 向後張開',           hint:'嘴角被皺紋牽得向後咧着'},
+      {char:'牽得',        meaning:'牽得 — 被拉扯',                 hint:'嘴角被皺紋牽得向後咧着'},
     ]
   }
 };
+
+// Shuffle helper — Fisher-Yates
+function msShuffleItems(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Shuffled accessor — always returns a fresh random order
+function msGetItems(setKey) {
+  return msShuffleItems(MS_WORD_SETS[setKey].items);
+}
+
 const WORD_SETS = MS_WORD_SETS;
 
 // ── State ──
@@ -5523,6 +5534,22 @@ let puzzleSet = 'vocab', puzzleIdx = 0, puzzleCorrect = 0;
 let dictSet   = 'vocab', dictIdx   = 0;
 let hwSet     = 'vocab', hwIdx     = 0;
 let msSessionExp = 0;
+
+// Shuffled item caches (re-shuffle when set changes or round completes)
+let _puzzleItems = null, _dictItems = null, _hwItems = null;
+
+function getPuzzleItems() {
+  if (!_puzzleItems) _puzzleItems = msShuffleItems(MS_WORD_SETS[puzzleSet].items);
+  return _puzzleItems;
+}
+function getDictItems() {
+  if (!_dictItems) _dictItems = msShuffleItems(MS_WORD_SETS[dictSet].items);
+  return _dictItems;
+}
+function getHWItems() {
+  if (!_hwItems) _hwItems = msShuffleItems(MS_WORD_SETS[hwSet].items);
+  return _hwItems;
+}
 
 // ── Stats UI ──
 function updateStats() {
@@ -5642,14 +5669,14 @@ function playSpeech(text,btnId){
 
 // ===== PUZZLE MODE =====
 function renderPuzzle(){
-  const items=WORD_SETS[puzzleSet].items;
+  const items=getPuzzleItems();
   if(puzzleIdx>=items.length)puzzleIdx=0;
   puzzleCorrect=0;
   const ch=items[puzzleIdx];
   const chars=ch.char.split('');
   window._correctChars=chars;
   // distractors
-  const pool=[...new Set(WORD_SETS[puzzleSet].items.flatMap(i=>i.char.split('')))].filter(c=>!chars.includes(c));
+  const pool=[...new Set(MS_WORD_SETS[puzzleSet].items.flatMap(i=>i.char.split('')))].filter(c=>!chars.includes(c));
   const nd=Math.min(5,Math.max(2,7-chars.length));
   const mixed=[...chars,...pool.sort(()=>Math.random()-.5).slice(0,nd)].sort(()=>Math.random()-.5);
   const slots=chars.map((c,i)=>`
@@ -5680,13 +5707,13 @@ function renderPuzzle(){
   `;
   setTimeout(()=>playSpeech(ch.char,'playBtnP'),500);
 }
-function switchPuzzleSet(k){puzzleSet=k;puzzleIdx=0;renderPuzzle();}
+function switchPuzzleSet(k){puzzleSet=k;puzzleIdx=0;_puzzleItems=null;renderPuzzle();}
 function nextPuzzle(){
-  const l=WORD_SETS[puzzleSet].items.length;
-  puzzleIdx=(puzzleIdx+1)%l; renderPuzzle();
+  const l=getPuzzleItems().length;
+  puzzleIdx=(puzzleIdx+1)%l; if(puzzleIdx===0)_puzzleItems=null; renderPuzzle();
 }
 function revealPuzzle(){
-  const ans=WORD_SETS[puzzleSet].items[puzzleIdx].char;
+  const ans=getPuzzleItems()[puzzleIdx].char;
   document.getElementById('puzzleReveal').textContent='答案：'+ans;
 }
 function dragStart(e,p,i){dragPiece={p,i};e.dataTransfer.setData('text',p);}
@@ -5704,7 +5731,7 @@ function placePiece(p,pi,si){
     cEl.textContent=p; slotEl.classList.add('filled'); slotEl.dataset.filled='1';
     pieEl.classList.add('used'); puzzleCorrect++;
     if(puzzleCorrect===correct.length){
-      const ans=WORD_SETS[puzzleSet].items[puzzleIdx].char;
+      const ans=getPuzzleItems()[puzzleIdx].char;
       const pts=80+streak*12;
       addScore(pts); updateStats();
       showToast(`✅ ${ans}
@@ -5720,7 +5747,7 @@ function placePiece(p,pi,si){
 
 // ===== DICTATION MODE =====
 function renderDictation(){
-  const items=WORD_SETS[dictSet].items;
+  const items=getDictItems();
   if(dictIdx>=items.length)dictIdx=0;
   document.getElementById('ms-game-card').innerHTML=`
     <div class="set-pills">${pillsHTML(dictSet,'switchDictSet')}</div>
@@ -5742,9 +5769,9 @@ function renderDictation(){
   `;
   setTimeout(()=>playSpeech(items[dictIdx].char,'playBtnD'),500);
 }
-function switchDictSet(k){dictSet=k;dictIdx=0;renderDictation();}
+function switchDictSet(k){dictSet=k;dictIdx=0;_dictItems=null;renderDictation();}
 function checkDict(){
-  const items=WORD_SETS[dictSet].items;
+  const items=getDictItems();
   const ch=items[dictIdx];
   const inp=document.getElementById('dictInput');
   const res=document.getElementById('dictResult');
@@ -5772,17 +5799,17 @@ function checkDict(){
   }
 }
 function showDictAnswer(){
-  const ch=WORD_SETS[dictSet].items[dictIdx];
+  const ch=getDictItems()[dictIdx];
   document.getElementById('answerBox').textContent=ch.char;
 }
 function nextDict(){
-  const l=WORD_SETS[dictSet].items.length;
-  dictIdx=(dictIdx+1)%l; renderDictation();
+  const l=getDictItems().length;
+  dictIdx=(dictIdx+1)%l; if(dictIdx===0)_dictItems=null; renderDictation();
 }
 
 // ===== HANDWRITE MODE =====
 function renderHandwrite(){
-  const items=WORD_SETS[hwSet].items;
+  const items=getHWItems();
   if(hwIdx>=items.length)hwIdx=0;
   const ch=items[hwIdx];
   const boxesHTML=ch.char.split('').map((_,i)=>
@@ -5828,7 +5855,7 @@ function setupHWEvents(){
 }
 function clearHW(){
   if(hwCtx)hwCtx.clearRect(0,0,hwCanvas.width,hwCanvas.height);
-  const ch=WORD_SETS[hwSet].items[hwIdx];
+  const ch=getHWItems()[hwIdx];
   ch.char.split('').forEach((_,i)=>{
     const el=document.getElementById('hwc_'+i);
     if(el){el.textContent='?';el.classList.remove('revealed');}
@@ -5836,17 +5863,17 @@ function clearHW(){
   document.getElementById('hwMeaning').textContent='';
 }
 function revealHW(){
-  const ch=WORD_SETS[hwSet].items[hwIdx];
+  const ch=getHWItems()[hwIdx];
   ch.char.split('').forEach((c,i)=>{
     const el=document.getElementById('hwc_'+i);
     if(el){el.textContent=c;el.classList.add('revealed');}
   });
   document.getElementById('hwMeaning').textContent=ch.meaning;
 }
-function switchHwSet(k){hwSet=k;hwIdx=0;renderHandwrite();}
+function switchHwSet(k){hwSet=k;hwIdx=0;_hwItems=null;renderHandwrite();}
 function nextHW(){
-  const l=WORD_SETS[hwSet].items.length;
-  hwIdx=(hwIdx+1)%l; renderHandwrite();
+  const l=getHWItems().length;
+  hwIdx=(hwIdx+1)%l; if(hwIdx===0)_hwItems=null; renderHandwrite();
 }
 
 // ── Mode switcher ──
