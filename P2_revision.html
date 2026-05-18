@@ -958,8 +958,10 @@
             }
         };
 
-        function getPokePic(pId) { 
-            return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pId}.png`; 
+        function getPokePic(pId) {
+            // Official Pokémon website artwork (padded 3-digit ID)
+            const padded = String(pId).padStart(3, '0');
+            return `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${padded}.png`;
         }
 
         // --- 玩家資料與自動儲存 ---
@@ -1333,30 +1335,30 @@
 
         // --- 全面擴充野生 Pokémon 與神獸 ---
         const monsters = [
-            { name: "史萊姆",   emoji: "🟢",  pic: "132",  atk: 10, def: 10, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
-            { name: "森林狼",   emoji: "🐺",  pic: "262",  atk: 20, def: 15, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3, 🔮 碎片 +1", rewardData: {wood: 3, stone: 3, frag: 1} },
-            { name: "吸血蝠",   emoji: "🦇",  pic: "169",  atk: 25, def: 20, type: "normal", rewardsStr: "💎 寶石 +1, 🔮 碎片 +1", rewardData: {gem: 1, frag: 1} },
-            { name: "毒蛇",     emoji: "🐍",  pic: "336",  atk: 30, def: 25, type: "normal", rewardsStr: "🌟 星星 +1, 🔮 碎片 +1", rewardData: {star: 1, frag: 1} },
-            { name: "狂暴熊",   emoji: "🐻",  pic: "217",  atk: 40, def: 35, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +2", rewardData: {gem: 2, star: 2} },
-            { name: "綠毛蟲",   emoji: "🐛",  pic: "10",  atk: 12, def: 10, type: "normal", rewardsStr: "🪵 木材 +2", rewardData: {wood: 2} },
-            { name: "波波",     emoji: "🐦",  pic: "16",  atk: 15, def: 12, type: "normal", rewardsStr: "🧱 石頭 +2", rewardData: {stone: 2} },
-            { name: "小拉達",   emoji: "🐀",  pic: "19",  atk: 18, def: 12, type: "normal", rewardsStr: "🪵 木材 +3", rewardData: {wood: 3} },
-            { name: "胖丁",     emoji: "🎤",  pic: "39",  atk: 20, def: 25, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
-            { name: "超音蝠",   emoji: "🦇",  pic: "41",  atk: 22, def: 18, type: "normal", rewardsStr: "🧱 石頭 +3", rewardData: {stone: 3} },
-            { name: "走路草",   emoji: "🌿",  pic: "43",  atk: 24, def: 20, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
-            { name: "喵喵",     emoji: "🐱",  pic: "52",  atk: 26, def: 22, type: "normal", rewardsStr: "💎 寶石 +1", rewardData: {gem: 1} },
-            { name: "可達鴨",   emoji: "🦆",  pic: "54",  atk: 28, def: 25, type: "normal", rewardsStr: "🌟 星星 +1", rewardData: {star: 1} },
-            { name: "猴怪",     emoji: "🐒",  pic: "56",  atk: 35, def: 20, type: "normal", rewardsStr: "🪵 木材 +4", rewardData: {wood: 4} },
-            { name: "卡蒂狗",   emoji: "🐕",  pic: "58",  atk: 32, def: 28, type: "normal", rewardsStr: "🧱 石頭 +4", rewardData: {stone: 4} },
-            { name: "蚊香蝌蚪", emoji: "🌀",  pic: "60",  atk: 25, def: 30, type: "normal", rewardsStr: "🔮 碎片 +2", rewardData: {frag: 2} },
-            { name: "腕力",     emoji: "💪",  pic: "66",  atk: 45, def: 30, type: "normal", rewardsStr: "💎 寶石 +1, 🌟 星星 +1", rewardData: {gem: 1, star: 1} },
-            { name: "喇叭芽",   emoji: "🌱",  pic: "69",  atk: 28, def: 20, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3", rewardData: {wood: 3, stone: 3} },
-            { name: "瑪瑙水母", emoji: "🦑",  pic: "72",  atk: 30, def: 35, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
-            { name: "小拳石",   emoji: "🪨",  pic: "74",  atk: 35, def: 50, type: "normal", rewardsStr: "🧱 石頭 +5", rewardData: {stone: 5} },
-            { name: "小磁怪",   emoji: "🧲",  pic: "81",  atk: 38, def: 30, type: "normal", rewardsStr: "💎 寶石 +2", rewardData: {gem: 2} },
-            { name: "大舌貝",   emoji: "🐚",  pic: "90",  atk: 32, def: 45, type: "normal", rewardsStr: "🌟 星星 +2", rewardData: {star: 2} },
-            { name: "鬼斯",     emoji: "👻",  pic: "92",  atk: 42, def: 25, type: "normal", rewardsStr: "🔮 碎片 +3", rewardData: {frag: 3} },
-            { name: "大岩蛇",   emoji: "🗿",  pic: "95",  atk: 45, def: 55, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +1", rewardData: {gem: 2, star: 1} },
+            { name: "綠毛蟲",   emoji: "🐛",  pic: "010", atk: 12, def: 10, type: "normal", rewardsStr: "🪵 木材 +2", rewardData: {wood: 2} },
+            { name: "波波",     emoji: "🐦",  pic: "016", atk: 15, def: 12, type: "normal", rewardsStr: "🧱 石頭 +2", rewardData: {stone: 2} },
+            { name: "小拉達",   emoji: "🐀",  pic: "019", atk: 18, def: 12, type: "normal", rewardsStr: "🪵 木材 +3", rewardData: {wood: 3} },
+            { name: "胖丁",     emoji: "🎤",  pic: "039", atk: 20, def: 25, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
+            { name: "超音蝠",   emoji: "🦇",  pic: "041", atk: 22, def: 18, type: "normal", rewardsStr: "🧱 石頭 +3", rewardData: {stone: 3} },
+            { name: "走路草",   emoji: "🌿",  pic: "043", atk: 24, def: 20, type: "normal", rewardsStr: "🪵 木材 +2, 🧱 石頭 +2", rewardData: {wood: 2, stone: 2} },
+            { name: "喵喵",     emoji: "🐱",  pic: "052", atk: 26, def: 22, type: "normal", rewardsStr: "💎 寶石 +1", rewardData: {gem: 1} },
+            { name: "可達鴨",   emoji: "🦆",  pic: "054", atk: 28, def: 25, type: "normal", rewardsStr: "🌟 星星 +1", rewardData: {star: 1} },
+            { name: "猴怪",     emoji: "🐒",  pic: "056", atk: 35, def: 20, type: "normal", rewardsStr: "🪵 木材 +4", rewardData: {wood: 4} },
+            { name: "卡蒂狗",   emoji: "🐕",  pic: "058", atk: 32, def: 28, type: "normal", rewardsStr: "🧱 石頭 +4", rewardData: {stone: 4} },
+            { name: "蚊香蝌蚪", emoji: "🌀",  pic: "060", atk: 25, def: 30, type: "normal", rewardsStr: "🔮 碎片 +2", rewardData: {frag: 2} },
+            { name: "腕力",     emoji: "💪",  pic: "066", atk: 45, def: 30, type: "normal", rewardsStr: "💎 寶石 +1, 🌟 星星 +1", rewardData: {gem: 1, star: 1} },
+            { name: "喇叭芽",   emoji: "🌱",  pic: "069", atk: 28, def: 20, type: "normal", rewardsStr: "🪵 木材 +3, 🧱 石頭 +3", rewardData: {wood: 3, stone: 3} },
+            { name: "瑪瑙水母", emoji: "🪼",  pic: "072", atk: 30, def: 35, type: "normal", rewardsStr: "🔮 碎片 +1", rewardData: {frag: 1} },
+            { name: "小拳石",   emoji: "🪨",  pic: "074", atk: 35, def: 50, type: "normal", rewardsStr: "🧱 石頭 +5", rewardData: {stone: 5} },
+            { name: "小磁怪",   emoji: "🧲",  pic: "081", atk: 38, def: 30, type: "normal", rewardsStr: "💎 寶石 +2", rewardData: {gem: 2} },
+            { name: "大舌貝",   emoji: "🐚",  pic: "090", atk: 32, def: 45, type: "normal", rewardsStr: "🌟 星星 +2", rewardData: {star: 2} },
+            { name: "鬼斯",     emoji: "👻",  pic: "092", atk: 42, def: 25, type: "normal", rewardsStr: "🔮 碎片 +3", rewardData: {frag: 3} },
+            { name: "大岩蛇",   emoji: "🗿",  pic: "095", atk: 45, def: 55, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +1", rewardData: {gem: 2, star: 1} },
+            { name: "電擊獸",   emoji: "⚡",  pic: "026", atk: 38, def: 28, type: "normal", rewardsStr: "💎 寶石 +2, 🌟 星星 +1", rewardData: {gem: 2, star: 1} },
+            { name: "九尾",     emoji: "🦊",  pic: "038", atk: 40, def: 30, type: "normal", rewardsStr: "🌟 星星 +2, 🔮 碎片 +1", rewardData: {star: 2, frag: 1} },
+            { name: "水箭龜",   emoji: "🐢",  pic: "009", atk: 52, def: 65, type: "normal", rewardsStr: "💎 寶石 +3, 🧱 石頭 +3", rewardData: {gem: 3, stone: 3} },
+            { name: "噴火龍",   emoji: "🔥",  pic: "006", atk: 70, def: 45, type: "normal", rewardsStr: "💎 寶石 +4, 🌟 星星 +2", rewardData: {gem: 4, star: 2} },
+            { name: "鬼斯通",   emoji: "👹",  pic: "093", atk: 55, def: 35, type: "normal", rewardsStr: "🔮 碎片 +4, 💎 寶石 +1", rewardData: {frag: 4, gem: 1} },
             { name: "卡比獸",   emoji: "💤",  pic: "143", atk: 50, def: 80, type: "normal", rewardsStr: "💎 寶石 +3, 🌟 星星 +3, 📜 手稿 +3", rewardData: {gem: 3, star: 3, manu: 3} }
         ];
 
