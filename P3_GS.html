@@ -585,7 +585,7 @@
         </button>
         <button class="map-action-btn mab-red" onclick="startGame('exam')" style="background: linear-gradient(135deg, #b71c1c, #e53935); border: 2px solid #ff8f00;">
             <span class="btn-icon">📝</span>
-            <span class="btn-text"><span class="btn-title">T3考試溫習</span><span class="btn-sub">終極試煉 · 全科混合精靈出沒</span></span>
+            <span class="btn-text"><span class="btn-title">T3考試温習</span><span class="btn-sub">全科混合 · 共100題</span></span>
         </button>
     </div>
 
@@ -759,7 +759,7 @@
             <!-- EXAM PROGRESS BAR (hidden in normal mode) -->
             <div id="exam-progress-wrap" class="hidden" style="width:95%;max-width:700px;margin:0 auto 10px;background:rgba(0,0,0,0.12);border-radius:12px;padding:10px 14px;border:2px solid rgba(255,255,255,0.3);">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-                    <span style="color:#FFF;font-weight:bold;font-size:0.95em;">📝 T3考試溫習進度</span>
+                    <span style="color:#FFF;font-weight:bold;font-size:0.95em;">📝 T3考試温習進度</span>
                     <span id="exam-progress-text" style="color:#FFD700;font-weight:bold;font-size:1em;">✅ 0 / 0</span>
                 </div>
                 <div style="background:rgba(0,0,0,0.25);border-radius:20px;height:18px;overflow:hidden;border:2px solid rgba(255,255,255,0.2);">
@@ -876,7 +876,7 @@
             } catch(e) {}
         }
 
-        const medalsConfig = { 10: '🥉', 20: '🥈', 30: '🥇', 40: '🏅', 50: '💎', 60: '🌠', 70: '👑', 80: '🐉', 90: '🌌', 100: '🏆', 150: '🌠' };
+        const medalsConfig = { 10: '🥉', 20: '🥈', 30: '🥇', 40: '🏅', 50: '💎', 60: '✨', 70: '👑', 80: '🐉', 90: '🌌', 100: '🏆', 110: '🔥', 120: '⚡', 130: '🌊', 140: '🌪️', 150: '🌠', 160: '💫', 170: '🦋', 180: '🎯', 190: '🎖️', 200: '🌙', 210: '☀️', 220: '🌈', 230: '💥', 240: '🎪', 250: '🦄', 260: '🧿', 270: '🔮', 280: '🗡️', 290: '🛡️', 300: '⭐👑⭐' };
 
         const wildBeastPool = [
             { id: "3", name: "妙蛙花", power: 33 }, { id: "500", name: "炎武王", power: 60 }, { id: "94", name: "耿鬼", power: 90 }, { id: "76", name: "隆隆岩", power: 120 },
@@ -1004,7 +1004,35 @@
   { q: "[時事題] 以下關於香港回歸歷史的事件，哪個選項的時間先後次序正確？（①簽署《中英聯合聲明》 ②成立基本法起草委員會 ③基本法正式通過 ④基本法正式生效）", ans: "①②③④", options: ["①②④③", "②①③④", "①②③④", "③①②④"] }
 ];
         
-        const allMiningTasks = [...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom, ...dbCulture, ...dbExam];
+        const dbT3Extra = [
+    { q: "基本法起草委員會在哪一年成立？", ans: "1985年", options: ["1982年", "1985年", "1990年", "1997年"] },
+    { q: "以下哪項是法律和規則的作用？", ans: "維持社會秩序", options: ["維持社會秩序", "增加政府收入", "限制市民自由", "減少人口增長"] },
+    { q: "以下哪個機關是香港的執法機關？", ans: "廉政公署", options: ["廉政公署", "立法會", "房屋署", "教育局"] },
+    { q: "以下哪個機關是香港的執法機關？", ans: "香港警務處", options: ["香港警務處", "消防處", "入境事務處", "海事處"] },
+    { q: "根據香港法律，市民對國旗和區旗應如何做？", ans: "尊重國旗和區旗，不可隨意塗上顏色或圖案", options: ["尊重國旗和區旗，不可隨意塗上顏色或圖案", "可以隨意在國旗上畫圖案", "可以用國旗做裝飾品", "不需要理會國旗和區旗"] },
+    { q: "香港回歸紀念日通常會舉辦哪項活動？", ans: "升旗典禮", options: ["升旗典禮", "選舉投票", "運動會", "校慶活動"] },
+    { q: "以下哪個地方屬於香港的禁煙區？", ans: "餐廳內", options: ["餐廳內", "郊野公園空曠地方", "私人住宅內", "無人的空地"] },
+    { q: "以下哪個地方屬於香港的禁煙區？", ans: "室內工作間", options: ["室內工作間", "私人屋苑天台", "郊野公園山徑", "私家車內"] },
+    { q: "在禁煙區內吸煙，市民應如何做？", ans: "不可在禁煙區吸煙", options: ["不可在禁煙區吸煙", "可以在角落吸煙", "只要沒有人看見便可以吸煙", "可以向管理員申請豁免"] },
+    { q: "以下哪種交通工具屬於香港的禁煙區？", ans: "巴士", options: ["巴士", "私家車", "的士後座", "貨車"] },
+    { q: "以下哪項屬於香港的房屋類型？", ans: "居屋", options: ["居屋", "學生宿舍", "旅館", "醫院"] },
+    { q: "香港新界一帶常見的傳統房屋類型是甚麼？", ans: "村屋", options: ["村屋", "唐樓", "公屋", "獨立屋"] },
+    { q: "以下哪種房屋類型通常是獨立建築、附有花園？", ans: "獨立屋", options: ["獨立屋", "公屋", "唐樓", "居屋"] },
+    { q: "以下哪種房屋通常設有會所、保安及管理員？", ans: "私人屋苑", options: ["私人屋苑", "唐樓", "村屋", "公屋"] },
+    { q: "唐樓居民面對的居住問題，以下哪項正確？", ans: "沒有升降機，需要行多層樓梯", options: ["沒有升降機，需要行多層樓梯", "租金便宜，生活舒適", "樓宇新淨，設備齊全", "有私人泳池和會所"] },
+    { q: "哪個政府部門負責維修政府斜坡？", ans: "土木工程拓展署", options: ["土木工程拓展署", "房屋署", "地政總署", "渠務署"] },
+    { q: "石油和天然氣是由甚麼形成的？", ans: "遠古動植物受熱力和壓力影響", options: ["遠古動植物受熱力和壓力影響", "沙石在水底長期浸泡", "岩石受地震影響碎裂", "海水受太陽蒸發"] },
+    { q: "石油開採後，會先送往哪裏處理？", ans: "煉油廠", options: ["煉油廠", "發電廠", "水務處", "貨倉"] },
+    { q: "煤是由遠古的甚麼受壓力和熱力形成的？", ans: "植物", options: ["植物", "動物", "沙石", "空氣"] },
+    { q: "人民幣是哪個地方的法定貨幣？", ans: "中國內地", options: ["中國內地", "香港", "台灣", "澳門"] },
+    { q: "香港由哪兩家公司提供電力？", ans: "中華電力和香港電燈", options: ["中華電力和香港電燈", "中華電力和煤氣公司", "港燈和中電煤氣", "香港電燈和中華煤氣"] },
+    { q: "香港電燈（港燈）主要負責哪個地區的供電？", ans: "香港島", options: ["香港島", "九龍", "新界", "大嶼山"] },
+];
+
+// 時事題暫時關閉
+const dbT3News = [];
+
+        const allMiningTasks = [...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom, ...dbCulture, ...dbExam, ...dbT3Extra];
         let currentCategory = 'energy';
         let currentMiningIdx = 0, currentMiningTasks = [];
 
@@ -1206,10 +1234,11 @@
         function clearBossEffects() {
             clearInterval(bossTimerInterval);
             clearInterval(psychicInterval);
+            isUltimateActive = false;
             clearTimeout(hideQuestionTimeout);
             stopParticles();
             document.body.classList.remove('invert-effect');
-            document.getElementById('main-container').className = 'container'; document.getElementById('main-container').style.border = ''; document.getElementById('main-container').classList.remove('shake-violent','shake-extreme','gold-border-flash'); document.body.classList.remove('fullscreen-shake','gold-flash-overlay','arceus-curse'); document.body.style.background = ''; document.body.style.filter = ''; if (window._arceusFlickerInt) { clearInterval(window._arceusFlickerInt); window._arceusFlickerInt = null; }
+            document.getElementById('main-container').className = 'container'; document.getElementById('main-container').style.border = ''; document.getElementById('main-container').classList.remove('shake-violent','shake-extreme','gold-border-flash'); document.body.classList.remove('fullscreen-shake','gold-flash-overlay','arceus-curse'); document.body.style.background = ''; document.body.style.filter = ''; if (window._arceusFlickerInt) { clearInterval(window._arceusFlickerInt); window._arceusFlickerInt = null; } if (window._arceusShakeTimeout) { clearTimeout(window._arceusShakeTimeout); window._arceusShakeTimeout = null; }
             document.getElementById('boss-question').style = "";
         }
 
@@ -1509,14 +1538,20 @@
 
         function startGame(cat) {
             playSound('click'); hideAll(); currentCategory = cat;
-            let titles = {'hk':"🌊 香港是我家 (蔚藍之海)", 'house':"🌳 安居樂 (豐饒之森)", 'energy':"🌋 能源世界 (烈焰火山)", 'freedom':"⛰️ 自由與守規 (雷霆高原)", 'culture':"🔮 文化交融 (幻影遺跡)", 'exam':"📝 T3考試溫習 (終極試煉)"};
+            let titles = {'hk':"🌊 香港是我家 (蔚藍之海)", 'house':"🌳 安居樂 (豐饒之森)", 'energy':"🌋 能源世界 (烈焰火山)", 'freedom':"⛰️ 自由與守規 (雷霆高原)", 'culture':"🔮 文化交融 (幻影遺跡)", 'exam':"📝 T3考試温習"};
             document.getElementById('level-title').innerHTML = titles[cat];
             if(cat === 'hk') currentMiningTasks = shuffle(dbHK); 
             else if (cat === 'house') currentMiningTasks = shuffle(dbHouse); 
             else if (cat === 'energy') currentMiningTasks = shuffle(dbEnergy); 
             else if (cat === 'freedom') currentMiningTasks = shuffle(dbFreedom);
             else if (cat === 'culture') currentMiningTasks = shuffle(dbCulture);
-            else if (cat === 'exam') currentMiningTasks = shuffle([...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom, ...dbCulture, ...dbExam]);
+            else if (cat === 'exam') {
+                // T3考試温習：所有新題目 + 隨機原有題目，共100題
+                const examNew = [...dbT3Extra];
+                const examOld = shuffle([...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom, ...dbCulture, ...dbExam]);
+                const needed = Math.max(0, 100 - examNew.length);
+                currentMiningTasks = shuffle([...examNew, ...examOld.slice(0, needed)]);
+            }
             currentMiningIdx = 0; document.getElementById('game-mining').classList.remove('hidden');
             if (cat === 'exam') { initExamMode(currentMiningTasks.length); } else { resetExamMode(); }
             loadMining();
@@ -1638,7 +1673,7 @@
 
         function checkMedalUnlock() {
             let m = Math.floor(inventory.streak / 10) * 10;
-            if (m >= 10 && m <= 150 && !inventory.medals.includes(m)) { inventory.medals.push(m); playSound('medal'); alert(`🎊 難以置信！你達成了 ${m} 連勝！\n榮獲專屬勳章【${medalsConfig[m]}】！`); }
+            if (m >= 10 && m <= 300 && !inventory.medals.includes(m)) { inventory.medals.push(m); playSound('medal'); alert(`🎊 難以置信！你達成了 ${m} 連勝！\n榮獲專屬勳章【${medalsConfig[m]}】！`); }
         }
 
         function craft(item) {
@@ -1912,11 +1947,13 @@
                 document.getElementById('main-container').classList.remove('shake-continuous');
                 document.getElementById('main-container').classList.add('shake-extreme', 'ultimate-warning', 'gold-border-flash');
                 document.body.classList.add('fullscreen-shake', 'gold-flash-overlay', 'arceus-curse');
-                // 方案A：3秒後移除 shake-extreme，改為 shake-violent
-                setTimeout(() => {
+                // 方案A：3秒後移除 shake-extreme，改為 shake-violent（可被取消）
+                if (window._arceusShakeTimeout) clearTimeout(window._arceusShakeTimeout);
+                window._arceusShakeTimeout = setTimeout(() => {
                     document.getElementById('main-container').classList.remove('shake-extreme');
                     document.getElementById('main-container').classList.add('shake-violent');
                     document.body.classList.remove('fullscreen-shake');
+                    window._arceusShakeTimeout = null;
                 }, 3000);
                 // 每2秒隨機閃爍消失選項文字
                 let flickerInt = setInterval(() => {
@@ -1951,7 +1988,7 @@
                 }, 1000);
                 startParticles('⭐');
                 playSound('legendary');
-                playerHP -= 15;
+                if (bossProgress === 0) { playerHP -= 15; } // 只在第一題發動時扣HP
                 updateBossHP();
                 if (playerHP <= 0) { clearInterval(bossTimerInterval); bossDefeat(); return; }
                 document.getElementById('boss-msg').innerHTML = `<span style='color:#FFD700;font-size:1.1em;font-weight:bold;'>⭐ 阿爾宙斯「創世制裁」必然發動！<br>🌍 全畫面震動！金閃×7！HP-15！連對7題才能取勝！</span>`;
