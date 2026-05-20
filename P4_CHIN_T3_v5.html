@@ -754,14 +754,14 @@
                 </div>
             </div>
 
-            <!-- ══ 期間限定通知 ══ -->
-            <div id="home-bonus-notice" style="background:linear-gradient(135deg,#FF6F00,#E65100);border-radius:10px;padding:10px 14px;margin-bottom:10px;text-align:center;color:#fff;font-weight:bold;font-size:0.88em;cursor:pointer;" onclick="openMoShu()">
-              ⚡ 期間限定！<b>漢字道場・聆聽默寫</b> 每題 <span style="color:#FFD700;font-size:1.1em;">+100分</span>　截止：5月19日　點擊前往 →
+            <!-- ══ 期間限定通知（模擬考試）截至6月9日 ══ -->
+            <div id="home-exam-bonus-notice" style="background:linear-gradient(135deg,#1565C0,#0D47A1);border-radius:10px;padding:10px 14px;margin-bottom:10px;text-align:center;color:#fff;font-weight:bold;font-size:0.88em;cursor:pointer;" onclick="openExamMode()">
+              📋 期間限定！<b>模擬考試</b> 完成+500分 · 每題答對+50分 · 正確率獎勵最高+1000分　截止：6月9日 🔥
             </div>
             <script>
             (function(){
-              const el = document.getElementById('home-bonus-notice');
-              if (el && new Date() >= new Date('2026-05-20T00:00:00+08:00')) el.style.display='none';
+              const el = document.getElementById('home-exam-bonus-notice');
+              if (el && new Date() >= new Date('2026-06-10T00:00:00+08:00')) el.style.display='none';
             })();
             </script>
 
@@ -2565,7 +2565,7 @@
             dailyQuestDate: "", dailyQuests: [], dailyQuestProgress: {}, gachaDrawsToday: 0, 
             scrollBoughtDate: "", hasLegendaryBuff: false,
             bloodMoonActive: false, bloodMoonTarget: 0, bloodMoonStreak: 0, bloodMoonLeft: 0, unlockedCards: [], cardStats: {}, potions: 0,
-            epicWins: 0, legendaryWins: 0, moShuCorrect: 0, dailyQuestsCompleted: 0
+            epicWins: 0, legendaryWins: 0, moShuCorrect: 0, dailyQuestsCompleted: 0, examBonusScore: 0
         };
         let inventory = { ...defaultInv };
 
@@ -2986,6 +2986,7 @@ function checkDailyReset() {
                     if (inventory.legendaryWins === undefined)       inventory.legendaryWins = 0;
                     if (inventory.moShuCorrect === undefined)        inventory.moShuCorrect = 0;
                     if (inventory.dailyQuestsCompleted === undefined) inventory.dailyQuestsCompleted = 0;
+                    if (inventory.examBonusScore === undefined) inventory.examBonusScore = 0;
                     
                     if(!inventory.partners) {
                         inventory.partners = {};
@@ -4666,6 +4667,7 @@ function checkDailyReset() {
                 + (inventory.partnerLv            ||0) * 25  // 夥伴等級
                 + (inventory.examCompletedCount   ||0) * 500 // 模擬考試完成
                 + (inventory.dailyQuestsCompleted ||0) * 20  // 每日任務完成
+                + (inventory.examBonusScore       ||0)        // 模擬考試期間限定加分
             );
         }
 
@@ -4760,6 +4762,7 @@ function checkDailyReset() {
                     moShuCorrect:      inventory.moShuCorrect || 0,
                     dailyQuestsDone:   inventory.dailyQuestsCompleted || 0,
                     examCount:         inventory.examCompletedCount || 0,
+                    examBonusScore:    inventory.examBonusScore || 0,
                     score:             calcScore(),
                     correctAnswers: inventory.totalCorrectAnswers || 0,
                     bossWins:       inventory.totalBossWins || 0,
@@ -5331,6 +5334,27 @@ function checkDailyReset() {
             const fragmentBonus   = correct * 2;
             const coinsBonus      = correct * 2;
 
+            // ── 期間限定考試加分（截至 2026-06-09）──
+            const EXAM_BONUS_ACTIVE = new Date() < new Date('2026-06-10T00:00:00+08:00');
+            let examBonusTotal = 0;
+            let examBonusMsg   = '';
+            if (EXAM_BONUS_ACTIVE) {
+                // A: 完成獎勵
+                const bonusA = 500;
+                // C: 每題答對 +50
+                const bonusC = correct * 50;
+                // B: 正確率獎勵
+                const pct = total > 0 ? correct / total : 0;
+                const bonusB = pct === 1 ? 1000 : pct >= 0.8 ? 600 : pct >= 0.6 ? 300 : 100;
+                examBonusTotal = bonusA + bonusC + bonusB;
+                // Apply to moShuCorrect-equivalent field (examBonus tracked separately)
+                inventory.examBonusScore = (inventory.examBonusScore || 0) + examBonusTotal;
+                examBonusMsg = '\n⚡ 期間限定加分：完成+' + bonusA
+                    + ' · 答對×50=+' + bonusC
+                    + ' · 正確率獎勵+' + bonusB
+                    + ' = 共 +' + examBonusTotal + '分！（截至6月9日）';
+            }
+
             const rewardMsg = '本關已獲得 ⭐×' + starsEarned
                 + '  📜×' + manuscriptBonus
                 + '  🪵×' + woodBonus
@@ -5338,7 +5362,7 @@ function checkDailyReset() {
                 + '  🔮×' + fragmentBonus
                 + '  🪙×' + coinsBonus;
             const expEarned = correct * 3;
-            document.getElementById('exam-result-msg').textContent += '\n' + rewardMsg + '  ✨+' + expEarned + ' EXP';
+            document.getElementById('exam-result-msg').textContent += '\n' + rewardMsg + '  ✨+' + expEarned + ' EXP' + examBonusMsg;
         }
 
         function examRetry() {
@@ -5388,6 +5412,17 @@ function checkDailyReset() {
          ══════════════════════════════════════ -->
     <div id="exam-screen" class="screen hidden" style="padding:16px;">
         <h2 style="color:#E53935;margin:0 0 8px;">📋 模擬考試</h2>
+        <!-- 期間限定通知 -->
+        <div id="exam-bonus-banner" style="background:linear-gradient(90deg,#1565C0,#1976D2);color:#fff;border-radius:10px;padding:9px 14px;margin-bottom:10px;font-size:0.82em;font-weight:bold;text-align:center;animation:examBannerPulse 2s ease-in-out infinite;">
+          📋 期間限定加分中！完成即得+500 · 每題答對+50 · 正確率獎勵最高+1000　截止：6月9日 🔥
+        </div>
+        <style>@keyframes examBannerPulse{0%,100%{opacity:1}50%{opacity:0.8}}</style>
+        <script>
+        (function(){
+          const b=document.getElementById('exam-bonus-banner');
+          if(b && new Date()>=new Date('2026-06-10T00:00:00+08:00')) b.style.display='none';
+        })();
+        </script>
         <div id="exam-level-select" style="margin-bottom:12px;">
             <p style="font-size:0.88em;color:#555;margin:0 0 10px;">選擇關卡開始練習：</p>
             <div id="exam-level-buttons" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;"></div>
@@ -5578,12 +5613,9 @@ let dictSet   = 'vocab', dictIdx   = 0;
 let hwSet     = 'vocab', hwIdx     = 0;
 let msSessionExp = 0;
 
-// ── 期間限定加分（截止：2026-05-19）──
-const MS_BONUS_DEADLINE = new Date('2026-05-20T00:00:00+08:00'); // 19日結束後自動取消
-function msDictBonusActive() {
-    return new Date() < MS_BONUS_DEADLINE;
-}
-const MS_DICT_BONUS = 100; // 聆聽默寫每題額外加分
+// ── 期間限定加分（聆聽默寫已結束）──
+function msDictBonusActive() { return false; } // 已過期 5月19日
+const MS_DICT_BONUS = 0;
 
 // Shuffled item caches (re-shuffle when set changes or round completes)
 let _puzzleItems = null, _dictItems = null, _hwItems = null;
