@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (2年級中文)</title>
+    <title>Roblox：森林大冒險 (2年級中文冒險)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -659,6 +659,16 @@
                     <div class="map-card" onclick="startGame('rhetorical')" style="--cc:#673AB7;--cg:rgba(103,58,183,0.45);"><div class="map-card-icon">❓</div><div class="map-card-title">反問句</div><div class="map-card-sub">陳述句→反問句</div><div class="map-card-stars">⭐⭐⭐</div></div>
                     <div class="map-card" onclick="startGame('reading_comp')" style="--cc:#00897B;--cg:rgba(0,137,123,0.45);"><div class="map-card-icon">📖</div><div class="map-card-title">閲讀理解</div><div class="map-card-sub">短文理解．詞義</div><div class="map-card-stars">⭐⭐⭐⭐</div></div>
                     <div class="map-card" onclick="startGame('exam')" style="--cc:#F44336;--cg:rgba(244,67,54,0.5);"><div class="map-card-icon">📝</div><div class="map-card-title">考試模式</div><div class="map-card-sub">混合50題 必含閲讀理解</div><div class="map-card-stars">🏆🏆🏆🏆🏆</div></div>
+                </div>
+            </div>
+            <div style="width:100%;background:#E8F5E9;border:2px solid #81C784;border-radius:16px;padding:12px;margin-bottom:10px;">
+                <h2 style="margin:0 0 10px 0;font-size:1.1em;color:#2E7D32;text-shadow:0 0 8px rgba(76,175,80,0.4);">🔢 數學冒險地圖</h2>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;">
+                    <div class="map-card" onclick="startGame('math_add_sub')" style="--cc:#43A047;--cg:rgba(67,160,71,0.45);"><div class="map-card-icon">➕</div><div class="map-card-title">加法與減法</div><div class="map-card-sub">兩位數加減·借位</div><div class="map-card-stars">⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('math_mul_div')" style="--cc:#FB8C00;--cg:rgba(251,140,0,0.45);"><div class="map-card-icon">✖️</div><div class="map-card-title">乘法與除法</div><div class="map-card-sub">乘數表·平均分配</div><div class="map-card-stars">⭐⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('math_shape_len')" style="--cc:#0288D1;--cg:rgba(2,136,209,0.45);"><div class="map-card-icon">📐</div><div class="map-card-title">圖形與長度</div><div class="map-card-sub">圖形·cm/m換算</div><div class="map-card-stars">⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('math_word')" style="--cc:#7B1FA2;--cg:rgba(123,31,162,0.45);"><div class="map-card-icon">🧮</div><div class="map-card-title">數學應用題</div><div class="map-card-sub">購物·分配·量度</div><div class="map-card-stars">⭐⭐⭐⭐</div></div>
+                    <div class="map-card" onclick="startGame('math_exam')" style="--cc:#C62828;--cg:rgba(198,40,40,0.5);"><div class="map-card-icon">🏆</div><div class="map-card-title">數學考試</div><div class="map-card-sub">隨機30題·必含應用</div><div class="map-card-stars">🏆🏆🏆🏆🏆</div></div>
                 </div>
             </div>
             <hr style="width:95%;border:none;border-top:2px dashed #FFD54F;margin:2px 0 8px 0;">
@@ -1338,6 +1348,11 @@
             rhetorical:    "❓ 反問句",
             reading_comp:  "📖 閲讀理解",
             exam:          "📝 考試模式（混合50題）",
+            math_add_sub:  "➕ 加法與減法",
+            math_mul_div:  "✖️ 乘法與除法",
+            math_shape_len:"📐 圖形與長度",
+            math_word:     "🧮 數學應用題",
+            math_exam:     "🏆 數學考試（隨機30題）",
         };
         let onNextAction = "normal"; 
         let isMonsterFight = false; let currentMonster = null;
@@ -1751,6 +1766,119 @@
                 { q: "📖【短文三】下雨天，小東不能出去玩，他坐在窗邊看着窗外的雨。雨水順着玻璃窗流下來，像一條條小河。小東感到有點悶，媽媽走過來説：「下雨天最適合看書了！」於是，小東從書架上取出一本故事書，依偎在媽媽身旁一起閲讀。書裏的故事十分有趣，小東讀着讀着，不知不覺便忘記了窗外的雨聲。讀完故事後，小東對媽媽説：「我以後要多看書，書裏有好多有趣的東西！」媽媽聽了，露出了欣慰的笑容。\n問：小東讀書後忘記了甚麼？", options: ["窗外的雨聲", "功課", "時間", "肚子餓"], a: "窗外的雨聲", hint: "短文説「不知不覺便忘記了窗外的雨聲」。" },
                 { q: "📖【短文三】下雨天，小東不能出去玩，他坐在窗邊看着窗外的雨。雨水順着玻璃窗流下來，像一條條小河。小東感到有點悶，媽媽走過來説：「下雨天最適合看書了！」於是，小東從書架上取出一本故事書，依偎在媽媽身旁一起閲讀。書裏的故事十分有趣，小東讀着讀着，不知不覺便忘記了窗外的雨聲。讀完故事後，小東對媽媽説：「我以後要多看書，書裏有好多有趣的東西！」媽媽聽了，露出了欣慰的笑容。\n問：「欣慰」最接近哪個意思？", options: ["高興而感到安慰", "非常驚訝", "感到很擔心", "有點失望"], a: "高興而感到安慰", hint: "媽媽聽到小東想多看書，感到「欣慰」——即高興而放心。" }
             ]
+            ,
+            // ══════════════════════════════════════
+            // 數學關卡
+            // ══════════════════════════════════════
+
+            // ── 加法與減法 ──
+            math_add_sub: [
+                { q: "35 + 47 = ？", options: ["82", "72", "83", "81"], a: "82", hint: "5+7=12，進1；3+4+1=8，答案是82。" },
+                { q: "64 + 28 = ？", options: ["92", "82", "93", "91"], a: "92", hint: "4+8=12，進1；6+2+1=9，答案是92。" },
+                { q: "51 + 39 = ？", options: ["90", "80", "91", "89"], a: "90", hint: "1+9=10，進1；5+3+1=9，答案是90。" },
+                { q: "73 + 19 = ？", options: ["92", "82", "93", "91"], a: "92", hint: "3+9=12，進1；7+1+1=9，答案是92。" },
+                { q: "46 + 55 = ？", options: ["101", "100", "99", "111"], a: "101", hint: "6+5=11，進1；4+5+1=10，答案是101。" },
+                { q: "83 - 45 = ？", options: ["38", "48", "37", "39"], a: "38", hint: "借位：13-5=8；7-4=3，答案是38。" },
+                { q: "72 - 36 = ？", options: ["36", "46", "34", "37"], a: "36", hint: "借位：12-6=6；6-3=3，答案是36。" },
+                { q: "91 - 58 = ？", options: ["33", "43", "32", "34"], a: "33", hint: "借位：11-8=3；8-5=3，答案是33。" },
+                { q: "60 - 27 = ？", options: ["33", "43", "32", "23"], a: "33", hint: "借位：10-7=3；5-2=3，答案是33。" },
+                { q: "105 - 67 = ？", options: ["38", "48", "37", "39"], a: "38", hint: "105-67：15-7=8，9-6=3，答案是38。" },
+                { q: "哪條算式答案最大？", options: ["56+37", "48+44", "71+19", "63+29"], a: "48+44", hint: "計算每條：93、92、90、92，最大是48+44=92。" },
+                { q: "□ + 28 = 75，□ = ？", options: ["47", "37", "57", "43"], a: "47", hint: "75-28=47。" },
+                { q: "94 - □ = 56，□ = ？", options: ["38", "48", "28", "36"], a: "38", hint: "94-56=38。" },
+                { q: "27 + 35 + 18 = ？", options: ["80", "70", "75", "85"], a: "80", hint: "27+35=62，62+18=80。" },
+                { q: "100 - 43 - 29 = ？", options: ["28", "38", "27", "29"], a: "28", hint: "100-43=57，57-29=28。" }
+            ],
+
+            // ── 乘法與除法 ──
+            math_mul_div: [
+                { q: "6 × 7 = ？", options: ["42", "43", "41", "48"], a: "42", hint: "六七四十二。" },
+                { q: "8 × 9 = ？", options: ["72", "63", "81", "64"], a: "72", hint: "八九七十二。" },
+                { q: "7 × 7 = ？", options: ["49", "48", "56", "42"], a: "49", hint: "七七四十九。" },
+                { q: "9 × 6 = ？", options: ["54", "56", "48", "63"], a: "54", hint: "九六五十四。" },
+                { q: "5 × 8 = ？", options: ["40", "45", "35", "48"], a: "40", hint: "五八四十。" },
+                { q: "4 × 9 = ？", options: ["36", "32", "45", "40"], a: "36", hint: "四九三十六。" },
+                { q: "3 × 7 = ？", options: ["21", "24", "18", "27"], a: "21", hint: "三七二十一。" },
+                { q: "56 ÷ 8 = ？", options: ["7", "6", "8", "9"], a: "7", hint: "8×7=56，所以56÷8=7。" },
+                { q: "63 ÷ 9 = ？", options: ["7", "6", "8", "9"], a: "7", hint: "9×7=63，所以63÷9=7。" },
+                { q: "48 ÷ 6 = ？", options: ["8", "7", "9", "6"], a: "8", hint: "6×8=48，所以48÷6=8。" },
+                { q: "45 ÷ 5 = ？", options: ["9", "8", "7", "6"], a: "9", hint: "5×9=45，所以45÷5=9。" },
+                { q: "32 ÷ 4 = ？", options: ["8", "7", "9", "6"], a: "8", hint: "4×8=32，所以32÷4=8。" },
+                { q: "□ × 6 = 42，□ = ？", options: ["7", "6", "8", "9"], a: "7", hint: "42÷6=7。" },
+                { q: "72 ÷ □ = 8，□ = ？", options: ["9", "8", "7", "6"], a: "9", hint: "72÷8=9。" },
+                { q: "哪個算式答案是 24？", options: ["3×8", "4×7", "6×5", "9×3"], a: "3×8", hint: "3×8=24。其他：28、30、27。" }
+            ],
+
+            // ── 圖形與長度 ──
+            math_shape_len: [
+                { q: "正方形有多少條邊？", options: ["4條", "3條", "5條", "6條"], a: "4條", hint: "正方形有4條相等的邊。" },
+                { q: "三角形有多少個角？", options: ["3個", "4個", "2個", "5個"], a: "3個", hint: "三角形有3條邊、3個角。" },
+                { q: "圓形有多少條直邊？", options: ["0條", "1條", "2條", "4條"], a: "0條", hint: "圓形沒有直邊，是一條曲線。" },
+                { q: "長方形有多少條邊？", options: ["4條", "3條", "5條", "6條"], a: "4條", hint: "長方形有4條邊，對邊相等。" },
+                { q: "哪個圖形有5條邊？", options: ["五邊形", "正方形", "三角形", "長方形"], a: "五邊形", hint: "五邊形有5條邊和5個角。" },
+                { q: "1米 = ？厘米", options: ["100厘米", "10厘米", "1000厘米", "50厘米"], a: "100厘米", hint: "1米 = 100厘米（cm）。" },
+                { q: "250厘米 = ？米？厘米", options: ["2米50厘米", "25米0厘米", "2米5厘米", "3米50厘米"], a: "2米50厘米", hint: "250÷100=2…50，即2米50厘米。" },
+                { q: "一張課桌的高度大約是多少？", options: ["75厘米", "75米", "7厘米", "750厘米"], a: "75厘米", hint: "課桌高度約75厘米，比1米短一點。" },
+                { q: "正方形與長方形有甚麼共同點？", options: ["都有4個直角", "邊長都相等", "都是圓形", "都有3條邊"], a: "都有4個直角", hint: "正方形和長方形都有4個90度的直角。" },
+                { q: "3米20厘米 = ？厘米", options: ["320厘米", "302厘米", "32厘米", "3020厘米"], a: "320厘米", hint: "3米=300厘米，加20厘米=320厘米。" }
+            ],
+
+            // ── 數學應用題 ──
+            math_word: [
+                { q: "小明有32顆糖，送給弟弟15顆，還剩多少顆？", options: ["17顆", "47顆", "27顆", "18顆"], a: "17顆", hint: "32-15=17顆。" },
+                { q: "一本書售$48，一支筆售$15，共需多少錢？", options: ["$63", "$33", "$53", "$73"], a: "$63", hint: "48+15=63。" },
+                { q: "媽媽買了6包餅乾，每包有8塊，共有多少塊？", options: ["48塊", "42塊", "56塊", "36塊"], a: "48塊", hint: "6×8=48塊。" },
+                { q: "36個蘋果平均分給9個小朋友，每人得幾個？", options: ["4個", "3個", "5個", "6個"], a: "4個", hint: "36÷9=4個。" },
+                { q: "一條繩子長200厘米，剪去75厘米，還剩多少厘米？", options: ["125厘米", "135厘米", "115厘米", "275厘米"], a: "125厘米", hint: "200-75=125厘米。" },
+                { q: "小花有$100，買了一個$37的玩具，找回多少錢？", options: ["$63", "$73", "$53", "$67"], a: "$63", hint: "100-37=63。" },
+                { q: "一班有28個男生和25個女生，共有多少個學生？", options: ["53個", "43個", "55個", "52個"], a: "53個", hint: "28+25=53個。" },
+                { q: "每盒有9粒朱古力，5盒共有多少粒？", options: ["45粒", "40粒", "54粒", "35粒"], a: "45粒", hint: "9×5=45粒。" },
+                { q: "哥哥身高1米35厘米，弟弟身高98厘米，哥哥比弟弟高多少厘米？", options: ["37厘米", "27厘米", "47厘米", "233厘米"], a: "37厘米", hint: "135-98=37厘米。" },
+                { q: "小東每天讀7頁書，4天共讀多少頁？", options: ["28頁", "21頁", "35頁", "24頁"], a: "28頁", hint: "7×4=28頁。" },
+                { q: "40個橙平均裝在5個袋子裏，每袋有多少個？", options: ["8個", "7個", "9個", "6個"], a: "8個", hint: "40÷5=8個。" },
+                { q: "媽媽買了3公斤蘋果，每公斤$12，共需多少錢？", options: ["$36", "$15", "$24", "$30"], a: "$36", hint: "3×12=36。" },
+                { q: "一條木板長3米，鋸去120厘米，還剩多少厘米？", options: ["180厘米", "170厘米", "190厘米", "420厘米"], a: "180厘米", hint: "3米=300厘米，300-120=180厘米。" },
+                { q: "小班有35人，大班比小班多18人，大班有多少人？", options: ["53人", "43人", "17人", "55人"], a: "53人", hint: "35+18=53人。" },
+                { q: "爸爸早上走了650米，下午走了480米，共走了多少米？", options: ["1130米", "1030米", "1230米", "170米"], a: "1130米", hint: "650+480=1130米。" },
+                { q: "超市有72個雞蛋，賣出去48個，還剩多少個？", options: ["24個", "34個", "14個", "26個"], a: "24個", hint: "72-48=24個。" },
+                { q: "小紅有63元，小明有45元，兩人相差多少元？", options: ["18元", "28元", "108元", "8元"], a: "18元", hint: "63-45=18元。" },
+                { q: "一個正方形花圃，每邊長8米，它的周界是多少米？", options: ["32米", "16米", "24米", "64米"], a: "32米", hint: "正方形周界=4×邊長，4×8=32米。" },
+                { q: "圖書館有3排書架，每排有9格，每格放8本書，共有多少本書？", options: ["216本", "108本", "72本", "27本"], a: "216本", hint: "3×9=27格，27×8=216本。" },
+                { q: "小明用$50買了2個$16的麵包，找回多少錢？", options: ["$18", "$32", "$34", "$16"], a: "$18", hint: "2×16=32，50-32=18。" }
+            ]
+            ,
+            // ── 加法與減法（額外題目）──
+            math_add_sub_b: [
+                { q: "78 + 56 = ？", options: ["134", "124", "144", "133"], a: "134", hint: "8+6=14，進1；7+5+1=13，答案是134。" },
+                { q: "143 + 79 = ？", options: ["222", "212", "232", "221"], a: "222", hint: "3+9=12，進1；4+7+1=12，進1；1+0+1=2，答案是222。" },
+                { q: "200 - 87 = ？", options: ["113", "123", "103", "117"], a: "113", hint: "200-87：借位計算，答案是113。" },
+                { q: "□ - 39 = 54，□ = ？", options: ["93", "83", "15", "95"], a: "93", hint: "54+39=93。" },
+                { q: "48 + □ + 25 = 100，□ = ？", options: ["27", "37", "17", "28"], a: "27", hint: "48+25=73，100-73=27。" }
+            ],
+            // ── 乘法與除法（額外題目）──
+            math_mul_div_b: [
+                { q: "12 × 4 = ？", options: ["48", "44", "52", "40"], a: "48", hint: "10×4=40，2×4=8，40+8=48。" },
+                { q: "15 × 3 = ？", options: ["45", "35", "55", "42"], a: "45", hint: "10×3=30，5×3=15，30+15=45。" },
+                { q: "84 ÷ 7 = ？", options: ["12", "11", "13", "14"], a: "12", hint: "7×12=84。" },
+                { q: "96 ÷ 8 = ？", options: ["12", "11", "13", "10"], a: "12", hint: "8×12=96。" },
+                { q: "□ × 9 = 108，□ = ？", options: ["12", "11", "13", "9"], a: "12", hint: "108÷9=12。" }
+            ],
+            // ── 圖形與長度（額外題目）──
+            math_shape_len_b: [
+                { q: "一個長方形的長是8厘米，寬是5厘米，周界是多少厘米？", options: ["26厘米", "40厘米", "13厘米", "24厘米"], a: "26厘米", hint: "長方形周界=(長+寬)×2=(8+5)×2=26厘米。" },
+                { q: "哪個圖形的四條邊都相等？", options: ["正方形", "長方形", "三角形", "梯形"], a: "正方形", hint: "正方形四條邊相等，長方形只有對邊相等。" },
+                { q: "5米30厘米 + 2米80厘米 = ？", options: ["8米10厘米", "7米10厘米", "8米0厘米", "7米80厘米"], a: "8米10厘米", hint: "530厘米+280厘米=810厘米=8米10厘米。" },
+                { q: "一條鉛筆長19厘米，一把尺長30厘米，尺比鉛筆長多少厘米？", options: ["11厘米", "9厘米", "21厘米", "49厘米"], a: "11厘米", hint: "30-19=11厘米。" },
+                { q: "正六邊形有多少條邊？", options: ["6條", "5條", "7條", "8條"], a: "6條", hint: "六邊形有六條邊。" }
+            ],
+            // ── 數學應用題（額外題目）──
+            math_word_b: [
+                { q: "一箱有24個蘋果，6箱共有多少個？", options: ["144個", "124個", "134個", "30個"], a: "144個", hint: "24×6=144個。" },
+                { q: "小明用$200買了3本$45的書，找回多少錢？", options: ["$65", "$55", "$75", "$135"], a: "$65", hint: "3×45=135，200-135=65。" },
+                { q: "一條跑道長400米，小花跑了3圈，共跑了多少米？", options: ["1200米", "1000米", "1400米", "403米"], a: "1200米", hint: "400×3=1200米。" },
+                { q: "圖書館有156本中文書和87本英文書，共有多少本書？", options: ["243本", "233本", "253本", "69本"], a: "243本", hint: "156+87=243本。" },
+                { q: "一個水桶可以裝8公升水，12個水桶共可以裝多少公升水？", options: ["96公升", "86公升", "106公升", "20公升"], a: "96公升", hint: "8×12=96公升。" }
+            ]
         };
 
         
@@ -1770,14 +1898,29 @@
         function startGame(mode) {
             window._qCount = 0;
             // ── EXAM mode: pick 50 random Qs, guaranteed ≥5 reading_comp ──
+            // Auto-merge _b pools into main pools on first use
+            ['math_add_sub','math_mul_div','math_shape_len','math_word'].forEach(k => {
+                if (questions[k+'_b'] && !questions[k]._merged) {
+                    questions[k].push(...questions[k+'_b']);
+                    questions[k]._merged = true;
+                }
+            });
             if (mode === 'exam') {
                 const rcPool = [...questions.reading_comp].sort(()=>Math.random()-0.5);
                 const rcPick = rcPool.slice(0, 5);
-                const otherKeys = Object.keys(questions).filter(k => k !== 'reading_comp' && k !== 'exam');
+                const otherKeys = Object.keys(questions).filter(k => k !== 'reading_comp' && k !== 'exam' && !k.startsWith('math'));
                 let otherPool = [];
                 otherKeys.forEach(k => otherPool.push(...questions[k]));
                 otherPool = otherPool.sort(()=>Math.random()-0.5).slice(0, 45);
                 questions['exam'] = [...rcPick, ...otherPool].sort(()=>Math.random()-0.5);
+            }
+            if (mode === 'math_exam') {
+                const mwPool = [...questions.math_word, ...questions.math_word_b].sort(()=>Math.random()-0.5).slice(0, 5);
+                const mathKeys = ['math_add_sub','math_add_sub_b','math_mul_div','math_mul_div_b','math_shape_len','math_shape_len_b'];
+                let mathPool = [];
+                mathKeys.forEach(k => { if(questions[k]) mathPool.push(...questions[k]); });
+                mathPool = mathPool.sort(()=>Math.random()-0.5).slice(0, 25);
+                questions['math_exam'] = [...mwPool, ...mathPool].sort(()=>Math.random()-0.5);
             }
             window._qTotal = (questions[mode]||[]).length || 20;
             currentMode = mode;
@@ -1891,7 +2034,14 @@
             let qList = questions[currentMode];
             currentQuestion = qList[Math.floor(Math.random() * qList.length)];
             
-            document.getElementById("question-text").innerText = currentQuestion.q;
+            // Render question - use innerHTML with line breaks for reading_comp
+            const _qtEl = document.getElementById("question-text");
+            if (currentMode === 'reading_comp') {
+                const [passage, question] = currentQuestion.q.split('\n問：');
+                _qtEl.innerHTML = '<div style="background:#E8F5E9;border-left:4px solid #43A047;padding:10px 12px;border-radius:8px;margin-bottom:10px;font-size:0.95em;line-height:1.9;color:#1a237e;">' + passage.replace(/📖【短文[^】]*】/, match => '<span style="font-weight:900;color:#2E7D32;">' + match + '</span><br>') + '</div><div style="font-weight:900;font-size:1.1em;">問：' + (question||'') + '</div>';
+            } else {
+                _qtEl.innerText = currentQuestion.q;
+            }
             document.getElementById("hint-area").classList.add("hidden");
             document.getElementById("feedback-area").classList.add("hidden");
             document.getElementById("options-area").classList.remove("hidden");
@@ -2426,6 +2576,11 @@
                     <option value="rhetorical">❓ 反問句</option>
                     <option value="reading_comp">📖 閲讀理解</option>
                     <option value="exam">📝 考試模式</option>
+                    <option value="math_add_sub">➕ 加法與減法</option>
+                    <option value="math_mul_div">✖️ 乘法與除法</option>
+                    <option value="math_shape_len">📐 圖形與長度</option>
+                    <option value="math_word">🧮 數學應用題</option>
+                    <option value="math_exam">🏆 數學考試</option>
                     <option value="reorder_fa2">🔤 FA2 重組句子</option>
                 </select>
                 <button class="btn-purple" onclick="senseiSummonBeast()" style="width:100%;">🐉 立即召喚神獸</button>
