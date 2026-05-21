@@ -194,6 +194,19 @@
         .ach-modal-box { background: #1a1a2e; border: 4px solid #FFD700; border-radius: 16px; padding: 25px 20px; max-width: 95%; width: 560px; max-height: 88vh; overflow-y: auto; text-align: center; }
         .ach-modal-box h2 { color: #FFD700; margin-top: 0; font-size: 1.6em; }
         .ach-modal-box p { color: #aaa; font-size: 0.85em; margin: 0 0 15px; }
+        /* ========== 食物 Modal ========== */
+        @keyframes foodModalPop {
+            0%   { transform: scale(0.5); opacity: 0; }
+            70%  { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        @keyframes foodModalLevelUp {
+            0%,100% { box-shadow: 0 8px 40px rgba(0,0,0,0.4); border-color: #FF8F00; }
+            50%     { box-shadow: 0 0 60px #FFD700, 0 0 30px #FFD700; border-color: #FFD700; }
+        }
+        #food-modal-box.levelup { animation: foodModalPop 0.35s cubic-bezier(0.34,1.56,0.64,1), foodModalLevelUp 1s 0.35s ease-in-out 3; border-color: #FFD700; }
+        #food-modal-box.levelup #food-modal-title { color: #FF6F00; }
+
         /* ========== 感情值系統 ========== */
         .affection-wrap { margin: 10px 0 5px; text-align: center; }
         .affection-wrap .aff-label { font-size: 0.85em; color: #AD1457; font-weight: bold; }
@@ -1338,6 +1351,17 @@
     </div>
 
     
+    <!-- 🍔 食物反饋 Modal -->
+    <div id="food-modal" class="hidden" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:2000;display:flex;justify-content:center;align-items:center;">
+        <div id="food-modal-box" style="background:#fff;border-radius:20px;padding:22px 24px;max-width:88vw;width:340px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.4);border:4px solid #FF8F00;animation:foodModalPop 0.35s cubic-bezier(0.34,1.56,0.64,1);">
+            <div id="food-modal-emoji" style="font-size:3.5em;margin-bottom:6px;">🍔</div>
+            <div id="food-modal-title" style="font-size:1.3em;font-weight:900;color:#E65100;margin-bottom:10px;">購買成功！</div>
+            <div id="food-modal-body" style="background:#FFF8E1;border-radius:12px;padding:12px 14px;margin-bottom:14px;text-align:left;font-size:0.9em;line-height:1.8;">
+            </div>
+            <button class="btn-orange" onclick="closeFoodModal()" style="width:100%;font-size:1em;padding:10px;margin:0;">✅ 確定</button>
+        </div>
+    </div>
+
     <!-- ✅ 成就彈窗 -->
     <div id="achievement-modal" class="hidden">
         <div class="ach-modal-box">
@@ -4804,6 +4828,36 @@ function checkDailyReset() {
 
         
 
+
+        // ==================== 食物反饋 Modal ====================
+        function showFoodModal({ emoji, title, lines, isLevelUp = false }) {
+            const modal = document.getElementById('food-modal');
+            const box   = document.getElementById('food-modal-box');
+            if (!modal || !box) return;
+            document.getElementById('food-modal-emoji').textContent  = emoji;
+            document.getElementById('food-modal-title').textContent  = title;
+            document.getElementById('food-modal-body').innerHTML     = lines.map(l =>
+                `<div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid #FFE082;">
+                    <span style="color:#555;">${l.label}</span>
+                    <span style="font-weight:bold;color:${l.color||'#333'};">${l.value}</span>
+                </div>`
+            ).join('');
+            // reset animation
+            box.classList.remove('levelup');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            if (isLevelUp) {
+                void box.offsetWidth; // reflow
+                box.classList.add('levelup');
+            }
+        }
+
+        function closeFoodModal() {
+            const modal = document.getElementById('food-modal');
+            if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+        }
+        // ==================== END 食物反饋 Modal ====================
+
         // ==================== 食物 & 餵食系統 ====================
         const FOOD_DATA = {
             burger:  { name: '🍔 雙層漢堡',       exp: 5,   cost: 50,  key: 'food_burger'  },
@@ -4837,9 +4891,18 @@ function checkDailyReset() {
             inventory.coins -= f.cost;
             inventory[f.key] = (inventory[f.key] || 0) + 1;
             saveGame(); updateUI();
-            showToast('✅ 購買 ' + f.name + ' x1！現有 ' + inventory[f.key] + ' 個');
             const el = document.getElementById('market-coin-display');
             if (el) el.textContent = inventory.coins;
+            showFoodModal({
+                emoji: f.name.split(' ')[0],
+                title: '購買成功！',
+                lines: [
+                    { label: '食物',     value: f.name,                    color: '#E65100' },
+                    { label: '數量',     value: '×1',                      color: '#333'    },
+                    { label: '現有庫存', value: '×' + inventory[f.key],    color: '#2E7D32' },
+                    { label: '剩餘金幣', value: '💰 ' + inventory.coins,   color: '#FF8F00' },
+                ]
+            });
         }
 
         function feedPartner(type) {
@@ -4877,13 +4940,41 @@ function checkDailyReset() {
             }
             saveGame(); updateUI(); updateFeedUI();
 
+            const pName = (inventory.partnerId && typeof getPartnerInfo === 'function')
+                ? getPartnerInfo(inventory.partnerId, inventory.partnerLv, inventory.partnerBranch).n
+                : '搭檔';
+            const needed = feedExpNeeded(lv);
+            const pct = lv >= 100 ? 100 : Math.round(exp / needed * 100);
+            const barFilled = Math.round(pct / 10);
+            const expBar = '█'.repeat(barFilled) + '░'.repeat(10 - barFilled);
+
             if (levelled > 0) {
-                showToast('🎉 搭檔升級！Lv ' + lv + ' ' + getFeedLvTitle(lv));
                 playSound('levelup');
+                showFoodModal({
+                    emoji: '🎉',
+                    title: '搭檔升級！',
+                    isLevelUp: true,
+                    lines: [
+                        { label: '搭檔',     value: pName,                           color: '#6A1B9A' },
+                        { label: '食物',     value: f.name,                          color: '#E65100' },
+                        { label: 'EXP 獲得', value: '+' + f.exp + ' EXP',           color: '#FF8F00' },
+                        { label: '新等級',   value: 'Lv ' + lv + ' ' + getFeedLvTitle(lv), color: '#FFD700' },
+                        { label: '進度',     value: (lv >= 100 ? 'MAX！' : expBar + ' ' + exp + '/' + needed), color: '#4CAF50' },
+                    ]
+                });
             } else {
-                const needed = feedExpNeeded(lv);
-                showToast(f.name + ' 餵食成功！+' + f.exp + ' EXP (' + exp + '/' + needed + ')');
                 playSound('click');
+                showFoodModal({
+                    emoji: f.name.split(' ')[0],
+                    title: '餵食成功！',
+                    lines: [
+                        { label: '搭檔',     value: pName,                           color: '#6A1B9A' },
+                        { label: '食物',     value: f.name,                          color: '#E65100' },
+                        { label: 'EXP 獲得', value: '+' + f.exp + ' EXP',           color: '#FF8F00' },
+                        { label: '等級',     value: 'Lv ' + lv + ' ' + getFeedLvTitle(lv), color: '#888' },
+                        { label: '進度',     value: expBar + ' ' + exp + '/' + needed, color: '#4CAF50' },
+                    ]
+                });
             }
         }
 
