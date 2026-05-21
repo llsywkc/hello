@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (2年級中文冒險)</title>
+    <title>Roblox：森林大冒險 (2年級中文)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -626,6 +626,131 @@
             line-height: 2em;
         }
 
+        
+        /* ══ Mythical Timer Bar ══ */
+        #mythical-timer-wrap {
+            display: none;
+            width: 100%;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding: 4px 8px;
+            background: rgba(156,39,176,0.12);
+            border-radius: 10px;
+            border: 2px solid #9C27B0;
+        }
+        #mythical-timer-track {
+            flex: 1;
+            height: 14px;
+            background: rgba(0,0,0,0.15);
+            border-radius: 7px;
+            overflow: hidden;
+        }
+        #mythical-timer-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 7px;
+            transition: width 1s linear, background 0.5s;
+        }
+        #mythical-timer-fill.danger {
+            background: linear-gradient(90deg, #F44336, #FF5722);
+            animation: timerPulse 0.4s infinite alternate;
+        }
+        @keyframes timerPulse { from { opacity:1; } to { opacity:0.35; } }
+        #mythical-timer-text {
+            font-family: 'Noto Serif TC','標楷體',serif;
+            font-weight: 900;
+            font-size: 1.1em;
+            color: #9C27B0;
+            min-width: 36px;
+            text-align: right;
+        }
+        #mythical-timer-text.danger { color: #F44336; }
+
+        /* ══ Skill Banner ══ */
+        #skill-banner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            padding: 14px 36px;
+            border-radius: 16px;
+            font-family: 'Noto Serif TC','標楷體',serif;
+            font-weight: 900;
+            font-size: 1.6em;
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            letter-spacing: 2px;
+            animation: bannerPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+            pointer-events: none;
+        }
+        @keyframes bannerPop {
+            from { transform: translate(-50%,-50%) scale(0.3); opacity:0; }
+            to   { transform: translate(-50%,-50%) scale(1);   opacity:1; }
+        }
+
+        /* ══ Skill FX Overlay ══ */
+        #skill-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            pointer-events: none;
+            border-radius: 0;
+        }
+
+        /* fx-dragon: 3 green slash beams */
+        @keyframes dragonSlash1 { 0%{transform:translateX(-120%) rotate(-35deg);opacity:0} 20%{opacity:1} 80%{opacity:0.8} 100%{transform:translateX(120%) rotate(-35deg);opacity:0} }
+        @keyframes dragonSlash2 { 0%{transform:translateX(-120%) rotate(-35deg);opacity:0} 30%{opacity:1} 80%{opacity:0.8} 100%{transform:translateX(120%) rotate(-35deg);opacity:0} }
+        @keyframes dragonSlash3 { 0%{transform:translateX(-120%) rotate(-35deg);opacity:0} 40%{opacity:1} 80%{opacity:0.8} 100%{transform:translateX(120%) rotate(-35deg);opacity:0} }
+        .fx-dragon .slash { position:absolute; left:0; width:200%; height:12px; background:linear-gradient(90deg,transparent,#00E676,#69F0AE,transparent); box-shadow:0 0 20px #00E676; border-radius:6px; }
+        .fx-dragon .slash:nth-child(1) { top:30%; animation:dragonSlash1 1.2s ease-in forwards; }
+        .fx-dragon .slash:nth-child(2) { top:48%; animation:dragonSlash2 1.2s ease-in 0.15s forwards; }
+        .fx-dragon .slash:nth-child(3) { top:66%; animation:dragonSlash3 1.2s ease-in 0.3s forwards; }
+
+        /* fx-phoenix: fire particles rising */
+        @keyframes fireRise { 0%{transform:translateY(0) scale(1);opacity:1} 100%{transform:translateY(-180px) scale(0.2);opacity:0} }
+        .fx-phoenix { background: radial-gradient(ellipse at bottom, rgba(255,87,34,0.35) 0%, transparent 70%); animation: phoenixGlow 3s ease-out forwards; }
+        @keyframes phoenixGlow { 0%{background:radial-gradient(ellipse at bottom,rgba(255,87,34,0.5) 0%,transparent 70%)} 100%{background:radial-gradient(ellipse at bottom,rgba(255,87,34,0) 0%,transparent 70%)} }
+        .fx-phoenix .spark { position:absolute; bottom:10%; width:12px; height:20px; border-radius:50% 50% 30% 30%; background:linear-gradient(#FF6D00,#FFCA28); animation:fireRise 1.8s ease-out forwards; }
+
+        /* fx-psychic: purple hue + rings */
+        .fx-psychic { animation: psychicHue 3s ease-out forwards; }
+        @keyframes psychicHue { 0%{background:rgba(156,39,176,0.4);filter:hue-rotate(60deg)} 50%{background:rgba(156,39,176,0.2);filter:hue-rotate(30deg)} 100%{background:transparent;filter:hue-rotate(0deg)} }
+        @keyframes ringExpand { 0%{transform:translate(-50%,-50%) scale(0);opacity:0.8} 100%{transform:translate(-50%,-50%) scale(4);opacity:0} }
+        .fx-psychic .ring { position:absolute; top:50%; left:50%; width:120px; height:120px; border:4px solid #CE93D8; border-radius:50%; animation:ringExpand 2s ease-out forwards; }
+        .fx-psychic .ring:nth-child(2) { animation-delay:0.5s; border-color:#AB47BC; }
+        .fx-psychic .ring:nth-child(3) { animation-delay:1s;   border-color:#7B1FA2; }
+
+        /* fx-storm: spiral + shake */
+        @keyframes stormShake { 0%,100%{transform:translate(0,0)} 20%{transform:translate(-4px,2px)} 40%{transform:translate(4px,-2px)} 60%{transform:translate(-2px,4px)} 80%{transform:translate(2px,-4px)} }
+        .fx-storm { animation: stormShake 0.4s 4, stormFade 3s forwards; }
+        @keyframes stormFade { 0%{background:rgba(176,224,230,0.3)} 100%{background:transparent} }
+        @keyframes spiralSpin { from{transform:translate(-50%,-50%) rotate(0deg) scale(0.5);opacity:0.8} to{transform:translate(-50%,-50%) rotate(720deg) scale(2);opacity:0} }
+        .fx-storm .spiral { position:absolute; top:50%; left:50%; width:100px; height:100px; border:3px solid rgba(255,255,255,0.8); border-top-color:transparent; border-radius:50%; animation:spiralSpin 2.5s ease-out forwards; }
+
+        /* fx-sky: crack flash + dark edges */
+        @keyframes crackFlash { 0%{opacity:0} 10%{opacity:1} 30%{opacity:0.3} 50%{opacity:0.9} 100%{opacity:0} }
+        .fx-sky { animation: skyDark 3s forwards; }
+        @keyframes skyDark { 0%{box-shadow:inset 0 0 80px rgba(13,71,161,0.6)} 100%{box-shadow:none} }
+        .fx-sky .crack { position:absolute; top:0; left:50%; width:3px; height:100%; background:linear-gradient(transparent 0%, white 40%, white 60%, transparent 100%); animation:crackFlash 1.5s ease-out forwards; box-shadow:0 0 15px #fff,0 0 30px #90CAF9; transform:rotate(8deg); }
+        .fx-sky .crack:nth-child(2) { left:35%; transform:rotate(-12deg); animation-delay:0.3s; }
+
+        /* fx-genesis: white flash → rainbow rings */
+        @keyframes genesisFlash { 0%{opacity:0} 15%{opacity:1} 40%{opacity:0.6} 100%{opacity:0} }
+        @keyframes rainbowRing { 0%{transform:translate(-50%,-50%) scale(0);opacity:1} 100%{transform:translate(-50%,-50%) scale(5);opacity:0} }
+        .fx-genesis { animation:genesisFlash 3s ease-out forwards; background:radial-gradient(circle,rgba(255,255,255,0.9) 0%,transparent 70%); }
+        .fx-genesis .rring { position:absolute; top:50%; left:50%; width:100px; height:100px; border-radius:50%; border:6px solid transparent; animation:rainbowRing 2.5s ease-out forwards; }
+        .fx-genesis .rring:nth-child(1) { border-color:#F44336; }
+        .fx-genesis .rring:nth-child(2) { border-color:#FF9800; animation-delay:0.2s; }
+        .fx-genesis .rring:nth-child(3) { border-color:#FFEB3B; animation-delay:0.4s; }
+        .fx-genesis .rring:nth-child(4) { border-color:#4CAF50; animation-delay:0.6s; }
+        .fx-genesis .rring:nth-child(5) { border-color:#2196F3; animation-delay:0.8s; }
+        .fx-genesis .rring:nth-child(6) { border-color:#9C27B0; animation-delay:1s;   }
+
         </style>
 </head>
 <body>
@@ -756,6 +881,21 @@
 
         <div id="game-screen" class="screen hidden">
             <h2 id="game-title">遊戲標題</h2>
+
+            <!-- Mythical Timer -->
+            <div id="mythical-timer-wrap" style="display:none;width:100%;align-items:center;gap:8px;margin-bottom:8px;padding:5px 10px;background:rgba(156,39,176,0.12);border-radius:10px;border:2px solid #9C27B0;">
+                <span style="font-size:1.2em;">⏱️</span>
+                <div id="mythical-timer-track" style="flex:1;height:14px;background:rgba(0,0,0,0.15);border-radius:7px;overflow:hidden;">
+                    <div id="mythical-timer-fill"></div>
+                </div>
+                <span id="mythical-timer-text">10</span>
+            </div>
+
+            <!-- Skill FX Overlay -->
+            <div id="skill-overlay"></div>
+
+            <!-- Skill Banner -->
+            <div id="skill-banner"></div>
             
             <div id="monster-encounter-panel" class="hidden" style="width: 100%; text-align: center; background: rgba(0,0,0,0.05); border-radius: 10px; padding: 20px; border: 4px dashed #f44336; margin-bottom: 15px;">
                 <h2 style="color:#f44336; margin-top:0;">🚨 遭遇怪獸！</h2>
@@ -815,7 +955,7 @@
             <h2>🔨 森林建築工坊</h2>
             <div style="margin-bottom: 15px;">
                 <button class="btn-orange" onclick="buildItem('tent')">⛺ 建探險帳篷 (-2木)</button>
-                <button class="btn-grey" onclick="buildItem('cabin')">🏠 建溫馨木屋 (-2石)</button>
+                <button class="btn-grey" onclick="buildItem('cabin')">🏠 建温馨木屋 (-2石)</button>
                 <button class="btn-blue" onclick="buildItem('castle')">🏰 合成豪華城堡 (-2帳篷, -2木屋)</button>
             </div>
             <div style="background: rgba(255,255,255,0.5); padding: 10px; border-radius: 8px; border: 2px dashed #FF9800; margin-bottom: 15px;">
@@ -1438,12 +1578,12 @@
         ];
 
         const mythicalBeasts = [
-            { name: "青龍", emoji: "🐉", pic: "384", atk: 100, def: 100, type: "mythical", rewardsStr: "💎 寶石 +10, 🌟 星星 +10, 📜 手稿 +10", rewardData: {gem: 10, star: 10, manu: 10} },
-            { name: "朱雀", emoji: "🦚", pic: "250", atk: 120, def: 90, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +15", rewardData: {gem: 15, star: 15} },
-            { name: "超夢", emoji: "🧬", pic: "150", atk: 150, def: 120, type: "mythical", rewardsStr: "💎 寶石 +20, 🌟 星星 +20, 🔮 碎片 +10", rewardData: {gem: 20, star: 20, frag: 10} },
-            { name: "洛奇亞", emoji: "🌪️", pic: "249", atk: 130, def: 150, type: "mythical", rewardsStr: "💎 寶石 +15, 🌟 星星 +25, 🪵 木材 +50", rewardData: {gem: 15, star: 25, wood: 50} },
-            { name: "烈空坐", emoji: "🐉", pic: "384", atk: 180, def: 110, type: "mythical", rewardsStr: "💎 寶石 +25, 🌟 星星 +15, 🧱 石頭 +50", rewardData: {gem: 25, star: 15, stone: 50} },
-            { name: "阿爾宙斯", emoji: "✨", pic: "493", atk: 200, def: 200, type: "mythical", rewardsStr: "💎 寶石 +50, 🌟 星星 +50, 📜 手稿 +50, 🔮 碎片 +50", rewardData: {gem: 50, star: 50, manu: 50, frag: 50} }
+            { name: "青龍", emoji: "🐉", pic: "384", atk: 100, def: 100, type: "mythical", skill: "青龍破天斬", fx: "fx-dragon", rewardsStr: "💎 寶石 +10, 🌟 星星 +10, 📜 手稿 +10", rewardData: {gem: 10, star: 10, manu: 10} },
+            { name: "鳳凰", emoji: "🦅", pic: "250", atk: 120, def: 90, type: "mythical", skill: "鳳凰烈焰翼", fx: "fx-phoenix", rewardsStr: "💎 寶石 +15, 🌟 星星 +15", rewardData: {gem: 15, star: 15} },
+            { name: "超夢", emoji: "🧬", pic: "150", atk: 150, def: 120, type: "mythical", skill: "超能力場", fx: "fx-psychic", rewardsStr: "💎 寶石 +20, 🌟 星星 +20, 🔮 碎片 +10", rewardData: {gem: 20, star: 20, frag: 10} },
+            { name: "洛奇亞", emoji: "🌪️", pic: "249", atk: 130, def: 150, type: "mythical", skill: "神聖風暴", fx: "fx-storm", rewardsStr: "💎 寶石 +15, 🌟 星星 +25, 🪵 木材 +50", rewardData: {gem: 15, star: 25, wood: 50} },
+            { name: "烈空坐", emoji: "🐉", pic: "384", atk: 180, def: 110, type: "mythical", skill: "空間斬裂", fx: "fx-sky", rewardsStr: "💎 寶石 +25, 🌟 星星 +15, 🧱 石頭 +50", rewardData: {gem: 25, star: 15, stone: 50} },
+            { name: "阿爾宙斯", emoji: "✨", pic: "493", atk: 200, def: 200, type: "mythical", skill: "創世之光", fx: "fx-genesis", rewardsStr: "💎 寶石 +50, 🌟 星星 +50, 📜 手稿 +50, 🔮 碎片 +50", rewardData: {gem: 50, star: 50, manu: 50, frag: 50} }
         ];
 
         // --- 題庫 ---
@@ -1501,7 +1641,7 @@
                 { q: "引號（「　」）的作用是甚麼？", options: ["標示書本名稱", "標示説話內容或特別詞語", "標示地名", "表示句子結束"], a: "標示説話內容或特別詞語", hint: "把別人説的話括起來。" },
                 { q: "書名號（《　》）應該用在哪裏？", options: ["説話內容", "人名", "書本或文章名稱", "地名"], a: "書本或文章名稱", hint: "表示書名的符號。" },
                 { q: "以下哪個句子正確使用了書名號？", options: ["我借了「烏鴉喝水」這本書。", "我借了（烏鴉喝水）這本書。", "我借了《烏鴉喝水》這本書。", "我借了烏鴉喝水這本書。"], a: "我借了《烏鴉喝水》這本書。", hint: "書本名字要用《》。" },
-                { q: "以下哪個句子正確使用了引號？", options: ["老師説，大家要認真溫習。", "老師説：大家要「認真溫習」。", "老師説：「大家要認真溫習。」", "老師説，「大家要認真溫習」。"], a: "老師説：「大家要認真溫習。」", hint: "引出別人説的話，前面要有冒號。" },
+                { q: "以下哪個句子正確使用了引號？", options: ["老師説，大家要認真温習。", "老師説：大家要「認真温習」。", "老師説：「大家要認真温習。」", "老師説，「大家要認真温習」。"], a: "老師説：「大家要認真温習。」", hint: "引出別人説的話，前面要有冒號。" },
                 { q: "「妹妹的性格開朗，她是我們家的（　）小太陽（　）。」括號內應填甚麼標點？", options: ["《　》", "「　」", "（　）", "——"], a: "「　」", hint: "用來標示特別強調的詞語。" },
                 { q: "逗號（，）的作用是甚麼？", options: ["表示一句話説完了", "表示説話的內容", "表示一句話中間的停頓", "標示書本名稱"], a: "表示一句話中間的停頓", hint: "句子還沒完，需要喘口氣。" },
                 { q: "句號（。）的作用是甚麼？", options: ["表示一句話中間的停頓", "表示一句話説完了", "標示書本名稱", "表示説話的內容"], a: "表示一句話説完了", hint: "放在句子的最後面。" },
@@ -1510,13 +1650,13 @@
                 { q: "以下哪個句子標點符號用得正確？", options: ["星期天，我讀了《三隻小豬》和《小美人魚》兩本書。", "星期天，我讀了「三隻小豬」和「小美人魚」兩本書。", "星期天我讀了三隻小豬和小美人魚兩本書。", "星期天，我讀了（三隻小豬）和（小美人魚）兩本書。"], a: "星期天，我讀了《三隻小豬》和《小美人魚》兩本書。", hint: "書名必須使用書名號。" },
                 { q: "「我做好了功課，（　　）跟家人一起看電視。」括號內應填甚麼？", options: ["一面", "有時", "然後", "一邊"], a: "然後", hint: "表示先後次序的詞語。" },
                 { q: "「爸爸和姐姐（　　）看風景，（　　）聊天。」括號內應填甚麼？", options: ["然後……然後", "有時……有時", "先……再", "一面……一面"], a: "一面……一面", hint: "同時進行兩個動作。" },
-                { q: "「溫度有時高，（　　）低。」括號內應填甚麼？", options: ["然後", "一面", "有時", "一邊"], a: "有時", hint: "表示不同情況交替出現。" },
+                { q: "「温度有時高，（　　）低。」括號內應填甚麼？", options: ["然後", "一面", "有時", "一邊"], a: "有時", hint: "表示不同情況交替出現。" },
                 { q: "以下哪個句子正確使用了「……然後……」句式？", options: ["我然後做功課，吃飯。", "然後我做功課，然後吃飯。", "家明換上睡衣，然後上牀睡覺。", "我一面做功課，然後看書。"], a: "家明換上睡衣，然後上牀睡覺。", hint: "先做前面的動作，然後做後面的動作。" },
                 { q: "「子敏（　　）玩洋娃娃，（　　）聽音樂。」括號內應填甚麼？", options: ["然後……然後", "先……再", "有時……有時", "一面……一面"], a: "一面……一面", hint: "兩個動作同時發生。" },
                 { q: "「雲有時厚，（　　）薄。」這句用了甚麼句式？", options: ["然後", "先……再", "一面……一面", "有時……有時"], a: "有時……有時", hint: "描寫不同的變化。" },
                 { q: "以下哪個句子正確使用了「一面……一面……」句式？", options: ["媽媽一面做家務，然後唱歌。", "媽媽有時做家務，有時唱歌。", "媽媽一面做家務，一面唱歌。", "媽媽做家務，然後唱歌。"], a: "媽媽一面做家務，一面唱歌。", hint: "同時做這兩件事。" },
                 { q: "「全班同學先在教室外排隊，（　　）到操場去。」括號內最適合填甚麼？", options: ["一面", "有時", "然後", "有時候"], a: "然後", hint: "排好隊之後做的事。" },
-                { q: "「麗香打開課本，（　　）開始溫習。」括號內應填甚麼？", options: ["一面", "然後", "有時", "一邊"], a: "然後", hint: "先打開，接着温習。" },
+                { q: "「麗香打開課本，（　　）開始温習。」括號內應填甚麼？", options: ["一面", "然後", "有時", "一邊"], a: "然後", hint: "先打開，接着温習。" },
                 { q: "以下哪個句子用了「有時……有時……」句式？", options: ["海浪然後大，然後小。", "海浪先大，再小。", "海浪一面大，一面小。", "海浪有時大，有時小。"], a: "海浪有時大，有時小。", hint: "表示兩種情況會輪流發生。" },
                 { q: "寫信時，「親愛的表哥：」是甚麼部分？", options: ["祝頌語", "問候語", "寫信人的名字", "收信人的稱呼"], a: "收信人的稱呼", hint: "寫在最開頭，表示信是寫給誰的。" },
                 { q: "寫信時，「祝生活愉快」是甚麼部分？", options: ["收信人的稱呼", "問候語", "祝頌語", "寫信人的名字"], a: "祝頌語", hint: "在結尾給對方的祝福。" },
@@ -1755,7 +1895,7 @@
                 { q: "哪個是「形容詞＋的＋名詞」？", options: ["整潔的房間", "努力地學習", "認真地寫字", "快樂地玩耍"], a: "整潔的房間", hint: "「整潔」是形容詞，「的」接「房間」（名詞）。" },
                 { q: "天空中有一朵＿＿的雲。哪個填法正確？", options: ["雪白", "慢慢", "飛翔", "輕輕"], a: "雪白", hint: "形容詞描述雲的顏色或樣子。" },
                 { q: "哪句正確使用了「形容詞＋的＋名詞」？", options: ["他有一雙靈巧的手。", "他靈巧地使用手。", "他的手靈巧地動。", "他用靈巧地手。"], a: "他有一雙靈巧的手。", hint: "「靈巧的手」= 形容詞＋的＋名詞。" },
-                { q: "哪個是「形容詞＋的＋名詞」？", options: ["溫柔的媽媽", "溫柔地説話", "説話的溫柔", "媽媽地溫柔"], a: "溫柔的媽媽", hint: "「溫柔的媽媽」= 形容詞＋的＋名詞。" },
+                { q: "哪個是「形容詞＋的＋名詞」？", options: ["温柔的媽媽", "温柔地説話", "説話的温柔", "媽媽地温柔"], a: "温柔的媽媽", hint: "「温柔的媽媽」= 形容詞＋的＋名詞。" },
                 { q: "選出正確用法：", options: ["金黃的麥田", "金黃地麥田", "麥田的金黃", "金黃地跑步"], a: "金黃的麥田", hint: "「的」前是形容詞，後是名詞。" },
                 { q: "選出「形容詞＋地＋動詞」的短語：", options: ["高興地跳舞", "高興的跳舞", "跳舞的高興", "高興的舞蹈"], a: "高興地跳舞", hint: "「地」前是形容詞，後是動詞。" },
                 { q: "小鳥＿＿地飛翔。哪個填法正確？", options: ["自由", "美麗", "可愛", "雪白"], a: "自由", hint: "「地」前的形容詞描述飛翔的狀態。" },
@@ -1795,11 +1935,11 @@
             ],
             // ══ 閲讀理解 ══
             reading_comp: [
-                { q: "📖 短文一：春天的公園§§春天來了，樹木長出嫩綠的新葉，花朵相繼開放，微風輕輕吹過，帶來陣陣花香，令人心曠神怡。\n小明和妹妹到附近的公園散步。公園裏的景色美極了！他們看見蝴蝶在花叢中翩翩飛舞，又聽到小鳥在枝頭快樂地唱歌。草地上，幾個小朋友正在放風箏，風箏在藍天白雲之間飄來飄去。\n小明和妹妹在長椅上坐下來，一邊吃着媽媽準備的點心，一邊欣賞四周的美景。小明望着滿園的春色，忍不住説：「春天真美麗！大自然真神奇！」妹妹點點頭，笑着説：「我最喜歡春天，春天讓我非常快樂！」\n回家的路上，兄妹倆採了幾朵小花送給媽媽，媽媽臉上露出了溫暖的笑容。§§短文描述的是哪個季節？", options: ["春天", "夏天", "秋天", "冬天"], a: "春天", hint: "短文開首説「春天來了」。" },
-                { q: "📖 短文一：春天的公園§§春天來了，樹木長出嫩綠的新葉，花朵相繼開放，微風輕輕吹過，帶來陣陣花香，令人心曠神怡。\n小明和妹妹到附近的公園散步。公園裏的景色美極了！他們看見蝴蝶在花叢中翩翩飛舞，又聽到小鳥在枝頭快樂地唱歌。草地上，幾個小朋友正在放風箏，風箏在藍天白雲之間飄來飄去。\n小明和妹妹在長椅上坐下來，一邊吃着媽媽準備的點心，一邊欣賞四周的美景。小明望着滿園的春色，忍不住説：「春天真美麗！大自然真神奇！」妹妹點點頭，笑着説：「我最喜歡春天，春天讓我非常快樂！」\n回家的路上，兄妹倆採了幾朵小花送給媽媽，媽媽臉上露出了溫暖的笑容。§§小明和妹妹在公園看見甚麼在飛舞？", options: ["蝴蝶", "風箏", "小鳥", "蜜蜂"], a: "蝴蝶", hint: "短文説「看見蝴蝶在花叢中翩翩飛舞」。" },
-                { q: "📖 短文一：春天的公園§§春天來了，樹木長出嫩綠的新葉，花朵相繼開放，微風輕輕吹過，帶來陣陣花香，令人心曠神怡。\n小明和妹妹到附近的公園散步。公園裏的景色美極了！他們看見蝴蝶在花叢中翩翩飛舞，又聽到小鳥在枝頭快樂地唱歌。草地上，幾個小朋友正在放風箏，風箏在藍天白雲之間飄來飄去。\n小明和妹妹在長椅上坐下來，一邊吃着媽媽準備的點心，一邊欣賞四周的美景。小明望着滿園的春色，忍不住説：「春天真美麗！大自然真神奇！」妹妹點點頭，笑着説：「我最喜歡春天，春天讓我非常快樂！」\n回家的路上，兄妹倆採了幾朵小花送給媽媽，媽媽臉上露出了溫暖的笑容。§§草地上的小朋友在做甚麼？", options: ["放風箏", "踢足球", "捉迷藏", "唱歌"], a: "放風箏", hint: "短文説「幾個小朋友正在放風箏」。" },
-                { q: "📖 短文一：春天的公園§§春天來了，樹木長出嫩綠的新葉，花朵相繼開放，微風輕輕吹過，帶來陣陣花香，令人心曠神怡。\n小明和妹妹到附近的公園散步。公園裏的景色美極了！他們看見蝴蝶在花叢中翩翩飛舞，又聽到小鳥在枝頭快樂地唱歌。草地上，幾個小朋友正在放風箏，風箏在藍天白雲之間飄來飄去。\n小明和妹妹在長椅上坐下來，一邊吃着媽媽準備的點心，一邊欣賞四周的美景。小明望着滿園的春色，忍不住説：「春天真美麗！大自然真神奇！」妹妹點點頭，笑着説：「我最喜歡春天，春天讓我非常快樂！」\n回家的路上，兄妹倆採了幾朵小花送給媽媽，媽媽臉上露出了溫暖的笑容。§§「心曠神怡」的意思最接近哪個？", options: ["心情舒暢，精神愉快", "心情緊張，精神疲倦", "心情難過，精神不好", "心情複雜，精神緊繃"], a: "心情舒暢，精神愉快", hint: "「心曠神怡」形容心情愉快舒暢。" },
-                { q: "📖 短文一：春天的公園§§春天來了，樹木長出嫩綠的新葉，花朵相繼開放，微風輕輕吹過，帶來陣陣花香，令人心曠神怡。\n小明和妹妹到附近的公園散步。公園裏的景色美極了！他們看見蝴蝶在花叢中翩翩飛舞，又聽到小鳥在枝頭快樂地唱歌。草地上，幾個小朋友正在放風箏，風箏在藍天白雲之間飄來飄去。\n小明和妹妹在長椅上坐下來，一邊吃着媽媽準備的點心，一邊欣賞四周的美景。小明望着滿園的春色，忍不住説：「春天真美麗！大自然真神奇！」妹妹點點頭，笑着説：「我最喜歡春天，春天讓我非常快樂！」\n回家的路上，兄妹倆採了幾朵小花送給媽媽，媽媽臉上露出了溫暖的笑容。§§媽媽見到小花後有甚麼反應？", options: ["臉上露出了溫暖的笑容", "感到非常驚訝", "叫他們放回原處", "沒有任何反應"], a: "臉上露出了溫暖的笑容", hint: "短文最後説「媽媽臉上露出了溫暖的笑容」。" },
+                { q: "📖 短文一：春天的公園§§春天來了，樹木長出嫩綠的新葉，花朵相繼開放，微風輕輕吹過，帶來陣陣花香，令人心曠神怡。\n小明和妹妹到附近的公園散步。公園裏的景色美極了！他們看見蝴蝶在花叢中翩翩飛舞，又聽到小鳥在枝頭快樂地唱歌。草地上，幾個小朋友正在放風箏，風箏在藍天白雲之間飄來飄去。\n小明和妹妹在長椅上坐下來，一邊吃着媽媽準備的點心，一邊欣賞四周的美景。小明望着滿園的春色，忍不住説：「春天真美麗！大自然真神奇！」妹妹點點頭，笑着説：「我最喜歡春天，春天讓我非常快樂！」\n回家的路上，兄妹倆採了幾朵小花送給媽媽，媽媽臉上露出了温暖的笑容。§§短文描述的是哪個季節？", options: ["春天", "夏天", "秋天", "冬天"], a: "春天", hint: "短文開首説「春天來了」。" },
+                { q: "📖 短文一：春天的公園§§春天來了，樹木長出嫩綠的新葉，花朵相繼開放，微風輕輕吹過，帶來陣陣花香，令人心曠神怡。\n小明和妹妹到附近的公園散步。公園裏的景色美極了！他們看見蝴蝶在花叢中翩翩飛舞，又聽到小鳥在枝頭快樂地唱歌。草地上，幾個小朋友正在放風箏，風箏在藍天白雲之間飄來飄去。\n小明和妹妹在長椅上坐下來，一邊吃着媽媽準備的點心，一邊欣賞四周的美景。小明望着滿園的春色，忍不住説：「春天真美麗！大自然真神奇！」妹妹點點頭，笑着説：「我最喜歡春天，春天讓我非常快樂！」\n回家的路上，兄妹倆採了幾朵小花送給媽媽，媽媽臉上露出了温暖的笑容。§§小明和妹妹在公園看見甚麼在飛舞？", options: ["蝴蝶", "風箏", "小鳥", "蜜蜂"], a: "蝴蝶", hint: "短文説「看見蝴蝶在花叢中翩翩飛舞」。" },
+                { q: "📖 短文一：春天的公園§§春天來了，樹木長出嫩綠的新葉，花朵相繼開放，微風輕輕吹過，帶來陣陣花香，令人心曠神怡。\n小明和妹妹到附近的公園散步。公園裏的景色美極了！他們看見蝴蝶在花叢中翩翩飛舞，又聽到小鳥在枝頭快樂地唱歌。草地上，幾個小朋友正在放風箏，風箏在藍天白雲之間飄來飄去。\n小明和妹妹在長椅上坐下來，一邊吃着媽媽準備的點心，一邊欣賞四周的美景。小明望着滿園的春色，忍不住説：「春天真美麗！大自然真神奇！」妹妹點點頭，笑着説：「我最喜歡春天，春天讓我非常快樂！」\n回家的路上，兄妹倆採了幾朵小花送給媽媽，媽媽臉上露出了温暖的笑容。§§草地上的小朋友在做甚麼？", options: ["放風箏", "踢足球", "捉迷藏", "唱歌"], a: "放風箏", hint: "短文説「幾個小朋友正在放風箏」。" },
+                { q: "📖 短文一：春天的公園§§春天來了，樹木長出嫩綠的新葉，花朵相繼開放，微風輕輕吹過，帶來陣陣花香，令人心曠神怡。\n小明和妹妹到附近的公園散步。公園裏的景色美極了！他們看見蝴蝶在花叢中翩翩飛舞，又聽到小鳥在枝頭快樂地唱歌。草地上，幾個小朋友正在放風箏，風箏在藍天白雲之間飄來飄去。\n小明和妹妹在長椅上坐下來，一邊吃着媽媽準備的點心，一邊欣賞四周的美景。小明望着滿園的春色，忍不住説：「春天真美麗！大自然真神奇！」妹妹點點頭，笑着説：「我最喜歡春天，春天讓我非常快樂！」\n回家的路上，兄妹倆採了幾朵小花送給媽媽，媽媽臉上露出了温暖的笑容。§§「心曠神怡」的意思最接近哪個？", options: ["心情舒暢，精神愉快", "心情緊張，精神疲倦", "心情難過，精神不好", "心情複雜，精神緊繃"], a: "心情舒暢，精神愉快", hint: "「心曠神怡」形容心情愉快舒暢。" },
+                { q: "📖 短文一：春天的公園§§春天來了，樹木長出嫩綠的新葉，花朵相繼開放，微風輕輕吹過，帶來陣陣花香，令人心曠神怡。\n小明和妹妹到附近的公園散步。公園裏的景色美極了！他們看見蝴蝶在花叢中翩翩飛舞，又聽到小鳥在枝頭快樂地唱歌。草地上，幾個小朋友正在放風箏，風箏在藍天白雲之間飄來飄去。\n小明和妹妹在長椅上坐下來，一邊吃着媽媽準備的點心，一邊欣賞四周的美景。小明望着滿園的春色，忍不住説：「春天真美麗！大自然真神奇！」妹妹點點頭，笑着説：「我最喜歡春天，春天讓我非常快樂！」\n回家的路上，兄妹倆採了幾朵小花送給媽媽，媽媽臉上露出了温暖的笑容。§§媽媽見到小花後有甚麼反應？", options: ["臉上露出了温暖的笑容", "感到非常驚訝", "叫他們放回原處", "沒有任何反應"], a: "臉上露出了温暖的笑容", hint: "短文最後説「媽媽臉上露出了温暖的笑容」。" },
                 { q: "📖 短文二：秋天撿葉§§秋天到了，樹葉由綠色變成黃色和紅色，紛紛從樹上飄落下來，像一隻隻美麗的蝴蝶在空中飛舞。\n小花和哥哥走在公園的小路上，踩着厚厚的落葉，發出「沙沙」的聲音。小花撿起一片紅色的楓葉，高興地説：「這片葉子真漂亮，我要把它帶回家做書籤！」哥哥笑着點頭，也撿起了幾片不同顏色的葉子。\n他們把葉子小心地放進袋子裏，開開心心地回家了。媽媽見到他們的收穫，稱讚他們很有創意，還建議用葉子做一幅貼畫。§§短文描述的是哪個季節？", options: ["秋天", "春天", "夏天", "冬天"], a: "秋天", hint: "短文開首説「秋天到了」。" },
                 { q: "📖 短文二：秋天撿葉§§秋天到了，樹葉由綠色變成黃色和紅色，紛紛從樹上飄落下來，像一隻隻美麗的蝴蝶在空中飛舞。\n小花和哥哥走在公園的小路上，踩着厚厚的落葉，發出「沙沙」的聲音。小花撿起一片紅色的楓葉，高興地説：「這片葉子真漂亮，我要把它帶回家做書籤！」哥哥笑着點頭，也撿起了幾片不同顏色的葉子。\n他們把葉子小心地放進袋子裏，開開心心地回家了。媽媽見到他們的收穫，稱讚他們很有創意，還建議用葉子做一幅貼畫。§§踩着落葉時發出甚麼聲音？", options: ["沙沙聲", "嘩嘩聲", "叮叮聲", "嗡嗡聲"], a: "沙沙聲", hint: "短文説「發出『沙沙』的聲音」。" },
                 { q: "📖 短文二：秋天撿葉§§秋天到了，樹葉由綠色變成黃色和紅色，紛紛從樹上飄落下來，像一隻隻美麗的蝴蝶在空中飛舞。\n小花和哥哥走在公園的小路上，踩着厚厚的落葉，發出「沙沙」的聲音。小花撿起一片紅色的楓葉，高興地説：「這片葉子真漂亮，我要把它帶回家做書籤！」哥哥笑着點頭，也撿起了幾片不同顏色的葉子。\n他們把葉子小心地放進袋子裏，開開心心地回家了。媽媽見到他們的收穫，稱讚他們很有創意，還建議用葉子做一幅貼畫。§§小花撿起一片甚麼顏色的楓葉？", options: ["紅色", "黃色", "綠色", "橙色"], a: "紅色", hint: "短文説「撿起一片紅色的楓葉」。" },
@@ -2109,24 +2249,133 @@
             }
         }
 
-        function startMonsterFight() {
+        
+        // ══ Mythical Skill Effects ══
+        function triggerSkillEffect(monster) {
+            if (!monster.fx) return;
+            const overlay = document.getElementById('skill-overlay');
+            const banner  = document.getElementById('skill-banner');
+            if (!overlay || !banner) return;
+
+            // Build inner HTML for each effect
+            const fxContent = {
+                'fx-dragon':  '<div class="slash"></div><div class="slash"></div><div class="slash"></div>',
+                'fx-phoenix': '<div class="spark" style="left:15%;animation-delay:0s"></div><div class="spark" style="left:30%;animation-delay:0.2s"></div><div class="spark" style="left:50%;animation-delay:0.1s"></div><div class="spark" style="left:65%;animation-delay:0.3s"></div><div class="spark" style="left:80%;animation-delay:0.15s"></div>',
+                'fx-psychic': '<div class="ring"></div><div class="ring"></div><div class="ring"></div>',
+                'fx-storm':   '<div class="spiral"></div>',
+                'fx-sky':     '<div class="crack"></div><div class="crack"></div>',
+                'fx-genesis': '<div class="rring"></div><div class="rring"></div><div class="rring"></div><div class="rring"></div><div class="rring"></div><div class="rring"></div>'
+            };
+            const bannerColors = {
+                'fx-dragon':  'linear-gradient(135deg,#1B5E20,#388E3C)',
+                'fx-phoenix': 'linear-gradient(135deg,#BF360C,#FF6D00)',
+                'fx-psychic': 'linear-gradient(135deg,#4A148C,#9C27B0)',
+                'fx-storm':   'linear-gradient(135deg,#01579B,#29B6F6)',
+                'fx-sky':     'linear-gradient(135deg,#0D47A1,#1565C0)',
+                'fx-genesis': 'linear-gradient(135deg,#F57F17,#E91E63,#9C27B0)'
+            };
+
+            // Show skill banner
+            banner.style.background = bannerColors[monster.fx] || '#333';
+            banner.style.boxShadow  = '0 4px 24px rgba(0,0,0,0.5)';
+            banner.innerHTML = '⚔️ ' + (monster.skill || '技能發動！');
+            banner.style.display = 'block';
+
+            // Show overlay
+            overlay.className = monster.fx;
+            overlay.innerHTML = fxContent[monster.fx] || '';
+            overlay.style.display = 'block';
+
+            // Auto-hide after 3s
+            setTimeout(() => {
+                banner.style.display  = 'none';
+                overlay.style.display = 'none';
+                overlay.className     = '';
+                overlay.innerHTML     = '';
+            }, 3000);
+        }
+
+        // ══ Mythical 10s Countdown Timer ══
+        let _mythTimerInterval = null;
+
+        function startMythicalTimer() {
+            clearInterval(_mythTimerInterval);
+            let timeLeft = 10;
+            const wrap   = document.getElementById('mythical-timer-wrap');
+            const fill   = document.getElementById('mythical-timer-fill');
+            const txt    = document.getElementById('mythical-timer-text');
+            if (!wrap) return;
+            wrap.style.display = 'flex';
+            if (fill) { fill.style.width = '100%'; fill.classList.remove('danger'); }
+            if (txt)  { txt.innerText = '10'; txt.classList.remove('danger'); }
+
+            _mythTimerInterval = setInterval(() => {
+                timeLeft--;
+                const pct = (timeLeft / 10) * 100;
+                if (fill) {
+                    fill.style.width = pct + '%';
+                    if (timeLeft <= 3) fill.classList.add('danger');
+                }
+                if (txt) {
+                    txt.innerText = timeLeft;
+                    if (timeLeft <= 3) txt.classList.add('danger');
+                }
+                if (timeLeft <= 0) {
+                    clearInterval(_mythTimerInterval);
+                    hideMythicalTimer();
+                    // Time's up - treat as wrong answer
+                    playSound('wrong');
+                    const fbArea = document.getElementById('feedback-area');
+                    if (fbArea) {
+                        fbArea.classList.remove('hidden');
+                        fbArea.classList.add('error');
+                        document.getElementById('feedback-msg').innerHTML =
+                            '⏰ 時間到！正確答案是：<span style="color:#F44336;">' + currentQuestion.a + '</span><br>'
+                            + '<span style="color:#9C27B0;">⚡ 神獸趁機逃走了！</span>';
+                        document.getElementById('reward-msg').innerText = '';
+                        document.getElementById('options-area').classList.add('hidden');
+                        onNextAction = 'monster_lose';
+                        renderStats();
+                    }
+                }
+            }, 1000);
+        }
+
+        function stopMythicalTimer() {
+            clearInterval(_mythTimerInterval);
+            hideMythicalTimer();
+        }
+
+        function hideMythicalTimer() {
+            const wrap = document.getElementById('mythical-timer-wrap');
+            if (wrap) wrap.style.display = 'none';
+            const fill = document.getElementById('mythical-timer-fill');
+            if (fill) { fill.style.width = '100%'; fill.classList.remove('danger'); }
+            const txt = document.getElementById('mythical-timer-text');
+            if (txt)  { txt.innerText = '10'; txt.classList.remove('danger'); }
+        }
+
+                function startMonsterFight() {
             isMonsterFight = true;
             monsterCorrectCount = 0;
             monsterGoal = (currentMonster.type === "mythical" ? 3 : 1);
-            
+
             document.getElementById("monster-encounter-panel").classList.add("hidden");
-            
+
             let qPanel = document.getElementById("question-panel");
             qPanel.classList.remove("hidden");
             if (currentMonster.type === "mythical") {
                 qPanel.classList.add("mythical-question");
+                triggerSkillEffect(currentMonster);
+                startMythicalTimer();
             } else {
                 qPanel.classList.remove("mythical-question");
+                hideMythicalTimer();
             }
 
             document.getElementById("bottom-controls").classList.remove("hidden");
             document.getElementById("game-title").innerText = `⚔️ 戰鬥中：${currentMonster.name} ${currentMonster.emoji}`;
-            
+
             loadMonsterQuestion();
         }
 
@@ -2359,8 +2608,10 @@
                         let winMsg = currentMonster.type === "mythical" ? `🎉 史詩級勝利！成功收服 ${currentMonster.name}！` : `🎉 成功擊敗 ${currentMonster.name}！`;
                         document.getElementById("feedback-msg").innerHTML = `✅ 答對了！正確答案是：<span style="color:#E65100;">${currentQuestion.a}</span><br><span style='color:#9C27B0'>${winMsg}</span>`;
                         document.getElementById("reward-msg").innerText = "準備領取戰利品...";
+                        stopMythicalTimer();
                         onNextAction = "monster_win";
                     } else {
+                        stopMythicalTimer();
                         document.getElementById("feedback-msg").innerHTML = `✅ 答對了！正確答案是：<span style="color:#E65100;">${currentQuestion.a}</span><br>還要答對 ${monsterGoal - monsterCorrectCount} 題才能擊敗它！`;
                         document.getElementById("reward-msg").innerText = "繼續戰鬥！";
                         onNextAction = "monster_next";
@@ -2371,6 +2622,7 @@
                     fbArea.classList.remove("hidden"); fbArea.classList.add("error");
                     document.getElementById("feedback-msg").innerHTML = `❌ 答錯了！正確答案是：<span style="color:#F44336;">${currentQuestion.a}</span><br>你被 ${currentMonster.name} 擊倒，只能逃跑！`;
                     document.getElementById("reward-msg").innerText = "遺失了一些資源...";
+                    stopMythicalTimer();
                     onNextAction = "monster_lose";
                 }
             } else {
@@ -2446,6 +2698,10 @@
                     loadQuestion();
                 }
             } else if (onNextAction === "monster_next") {
+                if (currentMonster && currentMonster.type === "mythical") {
+                    triggerSkillEffect(currentMonster);
+                    startMythicalTimer();
+                }
                 loadMonsterQuestion();
             } else if (onNextAction === "monster_win") {
                 alert(`🎉 你獲得了戰利品：${currentMonster.rewardsStr}`);
