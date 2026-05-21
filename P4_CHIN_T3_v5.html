@@ -1055,6 +1055,44 @@
                     </div>
                     <div id="partner-dialogue"></div>
 
+                    <!-- 🥩 餵食升級系統 -->
+                    <div style="margin-top:14px;background:#FFF8E1;border-radius:12px;padding:12px 14px;border:2px solid #FF8F00;text-align:left;width:90%;max-width:460px;box-sizing:border-box;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                            <span style="font-weight:bold;color:#E65100;font-size:0.95em;">🥩 搭檔等級</span>
+                            <span style="color:#FF6F00;font-weight:bold;">Lv <span id="feed-lv-display">0</span>&nbsp;<span id="feed-lv-title" style="font-size:0.82em;color:#888;">🥚 幼獸</span></span>
+                        </div>
+                        <div style="background:#ddd;border-radius:6px;height:10px;overflow:hidden;margin-bottom:4px;">
+                            <div id="feed-exp-bar" style="height:100%;background:linear-gradient(90deg,#FF8F00,#FF6F00);width:0%;transition:width 0.4s;"></div>
+                        </div>
+                        <div style="font-size:0.75em;color:#888;margin-bottom:10px;text-align:right;">EXP: <span id="feed-exp-text">0 / 20</span></div>
+                        <button class="btn-orange" onclick="document.getElementById('feed-food-panel').classList.toggle('hidden')" style="width:100%;font-size:0.88em;padding:7px;margin:0 0 8px;">
+                            🍔 餵食搭檔
+                        </button>
+                        <div id="feed-food-panel" class="hidden" style="display:flex;flex-direction:column;gap:6px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:6px 10px;">
+                                <span style="font-size:0.85em;">🍔 雙層漢堡 +5EXP ×<span id="feed-count-burger">0</span></span>
+                                <button class="btn-green" onclick="feedPartner('burger')" style="font-size:0.78em;padding:4px 10px;margin:0;">餵食</button>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:6px 10px;">
+                                <span style="font-size:0.85em;">🍕 芝心薄餅 +15EXP ×<span id="feed-count-pizza">0</span></span>
+                                <button class="btn-green" onclick="feedPartner('pizza')" style="font-size:0.78em;padding:4px 10px;margin:0;">餵食</button>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:6px 10px;">
+                                <span style="font-size:0.85em;">🍣 新鮮壽司 +30EXP ×<span id="feed-count-sushi">0</span></span>
+                                <button class="btn-blue" onclick="feedPartner('sushi')" style="font-size:0.78em;padding:4px 10px;margin:0;">餵食</button>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:6px 10px;">
+                                <span style="font-size:0.85em;">🎂 忌廉蛋糕 +60EXP ×<span id="feed-count-cake">0</span></span>
+                                <button class="btn-orange" onclick="feedPartner('cake')" style="font-size:0.78em;padding:4px 10px;margin:0;">餵食</button>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#fff8e1,#ffe0b2);border-radius:8px;padding:6px 10px;border:1px solid #FF6F00;">
+                                <span style="font-size:0.85em;">🍗✨ 4A雞腿 +150EXP ×<span id="feed-count-chicken">0</span></span>
+                                <button class="btn-red" onclick="feedPartner('chicken')" style="font-size:0.78em;padding:4px 10px;margin:0;">餵食</button>
+                            </div>
+                            <p style="font-size:0.72em;color:#aaa;margin:4px 0 0;text-align:center;">🛒 到秘密市場購買食物</p>
+                        </div>
+                    </div>
+
 
                     <div id="evo-req-single" class="hidden" style="margin-top: 15px; background: #F3E5F5; padding: 15px; border-radius: 10px; border: 2px solid #AB47BC;">
                         <h4 style="margin: 0 0 10px 0; color: #D50000; font-size:1.2em;">🔼 下一階進化需求</h4>
@@ -1235,6 +1273,34 @@
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <button class="btn-red" id="btn-buy-scroll" onclick="buyItem('scroll')">📜 傳説卷軸 (必遇傳説怪) <br>💰 50🪵 + 50🪨 + 10⭐</button>
             </div>
+            <!-- 🍔 夥伴食物商店 -->
+            <div style="background:#FFF8E1;border:3px dashed #FF8F00;padding:15px;border-radius:10px;margin-bottom:15px;">
+                <h3 style="color:#E65100;margin-top:0;">🍔 夥伴食物店</h3>
+                <p style="font-size:0.8em;color:#777;margin:0 0 10px;">購買食物後，到搭檔精靈區餵食升級！</p>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:8px 12px;">
+                        <span>🍔 雙層漢堡 <small style="color:#888;">+5 EXP</small></span>
+                        <button class="btn-green" onclick="buyFood('burger')" style="font-size:0.8em;padding:5px 12px;margin:0;">買 50💰</button>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:8px 12px;">
+                        <span>🍕 芝心薄餅 <small style="color:#888;">+15 EXP</small></span>
+                        <button class="btn-green" onclick="buyFood('pizza')" style="font-size:0.8em;padding:5px 12px;margin:0;">買 120💰</button>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:8px 12px;">
+                        <span>🍣 新鮮壽司 <small style="color:#888;">+30 EXP</small></span>
+                        <button class="btn-blue" onclick="buyFood('sushi')" style="font-size:0.8em;padding:5px 12px;margin:0;">買 200💰</button>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:8px 12px;">
+                        <span>🎂 忌廉蛋糕 <small style="color:#888;">+60 EXP</small></span>
+                        <button class="btn-orange" onclick="buyFood('cake')" style="font-size:0.8em;padding:5px 12px;margin:0;">買 350💰</button>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#fff8e1,#ffe0b2);border-radius:8px;padding:8px 12px;border:2px solid #FF6F00;">
+                        <span>🍗✨ 傳說的4A雞腿 <small style="color:#E65100;">+150 EXP</small></span>
+                        <button class="btn-red" onclick="buyFood('chicken')" style="font-size:0.8em;padding:5px 12px;margin:0;">買 800💰</button>
+                    </div>
+                </div>
+            </div>
+
             <button class="btn-grey" style="margin-top: 20px;" onclick="closeModal('market-modal')">❌ 離開</button>
         </div>
     </div>
@@ -2574,6 +2640,8 @@
             streak: 0, maxStreak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
             equip: { woodSword: false, stoneSword: false, woodShield: false, stoneArmor: false }, medals: [], 
             partnerLv: 0, partnerId: "", partnerBranch: "A", partners: {}, lastGachaDate: "",
+            partnerFeedLv: 0, partnerFeedExp: 0,
+            food_burger: 0, food_pizza: 0, food_sushi: 0, food_cake: 0, food_chicken: 0,
             achievements: [], totalCorrectAnswers: 0, totalBossWins: 0, bossWins: {},
             dailyQuestDate: "", dailyQuests: [], dailyQuestProgress: {}, gachaDrawsToday: 0, 
             scrollBoughtDate: "", hasLegendaryBuff: false,
@@ -3284,12 +3352,29 @@ function checkDailyReset() {
         window.selectPartner = function(id) {
             playSound('click');
             if (!inventory.partners) inventory.partners = {};
-            if (inventory.partnerId) inventory.partners[inventory.partnerId] = { lv: inventory.partnerLv, branch: inventory.partnerBranch };
-            
+            // Save current partner's feedLv/feedExp before switching
+            if (inventory.partnerId) {
+                inventory.partners[inventory.partnerId] = {
+                    lv:      inventory.partnerLv      || 0,
+                    branch:  inventory.partnerBranch  || 'A',
+                    feedLv:  inventory.partnerFeedLv  || 0,
+                    feedExp: inventory.partnerFeedExp || 0,
+                };
+            }
+            // Load new partner's data
             if (inventory.partners[id]) {
-                inventory.partnerId = id; inventory.partnerLv = inventory.partners[id].lv; inventory.partnerBranch = inventory.partners[id].branch;
+                inventory.partnerId      = id;
+                inventory.partnerLv      = inventory.partners[id].lv      || 0;
+                inventory.partnerBranch  = inventory.partners[id].branch  || 'A';
+                inventory.partnerFeedLv  = inventory.partners[id].feedLv  || 0;
+                inventory.partnerFeedExp = inventory.partners[id].feedExp || 0;
             } else {
-                inventory.partnerId = id; inventory.partnerLv = 0; inventory.partnerBranch = 'A'; inventory.partners[id] = { lv: 0, branch: 'A' };
+                inventory.partnerId      = id;
+                inventory.partnerLv      = 0;
+                inventory.partnerBranch  = 'A';
+                inventory.partnerFeedLv  = 0;
+                inventory.partnerFeedExp = 0;
+                inventory.partners[id]   = { lv: 0, branch: 'A', feedLv: 0, feedExp: 0 };
             }
             unlockAchievement('ach_partner');
             saveGame(); openPartnerZone(); updateUI();
@@ -3352,6 +3437,7 @@ function checkDailyReset() {
             // ✅ 感情值 UI & 任務進度
             updateAffectionUI();
             updateQuestProgress('visit_partner');
+            updateFeedUI();
         }
 
         window.evolvePartner = function(chosenBranch = 'A') {
@@ -4693,6 +4779,106 @@ function checkDailyReset() {
         }
 
         
+
+        // ==================== 食物 & 餵食系統 ====================
+        const FOOD_DATA = {
+            burger:  { name: '🍔 雙層漢堡',       exp: 5,   cost: 50,  key: 'food_burger'  },
+            pizza:   { name: '🍕 芝心薄餅',       exp: 15,  cost: 120, key: 'food_pizza'   },
+            sushi:   { name: '🍣 新鮮壽司',       exp: 30,  cost: 200, key: 'food_sushi'   },
+            cake:    { name: '🎂 忌廉蛋糕',       exp: 60,  cost: 350, key: 'food_cake'    },
+            chicken: { name: '🍗✨ 傳說的4A雞腿', exp: 150, cost: 800, key: 'food_chicken' },
+        };
+
+        const FEED_LV_TITLES = [
+            '🥚 幼獸', '🐣 見習', '🐾 成長', '⚔️ 強者', '🔥 精英',
+            '💫 宗師', '🌟 傳說', '🌈 神話', '👑 王者', '🏆 MAX'
+        ];
+
+        function getFeedLvTitle(lv) {
+            if (lv >= 100) return FEED_LV_TITLES[9];
+            return FEED_LV_TITLES[Math.floor(lv / 11)];
+        }
+
+        function feedExpNeeded(lv) {
+            if (lv >= 100) return 0;
+            return Math.ceil(20 * Math.pow(lv + 1, 1.4));
+        }
+
+        function buyFood(type) {
+            const f = FOOD_DATA[type];
+            if (!f) return;
+            if (inventory.coins < f.cost) {
+                showToast('💰 金幣不足！需要 ' + f.cost + ' 💰'); return;
+            }
+            inventory.coins -= f.cost;
+            inventory[f.key] = (inventory[f.key] || 0) + 1;
+            saveGame(); updateUI();
+            showToast('✅ 購買 ' + f.name + ' x1！現有 ' + inventory[f.key] + ' 個');
+            const el = document.getElementById('market-coin-display');
+            if (el) el.textContent = inventory.coins;
+        }
+
+        function feedPartner(type) {
+            const f = FOOD_DATA[type];
+            if (!f) return;
+            if (!inventory.partnerId) { showToast('❌ 請先選擇搭檔！'); return; }
+            if ((inventory[f.key] || 0) <= 0) { showToast('❌ 沒有 ' + f.name + '！請先到市場購買。'); return; }
+            if ((inventory.partnerFeedLv || 0) >= 100) { showToast('🏆 搭檔已達 MAX Lv 100！'); return; }
+
+            inventory[f.key]--;
+            let exp = inventory.partnerFeedExp || 0;
+            let lv  = inventory.partnerFeedLv  || 0;
+            exp += f.exp;
+
+            let levelled = 0;
+            while (lv < 100 && exp >= feedExpNeeded(lv)) {
+                exp -= feedExpNeeded(lv);
+                lv++;
+                levelled++;
+            }
+            if (lv >= 100) { lv = 100; exp = 0; }
+
+            inventory.partnerFeedExp = exp;
+            inventory.partnerFeedLv  = lv;
+            // Keep partners{} in sync
+            if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                inventory.partners[inventory.partnerId].feedLv  = lv;
+                inventory.partners[inventory.partnerId].feedExp = exp;
+            }
+            saveGame(); updateUI(); updateFeedUI();
+
+            if (levelled > 0) {
+                showToast('🎉 搭檔升級！Lv ' + lv + ' ' + getFeedLvTitle(lv));
+                playSound('levelup');
+            } else {
+                const needed = feedExpNeeded(lv);
+                showToast(f.name + ' 餵食成功！+' + f.exp + ' EXP (' + exp + '/' + needed + ')');
+                playSound('click');
+            }
+        }
+
+        function updateFeedUI() {
+            const lv     = inventory.partnerFeedLv  || 0;
+            const exp    = inventory.partnerFeedExp || 0;
+            const needed = feedExpNeeded(lv);
+            const pct    = lv >= 100 ? 100 : Math.round(exp / needed * 100);
+
+            const lvEl    = document.getElementById('feed-lv-display');
+            const barEl   = document.getElementById('feed-exp-bar');
+            const txtEl   = document.getElementById('feed-exp-text');
+            const titleEl = document.getElementById('feed-lv-title');
+            if (lvEl)    lvEl.textContent    = lv;
+            if (titleEl) titleEl.textContent = getFeedLvTitle(lv);
+            if (barEl)   barEl.style.width   = pct + '%';
+            if (txtEl)   txtEl.textContent   = lv >= 100 ? 'MAX' : (exp + ' / ' + needed);
+
+            Object.entries(FOOD_DATA).forEach(([type, f]) => {
+                const el = document.getElementById('feed-count-' + type);
+                if (el) el.textContent = inventory[f.key] || 0;
+            });
+        }
+        // ==================== END 食物 & 餵食系統 ====================
+
         // ==================== 四榜計分函數 ====================
         let currentLbTab = 0;
 
@@ -4709,19 +4895,19 @@ function checkDailyReset() {
         }
 
         function calcPartnerScore(e) {
-            // 戰力分 (B): partnerLv × buff tier
-            const buffByLv = [0, 20, 50, 100, 200];
-            const lv = Math.min(e.partnerLv||0, 4);
-            const combatScore = buffByLv[lv] * 5;
-            // 成就分 (C)
+            // 主分：所有搭檔餵食等級總和 × 100 (最高 N隻 × 100 × 100)
+            const feedLv = e.totalFeedLv || e.partnerFeedLv || 0;
+            const feedScore = feedLv * 100;
+            // 副分：感情值（打平用，但感情值不在leaderboard數據中，用進化成就補）
             let achieve = 0;
-            if (lv >= 1) achieve += 100;   // 首次進化
-            if (lv >= 2) achieve += 200;   // 成熟期
-            if (lv >= 3) achieve += 300;   // 完全體 + 分支
-            if (lv >= 4) achieve += 500;   // 究極體
-            if (e.partnerBranch === 'B') achieve += 150; // 選擇B路線
-            if (e.partnerId && e.partnerId !== '') achieve += 50; // 有夥伴
-            return combatScore + achieve;
+            const evoLv = e.partnerLv || 0;
+            if (evoLv >= 1) achieve += 50;
+            if (evoLv >= 2) achieve += 100;
+            if (evoLv >= 3) achieve += 200;
+            if (evoLv >= 4) achieve += 400;
+            if (e.partnerBranch === 'B') achieve += 80;
+            if (e.partnerId && e.partnerId !== '') achieve += 20;
+            return feedScore + achieve;
         }
 
         function calcBuildingScore(e) {
@@ -4767,13 +4953,16 @@ function checkDailyReset() {
                 row: (e, rank, score) => {
                     const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
                     const pName = e.partner || '未選夥伴';
-                    const lv = e.partnerLv||0;
-                    const branch = lv>=3 ? (e.partnerBranch==='B'?'🔴B線':'🔵A線') : '';
+                    const evoLv = e.partnerLv||0;
+                    const feedLv = e.totalFeedLv || e.partnerFeedLv || 0;
+                    const branch = evoLv>=3 ? (e.partnerBranch==='B'?'🔴B線':'🔵A線') : '';
+                    const feedTitles = ['🥚幼獸','🐣見習','🐾成長','⚔️強者','🔥精英','💫宗師','🌟傳說','🌈神話','👑王者','🏆MAX'];
+                    const feedTitle = feedLv>=100 ? feedTitles[9] : feedTitles[Math.floor(feedLv/11)];
                     return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin-bottom:4px;background:#0d1117;border-radius:8px;border-left:3px solid ${rank<=3?'#FFD700':'#333'};">
                       <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
                       <div style="flex:1;margin-left:8px;">
                         <div style="color:#eee;font-size:0.9em;">${e.name||'?'}</div>
-                        <div style="color:#CE93D8;font-size:0.75em;">${pName} Lv${lv} ${branch}</div>
+                        <div style="color:#CE93D8;font-size:0.75em;">${pName} 🥩Lv${feedLv} ${feedTitle} ｜ 進化:${evoLv}階 ${branch}</div>
                       </div>
                       <span style="color:#CE93D8;font-size:0.82em;">⚔️ ${score}分</span>
                     </div>`;
@@ -4952,6 +5141,24 @@ async function fetchLeaderboard() {
                     maxStreak:      inventory.maxStreak || 0,
                     partnerLv:      inventory.partnerLv || 0,
                     partnerBranch:  inventory.partnerBranch || 'A',
+                    partnerFeedLv:  inventory.partnerFeedLv  || 0,
+                    totalFeedLv:    (function() {
+                        // Save current partner first, then sum all
+                        const p = inventory.partners || {};
+                        const cur = inventory.partnerId;
+                        let total = 0;
+                        Object.entries(p).forEach(([id, data]) => {
+                            const fl = (cur === id) ? (inventory.partnerFeedLv || 0) : (data.feedLv || 0);
+                            total += fl;
+                        });
+                        return total;
+                    })(),
+                    partnerFeedExp: inventory.partnerFeedExp || 0,
+                    food_burger:    inventory.food_burger    || 0,
+                    food_pizza:     inventory.food_pizza     || 0,
+                    food_sushi:     inventory.food_sushi     || 0,
+                    food_cake:      inventory.food_cake      || 0,
+                    food_chicken:   inventory.food_chicken   || 0,
                     partnerId:      inventory.partnerId || '',
                     partner:        getPartnerDisplayName(),
                     // 🏗️ 建築榜
@@ -4985,6 +5192,13 @@ async function fetchLeaderboard() {
                         maxStreak:       Math.max(old.maxStreak       ||0, myEntry.maxStreak       ||0),
                         partnerLv:       Math.max(old.partnerLv       ||0, myEntry.partnerLv       ||0),
                         score:           Math.max(old.score           ||0, myEntry.score           ||0),
+                        partnerFeedLv:   Math.max(old.partnerFeedLv   ||0, myEntry.partnerFeedLv   ||0),
+                        totalFeedLv:     Math.max(old.totalFeedLv     ||0, myEntry.totalFeedLv     ||0),
+                        food_burger:     myEntry.food_burger,
+                        food_pizza:      myEntry.food_pizza,
+                        food_sushi:      myEntry.food_sushi,
+                        food_cake:       myEntry.food_cake,
+                        food_chicken:    myEntry.food_chicken,
                         // 建築（取最大，防跨裝置回退）
                         hut:             Math.max(old.hut             ||0, myEntry.hut             ||0),
                         tower:           Math.max(old.tower           ||0, myEntry.tower           ||0),
