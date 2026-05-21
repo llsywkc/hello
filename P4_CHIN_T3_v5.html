@@ -4786,8 +4786,21 @@ function checkDailyReset() {
                 };
                 const existIdx = entries.findIndex(e => e.playerId && e.playerId === inventory.playerId); // 🔧 playerId only — prevents name spoofing
                 if (existIdx >= 0) {
-                    // ✅ FIX B5: 永遠以最新分數更新（確保RC、考試等新功能分數即時反映）
-                    entries[existIdx] = myEntry;
+                    // ✅ FIX B5 v2: 分項取最大值合併，分數只升不降（防跨裝置覆蓋問題）
+                    const old = entries[existIdx];
+                    const merged = {
+                        ...myEntry,
+                        correctAnswers:  Math.max(old.correctAnswers  ||0, myEntry.correctAnswers  ||0),
+                        moShuCorrect:    Math.max(old.moShuCorrect    ||0, myEntry.moShuCorrect    ||0),
+                        rcCorrect:       Math.max(old.rcCorrect       ||0, myEntry.rcCorrect       ||0),
+                        bossWins:        Math.max(old.bossWins        ||0, myEntry.bossWins        ||0),
+                        examCount:       Math.max(old.examCount       ||0, myEntry.examCount       ||0),
+                        examBonusScore:  Math.max(old.examBonusScore  ||0, myEntry.examBonusScore  ||0),
+                        maxStreak:       Math.max(old.maxStreak       ||0, myEntry.maxStreak       ||0),
+                        partnerLv:       Math.max(old.partnerLv       ||0, myEntry.partnerLv       ||0),
+                        score:           Math.max(old.score           ||0, myEntry.score           ||0),
+                    };
+                    entries[existIdx] = merged;
                 } else {
                     entries.push(myEntry);
                 }
