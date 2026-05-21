@@ -968,7 +968,7 @@
 
         <div id="leaderboard-screen" class="screen hidden">
             <h2 style="color:#FFD700;">🏆 冒險者排行榜</h2>
-            <p style="font-size:0.78em;color:#aaa;">分數 = 答對×10 + Boss總勝×50 + 最高連勝×8 + 夥伴等級×30 + Boss關卡獎勵</p>
+            <p style="font-size:0.78em;color:#aaa;">分數 = 答對×8 + 漢字道場×12 + 閲讀理解×10 + Boss勝×50 + 夥伴等級×25 + 考試獎勵</p>
             <div id="lb-status" style="font-size:0.82em;color:#aaa;margin:4px 0;"></div>
             <div id="lb-list" style="width:95%;margin:0 auto;max-height:60vh;overflow-y:auto;"></div>
             <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
@@ -2570,7 +2570,7 @@
             dailyQuestDate: "", dailyQuests: [], dailyQuestProgress: {}, gachaDrawsToday: 0, 
             scrollBoughtDate: "", hasLegendaryBuff: false,
             bloodMoonActive: false, bloodMoonTarget: 0, bloodMoonStreak: 0, bloodMoonLeft: 0, unlockedCards: [], cardStats: {}, potions: 0,
-            epicWins: 0, legendaryWins: 0, moShuCorrect: 0, dailyQuestsCompleted: 0, examBonusScore: 0
+            epicWins: 0, legendaryWins: 0, moShuCorrect: 0, dailyQuestsCompleted: 0, examBonusScore: 0, rcCorrectAnswers: 0
         };
         let inventory = { ...defaultInv };
 
@@ -2992,6 +2992,7 @@ function checkDailyReset() {
                     if (inventory.moShuCorrect === undefined)        inventory.moShuCorrect = 0;
                     if (inventory.dailyQuestsCompleted === undefined) inventory.dailyQuestsCompleted = 0;
                     if (inventory.examBonusScore === undefined) inventory.examBonusScore = 0;
+                    if (inventory.rcCorrectAnswers === undefined) inventory.rcCorrectAnswers = 0;
                     
                     if(!inventory.partners) {
                         inventory.partners = {};
@@ -4673,6 +4674,7 @@ function checkDailyReset() {
                 + (inventory.examCompletedCount   ||0) * 500 // 模擬考試完成
                 + (inventory.dailyQuestsCompleted ||0) * 20  // 每日任務完成
                 + (inventory.examBonusScore       ||0)        // 模擬考試期間限定加分
+                + (inventory.rcCorrectAnswers    ||0) * 10  // 閲讀理解答題
             );
         }
 
@@ -4768,6 +4770,7 @@ function checkDailyReset() {
                     dailyQuestsDone:   inventory.dailyQuestsCompleted || 0,
                     examCount:         inventory.examCompletedCount || 0,
                     examBonusScore:    inventory.examBonusScore || 0,
+                    rcCorrect:         inventory.rcCorrectAnswers || 0,
                     score:             calcScore(),
                     correctAnswers: inventory.totalCorrectAnswers || 0,
                     bossWins:       inventory.totalBossWins || 0,
@@ -4783,25 +4786,8 @@ function checkDailyReset() {
                 };
                 const existIdx = entries.findIndex(e => e.playerId && e.playerId === inventory.playerId); // 🔧 playerId only — prevents name spoofing
                 if (existIdx >= 0) {
-                    // Only update if new score is higher
-                    if (myEntry.score >= entries[existIdx].score) {
-                        entries[existIdx] = myEntry;
-                    } else {
-                        // If name changed, update name even if score not higher
-                        if (entries[existIdx].name !== inventory.playerName) {
-                            entries[existIdx].name = inventory.playerName;
-                            entries[existIdx].playerId = inventory.playerId;
-                            const putResName = await fetch(JSONBIN_URL, {
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
-                                body: JSON.stringify({ entries })
-                            });
-                            status.textContent = '✅ 名字已更新至排行榜！分數保持最高紀錄。';
-                        } else {
-                            status.textContent = `⚠️ 你的最高分 ${entries[existIdx].score} 已在榜上，本次未更新。`;
-                        }
-                        fetchLeaderboard(); return;
-                    }
+                    // ✅ FIX B5: 永遠以最新分數更新（確保RC、考試等新功能分數即時反映）
+                    entries[existIdx] = myEntry;
                 } else {
                     entries.push(myEntry);
                 }
@@ -6475,7 +6461,9 @@ window.rcAnswer = function(btn, chosen, correct, hint) {
     if (typeof inventory !== 'undefined') {
       inventory.coins = (inventory.coins||0) + 3;
       inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers||0) + 1;
+      inventory.rcCorrectAnswers = (inventory.rcCorrectAnswers||0) + 1;  // ✅ FIX B1
     }
+    if (typeof saveGame === 'function') saveGame();  // ✅ FIX B1
     rcToast('✅ 答對！✨+3 EXP  💰+3');
   } else {
     rcToast('❌ 答錯了！正確答案：' + correct);
