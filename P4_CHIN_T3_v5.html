@@ -968,15 +968,23 @@
 
         <div id="leaderboard-screen" class="screen hidden">
             <h2 style="color:#FFD700;">🏆 冒險者排行榜</h2>
-            <p style="font-size:0.78em;color:#aaa;">分數 = 答對×8 + 漢字道場×12 + 閲讀理解×10 + Boss勝×50 + 夥伴等級×25 + 考試獎勵</p>
+            <!-- Tab buttons -->
+            <div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;">
+                <button id="lb-tab-0" class="lb-tab-btn lb-tab-active" onclick="switchLbTab(0)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#1565C0;color:#fff;font-weight:bold;">📚 學習榜</button>
+                <button id="lb-tab-1" class="lb-tab-btn" onclick="switchLbTab(1)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">⚔️ 夥伴榜</button>
+                <button id="lb-tab-2" class="lb-tab-btn" onclick="switchLbTab(2)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🏗️ 建築榜</button>
+                <button id="lb-tab-3" class="lb-tab-btn" onclick="switchLbTab(3)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">💰 材料榜</button>
+            </div>
+            <div id="lb-tab-desc" style="font-size:0.75em;color:#aaa;margin-bottom:6px;text-align:center;"></div>
             <div id="lb-status" style="font-size:0.82em;color:#aaa;margin:4px 0;"></div>
-            <div id="lb-list" style="width:95%;margin:0 auto;max-height:60vh;overflow-y:auto;"></div>
-            <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
+            <div id="lb-list" style="width:95%;margin:0 auto;max-height:55vh;overflow-y:auto;"></div>
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
                 <button class="btn-gold" onclick="submitScore()" style="font-size:0.85em;">📤 上傳我的分數</button>
                 <button class="btn-blue" onclick="fetchLeaderboard()" style="font-size:0.85em;">🔄 更新排行榜</button>
                 <button class="btn-grey" onclick="goHome()" style="font-size:0.85em;">🏠 返回</button>
+                <button class="btn-red" onclick="teacherRepairTool()" style="font-size:0.85em;">🛠️ 老師修復</button>
             </div>
-        </div>
+        </div></div>
 
         <div id="instruction-screen"
 
@@ -4684,7 +4692,168 @@ function checkDailyReset() {
             return routes[inventory.partnerId] || inventory.partnerId;
         }
 
-        async function fetchLeaderboard() {
+        
+        // ==================== 四榜計分函數 ====================
+        let currentLbTab = 0;
+
+        function calcStudyScore(e) {
+            return Math.floor(
+                  (e.playerLv        ||1) * 50
+                + (e.correctAnswers  ||0) * 15
+                + (e.moShuCorrect    ||0) * 20
+                + (e.rcCorrect       ||0) * 20
+                + (e.examCount       ||0) * 200
+                + (e.dailyQuestsDone ||0) * 20
+                + (e.examBonusScore  ||0)
+            );
+        }
+
+        function calcPartnerScore(e) {
+            // 戰力分 (B): partnerLv × buff tier
+            const buffByLv = [0, 20, 50, 100, 200];
+            const lv = Math.min(e.partnerLv||0, 4);
+            const combatScore = buffByLv[lv] * 5;
+            // 成就分 (C)
+            let achieve = 0;
+            if (lv >= 1) achieve += 100;   // 首次進化
+            if (lv >= 2) achieve += 200;   // 成熟期
+            if (lv >= 3) achieve += 300;   // 完全體 + 分支
+            if (lv >= 4) achieve += 500;   // 究極體
+            if (e.partnerBranch === 'B') achieve += 150; // 選擇B路線
+            if (e.partnerId && e.partnerId !== '') achieve += 50; // 有夥伴
+            return combatScore + achieve;
+        }
+
+        function calcBuildingScore(e) {
+            return Math.floor(
+                  (e.hut          ||0) * 50
+                + (e.tower        ||0) * 80
+                + (e.castles      ||0) * 200
+                + (e.ferrisWheel  ||0) * 300
+                + (e.flyingCastle ||0) * 500
+            );
+        }
+
+        function calcMaterialScore(e) {
+            return Math.floor(
+                  (e.wood       ||0) * 1
+                + (e.stone      ||0) * 2
+                + (e.gem        ||0) * 10
+                + (e.star       ||0) * 8
+                + (e.manuscript ||0) * 5
+                + (e.fragment   ||0) * 15
+                + (e.coins      ||0) * 1
+            );
+        }
+
+        const LB_TABS = [
+            {
+                label: '📚 學習榜',
+                desc:  '答題×15 + 默寫×20 + 閲讀×20 + 考試×200',
+                score: calcStudyScore,
+                row: (e, rank, score) => {
+                    const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
+                    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin-bottom:4px;background:#0d1117;border-radius:8px;border-left:3px solid ${rank<=3?'#FFD700':'#333'};">
+                      <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
+                      <span style="flex:1;margin-left:8px;color:#eee;">${e.name||'?'}</span>
+                      <span style="color:#4FC3F7;font-size:0.82em;">📚 ${score}分</span>
+                    </div>`;
+                }
+            },
+            {
+                label: '⚔️ 夥伴榜',
+                desc:  '夥伴等級戰力 + 進化成就里程碑',
+                score: calcPartnerScore,
+                row: (e, rank, score) => {
+                    const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
+                    const pName = e.partner || '未選夥伴';
+                    const lv = e.partnerLv||0;
+                    const branch = lv>=3 ? (e.partnerBranch==='B'?'🔴B線':'🔵A線') : '';
+                    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin-bottom:4px;background:#0d1117;border-radius:8px;border-left:3px solid ${rank<=3?'#FFD700':'#333'};">
+                      <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
+                      <div style="flex:1;margin-left:8px;">
+                        <div style="color:#eee;font-size:0.9em;">${e.name||'?'}</div>
+                        <div style="color:#CE93D8;font-size:0.75em;">${pName} Lv${lv} ${branch}</div>
+                      </div>
+                      <span style="color:#CE93D8;font-size:0.82em;">⚔️ ${score}分</span>
+                    </div>`;
+                }
+            },
+            {
+                label: '🏗️ 建築榜',
+                desc:  '小屋×50 + 塔×80 + 城堡×200 + 摩天輪×300 + 飛天城堡×500',
+                score: calcBuildingScore,
+                row: (e, rank, score) => {
+                    const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
+                    const buildings = [
+                        e.hut          ? `🛖×${e.hut}`          : '',
+                        e.tower        ? `🗼×${e.tower}`        : '',
+                        e.castles      ? `🏰×${e.castles}`      : '',
+                        e.ferrisWheel  ? `🎡×${e.ferrisWheel}`  : '',
+                        e.flyingCastle ? `🏰✨×${e.flyingCastle}`: '',
+                    ].filter(Boolean).join(' ') || '尚無建築';
+                    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin-bottom:4px;background:#0d1117;border-radius:8px;border-left:3px solid ${rank<=3?'#FFD700':'#333'};">
+                      <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
+                      <div style="flex:1;margin-left:8px;">
+                        <div style="color:#eee;font-size:0.9em;">${e.name||'?'}</div>
+                        <div style="color:#A5D6A7;font-size:0.72em;">${buildings}</div>
+                      </div>
+                      <span style="color:#A5D6A7;font-size:0.82em;">🏗️ ${score}分</span>
+                    </div>`;
+                }
+            },
+            {
+                label: '💰 材料榜',
+                desc:  '木×1 + 石×2 + 寶石×10 + 星石×8 + 書卷×5 + 碎片×15 + 金幣×1',
+                score: calcMaterialScore,
+                row: (e, rank, score) => {
+                    const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
+                    const mats = [
+                        e.wood       ? `🪵${e.wood}`       : '',
+                        e.stone      ? `🪨${e.stone}`      : '',
+                        e.gem        ? `💎${e.gem}`        : '',
+                        e.star       ? `⭐${e.star}`       : '',
+                        e.manuscript ? `📜${e.manuscript}` : '',
+                        e.fragment   ? `🔮${e.fragment}`   : '',
+                        e.coins      ? `💰${e.coins}`      : '',
+                    ].filter(Boolean).join(' ') || '身無分文';
+                    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin-bottom:4px;background:#0d1117;border-radius:8px;border-left:3px solid ${rank<=3?'#FFD700':'#333'};">
+                      <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
+                      <div style="flex:1;margin-left:8px;">
+                        <div style="color:#eee;font-size:0.9em;">${e.name||'?'}</div>
+                        <div style="color:#FFF176;font-size:0.72em;">${mats}</div>
+                      </div>
+                      <span style="color:#FFF176;font-size:0.82em;">💰 ${score}分</span>
+                    </div>`;
+                }
+            }
+        ];
+
+        window.switchLbTab = function(tabIdx) {
+            currentLbTab = tabIdx;
+            document.querySelectorAll('.lb-tab-btn').forEach((btn, i) => {
+                btn.style.background = i === tabIdx ? '#1565C0' : '#333';
+                btn.style.color      = i === tabIdx ? '#fff'    : '#aaa';
+                btn.style.fontWeight = i === tabIdx ? 'bold'    : 'normal';
+            });
+            renderLbTab(window._lbEntries || []);
+        };
+
+        function renderLbTab(entries) {
+            const tab  = LB_TABS[currentLbTab];
+            const desc = document.getElementById('lb-tab-desc');
+            if (desc) desc.textContent = tab.desc;
+            const sorted = [...entries]
+                .map(e => ({ e, s: tab.score(e) }))
+                .sort((a,b) => b.s - a.s);
+            const list = document.getElementById('lb-list');
+            if (!list) return;
+            if (sorted.length === 0) { list.innerHTML = '<div style="color:#aaa;padding:20px;text-align:center;">暫無數據</div>'; return; }
+            list.innerHTML = sorted.map(({e,s},i) => tab.row(e, i+1, s)).join('');
+        }
+        // ==================== END 四榜計分函數 ====================
+
+async function fetchLeaderboard() {
             const status = document.getElementById('lb-status');
             const list   = document.getElementById('lb-list');
             if (!JSONBIN_BIN_ID || JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') {
@@ -4700,7 +4869,8 @@ function checkDailyReset() {
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
                 const entries = (data.record && data.record.entries) ? data.record.entries : [];
-                renderLeaderboardList(entries);
+                window._lbEntries = entries;
+                renderLbTab(entries);
                 status.textContent = `✅ 共 ${entries.length} 位冒險者 · 最後更新：${new Date().toLocaleTimeString('zh-HK')}`;
             } catch(e) {
                 status.textContent = '❌ 載入失敗：' + e.message;
@@ -4781,7 +4951,23 @@ function checkDailyReset() {
                     },
                     maxStreak:      inventory.maxStreak || 0,
                     partnerLv:      inventory.partnerLv || 0,
+                    partnerBranch:  inventory.partnerBranch || 'A',
+                    partnerId:      inventory.partnerId || '',
                     partner:        getPartnerDisplayName(),
+                    // 🏗️ 建築榜
+                    hut:            inventory.hut            || 0,
+                    tower:          inventory.tower          || 0,
+                    castles:        inventory.castles        || 0,
+                    flyingCastle:   inventory.flyingCastle   || 0,
+                    ferrisWheel:    inventory.ferrisWheel    || 0,
+                    // 💰 材料榜
+                    wood:           inventory.wood           || 0,
+                    stone:          inventory.stone          || 0,
+                    gem:            inventory.gem            || 0,
+                    star:           inventory.star           || 0,
+                    manuscript:     inventory.manuscript     || 0,
+                    fragment:       inventory.fragment       || 0,
+                    coins:          inventory.coins          || 0,
                     timestamp:      new Date().toISOString()
                 };
                 const existIdx = entries.findIndex(e => e.playerId && e.playerId === inventory.playerId); // 🔧 playerId only — prevents name spoofing
@@ -4799,6 +4985,20 @@ function checkDailyReset() {
                         maxStreak:       Math.max(old.maxStreak       ||0, myEntry.maxStreak       ||0),
                         partnerLv:       Math.max(old.partnerLv       ||0, myEntry.partnerLv       ||0),
                         score:           Math.max(old.score           ||0, myEntry.score           ||0),
+                        // 建築（取最大，防跨裝置回退）
+                        hut:             Math.max(old.hut             ||0, myEntry.hut             ||0),
+                        tower:           Math.max(old.tower           ||0, myEntry.tower           ||0),
+                        castles:         Math.max(old.castles         ||0, myEntry.castles         ||0),
+                        flyingCastle:    Math.max(old.flyingCastle    ||0, myEntry.flyingCastle    ||0),
+                        ferrisWheel:     Math.max(old.ferrisWheel     ||0, myEntry.ferrisWheel     ||0),
+                        // 材料（現值，直接覆蓋最新）
+                        wood:            myEntry.wood,
+                        stone:           myEntry.stone,
+                        gem:             myEntry.gem,
+                        star:            myEntry.star,
+                        manuscript:      myEntry.manuscript,
+                        fragment:        myEntry.fragment,
+                        coins:           myEntry.coins,
                     };
                     entries[existIdx] = merged;
                 } else {
@@ -4831,7 +5031,7 @@ function checkDailyReset() {
 
         
         // ==================== 老師密碼重設功能 ====================
-        const TEACHER_PASSWORD = 'teacher2025';
+        const TEACHER_PASSWORD = 'teacher2026';
 
         function teacherReset() {
             const pwd = prompt('🔑 請輸入老師密碼：');
@@ -4875,6 +5075,159 @@ function checkDailyReset() {
             }
         }
         // ==================== END 老師密碼重設功能 ====================
+        // ==================== 老師修復工具 ====================
+        async function teacherRepairTool() {
+            const pwd = prompt('🔑 請輸入老師密碼：');
+            if (pwd === null) return;
+            if (pwd !== TEACHER_PASSWORD) { alert('❌ 密碼錯誤！'); return; }
+
+            // Step 1: fetch current leaderboard
+            if (!JSONBIN_BIN_ID || JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') {
+                alert('⚠️ 請先填寫 JSONBin BIN ID！'); return;
+            }
+            const statusMsg = id => { const el = document.getElementById('teacher-repair-status'); if(el) el.textContent = id; };
+
+            // Build repair modal
+            let modal = document.getElementById('teacher-repair-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'teacher-repair-modal';
+                modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;padding:16px;';
+                modal.innerHTML = `
+                  <div style="background:#1a1a2e;border-radius:16px;padding:20px;width:100%;max-width:480px;color:#eee;font-size:0.92em;">
+                    <div style="font-size:1.1em;font-weight:900;color:#FFD700;margin-bottom:12px;">🛠️ 老師修復工具</div>
+                    <div id="teacher-repair-status" style="color:#aaa;font-size:0.82em;margin-bottom:10px;">載入排行榜中...</div>
+                    <div id="teacher-repair-list" style="max-height:300px;overflow-y:auto;margin-bottom:12px;"></div>
+                    <div id="teacher-repair-edit" style="display:none;background:#0d1117;border-radius:10px;padding:14px;margin-bottom:10px;">
+                      <div style="font-weight:bold;color:#64B5F6;margin-bottom:8px;">✏️ 修改學生分數</div>
+                      <div style="margin-bottom:6px;">學生：<b id="tr-player-name" style="color:#FFD700;"></b></div>
+                      <div style="margin-bottom:10px;font-size:0.82em;color:#aaa;">
+                        目前分數：<span id="tr-current-score" style="color:#FF6F00;"></span>
+                      </div>
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+                        <label style="font-size:0.82em;">答題總數<br><input id="tr-correct" type="number" min="0" style="width:100%;padding:6px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#eee;"></label>
+                        <label style="font-size:0.82em;">漢字道場答題<br><input id="tr-moshu" type="number" min="0" style="width:100%;padding:6px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#eee;"></label>
+                        <label style="font-size:0.82em;">閲讀理解答題<br><input id="tr-rc" type="number" min="0" style="width:100%;padding:6px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#eee;"></label>
+                        <label style="font-size:0.82em;">Boss勝利<br><input id="tr-boss" type="number" min="0" style="width:100%;padding:6px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#eee;"></label>
+                        <label style="font-size:0.82em;">考試完成<br><input id="tr-exam" type="number" min="0" style="width:100%;padding:6px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#eee;"></label>
+                        <label style="font-size:0.82em;">考試限定分<br><input id="tr-exambonus" type="number" min="0" style="width:100%;padding:6px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#eee;"></label>
+                        <label style="font-size:0.82em;">夥伴等級<br><input id="tr-partner" type="number" min="0" max="4" style="width:100%;padding:6px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#eee;"></label>
+                        <label style="font-size:0.82em;">最高連勝<br><input id="tr-streak" type="number" min="0" style="width:100%;padding:6px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#eee;"></label>
+                      </div>
+                      <div style="display:flex;gap:8px;">
+                        <button onclick="trSaveEntry()" style="flex:1;background:#1565C0;color:#fff;border:none;border-radius:8px;padding:10px;font-weight:bold;cursor:pointer;">💾 儲存修復</button>
+                        <button onclick="document.getElementById('teacher-repair-edit').style.display='none'" style="flex:1;background:#555;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">取消</button>
+                      </div>
+                    </div>
+                    <button onclick="document.getElementById('teacher-repair-modal').remove()" style="width:100%;background:#333;color:#eee;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:0.9em;">✕ 關閉</button>
+                  </div>`;
+                document.body.appendChild(modal);
+            }
+            modal.style.display = 'flex';
+
+            // Fetch leaderboard
+            try {
+                const res = await fetch(JSONBIN_URL + '/latest', { headers: { 'X-Master-Key': JSONBIN_API_KEY } });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                window._trEntries = (data.record && data.record.entries) ? [...data.record.entries] : [];
+                window._trEntries.sort((a,b) => (b.score||0) - (a.score||0));
+
+                const list = document.getElementById('teacher-repair-list');
+                const status = document.getElementById('teacher-repair-status');
+                status.textContent = `共 ${window._trEntries.length} 位學生`;
+                list.innerHTML = window._trEntries.map((e,i) => `
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin-bottom:4px;background:#0d1117;border-radius:8px;border:1px solid #333;">
+                    <div>
+                      <span style="color:#FFD700;font-weight:bold;">#${i+1} ${e.name||'?'}</span>
+                      <span style="color:#FF6F00;font-size:0.85em;margin-left:8px;">${e.score||0}分</span>
+                    </div>
+                    <button onclick="trEditEntry(${i})" style="background:#1565C0;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:0.82em;cursor:pointer;">✏️ 修改</button>
+                  </div>`).join('');
+            } catch(e) {
+                document.getElementById('teacher-repair-status').textContent = '❌ 載入失敗：' + e.message;
+            }
+        }
+
+        window.trEditEntry = function(idx) {
+            const e = window._trEntries[idx];
+            window._trEditIdx = idx;
+            document.getElementById('teacher-repair-edit').style.display = 'block';
+            document.getElementById('tr-player-name').textContent = e.name || '?';
+            document.getElementById('tr-current-score').textContent = e.score || 0;
+            document.getElementById('tr-correct').value   = e.correctAnswers || 0;
+            document.getElementById('tr-moshu').value     = e.moShuCorrect   || 0;
+            document.getElementById('tr-rc').value        = e.rcCorrect      || 0;
+            document.getElementById('tr-boss').value      = e.bossWins       || 0;
+            document.getElementById('tr-exam').value      = e.examCount      || 0;
+            document.getElementById('tr-exambonus').value = e.examBonusScore  || 0;
+            document.getElementById('tr-partner').value   = e.partnerLv      || 0;
+            document.getElementById('tr-streak').value    = e.maxStreak      || 0;
+        };
+
+        window.trSaveEntry = async function() {
+            const idx = window._trEditIdx;
+            const e   = window._trEntries[idx];
+            // Update fields
+            e.correctAnswers = parseInt(document.getElementById('tr-correct').value)   || 0;
+            e.moShuCorrect   = parseInt(document.getElementById('tr-moshu').value)     || 0;
+            e.rcCorrect      = parseInt(document.getElementById('tr-rc').value)        || 0;
+            e.bossWins       = parseInt(document.getElementById('tr-boss').value)      || 0;
+            e.examCount      = parseInt(document.getElementById('tr-exam').value)      || 0;
+            e.examBonusScore = parseInt(document.getElementById('tr-exambonus').value) || 0;
+            e.partnerLv      = parseInt(document.getElementById('tr-partner').value)   || 0;
+            e.maxStreak      = parseInt(document.getElementById('tr-streak').value)    || 0;
+
+            // Recalculate score using same formula as calcScore()
+            const bwSnap = e.bossWinsDetail || {};
+            const bossLvBonus = [0,20,20,20,40,40,40,80,80];
+            let bossLvScore = 0;
+            for (let i=1; i<=8; i++) bossLvScore += ((bwSnap['lv'+i]||bwSnap[i]||0)) * bossLvBonus[i];
+            e.score = Math.floor(
+                  (e.playerLv          ||1) * 50
+                + (e.correctAnswers    ||0) * 8
+                + (e.moShuCorrect      ||0) * 12
+                + (e.bossWins          ||0) * 50
+                + bossLvScore
+                + (e.epicWins          ||0) * 300
+                + (e.legendaryWins     ||0) * 150
+                + (e.maxStreak         ||0) * 10
+                + (e.partnerLv         ||0) * 25
+                + (e.examCount         ||0) * 500
+                + (e.dailyQuestsDone   ||0) * 20
+                + (e.examBonusScore    ||0)
+                + (e.rcCorrect         ||0) * 10
+            );
+
+            // Push to JSONBin
+            const status = document.getElementById('teacher-repair-status');
+            status.textContent = '⏳ 儲存中...';
+            try {
+                const putRes = await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+                    body: JSON.stringify({ entries: window._trEntries })
+                });
+                if (!putRes.ok) throw new Error('HTTP ' + putRes.status);
+                status.textContent = `✅ ${e.name} 分數已修復為 ${e.score} 分！`;
+                document.getElementById('teacher-repair-edit').style.display = 'none';
+                // Refresh list
+                window._trEntries.sort((a,b) => (b.score||0) - (a.score||0));
+                const list = document.getElementById('teacher-repair-list');
+                list.innerHTML = window._trEntries.map((en,i) => `
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin-bottom:4px;background:#0d1117;border-radius:8px;border:1px solid #333;">
+                    <div>
+                      <span style="color:#FFD700;font-weight:bold;">#${i+1} ${en.name||'?'}</span>
+                      <span style="color:#FF6F00;font-size:0.85em;margin-left:8px;">${en.score||0}分</span>
+                    </div>
+                    <button onclick="trEditEntry(${i})" style="background:#1565C0;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:0.82em;cursor:pointer;">✏️ 修改</button>
+                  </div>`).join('');
+            } catch(err) {
+                status.textContent = '❌ 儲存失敗：' + err.message;
+            }
+        };
+        // ==================== END 老師修復工具 ====================
+
 
         
         // ══════════════════════════════════════
