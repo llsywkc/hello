@@ -3072,7 +3072,31 @@ function checkDailyReset() {
                     
                     if(!inventory.partners) {
                         inventory.partners = {};
-                        if(inventory.partnerId) inventory.partners[inventory.partnerId] = { lv: inventory.partnerLv, branch: inventory.partnerBranch };
+                        if(inventory.partnerId) inventory.partners[inventory.partnerId] = { lv: inventory.partnerLv, branch: inventory.partnerBranch, feedLv: 0, feedExp: 0 };
+                    }
+                    // 🔧 FIX: migrate partnerFeedLv/Exp (new fields for existing saves)
+                    if (inventory.partnerFeedLv  === undefined) inventory.partnerFeedLv  = 0;
+                    if (inventory.partnerFeedExp === undefined) inventory.partnerFeedExp = 0;
+                    if (inventory.food_burger    === undefined) inventory.food_burger    = 0;
+                    if (inventory.food_pizza     === undefined) inventory.food_pizza     = 0;
+                    if (inventory.food_sushi     === undefined) inventory.food_sushi     = 0;
+                    if (inventory.food_cake      === undefined) inventory.food_cake      = 0;
+                    if (inventory.food_chicken   === undefined) inventory.food_chicken   = 0;
+                    // 🔧 FIX: ensure all existing partners have feedLv/feedExp fields
+                    // ⚠️ partnerLv (進化階段 0-4) ≠ partnerFeedLv (餵食等級 0-100) — keep independent!
+                    if (inventory.partners) {
+                        Object.keys(inventory.partners).forEach(pid => {
+                            if (inventory.partners[pid].feedLv  === undefined) inventory.partners[pid].feedLv  = 0;
+                            if (inventory.partners[pid].feedExp === undefined) inventory.partners[pid].feedExp = 0;
+                        });
+                    }
+                    // 🔧 FIX: sync current partner's feedLv from partners{} (prevent reset on reload)
+                    if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                        const _cur = inventory.partners[inventory.partnerId];
+                        if (inventory.partnerFeedLv === 0 && _cur.feedLv > 0) {
+                            inventory.partnerFeedLv  = _cur.feedLv;
+                            inventory.partnerFeedExp = _cur.feedExp || 0;
+                        }
                     }
 
                     if(inventory.playerName) {
@@ -4823,6 +4847,12 @@ function checkDailyReset() {
             if (!f) return;
             if (!inventory.partnerId) { showToast('❌ 請先選擇搭檔！'); return; }
             if ((inventory[f.key] || 0) <= 0) { showToast('❌ 沒有 ' + f.name + '！請先到市場購買。'); return; }
+            // 🔧 FIX: always sync feedLv from partners{} before feeding (prevent stale data)
+            if (inventory.partners && inventory.partners[inventory.partnerId]) {
+                const _p = inventory.partners[inventory.partnerId];
+                inventory.partnerFeedLv  = _p.feedLv  || 0;
+                inventory.partnerFeedExp = _p.feedExp || 0;
+            }
             if ((inventory.partnerFeedLv || 0) >= 100) { showToast('🏆 搭檔已達 MAX Lv 100！'); return; }
 
             inventory[f.key]--;
@@ -4858,6 +4888,14 @@ function checkDailyReset() {
         }
 
         function updateFeedUI() {
+            // 🔧 FIX: sync from partners{} to ensure UI shows correct data
+            if (inventory.partnerId && inventory.partners && inventory.partners[inventory.partnerId]) {
+                const _p = inventory.partners[inventory.partnerId];
+                if ((_p.feedLv || 0) > 0 && (inventory.partnerFeedLv || 0) === 0) {
+                    inventory.partnerFeedLv  = _p.feedLv  || 0;
+                    inventory.partnerFeedExp = _p.feedExp || 0;
+                }
+            }
             const lv     = inventory.partnerFeedLv  || 0;
             const exp    = inventory.partnerFeedExp || 0;
             const needed = feedExpNeeded(lv);
@@ -4886,7 +4924,7 @@ function checkDailyReset() {
             return Math.floor(
                   (e.playerLv        ||1) * 50
                 + (e.correctAnswers  ||0) * 15
-                + (e.moShuCorrect    ||0) * 20
+                + (e.moShuCorrect    ||0) * 12
                 + (e.rcCorrect       ||0) * 20
                 + (e.examCount       ||0) * 200
                 + (e.dailyQuestsDone ||0) * 20
@@ -4935,7 +4973,7 @@ function checkDailyReset() {
         const LB_TABS = [
             {
                 label: '📚 學習榜',
-                desc:  '答題×15 + 默寫×20 + 閲讀×20 + 考試×200',
+                desc:  '答題×15 + 默寫×12 + 閲讀×20 + 考試×200',
                 score: calcStudyScore,
                 row: (e, rank, score) => {
                     const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
@@ -6111,6 +6149,15 @@ const MS_WORD_SETS = {
   vocab: {
     label:'📚 詞語',
     items:[
+      {char:'破釜沉舟', meaning:'破釜沉舟 — 比喻下定決心，不留退路', hint:'項羽打仗的故事'},
+      {char:'率領',    meaning:'率領 — 帶領、領導',             hint:'帶領軍隊前進'},
+      {char:'驕傲',    meaning:'驕傲 — 自滿自大',               hint:'不能太驕傲'},
+      {char:'貪生怕死', meaning:'貪生怕死 — 貪戀生命，害怕死亡', hint:'形容懦弱的人'},
+      {char:'愁眉苦臉', meaning:'愁眉苦臉 — 形容愁苦的樣子',    hint:'不開心的表情'},
+      {char:'以一當十', meaning:'以一當十 — 一個人抵十個人',     hint:'形容英勇善戰'},
+      {char:'勇猛',    meaning:'勇猛 — 勇敢猛烈',               hint:'戰士的特質'},
+      {char:'身先士卒', meaning:'身先士卒 — 領袖帶頭衝鋒',       hint:'親身帶領士兵'},
+      {char:'奮不顧身', meaning:'奮不顧身 — 勇往直前不顧危險',   hint:'英雄的精神'},
       {char:'秀麗',    meaning:'秀麗 — 美麗動人',         hint:'形容景色或人的外貌'},
       {char:'啼笑皆非', meaning:'啼笑皆非 — 哭笑不得',    hint:'形容無奈尷尬的處境'},
       {char:'口吻',    meaning:'口吻 — 說話的語氣',        hint:'講話時的語調和措辭'},
@@ -6138,6 +6185,15 @@ const MS_WORD_SETS = {
   allwords: {
     label:'🗒️ 全部詞語',
     items:[
+      {char:'破釜沉舟', meaning:'破釜沉舟 — 比喻下定決心，不留退路', hint:'項羽打仗的故事'},
+      {char:'率領',    meaning:'率領 — 帶領、領導',                   hint:'帶領軍隊前進'},
+      {char:'驕傲',    meaning:'驕傲 — 自滿自大',                     hint:'不能太驕傲'},
+      {char:'貪生怕死', meaning:'貪生怕死 — 貪戀生命，害怕死亡',     hint:'形容懦弱的人'},
+      {char:'愁眉苦臉', meaning:'愁眉苦臉 — 形容愁苦的樣子',         hint:'不開心的表情'},
+      {char:'以一當十', meaning:'以一當十 — 一個人抵十個人',           hint:'形容英勇善戰'},
+      {char:'勇猛',    meaning:'勇猛 — 勇敢猛烈',                     hint:'戰士的特質'},
+      {char:'身先士卒', meaning:'身先士卒 — 領袖帶頭衝鋒',             hint:'親身帶領士兵'},
+      {char:'奮不顧身', meaning:'奮不顧身 — 勇往直前不顧危險',         hint:'英雄的精神'},
       {char:'秀麗',        meaning:'秀麗 — 美麗動人',               hint:'形容景色或人的外貌'},
       {char:'啼笑皆非',    meaning:'啼笑皆非 — 哭笑不得',           hint:'形容無奈尷尬的處境'},
       {char:'口吻',        meaning:'口吻 — 說話的語氣',             hint:'講話時的語調和措辭'},
