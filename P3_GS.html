@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：3C常識大冒險</title>
+    <title>Roblox：3C常識</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -585,7 +585,7 @@
         </button>
         <button class="map-action-btn mab-red" onclick="startGame('exam')" style="background: linear-gradient(135deg, #b71c1c, #e53935); border: 2px solid #ff8f00;">
             <span class="btn-icon">📝</span>
-            <span class="btn-text"><span class="btn-title">T3考試温習</span><span class="btn-sub">全科混合 · 共100題</span></span>
+            <span class="btn-text"><span class="btn-title">T3考試温習</span><span class="btn-sub">全科混合 · 共50題</span></span>
         </button>
     </div>
 
@@ -1546,10 +1546,10 @@ const dbT3News = [];
             else if (cat === 'freedom') currentMiningTasks = shuffle(dbFreedom);
             else if (cat === 'culture') currentMiningTasks = shuffle(dbCulture);
             else if (cat === 'exam') {
-                // T3考試温習：所有新題目 + 隨機原有題目，共100題
+                // T3考試温習：所有新題目 + 隨機原有題目，共50題
                 const examNew = [...dbT3Extra];
                 const examOld = shuffle([...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom, ...dbCulture, ...dbExam]);
-                const needed = Math.max(0, 100 - examNew.length);
+                const needed = Math.max(0, 50 - examNew.length);
                 currentMiningTasks = shuffle([...examNew, ...examOld.slice(0, needed)]);
             }
             currentMiningIdx = 0; document.getElementById('game-mining').classList.remove('hidden');
