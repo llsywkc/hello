@@ -477,6 +477,15 @@
             border-color: #c8a84b; box-shadow: 0 0 12px rgba(200,168,75,0.4);
         }
         .menu-tab[onclick*="partner"]:hover:not(.active) { background: rgba(200,168,75,0.12); }
+        /* 抽獎 — gold/amber */
+        .menu-tab[onclick*="shop"] {
+            border-color: rgba(255,183,0,0.35); color: #ffd166;
+        }
+        .menu-tab[onclick*="shop"].active {
+            background: rgba(255,183,0,0.2); color: #ffe599;
+            border-color: #ffd166; box-shadow: 0 0 12px rgba(255,183,0,0.4);
+        }
+        .menu-tab[onclick*="shop"]:hover:not(.active) { background: rgba(255,183,0,0.12); }
         /* 系統 — steel blue */
         .menu-tab[onclick*="system"] {
             border-color: rgba(100,160,220,0.35); color: #7eaac8;
@@ -510,14 +519,15 @@
         .menu-card:active { transform: translateY(0);    box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
         .menu-card-lg { grid-column: 1 / -1; padding: 16px 8px; }
         .mc-icon  { font-size: 2em; margin-bottom: 4px; }
-        .mc-sub   { font-size: 0.72em; color: #8faabf; margin-top: 2px; }
+        .mc-sub   { font-size: 0.78em; color: #a8d4e8; margin-top: 2px; font-weight: 600; }
         /* mc-sub accent colours per tab — Genshin palette */
-        #tab-training .mc-sub { color: #7ec8a0; }
-        #tab-boss     .mc-sub { color: #e07070; }
-        #tab-partner  .mc-sub { color: #c8a84b; }
-        #tab-system   .mc-sub { color: #7eaac8; }
+        #tab-training .mc-sub { color: #a8e0c0; }
+        #tab-boss     .mc-sub { color: #f0a0a0; }
+        #tab-partner  .mc-sub { color: #e8d08a; }
+        #tab-shop     .mc-sub { color: #ffe599; }
+        #tab-system   .mc-sub { color: #a8cce0; }
         /* mc-title stays dark for readability */
-        .mc-title { font-size: 0.9em; font-weight: 900; color: #F0E6C8; line-height: 1.2; }
+        .mc-title { font-size: 0.95em; font-weight: 900; color: #FFFFFF; line-height: 1.3; text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.6); letter-spacing: 0.3px; }
 
         .menu-section-label {
             width: 100%; text-align: left;
@@ -605,7 +615,7 @@
         /* Card text clarity */
         .mc-icon  { font-size: 2.2em !important; margin-bottom: 6px !important; }
         .mc-title { font-size: 0.95em !important; font-weight: 900 !important; color: #F0E6C8 !important; line-height: 1.3 !important; }
-        .mc-sub   { font-size: 0.74em !important; color: #8faabf !important; margin-top: 3px !important; font-weight: 600 !important; }
+        .mc-sub   { font-size: 0.78em !important; color: #a8d4e8 !important; margin-top: 3px !important; font-weight: 700 !important; }
 
         /* Section label: clearer divider */
         .menu-section-label {
@@ -1053,6 +1063,7 @@
                 <button class="menu-tab active" onclick="switchTab('training')">🏕️ 特訓</button>
                 <button class="menu-tab" onclick="switchTab('boss')">⚔️ Boss</button>
                 <button class="menu-tab" onclick="switchTab('partner')">🐾 夥伴</button>
+                <button class="menu-tab" onclick="switchTab('shop')">🎰 抽獎</button>
                 <button class="menu-tab" onclick="switchTab('system')">🎒 系統</button>
             </div>
 
@@ -1179,20 +1190,26 @@
             <!-- ══ TAB: PARTNER ══ -->
             <div class="menu-tab-content" id="tab-partner" style="padding:4px 0;">
                 <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
-                    <div class="menu-card menu-card-lg" onclick="openPartnerZone()" style="border-color:#2E7D32;grid-column:1/-1;animation:pulse 2s infinite;">
+                    <div class="menu-card menu-card-lg" onclick="openPartnerZone()" style="border-color:rgba(200,168,75,0.6);grid-column:1/-1;animation:pulse 2s infinite;">
                         <div class="mc-icon">🐾</div>
                         <div class="mc-title">搭檔精靈</div>
                         <div class="mc-sub">全圖鑑 · 進化 · 感情值</div>
                     </div>
-                    <div class="menu-card" onclick="openGacha()" style="border-color:#FFB300;">
+                </div>
+            </div>
+
+            <!-- ══ TAB: SHOP ══ -->
+            <div class="menu-tab-content" id="tab-shop" style="padding:4px 0;">
+                <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
+                    <div class="menu-card menu-card-lg" onclick="openGacha()" style="border-color:rgba(200,168,75,0.6);grid-column:1/-1;animation:pulse 2s infinite;">
                         <div class="mc-icon">🎰</div>
                         <div class="mc-title">幸運轉盤</div>
-                        <div class="mc-sub">耗 1 🌟</div>
+                        <div class="mc-sub">消耗 1 🌟 · 隨機獎勵</div>
                     </div>
-                    <div class="menu-card" onclick="openMarket()" style="border-color:#FF9800;animation:pulse 2s infinite;">
+                    <div class="menu-card menu-card-lg" onclick="openMarket()" style="border-color:rgba(255,152,0,0.6);grid-column:1/-1;animation:pulse 2s infinite;">
                         <div class="mc-icon">🛒</div>
-                        <div class="mc-title">秘密市場</div>
-                        <div class="mc-sub">& 銀行</div>
+                        <div class="mc-title">秘密市場 & 銀行</div>
+                        <div class="mc-sub">購買道具 · 存取金幣</div>
                     </div>
                 </div>
             </div>
