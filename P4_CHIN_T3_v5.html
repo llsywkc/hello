@@ -3,26 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>數碼冒險：4A中文練習 </title>
+    <title>4A 中文冒險</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         /* 引入點陣像素字體，用於進化文字 */
         @import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
         
         body {
-            font-family: 'Nunito', "Microsoft JhengHei", sans-serif;
-            background: #4A148C; 
-            background-image: linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%, rgba(255,255,255,0.05)), linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%, rgba(255,255,255,0.05));
-            background-size: 40px 40px; background-position: 0 0, 20px 20px;
+            font-family: 'Noto Serif TC', 'Nunito', 'PMingLiU', '新細明體', serif;
+            background-color: #0d2137;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(100,160,220,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(200,168,75,0.06) 0%, transparent 50%),
+                linear-gradient(180deg, #1a3a5c 0%, #0d2137 45%, #060f1e 100%);
+            background-attachment: fixed;
             margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #333;
             transition: background 1s ease;
         }
         
-        h1 { color: #FFF; text-transform: uppercase; letter-spacing: 2px; text-shadow: 4px 4px 0 #311B92, -2px -2px 0 #311B92, 2px -2px 0 #311B92, -2px 2px 0 #311B92; font-size: 2.8em; text-align: center; margin: 10px 0; }
-        .player-info { background: #E1BEE7; color: #333; font-size: 1.2em; font-weight: bold; padding: 5px 20px; border-radius: 20px; border: 4px solid #AB47BC; margin-bottom: 10px; box-shadow: 0 4px 0 #8E24AA; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; }
-        .inventory-bar { background-color: #212121; color: white; border: 4px solid #000; border-radius: 8px; padding: 10px 20px; font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; margin-bottom: 5px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; }
+        h1 { color: #F0E6C8; text-transform: none; letter-spacing: 3px; text-shadow: 0 0 20px rgba(200,168,75,0.6), 0 2px 4px rgba(0,0,0,0.8); font-size: 2.8em; text-align: center; margin: 10px 0; }
+        .player-info { background: rgba(10,20,40,0.85); color: #F0E6C8; font-size: 1.1em; font-weight: bold; padding: 6px 16px; border-radius: 0; border: none; border-bottom: 1px solid rgba(200,168,75,0.3); margin-bottom: 0; box-shadow: 0 2px 20px rgba(0,0,0,0.5); backdrop-filter: blur(8px); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; }
+        .inventory-bar { background: rgba(6,15,30,0.9); color: #C8A84B; border: none; border-bottom: 1px solid rgba(200,168,75,0.2); border-radius: 0; padding: 6px 16px; backdrop-filter: blur(8px); font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; margin-bottom: 5px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; }
         
-        #medal-bar { background-color: #311B92; border-color: #1A237E; box-shadow: 0 6px 0 #000051; font-size: 1.4em; gap: 8px; }
+        #medal-bar { background-color: #1B5E20; border-color: #33691E; box-shadow: 0 6px 0 #0A1A0C; font-size: 1.4em; gap: 8px; }
         .medal-icon { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); animation: pulse 2s infinite; cursor: help; }
 
         .gem-text { color: #E040FB; text-shadow: 1px 1px 2px #000; }
@@ -33,10 +37,10 @@
         .stat-def { color: #448AFF; text-shadow: 1px 1px 2px #000;}
         .save-indicator { font-size: 0.8em; color: #CE93D8; margin-bottom: 15px; text-shadow: 1px 1px 0 #000; }
 
-        .container { background-color: #F3E5F5; border: 8px solid #4A148C; border-radius: 12px; padding: 20px; width: 95%; max-width: 800px; box-shadow: 0 12px 0 #311B92; text-align: center; }
+        .container { background: rgba(10,20,40,0.78); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(200,168,75,0.5); border-radius: 16px; padding: 20px; width: 95%; max-width: 800px; box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(200,168,75,0.2); text-align: center; }
 
-        input[type="text"] { font-size: 1.5em; padding: 10px; border: 4px solid #333; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; margin-bottom: 15px; font-weight: bold; }
-        button { font-family: inherit; font-size: 1.2em; font-weight: bold; padding: 12px 20px; margin: 10px; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: all 0.1s; border: 4px solid rgba(0,0,0,0.2); }
+        input[type="text"] { font-size: 1.5em; padding: 10px; border: 1px solid rgba(200,168,75,0.6); background: rgba(255,255,255,0.08); color: #F0E6C8; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; margin-bottom: 15px; font-weight: bold; }
+        button { font-family: inherit; font-size: 1.2em; font-weight: bold; padding: 12px 20px; margin: 10px; border-radius: 12px; cursor: pointer; text-transform: none; transition: all 0.15s; border: 4px solid rgba(0,0,0,0.2); }
         button:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0px 0 transparent !important; }
         button:disabled { cursor: not-allowed; opacity: 0.6; filter: grayscale(100%); }
         
@@ -45,10 +49,10 @@
         .btn-orange { background-color: #FF9800; color: white; box-shadow: 0 6px 0 #E65100; }
         .btn-grey { background-color: #9E9E9E; color: white; box-shadow: 0 6px 0 #616161; }
         .btn-red { background-color: #f44336; color: white; box-shadow: 0 6px 0 #b71c1c; }
-        .btn-purple { background-color: #9C27B0; color: white; box-shadow: 0 6px 0 #6A1B9A; border: 4px solid #EA80FC; animation: pulse 2s infinite; }
+        .btn-purple { background: linear-gradient(180deg,#C8A84B,#A07840); color: #1a1000; font-weight:900; box-shadow: 0 6px 0 #6b4f1e, 0 0 15px rgba(200,168,75,0.4); border: 2px solid #E8D08A; animation: pulse 2s infinite; }
         .btn-gold { background-color: #FFB300; color: white; box-shadow: 0 6px 0 #FF8F00; border: 4px solid #FFE082; animation: pulse 2s infinite; }
 
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(234, 128, 252, 0.7), 0 6px 0 #6A1B9A; } 70% { box-shadow: 0 0 0 15px rgba(234, 128, 252, 0), 0 6px 0 #6A1B9A; } 100% { box-shadow: 0 0 0 0 rgba(234, 128, 252, 0), 0 6px 0 #6A1B9A; } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(200,168,75,0.6), 0 6px 0 #6b4f1e; } 70% { box-shadow: 0 0 0 15px rgba(200,168,75,0), 0 6px 0 #6b4f1e; } 100% { box-shadow: 0 0 0 0 rgba(200,168,75,0), 0 6px 0 #6b4f1e; } } 100% { box-shadow: 0 0 0 0 rgba(234, 128, 252, 0), 0 6px 0 #1B5E20; } }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
         .hidden { display: none !important; }
@@ -166,16 +170,16 @@
         /* Modals 通用 */
         #event-modal, #market-modal, #gacha-modal, #album-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; display:flex; justify-content:center; align-items:center; }
         .event-box { background:#FFF; padding:30px; border-radius:15px; text-align:center; border:8px solid #4A148C; max-width: 90%; width: 500px; max-height: 90vh; overflow-y: auto; }
-        .event-box h2 { color:#4A148C; font-size: 2em; margin-top: 0; }
+        .event-box h2 { color:#C8A84B; font-size: 2em; margin-top: 0; }
         .market-modal-content { background: #E8F5E9; border: 6px solid #4CAF50; }
         .gacha-modal-content { background: #FFF3E0; border: 6px solid #FF9800; }
         .album-modal-content { background: #E3F2FD; border: 6px solid #1976D2; max-width: 800px !important; width: 95%;}
 
     
         /* ========== 每日任務系統 ========== */
-        .quest-panel { background: linear-gradient(135deg, #1A237E, #283593); border: 3px solid #5C6BC0; border-radius: 12px; padding: 12px 15px; width: 100%; box-sizing: border-box; margin-bottom: 8px; }
+        .quest-panel { background: rgba(10,20,40,0.65); border: 1px solid rgba(200,168,75,0.25); border-radius: 12px; padding: 12px 15px; width: 100%; box-sizing: border-box; margin-bottom: 8px; backdrop-filter: blur(6px); }
         .quest-panel h3 { color: #E8EAF6; margin: 0 0 8px 0; font-size: 1em; text-align: center; }
-        .quest-item { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.08); border-radius: 8px; padding: 6px 10px; margin-bottom: 5px; font-size: 0.85em; color: #E8EAF6; flex-wrap: wrap; }
+        .quest-item { display: flex; align-items: center; gap: 8px; background: rgba(200,168,75,0.07); border: 1px solid rgba(200,168,75,0.15); border-radius: 8px; padding: 6px 10px; margin-bottom: 5px; font-size: 0.85em; color: #C8D8E8; flex-wrap: wrap; }
         .quest-item.done { background: rgba(76,175,80,0.25); color: #A5D6A7; }
         .quest-item.claimed { background: rgba(100,100,100,0.2); color: #aaa; text-decoration: line-through; }
         .quest-progress { font-size: 0.75em; color: #90CAF9; margin-left: auto; font-weight: bold; }
@@ -433,52 +437,55 @@
         /* ===== Menu Tabs ===== */
         .menu-tabs {
             display: flex; gap: 6px; width: 100%;
-            background: transparent;
-            padding: 0; margin-bottom: 14px; box-sizing: border-box;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(200,168,75,0.15);
+            border-radius: 55px; padding: 4px;
+            margin-bottom: 14px; box-sizing: border-box;
         }
-        /* ── Pill Tabs: each tab has its own colour ── */
+        /* ── Pill Tabs: Genshin palette ── */
         .menu-tab {
-            flex: 1; padding: 9px 4px; border: 2px solid transparent;
+            flex: 1; padding: 9px 4px; border: 1px solid transparent;
             border-radius: 50px;
             font-family: inherit; font-size: 0.82em; font-weight: bold;
             cursor: pointer; transition: all 0.22s; white-space: nowrap;
+            background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5);
         }
-        /* 特訓 — green */
+        /* 特訓 — teal */
         .menu-tab[onclick*="training"] {
-            background: rgba(46,125,50,0.18); color: #81C784; border-color: rgba(46,125,50,0.4);
+            border-color: rgba(100,200,150,0.3); color: #7ec8a0;
         }
         .menu-tab[onclick*="training"].active {
-            background: #2E7D32; color: #fff; border-color: #2E7D32;
-            box-shadow: 0 2px 10px rgba(46,125,50,0.5);
+            background: rgba(100,200,150,0.2); color: #a8e6c8;
+            border-color: #7ec8a0; box-shadow: 0 0 12px rgba(100,200,150,0.35);
         }
-        .menu-tab[onclick*="training"]:hover:not(.active) { background: rgba(46,125,50,0.32); }
+        .menu-tab[onclick*="training"]:hover:not(.active) { background: rgba(100,200,150,0.12); }
         /* Boss — red */
         .menu-tab[onclick*="boss"] {
-            background: rgba(183,28,28,0.18); color: #EF9A9A; border-color: rgba(183,28,28,0.4);
+            border-color: rgba(220,80,80,0.35); color: #e07070;
         }
         .menu-tab[onclick*="boss"].active {
-            background: #B71C1C; color: #fff; border-color: #B71C1C;
-            box-shadow: 0 2px 10px rgba(183,28,28,0.5);
+            background: rgba(220,80,80,0.2); color: #f0a0a0;
+            border-color: #e07070; box-shadow: 0 0 12px rgba(220,80,80,0.35);
         }
-        .menu-tab[onclick*="boss"]:hover:not(.active) { background: rgba(183,28,28,0.32); }
-        /* 夥伴 — purple */
+        .menu-tab[onclick*="boss"]:hover:not(.active) { background: rgba(220,80,80,0.12); }
+        /* 夥伴 — amber gold */
         .menu-tab[onclick*="partner"] {
-            background: rgba(106,27,154,0.18); color: #CE93D8; border-color: rgba(106,27,154,0.4);
+            border-color: rgba(200,168,75,0.35); color: #c8a84b;
         }
         .menu-tab[onclick*="partner"].active {
-            background: #6A1B9A; color: #fff; border-color: #6A1B9A;
-            box-shadow: 0 2px 10px rgba(106,27,154,0.5);
+            background: rgba(200,168,75,0.2); color: #e8d08a;
+            border-color: #c8a84b; box-shadow: 0 0 12px rgba(200,168,75,0.4);
         }
-        .menu-tab[onclick*="partner"]:hover:not(.active) { background: rgba(106,27,154,0.32); }
-        /* 系統 — blue-grey */
+        .menu-tab[onclick*="partner"]:hover:not(.active) { background: rgba(200,168,75,0.12); }
+        /* 系統 — steel blue */
         .menu-tab[onclick*="system"] {
-            background: rgba(55,71,79,0.28); color: #90A4AE; border-color: rgba(55,71,79,0.5);
+            border-color: rgba(100,160,220,0.35); color: #7eaac8;
         }
         .menu-tab[onclick*="system"].active {
-            background: #37474F; color: #fff; border-color: #37474F;
-            box-shadow: 0 2px 10px rgba(55,71,79,0.5);
+            background: rgba(100,160,220,0.2); color: #a8cce0;
+            border-color: #7eaac8; box-shadow: 0 0 12px rgba(100,160,220,0.35);
         }
-        .menu-tab[onclick*="system"]:hover:not(.active) { background: rgba(55,71,79,0.42); }
+        .menu-tab[onclick*="system"]:hover:not(.active) { background: rgba(100,160,220,0.12); }
 
         .menu-tab-content { display: none; width: 100%; animation: tabFadeIn 0.25s ease; }
         .menu-tab-content.active { display: block; }
@@ -491,8 +498,9 @@
             gap: 12px; width: 100%; margin-bottom: 12px;
         }
         .menu-card {
-            background: rgba(255,255,255,0.92);
-            border: 3px solid #9C27B0; border-radius: 14px;
+            background: rgba(15,28,52,0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(200,168,75,0.3); border-radius: 14px;
             padding: 14px 8px; text-align: center;
             cursor: pointer; transition: transform 0.18s, box-shadow 0.18s;
             box-shadow: 0 4px 0 rgba(0,0,0,0.15);
@@ -502,20 +510,20 @@
         .menu-card:active { transform: translateY(0);    box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
         .menu-card-lg { grid-column: 1 / -1; padding: 16px 8px; }
         .mc-icon  { font-size: 2em; margin-bottom: 4px; }
-        .mc-sub   { font-size: 0.72em; color: #757575; margin-top: 2px; }
-        /* mc-sub accent colours per tab */
-        #tab-training .mc-sub { color: #2E7D32; }
-        #tab-boss     .mc-sub { color: #B71C1C; }
-        #tab-partner  .mc-sub { color: #6A1B9A; }
-        #tab-system   .mc-sub { color: #37474F; }
+        .mc-sub   { font-size: 0.72em; color: #8faabf; margin-top: 2px; }
+        /* mc-sub accent colours per tab — Genshin palette */
+        #tab-training .mc-sub { color: #7ec8a0; }
+        #tab-boss     .mc-sub { color: #e07070; }
+        #tab-partner  .mc-sub { color: #c8a84b; }
+        #tab-system   .mc-sub { color: #7eaac8; }
         /* mc-title stays dark for readability */
-        .mc-title { font-size: 0.9em; font-weight: 900; color: #212121; line-height: 1.2; }
+        .mc-title { font-size: 0.9em; font-weight: 900; color: #F0E6C8; line-height: 1.2; }
 
         .menu-section-label {
             width: 100%; text-align: left;
-            font-size: 0.82em; font-weight: bold; color: #CE93D8;
+            font-size: 0.82em; font-weight: bold; color: #C8A84B;
             margin: 6px 0 6px; padding-left: 4px;
-            border-left: 3px solid #CE93D8;
+            border-left: 3px solid rgba(200,168,75,0.6);
         }
 
         
@@ -535,7 +543,7 @@
 
         /* Purple top banner inside container */
         .container-banner {
-            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            background: linear-gradient(135deg, #0d2137 0%, #1a3a5c 50%, #0d2137 100%); border-bottom: 1px solid rgba(200,168,75,0.4);
             padding: 14px 20px 12px;
             margin-bottom: 16px;
             text-align: center;
@@ -563,7 +571,7 @@
 
         /* Menu Tabs: stronger active state */
         .menu-tabs {
-            background: rgba(74,20,140,0.18) !important;
+            background: transparent !important;
             border-radius: 12px !important;
             padding: 4px !important;
             gap: 3px !important;
@@ -575,18 +583,18 @@
             color: rgba(255,255,255,0.82) !important;
         }
         .menu-tab.active {
-            background: #6A1B9A !important;
-            color: #fff !important;
-            box-shadow: 0 3px 10px rgba(106,27,154,0.45) !important;
+            background: rgba(200,168,75,0.2) !important;
+            color: #e8d08a !important;
+            box-shadow: 0 0 12px rgba(200,168,75,0.35) !important;
         }
 
         /* Menu Cards: white, deeper shadow, thicker border */
         .menu-card {
-            background: #FFFFFF !important;
-            border-width: 3px !important;
+            background: rgba(15,28,52,0.75) !important;
+            border-width: 1px !important;
             border-radius: 16px !important;
             padding: 16px 8px !important;
-            box-shadow: 0 5px 14px rgba(0,0,0,0.12) !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4) !important;
             transition: transform 0.18s, box-shadow 0.18s !important;
         }
         .menu-card:hover {
@@ -596,14 +604,14 @@
 
         /* Card text clarity */
         .mc-icon  { font-size: 2.2em !important; margin-bottom: 6px !important; }
-        .mc-title { font-size: 0.95em !important; font-weight: 900 !important; color: #212121 !important; line-height: 1.3 !important; }
-        .mc-sub   { font-size: 0.74em !important; color: #555555 !important; margin-top: 3px !important; font-weight: 600 !important; }
+        .mc-title { font-size: 0.95em !important; font-weight: 900 !important; color: #F0E6C8 !important; line-height: 1.3 !important; }
+        .mc-sub   { font-size: 0.74em !important; color: #8faabf !important; margin-top: 3px !important; font-weight: 600 !important; }
 
         /* Section label: clearer divider */
         .menu-section-label {
             font-size: 0.85em !important;
-            color: #7B1FA2 !important;
-            border-left: 4px solid #AB47BC !important;
+            color: #C8A84B !important;
+            border-left: 4px solid rgba(200,168,75,0.6) !important;
             padding: 3px 0 3px 10px !important;
             margin: 10px 0 8px !important;
             background: rgba(171,71,188,0.07);
@@ -614,7 +622,7 @@
         .quest-panel {
             padding: 14px 16px !important;
             border-radius: 14px !important;
-            border: 2px solid #5C6BC0 !important;
+            border: 1px solid rgba(200,168,75,0.25) !important;
         }
         .quest-item {
             padding: 8px 12px !important;
@@ -627,8 +635,8 @@
         .container > h1 { display: none; }
 
         /* Typography hierarchy */
-        h2 { font-size: 1.5em !important; color: #4A148C !important; margin: 8px 0 4px !important; }
-        h3 { font-size: 1.1em !important; color: #E65100 !important; margin: 4px 0 !important; }
+        h2 { font-size: 1.5em !important; color: #C8A84B !important; margin: 8px 0 4px !important; }
+        h3 { font-size: 1.1em !important; color: #a8cce0 !important; margin: 4px 0 !important; }
 
         /* Section dividers */
         .menu-tab-content hr {
@@ -650,9 +658,9 @@
 
         /* Status bar */
         .player-info {
-            background: linear-gradient(135deg, #4A148C, #6A1B9A) !important;
+            background: linear-gradient(135deg, #0d2137, #1a3a5c) !important;
             border: none !important;
-            border-bottom: 3px solid #AB47BC !important;
+            border-bottom: 1px solid rgba(200,168,75,0.3) !important;
             border-radius: 0 !important;
             padding: 10px 16px !important;
             margin-bottom: 0 !important;
@@ -691,8 +699,9 @@
         .container-banner {
             padding: 16px 20px 14px !important;
             border-radius: 14px 14px 0 0;
+            background: linear-gradient(135deg, #0d2137 0%, #1a3a5c 50%, #0d2137 100%) !important;
         }
-        .container-banner h1 { font-size: 1.4em !important; }
+        .container-banner h1 { font-size: 1.4em !important; color: #F0E6C8 !important; text-shadow: 0 0 20px rgba(200,168,75,0.5) !important; }
 
         /* Start screen inner padding */
         #start-screen { padding: 14px 14px 0 !important; }
@@ -710,7 +719,7 @@
             border-radius: 12px !important;
             margin-bottom: 12px !important;
         }
-        .quest-panel h3 { font-size: 1em !important; color: #E3F2FD !important; margin:0 0 8px !important; }
+        .quest-panel h3 { font-size: 1em !important; color: #C8A84B !important; margin:0 0 8px !important; }
 
         /* Tab bar polish */
         .menu-tabs { margin-bottom: 12px !important; }
@@ -730,17 +739,178 @@
 
         /* Trailing note */
         #tab-training > p {
-            font-size:0.78em !important; color:#9C27B0 !important;
-            background:rgba(156,39,176,0.08);
+            font-size:0.78em !important; color:#7ec8a0 !important;
+            background:rgba(126,200,160,0.08);
             border-radius:8px; padding:6px 10px; margin:4px 0 0 !important;
         }
 
-        </style>
-</head>
-<body>
+        
+        /* ══════════════════════════════════
+           COVER SCREEN: RPG Plan C
+           ══════════════════════════════════ */
+        #login-screen { position: relative; }
 
-    <div class="container-banner">
-        <h1>🟪 森林大冒險：4A中文練習 🟪</h1>
+        /* Mountain silhouette */
+        .cover-mountain {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 220px;
+            z-index: 1; pointer-events: none;
+        }
+
+        /* Stars */
+        .cover-stars { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .star-dot {
+            position: absolute; width: 3px; height: 3px;
+            background: #F0E6C8; border-radius: 50%;
+            animation: starTwinkle 3s ease-in-out infinite;
+        }
+        @keyframes starTwinkle {
+            0%,100% { opacity: 0.2; transform: scale(1); }
+            50%      { opacity: 1;   transform: scale(1.4); }
+        }
+
+        /* Fireflies */
+        .firefly-wrap {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none; overflow: hidden;
+        }
+        .ff {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: rgba(200,168,75,0.9);
+            border-radius: 50%;
+            box-shadow: 0 0 6px 2px rgba(200,168,75,0.5);
+            animation: ffFloat 8s ease-in-out infinite;
+        }
+        .ff:nth-child(1)  { left:10%; top:30%; animation-duration:7s;  animation-delay:0s; }
+        .ff:nth-child(2)  { left:25%; top:55%; animation-duration:9s;  animation-delay:1s; }
+        .ff:nth-child(3)  { left:40%; top:40%; animation-duration:6s;  animation-delay:2s; }
+        .ff:nth-child(4)  { left:60%; top:65%; animation-duration:8s;  animation-delay:0.5s; }
+        .ff:nth-child(5)  { left:75%; top:35%; animation-duration:10s; animation-delay:1.5s; }
+        .ff:nth-child(6)  { left:85%; top:50%; animation-duration:7s;  animation-delay:3s; }
+        .ff:nth-child(7)  { left:15%; top:70%; animation-duration:9s;  animation-delay:2.5s; }
+        .ff:nth-child(8)  { left:50%; top:25%; animation-duration:6s;  animation-delay:1s; }
+        .ff:nth-child(9)  { left:35%; top:75%; animation-duration:11s; animation-delay:0s; }
+        .ff:nth-child(10) { left:65%; top:20%; animation-duration:8s;  animation-delay:4s; }
+        .ff:nth-child(11) { left:90%; top:75%; animation-duration:7s;  animation-delay:1.5s; }
+        .ff:nth-child(12) { left:5%;  top:45%; animation-duration:9s;  animation-delay:3.5s; }
+        @keyframes ffFloat {
+            0%   { transform: translate(0,0);          opacity: 0; }
+            15%  { opacity: 0.9; }
+            50%  { transform: translate(30px,-40px);   opacity: 0.6; }
+            85%  { opacity: 0.8; }
+            100% { transform: translate(-20px,-80px);  opacity: 0; }
+        }
+
+        /* Cover blink animation */
+        @keyframes coverBlink {
+            0%,100% { opacity: 0.3; }
+            50%      { opacity: 0.9; }
+        }
+
+        /* Hide container-banner on login */
+        body.on-login #container-banner-wrap { display: none; }
+        body.on-login .container {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+
+        /* ══ PERSISTENT STAR FIELD (all screens) ══ */
+        .star-field {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .star-field .s {
+            position: absolute; border-radius: 50%;
+            background: #F0E6C8; animation: starTwinkle 3s ease-in-out infinite;
+        }
+        /* Container sits above star field */
+        .container { position: relative; z-index: 1; }
+
+        /* ══ FONT CLARITY ══ */
+        .mc-title  { font-family: 'Noto Serif TC', serif !important; letter-spacing: 0.5px; }
+        .mc-sub    { font-family: 'Noto Serif TC', serif !important; }
+        .quest-item { color: #C8D8E8 !important; font-size: 0.9em !important; }
+        .quest-item.done { color: rgba(200,168,75,0.7) !important; }
+        h3         { color: #a8cce0 !important; font-family: 'Noto Serif TC', serif !important; }
+        .menu-section-label { font-family: 'Noto Serif TC', serif !important; letter-spacing: 1px; }
+        .status-name { font-family: 'Noto Serif TC', serif !important; color: #F0E6C8 !important; }
+
+        /* ══ FIXED BACKGROUND MOUNTAINS ══ */
+        .bg-mountains {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%; height: 45vh;
+            pointer-events: none; z-index: 0;
+        }
+</style>
+</head>
+<body class="on-login">
+    <!-- Persistent star field -->
+    <div class="star-field" aria-hidden="true">
+      <span class="s" style="width:2px;height:2px;top:3%;left:8%;animation-delay:0s;opacity:0.6;"></span>
+      <span class="s" style="width:3px;height:3px;top:7%;left:22%;animation-delay:0.4s;"></span>
+      <span class="s" style="width:2px;height:2px;top:5%;left:38%;animation-delay:0.8s;opacity:0.5;"></span>
+      <span class="s" style="width:3px;height:3px;top:2%;left:55%;animation-delay:1.2s;"></span>
+      <span class="s" style="width:2px;height:2px;top:9%;left:70%;animation-delay:0.3s;opacity:0.7;"></span>
+      <span class="s" style="width:2px;height:2px;top:4%;left:82%;animation-delay:1.6s;opacity:0.5;"></span>
+      <span class="s" style="width:3px;height:3px;top:12%;left:92%;animation-delay:0.7s;"></span>
+      <span class="s" style="width:2px;height:2px;top:15%;left:5%;animation-delay:2s;opacity:0.4;"></span>
+      <span class="s" style="width:2px;height:2px;top:18%;left:48%;animation-delay:1s;opacity:0.6;"></span>
+      <span class="s" style="width:3px;height:3px;top:1%;left:65%;animation-delay:1.8s;opacity:0.8;"></span>
+      <span class="s" style="width:2px;height:2px;top:11%;left:33%;animation-delay:0.5s;opacity:0.5;"></span>
+      <span class="s" style="width:2px;height:2px;top:20%;left:78%;animation-delay:2.5s;opacity:0.4;"></span>
+    </div>
+    <!-- Fixed background mountains -->
+    <svg class="bg-mountains" viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="sky-fade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0d2137" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#060f1e" stop-opacity="1"/>
+        </linearGradient>
+        <!-- Mist gradient for far mountains -->
+        <linearGradient id="mist1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a3a5c" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#0a1e35" stop-opacity="0.7"/>
+        </linearGradient>
+        <linearGradient id="mist2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0f2a42" stop-opacity="0.55"/>
+          <stop offset="100%" stop-color="#080f1c" stop-opacity="0.85"/>
+        </linearGradient>
+        <linearGradient id="mist3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0a1e30" stop-opacity="0.75"/>
+          <stop offset="100%" stop-color="#060f1e" stop-opacity="1"/>
+        </linearGradient>
+        <linearGradient id="mist4" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#060f1a" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#030810" stop-opacity="1"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Layer 1: Farthest, most mist, smallest peaks -->
+      <polygon points="0,400 0,280 80,180 160,260 280,130 400,220 520,100 640,200 760,120 880,190 1000,80 1100,170 1200,110 1200,400" fill="url(#mist1)"/>
+
+      <!-- Layer 2: Mid-far mountains -->
+      <polygon points="0,400 0,310 100,200 220,290 360,160 480,250 600,130 700,220 820,140 940,230 1060,100 1150,180 1200,140 1200,400" fill="url(#mist2)"/>
+
+      <!-- Layer 3: Mid mountains - taller, more defined -->
+      <polygon points="0,400 0,350 60,270 150,320 260,210 380,300 460,180 560,280 650,190 760,290 860,170 980,260 1080,195 1150,270 1200,220 1200,400" fill="url(#mist3)"/>
+
+      <!-- Layer 4: Nearest, darkest, sharpest peaks -->
+      <polygon points="0,400 0,370 40,330 100,360 180,290 260,350 340,280 420,340 500,260 580,330 660,270 740,350 820,285 900,350 980,300 1060,360 1140,310 1200,340 1200,400" fill="url(#mist4)"/>
+
+      <!-- Golden moon glow on peak of tallest mountain (layer2) -->
+      <circle cx="1000" cy="80" r="18" fill="rgba(200,168,75,0.08)" />
+      <circle cx="1000" cy="80" r="10" fill="rgba(200,168,75,0.12)" />
+      <circle cx="1000" cy="80" r="4"  fill="rgba(200,168,75,0.25)" />
+
+      <!-- Fog layer at base -->
+      <rect x="0" y="340" width="1200" height="60" fill="url(#sky-fade)" opacity="0.6"/>
+    </svg>
+
+
+    <div class="container-banner" id="container-banner-wrap">
+        <h1>4A 中文冒險</h1>
     </div>
 
     <div id="player-tag" class="player-info hidden">
@@ -784,12 +954,68 @@
 
     <div id="main-container" class="container">
         
-        <div id="login-screen" class="screen" style="padding:20px 16px;">
-            <h2>🏕️ 創建你的角色</h2>
-            <p>請輸入冒險者名稱：</p>
-            <input type="text" id="input-name" maxlength="10" placeholder="輸入名字...">
-            <button class="btn-purple" onclick="setPlayerName()">🚀 開始遊戲</button>
-            <p style="margin-top:24px;"><button onclick="teacherReset()" style="background:none;border:none;color:#bbb;font-size:0.75em;cursor:pointer;text-decoration:underline;">🔑 老師重設</button></p>
+        <div id="login-screen" class="screen" style="padding:0;background:none;border:none;box-shadow:none;width:100%;min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+
+          <!-- Firefly particles -->
+          <div class="firefly-wrap" aria-hidden="true">
+            <span class="ff"></span><span class="ff"></span><span class="ff"></span>
+            <span class="ff"></span><span class="ff"></span><span class="ff"></span>
+            <span class="ff"></span><span class="ff"></span><span class="ff"></span>
+            <span class="ff"></span><span class="ff"></span><span class="ff"></span>
+          </div>
+
+          <!-- SVG mountain silhouette -->
+          <svg class="cover-mountain" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="mgrd" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1a3a5c" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#060f1e" stop-opacity="1"/>
+              </linearGradient>
+            </defs>
+            <!-- far mountains -->
+            <polygon points="0,200 120,80 240,140 360,50 480,120 600,60 720,110 800,70 800,200" fill="rgba(15,35,60,0.7)"/>
+            <!-- near mountains -->
+            <polygon points="0,200 80,130 180,160 300,90 420,150 540,85 660,130 800,95 800,200" fill="rgba(8,20,38,0.85)"/>
+            <!-- foreground ridge -->
+            <polygon points="0,200 0,175 100,165 200,180 350,155 500,175 650,158 800,170 800,200" fill="#060f1e"/>
+          </svg>
+
+          <!-- Stars -->
+          <div class="cover-stars" aria-hidden="true">
+            <span class="star-dot" style="top:8%;left:15%;animation-delay:0s;"></span>
+            <span class="star-dot" style="top:12%;left:70%;animation-delay:0.5s;"></span>
+            <span class="star-dot" style="top:5%;left:40%;animation-delay:1s;width:3px;height:3px;"></span>
+            <span class="star-dot" style="top:20%;left:85%;animation-delay:1.5s;"></span>
+            <span class="star-dot" style="top:15%;left:55%;animation-delay:0.8s;width:2px;height:2px;"></span>
+            <span class="star-dot" style="top:7%;left:28%;animation-delay:1.2s;width:2px;height:2px;"></span>
+            <span class="star-dot" style="top:25%;left:10%;animation-delay:0.3s;width:2px;height:2px;"></span>
+            <span class="star-dot" style="top:10%;left:92%;animation-delay:0.7s;"></span>
+          </div>
+
+          <!-- Title block -->
+          <div style="text-align:center;margin-bottom:32px;z-index:2;position:relative;">
+            <div style="font-size:0.85em;letter-spacing:6px;color:rgba(200,168,75,0.7);text-transform:uppercase;margin-bottom:6px;font-family:'Noto Serif TC',serif;">— 語文冒險 —</div>
+            <h1 style="font-size:3.2em;margin:0;line-height:1.1;color:#F0E6C8;letter-spacing:8px;text-shadow:0 0 30px rgba(200,168,75,0.5),0 0 60px rgba(200,168,75,0.2),0 4px 8px rgba(0,0,0,0.8);font-family:'Noto Serif TC',serif;">4A 中文冒險</h1>
+            <div style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:10px;">
+              <span style="display:inline-block;width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(200,168,75,0.7));"></span>
+              <span style="color:rgba(200,168,75,0.6);font-size:0.8em;letter-spacing:3px;">ADVENTURE</span>
+              <span style="display:inline-block;width:60px;height:1px;background:linear-gradient(270deg,transparent,rgba(200,168,75,0.7));"></span>
+            </div>
+          </div>
+
+          <!-- Input panel -->
+          <div style="z-index:2;position:relative;width:100%;max-width:320px;display:flex;flex-direction:column;align-items:center;gap:12px;">
+            <div style="width:100%;position:relative;">
+              <div style="font-size:0.72em;color:rgba(200,168,75,0.8);letter-spacing:2px;margin-bottom:6px;text-align:left;">✦ 冒險者名稱</div>
+              <input type="text" id="input-name" maxlength="10" placeholder="輸入名字..." style="width:100%;box-sizing:border-box;background:rgba(10,20,40,0.7);border:1px solid rgba(200,168,75,0.5);border-radius:8px;padding:12px 16px;color:#F0E6C8;font-size:1.1em;font-family:'Noto Serif TC',serif;outline:none;backdrop-filter:blur(8px);">
+            </div>
+            <button class="btn-purple" onclick="setPlayerName()" style="width:100%;font-size:1.05em;letter-spacing:3px;padding:14px;border-radius:8px;margin:0;">▶ 開 始 冒 險</button>
+            <div style="margin-top:8px;animation:coverBlink 2s ease-in-out infinite;color:rgba(200,168,75,0.45);font-size:0.72em;letter-spacing:4px;">— 按下開始，踏上旅程 —</div>
+          </div>
+
+          <p style="margin-top:28px;z-index:2;position:relative;">
+            <button onclick="teacherReset()" style="background:none;border:none;color:rgba(255,255,255,0.25);font-size:0.68em;cursor:pointer;letter-spacing:1px;">🔑 老師重設</button>
+          </p>
         </div>
 
         <div id="start-screen" class="screen hidden">
@@ -806,7 +1032,7 @@
             </div>
 
             <!-- ══ 期間限定通知（模擬考試）截至6月9日 ══ -->
-            <div id="home-exam-bonus-notice" style="background:linear-gradient(135deg,#1565C0,#0D47A1);border-radius:10px;padding:10px 14px;margin-bottom:10px;text-align:center;color:#fff;font-weight:bold;font-size:0.88em;cursor:pointer;" onclick="openExamMode()">
+            <div id="home-exam-bonus-notice" style="background:linear-gradient(135deg,rgba(200,168,75,0.2),rgba(160,120,64,0.25));border:1px solid rgba(200,168,75,0.5);border-radius:10px;padding:10px 14px;margin-bottom:10px;text-align:center;color:#E8D08A;font-weight:bold;font-size:0.88em;cursor:pointer;" onclick="openExamMode()">
               📋 期間限定！<b>模擬考試</b> 完成+500分 · 每題答對+50分 · 正確率獎勵最高+1000分　截止：6月9日 🔥
             </div>
             <script>
@@ -833,7 +1059,7 @@
             <!-- ══ TAB: TRAINING ══ -->
             <div class="menu-tab-content active" id="tab-training" style="padding:4px 0;">
                 <div class="menu-card-grid">
-                    <div class="menu-card" onclick="startGame('reorder')" style="border-color:#9C27B0;">
+                    <div class="menu-card" onclick="startGame('reorder')" style="border-color:#2E7D32;">
                         <div class="mc-icon">🌉</div>
                         <div class="mc-title">鋪木板過河</div>
                         <div class="mc-sub">重組句子</div>
@@ -893,17 +1119,16 @@
                         <div class="mc-sub">温習</div>
                     </div>
                 </div>
-                <p style="font-size:0.82em;color:#8E24AA;margin:6px 0 0;">(連續答題有機率遇到「傳説怪」！)</p>
-            </div>
+                <p style="font-size:0.82em;color:#7ec8a0;margin:6px 0 0;">(連續答題有機率遇到「傳説怪」！)</p>
 
                 <div class="menu-section-label">✍️ 默書道場</div>
                 <div class="menu-card-grid">
-                    <div class="menu-card" onclick="openMoShu()" style="border-color:#FF7043;">
+                    <div class="menu-card" onclick="openMoShu()" style="border-color:rgba(126,200,160,0.6);">
                         <div class="mc-icon">🔊</div>
                         <div class="mc-title">漢字道場</div>
                         <div class="mc-sub">聆聽拼字／默寫／手寫</div>
                     </div>
-                    <div class="menu-card" onclick="openRC()" style="border-color:#1565C0;">
+                    <div class="menu-card" onclick="openRC()" style="border-color:rgba(126,170,200,0.6);">
                         <div class="mc-icon">📖</div>
                         <div class="mc-title">閲讀道場</div>
                         <div class="mc-sub">文章理解 · 隨機出題</div>
@@ -912,14 +1137,14 @@
 
                 <div class="menu-section-label">📝 考試練習模式</div>
                 <div class="menu-card-grid">
-                    <div class="menu-card" onclick="openExamMode()" style="border-color:#E53935;">
+                    <div class="menu-card" onclick="openExamMode()" style="border-color:rgba(200,168,75,0.6);">
                         <div class="mc-icon">📋</div>
                         <div class="mc-title">模擬考試</div>
                         <div class="mc-sub">12關卡 61題｜⭐獎勵</div>
                     </div>
                 </div>
+            </div>
 
-            
             <!-- ══ TAB: BOSS ══ -->
             <div class="menu-tab-content" id="tab-boss" style="padding:4px 0;">
                 <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
@@ -954,7 +1179,7 @@
             <!-- ══ TAB: PARTNER ══ -->
             <div class="menu-tab-content" id="tab-partner" style="padding:4px 0;">
                 <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
-                    <div class="menu-card menu-card-lg" onclick="openPartnerZone()" style="border-color:#9C27B0;grid-column:1/-1;animation:pulse 2s infinite;">
+                    <div class="menu-card menu-card-lg" onclick="openPartnerZone()" style="border-color:#2E7D32;grid-column:1/-1;animation:pulse 2s infinite;">
                         <div class="mc-icon">🐾</div>
                         <div class="mc-title">搭檔精靈</div>
                         <div class="mc-sub">全圖鑑 · 進化 · 感情值</div>
@@ -975,7 +1200,7 @@
             <!-- ══ TAB: SYSTEM ══ -->
             <div class="menu-tab-content" id="tab-system" style="padding:4px 0;">
                 <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
-                    <div class="menu-card" onclick="openInstructions()" style="border-color:#6A1B9A;">
+                    <div class="menu-card" onclick="openInstructions()" style="border-color:#2E7D32;">
                         <div class="mc-icon">📖</div>
                         <div class="mc-title">遊戲指南</div>
                         <div class="mc-sub">神獸與機制</div>
@@ -987,7 +1212,7 @@
                     </div>
                 </div>
                 <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;">
-                    <input id="cheat-input" type="password" placeholder="🔑" style="width:52px;padding:4px 6px;border-radius:6px;border:2px solid #9C27B0;font-size:0.8em;">
+                    <input id="cheat-input" type="password" placeholder="🔑" style="width:52px;padding:4px 6px;border-radius:6px;border:2px solid #2E7D32;font-size:0.8em;">
                     <button class="btn-purple" onclick="activateCheat()" style="font-size:0.75em;padding:4px 8px;margin:0;">🔑</button>
                 </div>
             </div>
@@ -1041,8 +1266,8 @@
 
  class="screen hidden">
             <h2>📖 冒險者指南</h2>
-            <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:4px solid #6A1B9A; max-height: 50vh; overflow-y: auto;">
-                <h3 style="color:#4A148C; margin-top:0;">1. 經濟系統與藥水</h3>
+            <div style="text-align:left; background:#FFF; padding:20px; border-radius:10px; width:90%; border:1px solid rgba(200,168,75,0.4); max-height: 50vh; overflow-y: auto;">
+                <h3 style="color:#C8A84B; margin-top:0;">1. 經濟系統與藥水</h3>
                 <p>💰<b>金幣</b>：打怪會掉落，也可在市場用木/石兌換。能在市場購買強力的【雙倍掉落藥水】！<br>📜<b>手稿</b>：連對題數越高，手稿給越多（5連對x2，10連對每題給15個）。打贏Boss更會掉落幾百個！</p>
                 
                 <h3 style="color:#B71C1C;">2. 戰鬥系統與狂暴機制</h3>
@@ -1069,7 +1294,7 @@
 
         <div id="partner-zone" class="screen hidden">
             <div id="partner-select-screen" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-                <h2 style="color: #9C27B0;">🥚 冒險拍檔圖鑑與切換</h2>
+                <h2 style="color: #C8A84B;">🥚 冒險拍檔圖鑑與切換</h2>
                 <p style="font-weight:bold; color:#D50000; margin-top:0;">你可以隨時切換搭檔！新領養的拍檔將從幼年期開始培育。</p>
                 <div id="partner-grid-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 700px;">
                     </div>
@@ -1077,7 +1302,7 @@
             </div>
 
             <div id="partner-status-screen" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-                <h2 style="color: #9C27B0; margin-bottom: 5px;">🐾 我的當前搭檔</h2>
+                <h2 style="color: #C8A84B; margin-bottom: 5px;">🐾 我的當前搭檔</h2>
                 <!-- Player EXP card -->
                 <div style="background:#1a1a2e;border-radius:12px;padding:10px 16px;width:90%;max-width:400px;margin-bottom:12px;box-sizing:border-box;">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
@@ -1089,11 +1314,11 @@
                     </div>
                     <div style="font-size:0.72em;color:#888;margin-top:4px;text-align:right;">每次答題 +1 EXP｜模擬考試 +3 EXP｜Boss勝利 +10~50 EXP</div>
                 </div>
-                <p id="partner-path-name" style="margin-top:0; font-weight:bold; color:#6A1B9A;">路線</p>
+                <p id="partner-path-name" style="margin-top:0; font-weight:bold; color:#C8A84B;">路線</p>
                 
                 <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 15px; border: 4px dashed #9C27B0; text-align: center; width: 90%; max-width: 500px;">
                     <img id="partner-pic" class="status-pic" src="">
-                    <h3 id="partner-name" style="color: #6A1B9A; font-size: 2em; margin: 10px 0; text-shadow: 1px 1px 0 #CE93D8, 0 0 8px rgba(106,27,154,0.3);">Name</h3>
+                    <h3 id="partner-name" style="color: #C8A84B; font-size: 2em; margin: 10px 0; text-shadow: 1px 1px 0 #CE93D8, 0 0 8px rgba(106,27,154,0.3);">Name</h3>
                     <p style="font-size: 1.3em; font-weight: bold; color: #2E7D32; margin-bottom:5px;">✨ 目前搭檔加成: <br>+<span id="partner-buff" style="font-size:1.8em; color:#D50000;">0</span> 攻防</p>
                     <p style="font-size: 0.8em; color: #666; margin-top:0;">(只有當前選擇的搭檔會提供戰力加成)</p>
                     <!-- ✅ 感情值 -->
@@ -1165,7 +1390,7 @@
                                 <button class="btn-orange" id="btn-evolve-a" onclick="evolvePartner('A')" style="font-size:0.9em; padding:5px; width:100%;">選此路線</button>
                             </div>
                             <div style="background: #E1BEE7; padding: 10px; border-radius: 10px; border: 2px solid #8E24AA; flex: 1;">
-                                <p style="margin:0 0 5px 0; font-weight:bold; color:#4A148C;" id="branch-b-title">💎 闇黑進化</p>
+                                <p style="margin:0 0 5px 0; font-weight:bold; color:#C8A84B;" id="branch-b-title">💎 闇黑進化</p>
                                 <p style="margin:2px 0; font-size:0.9em;">📜<span id="evo-b-m">0</span> 🔮<span id="evo-b-f">0</span></p>
                                 <p style="margin:2px 0; font-size:0.9em; color:#D50000; font-weight:bold;">💎寶石: <span id="evo-b-g">0</span></p>
                                 <button class="btn-purple" id="btn-evolve-b" onclick="evolvePartner('B')" style="font-size:0.9em; padding:5px; width:100%;">選此路線</button>
@@ -1252,7 +1477,7 @@
                 <button class="btn-blue" onclick="buildItem('castle')">🏰 合成大城堡 (-2木屋, -2石塔)</button>
             </div>
             <div style="background: rgba(255,255,255,0.5); padding: 10px; border-radius: 8px; border: 2px dashed #333; margin-bottom: 15px;">
-                <h3 style="margin-top:0; color: #6A1B9A;">✨ 奇蹟建築 (消耗稀有資源)</h3>
+                <h3 style="margin-top:0; color: #C8A84B;">✨ 奇蹟建築 (消耗稀有資源)</h3>
                 <button class="btn-purple" onclick="buildItem('flyingCastle')">🛸 飛天城堡 <br><small>(-5寶石, -1大城堡)</small></button>
                 <button class="btn-gold" onclick="buildItem('ferrisWheel')">🎡 摩天輪 <br><small>(-5星星, -5木材, -5石頭)</small></button>
             </div>
@@ -3044,6 +3269,7 @@ function checkDailyReset() {
             initAudio(); playSound('click');
             const name = document.getElementById('input-name').value.trim();
             if (!name) return alert('請輸入名字！');
+            document.body.classList.remove('on-login');
 
             const isChanging = !!inventory.playerName; // already had a name = changing
 
@@ -3085,6 +3311,7 @@ function checkDailyReset() {
             document.getElementById('top-nav').classList.add('hidden'); document.getElementById('exp-bar-wrap') && document.getElementById('exp-bar-wrap').classList.add('hidden');
             document.getElementById('medal-bar').classList.add('hidden');
             document.getElementById('login-screen').classList.remove('hidden');
+            document.body.classList.add('on-login');
         };
 
         window.claimGift = function() {
@@ -6208,7 +6435,7 @@ async function fetchLeaderboard() {
         <div id="exam-result-area" class="hidden" style="text-align:center;">
             <div style="font-size:2.5em;margin:10px 0;">🎉</div>
             <h3 id="exam-result-title" style="color:#E53935;"></h3>
-            <p id="exam-result-score" style="font-size:1.2em;font-weight:bold;color:#4A148C;"></p>
+            <p id="exam-result-score" style="font-size:1.2em;font-weight:bold;color:#C8A84B;"></p>
             <p id="exam-result-msg" style="font-size:0.88em;color:#555;margin:6px 0 16px;"></p>
             <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
                 <button class="btn-green" onclick="examRetry()" style="font-size:0.88em;">🔄 重做此關卡</button>
