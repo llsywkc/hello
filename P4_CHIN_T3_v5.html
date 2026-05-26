@@ -829,7 +829,7 @@
         /* ══ PERSISTENT STAR FIELD (all screens) ══ */
         .star-field {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0; overflow: hidden;
+            pointer-events: none; z-index: -1; overflow: hidden;
         }
         .star-field .s {
             position: absolute; border-radius: 50%;
@@ -851,7 +851,7 @@
         .bg-mountains {
             position: fixed;
             bottom: 0; left: 0; width: 100%; height: 45vh;
-            pointer-events: none; z-index: 0;
+            pointer-events: none; z-index: -1;
         }
 </style>
 </head>
