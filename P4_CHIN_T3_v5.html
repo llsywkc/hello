@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>數碼冒險：4A森林大作戰 </title>
+    <title>數碼冒險：4A中文温習 </title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         /* 引入點陣像素字體，用於進化文字 */
@@ -4791,11 +4791,10 @@ function checkDailyReset() {
 
 
 
-        // ==================== 排行榜系統 (JSONBin) ====================
-        // 🔧 請填入你的 JSONBin 資料:
-        const JSONBIN_BIN_ID  = '6a0469df250b1311c3441343';
-        const JSONBIN_API_KEY = '$2a$10$uSUt1OFfPNcSyxVWIBFlWu/nEN9gkwPNOskiPY33Dly6NOj2Ynipu';
-        const JSONBIN_URL     = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+        // ==================== 排行榜系統 (Firebase Realtime Database) ====================
+        // 🔧 Firebase Database URL:
+        const FIREBASE_DB_URL = 'https://chinese4a-default-rtdb.asia-southeast1.firebasedatabase.app';
+        const FIREBASE_LB_URL = FIREBASE_DB_URL + '/leaderboard.json';
 
         function calcScore() {
             const bw = inventory.bossWins || {};
@@ -5174,25 +5173,19 @@ function checkDailyReset() {
 async function fetchLeaderboard() {
             const status = document.getElementById('lb-status');
             const list   = document.getElementById('lb-list');
-            if (!JSONBIN_BIN_ID || JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') {
-                list.innerHTML = '<div style="color:#F44336;padding:20px;">⚠️ 請先填寫 JSONBin BIN ID 和 API Key！</div>';
-                return;
-            }
             status.textContent = '⏳ 載入中...';
             list.innerHTML = '';
             try {
-                const res = await fetch(JSONBIN_URL + '/latest', {
-                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
-                });
+                const res = await fetch(FIREBASE_LB_URL);
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
-                const entries = (data.record && data.record.entries) ? data.record.entries : [];
+                const entries = data && data.entries ? data.entries : [];
                 window._lbEntries = entries;
                 renderLbTab(entries);
                 status.textContent = `✅ 共 ${entries.length} 位冒險者 · 最後更新：${new Date().toLocaleTimeString('zh-HK')}`;
             } catch(e) {
                 status.textContent = '❌ 載入失敗：' + e.message;
-                list.innerHTML = '<div style="color:#F44336;padding:10px;font-size:0.85em;">請檢查 BIN ID 和 API Key 是否正確。</div>';
+                list.innerHTML = '<div style="color:#F44336;padding:10px;font-size:0.85em;">請檢查 Firebase 連線。</div>';
             }
         }
 
@@ -5232,19 +5225,13 @@ async function fetchLeaderboard() {
         async function submitScore() {
             const status = document.getElementById('lb-status');
             if (!inventory.playerName) { alert('請先設定冒險者名字！'); return; }
-            if (!JSONBIN_BIN_ID || JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') {
-                alert('⚠️ 請先填寫 JSONBin BIN ID 和 API Key！');
-                return;
-            }
             status.textContent = '⏳ 上傳中...';
             try {
-                // 1. Fetch current data
-                const getRes = await fetch(JSONBIN_URL + '/latest', {
-                    headers: { 'X-Master-Key': JSONBIN_API_KEY }
-                });
+                // 1. Fetch current data from Firebase
+                const getRes = await fetch(FIREBASE_LB_URL);
                 if (!getRes.ok) throw new Error('讀取失敗 HTTP ' + getRes.status);
                 const data = await getRes.json();
-                let entries = (data.record && data.record.entries) ? [...data.record.entries] : [];
+                let entries = (data && data.entries) ? [...data.entries] : [];
 
                 // 2. Update or insert this player
                 const bwSnap = inventory.bossWins || {};
@@ -5348,13 +5335,10 @@ async function fetchLeaderboard() {
                     entries.push(myEntry);
                 }
 
-                // 3. Put updated data back
-                const putRes = await fetch(JSONBIN_URL, {
+                // 3. Put updated data back to Firebase
+                const putRes = await fetch(FIREBASE_LB_URL, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': JSONBIN_API_KEY
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ entries })
                 });
                 if (!putRes.ok) throw new Error('上傳失敗 HTTP ' + putRes.status);
@@ -5425,9 +5409,7 @@ async function fetchLeaderboard() {
             if (pwd !== TEACHER_PASSWORD) { alert('❌ 密碼錯誤！'); return; }
 
             // Step 1: fetch current leaderboard
-            if (!JSONBIN_BIN_ID || JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') {
-                alert('⚠️ 請先填寫 JSONBin BIN ID！'); return;
-            }
+
             const statusMsg = id => { const el = document.getElementById('teacher-repair-status'); if(el) el.textContent = id; };
 
             // Build repair modal
@@ -5470,10 +5452,10 @@ async function fetchLeaderboard() {
 
             // Fetch leaderboard
             try {
-                const res = await fetch(JSONBIN_URL + '/latest', { headers: { 'X-Master-Key': JSONBIN_API_KEY } });
+                const res = await fetch(FIREBASE_LB_URL);
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
-                window._trEntries = (data.record && data.record.entries) ? [...data.record.entries] : [];
+                window._trEntries = (data && data.entries) ? [...data.entries] : [];
                 window._trEntries.sort((a,b) => (b.score||0) - (a.score||0));
 
                 const list = document.getElementById('teacher-repair-list');
@@ -5546,9 +5528,9 @@ async function fetchLeaderboard() {
             const status = document.getElementById('teacher-repair-status');
             status.textContent = '⏳ 儲存中...';
             try {
-                const putRes = await fetch(JSONBIN_URL, {
+                const putRes = await fetch(FIREBASE_LB_URL, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ entries: window._trEntries })
                 });
                 if (!putRes.ok) throw new Error('HTTP ' + putRes.status);
