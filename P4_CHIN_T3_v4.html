@@ -436,9 +436,9 @@
         
         /* ===== Menu Tabs ===== */
         .menu-tabs {
-            display: flex; gap: 6px; width: 100%;
-            background: rgba(0,0,0,0.25);
-            border: 1px solid rgba(200,168,75,0.15);
+            display: flex; gap: 5px; width: 100%;
+            background: rgba(0,0,0,0.45);
+            border: 1px solid rgba(200,168,75,0.2);
             border-radius: 55px; padding: 4px;
             margin-bottom: 14px; box-sizing: border-box;
         }
@@ -446,55 +446,82 @@
         .menu-tab {
             flex: 1; padding: 9px 4px; border: 1px solid transparent;
             border-radius: 50px;
-            font-family: inherit; font-size: 0.82em; font-weight: bold;
+            font-family: inherit; font-size: 0.82em; font-weight: 800;
             cursor: pointer; transition: all 0.22s; white-space: nowrap;
-            background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.78);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
         /* 特訓 — teal */
         .menu-tab[onclick*="training"] {
-            border-color: rgba(100,200,150,0.3); color: #7ec8a0;
+            border-color: rgba(100,200,150,0.4);
         }
         .menu-tab[onclick*="training"].active {
-            background: rgba(100,200,150,0.2); color: #a8e6c8;
-            border-color: #7ec8a0; box-shadow: 0 0 12px rgba(100,200,150,0.35);
+            background: rgba(60,170,110,0.5);
+            color: #FFFFFF;
+            border-color: rgba(100,220,160,0.9);
+            box-shadow: 0 0 14px rgba(60,170,110,0.55), inset 0 1px 0 rgba(255,255,255,0.15);
+            text-shadow: 0 0 8px rgba(100,255,180,0.6), 0 1px 3px rgba(0,0,0,0.8);
         }
-        .menu-tab[onclick*="training"]:hover:not(.active) { background: rgba(100,200,150,0.12); }
+        .menu-tab[onclick*="training"]:hover:not(.active) {
+            background: rgba(60,170,110,0.2); color: #FFFFFF;
+        }
         /* Boss — red */
         .menu-tab[onclick*="boss"] {
-            border-color: rgba(220,80,80,0.35); color: #e07070;
+            border-color: rgba(220,80,80,0.4);
         }
         .menu-tab[onclick*="boss"].active {
-            background: rgba(220,80,80,0.2); color: #f0a0a0;
-            border-color: #e07070; box-shadow: 0 0 12px rgba(220,80,80,0.35);
+            background: rgba(200,50,50,0.55);
+            color: #FFFFFF;
+            border-color: rgba(255,100,100,0.9);
+            box-shadow: 0 0 14px rgba(200,50,50,0.55), inset 0 1px 0 rgba(255,255,255,0.15);
+            text-shadow: 0 0 8px rgba(255,120,120,0.6), 0 1px 3px rgba(0,0,0,0.8);
         }
-        .menu-tab[onclick*="boss"]:hover:not(.active) { background: rgba(220,80,80,0.12); }
+        .menu-tab[onclick*="boss"]:hover:not(.active) {
+            background: rgba(200,50,50,0.22); color: #FFFFFF;
+        }
         /* 夥伴 — amber gold */
         .menu-tab[onclick*="partner"] {
-            border-color: rgba(200,168,75,0.35); color: #c8a84b;
+            border-color: rgba(200,168,75,0.4);
         }
         .menu-tab[onclick*="partner"].active {
-            background: rgba(200,168,75,0.2); color: #e8d08a;
-            border-color: #c8a84b; box-shadow: 0 0 12px rgba(200,168,75,0.4);
+            background: rgba(180,130,20,0.5);
+            color: #FFFFFF;
+            border-color: rgba(230,190,80,0.9);
+            box-shadow: 0 0 14px rgba(180,130,20,0.55), inset 0 1px 0 rgba(255,255,255,0.15);
+            text-shadow: 0 0 8px rgba(255,210,80,0.6), 0 1px 3px rgba(0,0,0,0.8);
         }
-        .menu-tab[onclick*="partner"]:hover:not(.active) { background: rgba(200,168,75,0.12); }
-        /* 抽獎 — gold/amber */
+        .menu-tab[onclick*="partner"]:hover:not(.active) {
+            background: rgba(180,130,20,0.22); color: #FFFFFF;
+        }
+        /* 抽獎 — purple/gold */
         .menu-tab[onclick*="shop"] {
-            border-color: rgba(255,183,0,0.35); color: #ffd166;
+            border-color: rgba(180,120,220,0.4);
         }
         .menu-tab[onclick*="shop"].active {
-            background: rgba(255,183,0,0.2); color: #ffe599;
-            border-color: #ffd166; box-shadow: 0 0 12px rgba(255,183,0,0.4);
+            background: rgba(130,60,200,0.5);
+            color: #FFFFFF;
+            border-color: rgba(200,140,255,0.9);
+            box-shadow: 0 0 14px rgba(130,60,200,0.55), inset 0 1px 0 rgba(255,255,255,0.15);
+            text-shadow: 0 0 8px rgba(200,140,255,0.6), 0 1px 3px rgba(0,0,0,0.8);
         }
-        .menu-tab[onclick*="shop"]:hover:not(.active) { background: rgba(255,183,0,0.12); }
+        .menu-tab[onclick*="shop"]:hover:not(.active) {
+            background: rgba(130,60,200,0.22); color: #FFFFFF;
+        }
         /* 系統 — steel blue */
         .menu-tab[onclick*="system"] {
-            border-color: rgba(100,160,220,0.35); color: #7eaac8;
+            border-color: rgba(100,160,220,0.4);
         }
         .menu-tab[onclick*="system"].active {
-            background: rgba(100,160,220,0.2); color: #a8cce0;
-            border-color: #7eaac8; box-shadow: 0 0 12px rgba(100,160,220,0.35);
+            background: rgba(40,110,200,0.5);
+            color: #FFFFFF;
+            border-color: rgba(100,180,255,0.9);
+            box-shadow: 0 0 14px rgba(40,110,200,0.55), inset 0 1px 0 rgba(255,255,255,0.15);
+            text-shadow: 0 0 8px rgba(100,180,255,0.6), 0 1px 3px rgba(0,0,0,0.8);
         }
-        .menu-tab[onclick*="system"]:hover:not(.active) { background: rgba(100,160,220,0.12); }
+        .menu-tab[onclick*="system"]:hover:not(.active) {
+            background: rgba(40,110,200,0.22); color: #FFFFFF;
+        }
 
         .menu-tab-content { display: none; width: 100%; animation: tabFadeIn 0.25s ease; }
         .menu-tab-content.active { display: block; }
