@@ -1298,7 +1298,13 @@
                 document.getElementById('player-tag').classList.remove('hidden');
                 document.getElementById('top-nav').classList.remove('hidden');
                 if(inventory.medals.length > 0) document.getElementById('medal-bar').classList.remove('hidden');
-                updateUI(); 
+                // 恢復考試進度條
+                if (examActive) {
+                    document.getElementById('exam-progress-wrap').classList.remove('hidden');
+                    updateExamProgress();
+                }
+                updateUI();
+                loadMining();
             } else goHome(); 
         }
 
@@ -1573,14 +1579,25 @@
             else if (cat === 'freedom') currentMiningTasks = shuffle(dbFreedom);
             else if (cat === 'culture') currentMiningTasks = shuffle(dbCulture);
             else if (cat === 'exam') {
-                // T3考試温習：所有新題目 + 隨機原有題目，共50題
-                const examNew = [...dbT3Extra];
-                const examOld = shuffle([...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom, ...dbCulture, ...dbExam]);
-                const needed = Math.max(0, 50 - examNew.length);
-                currentMiningTasks = shuffle([...examNew, ...examOld.slice(0, needed)]);
+                // 只有第一次進入才重新生成題目
+                if (!examActive || currentCategory !== 'exam') {
+                    const examNew = [...dbT3Extra];
+                    const examOld = shuffle([...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom, ...dbCulture, ...dbExam]);
+                    const needed = Math.max(0, 50 - examNew.length);
+                    currentMiningTasks = shuffle([...examNew, ...examOld.slice(0, needed)]);
+                }
             }
-            currentMiningIdx = 0; document.getElementById('game-mining').classList.remove('hidden');
-            if (cat === 'exam') { initExamMode(currentMiningTasks.length); } else { resetExamMode(); }
+            if (cat !== 'exam') currentMiningIdx = 0;
+            document.getElementById('game-mining').classList.remove('hidden');
+            if (cat === 'exam') {
+                if (!examActive || currentCategory !== 'exam') {
+                    initExamMode(currentMiningTasks.length);
+                } else {
+                    // 繼續考試：保留進度，只重新顯示進度條
+                    document.getElementById('exam-progress-wrap').classList.remove('hidden');
+                    updateExamProgress();
+                }
+            } else { resetExamMode(); }
             loadMining();
         }
 
