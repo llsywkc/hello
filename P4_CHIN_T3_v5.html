@@ -23,8 +23,8 @@
         }
         
         h1 { color: #F0E6C8; text-transform: none; letter-spacing: 3px; text-shadow: 0 0 20px rgba(200,168,75,0.6), 0 2px 4px rgba(0,0,0,0.8); font-size: 2.8em; text-align: center; margin: 10px 0; }
-        .player-info { background: rgba(10,20,40,0.85); color: #F0E6C8; font-size: 1.1em; font-weight: bold; padding: 6px 16px; border-radius: 0; border: none; border-bottom: 1px solid rgba(200,168,75,0.3); margin-bottom: 0; box-shadow: 0 2px 20px rgba(0,0,0,0.5); backdrop-filter: blur(8px); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; }
-        .inventory-bar { background: rgba(6,15,30,0.9); color: #C8A84B; border: none; border-bottom: 1px solid rgba(200,168,75,0.2); border-radius: 0; padding: 6px 16px; backdrop-filter: blur(8px); font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; margin-bottom: 5px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; }
+        .player-info { background: linear-gradient(90deg, rgba(35,18,5,0.97) 0%, rgba(15,8,3,0.98) 100%); color: #FFFFFF; font-size: 1.1em; font-weight: bold; padding: 6px 16px; border-radius: 0; border: none; border-bottom: 1px solid rgba(200,168,75,0.3); margin-bottom: 0; box-shadow: 0 2px 20px rgba(0,0,0,0.5); backdrop-filter: blur(8px); display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; }
+        .inventory-bar { background: rgba(6,15,30,0.95); color: #E8D08A; border: none; border-bottom: 1px solid rgba(200,168,75,0.4); border-radius: 0; padding: 6px 16px; backdrop-filter: blur(8px); font-size: 1.1em; font-weight: bold; display: flex; gap: 15px; margin-bottom: 5px; box-shadow: 0 6px 0 #111; flex-wrap: wrap; justify-content: center; width: 90%; max-width: 1000px; }
         
         #medal-bar { background-color: #1B5E20; border-color: #33691E; box-shadow: 0 6px 0 #0A1A0C; font-size: 1.4em; gap: 8px; }
         .medal-icon { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); animation: pulse 2s infinite; cursor: help; }
@@ -37,7 +37,7 @@
         .stat-def { color: #448AFF; text-shadow: 1px 1px 2px #000;}
         .save-indicator { font-size: 0.8em; color: #CE93D8; margin-bottom: 15px; text-shadow: 1px 1px 0 #000; }
 
-        .container { background: rgba(10,20,40,0.78); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(200,168,75,0.5); border-radius: 16px; padding: 20px; width: 95%; max-width: 800px; box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(200,168,75,0.2); text-align: center; }
+        .container { background: linear-gradient(170deg, rgba(45,28,10,0.92) 0%, rgba(22,14,6,0.95) 60%, rgba(12,8,3,0.97) 100%); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(200,168,75,0.5); border-radius: 16px; padding: 20px; width: 95%; max-width: 800px; box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(200,168,75,0.2); text-align: center; }
 
         input[type="text"] { font-size: 1.5em; padding: 10px; border: 1px solid rgba(200,168,75,0.6); background: rgba(255,255,255,0.08); color: #F0E6C8; border-radius: 8px; text-align: center; width: 80%; max-width: 300px; margin-bottom: 15px; font-weight: bold; }
         button { font-family: inherit; font-size: 1.2em; font-weight: bold; padding: 12px 20px; margin: 10px; border-radius: 12px; cursor: pointer; text-transform: none; transition: all 0.15s; border: 4px solid rgba(0,0,0,0.2); }
@@ -76,7 +76,7 @@
         @keyframes bounceIn { 0% { transform: scale(0.1); opacity: 0; } 60% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); } }
 
         .super-gear-card { border: 4px solid #FF9800; background: #FFF3E0; width: 200px; padding: 15px; border-radius: 10px; text-align: center; }
-        .super-gear-card h3 { margin: 5px 0; color: #E65100; font-size: 1.3em; }
+        .super-gear-card h3 { margin: 5px 0; color: #FFD54F; font-size: 1.2em; font-weight: 900; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
 
         .status-pic { width: 160px; height: 160px; object-fit: contain; margin: 10px auto; border: 4px solid #AB47BC; border-radius: 10px; background: #000; display: block; transition: all 0.3s ease; }
         .battle-pic { width: 250px; height: 250px; object-fit: contain; margin: 10px auto; border: 4px solid #AB47BC; border-radius: 10px; background: #000; display: block; }
@@ -177,12 +177,12 @@
 
     
         /* ========== 每日任務系統 ========== */
-        .quest-panel { background: rgba(10,20,40,0.65); border: 1px solid rgba(200,168,75,0.25); border-radius: 12px; padding: 12px 15px; width: 100%; box-sizing: border-box; margin-bottom: 8px; backdrop-filter: blur(6px); }
+        .quest-panel { background: linear-gradient(160deg, rgba(40,24,8,0.92) 0%, rgba(18,10,4,0.95) 100%); border: 1px solid rgba(200,168,75,0.45); border-radius: 12px; padding: 12px 15px; width: 100%; box-sizing: border-box; margin-bottom: 8px; backdrop-filter: blur(6px); }
         .quest-panel h3 { color: #E8EAF6; margin: 0 0 8px 0; font-size: 1em; text-align: center; }
-        .quest-item { display: flex; align-items: center; gap: 8px; background: rgba(200,168,75,0.07); border: 1px solid rgba(200,168,75,0.15); border-radius: 8px; padding: 6px 10px; margin-bottom: 5px; font-size: 0.85em; color: #C8D8E8; flex-wrap: wrap; }
+        .quest-item { display: flex; align-items: center; gap: 8px; background: rgba(200,168,75,0.12); border: 1px solid rgba(200,168,75,0.5); border-radius: 8px; padding: 6px 10px; margin-bottom: 5px; font-size: 0.88em; color: #E8F0F8; font-weight: 600; flex-wrap: wrap; }
         .quest-item.done { background: rgba(76,175,80,0.25); color: #A5D6A7; }
         .quest-item.claimed { background: rgba(100,100,100,0.2); color: #aaa; text-decoration: line-through; }
-        .quest-progress { font-size: 0.75em; color: #90CAF9; margin-left: auto; font-weight: bold; }
+        .quest-progress { font-size: 0.75em; color: #81D4FA; margin-left: auto; font-weight: 800; }
         .quest-mini-bar-bg { background: rgba(255,255,255,0.15); border-radius: 4px; height: 6px; width: 60px; }
         .quest-mini-bar-fill { background: #42A5F5; height: 100%; border-radius: 4px; transition: width 0.4s; }
         .quest-claim-btn { font-size: 0.72em !important; padding: 3px 8px !important; margin: 0 !important; box-shadow: 0 3px 0 #2E7D32 !important; }
@@ -436,9 +436,9 @@
         
         /* ===== Menu Tabs ===== */
         .menu-tabs {
-            display: flex; gap: 6px; width: 100%;
-            background: rgba(0,0,0,0.25);
-            border: 1px solid rgba(200,168,75,0.15);
+            display: flex; gap: 5px; width: 100%;
+            background: rgba(20,10,3,0.7);
+            border: 1px solid rgba(200,168,75,0.2);
             border-radius: 55px; padding: 4px;
             margin-bottom: 14px; box-sizing: border-box;
         }
@@ -446,55 +446,82 @@
         .menu-tab {
             flex: 1; padding: 9px 4px; border: 1px solid transparent;
             border-radius: 50px;
-            font-family: inherit; font-size: 0.82em; font-weight: bold;
+            font-family: inherit; font-size: 0.82em; font-weight: 800;
             cursor: pointer; transition: all 0.22s; white-space: nowrap;
-            background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5);
+            background: rgba(20,40,80,0.55);
+            color: #FFD54F;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
         }
         /* 特訓 — teal */
         .menu-tab[onclick*="training"] {
-            border-color: rgba(100,200,150,0.3); color: #7ec8a0;
+            border-color: rgba(100,200,150,0.4);
         }
         .menu-tab[onclick*="training"].active {
-            background: rgba(100,200,150,0.2); color: #a8e6c8;
-            border-color: #7ec8a0; box-shadow: 0 0 12px rgba(100,200,150,0.35);
+            background: rgba(20,60,160,0.75);
+            color: #FFE082;
+            border-color: rgba(100,180,255,0.85);
+            box-shadow: 0 0 14px rgba(20,80,200,0.6), inset 0 1px 0 rgba(255,220,100,0.2);
+            text-shadow: 0 0 8px rgba(255,210,80,0.5), 0 1px 3px rgba(0,0,0,0.9);
         }
-        .menu-tab[onclick*="training"]:hover:not(.active) { background: rgba(100,200,150,0.12); }
+        .menu-tab[onclick*="training"]:hover:not(.active) {
+            background: rgba(20,60,160,0.35); color: #FFE082;
+        }
         /* Boss — red */
         .menu-tab[onclick*="boss"] {
-            border-color: rgba(220,80,80,0.35); color: #e07070;
+            border-color: rgba(220,80,80,0.4);
         }
         .menu-tab[onclick*="boss"].active {
-            background: rgba(220,80,80,0.2); color: #f0a0a0;
-            border-color: #e07070; box-shadow: 0 0 12px rgba(220,80,80,0.35);
+            background: rgba(20,60,160,0.75);
+            color: #FFE082;
+            border-color: rgba(100,180,255,0.85);
+            box-shadow: 0 0 14px rgba(20,80,200,0.6), inset 0 1px 0 rgba(255,220,100,0.2);
+            text-shadow: 0 0 8px rgba(255,210,80,0.5), 0 1px 3px rgba(0,0,0,0.9);
         }
-        .menu-tab[onclick*="boss"]:hover:not(.active) { background: rgba(220,80,80,0.12); }
+        .menu-tab[onclick*="boss"]:hover:not(.active) {
+            background: rgba(20,60,160,0.35); color: #FFE082;
+        }
         /* 夥伴 — amber gold */
         .menu-tab[onclick*="partner"] {
-            border-color: rgba(200,168,75,0.35); color: #c8a84b;
+            border-color: rgba(200,168,75,0.4);
         }
         .menu-tab[onclick*="partner"].active {
-            background: rgba(200,168,75,0.2); color: #e8d08a;
-            border-color: #c8a84b; box-shadow: 0 0 12px rgba(200,168,75,0.4);
+            background: rgba(20,60,160,0.75);
+            color: #FFE082;
+            border-color: rgba(100,180,255,0.85);
+            box-shadow: 0 0 14px rgba(20,80,200,0.6), inset 0 1px 0 rgba(255,220,100,0.2);
+            text-shadow: 0 0 8px rgba(255,210,80,0.5), 0 1px 3px rgba(0,0,0,0.9);
         }
-        .menu-tab[onclick*="partner"]:hover:not(.active) { background: rgba(200,168,75,0.12); }
-        /* 抽獎 — gold/amber */
+        .menu-tab[onclick*="partner"]:hover:not(.active) {
+            background: rgba(20,60,160,0.35); color: #FFE082;
+        }
+        /* 抽獎 — purple/gold */
         .menu-tab[onclick*="shop"] {
-            border-color: rgba(255,183,0,0.35); color: #ffd166;
+            border-color: rgba(180,120,220,0.4);
         }
         .menu-tab[onclick*="shop"].active {
-            background: rgba(255,183,0,0.2); color: #ffe599;
-            border-color: #ffd166; box-shadow: 0 0 12px rgba(255,183,0,0.4);
+            background: rgba(20,60,160,0.75);
+            color: #FFE082;
+            border-color: rgba(100,180,255,0.85);
+            box-shadow: 0 0 14px rgba(20,80,200,0.6), inset 0 1px 0 rgba(255,220,100,0.2);
+            text-shadow: 0 0 8px rgba(255,210,80,0.5), 0 1px 3px rgba(0,0,0,0.9);
         }
-        .menu-tab[onclick*="shop"]:hover:not(.active) { background: rgba(255,183,0,0.12); }
+        .menu-tab[onclick*="shop"]:hover:not(.active) {
+            background: rgba(20,60,160,0.35); color: #FFE082;
+        }
         /* 系統 — steel blue */
         .menu-tab[onclick*="system"] {
-            border-color: rgba(100,160,220,0.35); color: #7eaac8;
+            border-color: rgba(100,160,220,0.4);
         }
         .menu-tab[onclick*="system"].active {
-            background: rgba(100,160,220,0.2); color: #a8cce0;
-            border-color: #7eaac8; box-shadow: 0 0 12px rgba(100,160,220,0.35);
+            background: rgba(20,60,160,0.75);
+            color: #FFE082;
+            border-color: rgba(100,180,255,0.85);
+            box-shadow: 0 0 14px rgba(20,80,200,0.6), inset 0 1px 0 rgba(255,220,100,0.2);
+            text-shadow: 0 0 8px rgba(255,210,80,0.5), 0 1px 3px rgba(0,0,0,0.9);
         }
-        .menu-tab[onclick*="system"]:hover:not(.active) { background: rgba(100,160,220,0.12); }
+        .menu-tab[onclick*="system"]:hover:not(.active) {
+            background: rgba(20,60,160,0.35); color: #FFE082;
+        }
 
         .menu-tab-content { display: none; width: 100%; animation: tabFadeIn 0.25s ease; }
         .menu-tab-content.active { display: block; }
@@ -507,31 +534,32 @@
             gap: 12px; width: 100%; margin-bottom: 12px;
         }
         .menu-card {
-            background: rgba(15,28,52,0.75);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(200,168,75,0.3); border-radius: 14px;
+            background: linear-gradient(160deg, rgba(38,22,5,0.92) 0%, rgba(18,12,4,0.95) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(220,168,60,0.55); border-radius: 14px;
             padding: 14px 8px; text-align: center;
             cursor: pointer; transition: transform 0.18s, box-shadow 0.18s;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,200,80,0.08);
             user-select: none;
         }
-        .menu-card:hover  { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+
+        .menu-card:hover  { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(180,110,0,0.5), 0 0 0 1px rgba(255,200,80,0.5), inset 0 1px 0 rgba(255,220,100,0.15); }
         .menu-card:active { transform: translateY(0);    box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
         .menu-card-lg { grid-column: 1 / -1; padding: 16px 8px; }
-        .mc-icon  { font-size: 2em; margin-bottom: 4px; }
-        .mc-sub   { font-size: 0.78em; color: #a8d4e8; margin-top: 2px; font-weight: 600; }
+        .mc-icon  { font-size: 2em; margin-bottom: 4px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.8)) drop-shadow(0 0 8px rgba(200,130,20,0.25)); }
+        .mc-sub   { font-size: 0.78em; color: #FFD54F; margin-top: 2px; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.9); }
         /* mc-sub accent colours per tab — Genshin palette */
-        #tab-training .mc-sub { color: #a8e0c0; }
-        #tab-boss     .mc-sub { color: #f0a0a0; }
-        #tab-partner  .mc-sub { color: #e8d08a; }
-        #tab-shop     .mc-sub { color: #ffe599; }
-        #tab-system   .mc-sub { color: #a8cce0; }
+        #tab-training .mc-sub { color: #a8e8b8; }
+        #tab-boss     .mc-sub { color: #FFB74D; }
+        #tab-partner  .mc-sub { color: #FFD54F; }
+        #tab-shop     .mc-sub { color: #FFE082; }
+        #tab-system   .mc-sub { color: #80DEEA; }
         /* mc-title stays dark for readability */
-        .mc-title { font-size: 0.95em; font-weight: 900; color: #FFFFFF; line-height: 1.3; text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.6); letter-spacing: 0.3px; }
+        .mc-title { font-size: 0.97em; font-weight: 900; color: #FFF8E7; line-height: 1.3; text-shadow: 0 1px 5px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(200,130,20,0.3); letter-spacing: 0.3px; }
 
         .menu-section-label {
             width: 100%; text-align: left;
-            font-size: 0.82em; font-weight: bold; color: #C8A84B;
+            font-size: 0.86em; font-weight: 900; color: #FFD54F;
             margin: 6px 0 6px; padding-left: 4px;
             border-left: 3px solid rgba(200,168,75,0.6);
         }
@@ -609,13 +637,13 @@
         }
         .menu-card:hover {
             transform: translateY(-5px) !important;
-            box-shadow: 0 12px 28px rgba(0,0,0,0.18) !important;
+            box-shadow: 0 8px 24px rgba(180,110,0,0.45), 0 0 0 1px rgba(255,200,80,0.45) !important;
         }
 
         /* Card text clarity */
         .mc-icon  { font-size: 2.2em !important; margin-bottom: 6px !important; }
         .mc-title { font-size: 0.95em !important; font-weight: 900 !important; color: #F0E6C8 !important; line-height: 1.3 !important; }
-        .mc-sub   { font-size: 0.78em !important; color: #a8d4e8 !important; margin-top: 3px !important; font-weight: 700 !important; }
+        .mc-sub   { font-size: 0.78em !important; color: #FFD54F !important; margin-top: 3px !important; font-weight: 700 !important; text-shadow: 0 1px 3px rgba(0,0,0,0.9) !important; }
 
         /* Section label: clearer divider */
         .menu-section-label {
@@ -729,7 +757,7 @@
             border-radius: 12px !important;
             margin-bottom: 12px !important;
         }
-        .quest-panel h3 { font-size: 1em !important; color: #C8A84B !important; margin:0 0 8px !important; }
+        .quest-panel h3 { font-size: 1em !important; color: #FFD54F !important; margin:0 0 8px !important; font-weight: 900 !important; text-shadow: 0 1px 3px rgba(0,0,0,0.8) !important; }
 
         /* Tab bar polish */
         .menu-tabs { margin-bottom: 12px !important; }
@@ -839,13 +867,20 @@
         .container { position: relative; z-index: 1; }
 
         /* ══ FONT CLARITY ══ */
-        .mc-title  { font-family: 'Noto Serif TC', serif !important; letter-spacing: 0.5px; }
-        .mc-sub    { font-family: 'Noto Serif TC', serif !important; }
-        .quest-item { color: #C8D8E8 !important; font-size: 0.9em !important; }
-        .quest-item.done { color: rgba(200,168,75,0.7) !important; }
-        h3         { color: #a8cce0 !important; font-family: 'Noto Serif TC', serif !important; }
+        .mc-title  { font-family: 'Noto Serif TC', serif !important; letter-spacing: 0.5px; color: #FFF8E7 !important; text-shadow: 0 1px 5px rgba(0,0,0,1), 0 0 20px rgba(200,130,20,0.3) !important; }
+        .mc-sub    { font-family: 'Noto Serif TC', serif !important; font-weight: 700 !important; text-shadow: 0 1px 3px rgba(0,0,0,0.9) !important; }
+        .quest-item { color: #E8F0F8 !important; font-size: 0.9em !important; font-weight: 600 !important; }
+        .quest-item.done { color: #81C784 !important; }
+        h3         { color: #FFD54F !important; font-family: 'Noto Serif TC', serif !important; text-shadow: 0 1px 3px rgba(0,0,0,0.8) !important; }
         .menu-section-label { font-family: 'Noto Serif TC', serif !important; letter-spacing: 1px; }
-        .status-name { font-family: 'Noto Serif TC', serif !important; color: #F0E6C8 !important; }
+        .status-name { font-family: 'Noto Serif TC', serif !important; color: #FFFFFF !important; font-weight: 900 !important; text-shadow: 0 1px 4px rgba(0,0,0,0.9) !important; }
+
+        /* ══ AVATAR PICKER ══ */
+        #avatar-picker-modal > div > div:nth-child(2) > div:hover {
+            transform: scale(1.2);
+            border-color: rgba(200,168,75,0.8) !important;
+        }
+        #login-avatar-preview:hover { transform: scale(1.15); }
 
         /* ══ FIXED BACKGROUND MOUNTAINS ══ */
         .bg-mountains {
@@ -926,7 +961,7 @@
     <div id="player-tag" class="player-info hidden">
         <div class="status-bar-inner">
             <div class="status-left">
-                <span class="status-name">🧙 <span id="display-name"></span> <span class="player-lv-display" style="color:#FFD700;font-size:0.8em;font-weight:bold;">Lv 1</span></span>
+                <span class="status-name"><span id="status-avatar" style="margin-right:4px;font-size:1.1em;"></span><span id="display-name"></span> <span class="player-lv-display" style="color:#FFD700;font-size:0.8em;font-weight:bold;">Lv 1</span></span>
                 <span id="streak-counter" class="status-streak">🔥 連對: 0</span>
                 <span id="buff-indicator" class="status-buff"></span>
             </div>
@@ -954,7 +989,7 @@
     <div id="exp-bar-wrap" class="hidden" style="width:100%;background:#1a1a2e;padding:3px 10px;box-sizing:border-box;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
             <span style="color:#FFD700;font-size:0.78em;font-weight:bold;">✨ <span class="player-lv-display">Lv 1</span></span>
-            <span id="exp-bar-text" style="color:#aaa;font-size:0.72em;">0 / 10</span>
+            <span id="exp-bar-text" style="color:#E0E0E0;font-size:0.72em;font-weight:600;">0 / 10</span>
         </div>
         <div style="background:#333;border-radius:6px;height:8px;overflow:hidden;">
             <div id="exp-bar-fill" style="height:100%;background:linear-gradient(90deg,#FFD700,#FF8C00);width:0%;transition:width 0.4s;"></div>
@@ -982,11 +1017,8 @@
                 <stop offset="100%" stop-color="#060f1e" stop-opacity="1"/>
               </linearGradient>
             </defs>
-            <!-- far mountains -->
             <polygon points="0,200 120,80 240,140 360,50 480,120 600,60 720,110 800,70 800,200" fill="rgba(15,35,60,0.7)"/>
-            <!-- near mountains -->
             <polygon points="0,200 80,130 180,160 300,90 420,150 540,85 660,130 800,95 800,200" fill="rgba(8,20,38,0.85)"/>
-            <!-- foreground ridge -->
             <polygon points="0,200 0,175 100,165 200,180 350,155 500,175 650,158 800,170 800,200" fill="#060f1e"/>
           </svg>
 
@@ -1003,7 +1035,7 @@
           </div>
 
           <!-- Title block -->
-          <div style="text-align:center;margin-bottom:32px;z-index:2;position:relative;">
+          <div style="text-align:center;margin-bottom:28px;z-index:2;position:relative;">
             <div style="font-size:0.85em;letter-spacing:6px;color:rgba(200,168,75,0.7);text-transform:uppercase;margin-bottom:6px;font-family:'Noto Serif TC',serif;">— 語文冒險 —</div>
             <h1 style="font-size:3.2em;margin:0;line-height:1.1;color:#F0E6C8;letter-spacing:8px;text-shadow:0 0 30px rgba(200,168,75,0.5),0 0 60px rgba(200,168,75,0.2),0 4px 8px rgba(0,0,0,0.8);font-family:'Noto Serif TC',serif;">4A 中文冒險</h1>
             <div style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:10px;">
@@ -1013,18 +1045,39 @@
             </div>
           </div>
 
-          <!-- Input panel -->
+          <!-- Login panel -->
           <div style="z-index:2;position:relative;width:100%;max-width:320px;display:flex;flex-direction:column;align-items:center;gap:12px;">
+
+            <!-- Avatar preview -->
+            <div id="login-avatar-preview" onclick="showAvatarPicker()" style="font-size:3em;cursor:pointer;filter:drop-shadow(0 0 10px rgba(200,168,75,0.5));transition:transform 0.2s;" title="點擊選擇頭像">🐉</div>
+            <div style="font-size:0.7em;color:rgba(200,168,75,0.6);margin-top:-8px;letter-spacing:2px;">點擊選擇頭像</div>
+
+            <!-- Username -->
             <div style="width:100%;position:relative;">
               <div style="font-size:0.72em;color:rgba(200,168,75,0.8);letter-spacing:2px;margin-bottom:6px;text-align:left;">✦ 冒險者名稱</div>
               <input type="text" id="input-name" maxlength="10" placeholder="輸入名字..." style="width:100%;box-sizing:border-box;background:rgba(10,20,40,0.7);border:1px solid rgba(200,168,75,0.5);border-radius:8px;padding:12px 16px;color:#F0E6C8;font-size:1.1em;font-family:'Noto Serif TC',serif;outline:none;backdrop-filter:blur(8px);">
             </div>
-            <button class="btn-purple" onclick="setPlayerName()" style="width:100%;font-size:1.05em;letter-spacing:3px;padding:14px;border-radius:8px;margin:0;">▶ 開 始 冒 險</button>
-            <div style="margin-top:8px;animation:coverBlink 2s ease-in-out infinite;color:rgba(200,168,75,0.45);font-size:0.72em;letter-spacing:4px;">— 按下開始，踏上旅程 —</div>
+
+            <!-- Password -->
+            <div style="width:100%;position:relative;">
+              <div style="font-size:0.72em;color:rgba(200,168,75,0.8);letter-spacing:2px;margin-bottom:6px;text-align:left;">🔒 密碼（4位數字）</div>
+              <input type="password" id="input-password" maxlength="4" placeholder="輸入密碼..." inputmode="numeric" pattern="[0-9]*"
+                style="width:100%;box-sizing:border-box;background:rgba(10,20,40,0.7);border:1px solid rgba(200,168,75,0.5);border-radius:8px;padding:12px 16px;color:#F0E6C8;font-size:1.1em;font-family:'Noto Serif TC',serif;outline:none;backdrop-filter:blur(8px);"
+                onkeydown="if(event.key==='Enter') loginPlayer()">
+            </div>
+
+            <!-- Login button -->
+            <button class="btn-purple" onclick="loginPlayer()" style="width:100%;font-size:1.05em;letter-spacing:3px;padding:14px;border-radius:8px;margin:0;">▶ 開 始 冒 險</button>
+
+            <!-- New player hint -->
+            <div id="login-hint" style="font-size:0.72em;color:rgba(200,168,75,0.5);text-align:center;letter-spacing:1px;">首次登入？密碼即為你的專屬密碼，輸入後記住！</div>
+
+            <!-- Forgot password -->
+            <div style="margin-top:4px;color:rgba(200,168,75,0.4);font-size:0.7em;letter-spacing:1px;">忘記密碼？請找老師幫忙 🔑</div>
           </div>
 
-          <p style="margin-top:28px;z-index:2;position:relative;">
-            <button onclick="teacherReset()" style="background:none;border:none;color:rgba(255,255,255,0.25);font-size:0.68em;cursor:pointer;letter-spacing:1px;">🔑 老師重設</button>
+          <p style="margin-top:24px;z-index:2;position:relative;">
+            <button onclick="teacherPanel()" style="background:none;border:none;color:rgba(255,255,255,0.25);font-size:0.68em;cursor:pointer;letter-spacing:1px;">🔑 老師管理</button>
           </p>
         </div>
 
@@ -1032,8 +1085,8 @@
 
             <!-- ══ TOP BAR ══ -->
             <div style="width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
-                <button class="btn-grey" onclick="logout()" style="font-size:0.82em;padding:7px 11px;margin:0;">✏️ 更名/登出</button>
-                <button class="btn-grey" onclick="teacherReset()" style="font-size:0.82em;padding:7px 11px;margin:0;background:#795548;border-color:#795548;">🔑 老師</button>
+                <button class="btn-grey" onclick="logoutPlayer()" style="font-size:0.82em;padding:7px 11px;margin:0;">🚪 登出</button>
+                <button class="btn-grey" onclick="teacherPanel()" style="font-size:0.82em;padding:7px 11px;margin:0;background:#795548;border-color:#795548;">🔑 老師</button>
                 <div style="display:flex;gap:6px;">
                     <button class="btn-gold"  onclick="claimGift()"  style="font-size:0.82em;padding:7px 11px;margin:0;">🎁 禮包</button>
                     <button class="btn-blue"  onclick="openAlbum()"  style="font-size:0.82em;padding:7px 11px;margin:0;">📖 紀念冊</button>
@@ -1042,7 +1095,7 @@
             </div>
 
             <!-- ══ 期間限定通知（模擬考試）截至6月9日 ══ -->
-            <div id="home-exam-bonus-notice" style="background:linear-gradient(135deg,rgba(200,168,75,0.2),rgba(160,120,64,0.25));border:1px solid rgba(200,168,75,0.5);border-radius:10px;padding:10px 14px;margin-bottom:10px;text-align:center;color:#E8D08A;font-weight:bold;font-size:0.88em;cursor:pointer;" onclick="openExamMode()">
+            <div id="home-exam-bonus-notice" style="background:linear-gradient(135deg,rgba(180,120,0,0.55),rgba(140,80,0,0.6));border:2px solid rgba(255,200,50,0.85);border-radius:10px;padding:10px 14px;margin-bottom:10px;text-align:center;color:#FFFFFF;font-weight:bold;font-size:0.88em;cursor:pointer;text-shadow:0 1px 4px rgba(0,0,0,0.95);box-shadow:0 0 12px rgba(200,150,0,0.4);" onclick="openExamMode()">
               📋 期間限定！<b>模擬考試</b> 完成+500分 · 每題答對+50分 · 正確率獎勵最高+1000分　截止：6月9日 🔥
             </div>
             <script>
@@ -1054,7 +1107,7 @@
 
             <!-- ══ DAILY QUEST (always visible) ══ -->
             <div class="quest-panel" id="daily-quest-panel" style="margin-bottom:10px;">
-                <h3 style="margin:0 0 6px;">📋 每日任務 <span id="quest-reset-hint" style="font-size:0.75em;color:#90CAF9;">(每日重置)</span></h3>
+                <h3 style="margin:0 0 6px;">📋 每日任務 <span id="quest-reset-hint" style="font-size:0.75em;color:#81D4FA;font-weight:600;">(每日重置)</span></h3>
                 <div id="quest-list"></div>
             </div>
 
@@ -1148,7 +1201,7 @@
 
                 <div class="menu-section-label">📝 考試練習模式</div>
                 <div class="menu-card-grid">
-                    <div class="menu-card" onclick="openExamMode()" style="border-color:rgba(200,168,75,0.6);">
+                    <div class="menu-card" onclick="openExamMode()" style="border-color:rgba(220,175,60,0.75);">
                         <div class="mc-icon">📋</div>
                         <div class="mc-title">模擬考試</div>
                         <div class="mc-sub">12關卡 61題｜⭐獎勵</div>
@@ -1190,7 +1243,7 @@
             <!-- ══ TAB: PARTNER ══ -->
             <div class="menu-tab-content" id="tab-partner" style="padding:4px 0;">
                 <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
-                    <div class="menu-card menu-card-lg" onclick="openPartnerZone()" style="border-color:rgba(200,168,75,0.6);grid-column:1/-1;animation:pulse 2s infinite;">
+                    <div class="menu-card menu-card-lg" onclick="openPartnerZone()" style="border-color:rgba(220,175,60,0.75);grid-column:1/-1;animation:pulse 2s infinite;">
                         <div class="mc-icon">🐾</div>
                         <div class="mc-title">搭檔精靈</div>
                         <div class="mc-sub">全圖鑑 · 進化 · 感情值</div>
@@ -1201,7 +1254,7 @@
             <!-- ══ TAB: SHOP ══ -->
             <div class="menu-tab-content" id="tab-shop" style="padding:4px 0;">
                 <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
-                    <div class="menu-card menu-card-lg" onclick="openGacha()" style="border-color:rgba(200,168,75,0.6);grid-column:1/-1;animation:pulse 2s infinite;">
+                    <div class="menu-card menu-card-lg" onclick="openGacha()" style="border-color:rgba(220,175,60,0.75);grid-column:1/-1;animation:pulse 2s infinite;">
                         <div class="mc-icon">🎰</div>
                         <div class="mc-title">幸運轉盤</div>
                         <div class="mc-sub">消耗 1 🌟 · 隨機獎勵</div>
@@ -1217,6 +1270,11 @@
             <!-- ══ TAB: SYSTEM ══ -->
             <div class="menu-tab-content" id="tab-system" style="padding:4px 0;">
                 <div class="menu-card-grid" style="grid-template-columns:1fr 1fr;">
+                    <div class="menu-card" onclick="showAvatarPicker()" style="border-color:rgba(220,175,60,0.75);">
+                        <div class="mc-icon" id="system-avatar-icon">🐉</div>
+                        <div class="mc-title">更改頭像</div>
+                        <div class="mc-sub">選擇你的圖示</div>
+                    </div>
                     <div class="menu-card" onclick="openInstructions()" style="border-color:#2E7D32;">
                         <div class="mc-icon">📖</div>
                         <div class="mc-title">遊戲指南</div>
@@ -3282,55 +3340,197 @@ function checkDailyReset() {
         }
 
         // ================== 遊戲主流程 ==================
-        function setPlayerName() {
-            initAudio(); playSound('click');
-            const name = document.getElementById('input-name').value.trim();
-            if (!name) return alert('請輸入名字！');
-            document.body.classList.remove('on-login');
+        // ══════════════════════════════════════════════════════
+        // AUTH SYSTEM v2 – password + Firebase save + avatar
+        // ══════════════════════════════════════════════════════
 
-            const isChanging = !!inventory.playerName; // already had a name = changing
+        /* ── Simple hash (btoa + salt, good enough for classroom) ── */
+        function hashPwd(pwd) { return btoa('p4chin_' + pwd + '_hk'); }
 
-            // 🔧 One-change limit
-            if (isChanging && inventory.nameChangeUsed) {
-                alert('❌ 改名機會已用盡！\n如需更改名字，請聯絡老師重設。');
-                goHome(); return;
-            }
-
-            // First-time confirmation
-            if (!isChanging) {
-                if (!confirm('確定使用「' + name + '」作為冒險者名字？\n⚠️ 名字設定後只可更改一次，請確認！')) return;
-            } else {
-                if (!confirm('確定把名字改為「' + name + '」？\n⚠️ 此為最後一次改名機會！')) return;
-                inventory.nameChangeUsed = true;  // mark change used
-            }
-
-            inventory.playerName = name;
-            // 生成唯一 ID（只在第一次設定名字時建立）
-            if (!inventory.playerId) {
-                inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
-            }
-            document.getElementById('display-name').textContent = name;
-            saveGame(); goHome();
+        /* ── Avatar helpers ── */
+        function getAvatar() { return inventory.avatar || '🐉'; }
+        function setAvatarUI() {
+            const av = getAvatar();
+            const el = document.getElementById('status-avatar');
+            if (el) el.textContent = av + ' ';
+            const lp = document.getElementById('login-avatar-preview');
+            if (lp) lp.textContent = av;
+            const si = document.getElementById('system-avatar-icon');
+            if (si) si.textContent = av;
         }
-        
-        window.logout = function() {
-            playSound('click');
-            // 🔧 Warn if no name changes left
-            if (inventory.nameChangeUsed) {
-                const go = confirm('⚠️ 你已用過改名機會！\n登出後將無法再更改名字。\n確定要繼續嗎？');
-                if (!go) return;
-            } else if (inventory.playerName) {
-                const go = confirm('✏️ 登出後可更改名字（僅限一次）。\n確定登出嗎？');
-                if (!go) return;
+
+        /* ── Firebase player CRUD ── */
+        async function fbGetPlayer(name) {
+            try {
+                const r = await fetch(FIREBASE_PLAYERS_URL + '/' + encodeURIComponent(name) + '.json');
+                if (!r.ok) return null;
+                return await r.json();
+            } catch(e) { return null; }
+        }
+        async function fbSetPlayer(name, data) {
+            try {
+                await fetch(FIREBASE_PLAYERS_URL + '/' + encodeURIComponent(name) + '.json', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+            } catch(e) {}
+        }
+        async function fbPatchPlayer(name, patch) {
+            try {
+                await fetch(FIREBASE_PLAYERS_URL + '/' + encodeURIComponent(name) + '.json', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(patch)
+                });
+            } catch(e) {}
+        }
+
+        /* ── Save to Firebase (called alongside localStorage) ── */
+        async function saveToFirebase() {
+            if (!inventory.playerName) return;
+            await fbPatchPlayer(inventory.playerName, { save: inventory });
+        }
+
+        /* ── Load from Firebase; migrate localStorage if needed ── */
+        async function loadFromFirebase(name) {
+            const remote = await fbGetPlayer(name);
+            if (remote && remote.save) {
+                // Firebase has data → use it
+                inventory = { ...defaultInv, ...remote.save,
+                    equip: { ...defaultInv.equip, ...(remote.save.equip || {}) },
+                    medals: remote.save.medals || [] };
+                // Sync to localStorage as cache
+                try { localStorage.setItem(SAVE_KEY, JSON.stringify(inventory)); } catch(e) {}
+                return 'firebase';
             }
-            inventory.playerName = ""; saveGame(); hideAll();
-            document.getElementById('player-tag').classList.add('hidden');
-            document.getElementById('top-nav').classList.add('hidden'); document.getElementById('exp-bar-wrap') && document.getElementById('exp-bar-wrap').classList.add('hidden');
-            document.getElementById('medal-bar').classList.add('hidden');
-            document.getElementById('login-screen').classList.remove('hidden');
-            document.body.classList.add('on-login');
+            // No Firebase save → try localStorage migration
+            let local = null;
+            try { local = JSON.parse(localStorage.getItem(SAVE_KEY)); } catch(e) {}
+            if (local && local.playerName === name) {
+                inventory = { ...defaultInv, ...local,
+                    equip: { ...defaultInv.equip, ...(local.equip || {}) },
+                    medals: local.medals || [] };
+                // Silently migrate to Firebase
+                await fbPatchPlayer(name, { save: inventory });
+                return 'migrated';
+            }
+            return 'new';
+        }
+
+        /* ── Main login ── */
+        window.loginPlayer = async function() {
+            initAudio(); playSound('click');
+            const name = (document.getElementById('input-name').value || '').trim();
+            const pwd  = (document.getElementById('input-password').value || '').trim();
+            if (!name) { alert('請輸入名字！'); return; }
+            if (!pwd)  { alert('請輸入密碼！'); return; }
+            if (!/^\d{4}$/.test(pwd)) { alert('密碼必須是 4 位數字！'); return; }
+
+            const btn = document.querySelector('#login-screen .btn-purple');
+            if (btn) { btn.disabled = true; btn.textContent = '登入中...'; }
+
+            try {
+                const remote = await fbGetPlayer(name);
+                const hashed = hashPwd(pwd);
+
+                if (remote && remote.password) {
+                    // Existing player – verify password
+                    if (remote.password !== hashed) {
+                        alert('❌ 密碼錯誤！\n如忘記密碼，請找老師幫忙。');
+                        if (btn) { btn.disabled = false; btn.textContent = '▶ 開 始 冒 險'; }
+                        return;
+                    }
+                } else {
+                    // New player – set password now
+                    if (!confirm('首次登入！\n確定使用「' + pwd + '」作為你的密碼嗎？\n⚠️ 請記住密碼，忘記需找老師重設！')) {
+                        if (btn) { btn.disabled = false; btn.textContent = '▶ 開 始 冒 險'; }
+                        return;
+                    }
+                    await fbPatchPlayer(name, { password: hashed });
+                }
+
+                // Load save (Firebase → localStorage migration)
+                const origin = await loadFromFirebase(name);
+                inventory.playerName = name;
+                if (!inventory.playerId) {
+                    inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+                }
+                // Restore avatar from remote
+                if (remote && remote.avatar) inventory.avatar = remote.avatar;
+
+                // Write session to localStorage
+                const session = { name, loginAt: Date.now(), avatar: getAvatar() };
+                try { localStorage.setItem(AUTH_KEY, JSON.stringify(session)); } catch(e) {}
+
+                // Save updated inventory
+                saveGame();
+
+                document.getElementById('display-name').textContent = name;
+                document.body.classList.remove('on-login');
+                setAvatarUI();
+                goHome();
+
+                if (origin === 'migrated') {
+                    setTimeout(() => alert('✅ 偵測到舊存檔，已自動同步到雲端！\n以後換任何裝置都能保留進度。'), 600);
+                }
+            } catch(e) {
+                alert('⚠️ 網絡錯誤，請重試。');
+            } finally {
+                if (btn) { btn.disabled = false; btn.textContent = '▶ 開 始 冒 險'; }
+            }
         };
 
+        /* Legacy alias */
+        window.setPlayerName = window.loginPlayer;
+
+        /* ── Logout ── */
+        window.logoutPlayer = function() {
+            playSound('click');
+            if (!confirm('確定登出嗎？\n你的進度已雲端儲存，下次登入可繼續。')) return;
+            try { localStorage.removeItem(AUTH_KEY); } catch(e) {}
+            inventory.playerName = '';
+            saveGame();
+            hideAll();
+            ['player-tag','top-nav','exp-bar-wrap','medal-bar'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.body.classList.add('on-login');
+            document.getElementById('input-name').value = '';
+            document.getElementById('input-password').value = '';
+        };
+        window.logout = window.logoutPlayer; // keep legacy calls working
+
+        /* ── Session check on page load ── */
+        window.initSession = async function() {
+            let session = null;
+            try { session = JSON.parse(localStorage.getItem(AUTH_KEY)); } catch(e) {}
+            if (session && session.name && session.loginAt &&
+                (Date.now() - session.loginAt < SESSION_EXPIRY_MS)) {
+                // Valid session – auto-login
+                const remote = await fbGetPlayer(session.name);
+                const origin = await loadFromFirebase(session.name);
+                inventory.playerName = session.name;
+                if (remote && remote.avatar) inventory.avatar = remote.avatar;
+                if (!inventory.playerId) {
+                    inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+                }
+                saveGame();
+                document.getElementById('display-name').textContent = session.name;
+                document.body.classList.remove('on-login');
+                setAvatarUI();
+                goHome();
+            } else {
+                // Expired or no session
+                try { localStorage.removeItem(AUTH_KEY); } catch(e) {}
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.body.classList.add('on-login');
+            }
+        };
+
+        
         window.claimGift = function() {
             playSound('click');
             if (inventory.giftClaimed) { return alert("❌ 你已經領取過老玩家補償大禮包了，不能重複領取喔！"); }
@@ -3407,17 +3607,21 @@ function checkDailyReset() {
 
                     if(inventory.playerName) {
                         document.getElementById('display-name').textContent = inventory.playerName;
+                        setAvatarUI();
                         goHome();
                     }
                 } catch (e) { inventory = { ...defaultInv }; }
             }
             // Always initialise UI regardless of save state
+            setAvatarUI();
             goHome();
         }
 
         function saveGame() {
             if(inventory.playerName) {
                 try { localStorage.setItem(SAVE_KEY, JSON.stringify(inventory)); } catch(e) {}
+                // Also push to Firebase (async, no await to keep UI snappy)
+                saveToFirebase().catch(()=>{});
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -3534,6 +3738,7 @@ function checkDailyReset() {
                 document.getElementById('medal-container').innerHTML = medalStr;
             }
             if(doSave) saveGame();
+            setAvatarUI();
         }
 
         function hideAll() { document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); }
@@ -4889,7 +5094,10 @@ function checkDailyReset() {
             updateUI(); goHome();
         };
 
-        window.onload = loadGame;
+        window.onload = function() {
+            loadGame();          // load localStorage cache first (instant)
+            initSession();       // then check session + Firebase (async)
+        };
     
         // ===== 神獸視覺特效函式 =====
 
@@ -5361,7 +5569,7 @@ function checkDailyReset() {
                       <div onclick="(function(){const d=document.getElementById('${cid}');const a=document.getElementById('${cid}-arr');const isOpen=d.style.display!=='none';document.querySelectorAll('[id^=study-card-]').forEach(el=>{if(!el.id.endsWith('-arr')){el.style.display='none';const arr=document.getElementById(el.id+'-arr');if(arr)arr.textContent='▼';}});if(!isOpen){d.style.display='block';a.textContent='▲';}})()" 
                            style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;">
                         <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
-                        <span style="flex:1;margin-left:8px;color:${isMe?'#FFD700':'#eee'};font-weight:${isMe?'bold':'normal'};">${e.name||'?'}${isMe?' 👤':''}</span>
+                        <span style="flex:1;margin-left:8px;color:${isMe?'#FFD700':'#eee'};font-weight:${isMe?'bold':'normal'};"><span style="margin-right:3px;">${e.avatar||'🐉'}</span>${e.name||'?'}${isMe?' 👤':''}</span>
                         <span style="color:#4FC3F7;font-size:0.85em;font-weight:bold;">📚 ${score}</span>
                         <span id="${cid}-arr" style="color:#888;font-size:0.75em;margin-left:8px;">▼</span>
                       </div>
@@ -5416,7 +5624,7 @@ function checkDailyReset() {
                     return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin-bottom:4px;background:#0d1117;border-radius:8px;border-left:3px solid ${rank<=3?'#FFD700':'#333'};">
                       <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
                       <div style="flex:1;margin-left:8px;">
-                        <div style="color:#eee;font-size:0.9em;">${e.name||'?'}</div>
+                        <div style="color:#eee;font-size:0.9em;"><span style="margin-right:3px;">${e.avatar||'🐉'}</span>${e.name||'?'}</div>
                         <div style="color:#CE93D8;font-size:0.75em;">${pName} 🥩Lv${feedLv} ${feedTitle} ｜ 進化:${evoLv}階 ${branch}</div>
                       </div>
                       <span style="color:#CE93D8;font-size:0.82em;">⚔️ ${score}分</span>
@@ -5439,7 +5647,7 @@ function checkDailyReset() {
                     return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin-bottom:4px;background:#0d1117;border-radius:8px;border-left:3px solid ${rank<=3?'#FFD700':'#333'};">
                       <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
                       <div style="flex:1;margin-left:8px;">
-                        <div style="color:#eee;font-size:0.9em;">${e.name||'?'}</div>
+                        <div style="color:#eee;font-size:0.9em;"><span style="margin-right:3px;">${e.avatar||'🐉'}</span>${e.name||'?'}</div>
                         <div style="color:#A5D6A7;font-size:0.72em;">${buildings}</div>
                       </div>
                       <span style="color:#A5D6A7;font-size:0.82em;">🏗️ ${score}分</span>
@@ -5464,7 +5672,7 @@ function checkDailyReset() {
                     return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin-bottom:4px;background:#0d1117;border-radius:8px;border-left:3px solid ${rank<=3?'#FFD700':'#333'};">
                       <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
                       <div style="flex:1;margin-left:8px;">
-                        <div style="color:#eee;font-size:0.9em;">${e.name||'?'}</div>
+                        <div style="color:#eee;font-size:0.9em;"><span style="margin-right:3px;">${e.avatar||'🐉'}</span>${e.name||'?'}</div>
                         <div style="color:#FFF176;font-size:0.72em;">${mats}</div>
                       </div>
                       <span style="color:#FFF176;font-size:0.82em;">💰 ${score}分</span>
@@ -5564,6 +5772,7 @@ async function fetchLeaderboard() {
                 const bwSnap = inventory.bossWins || {};
                 const myEntry = {
                     name:              inventory.playerName,
+                    avatar:            inventory.avatar || '🐉',
                     playerId:          inventory.playerId || '',
                     playerLv:          inventory.playerLv || 1,
                     epicWins:          inventory.epicWins || 0,
@@ -5686,50 +5895,132 @@ async function fetchLeaderboard() {
         
         // ==================== 老師密碼重設功能 ====================
         const TEACHER_PASSWORD = 'teacher2026';
+        const MASTER_KEY = 'master2026hk';          // Teacher bypass key
+        const SESSION_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+        const AUTH_KEY = 'p4chin_auth_v1';           // localStorage auth session key
+        const FIREBASE_PLAYERS_URL = FIREBASE_DB_URL + '/players';
+        const AVATARS = [
+            // 動物
+            '🐉','🦊','🐺','🦁','🐯','🐻','🐼','🐨','🦄','🐬','🦅','🦋',
+            '🐸','🐙','🦈','🐧','🦉','🐺','🦝','🐲','🦕','🦖',
+            // 自然 / 元素
+            '🌟','⚡','🔥','❄️','🌊','🌸','🍀','🌙','☀️','🌈','🌪️','💧',
+            // 戰鬥 / 冒險
+            '⚔️','🛡️','🎯','🗡️','🏹','🔮','💎','👑','🎭','🧙','🥷','🤺',
+            // 食物 / 趣味
+            '🍕','🍔','🎮','🎲','🎸','🚀','🛸','🤖',
+        ];
 
-        function teacherReset() {
-            const pwd = prompt('🔑 請輸入老師密碼：');
-            if (pwd === null) return; // cancelled
-            if (pwd !== TEACHER_PASSWORD) {
-                alert('❌ 密碼錯誤！');
+        function teacherReset() { teacherPanel(); } // legacy alias
+        window.teacherPanel = async function() {
+            const key = prompt('🔑 老師管理介面\n請輸入 Master Key：');
+            if (!key) return;
+            if (key !== MASTER_KEY && key !== TEACHER_PASSWORD) {
+                alert('❌ 密碼錯誤！'); return;
+            }
+
+            // Build teacher modal
+            let modal = document.getElementById('teacher-panel-modal');
+            if (modal) modal.remove();
+            modal = document.createElement('div');
+            modal.id = 'teacher-panel-modal';
+            modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;padding:16px;';
+            modal.innerHTML = `
+              <div style="background:#1a1a2e;border-radius:16px;padding:20px;width:100%;max-width:420px;color:#eee;font-size:0.92em;max-height:90vh;overflow-y:auto;">
+                <div style="font-size:1.15em;font-weight:900;color:#FFD700;margin-bottom:14px;">🔑 老師管理介面</div>
+
+                <div style="background:#0d1117;border-radius:10px;padding:14px;margin-bottom:12px;">
+                  <div style="font-weight:bold;color:#64B5F6;margin-bottom:10px;">👤 學生帳號管理</div>
+                  <div style="display:flex;gap:8px;margin-bottom:8px;">
+                    <input id="tp-student-name" placeholder="輸入學生名字" maxlength="10"
+                      style="flex:1;padding:8px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#eee;font-size:0.95em;">
+                    <button onclick="tpLoadStudent()" style="background:#1565C0;color:#fff;border:none;border-radius:6px;padding:8px 14px;cursor:pointer;">載入</button>
+                  </div>
+                  <div id="tp-student-info" style="font-size:0.82em;color:#aaa;min-height:20px;"></div>
+                </div>
+
+                <div id="tp-actions" style="display:none;background:#0d1117;border-radius:10px;padding:14px;margin-bottom:12px;">
+                  <div style="font-weight:bold;color:#FFD700;margin-bottom:10px;">操作：<span id="tp-target-name" style="color:#fff;"></span></div>
+                  <div style="display:grid;gap:8px;">
+                    <div style="display:flex;gap:8px;align-items:center;">
+                      <input id="tp-new-pwd" type="password" placeholder="新密碼（4位數字）" maxlength="4" inputmode="numeric"
+                        style="flex:1;padding:8px;border-radius:6px;border:1px solid #444;background:#1a1a2e;color:#eee;">
+                      <button onclick="tpChangePwd()" style="background:#2E7D32;color:#fff;border:none;border-radius:6px;padding:8px 12px;cursor:pointer;">改密碼</button>
+                    </div>
+                    <button onclick="tpLoginAs()" style="background:#6A1B9A;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-weight:bold;">🚀 以此學生身份登入</button>
+                    <button onclick="tpResetName()" style="background:#E65100;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">🔄 重設帳號（保留進度）</button>
+                    <button onclick="tpFullReset()" style="background:#B71C1C;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">💥 完全清除此學生資料</button>
+                  </div>
+                </div>
+
+                <button onclick="document.getElementById('teacher-panel-modal').remove()"
+                  style="width:100%;background:#333;color:#eee;border:none;border-radius:8px;padding:10px;cursor:pointer;">✕ 關閉</button>
+              </div>`;
+            document.body.appendChild(modal);
+        };
+
+        window.tpLoadStudent = async function() {
+            const name = document.getElementById('tp-student-name').value.trim();
+            if (!name) return;
+            const info = document.getElementById('tp-student-info');
+            info.textContent = '載入中...';
+            const data = await fbGetPlayer(name);
+            if (!data) {
+                info.textContent = '⚠️ 找不到此學生（或從未登入過）';
+                document.getElementById('tp-actions').style.display = 'none';
                 return;
             }
-            // Show reset options
-            const choice = confirm(
-                '✅ 老師驗證成功！\n\n' +
-                '選擇重設項目：\n' +
-                '✅ 確定 → 重設【名字 + 改名次數】（保留所有遊戲進度）\n' +
-                '❌ 取消 → 完全重設【所有資料】（慎用！）'
-            );
-            if (choice) {
-                // Soft reset: name + nameChangeUsed only
-                inventory.playerName = '';
-                inventory.nameChangeUsed = false;
-                saveGame();
-                hideAll();
-                document.getElementById('player-tag').classList.add('hidden');
-                document.getElementById('top-nav').classList.add('hidden'); document.getElementById('exp-bar-wrap') && document.getElementById('exp-bar-wrap').classList.add('hidden');
-                document.getElementById('medal-bar') && document.getElementById('medal-bar').classList.add('hidden');
-                document.getElementById('login-screen').classList.remove('hidden');
-                alert('✅ 已重設名字！學生可重新輸入名字（改名機會重設為 1 次）。');
-            } else {
-                const confirm2 = prompt('⚠️ 確定要完全重設所有資料？\n此操作不可復原！\n請輸入「確認重設」繼續：');
-                if (confirm2 === '確認重設') {
-                    localStorage.removeItem('digiAdventureV3Save');
-                    inventory = { ...defaultInv };
-                    hideAll();
-                    document.getElementById('player-tag') && document.getElementById('player-tag').classList.add('hidden');
-                    document.getElementById('top-nav') && document.getElementById('top-nav').classList.add('hidden'); document.getElementById('exp-bar-wrap') && document.getElementById('exp-bar-wrap').classList.add('hidden');
-                    document.getElementById('medal-bar') && document.getElementById('medal-bar').classList.add('hidden');
-                    document.getElementById('login-screen').classList.remove('hidden');
-                    alert('✅ 已完全重設所有遊戲資料。');
-                } else {
-                    alert('❌ 取消重設。');
-                }
-            }
-        }
+            const hasPassword = !!data.password;
+            const hasSave = !!(data.save && data.save.playerExp !== undefined);
+            info.innerHTML = `<span style="color:#4CAF50;">✅ 找到學生</span>　密碼：${hasPassword?'已設定':'未設定'}　存檔：${hasSave?'有 (Lv'+(data.save.playerLv||1)+')':'無'}`;
+            document.getElementById('tp-target-name').textContent = name;
+            document.getElementById('tp-actions').style.display = 'block';
+        };
+
+        window.tpChangePwd = async function() {
+            const name = document.getElementById('tp-student-name').value.trim();
+            const pwd = document.getElementById('tp-new-pwd').value.trim();
+            if (!name || !pwd) return;
+            if (!/^\d{4}$/.test(pwd)) { alert('密碼必須是 4 位數字！'); return; }
+            await fbPatchPlayer(name, { password: hashPwd(pwd) });
+            alert('✅ 已成功更改「' + name + '」的密碼為：' + pwd);
+        };
+
+        window.tpLoginAs = async function() {
+            const name = document.getElementById('tp-student-name').value.trim();
+            if (!name) return;
+            if (!confirm('以「' + name + '」身份登入？')) return;
+            document.getElementById('teacher-panel-modal').remove();
+            await loadFromFirebase(name);
+            inventory.playerName = name;
+            const session = { name, loginAt: Date.now(), avatar: getAvatar() };
+            try { localStorage.setItem(AUTH_KEY, JSON.stringify(session)); } catch(e) {}
+            saveGame();
+            document.getElementById('display-name').textContent = name;
+            document.body.classList.remove('on-login');
+            setAvatarUI();
+            goHome();
+        };
+
+        window.tpResetName = async function() {
+            const name = document.getElementById('tp-student-name').value.trim();
+            if (!name || !confirm('重設「' + name + '」的帳號（保留遊戲進度）？')) return;
+            await fbPatchPlayer(name, { password: null });
+            alert('✅ 已清除密碼。學生下次登入時可重設密碼。');
+        };
+
+        window.tpFullReset = async function() {
+            const name = document.getElementById('tp-student-name').value.trim();
+            if (!name) return;
+            const confirm1 = prompt('⚠️ 此操作將完全刪除「' + name + '」的所有資料！\n請輸入「確認刪除」繼續：');
+            if (confirm1 !== '確認刪除') { alert('❌ 取消。'); return; }
+            await fbSetPlayer(name, null);
+            alert('✅ 已刪除「' + name + '」的所有資料。');
+            document.getElementById('tp-actions').style.display = 'none';
+            document.getElementById('tp-student-info').textContent = '已刪除。';
+        };
         // ==================== END 老師密碼重設功能 ====================
-        // ==================== 老師修復工具 ====================
+                // ==================== 老師修復工具 ====================
         async function teacherRepairTool() {
             const pwd = prompt('🔑 請輸入老師密碼：');
             if (pwd === null) return;
@@ -7079,7 +7370,41 @@ window.setPlaying       = setPlaying;
 window.msSetMode        = msSetMode;
 
 
-// ── Public open/close ──
+// ══ AVATAR PICKER ══
+        window.showAvatarPicker = function() {
+            let modal = document.getElementById('avatar-picker-modal');
+            if (modal) modal.remove();
+            modal = document.createElement('div');
+            modal.id = 'avatar-picker-modal';
+            modal.style.cssText = 'position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:20px;';
+            const grid = AVATARS.map(av =>
+                `<div onclick="selectAvatar('${av}')" style="font-size:2.2em;cursor:pointer;padding:10px;border-radius:10px;border:2px solid rgba(200,168,75,0.3);background:rgba(10,20,40,0.6);transition:transform 0.15s;text-align:center;"
+                  onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">${av}</div>`
+            ).join('');
+            modal.innerHTML = `
+              <div style="background:#1a1a2e;border-radius:16px;padding:20px;width:100%;max-width:420px;text-align:center;">
+                <div style="font-size:1.1em;font-weight:900;color:#FFD700;margin-bottom:14px;">🧑‍🎨 選擇你的頭像</div>
+                <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-bottom:16px;">${grid}</div>
+                <button onclick="document.getElementById('avatar-picker-modal').remove()"
+                  style="background:#333;color:#eee;border:none;border-radius:8px;padding:10px 24px;cursor:pointer;">取消</button>
+              </div>`;
+            document.body.appendChild(modal);
+        };
+
+        window.selectAvatar = function(av) {
+            inventory.avatar = av;
+            setAvatarUI();  // update all avatar display points immediately
+            const lp = document.getElementById('login-avatar-preview');
+            if (lp) lp.textContent = av;
+            // Save avatar to Firebase immediately if logged in
+            if (inventory.playerName) {
+                fbPatchPlayer(inventory.playerName, { avatar: av }).catch(()=>{});
+                saveGame();  // also persists avatar in save JSON
+            }
+            document.getElementById('avatar-picker-modal').remove();
+        };
+
+        // ── Public open/close ──
 window.openMoShu = function() {
     score = 0; level = 1; streak = 0; hp = 100;
     msSessionExp = 0; puzzleIdx = 0; dictIdx = 0; hwIdx = 0;
