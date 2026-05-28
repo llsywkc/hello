@@ -911,6 +911,103 @@
         #copyright-bar .cr-sep  { opacity: 0.4; margin: 0 4px; }
         /* Push game content above copyright bar */
         body { padding-bottom: 22px; }
+
+        /* ══ SHOOTER GAME ══ */
+        #game-shooter { padding: 0; overflow: hidden; }
+        #shooter-wrap {
+            position: relative; width: 100%; height: 100vh;
+            max-height: 100vh;
+            background: linear-gradient(180deg, #0a0018 0%, #0d0030 40%, #1a0050 100%);
+            overflow: hidden; user-select: none;
+        }
+        #shooter-question {
+            position: absolute; top: 0; left: 0; right: 0; z-index: 20;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            padding: 10px 14px; text-align: center;
+            border-bottom: 1px solid rgba(200,168,75,0.4);
+        }
+        #shooter-q-text {
+            font-size: 1.05em; font-weight: 900; color: #FFF8E7;
+            font-family: 'Noto Serif TC', serif; line-height: 1.4;
+        }
+        #shooter-hud {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.78em; color: #FFD54F; margin-top: 4px;
+        }
+        #shooter-arena {
+            position: absolute; top: 80px; bottom: 80px; left: 0; right: 0;
+        }
+        .shooter-target {
+            position: absolute; display: flex; align-items: center; justify-content: center;
+            width: 88px; height: 88px; border-radius: 50%;
+            font-size: 0.82em; font-weight: 900; text-align: center;
+            cursor: pointer; transition: transform 0.1s;
+            border: 3px solid rgba(255,255,255,0.6);
+            font-family: 'Noto Serif TC', serif;
+            line-height: 1.2; padding: 6px; box-sizing: border-box;
+            word-break: break-all;
+            box-shadow: 0 0 18px rgba(255,255,255,0.25), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .shooter-target:active { transform: scale(0.92); }
+        .target-hit {
+            animation: targetHit 0.4s ease-out forwards;
+        }
+        .target-miss {
+            animation: targetMiss 0.3s ease-out forwards;
+        }
+        @keyframes targetHit {
+            0%   { transform: scale(1); opacity: 1; }
+            50%  { transform: scale(1.5); opacity: 0.8; filter: brightness(3); }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        @keyframes targetMiss {
+            0%   { transform: translateX(0); }
+            25%  { transform: translateX(-10px); }
+            75%  { transform: translateX(10px); }
+            100% { transform: translateX(0); border-color: #F44336; }
+        }
+        .particle {
+            position: absolute; pointer-events: none; border-radius: 50%;
+            animation: particleFly 0.6s ease-out forwards;
+        }
+        @keyframes particleFly {
+            0%   { transform: translate(0,0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--dx),var(--dy)) scale(0); opacity: 0; }
+        }
+        #shooter-cannon {
+            position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+            font-size: 2.8em; z-index: 10;
+            filter: drop-shadow(0 0 10px rgba(255,200,50,0.8));
+            transition: transform 0.15s;
+        }
+        #shooter-laser {
+            position: absolute; width: 4px; background: linear-gradient(#FFD700, transparent);
+            left: 50%; transform: translateX(-50%);
+            bottom: 130px; height: 0; z-index: 5;
+            border-radius: 2px; opacity: 0;
+            transition: height 0.12s, opacity 0.12s;
+        }
+        #shooter-footer {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 78px;
+            background: rgba(0,0,0,0.7); border-top: 1px solid rgba(200,168,75,0.3);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 0 12px; z-index: 20;
+        }
+        #shooter-hp-bar-wrap {
+            flex: 1; background: rgba(255,255,255,0.1);
+            border-radius: 10px; height: 12px; overflow: hidden;
+        }
+        #shooter-hp-bar { height: 100%; background: linear-gradient(90deg, #F44336, #FF8A65); border-radius: 10px; transition: width 0.3s; }
+        #shooter-msg {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            font-size: 1.8em; font-weight: 900; color: #FFD700; z-index: 30;
+            text-shadow: 0 0 20px #FF6B00, 0 2px 4px rgba(0,0,0,0.9);
+            pointer-events: none; opacity: 0; transition: opacity 0.2s;
+        }
+        #shooter-stars {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; z-index: 1;
+        }
 </style>
 </head>
 <body class="on-login">
@@ -1188,6 +1285,30 @@
                         <div class="mc-icon">📝</div>
                         <div class="mc-title">FA 温習</div>
                         <div class="mc-sub">課文重組</div>
+                    </div>
+                </div>
+
+                <div class="menu-section-label">🎯 射擊道場</div>
+                <div class="menu-card-grid">
+                    <div class="menu-card" onclick="startShooter('fill')" style="border-color:#FF6F00;">
+                        <div class="mc-icon">🚀</div>
+                        <div class="mc-title">太空射擊</div>
+                        <div class="mc-sub">填充選擇</div>
+                    </div>
+                    <div class="menu-card" onclick="startShooter('match-word')" style="border-color:#1565C0;">
+                        <div class="mc-icon">🛸</div>
+                        <div class="mc-title">配詞射擊</div>
+                        <div class="mc-sub">詞語配對</div>
+                    </div>
+                    <div class="menu-card" onclick="startShooter('term3-vocab')" style="border-color:#6A1B9A;">
+                        <div class="mc-icon">⚡</div>
+                        <div class="mc-title">詞語射擊</div>
+                        <div class="mc-sub">第三學期詞彙</div>
+                    </div>
+                    <div class="menu-card" onclick="startShooter('fa-mc')" style="border-color:#C62828;">
+                        <div class="mc-icon">🎯</div>
+                        <div class="mc-title">FA 射擊</div>
+                        <div class="mc-sub">FA 綜合題</div>
                     </div>
                 </div>
 
@@ -3839,6 +3960,8 @@ function checkDailyReset() {
         function goHome() {
             playSound('click'); updateUI(); renderDailyQuests(); hideAll(); clearInterval(combatTimerInterval);
             stopContinuousShake(); fxFlipText(false);
+            // Cleanup shooter
+            shooterActive = false; if (shooterAnimFrame) cancelAnimationFrame(shooterAnimFrame);
             if(!inventory.playerName) {
                 document.getElementById('login-screen').classList.remove('hidden');
             } else {
@@ -5745,46 +5868,46 @@ function checkDailyReset() {
                         legendary  ? `🌟<small>傳說</small>×${legendary}` : '',
                     ].filter(Boolean).join(' ');
 
-                    return \`
-                    <div style="\${cardBg}border-radius:10px;margin-bottom:5px;overflow:hidden;">
-                      <div onclick="(function(){const d=document.getElementById('\${cid}');const a=document.getElementById('\${cid}-arr');const isOpen=d.style.display!=='none';document.querySelectorAll('[id^=combat-card-]').forEach(el=>{if(!el.id.endsWith('-arr')){el.style.display='none';const arr=document.getElementById(el.id+'-arr');if(arr)arr.textContent='▼';}});if(!isOpen){d.style.display='block';a.textContent='▲';}})() "
+                    return `
+                    <div style="${cardBg}border-radius:10px;margin-bottom:5px;overflow:hidden;">
+                      <div onclick="(function(){const d=document.getElementById('${cid}');const a=document.getElementById('${cid}-arr');const isOpen=d.style.display!=='none';document.querySelectorAll('[id^=combat-card-]').forEach(el=>{if(!el.id.endsWith('-arr')){el.style.display='none';const arr=document.getElementById(el.id+'-arr');if(arr)arr.textContent='▼';}});if(!isOpen){d.style.display='block';a.textContent='▲';}})() "
                            style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;">
-                        <span style="color:#FFD700;font-weight:bold;min-width:28px;">\${medal}</span>
+                        <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
                         <div style="flex:1;margin-left:8px;">
-                          <div style="color:\${isMe?'#FF8A80':'#eee'};font-weight:\${isMe?'bold':'normal'};font-size:0.92em;">
-                            <span style="margin-right:3px;">\${e.avatar||'🐉'}</span>\${e.name||'?'}\${isMe?' 👤':''}
+                          <div style="color:${isMe?'#FF8A80':'#eee'};font-weight:${isMe?'bold':'normal'};font-size:0.92em;">
+                            <span style="margin-right:3px;">${e.avatar||'🐉'}</span>${e.name||'?'}${isMe?' 👤':''}
                           </div>
-                          <div style="font-size:0.7em;color:#aaa;margin-top:2px;">\${badges||'尚未出戰'}</div>
+                          <div style="font-size:0.7em;color:#aaa;margin-top:2px;">${badges||'尚未出戰'}</div>
                         </div>
-                        <span style="color:#FF6B6B;font-size:0.85em;font-weight:bold;">⚔️ \${score}</span>
-                        <span id="\${cid}-arr" style="color:#888;font-size:0.75em;margin-left:8px;">▼</span>
+                        <span style="color:#FF6B6B;font-size:0.85em;font-weight:bold;">⚔️ ${score}</span>
+                        <span id="${cid}-arr" style="color:#888;font-size:0.75em;margin-left:8px;">▼</span>
                       </div>
-                      <div id="\${cid}" style="display:none;padding:0 12px 10px 12px;border-top:1px solid #222;">
+                      <div id="${cid}" style="display:none;padding:0 12px 10px 12px;border-top:1px solid #222;">
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 10px;margin-top:8px;font-size:0.8em;">
                           <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
-                            <span style="color:#aaa;">⚔️ Lv1-3 Boss</span><span style="color:#80CBC4;font-weight:bold;">\${lv13} 場</span>
+                            <span style="color:#aaa;">⚔️ Lv1-3 Boss</span><span style="color:#80CBC4;font-weight:bold;">${lv13} 場</span>
                           </div>
                           <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
-                            <span style="color:#aaa;">🌑 Lv4-6 Boss</span><span style="color:#FF8A65;font-weight:bold;">\${lv46} 場</span>
+                            <span style="color:#aaa;">🌑 Lv4-6 Boss</span><span style="color:#FF8A65;font-weight:bold;">${lv46} 場</span>
                           </div>
                           <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
-                            <span style="color:#aaa;">🔴 Lv7 Boss</span><span style="color:#EF9A9A;font-weight:bold;">\${lv7} 場</span>
+                            <span style="color:#aaa;">🔴 Lv7 Boss</span><span style="color:#EF9A9A;font-weight:bold;">${lv7} 場</span>
                           </div>
                           <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
-                            <span style="color:#aaa;">⚡ Lv8 Boss</span><span style="color:#FFD54F;font-weight:bold;">\${lv8} 場</span>
+                            <span style="color:#aaa;">⚡ Lv8 Boss</span><span style="color:#FFD54F;font-weight:bold;">${lv8} 場</span>
                           </div>
                           <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
-                            <span style="color:#aaa;">🦎 神獸</span><span style="color:#CE93D8;font-weight:bold;">\${epic} 場</span>
+                            <span style="color:#aaa;">🦎 神獸</span><span style="color:#CE93D8;font-weight:bold;">${epic} 場</span>
                           </div>
                           <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
-                            <span style="color:#aaa;">🌟 傳說神獸</span><span style="color:#FFD700;font-weight:bold;">\${legendary} 場</span>
+                            <span style="color:#aaa;">🌟 傳說神獸</span><span style="color:#FFD700;font-weight:bold;">${legendary} 場</span>
                           </div>
                         </div>
                         <div style="margin-top:8px;background:#111;border-radius:6px;padding:6px 8px;font-size:0.75em;color:#888;">
-                          分數構成：⚔️\${lv13*20} + 🌑\${lv46*40} + 🔴\${lv7*80} + ⚡\${lv8*80} + 🦎\${epic*300} + 🌟\${legendary*500}
+                          分數構成：⚔️${lv13*20} + 🌑${lv46*40} + 🔴${lv7*80} + ⚡${lv8*80} + 🦎${epic*300} + 🌟${legendary*500}
                         </div>
                       </div>
-                    </div>\`;
+                    </div>`;
                 }
             },
             {
@@ -6071,6 +6194,258 @@ async function fetchLeaderboard() {
             // Always submit latest score when opening LB (force refresh)
             submitScore(false);
         }
+
+        // ══════════ 🎯 SHOOTER GAME ══════════
+        let shooterTasks = [], shooterIdx = 0, shooterHP = 3, shooterScore = 0;
+        let shooterStreak = 0, shooterActive = false, shooterAnimFrame = null;
+        let shooterTargets = [], shooterSpeed = 0.35, shooterAnswered = false;
+        let shooterStarCtx = null, shooterStars = [];
+
+        const TARGET_COLORS = [
+            ['#1565C0','#42A5F5'], ['#6A1B9A','#CE93D8'],
+            ['#2E7D32','#A5D6A7'], ['#BF360C','#FF8A65'],
+            ['#F57F17','#FFE082'], ['#00838F','#80DEEA']
+        ];
+
+        function initShooterStars() {
+            const c = document.getElementById('shooter-stars');
+            if (!c) return;
+            c.width = window.innerWidth; c.height = window.innerHeight;
+            shooterStarCtx = c.getContext('2d');
+            shooterStars = Array.from({length:80}, () => ({
+                x: Math.random()*c.width, y: Math.random()*c.height,
+                r: Math.random()*1.5+0.3, speed: Math.random()*0.4+0.1,
+                opacity: Math.random()*0.6+0.3
+            }));
+        }
+
+        function animShooterStars() {
+            if (!shooterStarCtx || !shooterActive) return;
+            const c = document.getElementById('shooter-stars');
+            shooterStarCtx.clearRect(0,0,c.width,c.height);
+            shooterStars.forEach(s => {
+                s.y += s.speed;
+                if (s.y > c.height) { s.y = 0; s.x = Math.random()*c.width; }
+                shooterStarCtx.beginPath();
+                shooterStarCtx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+                shooterStarCtx.fillStyle = `rgba(255,255,255,${s.opacity})`;
+                shooterStarCtx.fill();
+            });
+        }
+
+        window.startShooter = function(type) {
+            const cfg = mcConfigs[type];
+            if (!cfg) return;
+            playSound('click'); hideAll();
+            document.getElementById('game-shooter').classList.remove('hidden');
+            shooterTasks   = shuffle([...cfg.tasks]);
+            shooterIdx     = 0; shooterHP = 3; shooterScore = 0;
+            shooterStreak  = 0; shooterActive = true; shooterSpeed = 0.35;
+            updateShooterHUD();
+            initShooterStars();
+            loadShooterQuestion();
+            requestAnimationFrame(shooterLoop);
+        };
+
+        function shooterLoop() {
+            if (!shooterActive) return;
+            animShooterStars();
+            moveTargets();
+            shooterAnimFrame = requestAnimationFrame(shooterLoop);
+        }
+
+        function loadShooterQuestion() {
+            if (shooterIdx >= shooterTasks.length) { shooterWin(); return; }
+            const task = shooterTasks[shooterIdx];
+            document.getElementById('shooter-q-text').textContent = task.q;
+            shooterAnswered = false;
+            spawnTargets(task);
+        }
+
+        function spawnTargets(task) {
+            const arena = document.getElementById('shooter-arena');
+            arena.innerHTML = '';
+            shooterTargets = [];
+            const opts = shuffle([...task.options]);
+            const aW = arena.offsetWidth || window.innerWidth;
+            const aH = arena.offsetHeight || (window.innerHeight - 160);
+            // Spread targets across arena in a loose grid
+            const positions = shufflePositions(opts.length, aW, aH);
+            opts.forEach((opt, i) => {
+                const [cx, cy] = TARGET_COLORS[i % TARGET_COLORS.length];
+                const el = document.createElement('div');
+                el.className = 'shooter-target';
+                el.textContent = opt;
+                el.style.background = `radial-gradient(circle at 35% 35%, ${cx}cc, ${cy}88)`;
+                el.style.color = '#fff';
+                el.style.left  = positions[i].x + 'px';
+                el.style.top   = positions[i].y + 'px';
+                // Give each target a random drift direction & speed
+                el.dataset.vx = (Math.random() - 0.5) * 1.2;
+                el.dataset.vy = (Math.random() * 0.5 + 0.2) * (Math.random() > 0.5 ? 1 : -1);
+                el.dataset.correct = (opt === task.ans) ? '1' : '0';
+                el.addEventListener('click', () => onTargetClick(el, task));
+                arena.appendChild(el);
+                shooterTargets.push(el);
+            });
+        }
+
+        function shufflePositions(n, w, h) {
+            const margin = 50, tw = 88, th = 88;
+            const positions = [];
+            let attempts = 0;
+            while (positions.length < n && attempts < 500) {
+                attempts++;
+                const x = margin + Math.random() * (w - tw - margin*2);
+                const y = margin + Math.random() * (h - th - margin*2);
+                const overlap = positions.some(p => Math.abs(p.x-x)<100 && Math.abs(p.y-y)<100);
+                if (!overlap) positions.push({x, y});
+            }
+            while (positions.length < n) positions.push({x: Math.random()*(w-100), y: Math.random()*(h-100)});
+            return positions;
+        }
+
+        function moveTargets() {
+            if (shooterAnswered) return;
+            const arena = document.getElementById('shooter-arena');
+            if (!arena) return;
+            const aW = arena.offsetWidth || window.innerWidth;
+            const aH = arena.offsetHeight || 300;
+            shooterTargets.forEach(el => {
+                if (!el.parentNode) return;
+                let x = parseFloat(el.style.left) || 0;
+                let y = parseFloat(el.style.top)  || 0;
+                let vx = parseFloat(el.dataset.vx);
+                let vy = parseFloat(el.dataset.vy);
+                x += vx * shooterSpeed * 2;
+                y += vy * shooterSpeed * 2;
+                // Bounce off walls
+                if (x < 0 || x > aW - 88) { vx *= -1; el.dataset.vx = vx; x = Math.max(0, Math.min(x, aW-88)); }
+                if (y < 0 || y > aH - 88) { vy *= -1; el.dataset.vy = vy; y = Math.max(0, Math.min(y, aH-88)); }
+                el.style.left = x + 'px';
+                el.style.top  = y + 'px';
+            });
+        }
+
+        function onTargetClick(el, task) {
+            if (shooterAnswered) return;
+            shooterAnswered = true;
+            const correct = el.dataset.correct === '1';
+            // Fire laser toward target
+            fireLaser(el);
+            if (correct) {
+                el.classList.add('target-hit');
+                spawnParticles(el);
+                playSound('win');
+                shooterScore++;
+                shooterStreak++;
+                shooterSpeed = Math.min(1.8, 0.35 + shooterStreak * 0.06);
+                showShooterMsg(shooterStreak >= 5 ? `🔥 ${shooterStreak}連對！` : '✅ 正確！', '#FFD700');
+                addStreak();
+                setTimeout(() => { shooterIdx++; loadShooterQuestion(); }, 900);
+            } else {
+                el.classList.add('target-miss');
+                // Highlight correct answer
+                shooterTargets.forEach(t => {
+                    if (t.dataset.correct === '1') t.style.boxShadow = '0 0 30px #4CAF50, 0 0 60px #4CAF50';
+                });
+                playSound('error');
+                shooterHP--;
+                shooterStreak = 0;
+                inventory.streak = 0;
+                updateShooterHUD();
+                showShooterMsg('❌ 答錯！', '#F44336');
+                updateUI(false);
+                if (shooterHP <= 0) { setTimeout(shooterGameOver, 1000); return; }
+                setTimeout(() => { shooterIdx++; loadShooterQuestion(); }, 1400);
+            }
+            updateShooterHUD();
+        }
+
+        function fireLaser(targetEl) {
+            const laser = document.getElementById('shooter-laser');
+            const arena = document.getElementById('shooter-arena');
+            if (!laser || !arena) return;
+            const tX = parseFloat(targetEl.style.left) + 44;
+            const aW = (arena.offsetWidth || window.innerWidth);
+            const cannon = document.getElementById('shooter-cannon');
+            const cannonY = cannon ? cannon.offsetTop : window.innerHeight - 130;
+            const tY = parseFloat(targetEl.style.top) + 44 + (arena.offsetTop || 80);
+            const dist = Math.abs(cannonY - tY) + 20;
+            laser.style.height = dist + 'px';
+            laser.style.opacity = '1';
+            laser.style.left = tX + 'px';
+            setTimeout(() => { laser.style.height = '0'; laser.style.opacity = '0'; }, 200);
+        }
+
+        function spawnParticles(el) {
+            const arena = document.getElementById('shooter-arena');
+            if (!arena) return;
+            const x = parseFloat(el.style.left) + 44;
+            const y = parseFloat(el.style.top) + 44;
+            const colors = ['#FFD700','#FF6B00','#FF4444','#FFFFFF','#4CAF50'];
+            for (let i = 0; i < 12; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const angle = (i / 12) * Math.PI * 2;
+                const dist  = 40 + Math.random() * 40;
+                p.style.cssText = `width:${4+Math.random()*6}px;height:${4+Math.random()*6}px;
+                    background:${colors[i%colors.length]};left:${x}px;top:${y}px;
+                    --dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;`;
+                arena.appendChild(p);
+                setTimeout(() => p.remove(), 700);
+            }
+        }
+
+        function showShooterMsg(text, color) {
+            const msg = document.getElementById('shooter-msg');
+            if (!msg) return;
+            msg.textContent = text; msg.style.color = color; msg.style.opacity = '1';
+            setTimeout(() => { msg.style.opacity = '0'; }, 700);
+        }
+
+        function updateShooterHUD() {
+            const maxHP = 3;
+            document.getElementById('shooter-score').textContent  = shooterScore;
+            document.getElementById('shooter-streak-disp').textContent = shooterStreak;
+            document.getElementById('shooter-hp-disp').textContent = shooterHP;
+            document.getElementById('shooter-hp-bar').style.width = (shooterHP/maxHP*100) + '%';
+            document.getElementById('shooter-hp-bar').style.background =
+                shooterHP <= 1 ? 'linear-gradient(90deg,#F44336,#FF8A65)' :
+                shooterHP === 2 ? 'linear-gradient(90deg,#FF9800,#FFD54F)' :
+                                  'linear-gradient(90deg,#4CAF50,#A5D6A7)';
+        }
+
+        function shooterWin() {
+            shooterActive = false;
+            cancelAnimationFrame(shooterAnimFrame);
+            playSound('bosswin');
+            gainExp(shooterScore * 2, '射擊道場');
+            saveGame();
+            const arena = document.getElementById('shooter-arena');
+            if (arena) arena.innerHTML = `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#FFD700;">
+                <div style="font-size:2.5em;margin-bottom:10px;">🏆</div>
+                <div style="font-size:1.2em;font-weight:900;">全部完成！</div>
+                <div style="font-size:0.9em;margin-top:8px;color:#FFF8E7;">得分：${shooterScore} · EXP +${shooterScore*2}</div>
+                <button onclick="goHome()" style="margin-top:20px;background:#1565C0;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:1em;cursor:pointer;">🏠 返回</button>
+            </div>`;
+        }
+
+        function shooterGameOver() {
+            shooterActive = false;
+            cancelAnimationFrame(shooterAnimFrame);
+            playSound('error');
+            saveGame();
+            const arena = document.getElementById('shooter-arena');
+            if (arena) arena.innerHTML = `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#F44336;">
+                <div style="font-size:2.5em;margin-bottom:10px;">💀</div>
+                <div style="font-size:1.2em;font-weight:900;color:#FF8A80;">飛船被擊落！</div>
+                <div style="font-size:0.9em;margin-top:8px;color:#FFF8E7;">得分：${shooterScore}</div>
+                <button onclick="goHome()" style="margin-top:20px;background:#C62828;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:1em;cursor:pointer;">🏠 返回</button>
+            </div>`;
+        }
+        // ══════════ END SHOOTER ══════════
+
         // ==================== END 排行榜 ====================
 
         
@@ -8152,6 +8527,40 @@ window.closeRC = function() {
 
 })(); // end RC IIFE
 </script>
+
+
+    <!-- ══ SHOOTER GAME SCREEN ══ -->
+    <div id="game-shooter" class="screen hidden">
+      <div id="shooter-wrap">
+        <!-- Starfield bg -->
+        <canvas id="shooter-stars"></canvas>
+        <!-- Question bar -->
+        <div id="shooter-question">
+          <div id="shooter-q-text">題目載入中...</div>
+          <div id="shooter-hud">
+            <span>🎯 <span id="shooter-score">0</span></span>
+            <span>🔥 <span id="shooter-streak-disp">0</span> 連對</span>
+            <span>❤️ <span id="shooter-hp-disp">3</span></span>
+          </div>
+        </div>
+        <!-- Arena -->
+        <div id="shooter-arena"></div>
+        <!-- Laser beam -->
+        <div id="shooter-laser"></div>
+        <!-- Cannon -->
+        <div id="shooter-cannon">🛸</div>
+        <!-- Hit message -->
+        <div id="shooter-msg"></div>
+        <!-- Footer -->
+        <div id="shooter-footer">
+          <span style="color:#FFD54F;font-size:0.8em;font-weight:bold;">HP</span>
+          <div id="shooter-hp-bar-wrap">
+            <div id="shooter-hp-bar" style="width:100%;"></div>
+          </div>
+          <button onclick="goHome()" style="background:rgba(200,50,50,0.7);color:#fff;border:none;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:0.82em;">🏠 退出</button>
+        </div>
+      </div>
+    </div>
 
 </body>
 </html>
