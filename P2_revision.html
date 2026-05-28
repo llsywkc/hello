@@ -969,8 +969,25 @@
         #dojo-btn-drag.active-mode  { background:linear-gradient(135deg,#6D4C41,#8D6E63)!important; color:#FFF8E1!important; border:none!important; box-shadow:0 3px 10px rgba(109,76,65,0.5)!important; }
         #dojo-btn-write.active-mode { background:linear-gradient(135deg,#6D4C41,#8D6E63)!important; color:#FFF8E1!important; border:none!important; box-shadow:0 3px 10px rgba(109,76,65,0.5)!important; }
         </style>
+
+  <meta name="author" content="王家駿老師 / 勵志會梁李秀娛紀念小學">
+  <meta name="copyright" content="© 2025-2026 王家駿老師. All Rights Reserved.">
+  <meta name="robots" content="noindex, noarchive, nosnippet">
+  <meta name="googlebot" content="noindex, noarchive">
 </head>
 <body>
+
+<div id="copyright-bar" style="
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  background:rgba(20,20,40,0.92);
+  color:#ccc;font-size:11px;font-family:sans-serif;
+  text-align:center;padding:3px 8px;
+  letter-spacing:0.03em;pointer-events:none;
+  border-top:1px solid rgba(255,255,255,0.1);
+  user-select:none;-webkit-user-select:none;">
+  © 2025–2026 王家駿老師 ｜ 勵志會梁李秀娛紀念小學 ｜ 版權所有，未經許可不得複製或轉載
+</div>
+
 
     <div id="evo-modal" class="hidden">
         <div id="evo-box">
@@ -1300,6 +1317,117 @@
     </div>
 
     <script>
+
+/* ============================================================
+ *  版權聲明 COPYRIGHT NOTICE
+ *  作品名稱：P2 中文科 第三學期 全年評估 互動學習遊戲
+ *  作　　者：王家駿 老師
+ *  學　　校：勵志會梁李秀娛紀念小學
+ *  版　　本：v22
+ *  創作年份：2025–2026
+ *  保留所有權利。未經作者書面許可，不得複製、修改、
+ *  分發或以任何形式使用本作品。
+ *  All rights reserved. Unauthorized reproduction,
+ *  modification, distribution or use is prohibited.
+ * ============================================================ */
+
+const _AUTHOR    = '王家駿老師';
+const _SCHOOL    = '勵志會梁李秀娛紀念小學';
+const _VERSION   = 'v22';
+const _YEAR      = '2025-2026';
+const _COPYRIGHT = '© 2025-2026 王家駿老師 / 勵志會梁李秀娛紀念小學. All Rights Reserved.';
+
+/* ===== 登入保護 & 技術防護 ===== */
+(function(){
+  const _PW = '2CYEAH';
+  const _SESSION_MINUTES = 60;
+  const _STORAGE_KEY = '_rc_login_ts';
+
+  // ── DevTools copyright warning ──
+  console.log('%c⚠️  版權警告 COPYRIGHT WARNING', 'color:#f00;font-size:18px;font-weight:bold;');
+  console.log('%c本遊戲由 王家駿老師（勵志會梁李秀娛紀念小學）獨立創作。\n未經書面授權，嚴禁複製、修改或再發布。\n© 2025-2026 All Rights Reserved.', 'color:#ff9900;font-size:13px;');
+
+  // ── Right-click disable ──
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+
+  // ── Keyboard shortcut block ──
+  document.addEventListener('keydown', function(e){
+    // Ctrl+U (view source), Ctrl+S (save), Ctrl+Shift+I/J/C (devtools), F12
+    if (
+      (e.ctrlKey && (e.key==='u'||e.key==='U'||e.key==='s'||e.key==='S')) ||
+      (e.ctrlKey && e.shiftKey && (e.key==='I'||e.key==='i'||e.key==='J'||e.key==='j'||e.key==='C'||e.key==='c')) ||
+      e.key === 'F12'
+    ){
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  });
+
+  // ── Tamper detection: copyright bar ──
+  setInterval(function(){
+    var bar = document.getElementById('copyright-bar');
+    if (!bar || !document.body.contains(bar)) {
+      console.warn('⚠️  版權欄被移除！Copyright bar removed – unauthorized modification detected.');
+    }
+  }, 5000);
+
+  // ── Session / Login ──
+  function _isLoggedIn(){
+    var ts = localStorage.getItem(_STORAGE_KEY);
+    if (!ts) return false;
+    return (Date.now() - parseInt(ts)) < _SESSION_MINUTES * 60 * 1000;
+  }
+
+  function _showLogin(msg){
+    // Dim the game
+    var overlay = document.getElementById('_login_overlay');
+    if (!overlay){
+      overlay = document.createElement('div');
+      overlay.id = '_login_overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(10,10,30,0.97);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:sans-serif;';
+      document.body.appendChild(overlay);
+    }
+    overlay.innerHTML =
+      '<div style="background:#1a1a3e;border:2px solid #5c6bc0;border-radius:16px;padding:36px 40px;text-align:center;max-width:340px;width:90%;">' +
+      '<div style="font-size:2em;margin-bottom:8px;">🔒</div>' +
+      '<div style="color:#fff;font-size:1.1em;font-weight:bold;margin-bottom:6px;">請輸入密碼</div>' +
+      (msg ? '<div style="color:#ff6b6b;font-size:0.85em;margin-bottom:10px;">'+msg+'</div>' : '<div style="color:#aaa;font-size:0.8em;margin-bottom:14px;">© 2025-2026 王家駿老師 ｜ 勵志會梁李秀娛紀念小學</div>') +
+      '<input id="_login_pw_input" type="password" placeholder="密碼" maxlength="20" style="width:100%;padding:10px;border-radius:8px;border:1px solid #5c6bc0;background:#0d0d2b;color:#fff;font-size:1em;text-align:center;box-sizing:border-box;margin-bottom:12px;" autocomplete="off">' +
+      '<button id="_login_btn" style="width:100%;padding:10px;border-radius:8px;background:#5c6bc0;color:#fff;font-size:1em;border:none;cursor:pointer;">確認</button>' +
+      '<div style="color:#555;font-size:0.72em;margin-top:14px;">© 2025-2026 王家駿老師 ｜ 勵志會梁李秀娛紀念小學</div>' +
+      '</div>';
+    overlay.style.display = 'flex';
+    var inp = document.getElementById('_login_pw_input');
+    var btn = document.getElementById('_login_btn');
+    if (inp) setTimeout(function(){ inp.focus(); }, 100);
+    function _tryLogin(){
+      var val = inp ? inp.value : '';
+      if (val === _PW){
+        localStorage.setItem(_STORAGE_KEY, Date.now().toString());
+        overlay.style.display = 'none';
+      } else {
+        _showLogin('❌ 密碼錯誤，請重試');
+      }
+    }
+    if (btn) btn.addEventListener('click', _tryLogin);
+    if (inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') _tryLogin(); });
+  }
+
+  // ── Check on load ──
+  window.addEventListener('load', function(){
+    if (!_isLoggedIn()) _showLogin('');
+  });
+
+  // ── Periodic re-check every 60s ──
+  setInterval(function(){
+    if (!_isLoggedIn()){
+      _showLogin('⏱ 工作階段已逾時（60分鐘），請重新登入');
+    }
+  }, 60 * 1000);
+
+})();
+/* ===== END 保護層 ===== */
+
         // --- 遊戲音效引擎大升級 ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx;
