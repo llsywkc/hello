@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox：森林大冒險 (2年級中文)</title>
+    <title>Roblox：森林大冒險 (2年級中文冒險)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
         
@@ -751,6 +751,204 @@
         .fx-genesis .rring:nth-child(5) { border-color:#2196F3; animation-delay:0.8s; }
         .fx-genesis .rring:nth-child(6) { border-color:#9C27B0; animation-delay:1s;   }
 
+        
+        /* ══ 寫字道場 Dojo Screen ══ */
+        #dojo-screen {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .dojo-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(139,69,19,0.15);
+            border-radius: 12px;
+            padding: 8px 14px;
+            border: 2px solid rgba(139,69,19,0.3);
+        }
+        #dojo-score-display {
+            font-family: 'Noto Serif TC','標楷體',serif;
+            font-weight: 900;
+            font-size: 1.1em;
+            color: #5D4037;
+        }
+        #dojo-progress-display {
+            font-family: 'Noto Serif TC','標楷體',serif;
+            font-size: 0.95em;
+            color: #8D6E63;
+        }
+        .dojo-clue-box {
+            width: 100%;
+            background: linear-gradient(135deg, #FFF8E1, #FFF3CD);
+            border: 2px solid #FFD54F;
+            border-left: 5px solid #FF8F00;
+            border-radius: 12px;
+            padding: 14px 18px;
+            text-align: center;
+        }
+        .dojo-meaning {
+            font-family: 'Noto Serif TC','標楷體',serif;
+            font-size: 1.2em;
+            font-weight: 900;
+            color: #1a237e;
+            margin-bottom: 6px;
+        }
+        .dojo-jyut {
+            font-size: 0.95em;
+            color: #5D4037;
+            letter-spacing: 1px;
+            font-family: 'Noto Serif TC','標楷體',serif;
+        }
+        .dojo-speak-btn {
+            margin-top: 8px;
+            background: linear-gradient(135deg, #FF8F00, #FFB300);
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 18px;
+            font-size: 1em;
+            font-family: 'Noto Serif TC','標楷體',serif;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(255,143,0,0.4);
+            transition: transform 0.1s;
+        }
+        .dojo-speak-btn:active { transform: scale(0.95); }
+
+        /* Answer slots */
+        #dojo-slots {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            min-height: 70px;
+            padding: 10px;
+            background: rgba(255,255,255,0.6);
+            border: 3px dashed #BCAAA4;
+            border-radius: 14px;
+            width: 100%;
+        }
+        .dojo-drop-slot {
+            width: 62px;
+            height: 62px;
+            border: 3px solid #8D6E63;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6em;
+            font-family: 'Noto Serif TC','標楷體',serif;
+            font-weight: 900;
+            color: #3E2723;
+            transition: background 0.2s, border-color 0.2s;
+            position: relative;
+        }
+        .dojo-drop-slot.drag-over {
+            background: #FFF9C4;
+            border-color: #FF8F00;
+            border-style: solid;
+        }
+        .dojo-drop-slot.filled {
+            background: #E8F5E9;
+            border-color: #388E3C;
+            cursor: pointer;
+        }
+        .dojo-drop-slot.correct {
+            background: #C8E6C9;
+            border-color: #2E7D32;
+            animation: slotCorrect 0.4s ease;
+        }
+        .dojo-drop-slot.wrong {
+            background: #FFCDD2;
+            border-color: #C62828;
+            animation: slotWrong 0.4s ease;
+        }
+        @keyframes slotCorrect {
+            0%  { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100%{ transform: scale(1); }
+        }
+        @keyframes slotWrong {
+            0%,100%{ transform: translateX(0); }
+            25%    { transform: translateX(-6px); }
+            75%    { transform: translateX(6px); }
+        }
+
+        /* Char cards */
+        #dojo-chars {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            padding: 10px;
+        }
+        .dojo-char-card {
+            width: 62px;
+            height: 62px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6D4C41, #8D6E63);
+            color: #FFF8E1;
+            font-size: 1.6em;
+            font-family: 'Noto Serif TC','標楷體',serif;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            user-select: none;
+            -webkit-user-select: none;
+            transition: transform 0.15s, box-shadow 0.15s;
+            touch-action: none;
+        }
+        .dojo-char-card:active, .dojo-char-card.dragging {
+            transform: scale(1.12) rotate(-3deg);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+            cursor: grabbing;
+            opacity: 0.85;
+            z-index: 1000;
+        }
+        .dojo-char-card.used { opacity: 0.3; pointer-events: none; }
+
+        /* Feedback */
+        #dojo-feedback {
+            font-family: 'Noto Serif TC','標楷體',serif;
+            font-size: 1.2em;
+            font-weight: 900;
+            text-align: center;
+            min-height: 36px;
+            padding: 6px;
+        }
+        .dojo-feedback-correct { color: #2E7D32; animation: feedPop 0.4s ease; }
+        .dojo-feedback-wrong   { color: #C62828; animation: feedShake 0.4s ease; }
+        @keyframes feedPop   { 0%{transform:scale(0.8);opacity:0} 100%{transform:scale(1);opacity:1} }
+        @keyframes feedShake { 0%,100%{transform:translateX(0)} 30%{transform:translateX(-8px)} 70%{transform:translateX(8px)} }
+
+        /* Check button */
+        #dojo-check-btn {
+            width: 100%;
+            max-width: 260px;
+            padding: 12px;
+            font-family: 'Noto Serif TC','標楷體',serif;
+            font-size: 1.1em;
+            font-weight: 900;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #5D4037, #8D6E63);
+            color: #FFF8E1;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(93,64,55,0.4);
+            transition: transform 0.1s;
+        }
+        #dojo-check-btn:active { transform: scale(0.97); }
+        #dojo-check-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         </style>
 </head>
 <body>
@@ -825,7 +1023,8 @@
                     <div class="map-card" onclick="startGame('math_mul_div')" style="--cc:#FB8C00;--cg:rgba(251,140,0,0.45);"><div class="map-card-icon">✖️</div><div class="map-card-title">乘法與除法</div><div class="map-card-sub">乘數表·平均分配</div><div class="map-card-stars">⭐⭐⭐</div></div>
                     <div class="map-card" onclick="startGame('math_shape_len')" style="--cc:#0288D1;--cg:rgba(2,136,209,0.45);"><div class="map-card-icon">📐</div><div class="map-card-title">圖形與長度</div><div class="map-card-sub">圖形·cm/m換算</div><div class="map-card-stars">⭐⭐</div></div>
                     <div class="map-card" onclick="startGame('math_word')" style="--cc:#7B1FA2;--cg:rgba(123,31,162,0.45);"><div class="map-card-icon">🧮</div><div class="map-card-title">數學應用題</div><div class="map-card-sub">購物·分配·量度</div><div class="map-card-stars">⭐⭐⭐⭐</div></div>
-                    <div class="map-card" onclick="startGame('math_exam')" style="--cc:#C62828;--cg:rgba(198,40,40,0.5);"><div class="map-card-icon">🏆</div><div class="map-card-title">數學考試</div><div class="map-card-sub">隨機30題·必含應用</div><div class="map-card-stars">🏆🏆🏆🏆🏆</div></div>
+                    <div class="map-card" onclick="startGame('math_exam')" style="--cc:#C62828;--cg:rgba(198,40,40,0.5);"><div class="map-card-icon">🏆</div>
+                    <div class="map-card" onclick="openDojo()" style="--cc:#6D4C41;--cg:rgba(109,76,65,0.45);"><div class="map-card-icon">🏯</div><div class="map-card-title">寫字道場</div><div class="map-card-sub">拖放配詞 · 28個詞語</div><div class="map-card-stars">⭐⭐⭐</div></div><div class="map-card-title">數學考試</div><div class="map-card-sub">隨機30題·必含應用</div><div class="map-card-stars">🏆🏆🏆🏆🏆</div></div>
                 </div>
             </div>
             <hr style="width:95%;border:none;border-top:2px dashed #FFD54F;margin:2px 0 8px 0;">
@@ -1002,6 +1201,33 @@
                 <button class="btn-gold" onclick="showBossHint()">💡 顯示提示</button>
                 <button class="btn-red" id="btn-boss-flee" onclick="goHome()">🏃 逃跑 (返回主頁)</button>
             </div>
+        </div>
+
+        <!-- ══ 寫字道場 Dojo Screen ══ -->
+        <div id="dojo-screen" class="screen hidden">
+            <div class="dojo-header">
+                <span id="dojo-score-display">⚔️ 分數：0</span>
+                <span id="dojo-progress-display">第 1 / 28 題</span>
+                <button class="btn-grey" onclick="goHome()" style="padding:4px 10px;font-size:0.85em;">🏠 返回</button>
+            </div>
+
+            <div class="dojo-clue-box">
+                <div class="dojo-meaning" id="dojo-meaning-text">意思：外出遊覽</div>
+                <div class="dojo-jyut" id="dojo-jyut-text">粵拼：leoi5 hang4</div>
+                <button class="dojo-speak-btn" onclick="dojoSpeak()">🔊 播音</button>
+            </div>
+
+            <div style="width:100%;text-align:center;font-family:'Noto Serif TC','標楷體',serif;color:#5D4037;font-size:0.9em;margin-bottom:-4px;">
+                👇 把正確的字拖入方格
+            </div>
+
+            <div id="dojo-slots"></div>
+
+            <div id="dojo-chars"></div>
+
+            <div id="dojo-feedback"></div>
+
+            <button id="dojo-check-btn" onclick="dojoCheck()">✅ 核對答案</button>
         </div>
 
     </div>
@@ -3051,7 +3277,268 @@
         }
         // ── End Sensei Cheat Code ──────────────────────────────────
 
-        </script>
+        
+        // ══════════════════════════════════════════
+        // 🏯 寫字道場 — Drag & Drop Mode
+        // ══════════════════════════════════════════
+        const dojoVocab = [
+            {word:"分組",   jyut:"fan1 zou2",           meaning:"分成小組"},
+            {word:"連忙",   jyut:"lin4 mong4",          meaning:"急忙、趕快"},
+            {word:"笑話",   jyut:"siu3 waa6",           meaning:"可笑的故事"},
+            {word:"查",     jyut:"caa4",                meaning:"查找、查閱"},
+            {word:"字典",   jyut:"zi6 din2",            meaning:"解釋文字的書"},
+            {word:"曾經",   jyut:"cang4 ging1",         meaning:"以前曾發生過"},
+            {word:"教訓",   jyut:"gaau3 fan3",          meaning:"從錯誤中學到的道理"},
+            {word:"箱子",   jyut:"soeng1 zi2",          meaning:"用來裝東西的盒子"},
+            {word:"課外",   jyut:"fo3 ngoi6",           meaning:"課堂以外的時間"},
+            {word:"班",     jyut:"baan1",               meaning:"班級、一組學生"},
+            {word:"有趣",   jyut:"jau5 ceoi3",          meaning:"令人感興趣的"},
+            {word:"輪流",   jyut:"leon4 lau4",          meaning:"依次輪替"},
+            {word:"介紹",   jyut:"gaai3 siu6",          meaning:"告訴別人有關某人或某事"},
+            {word:"然後",   jyut:"jin4 hau6",           meaning:"之後、接着"},
+            {word:"衣裳",   jyut:"ji1 soeng5",          meaning:"衣服"},
+            {word:"叔",     jyut:"suk1",                meaning:"爸爸的弟弟"},
+            {word:"件",     jyut:"gin6",                meaning:"量詞，用於衣物"},
+            {word:"寬",     jyut:"fun1",                meaning:"寬闊、不窄"},
+            {word:"量度",   jyut:"loeng6 dok6",         meaning:"測量大小長短"},
+            {word:"尺寸",   jyut:"cek3 cun3",           meaning:"大小、尺碼"},
+            {word:"怎麼",   jyut:"zam2 mo1",            meaning:"怎樣、如何"},
+            {word:"失物",   jyut:"sat1 mat6",           meaning:"遺失的東西"},
+            {word:"郊野",   jyut:"gaau1 je5",           meaning:"郊外的地方"},
+            {word:"旅行",   jyut:"leoi5 hang4",         meaning:"外出遊覽"},
+            {word:"談天說地",jyut:"taam4 tin1 syut3 dei6",meaning:"隨意閒聊"},
+            {word:"失主",   jyut:"sat1 zyu2",           meaning:"失去物品的人"},
+            {word:"認領",   jyut:"jing6 ling5",         meaning:"確認並取回失物"},
+            {word:"口袋",   jyut:"hau2 doi6",           meaning:"衣服上的小袋"},
+        ];
+
+        // All chars pool for distractors
+        const dojoAllChars = [...new Set(dojoVocab.map(v=>v.word).join('').split(''))];
+
+        let dojoQueue       = [];   // shuffled indices
+        let dojoQIdx        = 0;    // current position in queue
+        let dojoCurrent     = null; // current vocab item
+        let dojoScore       = 0;
+        let dojoSlotData    = [];   // chars placed in each slot
+        let _dojoDragChar   = null; // char being dragged
+        let _dojoDragSource = null; // 'card' or slot index
+
+        function openDojo() {
+            hideAllScreens();
+            document.getElementById('dojo-screen').classList.remove('hidden');
+            dojoScore = 0;
+            dojoQueue = [...Array(dojoVocab.length).keys()].sort(()=>Math.random()-0.5);
+            dojoQIdx  = 0;
+            dojoLoadQuestion();
+        }
+
+        function dojoLoadQuestion() {
+            if (dojoQIdx >= dojoQueue.length) {
+                // All done — loop again
+                dojoQueue = [...Array(dojoVocab.length).keys()].sort(()=>Math.random()-0.5);
+                dojoQIdx  = 0;
+            }
+            dojoCurrent  = dojoVocab[dojoQueue[dojoQIdx]];
+            dojoSlotData = new Array(dojoCurrent.word.length).fill('');
+
+            // Update clue
+            document.getElementById('dojo-meaning-text').innerText = '意思：' + dojoCurrent.meaning;
+            document.getElementById('dojo-jyut-text').innerText    = '粵拼：' + dojoCurrent.jyut;
+            document.getElementById('dojo-score-display').innerText = '⚔️ 分數：' + dojoScore;
+            document.getElementById('dojo-progress-display').innerText =
+                '第 ' + (dojoQIdx+1) + ' / ' + dojoVocab.length + ' 題';
+            document.getElementById('dojo-feedback').innerHTML = '';
+            document.getElementById('dojo-check-btn').disabled  = false;
+
+            // Build slots
+            const slotsEl = document.getElementById('dojo-slots');
+            slotsEl.innerHTML = '';
+            for (let i = 0; i < dojoCurrent.word.length; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'dojo-drop-slot';
+                slot.dataset.idx = i;
+                slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('drag-over'); });
+                slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+                slot.addEventListener('drop', e => { e.preventDefault(); dojoDropToSlot(i); slot.classList.remove('drag-over'); });
+                slot.addEventListener('click', () => dojoClearSlot(i));
+                slotsEl.appendChild(slot);
+            }
+
+            // Build char cards: correct chars + 2 distractors, shuffled
+            const correctChars = dojoCurrent.word.split('');
+            const distPool     = dojoAllChars.filter(c => !correctChars.includes(c));
+            const distractors  = distPool.sort(()=>Math.random()-0.5).slice(0, 2);
+            const allCards     = [...correctChars, ...distractors].sort(()=>Math.random()-0.5);
+
+            const charsEl = document.getElementById('dojo-chars');
+            charsEl.innerHTML = '';
+            allCards.forEach((ch, ci) => {
+                const card = document.createElement('div');
+                card.className   = 'dojo-char-card';
+                card.innerText   = ch;
+                card.draggable   = true;
+                card.dataset.char = ch;
+                card.dataset.cardIdx = ci;
+
+                // Desktop drag
+                card.addEventListener('dragstart', e => {
+                    _dojoDragChar   = ch;
+                    _dojoDragSource = 'card_' + ci;
+                    card.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+                card.addEventListener('dragend', () => card.classList.remove('dragging'));
+
+                // Touch support for iPad
+                card.addEventListener('touchstart', dojoTouchStart, {passive:false});
+                card.addEventListener('touchmove',  dojoTouchMove,  {passive:false});
+                card.addEventListener('touchend',   dojoTouchEnd,   {passive:false});
+
+                charsEl.appendChild(card);
+            });
+
+            // Auto-speak after short delay
+            setTimeout(dojoSpeak, 400);
+        }
+
+        function dojoDropToSlot(slotIdx) {
+            if (!_dojoDragChar) return;
+            // If dragging from another slot, clear that slot first
+            if (_dojoDragSource && _dojoDragSource.startsWith('slot_')) {
+                const fromIdx = parseInt(_dojoDragSource.split('_')[1]);
+                dojoSlotData[fromIdx] = '';
+                dojoRenderSlots();
+            } else if (_dojoDragSource && _dojoDragSource.startsWith('card_')) {
+                // Mark card as used
+                const ci = parseInt(_dojoDragSource.split('_')[1]);
+                const cards = document.querySelectorAll('.dojo-char-card');
+                if (cards[ci]) cards[ci].classList.add('used');
+            }
+            // Place char in slot
+            dojoSlotData[slotIdx] = _dojoDragChar;
+            dojoRenderSlots();
+            _dojoDragChar   = null;
+            _dojoDragSource = null;
+        }
+
+        function dojoClearSlot(slotIdx) {
+            const ch = dojoSlotData[slotIdx];
+            if (!ch) return;
+            dojoSlotData[slotIdx] = '';
+            // Re-enable matching card
+            document.querySelectorAll('.dojo-char-card').forEach(c => {
+                if (c.dataset.char === ch && c.classList.contains('used')) {
+                    c.classList.remove('used');
+                }
+            });
+            dojoRenderSlots();
+        }
+
+        function dojoRenderSlots() {
+            const slots = document.querySelectorAll('.dojo-drop-slot');
+            slots.forEach((slot, i) => {
+                const ch = dojoSlotData[i] || '';
+                slot.innerText = ch;
+                slot.classList.toggle('filled', ch !== '');
+            });
+        }
+
+        function dojoCheck() {
+            const answer = dojoSlotData.join('');
+            if (answer.length < dojoCurrent.word.length || dojoSlotData.includes('')) {
+                document.getElementById('dojo-feedback').innerHTML =
+                    '<span class="dojo-feedback-wrong">⚠️ 請先填滿所有方格！</span>';
+                return;
+            }
+            const slots = document.querySelectorAll('.dojo-drop-slot');
+            const correct = (answer === dojoCurrent.word);
+            if (correct) {
+                dojoScore += 10;
+                slots.forEach(s => s.classList.add('correct'));
+                document.getElementById('dojo-feedback').innerHTML =
+                    '<span class="dojo-feedback-correct">🎉 答對了！＋10分</span>';
+                document.getElementById('dojo-score-display').innerText = '⚔️ 分數：' + dojoScore;
+                document.getElementById('dojo-check-btn').disabled = true;
+                playSound('correct');
+                setTimeout(() => {
+                    dojoQIdx++;
+                    dojoLoadQuestion();
+                }, 1500);
+            } else {
+                slots.forEach(s => s.classList.add('wrong'));
+                document.getElementById('dojo-feedback').innerHTML =
+                    '<span class="dojo-feedback-wrong">❌ 答錯了！正確答案：' + dojoCurrent.word + '</span>';
+                playSound('wrong');
+                setTimeout(() => {
+                    slots.forEach(s => s.classList.remove('wrong'));
+                    // Reset slots
+                    dojoSlotData = new Array(dojoCurrent.word.length).fill('');
+                    dojoRenderSlots();
+                    document.querySelectorAll('.dojo-char-card').forEach(c => c.classList.remove('used'));
+                    document.getElementById('dojo-feedback').innerHTML = '';
+                }, 1800);
+            }
+        }
+
+        function dojoSpeak() {
+            if (!dojoCurrent) return;
+            const utter = new SpeechSynthesisUtterance(dojoCurrent.word);
+            utter.lang  = 'zh-HK';
+            utter.rate  = 0.85;
+            utter.pitch = 1.05;
+            window.speechSynthesis && window.speechSynthesis.speak(utter);
+        }
+
+        // ── Touch drag support for iPad ──
+        let _touchCard = null, _touchClone = null;
+
+        function dojoTouchStart(e) {
+            e.preventDefault();
+            _touchCard = e.currentTarget;
+            _dojoDragChar   = _touchCard.dataset.char;
+            _dojoDragSource = 'card_' + _touchCard.dataset.cardIdx;
+            // Create floating clone
+            _touchClone = _touchCard.cloneNode(true);
+            _touchClone.style.cssText = 'position:fixed;opacity:0.85;z-index:9999;pointer-events:none;transform:scale(1.15);transition:none;';
+            document.body.appendChild(_touchClone);
+            const t = e.touches[0];
+            _touchClone.style.left = (t.clientX - 31) + 'px';
+            _touchClone.style.top  = (t.clientY - 31) + 'px';
+        }
+
+        function dojoTouchMove(e) {
+            e.preventDefault();
+            if (!_touchClone) return;
+            const t = e.touches[0];
+            _touchClone.style.left = (t.clientX - 31) + 'px';
+            _touchClone.style.top  = (t.clientY - 31) + 'px';
+            // Highlight slot under finger
+            document.querySelectorAll('.dojo-drop-slot').forEach(slot => {
+                const r = slot.getBoundingClientRect();
+                const over = t.clientX>=r.left && t.clientX<=r.right && t.clientY>=r.top && t.clientY<=r.bottom;
+                slot.classList.toggle('drag-over', over);
+            });
+        }
+
+        function dojoTouchEnd(e) {
+            e.preventDefault();
+            if (_touchClone) { _touchClone.remove(); _touchClone = null; }
+            document.querySelectorAll('.dojo-drop-slot').forEach(slot => slot.classList.remove('drag-over'));
+            if (!_dojoDragChar) return;
+            const t = e.changedTouches[0];
+            let dropped = false;
+            document.querySelectorAll('.dojo-drop-slot').forEach(slot => {
+                const r = slot.getBoundingClientRect();
+                if (t.clientX>=r.left && t.clientX<=r.right && t.clientY>=r.top && t.clientY<=r.bottom) {
+                    dojoDropToSlot(parseInt(slot.dataset.idx));
+                    if (_touchCard) _touchCard.classList.add('used');
+                    dropped = true;
+                }
+            });
+            if (!dropped) { _dojoDragChar = null; _dojoDragSource = null; }
+        }
+
+</script>
 
     <!-- ══ 新手禮包翻牌 Modal ══ -->
     <div id="newbie-modal">
