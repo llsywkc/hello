@@ -949,6 +949,25 @@
         }
         #dojo-check-btn:active { transform: scale(0.97); }
         #dojo-check-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        /* ══ Handwriting Mode ══ */
+        #dojo-write-input:focus {
+            border-color: #FF8F00;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.08), 0 0 0 3px rgba(255,143,0,0.2);
+        }
+        .dojo-write-char {
+            width: 56px; height: 56px;
+            border-radius: 10px;
+            border: 2.5px solid #8D6E63;
+            background: #FFFDE7;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Noto Serif TC','標楷體',serif;
+            font-size: 1.6em; font-weight: 900; color: #3E2723;
+        }
+        .dojo-write-char.correct-char { background: #C8E6C9; border-color: #2E7D32; color: #1B5E20; }
+        .dojo-write-char.wrong-char   { background: #FFCDD2; border-color: #C62828; color: #B71C1C; }
+        #dojo-btn-drag.active-mode  { background:linear-gradient(135deg,#6D4C41,#8D6E63)!important; color:#FFF8E1!important; border:none!important; box-shadow:0 3px 10px rgba(109,76,65,0.5)!important; }
+        #dojo-btn-write.active-mode { background:linear-gradient(135deg,#6D4C41,#8D6E63)!important; color:#FFF8E1!important; border:none!important; box-shadow:0 3px 10px rgba(109,76,65,0.5)!important; }
         </style>
 </head>
 <body>
@@ -1211,6 +1230,18 @@
                 <button class="btn-grey" onclick="goHome()" style="padding:4px 10px;font-size:0.85em;">🏠 返回</button>
             </div>
 
+            <!-- Mode toggle -->
+            <div style="display:flex;gap:8px;width:100%;justify-content:center;">
+                <button id="dojo-btn-drag" onclick="setDojoMode('drag')"
+                    style="flex:1;padding:9px 0;border-radius:12px;border:none;font-family:'Noto Serif TC','標楷體',serif;font-size:1em;font-weight:900;cursor:pointer;background:linear-gradient(135deg,#6D4C41,#8D6E63);color:#FFF8E1;box-shadow:0 3px 10px rgba(109,76,65,0.4);">
+                    🧩 拖放配詞
+                </button>
+                <button id="dojo-btn-write" onclick="setDojoMode('write')"
+                    style="flex:1;padding:9px 0;border-radius:12px;border:2px solid #8D6E63;font-family:'Noto Serif TC','標楷體',serif;font-size:1em;font-weight:900;cursor:pointer;background:rgba(255,255,255,0.7);color:#5D4037;">
+                    ✍️ 手寫輸入
+                </button>
+            </div>
+
             <div class="dojo-clue-box">
                 <div class="dojo-meaning" id="dojo-meaning-text">意思：外出遊覽</div>
                 <div class="dojo-jyut" id="dojo-jyut-text">粵拼：leoi5 hang4</div>
@@ -1228,6 +1259,42 @@
             <div id="dojo-feedback"></div>
 
             <button id="dojo-check-btn" onclick="dojoCheck()">✅ 核對答案</button>
+
+            <!-- ✍️ Handwriting section (hidden by default) -->
+            <div id="dojo-write-section" style="display:none;width:100%;flex-direction:column;align-items:center;gap:10px;">
+                <div style="width:100%;text-align:center;font-family:'Noto Serif TC','標楷體',serif;color:#5D4037;font-size:0.9em;">
+                    ✍️ 用手寫功能輸入詞語
+                </div>
+
+                <!-- Input box: big, supports iPad handwriting keyboard -->
+                <div style="position:relative;width:100%;">
+                    <input id="dojo-write-input" type="text"
+                        inputmode="text"
+                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                        placeholder="點此輸入…"
+                        style="width:100%;box-sizing:border-box;font-family:'Noto Serif TC','標楷體',serif;
+                               font-size:2em;font-weight:900;text-align:center;
+                               padding:16px 12px;border:3px solid #8D6E63;border-radius:14px;
+                               background:#FFFDE7;color:#3E2723;outline:none;
+                               box-shadow:inset 0 2px 8px rgba(0,0,0,0.08);"
+                        oninput="dojoWriteInput(this.value)">
+                    <button onclick="document.getElementById('dojo-write-input').value='';dojoWriteInput('');"
+                        style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
+                               background:none;border:none;font-size:1.3em;cursor:pointer;color:#8D6E63;">✕</button>
+                </div>
+
+                <!-- Character-by-character preview -->
+                <div id="dojo-write-preview" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;min-height:50px;"></div>
+
+                <button id="dojo-write-check-btn" onclick="dojoWriteCheck()"
+                    style="width:100%;max-width:260px;padding:12px;font-family:'Noto Serif TC','標楷體',serif;
+                           font-size:1.1em;font-weight:900;border:none;border-radius:14px;
+                           background:linear-gradient(135deg,#5D4037,#8D6E63);color:#FFF8E1;
+                           cursor:pointer;box-shadow:0 4px 14px rgba(93,64,55,0.4);">
+                    ✅ 核對答案
+                </button>
+            </div>
+
         </div>
 
     </div>
@@ -3329,7 +3396,9 @@
             dojoScore = 0;
             dojoQueue = [...Array(dojoVocab.length).keys()].sort(()=>Math.random()-0.5);
             dojoQIdx  = 0;
+            dojoMode  = 'drag';
             dojoLoadQuestion();
+            setTimeout(() => setDojoMode('drag'), 50);
         }
 
         function dojoLoadQuestion() {
@@ -3536,6 +3605,110 @@
                 }
             });
             if (!dropped) { _dojoDragChar = null; _dojoDragSource = null; }
+        }
+
+
+        // ══ 寫字道場 — 手寫輸入模式 ══
+        let dojoMode = 'drag'; // 'drag' | 'write'
+
+        function setDojoMode(mode) {
+            dojoMode = mode;
+            const dragSection  = document.getElementById('dojo-slots');
+            const dragChars    = document.getElementById('dojo-chars');
+            const dragHint     = dragSection ? dragSection.previousElementSibling : null;
+            const dragCheckBtn = document.getElementById('dojo-check-btn');
+            const writeSection = document.getElementById('dojo-write-section');
+            const btnDrag      = document.getElementById('dojo-btn-drag');
+            const btnWrite     = document.getElementById('dojo-btn-write');
+
+            if (mode === 'drag') {
+                if (dragSection)  dragSection.style.display  = '';
+                if (dragChars)    dragChars.style.display    = '';
+                if (dragCheckBtn) dragCheckBtn.style.display = '';
+                if (writeSection) writeSection.style.display = 'none';
+                if (btnDrag)  { btnDrag.classList.add('active-mode');    btnDrag.style.cssText=''; }
+                if (btnWrite) { btnWrite.classList.remove('active-mode'); btnWrite.style.cssText='flex:1;padding:9px 0;border-radius:12px;border:2px solid #8D6E63;font-family:\'Noto Serif TC\',\'標楷體\',serif;font-size:1em;font-weight:900;cursor:pointer;background:rgba(255,255,255,0.7);color:#5D4037;'; }
+            } else {
+                if (dragSection)  dragSection.style.display  = 'none';
+                if (dragChars)    dragChars.style.display    = 'none';
+                if (dragCheckBtn) dragCheckBtn.style.display = 'none';
+                if (writeSection) writeSection.style.display = 'flex';
+                if (btnWrite) { btnWrite.classList.add('active-mode');  btnWrite.style.cssText=''; }
+                if (btnDrag)  { btnDrag.classList.remove('active-mode'); btnDrag.style.cssText='flex:1;padding:9px 0;border-radius:12px;border:2px solid #8D6E63;font-family:\'Noto Serif TC\',\'標楷體\',serif;font-size:1em;font-weight:900;cursor:pointer;background:rgba(255,255,255,0.7);color:#5D4037;'; }
+                // Reset input
+                const inp = document.getElementById('dojo-write-input');
+                if (inp) { inp.value = ''; }
+                dojoWriteInput('');
+            }
+        }
+
+        function dojoWriteInput(val) {
+            const preview = document.getElementById('dojo-write-preview');
+            if (!preview || !dojoCurrent) return;
+            const len = dojoCurrent.word.length;
+            const chars = val.split('');
+            let html = '';
+            for (let i = 0; i < len; i++) {
+                const ch = chars[i] || '';
+                html += '<div class="dojo-write-char">' + (ch || '') + '</div>';
+            }
+            preview.innerHTML = html;
+        }
+
+        function dojoWriteCheck() {
+            const inp = document.getElementById('dojo-write-input');
+            if (!inp || !dojoCurrent) return;
+            const answer  = inp.value.trim();
+            const correct = dojoCurrent.word;
+            const preview = document.getElementById('dojo-write-preview');
+
+            if (answer.length === 0) {
+                document.getElementById('dojo-feedback').innerHTML =
+                    '<span class="dojo-feedback-wrong">⚠️ 請先輸入詞語！</span>';
+                return;
+            }
+
+            // Character-by-character highlight
+            if (preview) {
+                let html = '';
+                for (let i = 0; i < correct.length; i++) {
+                    const ch  = answer[i] || '';
+                    const cls = ch === correct[i] ? 'correct-char' : 'wrong-char';
+                    html += '<div class="dojo-write-char ' + cls + '">' + (ch || '?') + '</div>';
+                }
+                preview.innerHTML = html;
+            }
+
+            const isCorrect = (answer === correct);
+            if (isCorrect) {
+                dojoScore += 10;
+                document.getElementById('dojo-feedback').innerHTML =
+                    '<span class="dojo-feedback-correct">🎉 答對了！＋10分</span>';
+                document.getElementById('dojo-score-display').innerText = '⚔️ 分數：' + dojoScore;
+                playSound('correct');
+                document.getElementById('dojo-write-check-btn').disabled = true;
+                setTimeout(() => {
+                    dojoQIdx++;
+                    dojoLoadQuestion();
+                    // Reset write mode UI
+                    const inp2 = document.getElementById('dojo-write-input');
+                    if (inp2) inp2.value = '';
+                    dojoWriteInput('');
+                    document.getElementById('dojo-write-check-btn').disabled = false;
+                    document.getElementById('dojo-feedback').innerHTML = '';
+                    // Re-apply mode
+                    setDojoMode('write');
+                }, 1600);
+            } else {
+                document.getElementById('dojo-feedback').innerHTML =
+                    '<span class="dojo-feedback-wrong">❌ 答錯了！正確答案：' + correct + '</span>';
+                playSound('wrong');
+                setTimeout(() => {
+                    inp.value = '';
+                    dojoWriteInput('');
+                    document.getElementById('dojo-feedback').innerHTML = '';
+                }, 1800);
+            }
         }
 
 </script>
