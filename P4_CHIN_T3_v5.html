@@ -1358,10 +1358,12 @@
             <!-- Tab buttons -->
             <div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;">
                 <button id="lb-tab-0" class="lb-tab-btn lb-tab-active" onclick="switchLbTab(0)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#1565C0;color:#fff;font-weight:bold;">📚 學習榜</button>
-                <button id="lb-tab-1" class="lb-tab-btn" onclick="switchLbTab(1)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">⚔️ 夥伴榜</button>
-                <button id="lb-tab-2" class="lb-tab-btn" onclick="switchLbTab(2)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🏗️ 建築榜</button>
-                <button id="lb-tab-3" class="lb-tab-btn" onclick="switchLbTab(3)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">💰 材料榜</button>
+                <button id="lb-tab-1" class="lb-tab-btn" onclick="switchLbTab(1)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">👹 戰鬥榜</button>
+                <button id="lb-tab-2" class="lb-tab-btn" onclick="switchLbTab(2)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">⚔️ 夥伴榜</button>
+                <button id="lb-tab-3" class="lb-tab-btn" onclick="switchLbTab(3)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🏗️ 建築榜</button>
+                <button id="lb-tab-4" class="lb-tab-btn" onclick="switchLbTab(4)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">💰 材料榜</button>
             </div>
+
             <div id="lb-tab-desc" style="font-size:0.75em;color:#aaa;margin-bottom:6px;text-align:center;"></div>
             <div id="lb-status" style="font-size:0.82em;color:#aaa;margin:4px 0;"></div>
             <div id="lb-list" style="width:95%;margin:0 auto;max-height:55vh;overflow-y:auto;"></div>
@@ -5642,6 +5644,17 @@ function checkDailyReset() {
             );
         }
 
+        function calcCombatScore(e) {
+            const bwd = e.bossWinsDetail || {};
+            return Math.floor(
+                  (bwd.lv1||0) * 20  + (bwd.lv2||0) * 20  + (bwd.lv3||0) * 20
+                + (bwd.lv4||0) * 40  + (bwd.lv5||0) * 40  + (bwd.lv6||0) * 40
+                + (bwd.lv7||0) * 80  + (bwd.lv8||0) * 80
+                + (e.epicWins      ||0) * 300
+                + (e.legendaryWins ||0) * 500
+            );
+        }
+
         const LB_TABS = [
             {
                 label: '📚 學習榜',
@@ -5699,6 +5712,79 @@ function checkDailyReset() {
                         </div>
                       </div>
                     </div>`;
+                }
+            },
+            {
+                label: '👹 戰鬥榜',
+                desc:  'Boss Lv1-3×20 · Lv4-6×40 · Lv7-8×80 · 神獸×300 · 傳說×500',
+                score: calcCombatScore,
+                row: (e, rank, score) => {
+                    const medal  = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
+                    const isMe   = e.name === inventory.playerName;
+                    const cardBg = isMe
+                        ? 'background:linear-gradient(135deg,#1a0500,#1a0000);border:1px solid #FF6B6B;'
+                        : `background:#0d1117;border-left:3px solid ${rank<=3?'#FF6B6B':'#333'};`;
+                    const bwd = e.bossWinsDetail || {};
+                    const cid = 'combat-card-' + rank;
+
+                    // Boss badges per tier
+                    const lv13 = (bwd.lv1||0)+(bwd.lv2||0)+(bwd.lv3||0);
+                    const lv46 = (bwd.lv4||0)+(bwd.lv5||0)+(bwd.lv6||0);
+                    const lv7  = (bwd.lv7||0);
+                    const lv8  = (bwd.lv8||0);
+                    const epic = e.epicWins || 0;
+                    const legendary = e.legendaryWins || 0;
+                    const totalBoss = (e.bossWins||0);
+
+                    const badges = [
+                        lv13       ? `⚔️<small>Lv1-3</small>×${lv13}` : '',
+                        lv46       ? `🌑<small>Lv4-6</small>×${lv46}` : '',
+                        lv7        ? `🔴<small>Lv7</small>×${lv7}`    : '',
+                        lv8        ? `⚡<small>Lv8</small>×${lv8}`    : '',
+                        epic       ? `🦎<small>神獸</small>×${epic}`   : '',
+                        legendary  ? `🌟<small>傳說</small>×${legendary}` : '',
+                    ].filter(Boolean).join(' ');
+
+                    return \`
+                    <div style="\${cardBg}border-radius:10px;margin-bottom:5px;overflow:hidden;">
+                      <div onclick="(function(){const d=document.getElementById('\${cid}');const a=document.getElementById('\${cid}-arr');const isOpen=d.style.display!=='none';document.querySelectorAll('[id^=combat-card-]').forEach(el=>{if(!el.id.endsWith('-arr')){el.style.display='none';const arr=document.getElementById(el.id+'-arr');if(arr)arr.textContent='▼';}});if(!isOpen){d.style.display='block';a.textContent='▲';}})() "
+                           style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;">
+                        <span style="color:#FFD700;font-weight:bold;min-width:28px;">\${medal}</span>
+                        <div style="flex:1;margin-left:8px;">
+                          <div style="color:\${isMe?'#FF8A80':'#eee'};font-weight:\${isMe?'bold':'normal'};font-size:0.92em;">
+                            <span style="margin-right:3px;">\${e.avatar||'🐉'}</span>\${e.name||'?'}\${isMe?' 👤':''}
+                          </div>
+                          <div style="font-size:0.7em;color:#aaa;margin-top:2px;">\${badges||'尚未出戰'}</div>
+                        </div>
+                        <span style="color:#FF6B6B;font-size:0.85em;font-weight:bold;">⚔️ \${score}</span>
+                        <span id="\${cid}-arr" style="color:#888;font-size:0.75em;margin-left:8px;">▼</span>
+                      </div>
+                      <div id="\${cid}" style="display:none;padding:0 12px 10px 12px;border-top:1px solid #222;">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 10px;margin-top:8px;font-size:0.8em;">
+                          <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
+                            <span style="color:#aaa;">⚔️ Lv1-3 Boss</span><span style="color:#80CBC4;font-weight:bold;">\${lv13} 場</span>
+                          </div>
+                          <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
+                            <span style="color:#aaa;">🌑 Lv4-6 Boss</span><span style="color:#FF8A65;font-weight:bold;">\${lv46} 場</span>
+                          </div>
+                          <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
+                            <span style="color:#aaa;">🔴 Lv7 Boss</span><span style="color:#EF9A9A;font-weight:bold;">\${lv7} 場</span>
+                          </div>
+                          <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
+                            <span style="color:#aaa;">⚡ Lv8 Boss</span><span style="color:#FFD54F;font-weight:bold;">\${lv8} 場</span>
+                          </div>
+                          <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
+                            <span style="color:#aaa;">🦎 神獸</span><span style="color:#CE93D8;font-weight:bold;">\${epic} 場</span>
+                          </div>
+                          <div style="background:#111;border-radius:6px;padding:5px 8px;display:flex;justify-content:space-between;">
+                            <span style="color:#aaa;">🌟 傳說神獸</span><span style="color:#FFD700;font-weight:bold;">\${legendary} 場</span>
+                          </div>
+                        </div>
+                        <div style="margin-top:8px;background:#111;border-radius:6px;padding:6px 8px;font-size:0.75em;color:#888;">
+                          分數構成：⚔️\${lv13*20} + 🌑\${lv46*40} + 🔴\${lv7*80} + ⚡\${lv8*80} + 🦎\${epic*300} + 🌟\${legendary*500}
+                        </div>
+                      </div>
+                    </div>\`;
                 }
             },
             {
@@ -5775,10 +5861,12 @@ function checkDailyReset() {
 
         window.switchLbTab = function(tabIdx) {
             currentLbTab = tabIdx;
+            // Tab accent colours: 0=blue(study), 1=red(combat), 2=purple(partner), 3=green(build), 4=gold(material)
+            const tabColors = ['#1565C0','#C62828','#6A1B9A','#2E7D32','#F57F17'];
             document.querySelectorAll('.lb-tab-btn').forEach((btn, i) => {
-                btn.style.background = i === tabIdx ? '#1565C0' : '#333';
-                btn.style.color      = i === tabIdx ? '#fff'    : '#aaa';
-                btn.style.fontWeight = i === tabIdx ? 'bold'    : 'normal';
+                btn.style.background = i === tabIdx ? (tabColors[i]||'#1565C0') : '#333';
+                btn.style.color      = i === tabIdx ? '#fff' : '#aaa';
+                btn.style.fontWeight = i === tabIdx ? 'bold' : 'normal';
             });
             renderLbTab(window._lbEntries || []);
         };
