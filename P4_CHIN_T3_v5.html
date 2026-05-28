@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="王家駿 (Wang Ka-Chun)">
+    <meta name="copyright" content="© 2025-2026 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
+    <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, noarchive">
+    <meta name="description" content="私人教學工具 — 未經授權不得複製或分發">
     <title>4A 中文冒險</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap');
@@ -888,9 +893,40 @@
             bottom: 0; left: 0; width: 100%; height: 45vh;
             pointer-events: none; z-index: -1;
         }
+
+        /* ── COPYRIGHT FOOTER ── */
+        #copyright-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
+            background: rgba(10,6,2,0.92);
+            border-top: 1px solid rgba(200,168,75,0.4);
+            padding: 4px 12px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-size: 0.62em; color: rgba(200,168,75,0.75);
+            font-family: 'Noto Serif TC', serif; letter-spacing: 0.3px;
+            pointer-events: none; user-select: none;
+            backdrop-filter: blur(6px);
+        }
+        #copyright-bar .cr-icon { font-size: 1.1em; opacity: 0.8; }
+        #copyright-bar .cr-text { opacity: 0.85; }
+        #copyright-bar .cr-sep  { opacity: 0.4; margin: 0 4px; }
+        /* Push game content above copyright bar */
+        body { padding-bottom: 22px; }
 </style>
 </head>
 <body class="on-login">
+
+    <!-- ══ COPYRIGHT BAR ══ -->
+    <div id="copyright-bar" role="contentinfo" aria-label="版權聲明">
+        <span class="cr-icon">©</span>
+        <span class="cr-text">2025–2026 <strong>勵志會梁李秀娛紀念小學</strong></span>
+        <span class="cr-sep">·</span>
+        <span class="cr-text">王家駿老師 製作</span>
+        <span class="cr-sep">·</span>
+        <span class="cr-text">私人教學工具，未經授權不得複製或分發</span>
+        <span class="cr-sep">·</span>
+        <span class="cr-text">P4_CHIN_T3 v6.3</span>
+    </div>
+
     <!-- Persistent star field -->
     <div class="star-field" aria-hidden="true">
       <span class="s" style="width:2px;height:2px;top:3%;left:8%;animation-delay:0s;opacity:0.6;"></span>
@@ -1713,6 +1749,53 @@
     <div id="achievement-toast">🏆 成就解鎖！<br><span id="ach-toast-text"></span></div>
 
 <script>
+        /* ═══════════════════════════════════════════════════════════════
+         *  © 2025–2026  勵志會梁李秀娛紀念小學
+         *  Leung Lee Sau Yu Memorial Primary School
+         *  製作人：王家駿老師  (Wang Ka-Chun)
+         *  本程式為私人教學工具，未經書面授權不得複製、改編或再分發。
+         *  All rights reserved. Unauthorised copying or redistribution prohibited.
+         * ═══════════════════════════════════════════════════════════════ */
+        const _AUTHOR   = '王家駿 (Wang Ka-Chun)';
+        const _SCHOOL   = '勵志會梁李秀娛紀念小學';
+        const _TOOL     = 'P4 Chinese T3 Interactive Learning Game';
+        const _VERSION  = 'v6.3.55';
+        const _YEAR     = '2025-2026';
+        const _RIGHTS   = 'All rights reserved. Unauthorised use prohibited.';
+
+        // ── DevTools copyright notice ──
+        (function devToolsWarning() {
+            console.log('%c© 2025–2026 勵志會梁李秀娛紀念小學 · 王家駿老師',
+                'color:#FFD700;background:#1a0a00;font-size:14px;font-weight:bold;padding:6px 12px;border-radius:4px;');
+            console.log('%c本程式為私人教學工具。未經授權，嚴禁複製、改編或再分發。',
+                'color:#FF6B6B;font-size:11px;');
+            console.log('%c_AUTHOR: ' + _AUTHOR + '  |  _SCHOOL: ' + _SCHOOL + '  |  _VERSION: ' + _VERSION,
+                'color:#a0a0a0;font-size:9px;');
+        })();
+
+        // ── Right-click & keyboard protection ──
+        (function installProtection() {
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('keydown', e => {
+                const k = e.key.toLowerCase();
+                if (e.ctrlKey && (k === 'u' || k === 's')) { e.preventDefault(); return false; }
+                if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) { e.preventDefault(); return false; }
+                if (k === 'f12') { e.preventDefault(); return false; }
+            });
+        })();
+
+        // ── Tamper detection: warn if copyright bar removed ──
+        (function tamperDetect() {
+            setTimeout(() => {
+                const bar = document.getElementById('copyright-bar');
+                if (!bar) { console.warn('%c⚠️ 版權欄被刪除！© 2025-2026 王家駿老師 · 勵志會梁李秀娛紀念小學', 'color:#FF4444;font-weight:bold;font-size:13px;'); }
+                if (bar) new MutationObserver(() => {
+                    if (!document.getElementById('copyright-bar'))
+                        console.warn('%c⚠️ 版權欄被刪除！© 2025-2026 王家駿老師', 'color:#FF4444;font-weight:bold;');
+                }).observe(bar.parentNode, { childList: true });
+            }, 1500);
+        })();
+
         // ================== 全局函式定義 ==================
         // 🔑 已經改回 v7_ext，確保學生舊存檔完美繼承！
         const SAVE_KEY = 'roblox_p4_chi_combat_v7_ext'; 
@@ -2936,7 +3019,7 @@
             'gabu': { title: "加布獸路線", desc: "冷酷且敏捷，高人氣的冰狼型精靈。", lv0: { n: "獨角獸", p: "tunomon.jpg", b: 0 }, lv1: { n: "加布獸", p: "gabumon.jpg", b: 20 }, lv2: { n: "加魯魯獸", p: "garurumon.jpg", b: 50 }, lv3A: { n: "獸人加魯魯獸", p: "weregarrumon.jpg", b: 100 }, lv3B: { n: "地獄犬獸", p: "cerberumon.jpg", b: 120 }, lv4A: { n: "鋼鐵加魯魯獸", p: "metalgarurumon.jpg", b: 200 }, lv4B: { n: "阿努比獸", p: "anubimon.jpg", b: 220 } },
             'pata': { title: "巴達獸路線", desc: "擁有神聖力量，能帶來奇蹟的精靈。", lv0: { n: "迪哥獸", p: "tokomon.jpg", b: 0 }, lv1: { n: "巴達獸", p: "patamon.jpg", b: 20 }, lv2: { n: "天使獸", p: "angemon.jpg", b: 50 }, lv3A: { n: "神聖天使獸", p: "holyangemon.jpg", b: 100 }, lv3B: { n: "吸血魔獸", p: "vamdemon.jpg", b: 120 }, lv4A: { n: "究極天使獸", p: "seraphimon.jpg", b: 200 }, lv4B: { n: "小丑皇", p: "piemon.jpg", b: 220 } },
             'tail': { title: "迪路獸路線", desc: "專屬女孩子！可愛又迷人的神聖貓咪。", lv0: { n: "喵喵獸", p: "nyaromon.jpg", b: 0 }, lv1: { n: "小狗獸", p: "plotmon.jpg", b: 20 }, lv2: { n: "迪路獸", p: "tailmon.jpg", b: 50 }, lv3A: { n: "天女獸", p: "angewomon.jpg", b: 100 }, lv3B: { n: "妖女獸", p: "ladydevimon.jpg", b: 120 }, lv4A: { n: "聖龍獸", p: "holydramon.jpg", b: 200 }, lv4B: { n: "莉莉絲獸", p: "lilithmon.jpg", b: 220 } },
-            'pal': { title: "巴魯獸路線", desc: "專屬女孩子！熱愛大自然的美麗花仙子。", lv0: { n: "種子獸", p: "tanemon.jpg", b: 0 }, lv1: { n: "巴魯獸", p: "palmon.jpg", b: 20 }, lv2: { n: "仙人掌獸", p: "togemon.jpg", b: 50 }, lv3A: { n: "花仙獸", p: "lilimon.jpg", b: 100 }, lv3B: { n: "南瓜獸", p: "pumpmon.jpg", b: 120 }, lv4A: { n: "薔薇獸", p: "rosemon.jpg", b: 200 }, lv4B: { n: "木偶獸", p: "https://digimon.net/reference_zh-CHT/detail.php?directory_name=pinochimon", b: 220 } },
+            'pal': { title: "巴魯獸路線", desc: "專屬女孩子！熱愛大自然的美麗花仙子。", lv0: { n: "種子獸", p: "tanemon.jpg", b: 0 }, lv1: { n: "巴魯獸", p: "palmon.jpg", b: 20 }, lv2: { n: "仙人掌獸", p: "togemon.jpg", b: 50 }, lv3A: { n: "花仙獸", p: "lilimon.jpg", b: 100 }, lv3B: { n: "南瓜獸", p: "pumpmon.jpg", b: 120 }, lv4A: { n: "薔薇獸", p: "rosemon.jpg", b: 200 }, lv4B: { n: "木偶獸", p: "pinochimon.jpg", b: 220 } },
             'pika': { title: "皮卡丘路線", desc: "電系拍檔：十萬伏特！", lv0: { n: "皮丘", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/172.png", b: 0 }, lv1: { n: "皮卡丘", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png", b: 20 }, lv2: { n: "雷丘", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/26.png", b: 50 }, lv3A: { n: "阿羅拉雷丘", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10100.png", b: 100 }, lv3B: { n: "閃光雷丘", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/26.png", b: 120 }, lv4A: { n: "帽子皮卡丘(世冠)", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10085.png", b: 200 }, lv4B: { n: "帽子皮卡丘(小智)", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10080.png", b: 220 } },
             'chari': { title: "噴火龍路線", desc: "火系拍檔：戰鬥動作更快！", lv0: { n: "小火龍", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png", b: 0 }, lv1: { n: "火恐龍", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png", b: 20 }, lv2: { n: "噴火龍", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png", b: 50 }, lv3A: { n: "超級噴火龍Y", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10035.png", b: 100 }, lv3B: { n: "超級噴火龍X", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10034.png", b: 120 }, lv4A: { n: "極巨化噴火龍", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10196.png", b: 200 }, lv4B: { n: "閃光噴火龍", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/6.png", b: 220 } },
             'ninja': { title: "甲賀忍蛙路線", desc: "水系拍檔：迴避率提升！", lv0: { n: "呱呱泡蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/656.png", b: 0 }, lv1: { n: "呱頭蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/657.png", b: 20 }, lv2: { n: "甲賀忍蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/658.png", b: 50 }, lv3A: { n: "小智版忍蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10116.png", b: 100 }, lv3B: { n: "閃光甲賀忍蛙", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/658.png", b: 120 }, lv4A: { n: "閃光甲賀忍蛙★", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/658.png", b: 200 }, lv4B: { n: "閃光甲賀忍蛙★", p: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/658.png", b: 220 } },
