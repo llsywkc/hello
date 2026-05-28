@@ -6823,7 +6823,7 @@ async function fetchLeaderboard() {
 #moshu-panel .puzzle-slots{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0;}
 #moshu-panel .puzzle-slot{width:52px;height:52px;border:2px dashed #ccc;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.3em;font-family:serif;}
 #moshu-panel .puzzle-slot.filled{border-color:#FF7043;background:#FFF3E0;}
-#moshu-panel .dict-input{width:90%;padding:10px;font-size:1.2em;border:2px solid #ccc;border-radius:8px;text-align:center;font-family:serif;margin:10px auto;display:block;}
+#moshu-panel .dict-input{width:90%;padding:10px;font-size:1.2em;border:2px solid #ccc;border-radius:8px;text-align:center;font-family:serif;margin:10px auto;display:block;color:#111;font-weight:bold;background:#fff;}
 #moshu-panel .dict-input.correct{border-color:#4CAF50;background:#E8F5E9;}
 #moshu-panel .dict-input.wrong{border-color:#F44336;background:#FFEBEE;}
 #moshu-panel .btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
@@ -6834,7 +6834,7 @@ async function fetchLeaderboard() {
 #moshu-panel .hint-box{background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:10px;font-size:0.85em;color:#795548;margin:10px 0;}
 #moshu-panel .answer-box{font-size:1.8em;font-family:serif;font-weight:bold;color:#D32F2F;margin:10px 0;text-align:center;}
 #moshu-panel .hw-canvas-wrap{border:2px solid #ccc;border-radius:8px;margin:10px auto;display:block;}
-#moshu-panel canvas{touch-action:none;border-radius:6px;}
+#moshu-panel canvas{touch-action:none;border-radius:6px;background:#FFFFFF;}
 #moshu-panel .meaning-text{font-size:0.88em;color:#666;margin:6px 0;text-align:center;}
 </style>
 
@@ -7315,8 +7315,8 @@ function setupHWEvents(){
     e.preventDefault();if(!hwDrawing)return;
     const [x,y]=getPos(e);
     hwCtx.beginPath();hwCtx.moveTo(hwLX,hwLY);hwCtx.lineTo(x,y);
-    hwCtx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim()||'#01696f';
-    hwCtx.lineWidth=11;hwCtx.lineCap='round';hwCtx.stroke();
+    hwCtx.strokeStyle='#1a1a1a';
+    hwCtx.lineWidth=14;hwCtx.lineCap='round';hwCtx.stroke();
     [hwLX,hwLY]=[x,y];
   };
   hwCanvas.onmouseup=hwCanvas.ontouchend=()=>hwDrawing=false;
