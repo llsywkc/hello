@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="王家駿 (Wang Ka-Chun)">
+    <meta name="author" content="王家駿 (Wong Ka-Chun)">
     <meta name="copyright" content="© 2025-2026 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
     <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, noarchive">
@@ -916,13 +916,10 @@
         #game-shooter { 
             padding: 0; overflow: hidden; 
             position: fixed; top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: 9999;
+            width: 100vw; height: 100vh; z-index: 9999;
         }
         #shooter-wrap {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%;
-            min-height: 100vh;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(180deg, #0a0018 0%, #0d0030 40%, #1a0050 100%);
             overflow: hidden; user-select: none;
         }
@@ -936,80 +933,124 @@
             font-size: 1.05em; font-weight: 900; color: #FFF8E7;
             font-family: 'Noto Serif TC', serif; line-height: 1.4;
         }
+        #shooter-timer-wrap {
+            height: 6px; background: rgba(255,255,255,0.15);
+            border-radius: 3px; margin-top: 6px; overflow: hidden;
+        }
+        #shooter-timer-bar {
+            height: 100%; width: 100%;
+            background: linear-gradient(90deg, #F44336, #FF6D00);
+            border-radius: 3px; transition: width 1s linear;
+        }
         #shooter-hud {
             display: flex; justify-content: space-between; align-items: center;
             font-size: 0.78em; color: #FFD54F; margin-top: 4px;
         }
         #shooter-arena {
-            position: absolute; top: 80px; bottom: 80px; left: 0; right: 0; z-index: 10;
+            position: absolute; top: 95px; bottom: 110px; left: 0; right: 0; z-index: 10;
         }
         .shooter-target {
-            position: absolute; display: flex; align-items: center; justify-content: center;
-            width: 88px; height: 88px; border-radius: 50%; z-index: 15;
-            background: #1565C0; /* fallback */
+            position: fixed; display: flex; align-items: center; justify-content: center;
+            width: 76px; height: 76px; border-radius: 50%; z-index: 10000;
             font-size: 0.82em; font-weight: 900; text-align: center;
-            cursor: pointer; transition: transform 0.1s;
+            cursor: pointer; transition: transform 0.12s, box-shadow 0.12s;
             border: 3px solid rgba(255,255,255,0.6);
             font-family: 'Noto Serif TC', serif;
-            line-height: 1.2; padding: 6px; box-sizing: border-box;
+            line-height: 1.2; padding: 5px; box-sizing: border-box;
             word-break: break-all;
             box-shadow: 0 0 18px rgba(255,255,255,0.25), inset 0 0 20px rgba(0,0,0,0.3);
         }
         .shooter-target:active { transform: scale(0.92); }
-        .target-hit {
-            animation: targetHit 0.4s ease-out forwards;
+        .shooter-target.locked {
+            border: 4px solid #FFD700 !important;
+            box-shadow: 0 0 25px #FFD700, 0 0 50px rgba(255,215,0,0.5) !important;
+            animation: lockPulse 0.4s ease-in-out infinite alternate;
         }
-        .target-miss {
-            animation: targetMiss 0.3s ease-out forwards;
-        }
+        @keyframes lockPulse { from{transform:scale(1);}to{transform:scale(1.08);} }
+        .target-hit { animation: targetHit 0.4s ease-out forwards; }
+        .target-miss { animation: targetMiss 0.3s ease-out forwards; }
         @keyframes targetHit {
-            0%   { transform: scale(1); opacity: 1; }
-            50%  { transform: scale(1.5); opacity: 0.8; filter: brightness(3); }
-            100% { transform: scale(2.5); opacity: 0; }
+            0%{transform:scale(1);opacity:1;}
+            50%{transform:scale(1.5);opacity:0.8;filter:brightness(3);}
+            100%{transform:scale(2.5);opacity:0;}
         }
         @keyframes targetMiss {
-            0%   { transform: translateX(0); }
-            25%  { transform: translateX(-10px); }
-            75%  { transform: translateX(10px); }
-            100% { transform: translateX(0); border-color: #F44336; }
+            0%{transform:translateX(0);}25%{transform:translateX(-10px);}
+            75%{transform:translateX(10px);}100%{transform:translateX(0);border-color:#F44336;}
         }
         .particle {
-            position: absolute; pointer-events: none; border-radius: 50%;
+            position: fixed; pointer-events: none; border-radius: 50%;
             animation: particleFly 0.6s ease-out forwards;
         }
         @keyframes particleFly {
-            0%   { transform: translate(0,0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--dx),var(--dy)) scale(0); opacity: 0; }
+            0%{transform:translate(0,0) scale(1);opacity:1;}
+            100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0;}
         }
         #shooter-cannon {
-            position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
-            font-size: 2.8em; z-index: 10;
+            font-size: 2.8em; line-height: 1;
             filter: drop-shadow(0 0 10px rgba(255,200,50,0.8));
-            transition: transform 0.15s;
+            position: fixed; bottom: 18px;
+            transform: translateX(-50%);
+            cursor: grab; pointer-events: auto;
+            user-select: none; z-index: 20;
         }
-        #shooter-laser {
-            position: absolute; width: 4px; background: linear-gradient(#FFD700, transparent);
-            left: 50%; transform: translateX(-50%);
-            bottom: 130px; height: 0; z-index: 5;
-            border-radius: 2px; opacity: 0;
-            transition: height 0.12s, opacity 0.12s;
+        #shooter-aim-line {
+            position: fixed; width: 3px;
+            background: linear-gradient(to top, rgba(255,215,0,0.9), transparent);
+            z-index: 9999; pointer-events: none;
+            transform-origin: bottom center;
+            opacity: 0; transition: opacity 0.15s;
+        }
+        #shooter-fire-btn {
+            position: fixed; bottom: 14px; left: 50%;
+            transform: translateX(-50%);
+            width: 60px; height: 60px; border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, #ff6b6b, #c0392b);
+            border: 4px solid #FF8A65;
+            box-shadow: 0 0 20px rgba(244,67,54,0.7), 0 4px 0 #8B0000;
+            font-size: 1.5em; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.1s, box-shadow 0.1s;
+            z-index: 21; pointer-events: auto;
+        }
+        #shooter-fire-btn:active {
+            transform: translateX(-50%) translateY(3px);
+            box-shadow: 0 0 12px rgba(244,67,54,0.5), 0 1px 0 #8B0000;
+        }
+        #shooter-fire-btn.no-target { opacity: 0.4; cursor: not-allowed; }
+        .shooter-bullet {
+            position: fixed; width: 8px; height: 24px;
+            background: linear-gradient(to top, #FFD700, #fff); border-radius: 4px;
+            box-shadow: 0 0 10px #FFD700, 0 0 20px rgba(255,215,0,0.5);
+            z-index: 10002; pointer-events: none;
         }
         #shooter-footer {
-            position: absolute; bottom: 0; left: 0; right: 0; height: 78px;
-            background: rgba(0,0,0,0.7); border-top: 1px solid rgba(200,168,75,0.3);
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            padding: 0 12px; z-index: 20;
+            position: fixed; bottom: 0; left: 0; right: 0; height: 90px;
+            background: rgba(0,0,0,0.65);
+            border-top: 1px solid rgba(200,168,75,0.3);
+            z-index: 19; pointer-events: none;
         }
         #shooter-hp-bar-wrap {
-            flex: 1; background: rgba(255,255,255,0.1);
-            border-radius: 10px; height: 12px; overflow: hidden;
+            position: fixed; bottom: 78px; left: 12px; right: 12px;
+            background: rgba(255,255,255,0.1); border-radius: 10px;
+            height: 10px; overflow: hidden; z-index: 20;
         }
-        #shooter-hp-bar { height: 100%; background: linear-gradient(90deg, #F44336, #FF8A65); border-radius: 10px; transition: width 0.3s; }
+        #shooter-hp-bar {
+            height: 100%; background: linear-gradient(90deg, #4CAF50, #A5D6A7);
+            border-radius: 10px; transition: width 0.3s;
+        }
         #shooter-msg {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            font-size: 1.8em; font-weight: 900; color: #FFD700; z-index: 30;
-            text-shadow: 0 0 20px #FF6B00, 0 2px 4px rgba(0,0,0,0.9);
-            pointer-events: none; opacity: 0; transition: opacity 0.2s;
+            position: fixed; top: 44%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-size: 1.6em; font-weight: 900; color: #FFD700;
+            z-index: 10003; text-shadow: 0 0 20px currentColor;
+            pointer-events: none; opacity: 0;
+            transition: opacity 0.2s; white-space: nowrap;
+        }
+        #shooter-miss-flash {
+            position: fixed; inset: 0; background: rgba(244,67,54,0.25);
+            z-index: 10004; pointer-events: none;
+            opacity: 0; transition: opacity 0.1s;
         }
         #shooter-stars {
             position: absolute; top: 0; left: 0;
@@ -1298,25 +1339,10 @@
 
                 <div class="menu-section-label">🎯 射擊道場</div>
                 <div class="menu-card-grid">
-                    <div class="menu-card" onclick="startShooter('fill')" style="border-color:#FF6F00;">
+                    <div class="menu-card menu-card-lg" onclick="startShooter('shooter-all')" style="border-color:#FF6F00;background:linear-gradient(135deg,rgba(255,111,0,0.15),rgba(198,40,40,0.15));">
                         <div class="mc-icon">🚀</div>
-                        <div class="mc-title">太空射擊</div>
-                        <div class="mc-sub">填充選擇</div>
-                    </div>
-                    <div class="menu-card" onclick="startShooter('match-word')" style="border-color:#1565C0;">
-                        <div class="mc-icon">🛸</div>
-                        <div class="mc-title">配詞射擊</div>
-                        <div class="mc-sub">詞語配對</div>
-                    </div>
-                    <div class="menu-card" onclick="startShooter('term3-vocab')" style="border-color:#6A1B9A;">
-                        <div class="mc-icon">⚡</div>
-                        <div class="mc-title">詞語射擊</div>
-                        <div class="mc-sub">第三學期詞彙</div>
-                    </div>
-                    <div class="menu-card" onclick="startShooter('fa-mc')" style="border-color:#C62828;">
-                        <div class="mc-icon">🎯</div>
-                        <div class="mc-title">FA 射擊</div>
-                        <div class="mc-sub">FA 綜合題</div>
+                        <div class="mc-title">射擊道場（綜合）</div>
+                        <div class="mc-sub">混合所有題型 · 隨機15題</div>
                     </div>
                 </div>
 
@@ -2428,7 +2454,8 @@
             'dictation2-mc': { title: "📖 默書温習(二) (填充題)", subtitle: "選擇正確的詞語完成句子！", tasks: dictation2Tasks },
             'adv-mc': { title: "⏳ 時間法師 (副詞題)", subtitle: "選擇正確的時間副詞完成句子！", tasks: advTasks },
             'appearance-mc': { title: "👤 變身畫家 (外貌描寫)", subtitle: "選出最適合描寫人物外貌的詞語！", tasks: appearanceTasks },
-            'term3-vocab': { title: "📚 第三學期詞語温習", subtitle: "温習第三學期詞語，鞏固基礎！", tasks: term3VocabTasks }
+            'term3-vocab': { title: "📚 第三學期詞語温習", subtitle: "温習第三學期詞語，鞏固基礎！", tasks: term3VocabTasks },
+            'shooter-all': { title: "🚀 射擊道場（綜合）", subtitle: "混合所有題型，隨機15題！", tasks: [] }
         };
 
         const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🌌', 900: '🏆', 1001: '🐉', 1002: '🦄' };
@@ -6260,230 +6287,313 @@ async function fetchLeaderboard() {
             clearInterval(combatTimerInterval);
             hideAll();
             const gs = document.getElementById('game-shooter');
-            gs.classList.remove('hidden');
-            gs.style.display = 'block';
-            shooterTasks   = shuffle([...cfg.tasks]);
-            shooterIdx     = 0; shooterHP = 3; shooterScore = 0;
-            shooterStreak  = 0; shooterActive = true; shooterSpeed = 0.35;
+            gs.classList.remove('hidden'); gs.style.display = 'block';
+            if (type === 'shooter-all') {
+                const allPool = shuffle([...fillTasks, ...matchTasks, ...term3VocabTasks, ...faMCTasks]);
+                shooterTasks = allPool.slice(0, 15);
+            } else {
+                shooterTasks = shuffle([...cfg.tasks]);
+            }
+            shooterIdx=0; shooterHP=3; shooterScore=0;
+            shooterStreak=0; shooterActive=true; shooterSpeed=0.35;
+            shooterLockedTarget=null;
+            cannonX = window.innerWidth / 2;
+            positionCannon();
+            setupCannonDrag();
             updateShooterHUD();
             initShooterStars();
             loadShooterQuestion();
             requestAnimationFrame(shooterLoop);
         };
 
+        let shooterTasks=[], shooterIdx=0, shooterHP=3, shooterScore=0;
+        let shooterStreak=0, shooterActive=false, shooterSpeed=0.35;
+        let shooterAnswered=false, shooterTargets=[], shooterAnimFrame;
+        let shooterLockedTarget=null;
+        let shooterTimerInterval=null, shooterTimeLeft=8;
+        let cannonX=200;
+
+        const TARGET_COLORS=[
+            ['#1E88E5','#0D47A1'],['#E53935','#B71C1C'],
+            ['#43A047','#1B5E20'],['#FB8C00','#E65100'],
+            ['#8E24AA','#4A148C']
+        ];
+
         function shooterLoop() {
             if (!shooterActive) return;
             animShooterStars();
             moveTargets();
+            updateAimLine();
             shooterAnimFrame = requestAnimationFrame(shooterLoop);
         }
 
+        function positionCannon() {
+            const cannon = document.getElementById('shooter-cannon');
+            if (!cannon) return;
+            cannon.style.left = cannonX + 'px';
+        }
+
+        function setupCannonDrag() {
+            const cannon = document.getElementById('shooter-cannon');
+            if (!cannon) return;
+            let dragging = false;
+            function startDrag(clientX) { dragging=true; moveDrag(clientX); }
+            function moveDrag(clientX) {
+                if (!dragging) return;
+                cannonX = Math.max(24, Math.min(window.innerWidth-24, clientX));
+                positionCannon(); updateAimLine();
+            }
+            function endDrag() { dragging=false; }
+            cannon.addEventListener('touchstart', e=>{ e.preventDefault(); startDrag(e.touches[0].clientX); },{passive:false});
+            document.addEventListener('touchmove', e=>{ if(dragging){e.preventDefault();moveDrag(e.touches[0].clientX);}},{passive:false});
+            document.addEventListener('touchend', endDrag);
+            cannon.addEventListener('mousedown', e=>startDrag(e.clientX));
+            document.addEventListener('mousemove', e=>moveDrag(e.clientX));
+            document.addEventListener('mouseup', endDrag);
+        }
+
+        function updateAimLine() {
+            const line = document.getElementById('shooter-aim-line');
+            if (!line || !shooterLockedTarget) { if(line) line.style.opacity='0'; return; }
+            const tX = parseFloat(shooterLockedTarget.style.left)+38;
+            const tY = parseFloat(shooterLockedTarget.style.top)+38;
+            const cannonY = window.innerHeight-48;
+            const dx=tX-cannonX, dy=cannonY-tY;
+            const dist=Math.sqrt(dx*dx+dy*dy);
+            const angle=Math.atan2(dx,dy)*180/Math.PI;
+            line.style.left=cannonX+'px';
+            line.style.bottom='48px';
+            line.style.height=dist+'px';
+            line.style.transform=`translateX(-50%) rotate(${angle}deg)`;
+            line.style.opacity='0.75';
+        }
+
+        function startShooterTimer() {
+            clearInterval(shooterTimerInterval);
+            shooterTimeLeft=8;
+            const bar=document.getElementById('shooter-timer-bar');
+            if(bar){bar.style.transition='none';bar.style.width='100%';}
+            setTimeout(()=>{
+                if(bar){bar.style.transition='width 8s linear';bar.style.width='0%';}
+            },50);
+            shooterTimerInterval=setInterval(()=>{
+                shooterTimeLeft--;
+                if(shooterTimeLeft<=0){
+                    clearInterval(shooterTimerInterval);
+                    if(!shooterAnswered){
+                        shooterAnswered=true;
+                        shooterHP--; shooterStreak=0; inventory.streak=0;
+                        updateShooterHUD();
+                        showShooterMsg('⏰ 超時！','#FF9800');
+                        flashMiss();
+                        if(shooterHP<=0){setTimeout(shooterGameOver,900);return;}
+                        setTimeout(()=>{shooterLockedTarget=null;shooterIdx++;loadShooterQuestion();},1200);
+                    }
+                }
+            },1000);
+        }
+
+        function flashMiss() {
+            const f=document.getElementById('shooter-miss-flash');
+            if(!f)return;
+            f.style.opacity='1'; setTimeout(()=>f.style.opacity='0',300);
+        }
+
         function loadShooterQuestion() {
-            if (shooterIdx >= shooterTasks.length) { shooterWin(); return; }
-            const task = shooterTasks[shooterIdx];
-            document.getElementById('shooter-q-text').textContent = task.q;
-            shooterAnswered = false;
-            // Small delay ensures screen is visible before spawn
-            setTimeout(() => spawnTargets(task), 80);
+            if(shooterIdx>=shooterTasks.length){shooterWin();return;}
+            const task=shooterTasks[shooterIdx];
+            document.getElementById('shooter-q-text').textContent=task.q;
+            shooterAnswered=false; shooterLockedTarget=null;
+            updateFireBtn();
+            setTimeout(()=>{spawnTargets(task);startShooterTimer();},80);
         }
 
         function spawnTargets(task) {
-            document.querySelectorAll('.shooter-target').forEach(el => el.remove());
-            shooterTargets = [];
-            const opts = shuffle([...task.options]);
-            const W = window.innerWidth  || 375;
-            const H = window.innerHeight || 600;
-            const TW = 88, margin = 20;
-            const topMin = 90, topMax = H - TW - 90;
-            const positions = [];
-            opts.forEach(() => {
-                let x, y, tries = 0;
-                do {
-                    x = margin + Math.random() * (W - TW - margin * 2);
-                    y = topMin + Math.random() * Math.max(60, topMax - topMin);
+            document.querySelectorAll('.shooter-target').forEach(el=>el.remove());
+            shooterTargets=[];
+            let opts=shuffle([...task.options]);
+            const extras=['一','二','三','的','了'];
+            while(opts.length<5) opts.push(extras[opts.length%extras.length]);
+            opts=opts.slice(0,5);
+            if(!opts.includes(task.ans)) opts[Math.floor(Math.random()*5)]=task.ans;
+            const W=window.innerWidth||375, H=window.innerHeight||600;
+            const TW=76, margin=16, topMin=100, topMax=H-TW-115;
+            const positions=[];
+            opts.forEach(()=>{
+                let x,y,tries=0;
+                do{
+                    x=margin+Math.random()*(W-TW-margin*2);
+                    y=topMin+Math.random()*Math.max(60,topMax-topMin);
                     tries++;
-                } while (tries < 30 && positions.some(p => Math.abs(p.x-x) < 110 && Math.abs(p.y-y) < 110));
-                positions.push({x, y});
+                }while(tries<40&&positions.some(p=>Math.abs(p.x-x)<100&&Math.abs(p.y-y)<100));
+                positions.push({x,y});
             });
-            opts.forEach((opt, i) => {
-                const [c1, c2] = TARGET_COLORS[i % TARGET_COLORS.length];
-                const el = document.createElement('div');
-                el.className = 'shooter-target';
-                el.textContent = opt;
-                el.style.cssText = [
-                    'position:fixed',
-                    `left:${positions[i].x}px`,
-                    `top:${positions[i].y}px`,
-                    'width:88px', 'height:88px',
-                    'border-radius:50%',
-                    'display:flex', 'align-items:center', 'justify-content:center',
-                    `background:radial-gradient(circle at 35% 35%, ${c1}, ${c2})`,
-                    'color:#fff', 'font-size:0.9em', 'font-weight:bold',
-                    'cursor:pointer', 'user-select:none',
-                    'z-index:10000',
+            opts.forEach((opt,i)=>{
+                const [c1,c2]=TARGET_COLORS[i%TARGET_COLORS.length];
+                const el=document.createElement('div');
+                el.className='shooter-target';
+                el.textContent=opt;
+                el.style.cssText=[
+                    'position:fixed',`left:${positions[i].x}px`,`top:${positions[i].y}px`,
+                    'width:76px','height:76px','border-radius:50%',
+                    'display:flex','align-items:center','justify-content:center',
+                    `background:radial-gradient(circle at 35% 35%,${c1},${c2})`,
+                    'color:#fff','font-size:0.88em','font-weight:bold',
+                    'cursor:pointer','user-select:none','z-index:10000',
                     'box-shadow:0 0 15px rgba(100,150,255,0.6)',
-                    'transition:transform 0.1s',
-                    'text-align:center', 'word-break:break-all', 'padding:4px'
+                    'text-align:center','word-break:break-all','padding:4px',
+                    'border:3px solid rgba(255,255,255,0.55)'
                 ].join(';');
-                el.dataset.vx = (Math.random() - 0.5) * 1.2;
-                el.dataset.vy = (Math.random() * 0.5 + 0.2) * (Math.random() > 0.5 ? 1 : -1);
-                el.dataset.correct = (opt === task.ans) ? '1' : '0';
-                el.addEventListener('click', () => onTargetClick(el, task));
+                el.dataset.vx=(Math.random()-0.5)*1.2;
+                el.dataset.vy=(Math.random()*0.5+0.2)*(Math.random()>0.5?1:-1);
+                el.dataset.correct=(opt===task.ans)?'1':'0';
+                el.addEventListener('click',()=>lockTarget(el));
                 document.body.appendChild(el);
                 shooterTargets.push(el);
             });
         }
 
-        function shufflePositions(n, w, h) {
-            const margin = 50, tw = 88, th = 88;
-            const positions = [];
-            let attempts = 0;
-            while (positions.length < n && attempts < 500) {
-                attempts++;
-                const x = margin + Math.random() * (w - tw - margin*2);
-                const y = margin + Math.random() * (h - th - margin*2);
-                const overlap = positions.some(p => Math.abs(p.x-x)<100 && Math.abs(p.y-y)<100);
-                if (!overlap) positions.push({x, y});
+        function lockTarget(el) {
+            if(shooterAnswered)return;
+            shooterTargets.forEach(t=>t.classList.remove('locked'));
+            shooterLockedTarget=el;
+            el.classList.add('locked');
+            playSound('click');
+            updateFireBtn(); updateAimLine();
+        }
+
+        function updateFireBtn() {
+            const btn=document.getElementById('shooter-fire-btn');
+            if(!btn)return;
+            if(shooterLockedTarget){btn.classList.remove('no-target');btn.textContent='🔴';}
+            else{btn.classList.add('no-target');btn.textContent='⭕';}
+        }
+
+        window.fireShooter = function() {
+            if(!shooterLockedTarget||shooterAnswered)return;
+            const tX=parseFloat(shooterLockedTarget.style.left)+38;
+            const tY=parseFloat(shooterLockedTarget.style.top)+38;
+            const cannonY=window.innerHeight-48;
+            const dx=tX-cannonX, dy=cannonY-tY;
+            const angle=Math.abs(Math.atan2(dx,dy)*180/Math.PI);
+            if(angle>25){
+                showShooterMsg('💨 脫靶！移動炮台再試','#FF9800');
+                flashMiss();
+                fireBulletAnim(cannonX,cannonY,cannonX+dx*0.4,tY+30,false,null);
+                return;
             }
-            while (positions.length < n) positions.push({x: Math.random()*(w-100), y: Math.random()*(h-100)});
-            return positions;
+            clearInterval(shooterTimerInterval);
+            shooterAnswered=true;
+            const correct=shooterLockedTarget.dataset.correct==='1';
+            fireBulletAnim(cannonX,cannonY,tX,tY,true,()=>onBulletHit(correct));
+        };
+
+        function fireBulletAnim(x0,y0,x1,y1,hit,cb) {
+            const bullet=document.createElement('div');
+            bullet.className='shooter-bullet';
+            bullet.style.cssText=`position:fixed;left:${x0}px;top:${y0}px;z-index:10002;`;
+            document.body.appendChild(bullet);
+            const dx=x1-x0, dy=y1-y0;
+            const steps=Math.max(10,Math.floor(Math.sqrt(dx*dx+dy*dy)/18));
+            let step=0;
+            function tick(){
+                step++;
+                const t=step/steps;
+                bullet.style.left=(x0+dx*t-4)+'px';
+                bullet.style.top=(y0+dy*t-12)+'px';
+                if(step<steps) requestAnimationFrame(tick);
+                else{bullet.remove();if(cb)cb();}
+            }
+            requestAnimationFrame(tick);
         }
 
-        function moveTargets() {
-            if (shooterAnswered) return;
-            const W = window.innerWidth  || 375;
-            const H = window.innerHeight || 600;
-            const minY = 90, maxY = H - 88 - 90;
-            shooterTargets.forEach(el => {
-                if (!el.parentNode) return;
-                let x  = parseFloat(el.style.left) || 0;
-                let y  = parseFloat(el.style.top)  || 0;
-                let vx = parseFloat(el.dataset.vx);
-                let vy = parseFloat(el.dataset.vy);
-                x += vx * shooterSpeed * 2;
-                y += vy * shooterSpeed * 2;
-                if (x < 0 || x > W - 88) { vx *= -1; el.dataset.vx = vx; x = Math.max(0, Math.min(x, W-88)); }
-                if (y < minY || y > maxY) { vy *= -1; el.dataset.vy = vy; y = Math.max(minY, Math.min(y, maxY)); }
-                el.style.left = x + 'px';
-                el.style.top  = y + 'px';
-            });
-        }
-
-        function onTargetClick(el, task) {
-            if (shooterAnswered) return;
-            shooterAnswered = true;
-            const correct = el.dataset.correct === '1';
-            // Fire laser toward target
-            fireLaser(el);
-            if (correct) {
+        function onBulletHit(correct) {
+            const el=shooterLockedTarget; if(!el)return;
+            const line=document.getElementById('shooter-aim-line');
+            if(line)line.style.opacity='0';
+            if(correct){
                 el.classList.add('target-hit');
-                spawnParticles(el);
-                playSound('win');
-                shooterScore++;
-                shooterStreak++;
-                shooterSpeed = Math.min(1.8, 0.35 + shooterStreak * 0.06);
-                showShooterMsg(shooterStreak >= 5 ? `🔥 ${shooterStreak}連對！` : '✅ 正確！', '#FFD700');
+                spawnParticles(el); playSound('win');
+                shooterScore++; shooterStreak++;
+                if(shooterStreak%3===0) shooterSpeed=Math.min(1.8,shooterSpeed*1.15);
+                showShooterMsg(shooterStreak>=5?`🔥 ${shooterStreak}連！`:'✅ 正確！','#FFD700');
                 addStreak();
-                setTimeout(() => { shooterIdx++; loadShooterQuestion(); }, 900);
+                setTimeout(()=>{shooterLockedTarget=null;shooterIdx++;loadShooterQuestion();},900);
             } else {
-                el.classList.add('target-miss');
-                // Highlight correct answer
-                shooterTargets.forEach(t => {
-                    if (t.dataset.correct === '1') t.style.boxShadow = '0 0 30px #4CAF50, 0 0 60px #4CAF50';
-                });
+                el.classList.add('target-miss'); flashMiss();
+                shooterTargets.forEach(t=>{if(t.dataset.correct==='1')t.style.boxShadow='0 0 30px #4CAF50,0 0 60px #4CAF50';});
                 playSound('error');
-                shooterHP--;
-                shooterStreak = 0;
-                inventory.streak = 0;
-                updateShooterHUD();
-                showShooterMsg('❌ 答錯！', '#F44336');
+                shooterHP--; shooterStreak=0; inventory.streak=0;
+                updateShooterHUD(); showShooterMsg('❌ 答錯！','#F44336');
                 updateUI(false);
-                if (shooterHP <= 0) { setTimeout(shooterGameOver, 1000); return; }
-                setTimeout(() => { shooterIdx++; loadShooterQuestion(); }, 1400);
+                if(shooterHP<=0){setTimeout(shooterGameOver,1000);return;}
+                setTimeout(()=>{shooterLockedTarget=null;shooterIdx++;loadShooterQuestion();},1400);
             }
             updateShooterHUD();
         }
 
-        function fireLaser(targetEl) {
-            const laser = document.getElementById('shooter-laser');
-            if (!laser) return;
-            const tX  = parseFloat(targetEl.style.left) + 44;
-            const tY  = parseFloat(targetEl.style.top)  + 44;
-            const H   = window.innerHeight || 600;
-            const cannonY = H - 80;          // approx cannon center y
-            const dist = Math.max(20, cannonY - tY);
-            laser.style.height  = dist + 'px';
-            laser.style.opacity = '1';
-            laser.style.left    = tX + 'px';
-            laser.style.bottom  = '80px';
-            setTimeout(() => { laser.style.height = '0'; laser.style.opacity = '0'; }, 200);
+        function moveTargets() {
+            if(shooterAnswered)return;
+            const W=window.innerWidth||375, H=window.innerHeight||600;
+            const minY=100, maxY=H-76-115;
+            shooterTargets.forEach(el=>{
+                if(!el.parentNode)return;
+                let x=parseFloat(el.style.left)||0, y=parseFloat(el.style.top)||0;
+                let vx=parseFloat(el.dataset.vx), vy=parseFloat(el.dataset.vy);
+                x+=vx*shooterSpeed*2; y+=vy*shooterSpeed*2;
+                if(x<0||x>W-76){vx*=-1;el.dataset.vx=vx;x=Math.max(0,Math.min(x,W-76));}
+                if(y<minY||y>maxY){vy*=-1;el.dataset.vy=vy;y=Math.max(minY,Math.min(y,maxY));}
+                el.style.left=x+'px'; el.style.top=y+'px';
+            });
         }
 
         function spawnParticles(el) {
-            const x = parseFloat(el.style.left) + 44;
-            const y = parseFloat(el.style.top) + 44;
-            const colors = ['#FFD700','#FF6B00','#FF4444','#FFFFFF','#4CAF50'];
-            for (let i = 0; i < 12; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                const angle = (i / 12) * Math.PI * 2;
-                const dist  = 40 + Math.random() * 40;
-                p.style.cssText = `position:fixed;width:${4+Math.random()*6}px;height:${4+Math.random()*6}px;
-                    background:${colors[i%colors.length]};left:${x}px;top:${y}px;z-index:10001;
-                    --dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;`;
-                document.body.appendChild(p);
-                setTimeout(() => p.remove(), 700);
+            const x=parseFloat(el.style.left)+38, y=parseFloat(el.style.top)+38;
+            const colors=['#FFD700','#FF6B00','#FF4444','#FFFFFF','#4CAF50'];
+            for(let i=0;i<14;i++){
+                const p=document.createElement('div'); p.className='particle';
+                const angle=(i/14)*Math.PI*2, dist=45+Math.random()*45;
+                p.style.cssText=`position:fixed;width:${4+Math.random()*6}px;height:${4+Math.random()*6}px;background:${colors[i%colors.length]};left:${x}px;top:${y}px;z-index:10001;--dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;`;
+                document.body.appendChild(p); setTimeout(()=>p.remove(),700);
             }
         }
 
-        function showShooterMsg(text, color) {
-            const msg = document.getElementById('shooter-msg');
-            if (!msg) return;
-            msg.textContent = text; msg.style.color = color; msg.style.opacity = '1';
-            setTimeout(() => { msg.style.opacity = '0'; }, 700);
+        function showShooterMsg(text,color) {
+            const msg=document.getElementById('shooter-msg');
+            if(!msg)return;
+            msg.textContent=text; msg.style.color=color; msg.style.opacity='1';
+            clearTimeout(msg._t); msg._t=setTimeout(()=>msg.style.opacity='0',800);
         }
 
         function updateShooterHUD() {
-            const maxHP = 3;
-            document.getElementById('shooter-score').textContent  = shooterScore;
-            document.getElementById('shooter-streak-disp').textContent = shooterStreak;
-            document.getElementById('shooter-hp-disp').textContent = shooterHP;
-            document.getElementById('shooter-hp-bar').style.width = (shooterHP/maxHP*100) + '%';
-            document.getElementById('shooter-hp-bar').style.background =
-                shooterHP <= 1 ? 'linear-gradient(90deg,#F44336,#FF8A65)' :
-                shooterHP === 2 ? 'linear-gradient(90deg,#FF9800,#FFD54F)' :
-                                  'linear-gradient(90deg,#4CAF50,#A5D6A7)';
+            document.getElementById('shooter-score').textContent=shooterScore;
+            document.getElementById('shooter-streak-disp').textContent=shooterStreak;
+            document.getElementById('shooter-hp-disp').textContent=shooterHP;
+            const bar=document.getElementById('shooter-hp-bar');
+            if(bar){
+                bar.style.width=(shooterHP/3*100)+'%';
+                bar.style.background=shooterHP<=1?'linear-gradient(90deg,#F44336,#FF8A65)':
+                    shooterHP===2?'linear-gradient(90deg,#FF9800,#FFD54F)':
+                    'linear-gradient(90deg,#4CAF50,#A5D6A7)';
+            }
         }
 
         function shooterWin() {
-            shooterActive = false;
+            shooterActive=false; clearInterval(shooterTimerInterval);
             cancelAnimationFrame(shooterAnimFrame);
-            document.querySelectorAll('.shooter-target').forEach(el => el.remove());
-            playSound('bosswin');
-            gainExp(shooterScore * 2, '射擊道場');
-            saveGame();
-            const arena = document.getElementById('shooter-arena');
-            if (arena) arena.innerHTML = `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#FFD700;">
-                <div style="font-size:2.5em;margin-bottom:10px;">🏆</div>
-                <div style="font-size:1.2em;font-weight:900;">全部完成！</div>
-                <div style="font-size:0.9em;margin-top:8px;color:#FFF8E7;">得分：${shooterScore} · EXP +${shooterScore*2}</div>
-                <button onclick="goHome()" style="margin-top:20px;background:#1565C0;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:1em;cursor:pointer;">🏠 返回</button>
-            </div>`;
+            document.querySelectorAll('.shooter-target').forEach(el=>el.remove());
+            playSound('bosswin'); gainExp(shooterScore*2,'射擊道場'); saveGame();
+            const arena=document.getElementById('shooter-arena');
+            if(arena) arena.innerHTML=`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#FFD700;"><div style="font-size:2.5em;margin-bottom:10px;">🏆</div><div style="font-size:1.2em;font-weight:900;">全部完成！</div><div style="font-size:0.9em;margin-top:8px;color:#FFF8E7;">得分：${shooterScore} · EXP +${shooterScore*2}</div><button onclick="goHome()" style="margin-top:20px;background:#1565C0;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:1em;cursor:pointer;">🏠 返回</button></div>`;
         }
 
         function shooterGameOver() {
-            shooterActive = false;
+            shooterActive=false; clearInterval(shooterTimerInterval);
             cancelAnimationFrame(shooterAnimFrame);
-            document.querySelectorAll('.shooter-target').forEach(el => el.remove());
-            playSound('error');
-            saveGame();
-            const arena = document.getElementById('shooter-arena');
-            if (arena) arena.innerHTML = `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#F44336;">
-                <div style="font-size:2.5em;margin-bottom:10px;">💀</div>
-                <div style="font-size:1.2em;font-weight:900;color:#FF8A80;">飛船被擊落！</div>
-                <div style="font-size:0.9em;margin-top:8px;color:#FFF8E7;">得分：${shooterScore}</div>
-                <button onclick="goHome()" style="margin-top:20px;background:#C62828;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:1em;cursor:pointer;">🏠 返回</button>
-            </div>`;
+            document.querySelectorAll('.shooter-target').forEach(el=>el.remove());
+            playSound('error'); saveGame();
+            const arena=document.getElementById('shooter-arena');
+            if(arena) arena.innerHTML=`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;"><div style="font-size:2.5em;margin-bottom:10px;">💀</div><div style="font-size:1.2em;font-weight:900;color:#FF8A80;">飛船被擊落！</div><div style="font-size:0.9em;margin-top:8px;color:#FFF8E7;">得分：${shooterScore}</div><button onclick="goHome()" style="margin-top:20px;background:#C62828;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:1em;cursor:pointer;">🏠 返回</button></div>`;
         }
         // ══════════ END SHOOTER ══════════
 
@@ -8573,33 +8683,24 @@ window.closeRC = function() {
     <!-- ══ SHOOTER GAME SCREEN ══ -->
     <div id="game-shooter" class="screen hidden">
       <div id="shooter-wrap">
-        <!-- Starfield bg -->
         <canvas id="shooter-stars"></canvas>
-        <!-- Question bar -->
         <div id="shooter-question">
-          <div id="shooter-q-text">題目載入中...</div>
+          <div id="shooter-q-text">載入中…</div>
+          <div id="shooter-timer-wrap"><div id="shooter-timer-bar"></div></div>
           <div id="shooter-hud">
             <span>🎯 <span id="shooter-score">0</span></span>
-            <span>🔥 <span id="shooter-streak-disp">0</span> 連對</span>
+            <span>🔥 <span id="shooter-streak-disp">0</span>連</span>
             <span>❤️ <span id="shooter-hp-disp">3</span></span>
           </div>
         </div>
-        <!-- Arena -->
         <div id="shooter-arena"></div>
-        <!-- Laser beam -->
-        <div id="shooter-laser"></div>
-        <!-- Cannon -->
-        <div id="shooter-cannon">🛸</div>
-        <!-- Hit message -->
+        <div id="shooter-cannon">🚀</div>
+        <div id="shooter-aim-line"></div>
+        <div id="shooter-miss-flash"></div>
+        <div id="shooter-footer"></div>
+        <div id="shooter-hp-bar-wrap"><div id="shooter-hp-bar"></div></div>
+        <button id="shooter-fire-btn" class="no-target" onclick="fireShooter()">⭕</button>
         <div id="shooter-msg"></div>
-        <!-- Footer -->
-        <div id="shooter-footer">
-          <span style="color:#FFD54F;font-size:0.8em;font-weight:bold;">HP</span>
-          <div id="shooter-hp-bar-wrap">
-            <div id="shooter-hp-bar" style="width:100%;"></div>
-          </div>
-          <button onclick="goHome()" style="background:rgba(200,50,50,0.7);color:#fff;border:none;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:0.82em;position:relative;z-index:10002;">🏠 退出</button>
-        </div>
       </div>
     </div>
 
