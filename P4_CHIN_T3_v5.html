@@ -3470,6 +3470,8 @@ function checkDailyReset() {
                 document.body.classList.remove('on-login');
                 setAvatarUI();
                 goHome();
+                // Submit score immediately on login so LB is up-to-date
+                setTimeout(() => submitScore(true).catch(()=>{}), 2000);
 
                 if (origin === 'migrated') {
                     setTimeout(() => alert('✅ 偵測到舊存檔，已自動同步到雲端！\n以後換任何裝置都能保留進度。'), 600);
@@ -3620,8 +3622,14 @@ function checkDailyReset() {
         function saveGame() {
             if(inventory.playerName) {
                 try { localStorage.setItem(SAVE_KEY, JSON.stringify(inventory)); } catch(e) {}
-                // Also push to Firebase (async, no await to keep UI snappy)
+                // Push save to Firebase /players (fast, no read needed)
                 saveToFirebase().catch(()=>{});
+                // Auto-submit leaderboard — throttled to once per 60s
+                const now = Date.now();
+                if (now - _lastLbSubmit > 60000) {
+                    _lastLbSubmit = now; // set immediately to prevent parallel calls
+                    submitScore(true).catch(()=>{});
+                }
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -5285,6 +5293,7 @@ function checkDailyReset() {
         // 🔧 Firebase Database URL:
         const FIREBASE_DB_URL = 'https://chinese4a-default-rtdb.asia-southeast1.firebasedatabase.app';
         const FIREBASE_LB_URL = FIREBASE_DB_URL + '/leaderboard.json';
+        let _lastLbSubmit = 0;  // throttle: auto-submit at most once per 60s
 
         function calcScore() {
             const bw = inventory.bossWins || {};
@@ -5757,10 +5766,10 @@ async function fetchLeaderboard() {
                      + '</div></div>';
             }).join('');
         }
-        async function submitScore() {
+        async function submitScore(silent = false) {
             const status = document.getElementById('lb-status');
-            if (!inventory.playerName) { alert('請先設定冒險者名字！'); return; }
-            status.textContent = '⏳ 上傳中...';
+            if (!inventory.playerName) { if (!silent) alert('請先設定冒險者名字！'); return; }
+            if (!silent) status.textContent = '⏳ 上傳中...';
             try {
                 // 1. Fetch current data from Firebase
                 const getRes = await fetch(FIREBASE_LB_URL);
@@ -5878,17 +5887,18 @@ async function fetchLeaderboard() {
                     body: JSON.stringify({ entries })
                 });
                 if (!putRes.ok) throw new Error('上傳失敗 HTTP ' + putRes.status);
-                status.textContent = `✅ 分數已上傳！你的分數：${myEntry.score}`;
-                fetchLeaderboard();
+                if (!silent) { status.textContent = `✅ 分數已上傳！你的分數：${myEntry.score}`; fetchLeaderboard(); }
+                window._lastLbSubmit = Date.now(); // update throttle timer
             } catch(e) {
-                status.textContent = '❌ 上傳失敗：' + e.message;
+                if (!silent) status.textContent = '❌ 上傳失敗：' + e.message;
             }
         }
 
         function openLeaderboard() {
             playSound('click'); hideAll();
             document.getElementById('leaderboard-screen').classList.remove('hidden');
-            fetchLeaderboard();
+            // Always submit latest score when opening LB (force refresh)
+            submitScore(false);
         }
         // ==================== END 排行榜 ====================
 
