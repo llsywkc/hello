@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="王家駿 (Wong Ka-Chun)">
+    <meta name="author" content="王家駿 (Wang Ka-Chun)">
     <meta name="copyright" content="© 2025-2026 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
     <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, noarchive">
@@ -1001,23 +1001,7 @@
             transform-origin: bottom center;
             opacity: 0; transition: opacity 0.15s;
         }
-        #shooter-fire-btn {
-            position: fixed; bottom: 14px; left: 50%;
-            transform: translateX(-50%);
-            width: 60px; height: 60px; border-radius: 50%;
-            background: radial-gradient(circle at 40% 35%, #ff6b6b, #c0392b);
-            border: 4px solid #FF8A65;
-            box-shadow: 0 0 20px rgba(244,67,54,0.7), 0 4px 0 #8B0000;
-            font-size: 1.5em; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: transform 0.1s, box-shadow 0.1s;
-            z-index: 21; pointer-events: auto;
-        }
-        #shooter-fire-btn:active {
-            transform: translateX(-50%) translateY(3px);
-            box-shadow: 0 0 12px rgba(244,67,54,0.5), 0 1px 0 #8B0000;
-        }
-        #shooter-fire-btn.no-target { opacity: 0.4; cursor: not-allowed; }
+/* fire btn defined below */
         .shooter-bullet {
             position: fixed; width: 8px; height: 24px;
             background: linear-gradient(to top, #FFD700, #fff); border-radius: 4px;
@@ -1047,51 +1031,45 @@
             pointer-events: none; opacity: 0;
             transition: opacity 0.2s; white-space: nowrap;
         }
-        /* ── 虛擬搖桿 ── */
-        #shooter-joystick-wrap {
-            position: fixed; bottom: 18px; left: 24px;
-            width: 110px; height: 110px;
+        /* ── 方向按鈕 ── */
+        #shooter-btn-left, #shooter-btn-right {
+            position: fixed; bottom: 22px;
+            width: 80px; height: 80px; border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 3px solid rgba(255,215,0,0.5);
+            color: #FFD700; font-size: 2em;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; user-select: none;
             z-index: 22; pointer-events: auto;
-        }
-        #shooter-joystick-base {
-            position: absolute; inset: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.08);
-            border: 2.5px solid rgba(255,215,0,0.35);
             backdrop-filter: blur(4px);
+            transition: background 0.1s, transform 0.1s;
+            -webkit-tap-highlight-color: transparent;
         }
-        #shooter-joystick-knob {
-            position: absolute;
-            width: 46px; height: 46px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 38% 35%, rgba(255,220,80,0.9), rgba(200,120,0,0.85));
-            border: 2px solid rgba(255,215,0,0.7);
-            box-shadow: 0 0 12px rgba(255,200,50,0.5);
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            transition: none;
-            cursor: grab;
+        #shooter-btn-left  { left: 16px; }
+        #shooter-btn-right { left: 108px; }
+        #shooter-btn-left.pressed, #shooter-btn-right.pressed {
+            background: rgba(255,215,0,0.25);
+            transform: scale(0.92);
+            border-color: rgba(255,215,0,0.9);
         }
         /* 重新定位發射按鈕到右下 */
         #shooter-fire-btn {
-            position: fixed !important;
-            bottom: 22px !important;
-            left: auto !important;
-            right: 28px !important;
-            transform: none !important;
-            width: 72px !important; height: 72px !important;
-            border-radius: 50%;
+            position: fixed;
+            bottom: 22px; right: 24px;
+            left: auto; transform: none;
+            width: 80px; height: 80px; border-radius: 50%;
             background: radial-gradient(circle at 40% 35%, #ff6b6b, #c0392b);
             border: 4px solid #FF8A65;
             box-shadow: 0 0 22px rgba(244,67,54,0.8), 0 4px 0 #8B0000;
-            font-size: 1.6em; cursor: pointer;
+            font-size: 1.8em; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            transition: box-shadow 0.1s;
+            transition: box-shadow 0.1s, transform 0.1s;
             z-index: 22; pointer-events: auto;
+            -webkit-tap-highlight-color: transparent;
         }
         #shooter-fire-btn:active {
-            transform: scale(0.93) !important;
-            box-shadow: 0 0 12px rgba(244,67,54,0.5), 0 1px 0 #8B0000 !important;
+            transform: scale(0.91);
+            box-shadow: 0 0 12px rgba(244,67,54,0.5), 0 1px 0 #8B0000;
         }
         #shooter-fire-btn.no-target { opacity: 0.35; cursor: not-allowed; }
         /* HP bar repositioned above joystick/fire area */
@@ -1110,7 +1088,93 @@
             width: 100%; height: 100%;
             pointer-events: none; z-index: 1;
         }
-</style>
+
+        /* ════ 恐龍遊戲 CSS ════ */
+        #dino-modal * { box-sizing: border-box; }
+        #dino-modal * { margin:0; padding:0; box-sizing:border-box; }
+  #dino-modal {
+    background: #1a1a2e;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100vh; overflow: hidden;
+    font-family: 'Noto Sans TC', sans-serif;
+    touch-action: none;
+  }
+
+  #game-wrap {
+    position: relative;
+    width: 100vw; max-width: 800px;
+  }
+
+  /* ── HUD ── */
+  #hud {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 16px;
+    background: rgba(0,0,0,0.4);
+    color: #FFD700; font-size: 1em; font-weight: bold;
+    border-bottom: 2px solid rgba(255,215,0,0.3);
+  }
+  #hud-q { flex:1; text-align:center; font-size:1.1em; color:#fff; letter-spacing:1px; }
+  #hud-hp span { color:#F44336; font-size:1.2em; }
+  #hud-score { color:#FFD700; }
+
+  /* ── Canvas ── */
+  #canvas {
+    display: block;
+    background: linear-gradient(180deg, #0d1b2a 60%, #1a3a1a 100%);
+    width: 100%;
+    cursor: pointer;
+  }
+
+  /* ── Bottom bar ── */
+  #bottom-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.5);
+    border-top: 2px solid rgba(255,215,0,0.3);
+  }
+  #btn-jump {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: radial-gradient(circle at 38% 35%, #66BB6A, #2E7D32);
+    border: 4px solid #A5D6A7;
+    color: #fff; font-size: 2em;
+    box-shadow: 0 0 18px rgba(100,255,100,0.4), 0 4px 0 #1B5E20;
+    cursor: pointer; user-select: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.1s, box-shadow 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #btn-jump:active { transform: scale(0.9); box-shadow: 0 0 8px rgba(100,255,100,0.3); }
+  #info-box {
+    flex:1; text-align:center; color: rgba(255,255,255,0.7);
+    font-size: 0.85em; line-height: 1.5;
+  }
+  #btn-restart {
+    padding: 12px 20px; border-radius: 12px;
+    background: rgba(255,215,0,0.15);
+    border: 2px solid rgba(255,215,0,0.5);
+    color: #FFD700; font-size: 0.95em; cursor: pointer;
+    display: none;
+  }
+
+  /* ── Overlay screens ── */
+  .overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.82);
+    z-index: 10; gap: 16px;
+  }
+  .overlay h1 { font-size: 2.2em; color: #FFD700; }
+  .overlay p  { color: #ccc; font-size: 1em; text-align:center; padding: 0 20px; }
+  .overlay button {
+    padding: 14px 36px; border-radius: 24px;
+    background: linear-gradient(135deg, #FFD700, #FF8C00);
+    border: none; color: #1a1a2e; font-size: 1.1em; font-weight: bold;
+    cursor: pointer; margin-top: 8px;
+  }
+  #score-final { font-size: 1.5em; color: #FFD700; font-weight: bold; }
+        </style>
 </head>
 <body class="on-login">
 
@@ -1390,6 +1454,15 @@
                     </div>
                 </div>
 
+                <div class="menu-section-label">🦕 恐龍跳字</div>
+                <div class="menu-card-grid">
+                    <div class="menu-card menu-card-lg" onclick="launchDino()" style="border-color:#69F0AE;background:linear-gradient(135deg,rgba(105,240,174,0.12),rgba(46,125,50,0.12));">
+                        <div class="mc-icon">🦕</div>
+                        <div class="mc-title">恐龍跳字遊戲</div>
+                        <div class="mc-sub">成語·古詩·字詞·副詞 共144題</div>
+                    </div>
+                </div>
+
                 <div class="menu-section-label">🎯 射擊道場</div>
                 <div class="menu-card-grid">
                     <div class="menu-card menu-card-lg" onclick="startShooter('shooter-all')" style="border-color:#FF6F00;background:linear-gradient(135deg,rgba(255,111,0,0.15),rgba(198,40,40,0.15));">
@@ -1590,6 +1663,8 @@
                 <button id="lb-tab-2" class="lb-tab-btn" onclick="switchLbTab(2)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">⚔️ 夥伴榜</button>
                 <button id="lb-tab-3" class="lb-tab-btn" onclick="switchLbTab(3)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🏗️ 建築榜</button>
                 <button id="lb-tab-4" class="lb-tab-btn" onclick="switchLbTab(4)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">💰 材料榜</button>
+                <button id="lb-tab-5" class="lb-tab-btn" onclick="switchLbTab(5)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🦕 恐龍榜</button>
+                <button id="lb-tab-6" class="lb-tab-btn" onclick="switchLbTab(6)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🎯 射擊榜</button>
             </div>
 
             <div id="lb-tab-desc" style="font-size:0.75em;color:#aaa;margin-bottom:6px;text-align:center;"></div>
@@ -3722,7 +3797,8 @@ function checkDailyReset() {
         /* ── Firebase player CRUD ── */
         async function fbGetPlayer(name) {
             try {
-                const r = await fetch(FIREBASE_PLAYERS_URL + '/' + encodeURIComponent(name) + '.json');
+                const url = FIREBASE_PLAYERS_URL + '/' + encodeURIComponent(name) + '.json?_=' + Date.now();
+                const r = await fetch(url, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
                 if (!r.ok) return null;
                 return await r.json();
             } catch(e) { return null; }
@@ -3987,7 +4063,7 @@ function checkDailyReset() {
                 saveToFirebase().catch(()=>{});
                 // Auto-submit leaderboard — throttled to once per 60s
                 const now = Date.now();
-                if (now - _lastLbSubmit > 60000) {
+                if (now - _lastLbSubmit > 30000) {
                     _lastLbSubmit = now; // set immediately to prevent parallel calls
                     submitScore(true).catch(()=>{});
                 }
@@ -6142,7 +6218,47 @@ function checkDailyReset() {
                     </div>`;
                 }
             }
-        ];
+        ,
+            {
+                label: '🦕 恐龍榜',
+                desc:  '恐龍跳字遊戲累積得分',
+                score: e => e.dinoScore || 0,
+                row: (e, rank, score) => {
+                    const medal  = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
+                    const isMe   = e.name === inventory.playerName;
+                    const cardBg = isMe
+                        ? 'background:linear-gradient(135deg,#0a1f0a,#0d2b0d);border:1px solid #69F0AE;'
+                        : `background:#0d1117;border-left:3px solid ${rank<=3?'#69F0AE':'#333'};`;
+                    return `
+                    <div style="${cardBg}border-radius:10px;margin-bottom:5px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;">
+                        <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
+                        <span style="flex:1;margin-left:8px;color:${isMe?'#69F0AE':'#eee'};font-weight:${isMe?'bold':'normal'};">
+                            <span style="margin-right:3px;">${e.avatar||'🐉'}</span>${e.name||'?'}${isMe?' 👤':''}
+                        </span>
+                        <span style="color:#69F0AE;font-size:0.85em;font-weight:bold;">🦕 ${score} 分</span>
+                    </div>`;
+                },
+            {
+                label: '🎯 射擊榜',
+                desc:  '射擊道場最高得分',
+                score: e => e.shooterScore || 0,
+                row: (e, rank, score) => {
+                    const medal  = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
+                    const isMe   = e.name === inventory.playerName;
+                    const cardBg = isMe
+                        ? 'background:linear-gradient(135deg,#1a0a00,#2a1500);border:1px solid #FF6F00;'
+                        : `background:#0d1117;border-left:3px solid ${rank<=3?'#FF6F00':'#333'};`;
+                    return `
+                    <div style="${cardBg}border-radius:10px;margin-bottom:5px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;">
+                        <span style="color:#FFD700;font-weight:bold;min-width:28px;">${medal}</span>
+                        <span style="flex:1;margin-left:8px;color:${isMe?'#FF9800':'#eee'};font-weight:${isMe?'bold':'normal'};">
+                            <span style="margin-right:3px;">${e.avatar||'🐉'}</span>${e.name||'?'}${isMe?' 👤':''}
+                        </span>
+                        <span style="color:#FF9800;font-size:0.85em;font-weight:bold;">🎯 ${score} 分</span>
+                    </div>`;
+                }
+            }
+            }];
 
         window.switchLbTab = function(tabIdx) {
             currentLbTab = tabIdx;
@@ -6176,7 +6292,12 @@ async function fetchLeaderboard() {
             status.textContent = '⏳ 載入中...';
             list.innerHTML = '';
             try {
-                const res = await fetch(FIREBASE_LB_URL);
+                // cache-busting: append timestamp to force fresh fetch every time
+                const bust = '?_=' + Date.now();
+                const res = await fetch(FIREBASE_LB_URL + bust, {
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
+                });
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
                 const entries = data && data.entries ? data.entries : [];
@@ -6228,7 +6349,7 @@ async function fetchLeaderboard() {
             if (!silent) status.textContent = '⏳ 上傳中...';
             try {
                 // 1. Fetch current data from Firebase
-                const getRes = await fetch(FIREBASE_LB_URL);
+                const getRes = await fetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
                 if (!getRes.ok) throw new Error('讀取失敗 HTTP ' + getRes.status);
                 const data = await getRes.json();
                 let entries = (data && data.entries) ? [...data.entries] : [];
@@ -6249,6 +6370,8 @@ async function fetchLeaderboard() {
                     examBonusScore:    inventory.examBonusScore || 0,
                     rcCorrect:         inventory.rcCorrectAnswers || 0,
                     score:             calcScore(),
+                    dinoScore:         inventory.dinoScore || 0,
+                    shooterScore:      inventory.shooterScore || 0,
                     correctAnswers: inventory.totalCorrectAnswers || 0,
                     bossWins:       inventory.totalBossWins || 0,
                     bossWinsDetail: {
@@ -6310,6 +6433,8 @@ async function fetchLeaderboard() {
                         maxStreak:       Math.max(old.maxStreak       ||0, myEntry.maxStreak       ||0),
                         partnerLv:       Math.max(old.partnerLv       ||0, myEntry.partnerLv       ||0),
                         score:           Math.max(old.score           ||0, myEntry.score           ||0),
+                        dinoScore:       Math.max(old.dinoScore       ||0, myEntry.dinoScore       ||0),
+                        shooterScore:    Math.max(old.shooterScore    ||0, myEntry.shooterScore    ||0),
                         partnerFeedLv:   Math.max(old.partnerFeedLv   ||0, myEntry.partnerFeedLv   ||0),
                         totalFeedLv:     Math.max(old.totalFeedLv     ||0, myEntry.totalFeedLv     ||0),
                         food_burger:     myEntry.food_burger,
@@ -6344,7 +6469,7 @@ async function fetchLeaderboard() {
                     body: JSON.stringify({ entries })
                 });
                 if (!putRes.ok) throw new Error('上傳失敗 HTTP ' + putRes.status);
-                if (!silent) { status.textContent = `✅ 分數已上傳！你的分數：${myEntry.score}`; fetchLeaderboard(); }
+                if (!silent) { status.textContent = `✅ 分數已上傳！你的分數：${myEntry.score}`; setTimeout(fetchLeaderboard, 600); }
                 window._lastLbSubmit = Date.now(); // update throttle timer
             } catch(e) {
                 if (!silent) status.textContent = '❌ 上傳失敗：' + e.message;
@@ -6449,51 +6574,44 @@ async function fetchLeaderboard() {
         }
 
         function setupCannonDrag() {
-            const base = document.getElementById('shooter-joystick-base');
-            const knob = document.getElementById('shooter-joystick-knob');
-            if (!base || !knob) return;
+            const btnL = document.getElementById('shooter-btn-left');
+            const btnR = document.getElementById('shooter-btn-right');
+            if (!btnL || !btnR) return;
 
-            const RADIUS = 38;
-            let joyActive = false, joyStartX = 0, joyRafId = null, joyDx = 0;
+            let pressL = false, pressR = false;
+            const SPEED = 7; // px per frame
 
-            function startJoy(clientX) {
-                joyActive = true;
-                joyStartX = clientX;
-                joyDx = 0;
-                knob.style.transition = 'none';
-            }
-
-            function moveJoy(clientX) {
-                if (!joyActive) return;
-                joyDx = Math.max(-RADIUS, Math.min(RADIUS, clientX - joyStartX));
-                knob.style.transform = `translate(calc(-50% + ${joyDx}px), -50%)`;
-            }
-
-            function endJoy() {
-                joyActive = false; joyDx = 0;
-                knob.style.transition = 'transform 0.18s ease';
-                knob.style.transform = 'translate(-50%, -50%)';
-            }
-
-            // Continuous smooth loop — moves cannon every frame proportional to knob offset
-            function joyLoop() {
-                if (joyActive && joyDx !== 0) {
-                    const speed = (joyDx / RADIUS) * 7.5; // max 7.5px/frame at full deflection
+            function dirLoop() {
+                if (pressL || pressR) {
                     const W = window.innerWidth;
-                    cannonX = Math.max(28, Math.min(W - 28, cannonX + speed));
+                    if (pressL) cannonX = Math.max(28, cannonX - SPEED);
+                    if (pressR) cannonX = Math.min(W - 28, cannonX + SPEED);
                     positionCannon();
                     updateAimLine();
                 }
-                requestAnimationFrame(joyLoop);
+                requestAnimationFrame(dirLoop);
             }
-            requestAnimationFrame(joyLoop);
+            requestAnimationFrame(dirLoop);
 
-            base.addEventListener('touchstart', e => { e.preventDefault(); startJoy(e.touches[0].clientX); }, {passive:false});
-            document.addEventListener('touchmove', e => { if(joyActive){ e.preventDefault(); moveJoy(e.touches[0].clientX); }}, {passive:false});
-            document.addEventListener('touchend', () => { if(joyActive) endJoy(); });
-            base.addEventListener('mousedown', e => startJoy(e.clientX));
-            document.addEventListener('mousemove', e => { if(joyActive) moveJoy(e.clientX); });
-            document.addEventListener('mouseup', () => { if(joyActive) endJoy(); });
+            function setPress(btn, el, state) {
+                if (state) el.classList.add('pressed');
+                else el.classList.remove('pressed');
+                if (btn === 'L') pressL = state;
+                else pressR = state;
+            }
+
+            // Touch
+            btnL.addEventListener('touchstart', e => { e.preventDefault(); setPress('L', btnL, true);  }, {passive:false});
+            btnL.addEventListener('touchend',   e => { e.preventDefault(); setPress('L', btnL, false); }, {passive:false});
+            btnL.addEventListener('touchcancel',e => { setPress('L', btnL, false); });
+            btnR.addEventListener('touchstart', e => { e.preventDefault(); setPress('R', btnR, true);  }, {passive:false});
+            btnR.addEventListener('touchend',   e => { e.preventDefault(); setPress('R', btnR, false); }, {passive:false});
+            btnR.addEventListener('touchcancel',e => { setPress('R', btnR, false); });
+
+            // Mouse (desktop testing)
+            btnL.addEventListener('mousedown', () => setPress('L', btnL, true));
+            btnR.addEventListener('mousedown', () => setPress('R', btnR, true));
+            document.addEventListener('mouseup', () => { setPress('L', btnL, false); setPress('R', btnR, false); });
         }
 
         function updateAimLine() {
@@ -6731,7 +6849,7 @@ async function fetchLeaderboard() {
             shooterActive=false; clearInterval(shooterTimerInterval);
             cancelAnimationFrame(shooterAnimFrame);
             document.querySelectorAll('.shooter-target').forEach(el=>el.remove());
-            playSound('bosswin'); gainExp(shooterScore*2,'射擊道場'); saveGame();
+            if ((inventory.shooterScore||0) < shooterScore) { inventory.shooterScore = shooterScore; } playSound('bosswin'); gainExp(shooterScore*2,'射擊道場'); saveGame(); submitScore(true).catch(()=>{});
             const arena=document.getElementById('shooter-arena');
             if(arena) arena.innerHTML=`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#FFD700;"><div style="font-size:2.5em;margin-bottom:10px;">🏆</div><div style="font-size:1.2em;font-weight:900;">全部完成！</div><div style="font-size:0.9em;margin-top:8px;color:#FFF8E7;">得分：${shooterScore} · EXP +${shooterScore*2}</div><button onclick="goHome()" style="margin-top:20px;background:#1565C0;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:1em;cursor:pointer;">🏠 返回</button></div>`;
         }
@@ -6740,6 +6858,7 @@ async function fetchLeaderboard() {
             shooterActive=false; clearInterval(shooterTimerInterval);
             cancelAnimationFrame(shooterAnimFrame);
             document.querySelectorAll('.shooter-target').forEach(el=>el.remove());
+            if ((inventory.shooterScore||0) < shooterScore) { inventory.shooterScore = shooterScore; }
             playSound('error'); saveGame();
             const arena=document.getElementById('shooter-arena');
             if(arena) arena.innerHTML=`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;"><div style="font-size:2.5em;margin-bottom:10px;">💀</div><div style="font-size:1.2em;font-weight:900;color:#FF8A80;">飛船被擊落！</div><div style="font-size:0.9em;margin-top:8px;color:#FFF8E7;">得分：${shooterScore}</div><button onclick="goHome()" style="margin-top:20px;background:#C62828;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:1em;cursor:pointer;">🏠 返回</button></div>`;
@@ -8848,16 +8967,649 @@ window.closeRC = function() {
         <div id="shooter-miss-flash"></div>
         <div id="shooter-footer"></div>
         <div id="shooter-hp-bar-wrap"><div id="shooter-hp-bar"></div></div>
-        <!-- 虛擬搖桿 (左下) -->
-        <div id="shooter-joystick-wrap">
-          <div id="shooter-joystick-base"></div>
-          <div id="shooter-joystick-knob"></div>
-        </div>
+        <!-- 方向按鈕 (左下) -->
+        <div id="shooter-btn-left">◀</div>
+        <div id="shooter-btn-right">▶</div>
         <!-- 發射按鈕 (右下) -->
         <button id="shooter-fire-btn" class="no-target" onclick="fireShooter()">🔴</button>
         <div id="shooter-msg"></div>
       </div>
     </div>
 
+
+        <!-- ═══ 恐龍跳字遊戲 Modal ═══ -->
+        <div id="dino-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:#1a1a2e;overflow:hidden;flex-direction:column;align-items:center;justify-content:center;">
+            <button onclick="closeDino()" style="position:fixed;top:12px;right:16px;z-index:10001;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.3);color:#fff;padding:6px 16px;border-radius:20px;font-size:0.9em;cursor:pointer;">✕ 返回</button>
+            <div id="game-wrap">
+  <!-- HUD -->
+  <div id="hud">
+    <div id="hud-hp">❤️ <span id="hp-val">3</span></div>
+    <div id="hud-q">── 題目 ──</div>
+    <div id="hud-score">⭐ <span id="score-val">0</span></div>
+  </div>
+
+  <!-- Canvas -->
+  <canvas id="canvas"></canvas>
+
+  <!-- Bottom -->
+  <div id="bottom-bar">
+    <div id="info-box">
+      Tap 畫面<br>或按 ▲ 跳躍
+    </div>
+    <button id="btn-jump" ontouchstart="doJump()" onclick="doJump()">▲</button>
+    <button id="btn-restart" onclick="restartGame()">🔄 再玩</button>
+  </div>
+
+  <!-- Start overlay -->
+  <div class="overlay" id="overlay-start">
+    <h1>🦕 跳字恐龍</h1>
+    <p>恐龍自動向前跑，Tap 或按 ▲ 跳躍<br><b style="color:#FFD700">▲ 跳</b> 打高位泡泡 · <b style="color:#69F0AE">▶ 跑</b> 打低位泡泡<br>跳到正確答案 ✅ 得分 · 跳錯 ❌ 失血<br><span style="font-size:0.82em;color:#aaa;">📚 成語·古詩·字詞·T3·副詞·標點·數量詞·形容詞·動詞 共144題</span></p>
+    <button onclick="startGame()">▶ 開始遊戲</button>
+  </div>
+
+  <!-- Game over overlay -->
+  <div class="overlay" id="overlay-gameover" style="display:none">
+    <h1>💀 遊戲結束</h1>
+    <div id="score-final"></div>
+    <p id="go-msg"></p>
+    <button onclick="restartGame()">🔄 再玩一次</button>
+  </div>
+
+  <!-- Win overlay -->
+  <div class="overlay" id="overlay-win" style="display:none">
+    <h1>🎉 全部答對！</h1>
+    <div id="score-final-win"></div>
+    <p>恐龍勇士！完成所有 144 題！</p>
+    <button onclick="restartGame()">🔄 再玩一次</button>
+  </div>
+</div>
+
+<script>
+
+        /* ════ 恐龍遊戲 (namespaced) ════ */
+        const DinoGame = (function() {
+// ── Task bank (fill-in-blank style, 4 options each) ──
+const TASKS = [
+  { q:"做事要有始有終，不能半途___。", ans:"而廢", opts:["而廢", "放棄", "停止", "離開"], cat:"成語" },
+  { q:"他解決問題的方法非常巧妙，真是___。", ans:"一石二鳥", opts:["一石二鳥", "守株待兔", "半途而廢", "亡羊補牢"], cat:"成語" },
+  { q:"比賽快開始了，大家都___，準備全力以赴。", ans:"摩拳擦掌", opts:["摩拳擦掌", "垂頭喪氣", "愁眉苦臉", "手忙腳亂"], cat:"成語" },
+  { q:"他考試失敗後，整天___，一點精神也沒有。", ans:"垂頭喪氣", opts:["垂頭喪氣", "喜出望外", "興高采烈", "眉飛色舞"], cat:"成語" },
+  { q:"媽媽忙得___，連吃飯的時間也沒有。", ans:"手忙腳亂", opts:["手忙腳亂", "從容不迫", "有條不紊", "井井有條"], cat:"成語" },
+  { q:"他學習非常認真，___，從不浪費時間。", ans:"分秒必爭", opts:["分秒必爭", "得過且過", "馬馬虎虎", "敷衍了事"], cat:"成語" },
+  { q:"消防員___地衝入火場救人，令人敬佩。", ans:"奮不顧身", opts:["奮不顧身", "貪生怕死", "臨陣退縮", "畏縮不前"], cat:"成語" },
+  { q:"他把不屬於自己的東西佔為己有，真是___。", ans:"監守自盜", opts:["監守自盜", "捨己為人", "大公無私", "見義勇為"], cat:"成語" },
+  { q:"兩兄弟感情很好，___，從不吵架。", ans:"手足情深", opts:["手足情深", "反目成仇", "同室操戈", "兄弟鬩牆"], cat:"成語" },
+  { q:"他演講時___，把道理說得清清楚楚。", ans:"口若懸河", opts:["口若懸河", "結結巴巴", "語無倫次", "支支吾吾"], cat:"成語" },
+  { q:"這道數學題太難了，大家都感到___。", ans:"束手無策", opts:["束手無策", "得心應手", "輕而易舉", "遊刃有餘"], cat:"成語" },
+  { q:"老師表揚了他，他感到___，臉都紅了。", ans:"喜出望外", opts:["喜出望外", "悶悶不樂", "愁眉苦臉", "垂頭喪氣"], cat:"成語" },
+  { q:"做錯事要勇於承認，亡羊補牢，___。", ans:"為時未晚", opts:["為時未晚", "悔之已晚", "後悔莫及", "追悔莫及"], cat:"成語" },
+  { q:"他說話___，大家都不知道他在說甚麼。", ans:"語無倫次", opts:["語無倫次", "條理分明", "頭頭是道", "井井有條"], cat:"成語" },
+  { q:"比賽結果出來，我們隊___，同學們歡呼雀躍。", ans:"旗開得勝", opts:["旗開得勝", "一敗塗地", "慘敗而歸", "落荒而逃"], cat:"成語" },
+  { q:"他做事非常小心，___，從不出錯。", ans:"一絲不苟", opts:["一絲不苟", "馬馬虎虎", "粗心大意", "漫不經心"], cat:"成語" },
+  { q:"遇到困難不要___，要想辦法解決。", ans:"自暴自棄", opts:["自暴自棄", "自強不息", "奮發圖強", "勇往直前"], cat:"成語" },
+  { q:"他們兩人意見不同，爭論得___。", ans:"面紅耳赤", opts:["面紅耳赤", "心平氣和", "從容不迫", "平心靜氣"], cat:"成語" },
+  { q:"這個節目精彩絕倫，觀眾看得___。", ans:"如癡如醉", opts:["如癡如醉", "昏昏欲睡", "無精打采", "心不在焉"], cat:"成語" },
+  { q:"她待人___，大家都很喜歡她。", ans:"和藹可親", opts:["和藹可親", "冷若冰霜", "橫眉冷目", "盛氣凌人"], cat:"成語" },
+  { q:"床前___光，疑是地上霜。", ans:"明月", opts:["明月", "燈火", "陽光", "星星"], cat:"古詩" },
+  { q:"舉頭望明月，低頭思___。", ans:"故鄉", opts:["故鄉", "家人", "父母", "親人"], cat:"古詩" },
+  { q:"春眠不覺曉，處處___啼鳥。", ans:"聞", opts:["聞", "聽", "看", "見"], cat:"古詩" },
+  { q:"夜來風雨聲，花落___多少。", ans:"知", opts:["知", "問", "數", "看"], cat:"古詩" },
+  { q:"慈母手中線，遊子___上衣。", ans:"身", opts:["身", "臂", "心", "腰"], cat:"古詩" },
+  { q:"誰言寸草心，報得___春暉。", ans:"三春", opts:["三春", "一寸", "萬丈", "千秋"], cat:"古詩" },
+  { q:"鋤禾日當午，汗滴___下土。", ans:"禾", opts:["禾", "泥", "地", "田"], cat:"古詩" },
+  { q:"粒粒皆___苦。", ans:"辛", opts:["辛", "血", "汗", "淚"], cat:"古詩" },
+  { q:"登鸛雀樓：白日依山___。", ans:"盡", opts:["盡", "落", "去", "沉"], cat:"古詩" },
+  { q:"欲窮千里目，更上___層樓。", ans:"一", opts:["一", "千", "萬", "百"], cat:"古詩" },
+  { q:"春色滿___園，關不住。", ans:"園", opts:["園", "山", "花", "田"], cat:"古詩" },
+  { q:"___花生火，春風送暖入屠蘇。", ans:"爆竹", opts:["爆竹", "煙火", "炮仗", "禮花"], cat:"古詩" },
+  { q:"兒童相見不相識，笑問客從___來。", ans:"何處", opts:["何處", "哪裡", "遠方", "他鄉"], cat:"古詩" },
+  { q:"離離原上草，一歲一___榮。", ans:"枯", opts:["枯", "生", "長", "死"], cat:"古詩" },
+  { q:"野火燒不盡，春風吹又___。", ans:"生", opts:["生", "長", "起", "來"], cat:"古詩" },
+  { q:"不知細葉誰裁出，二月春風似___刀。", ans:"剪", opts:["剪", "利", "快", "鋒"], cat:"古詩" },
+  { q:"碧玉妝成___樹高，萬條垂下綠絲絛。", ans:"一", opts:["一", "千", "萬", "十"], cat:"古詩" },
+  { q:"停車坐愛楓林晚，霜葉紅於___月花。", ans:"二", opts:["二", "三", "春", "夏"], cat:"古詩" },
+  { q:"___人皆若渴，詩到工時自有神。", ans:"讀書", opts:["讀書", "學習", "用功", "勤勞"], cat:"古詩" },
+  { q:"少壯不努力，老大___傷悲。", ans:"徒", opts:["徒", "只", "空", "枉"], cat:"古詩" },
+  { q:"這本書的___非常精彩，令我看得入迷。", ans:"內容", opts:["內容", "外表", "封面", "書名"], cat:"字詞" },
+  { q:"老師要我們寫一篇___，描述暑假的經歷。", ans:"作文", opts:["作文", "日記", "詩歌", "故事"], cat:"字詞" },
+  { q:"媽媽叫我去___買菜，準備晚飯。", ans:"街市", opts:["街市", "商場", "超市", "書店"], cat:"字詞" },
+  { q:"我每天早上都要___牙齒，保持口腔衛生。", ans:"刷", opts:["刷", "洗", "擦", "咬"], cat:"字詞" },
+  { q:"弟弟把玩具___在地上，媽媽叫他收拾好。", ans:"散落", opts:["散落", "放置", "整齊", "排列"], cat:"字詞" },
+  { q:"天氣太熱了，我想喝一杯___的果汁。", ans:"冰涼", opts:["冰涼", "溫熱", "滾燙", "微溫"], cat:"字詞" },
+  { q:"他因為___而得了冠軍，全班同學都為他鼓掌。", ans:"努力", opts:["努力", "懶惰", "放棄", "逃避"], cat:"字詞" },
+  { q:"圖書館是一個___的地方，不可以大聲說話。", ans:"安靜", opts:["安靜", "熱鬧", "嘈雜", "喧嘩"], cat:"字詞" },
+  { q:"運動會上，同學們___比賽，互相加油打氣。", ans:"積極", opts:["積極", "消極", "被動", "勉強"], cat:"字詞" },
+  { q:"媽媽生病了，我要好好___她。", ans:"照顧", opts:["照顧", "忽視", "無視", "冷落"], cat:"字詞" },
+  { q:"這條路___很多，請小心過馬路。", ans:"車輛", opts:["車輛", "行人", "學生", "動物"], cat:"字詞" },
+  { q:"老師要求我們___完成功課，不可拖延。", ans:"準時", opts:["準時", "遲到", "拖延", "緩慢"], cat:"字詞" },
+  { q:"他把事情的___告訴了父母，沒有隱瞞。", ans:"真相", opts:["真相", "謊言", "假話", "秘密"], cat:"字詞" },
+  { q:"媽媽在廚房___晚飯，香味飄出來了。", ans:"煮", opts:["煮", "做", "炒", "寫"], cat:"字詞" },
+  { q:"爸爸每天___報紙，了解最新消息。", ans:"閱讀", opts:["閱讀", "撕碎", "丟棄", "燃燒"], cat:"字詞" },
+  { q:"上學途中，我看見一位老婆婆需要幫助，我___過去扶她。", ans:"主動", opts:["主動", "被動", "勉強", "猶豫"], cat:"字詞" },
+  { q:"同學之間要互相___，不可以互相欺負。", ans:"尊重", opts:["尊重", "欺負", "嘲笑", "歧視"], cat:"字詞" },
+  { q:"他的字寫得非常___，每一個筆畫都清清楚楚。", ans:"工整", opts:["工整", "潦草", "凌亂", "歪斜"], cat:"字詞" },
+  { q:"媽媽叫我把用完的東西放回___的地方。", ans:"原來", opts:["原來", "隨意", "任何", "別人"], cat:"字詞" },
+  { q:"遇到不明白的問題，要___老師或同學。", ans:"請教", opts:["請教", "欺騙", "忽略", "避開"], cat:"字詞" },
+  { q:"天上的煙火在黑夜中特別___，因此顯得十分燦爛。", ans:"閃耀", opts:["愛惜", "率領", "閃耀", "勇猛"], cat:"T3" },
+  { q:"舞台上的燈光不停地___，十分吸引觀眾。", ans:"閃耀", opts:["相處", "驕傲", "視覺", "閃耀"], cat:"T3" },
+  { q:"媽媽很___這部電腦，所以叫我小心使用。", ans:"愛惜", opts:["愛惜", "爽快", "友愛", "破釜沉舟"], cat:"T3" },
+  { q:"我們要___時間，因為它一過去就不會再回來。", ans:"愛惜", opts:["迫不及待", "愛惜", "愁眉苦臉", "身先士卒"], cat:"T3" },
+  { q:"同學之間要互相___，這樣才不會吵架。", ans:"友愛", opts:["驕傲", "友愛", "奮不顧身", "一本正經"], cat:"T3" },
+  { q:"班上同學都很___，大家相處得十分融洽。", ans:"友愛", opts:["勇猛", "貪生怕死", "率領", "友愛"], cat:"T3" },
+  { q:"我們要學會與人___，因為良好的關係需要互相尊重。", ans:"相處", opts:["視覺", "驕傲", "相處", "迫不及待"], cat:"T3" },
+  { q:"小朋友要學會和同學和平___，這樣才會開心。", ans:"相處", opts:["率領", "藝術", "閃耀", "相處"], cat:"T3" },
+  { q:"爺爺説話時往往都是___的，從來不會亂開玩笑。", ans:"一本正經", opts:["爽快", "愛惜", "臉紅耳赤", "一本正經"], cat:"T3" },
+  { q:"哥哥做事總是___的樣子，看起來十分認真。", ans:"一本正經", opts:["友愛", "閃耀", "一本正經", "勇猛"], cat:"T3" },
+  { q:"夜空中的星星不停地___，把夜晚點綴得很美。", ans:"閃耀", opts:["視覺", "相處", "閃耀", "貪生怕死"], cat:"T3" },
+  { q:"這顆寶石在燈光下十分___，吸引了眾人的目光。", ans:"閃耀", opts:["爽快", "驕傲", "閃耀", "勇猛"], cat:"T3" },
+  { q:"我們要好好運用___去欣賞美麗的圖畫，仔細地看清楚每個細節。", ans:"視覺", opts:["奮不顧身", "視覺", "率領", "以一當十"], cat:"T3" },
+  { q:"眼睛是人體的___器官，所以很重要。", ans:"視覺", opts:["視覺", "藝術", "友愛", "破釜沉舟"], cat:"T3" },
+  { q:"這幅畫很有___感，看起來既特別又漂亮。", ans:"藝術", opts:["藝術", "率領", "愛惜", "愁眉苦臉"], cat:"T3" },
+  { q:"她很喜歡音樂和___創作，所以常常參加比賽。", ans:"藝術", opts:["爽快", "相處", "貪生怕死", "藝術"], cat:"T3" },
+  { q:"這位同學的性格很___，做事從不拖拉。", ans:"爽快", opts:["驕傲", "友愛", "爽快", "一本正經"], cat:"T3" },
+  { q:"他處理問題時十分___，從不會轉彎抹角。", ans:"爽快", opts:["迫不及待", "率領", "爽快", "視覺"], cat:"T3" },
+  { q:"弟弟___想拆開生日禮物，所以一直催着我。", ans:"迫不及待", opts:["愛惜", "相處", "迫不及待", "驕傲"], cat:"T3" },
+  { q:"梓晴___想知道比賽結果，所以不停追問老師。", ans:"迫不及待", opts:["友愛", "藝術", "迫不及待", "勇猛"], cat:"T3" },
+  { q:"琪柏説話很___，從不會拐彎抹角。", ans:"率直", opts:["一本正經", "驕傲", "閃耀", "率直"], cat:"T3" },
+  { q:"允晴是個___的人，想到甚麼就會説甚麼。", ans:"率直", opts:["貪生怕死", "相處", "率直", "視覺"], cat:"T3" },
+  { q:"聽到這個壞消息後，他變得___，很不開心。", ans:"愁眉苦臉", opts:["臉紅耳赤", "愁眉苦臉", "爽快", "友愛"], cat:"T3" },
+  { q:"偉恒因為被老師稱讚，所以害羞得___。", ans:"臉紅耳赤", opts:["率領", "臉紅耳赤", "視覺", "以一當十"], cat:"T3" },
+  { q:"芠宇將軍親自___軍隊前進，令他們士氣大增。", ans:"率領", opts:["愛惜", "藝術", "閃耀", "率領"], cat:"T3" },
+  { q:"老師___小組進行活動，所以大家都很有秩序。", ans:"率領", opts:["爽快", "友愛", "相處", "率領"], cat:"T3" },
+  { q:"不要因為小小的成功就變得___，這樣會令人反感。", ans:"驕傲", opts:["驕傲", "勇猛", "視覺", "閃耀"], cat:"T3" },
+  { q:"在戰場上，士兵如果___，就無法保衛自己的國家。", ans:"貪生怕死", opts:["貪生怕死", "奮不顧身", "身先士卒", "以一當十"], cat:"T3" },
+  { q:"我們不能做一個___的人，遇到危險時只顧着自己逃跑。", ans:"貪生怕死", opts:["友愛", "爽快", "藝術", "貪生怕死"], cat:"T3" },
+  { q:"消防員___地救出被困的市民，所以大家都很敬佩他們。", ans:"奮不顧身", opts:["愁眉苦臉", "奮不顧身", "一本正經", "閃耀"], cat:"T3" },
+  { q:"他為了救朋友，___地跳進水中，實在非常勇敢。", ans:"奮不顧身", opts:["率直", "奮不顧身", "愛惜", "視覺"], cat:"T3" },
+  { q:"看到不理想的成績，姐姐整天___，心情很差。", ans:"愁眉苦臉", opts:["愁眉苦臉", "迫不及待", "友愛", "藝術"], cat:"T3" },
+  { q:"他因為考試失手，所以一直___，不願意説話。", ans:"愁眉苦臉", opts:["愁眉苦臉", "爽快", "率領", "閃耀"], cat:"T3" },
+  { q:"葳霖的身體很強壯，而且十分___，在球場上總是跑在最前面。", ans:"勇猛", opts:["勇猛", "友愛", "率直", "一本正經"], cat:"T3" },
+  { q:"頌文在籃球比賽中表現得十分___，一個人就拿下了三十分。", ans:"勇猛", opts:["愛惜", "勇猛", "視覺", "破釜沉舟"], cat:"T3" },
+  { q:"晨曦將軍在戰場上總是___，一馬當先地向前衝鋒陷陣。", ans:"身先士卒", opts:["相處", "身先士卒", "爽快", "藝術"], cat:"T3" },
+  { q:"這次山區救援行動中，搜救隊長___，走在最前面為隊員開路。", ans:"身先士卒", opts:["臉紅耳赤", "身先士卒", "閃耀", "友愛"], cat:"T3" },
+  { q:"頌文決定___，不再給自己留退路，全力以赴完成這項挑戰。", ans:"破釜沉舟", opts:["破釜沉舟", "率直", "視覺", "愁眉苦臉"], cat:"T3" },
+  { q:"為了在這次比賽中奪冠，整支隊伍抱着___的決心，拚命練習。", ans:"破釜沉舟", opts:["破釜沉舟", "一本正經", "爽快", "愛惜"], cat:"T3" },
+  { q:"「我___告訴過你千百遍，這件事不是我幹的。」", ans:"已經", opts:["忽然", "已經", "頓時", "終於"], cat:"副詞" },
+  { q:"「我___要上班去了，請把桌子上的公事包遞給我。」", ans:"馬上", opts:["馬上", "曾經", "不時", "始終"], cat:"副詞" },
+  { q:"「他___不肯改過，你不要對他抱太大的期望。」", ans:"始終", opts:["快要", "已經", "始終", "頓時"], cat:"副詞" },
+  { q:"「老師一走進教室，大家___安靜下來。」", ans:"頓時", opts:["經常", "依然", "快要", "頓時"], cat:"副詞" },
+  { q:"「妹妹給我們講故事，説着説着，___大笑起來。」", ans:"忽然", opts:["馬上", "忽然", "始終", "已經"], cat:"副詞" },
+  { q:"「他___給我很大的幫助，我怎會忘記他呢？」", ans:"曾經", opts:["曾經", "終於", "頓時", "立刻"], cat:"副詞" },
+  { q:"「因為我經常遲到，所以___給老師責罰。」", ans:"不時", opts:["已經", "忽然", "不時", "頓時"], cat:"副詞" },
+  { q:"「我猜姐姐___回來了，你看見她，立刻向她認錯吧。」", ans:"快要", opts:["依然", "始終", "曾經", "快要"], cat:"副詞" },
+  { q:"「你看見她，___向她認錯吧。」", ans:"立刻", opts:["立刻", "不時", "已經", "曾經"], cat:"副詞" },
+  { q:"選出句子中的時間副詞：「他始終不肯改過。」", ans:"始終", opts:["他", "不肯", "始終", "改過"], cat:"副詞" },
+  { q:"選出句子中的時間副詞：「我馬上要上班去了。」", ans:"馬上", opts:["上班", "馬上", "我", "去了"], cat:"副詞" },
+  { q:"選出句子中的時間副詞：「老師一走進教室，大家頓時安靜下來。」", ans:"頓時", opts:["老師", "走進", "大家", "頓時"], cat:"副詞" },
+  { q:"選出句子中的時間副詞：「他曾經給我很大的幫助。」", ans:"曾經", opts:["他", "幫助", "很大", "曾經"], cat:"副詞" },
+  { q:"「這項工程___完成了，大家都鬆了一口氣。」", ans:"終於", opts:["始終", "終於", "馬上", "不時"], cat:"副詞" },
+  { q:"「雨下得很大，但他___堅持要出門。」", ans:"依然", opts:["依然", "頓時", "馬上", "快要"], cat:"副詞" },
+
+  // ── 標點符號 (6) ──
+  { q:"「你好嗎___」這句話後面應用甚麼標點？", ans:"？", opts:["？","！","。","，"], cat:"標點" },
+  { q:"「嘩___這個蛋糕真好吃！」空格應填___", ans:"，", opts:["，","。","？","；"], cat:"標點" },
+  { q:"「請把書本、鉛筆___橡皮擦放好。」空格應填___", ans:"和", opts:["和","或","，","、"], cat:"標點" },
+  { q:"「老師說___明天不用上課。」引號內用甚麼標點結尾？", ans:"。", opts:["。","，","？","！"], cat:"標點" },
+  { q:"「小心___」這個警告句後用甚麼標點？", ans:"！", opts:["！","？","。","，"], cat:"標點" },
+  { q:"列舉多項東西時，各項之間用___分隔。", ans:"、", opts:["、","，","。","；"], cat:"標點" },
+
+  // ── 常用字詞 (6) ──
+  { q:"他說話很___，從不說謊，大家都信任他。", ans:"誠實", opts:["誠實","虛假","馬虎","草率"], cat:"字詞" },
+  { q:"弟弟非常___，每天主動幫媽媽做家務。", ans:"勤力", opts:["勤力","懶惰","頑皮","粗心"], cat:"字詞" },
+  { q:"這條數學題我做了好幾次，___都答錯了。", ans:"始終", opts:["始終","突然","偶然","頓時"], cat:"字詞" },
+  { q:"老師___地解釋，直到同學們都明白為止。", ans:"耐心", opts:["耐心","粗心","隨意","急忙"], cat:"字詞" },
+  { q:"媽媽___地把受傷的小貓抱回家照顧。", ans:"輕輕", opts:["輕輕","用力","快速","粗魯"], cat:"字詞" },
+  { q:"他的成績___進步，老師和家長都很高興。", ans:"不斷", opts:["不斷","停止","忽然","偶爾"], cat:"字詞" },
+
+  // ── 數量詞 (6) ──
+  { q:"一___魚", ans:"條", opts:["條","隻","頭","匹"], cat:"數量詞" },
+  { q:"一___大象", ans:"頭", opts:["頭","條","尾","張"], cat:"數量詞" },
+  { q:"一___紙", ans:"張", opts:["張","本","冊","份"], cat:"數量詞" },
+  { q:"一___書", ans:"本", opts:["本","張","份","隻"], cat:"數量詞" },
+  { q:"一___花", ans:"朵", opts:["朵","棵","頁","根"], cat:"數量詞" },
+  { q:"一___樹", ans:"棵", opts:["棵","朵","顆","條"], cat:"數量詞" },
+
+  // ── 形容詞 (6) ──
+  { q:"天空___，白雲潔白，景色非常美麗。", ans:"蔚藍", opts:["蔚藍","漆黑","火紅","翠綠"], cat:"形容詞" },
+  { q:"她的聲音___悅耳，像小鳥唱歌一樣動聽。", ans:"清脆", opts:["清脆","沙啞","微弱","嘈雜"], cat:"形容詞" },
+  { q:"爺爺老了，頭髮變得___。", ans:"雪白", opts:["雪白","烏黑","金黃","火紅"], cat:"形容詞" },
+  { q:"他的字寫得___，每一個筆畫都非常清楚。", ans:"工整", opts:["工整","潦草","歪斜","模糊"], cat:"形容詞" },
+  { q:"這個故事___有趣，哥哥看得非常入神。", ans:"十分", opts:["十分","毫不","略為","稍微"], cat:"形容詞" },
+  { q:"操場上___熱鬧，歡笑聲此起彼落。", ans:"非常", opts:["非常","毫不","絕對","從不"], cat:"形容詞" },
+
+  // ── 動詞 (6) ──
+  { q:"媽媽每天___我上學，風雨不改。", ans:"接送", opts:["接送","推開","離開","帶走"], cat:"動詞" },
+  { q:"為了宣傳環保活動，同學們一起___海報。", ans:"製作", opts:["製作","破壞","丟棄","忽略"], cat:"動詞" },
+  { q:"他嘗試了好幾次，才成功把蠟燭___熄。", ans:"吹", opts:["吹","吸","喝","咬"], cat:"動詞" },
+  { q:"小明___起手，回答老師的問題。", ans:"舉", opts:["舉","放","搖","擺"], cat:"動詞" },
+  { q:"妹妹___起腳尖，想摘樹上的蘋果。", ans:"踮", opts:["踮","跨","踩","跳"], cat:"動詞" },
+  { q:"他把垃圾___進垃圾桶，保持環境整潔。", ans:"丟", opts:["丟","放","推","掛"], cat:"動詞" },
+];
+
+// ── Constants ──
+const CANVAS_H = 300;
+const GROUND_Y = CANVAS_H - 48;
+const DINO_W = 48, DINO_H = 56;
+const GRAVITY = 0.55;
+const JUMP_V  = -13.5;
+const BASE_SPEED = 4.2;
+
+// ── State ──
+let canvas, ctx, W;
+let dino, obstacles, score, hp, gameRunning, animId;
+let taskIdx, currentTask, taskQueue;
+let speed, frameCount, nextObstacleFrame;
+let streak = 0;
+
+function initCanvas() {
+  canvas = document.getElementById('canvas');
+  W = canvas.parentElement.offsetWidth || window.innerWidth;
+  if (W > 800) W = 800;
+  canvas.width  = W;
+  canvas.height = CANVAS_H;
+  ctx = canvas.getContext('2d');
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function startGame() {
+  document.getElementById('overlay-start').style.display    = 'none';
+  document.getElementById('overlay-gameover').style.display = 'none';
+  document.getElementById('overlay-win').style.display      = 'none';
+  document.getElementById('btn-restart').style.display      = 'none';
+
+  initCanvas();
+  taskQueue = shuffle([...TASKS]);
+  taskIdx   = 0;
+  score     = 0;
+  hp        = 3;
+  streak    = 0;
+  speed     = BASE_SPEED;
+  frameCount = 0;
+
+  dino = { x: 80, y: GROUND_Y - DINO_H, vy: 0, onGround: true, jumping: false };
+  obstacles = [];
+  gameRunning = true;
+
+  updateHUD();
+  loadNextQuestion();
+
+  if (animId) cancelAnimationFrame(animId);
+  loop();
+}
+
+function restartGame() { startGame(); }
+
+function loadNextQuestion() {
+  if (taskIdx >= taskQueue.length) { showWin(); return; }
+  currentTask = taskQueue[taskIdx];
+  const catColors = {成語:'#E91E63',古詩:'#009688',字詞:'#3F51B5',T3:'#FF6F00',副詞:'#795548',標點:'#F44336',數量詞:'#00ACC1',形容詞:'#7B1FA2',動詞:'#2E7D32'};
+    const badge = `<span style="background:${catColors[currentTask.cat]||'#555'};padding:2px 8px;border-radius:8px;font-size:0.75em;margin-right:6px;">${currentTask.cat}</span>`;
+    document.getElementById('hud-q').innerHTML = badge + currentTask.q;
+  nextObstacleFrame = frameCount + 90;
+}
+
+function spawnObstacle() {
+  if (!currentTask) return;
+  obstacles = []; // clear any leftovers
+  const opts = shuffle([...currentTask.opts]);
+  const cols = ['#1565C0','#6A1B9A','#2E7D32','#BF360C'];
+  const shuffledCols = shuffle([...cols]);
+
+  // 2×2 grid: top row needs jump, bottom row dino runs into at ground level
+  // Stagger x so bubbles arrive one-by-one with reaction time
+  const ROW_GAP  = 460;  // horizontal gap between bubbles in same row
+  const COL_OFF  = 230;  // x-offset between top and bottom rows
+  const Y_TOP    = GROUND_Y - 155; // high — needs full jump
+  const Y_BOT    = GROUND_Y - 72;  // low  — no/small jump
+
+  const positions = [
+    { x: W + 60,            y: Y_TOP },  // opt0 top-left
+    { x: W + 60 + ROW_GAP,  y: Y_TOP },  // opt1 top-right
+    { x: W + 60 + COL_OFF,  y: Y_BOT },  // opt2 bot-left (staggered)
+    { x: W + 60 + COL_OFF + ROW_GAP, y: Y_BOT }, // opt3 bot-right
+  ];
+
+  opts.forEach((opt, i) => {
+    obstacles.push({
+      x: positions[i].x,
+      y: positions[i].y,
+      w: 72, h: 46,
+      label: opt,
+      correct: opt === currentTask.ans,
+      color: shuffledCols[i],
+      hit: false,
+      row: i < 2 ? 'top' : 'bot',
+    });
+  });
+
+  nextObstacleFrame = Infinity;
+}
+
+function doJump() {
+  if (!gameRunning) return;
+  if (dino.onGround) {
+    dino.vy = JUMP_V;
+    dino.onGround = false;
+  } else if (!dino.doubleJumped) {
+    // double jump
+    dino.vy = JUMP_V * 0.85;
+    dino.doubleJumped = true;
+  }
+}
+
+function updateDino() {
+  dino.vy += GRAVITY;
+  dino.y  += dino.vy;
+  if (dino.y >= GROUND_Y - DINO_H) {
+    dino.y = GROUND_Y - DINO_H;
+    dino.vy = 0;
+    dino.onGround = true;
+    dino.doubleJumped = false;
+  }
+}
+
+function updateObstacles() {
+  let correctPassedMissed = false;
+
+  for (let i = obstacles.length - 1; i >= 0; i--) {
+    const ob = obstacles[i];
+    ob.x -= speed;
+
+    if (!ob.hit) {
+      // Collision with dino
+      const dx = dino.x + DINO_W*0.5 - (ob.x + ob.w*0.5);
+      const dy = dino.y + DINO_H*0.5 - (ob.y + ob.h*0.5);
+      if (Math.abs(dx) < (DINO_W + ob.w)*0.42 && Math.abs(dy) < (DINO_H + ob.h)*0.42) {
+        ob.hit = true;
+        if (ob.correct) onCorrect(ob);
+        else             onWrong(ob);
+      }
+
+      // Correct bubble passed off screen without being hit = missed
+      if (ob.x + ob.w < -10 && ob.correct) {
+        correctPassedMissed = true;
+        ob.hit = true;
+      }
+    }
+
+    // Remove any obstacle (hit or not) once off screen
+    if (ob.x + ob.w < -10) {
+      obstacles.splice(i, 1);
+    }
+  }
+
+  // Penalise missing the correct bubble
+  if (correctPassedMissed) {
+    hp = Math.max(0, hp - 1);
+    streak = 0;
+    showFloatText(dino.x + DINO_W/2, dino.y - 10, '💨 missed!', '#FF9800');
+    updateHUD();
+    flashRed();
+    if (hp <= 0) { gameOver(); return; }
+  }
+
+  // All obstacles gone or all hit → load next question
+  if (nextObstacleFrame === Infinity &&
+      (obstacles.length === 0 || obstacles.every(o => o.hit))) {
+    obstacles = [];
+    taskIdx++;
+    loadNextQuestion();
+  }
+}
+
+function onCorrect(ob) {
+  const gained = 10 + streak * 2;
+  score += gained;
+  streak++;
+  speed = BASE_SPEED + Math.min(streak * 0.3, 4);
+  // Mark all obstacles as hit so the clear-check triggers
+  obstacles.forEach(o => o.hit = true);
+  showFloatText(ob.x + ob.w/2, ob.y - 10, '+' + gained + ' ✅', '#69F0AE');
+  updateHUD();
+}
+
+function onWrong(ob) {
+  hp = Math.max(0, hp - 1);
+  streak = 0;
+  showFloatText(ob.x + ob.w/2, ob.y, '❌', '#FF5252');
+  updateHUD();
+  flashRed();
+  if (hp <= 0) { gameOver(); }
+}
+
+// Float texts
+let floatTexts = [];
+function showFloatText(x, y, text, color) {
+  floatTexts.push({ x, y, text, color, life: 60 });
+}
+
+function flashRed() {
+  canvas.style.transition = 'box-shadow 0.1s';
+  canvas.style.boxShadow  = '0 0 0 6px #F44336 inset';
+  setTimeout(() => { canvas.style.boxShadow = 'none'; }, 300);
+}
+
+function updateHUD() {
+  document.getElementById('hp-val').textContent    = '❤️'.repeat(hp);
+  document.getElementById('score-val').textContent = score;
+}
+
+// ── Draw functions ──
+let groundOffset = 0;
+
+function drawGround() {
+  groundOffset = (groundOffset + speed) % 40;
+  ctx.fillStyle = '#2E7D32';
+  ctx.fillRect(0, GROUND_Y, W, CANVAS_H - GROUND_Y);
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  for (let x = -groundOffset; x < W; x += 40) {
+    ctx.beginPath(); ctx.moveTo(x, GROUND_Y); ctx.lineTo(x+20, GROUND_Y); ctx.stroke();
+  }
+}
+
+function drawDino() {
+  const x = dino.x, y = dino.y;
+  // Body
+  ctx.fillStyle = '#69F0AE';
+  ctx.beginPath();
+  ctx.roundRect(x+8, y+14, 30, 36, 8);
+  ctx.fill();
+  // Head
+  ctx.fillStyle = '#B9F6CA';
+  ctx.beginPath();
+  ctx.roundRect(x+18, y, 26, 22, 6);
+  ctx.fill();
+  // Eye
+  ctx.fillStyle = '#1a1a2e';
+  ctx.beginPath(); ctx.arc(x+38, y+8, 4, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(x+39, y+7, 1.5, 0, Math.PI*2); ctx.fill();
+  // Legs (animate)
+  const legAnim = dino.onGround ? Math.sin(frameCount * 0.25) * 6 : 0;
+  ctx.fillStyle = '#00C853';
+  ctx.fillRect(x+14, y+46, 10, 12 + legAnim);
+  ctx.fillRect(x+26, y+46, 10, 12 - legAnim);
+  // Tail
+  ctx.fillStyle = '#69F0AE';
+  ctx.beginPath();
+  ctx.moveTo(x+8, y+30); ctx.lineTo(x-12, y+38); ctx.lineTo(x+8, y+44);
+  ctx.fill();
+  // Jump indicator
+  if (!dino.onGround) {
+    ctx.fillStyle = 'rgba(105,240,174,0.15)';
+    ctx.beginPath(); ctx.ellipse(x+24, GROUND_Y+4, 20, 6, 0, 0, Math.PI*2); ctx.fill();
+  }
+}
+
+function drawObstacles() {
+  obstacles.forEach(ob => {
+    ctx.globalAlpha = ob.hit ? 0.2 : 0.92;
+
+    // Glow for top-row bubbles (need jump)
+    if (ob.row === 'top' && !ob.hit) {
+      ctx.shadowColor = 'rgba(255,255,255,0.3)';
+      ctx.shadowBlur = 10;
+    }
+
+    // Bubble body
+    ctx.fillStyle = ob.color;
+    ctx.beginPath();
+    ctx.roundRect(ob.x, ob.y, ob.w, ob.h, 12);
+    ctx.fill();
+
+    // Border
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = ob.hit ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.5)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Row indicator: ↑ for top, → for bot
+    if (!ob.hit) {
+      ctx.font = '11px sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.textAlign = 'center';
+      ctx.fillText(ob.row === 'top' ? '▲ 跳' : '▶ 跑', ob.x + ob.w/2, ob.y - 6);
+    }
+
+    // Answer label
+    ctx.globalAlpha = ob.hit ? 0.25 : 1;
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 17px "Noto Sans TC", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(ob.label, ob.x + ob.w/2, ob.y + ob.h/2);
+
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+  });
+}
+
+function drawFloatTexts() {
+  floatTexts.forEach(ft => {
+    ctx.globalAlpha = ft.life / 60;
+    ctx.fillStyle = ft.color;
+    ctx.font = 'bold 22px "Noto Sans TC", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(ft.text, ft.x, ft.y - (60 - ft.life) * 0.8);
+    ctx.globalAlpha = 1;
+    ft.y -= 0.5;
+    ft.life--;
+  });
+  floatTexts = floatTexts.filter(ft => ft.life > 0);
+}
+
+function drawBg() {
+  // Sky gradient
+  const grad = ctx.createLinearGradient(0,0,0,GROUND_Y);
+  grad.addColorStop(0, '#0d1b2a');
+  grad.addColorStop(1, '#1a3a4a');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, GROUND_Y);
+  // Stars
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  for (let i=0; i<20; i++) {
+    const sx = ((i*137 + frameCount*0.05) % W);
+    const sy = (i*53) % (GROUND_Y - 20);
+    ctx.fillRect(sx, sy, 1.5, 1.5);
+  }
+}
+
+function drawSpeedBar() {
+  const pct = Math.min((speed - BASE_SPEED) / 4, 1);
+  ctx.fillStyle = 'rgba(255,215,0,0.15)';
+  ctx.fillRect(W - 80, 8, 70, 8);
+  ctx.fillStyle = `hsl(${120 - pct*120}, 100%, 55%)`;
+  ctx.fillRect(W - 80, 8, 70 * pct, 8);
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('速度', W - 82, 16);
+}
+
+// ── Main loop ──
+function loop() {
+  if (!gameRunning) return;
+  frameCount++;
+  ctx.clearRect(0, 0, W, CANVAS_H);
+
+  drawBg();
+  drawGround();
+  updateDino();
+  drawDino();
+
+  if (frameCount >= nextObstacleFrame) {
+    spawnObstacle();
+  }
+  updateObstacles();
+  drawObstacles();
+  drawFloatTexts();
+  drawSpeedBar();
+
+  animId = requestAnimationFrame(loop);
+}
+
+function gameOver() {
+  gameRunning = false;
+  cancelAnimationFrame(animId);
+  document.getElementById('overlay-gameover').style.display = 'flex';
+  document.getElementById('score-final').textContent = '得分：' + score;
+  document.getElementById('go-msg').textContent = '答對了 ' + taskIdx + ' 題，繼續努力！';
+  document.getElementById('btn-restart').style.display = 'block';
+}
+
+function showWin() {
+  gameRunning = false;
+  cancelAnimationFrame(animId);
+  document.getElementById('overlay-win').style.display = 'flex';
+  document.getElementById('score-final-win').textContent = '最終得分：' + score;
+}
+
+// ── Input ──
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); doJump(); }
+});
+document.getElementById('canvas').addEventListener('touchstart', e => { e.preventDefault(); doJump(); }, {passive:false});
+document.getElementById('canvas').addEventListener('click', () => doJump());
+
+window.addEventListener('resize', () => {
+  if (gameRunning) { initCanvas(); }
+});
+
+        // ── Namespace exports ──
+        function saveScore() {
+            if (typeof inventory !== 'undefined') {
+                if ((inventory.dinoScore || 0) < score) {
+                    inventory.dinoScore = score;
+                    if (typeof saveToLocalStorage === 'function') saveToLocalStorage();
+                }
+            }
+        }
+
+        return { startGame, saveScore };
+        })();
+
+        function launchDino() {
+            document.getElementById('dino-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => DinoGame.startGame(), 100);
+        }
+
+        function closeDino() {
+            document.getElementById('dino-modal').style.display = 'none';
+            document.body.style.overflow = '';
+            DinoGame.saveScore();
+            if (typeof submitScore === 'function') submitScore(true).catch(()=>{});
+        }
+        </script>
+        </div>
 </body>
 </html>
