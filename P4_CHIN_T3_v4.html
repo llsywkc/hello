@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="王家駿 (Wong Ka-Chun)">
+    <meta name="author" content="王家駿 (Wang Ka-Chun)">
     <meta name="copyright" content="© 2025-2026 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
     <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, noarchive">
@@ -6243,6 +6243,9 @@ async function fetchLeaderboard() {
         let shooterTasks = [], shooterIdx = 0, shooterHP = 3, shooterScore = 0;
         let shooterStreak = 0, shooterActive = false, shooterAnimFrame = null;
         let shooterTargets = [], shooterSpeed = 0.35, shooterAnswered = false;
+        let shooterLockedTarget = null;
+        let shooterTimerInterval = null, shooterTimeLeft = 8;
+        let cannonX = 200;
         let shooterStarCtx = null, shooterStars = [];
 
         const TARGET_COLORS = [
@@ -6305,19 +6308,6 @@ async function fetchLeaderboard() {
             loadShooterQuestion();
             requestAnimationFrame(shooterLoop);
         };
-
-        let shooterTasks=[], shooterIdx=0, shooterHP=3, shooterScore=0;
-        let shooterStreak=0, shooterActive=false, shooterSpeed=0.35;
-        let shooterAnswered=false, shooterTargets=[], shooterAnimFrame;
-        let shooterLockedTarget=null;
-        let shooterTimerInterval=null, shooterTimeLeft=8;
-        let cannonX=200;
-
-        const TARGET_COLORS=[
-            ['#1E88E5','#0D47A1'],['#E53935','#B71C1C'],
-            ['#43A047','#1B5E20'],['#FB8C00','#E65100'],
-            ['#8E24AA','#4A148C']
-        ];
 
         function shooterLoop() {
             if (!shooterActive) return;
