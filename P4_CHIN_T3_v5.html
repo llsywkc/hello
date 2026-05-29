@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="王家駿 (Wong Ka-Chun)">
+    <meta name="author" content="王家駿 (Wang Ka-Chun)">
     <meta name="copyright" content="© 2025-2026 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
     <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, noarchive">
@@ -3700,7 +3700,8 @@ function checkDailyReset() {
         /* ── Firebase player CRUD ── */
         async function fbGetPlayer(name) {
             try {
-                const r = await fetch(FIREBASE_PLAYERS_URL + '/' + encodeURIComponent(name) + '.json');
+                const url = FIREBASE_PLAYERS_URL + '/' + encodeURIComponent(name) + '.json?_=' + Date.now();
+                const r = await fetch(url, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
                 if (!r.ok) return null;
                 return await r.json();
             } catch(e) { return null; }
@@ -3965,7 +3966,7 @@ function checkDailyReset() {
                 saveToFirebase().catch(()=>{});
                 // Auto-submit leaderboard — throttled to once per 60s
                 const now = Date.now();
-                if (now - _lastLbSubmit > 60000) {
+                if (now - _lastLbSubmit > 30000) {
                     _lastLbSubmit = now; // set immediately to prevent parallel calls
                     submitScore(true).catch(()=>{});
                 }
@@ -6154,7 +6155,12 @@ async function fetchLeaderboard() {
             status.textContent = '⏳ 載入中...';
             list.innerHTML = '';
             try {
-                const res = await fetch(FIREBASE_LB_URL);
+                // cache-busting: append timestamp to force fresh fetch every time
+                const bust = '?_=' + Date.now();
+                const res = await fetch(FIREBASE_LB_URL + bust, {
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
+                });
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
                 const entries = data && data.entries ? data.entries : [];
@@ -6206,7 +6212,7 @@ async function fetchLeaderboard() {
             if (!silent) status.textContent = '⏳ 上傳中...';
             try {
                 // 1. Fetch current data from Firebase
-                const getRes = await fetch(FIREBASE_LB_URL);
+                const getRes = await fetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
                 if (!getRes.ok) throw new Error('讀取失敗 HTTP ' + getRes.status);
                 const data = await getRes.json();
                 let entries = (data && data.entries) ? [...data.entries] : [];
@@ -6322,7 +6328,7 @@ async function fetchLeaderboard() {
                     body: JSON.stringify({ entries })
                 });
                 if (!putRes.ok) throw new Error('上傳失敗 HTTP ' + putRes.status);
-                if (!silent) { status.textContent = `✅ 分數已上傳！你的分數：${myEntry.score}`; fetchLeaderboard(); }
+                if (!silent) { status.textContent = `✅ 分數已上傳！你的分數：${myEntry.score}`; setTimeout(fetchLeaderboard, 600); }
                 window._lastLbSubmit = Date.now(); // update throttle timer
             } catch(e) {
                 if (!silent) status.textContent = '❌ 上傳失敗：' + e.message;
