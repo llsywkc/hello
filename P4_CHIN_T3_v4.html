@@ -9226,6 +9226,18 @@ function startGame() {
   document.getElementById('btn-restart').style.display      = 'none';
 
   initCanvas();
+
+  // Attach event listeners here (safe — canvas exists now)
+  const cv = document.getElementById('canvas');
+  if (cv) {
+    cv.ontouchstart = e => { e.preventDefault(); doJump(); };
+    cv.onclick = () => doJump();
+  }
+  document.onkeydown = e => {
+    if ((e.code === 'Space' || e.code === 'ArrowUp') && gameRunning) {
+      e.preventDefault(); doJump();
+    }
+  };
   taskQueue = shuffle([...TASKS]);
   taskIdx   = 0;
   score     = 0;
@@ -9574,15 +9586,7 @@ function showWin() {
 }
 
 // ── Input ──
-document.addEventListener('keydown', e => {
-  if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); doJump(); }
-});
-document.getElementById('canvas').addEventListener('touchstart', e => { e.preventDefault(); doJump(); }, {passive:false});
-document.getElementById('canvas').addEventListener('click', () => doJump());
-
-window.addEventListener('resize', () => {
-  if (gameRunning) { initCanvas(); }
-});
+// Event listeners moved into startGame() to avoid null reference at page load
 
         // ── Namespace exports ──
         function saveScore() {
