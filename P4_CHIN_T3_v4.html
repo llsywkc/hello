@@ -947,7 +947,7 @@
             font-size: 0.78em; color: #FFD54F; margin-top: 4px;
         }
         #shooter-arena {
-            position: absolute; top: 95px; bottom: 110px; left: 0; right: 0; z-index: 10;
+            position: absolute; top: 95px; bottom: 140px; left: 0; right: 0; z-index: 10;
         }
         .shooter-target {
             position: fixed; display: flex; align-items: center; justify-content: center;
@@ -989,9 +989,9 @@
         #shooter-cannon {
             font-size: 2.8em; line-height: 1;
             filter: drop-shadow(0 0 10px rgba(255,200,50,0.8));
-            position: fixed; bottom: 18px;
+            position: fixed; bottom: 22px;
             transform: translateX(-50%);
-            cursor: grab; pointer-events: auto;
+            cursor: default; pointer-events: none;
             user-select: none; z-index: 20;
         }
         #shooter-aim-line {
@@ -1025,8 +1025,8 @@
             z-index: 10002; pointer-events: none;
         }
         #shooter-footer {
-            position: fixed; bottom: 0; left: 0; right: 0; height: 90px;
-            background: rgba(0,0,0,0.65);
+            position: fixed; bottom: 0; left: 0; right: 0; height: 130px;
+            background: rgba(0,0,0,0.6);
             border-top: 1px solid rgba(200,168,75,0.3);
             z-index: 19; pointer-events: none;
         }
@@ -1046,6 +1046,59 @@
             z-index: 10003; text-shadow: 0 0 20px currentColor;
             pointer-events: none; opacity: 0;
             transition: opacity 0.2s; white-space: nowrap;
+        }
+        /* ── 虛擬搖桿 ── */
+        #shooter-joystick-wrap {
+            position: fixed; bottom: 18px; left: 24px;
+            width: 110px; height: 110px;
+            z-index: 22; pointer-events: auto;
+        }
+        #shooter-joystick-base {
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            border: 2.5px solid rgba(255,215,0,0.35);
+            backdrop-filter: blur(4px);
+        }
+        #shooter-joystick-knob {
+            position: absolute;
+            width: 46px; height: 46px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 38% 35%, rgba(255,220,80,0.9), rgba(200,120,0,0.85));
+            border: 2px solid rgba(255,215,0,0.7);
+            box-shadow: 0 0 12px rgba(255,200,50,0.5);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            transition: none;
+            cursor: grab;
+        }
+        /* 重新定位發射按鈕到右下 */
+        #shooter-fire-btn {
+            position: fixed !important;
+            bottom: 22px !important;
+            left: auto !important;
+            right: 28px !important;
+            transform: none !important;
+            width: 72px !important; height: 72px !important;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, #ff6b6b, #c0392b);
+            border: 4px solid #FF8A65;
+            box-shadow: 0 0 22px rgba(244,67,54,0.8), 0 4px 0 #8B0000;
+            font-size: 1.6em; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: box-shadow 0.1s;
+            z-index: 22; pointer-events: auto;
+        }
+        #shooter-fire-btn:active {
+            transform: scale(0.93) !important;
+            box-shadow: 0 0 12px rgba(244,67,54,0.5), 0 1px 0 #8B0000 !important;
+        }
+        #shooter-fire-btn.no-target { opacity: 0.35; cursor: not-allowed; }
+        /* HP bar repositioned above joystick/fire area */
+        #shooter-hp-bar-wrap {
+            position: fixed !important;
+            bottom: 138px !important;
+            left: 12px !important; right: 12px !important;
         }
         #shooter-miss-flash {
             position: fixed; inset: 0; background: rgba(244,67,54,0.25);
@@ -6324,22 +6377,66 @@ async function fetchLeaderboard() {
         }
 
         function setupCannonDrag() {
-            const cannon = document.getElementById('shooter-cannon');
-            if (!cannon) return;
-            let dragging = false;
-            function startDrag(clientX) { dragging=true; moveDrag(clientX); }
-            function moveDrag(clientX) {
-                if (!dragging) return;
-                cannonX = Math.max(24, Math.min(window.innerWidth-24, clientX));
-                positionCannon(); updateAimLine();
+            // ── 虛擬搖桿操控炮台 ──
+            const base  = document.getElementById('shooter-joystick-base');
+            const knob  = document.getElementById('shooter-joystick-knob');
+            if (!base || !knob) return;
+
+            const RADIUS = 32;   // knob 最大偏移px
+            const SPEED  = 3.2;  // 炮台移動速度比例
+            let joyActive = false;
+            let joyStartX = 0, joyOffsetX = 0;
+            let joyRafId = null;
+
+            function joyMove(clientX) {
+                const dx = Math.max(-RADIUS, Math.min(RADIUS, clientX - joyStartX));
+                joyOffsetX = dx;
+                // Move knob visually
+                knob.style.transform = `translate(calc(-50% + ${dx}px), -50%)`;
+                // Move cannon proportionally
+                const W = window.innerWidth;
+                cannonX = Math.max(24, Math.min(W - 24, cannonX + dx * SPEED * 0.08));
+                positionCannon();
+                updateAimLine();
             }
-            function endDrag() { dragging=false; }
-            cannon.addEventListener('touchstart', e=>{ e.preventDefault(); startDrag(e.touches[0].clientX); },{passive:false});
-            document.addEventListener('touchmove', e=>{ if(dragging){e.preventDefault();moveDrag(e.touches[0].clientX);}},{passive:false});
-            document.addEventListener('touchend', endDrag);
-            cannon.addEventListener('mousedown', e=>startDrag(e.clientX));
-            document.addEventListener('mousemove', e=>moveDrag(e.clientX));
-            document.addEventListener('mouseup', endDrag);
+
+            function joyLoop() {
+                if (!joyActive || joyOffsetX === 0) { joyRafId = null; return; }
+                const W = window.innerWidth;
+                cannonX = Math.max(24, Math.min(W - 24, cannonX + joyOffsetX * SPEED * 0.055));
+                positionCannon();
+                updateAimLine();
+                joyRafId = requestAnimationFrame(joyLoop);
+            }
+
+            function startJoy(clientX) {
+                joyActive = true;
+                joyStartX = clientX;
+                joyOffsetX = 0;
+                knob.style.transition = 'none';
+                if (!joyRafId) joyRafId = requestAnimationFrame(joyLoop);
+            }
+
+            function endJoy() {
+                joyActive = false; joyOffsetX = 0;
+                knob.style.transition = 'transform 0.2s ease';
+                knob.style.transform = 'translate(-50%, -50%)';
+                if (joyRafId) { cancelAnimationFrame(joyRafId); joyRafId = null; }
+            }
+
+            // Touch events on base
+            base.addEventListener('touchstart', e => {
+                e.preventDefault(); startJoy(e.touches[0].clientX);
+            }, {passive:false});
+            document.addEventListener('touchmove', e => {
+                if (joyActive) { e.preventDefault(); joyMove(e.touches[0].clientX); }
+            }, {passive:false});
+            document.addEventListener('touchend', e => { if(joyActive) endJoy(); });
+
+            // Mouse events (desktop testing)
+            base.addEventListener('mousedown', e => startJoy(e.clientX));
+            document.addEventListener('mousemove', e => { if(joyActive) joyMove(e.clientX); });
+            document.addEventListener('mouseup', () => { if(joyActive) endJoy(); });
         }
 
         function updateAimLine() {
@@ -8689,7 +8786,13 @@ window.closeRC = function() {
         <div id="shooter-miss-flash"></div>
         <div id="shooter-footer"></div>
         <div id="shooter-hp-bar-wrap"><div id="shooter-hp-bar"></div></div>
-        <button id="shooter-fire-btn" class="no-target" onclick="fireShooter()">⭕</button>
+        <!-- 虛擬搖桿 (左下) -->
+        <div id="shooter-joystick-wrap">
+          <div id="shooter-joystick-base"></div>
+          <div id="shooter-joystick-knob"></div>
+        </div>
+        <!-- 發射按鈕 (右下) -->
+        <button id="shooter-fire-btn" class="no-target" onclick="fireShooter()">🔴</button>
         <div id="shooter-msg"></div>
       </div>
     </div>
