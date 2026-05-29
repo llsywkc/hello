@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="王家駿 (Wang Ka-Chun)">
+    <meta name="author" content="王家駿 (Wong Ka-Chun)">
     <meta name="copyright" content="© 2025-2026 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
     <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, noarchive">
@@ -1394,8 +1394,28 @@
                 <div class="menu-card-grid">
                     <div class="menu-card menu-card-lg" onclick="startShooter('shooter-all')" style="border-color:#FF6F00;background:linear-gradient(135deg,rgba(255,111,0,0.15),rgba(198,40,40,0.15));">
                         <div class="mc-icon">🚀</div>
-                        <div class="mc-title">射擊道場（綜合）</div>
+                        <div class="mc-title">綜合射擊</div>
                         <div class="mc-sub">混合所有題型 · 隨機15題</div>
+                    </div>
+                    <div class="menu-card" onclick="startShooter('chengyu')" style="border-color:#E91E63;">
+                        <div class="mc-icon">🐉</div>
+                        <div class="mc-title">成語射擊</div>
+                        <div class="mc-sub">20條成語填充</div>
+                    </div>
+                    <div class="menu-card" onclick="startShooter('gushi')" style="border-color:#009688;">
+                        <div class="mc-icon">📜</div>
+                        <div class="mc-title">古詩射擊</div>
+                        <div class="mc-sub">20條古詩填充</div>
+                    </div>
+                    <div class="menu-card" onclick="startShooter('changyong')" style="border-color:#3F51B5;">
+                        <div class="mc-icon">✏️</div>
+                        <div class="mc-title">常用字詞</div>
+                        <div class="mc-sub">20條常用字詞</div>
+                    </div>
+                    <div class="menu-card" onclick="startShooter('adv-mc')" style="border-color:#795548;">
+                        <div class="mc-icon">⏳</div>
+                        <div class="mc-title">副詞射擊</div>
+                        <div class="mc-sub">時間副詞填充</div>
                     </div>
                 </div>
 
@@ -2244,33 +2264,7 @@
             { q: "要在馬拉松比賽脱穎而出，最 ______ 的不是跑步的速度，而是個人的耐力和毅力。", ans: "要緊", options: ["要緊", "隨便", "普通", "次要"] }
         ];
 
-        const matchTasks = [
-            { q: "無論任何人都要 ______ 生命，因為生命是無價的。", ans: "愛惜", options: ["愛惜", "浪費", "拋棄", "破壞"] },
-            { q: "參與義工活動能讓人體會到善良、 ______ 及互助的精神。", ans: "友愛", options: ["友愛", "自私", "冷漠", "妒忌"] },
-            { q: "弟弟今天遲了起牀，所以他連早餐也不吃，就 ______ 出門去了。", ans: "急忙", options: ["急忙", "悠閒", "緩慢", "鎮定"] },
-            { q: "惠晶有一雙水汪汪的大眼睛，高挑挺拔的鼻樑和一把 ______ 亮麗的秀髮，可算是一個美人兒。", ans: "烏黑", options: ["烏黑", "雪白", "金黃", "灰暗"] },
-            { q: "叔叔年紀不算大，但因他臉上留了 ______ 的鬍子，看上去給人成熟穩重的感覺。", ans: "濃密", options: ["濃密", "稀疏", "光禿", "稀少"] },
-            { q: "老師説：「你們要趁着 ______ 的時候好好去努力，不要虛度光陰。」", ans: "青春", options: ["青春", "衰老", "晚年", "古老"] },
-            { q: "「快點吃飯！」我和哥哥總是模仿着爸爸説話的 ______ 來開玩笑。", ans: "口吻", options: ["口吻", "動作", "眼神", "步伐"] },
-            { q: "夜幕低垂，在這五光十色的不夜城裏，連幾顆 ______ 的星星也看不到。", ans: "稀疏", options: ["稀疏", "密雜", "擁擠", "無數"] },
-            { q: "表弟自幼在外國長大，他雖然會説廣東話，但不時會 ______ 着英語，大家也不以為然。", ans: "夾雜", options: ["夾雜", "單一", "純粹", "分開"] },
-            { q: "媽媽的臉上雖然長了幾條 ______ ，但她並不介意，因為她覺得這是歲月的痕跡。", ans: "皺紋", options: ["皺紋", "笑容", "汗水", "淚痕"] },
-            { q: "若不是項羽使出「 ______ 」之計，相信這場戰役他未必能得到勝利。", ans: "破釜沉舟", options: ["破釜沉舟", "半途而廢", "退避三舍", "知難而退"] },
-            { q: "陳經理 ______ 大氣，温文儒雅，舉手投足落落大方，同事們都很喜歡他。", ans: "端莊", options: ["端莊", "輕浮", "滑稽", "粗魯"] },
-            { q: "媽媽一邊撫摸着妹妹的 ______ ，一邊抹去她臉上的眼淚，還温柔地安撫着她。", ans: "面龐", options: ["面龐", "手掌", "背影", "肩膀"] },
-            { q: "小寶寶有着圓圓的眼睛，長長的 ______ ，好像一個精緻的洋娃娃。", ans: "睫毛", options: ["睫毛", "指甲", "牙齒", "嘴唇"] },
-            { q: "聖誕節，街道上的燈飾 ______ 耀眼，節日氣氛濃厚。", ans: "閃爍", options: ["閃爍", "黯淡", "熄滅", "漆黑"] },
-            { q: "哥哥看書看得入了神，一副 ______ 的樣子。", ans: "津津有味", options: ["津津有味", "愁眉苦臉", "索然無味", "無精打采"] },
-            { q: "聽了老師的詳細解釋，我才 ______ ，明白這道題的解法。", ans: "恍然大悟", options: ["恍然大悟", "百思不解", "執迷不悟", "半信半疑"] },
-            { q: "魔術師的表演非常精彩，觀眾席上響起了 ______ 的掌聲。", ans: "震耳欲聾", options: ["震耳欲聾", "鴉雀無聲", "悄無聲息", "低聲細語"] },
-            { q: "下課鐘聲一響，同學們就 ______ 地跑到操場玩耍。", ans: "興高采烈", options: ["興高采烈", "垂頭喪氣", "悲痛欲絕", "怒氣衝衝"] },
-            { q: "他的房間總是收拾得 ______ ，一塵不染。", ans: "井井有條", options: ["井井有條", "亂七八糟", "雜亂無章", "東倒西歪"] },
-            { q: "不要總想着不勞而獲， ______ 是不會有真正成就的。", ans: "守株待兔", options: ["守株待兔", "奮發圖強", "孜孜不倦", "精益求精"] },
-            { q: "弟弟 ______ 地拆開生日禮物，想看看裏面是甚麼。", ans: "迫不及待", options: ["迫不及待", "慢條斯理", "拖泥帶水", "猶豫不決"] },
-            { q: "導遊一路上 ______ 地為我們介紹當地的歷史故事。", ans: "滔滔不絕", options: ["滔滔不絕", "沉默寡言", "啞口無言", "支支吾吾"] },
-            { q: "畢業時，同學們都 ______ 地向老師道別。", ans: "依依不捨", options: ["依依不捨", "揚長而去", "迫不及待", "冷酷無情"] },
-            { q: "夜晚的森林裏 ______ ，靜得有些讓人害怕。", ans: "鴉雀無聲", options: ["鴉雀無聲", "人聲鼎沸", "吵吵鬧闹", "喧囂蔽天"] }
-        ];
+        const matchTasks = []; // 已移除配詞題
 
         const punctTasks = [
             { q: "夾娃娃店職員説 ___「你只剩下最後一次機會，要好好把握啊！」", ans: "：", options: ["：", "，", "。", "；"] },
@@ -2382,6 +2376,75 @@
             { q: "選出句子中的時間副詞：「他曾經給我很大的幫助。」", ans: "曾經", options: ["他", "幫助", "很大", "曾經"] },
             { q: "「這項工程___完成了，大家都鬆了一口氣。」", ans: "終於", options: ["始終", "終於", "馬上", "不時"] },
             { q: "「雨下得很大，但他___堅持要出門。」", ans: "依然", options: ["依然", "頓時", "馬上", "快要"] }
+        ];
+
+        const chengyuTasks = [
+            { q: "做事要有始有終，不能半途___。", ans: "而廢", options: ["而廢","放棄","停止","離開","結束"] },
+            { q: "他解決問題的方法非常巧妙，真是___。", ans: "一石二鳥", options: ["一石二鳥","守株待兔","半途而廢","亡羊補牢","對牛彈琴"] },
+            { q: "比賽快開始了，大家都___，準備全力以赴。", ans: "摩拳擦掌", options: ["摩拳擦掌","垂頭喪氣","愁眉苦臉","手忙腳亂","無精打采"] },
+            { q: "他考試失敗後，整天___，一點精神也沒有。", ans: "垂頭喪氣", options: ["垂頭喪氣","喜出望外","興高采烈","眉飛色舞","手舞足蹈"] },
+            { q: "媽媽忙得___，連吃飯的時間也沒有。", ans: "手忙腳亂", options: ["手忙腳亂","從容不迫","有條不紊","井井有條","輕而易舉"] },
+            { q: "他學習非常認真，___，從不浪費時間。", ans: "分秒必爭", options: ["分秒必爭","得過且過","馬馬虎虎","敷衍了事","漫不經心"] },
+            { q: "消防員___地衝入火場救人，令人敬佩。", ans: "奮不顧身", options: ["奮不顧身","貪生怕死","臨陣退縮","畏縮不前","膽小如鼠"] },
+            { q: "他把不屬於自己的東西佔為己有，真是___。", ans: "監守自盜", options: ["監守自盜","捨己為人","大公無私","見義勇為","助人為樂"] },
+            { q: "兩兄弟感情很好，___，從不吵架。", ans: "手足情深", options: ["手足情深","反目成仇","同室操戈","兄弟鬩牆","形同陌路"] },
+            { q: "他演講時___，把道理說得清清楚楚。", ans: "口若懸河", options: ["口若懸河","結結巴巴","語無倫次","支支吾吾","吞吞吐吐"] },
+            { q: "這道數學題太難了，大家都感到___。", ans: "束手無策", options: ["束手無策","得心應手","輕而易舉","遊刃有餘","易如反掌"] },
+            { q: "老師表揚了他，他感到___，臉都紅了。", ans: "喜出望外", options: ["喜出望外","悶悶不樂","愁眉苦臉","垂頭喪氣","心灰意冷"] },
+            { q: "做錯事要勇於承認，亡羊補牢，___。", ans: "為時未晚", options: ["為時未晚","悔之已晚","後悔莫及","追悔莫及","悔不當初"] },
+            { q: "他說話___，大家都不知道他在說甚麼。", ans: "語無倫次", options: ["語無倫次","條理分明","頭頭是道","井井有條","有條不紊"] },
+            { q: "比賽結果出來，我們隊___，同學們歡呼雀躍。", ans: "旗開得勝", options: ["旗開得勝","一敗塗地","慘敗而歸","落荒而逃","望風而逃"] },
+            { q: "他做事非常小心，___，從不出錯。", ans: "一絲不苟", options: ["一絲不苟","馬馬虎虎","粗心大意","漫不經心","敷衍了事"] },
+            { q: "遇到困難不要___，要想辦法解決。", ans: "自暴自棄", options: ["自暴自棄","自強不息","奮發圖強","勇往直前","堅持不懈"] },
+            { q: "他們兩人意見不同，爭論得___。", ans: "面紅耳赤", options: ["面紅耳赤","心平氣和","從容不迫","平心靜氣","冷靜自若"] },
+            { q: "這個節目精彩絕倫，觀眾看得___。", ans: "如癡如醉", options: ["如癡如醉","昏昏欲睡","無精打采","心不在焉","漠然置之"] },
+            { q: "她待人___，大家都很喜歡她。", ans: "和藹可親", options: ["和藹可親","冷若冰霜","橫眉冷目","盛氣凌人","頤指氣使"] }
+        ];
+
+        const gushiTasks = [
+            { q: "床前___光，疑是地上霜。", ans: "明月", options: ["明月","燈火","陽光","星星","月亮"] },
+            { q: "舉頭望明月，低頭思___。", ans: "故鄉", options: ["故鄉","家人","父母","親人","家園"] },
+            { q: "春眠不覺曉，處處___啼鳥。", ans: "聞", options: ["聞","聽","看","見","望"] },
+            { q: "夜來風雨聲，花落___多少。", ans: "知", options: ["知","問","數","看","問"] },
+            { q: "慈母手中線，遊子___上衣。", ans: "身", options: ["身","臂","心","腰","手"] },
+            { q: "誰言寸草心，報得___春暉。", ans: "三春", options: ["三春","一寸","萬丈","千秋","百年"] },
+            { q: "鋤禾日當午，汗滴___下土。", ans: "禾", options: ["禾","泥","地","田","苗"] },
+            { q: "粒粒皆___苦。", ans: "辛", options: ["辛","血","汗","淚","心"] },
+            { q: "登鸛雀樓：白日依山___。", ans: "盡", options: ["盡","落","去","沉","下"] },
+            { q: "欲窮千里目，更上___層樓。", ans: "一", options: ["一","千","萬","百","九"] },
+            { q: "春色滿___園，關不住。", ans: "園", options: ["園","山","花","田","城"] },
+            { q: "___花生火，春風送暖入屠蘇。", ans: "爆竹", options: ["爆竹","煙火","炮仗","禮花","彩花"] },
+            { q: "兒童相見不相識，笑問客從___來。", ans: "何處", options: ["何處","哪裡","遠方","他鄉","外地"] },
+            { q: "離離原上草，一歲一___榮。", ans: "枯", options: ["枯","生","長","死","衰"] },
+            { q: "野火燒不盡，春風吹又___。", ans: "生", options: ["生","長","起","來","發"] },
+            { q: "不知細葉誰裁出，二月春風似___刀。", ans: "剪", options: ["剪","利","快","鋒","斬"] },
+            { q: "碧玉妝成___樹高，萬條垂下綠絲絛。", ans: "一", options: ["一","千","萬","十","百"] },
+            { q: "停車坐愛楓林晚，霜葉紅於___月花。", ans: "二", options: ["二","三","春","夏","秋"] },
+            { q: "___人皆若渴，詩到工時自有神。", ans: "讀書", options: ["讀書","學習","用功","勤勞","刻苦"] },
+            { q: "少壯不努力，老大___傷悲。", ans: "徒", options: ["徒","只","空","枉","盡"] }
+        ];
+
+        const changyongTasks = [
+            { q: "這本書的___非常精彩，令我看得入迷。", ans: "內容", options: ["內容","外表","封面","書名","標題"] },
+            { q: "老師要我們寫一篇___，描述暑假的經歷。", ans: "作文", options: ["作文","日記","詩歌","故事","文章"] },
+            { q: "媽媽叫我去___買菜，準備晚飯。", ans: "街市", options: ["街市","商場","超市","書店","藥房"] },
+            { q: "我每天早上都要___牙齒，保持口腔衛生。", ans: "刷", options: ["刷","洗","擦","咬","清"] },
+            { q: "弟弟把玩具___在地上，媽媽叫他收拾好。", ans: "散落", options: ["散落","放置","整齊","排列","收藏"] },
+            { q: "天氣太熱了，我想喝一杯___的果汁。", ans: "冰涼", options: ["冰涼","溫熱","滾燙","微溫","沸騰"] },
+            { q: "他因為___而得了冠軍，全班同學都為他鼓掌。", ans: "努力", options: ["努力","懶惰","放棄","逃避","馬虎"] },
+            { q: "圖書館是一個___的地方，不可以大聲說話。", ans: "安靜", options: ["安靜","熱鬧","嘈雜","喧嘩","吵鬧"] },
+            { q: "運動會上，同學們___比賽，互相加油打氣。", ans: "積極", options: ["積極","消極","被動","勉強","不情願"] },
+            { q: "媽媽生病了，我要好好___她。", ans: "照顧", options: ["照顧","忽視","無視","冷落","拋棄"] },
+            { q: "這條路___很多，請小心過馬路。", ans: "車輛", options: ["車輛","行人","學生","動物","貨物"] },
+            { q: "老師要求我們___完成功課，不可拖延。", ans: "準時", options: ["準時","遲到","拖延","緩慢","隨意"] },
+            { q: "他把事情的___告訴了父母，沒有隱瞞。", ans: "真相", options: ["真相","謊言","假話","秘密","藉口"] },
+            { q: "媽媽在廚房___晚飯，香味飄出來了。", ans: "煮", options: ["煮","做","炒","寫","畫"] },
+            { q: "爸爸每天___報紙，了解最新消息。", ans: "閱讀", options: ["閱讀","撕碎","丟棄","燃燒","折疊"] },
+            { q: "上學途中，我看見一位老婆婆需要幫助，我___過去扶她。", ans: "主動", options: ["主動","被動","勉強","猶豫","逃避"] },
+            { q: "同學之間要互相___，不可以互相欺負。", ans: "尊重", options: ["尊重","欺負","嘲笑","歧視","排斥"] },
+            { q: "他的字寫得非常___，每一個筆畫都清清楚楚。", ans: "工整", options: ["工整","潦草","凌亂","歪斜","模糊"] },
+            { q: "媽媽叫我把用完的東西放回___的地方。", ans: "原來", options: ["原來","隨意","任何","別人","新的"] },
+            { q: "遇到不明白的問題，要___老師或同學。", ans: "請教", options: ["請教","欺騙","忽略","避開","假裝"] }
         ];
 
         const appearanceTasks = [
@@ -2508,7 +2571,10 @@
             'adv-mc': { title: "⏳ 時間法師 (副詞題)", subtitle: "選擇正確的時間副詞完成句子！", tasks: advTasks },
             'appearance-mc': { title: "👤 變身畫家 (外貌描寫)", subtitle: "選出最適合描寫人物外貌的詞語！", tasks: appearanceTasks },
             'term3-vocab': { title: "📚 第三學期詞語温習", subtitle: "温習第三學期詞語，鞏固基礎！", tasks: term3VocabTasks },
-            'shooter-all': { title: "🚀 射擊道場（綜合）", subtitle: "混合所有題型，隨機15題！", tasks: [] }
+            'shooter-all': { title: "🚀 射擊道場（綜合）", subtitle: "混合所有題型，隨機15題！", tasks: [] },
+            'chengyu': { title: "🐉 成語射擊", subtitle: "20條成語填充！", tasks: [] },
+            'gushi':   { title: "📜 古詩射擊", subtitle: "20條古詩填充！", tasks: [] },
+            'changyong': { title: "✏️ 常用字詞射擊", subtitle: "20條常用字詞！", tasks: [] }
         };
 
         const medalsConfig = { 100: '🥉', 200: '🥈', 300: '🥇', 400: '🏅', 500: '💎', 600: '🌠', 700: '👑', 800: '🌌', 900: '🏆', 1001: '🐉', 1002: '🦄' };
@@ -6345,8 +6411,14 @@ async function fetchLeaderboard() {
             const gs = document.getElementById('game-shooter');
             gs.classList.remove('hidden'); gs.style.display = 'block';
             if (type === 'shooter-all') {
-                const allPool = shuffle([...fillTasks, ...matchTasks, ...term3VocabTasks, ...faMCTasks]);
+                const allPool = shuffle([...fillTasks, ...term3VocabTasks, ...faMCTasks, ...advTasks, ...chengyuTasks, ...gushiTasks, ...changyongTasks]);
                 shooterTasks = allPool.slice(0, 15);
+            } else if (type === 'chengyu') {
+                shooterTasks = shuffle([...chengyuTasks]);
+            } else if (type === 'gushi') {
+                shooterTasks = shuffle([...gushiTasks]);
+            } else if (type === 'changyong') {
+                shooterTasks = shuffle([...changyongTasks]);
             } else {
                 shooterTasks = shuffle([...cfg.tasks]);
             }
@@ -6377,82 +6449,62 @@ async function fetchLeaderboard() {
         }
 
         function setupCannonDrag() {
-            // ── 虛擬搖桿操控炮台 ──
-            const base  = document.getElementById('shooter-joystick-base');
-            const knob  = document.getElementById('shooter-joystick-knob');
+            const base = document.getElementById('shooter-joystick-base');
+            const knob = document.getElementById('shooter-joystick-knob');
             if (!base || !knob) return;
 
-            const RADIUS = 32;   // knob 最大偏移px
-            const SPEED  = 3.2;  // 炮台移動速度比例
-            let joyActive = false;
-            let joyStartX = 0, joyOffsetX = 0;
-            let joyRafId = null;
-
-            function joyMove(clientX) {
-                const dx = Math.max(-RADIUS, Math.min(RADIUS, clientX - joyStartX));
-                joyOffsetX = dx;
-                // Move knob visually
-                knob.style.transform = `translate(calc(-50% + ${dx}px), -50%)`;
-                // Move cannon proportionally
-                const W = window.innerWidth;
-                cannonX = Math.max(24, Math.min(W - 24, cannonX + dx * SPEED * 0.08));
-                positionCannon();
-                updateAimLine();
-            }
-
-            function joyLoop() {
-                if (!joyActive || joyOffsetX === 0) { joyRafId = null; return; }
-                const W = window.innerWidth;
-                cannonX = Math.max(24, Math.min(W - 24, cannonX + joyOffsetX * SPEED * 0.055));
-                positionCannon();
-                updateAimLine();
-                joyRafId = requestAnimationFrame(joyLoop);
-            }
+            const RADIUS = 38;
+            let joyActive = false, joyStartX = 0, joyRafId = null, joyDx = 0;
 
             function startJoy(clientX) {
                 joyActive = true;
                 joyStartX = clientX;
-                joyOffsetX = 0;
+                joyDx = 0;
                 knob.style.transition = 'none';
-                if (!joyRafId) joyRafId = requestAnimationFrame(joyLoop);
+            }
+
+            function moveJoy(clientX) {
+                if (!joyActive) return;
+                joyDx = Math.max(-RADIUS, Math.min(RADIUS, clientX - joyStartX));
+                knob.style.transform = `translate(calc(-50% + ${joyDx}px), -50%)`;
             }
 
             function endJoy() {
-                joyActive = false; joyOffsetX = 0;
-                knob.style.transition = 'transform 0.2s ease';
+                joyActive = false; joyDx = 0;
+                knob.style.transition = 'transform 0.18s ease';
                 knob.style.transform = 'translate(-50%, -50%)';
-                if (joyRafId) { cancelAnimationFrame(joyRafId); joyRafId = null; }
             }
 
-            // Touch events on base
-            base.addEventListener('touchstart', e => {
-                e.preventDefault(); startJoy(e.touches[0].clientX);
-            }, {passive:false});
-            document.addEventListener('touchmove', e => {
-                if (joyActive) { e.preventDefault(); joyMove(e.touches[0].clientX); }
-            }, {passive:false});
-            document.addEventListener('touchend', e => { if(joyActive) endJoy(); });
+            // Continuous smooth loop — moves cannon every frame proportional to knob offset
+            function joyLoop() {
+                if (joyActive && joyDx !== 0) {
+                    const speed = (joyDx / RADIUS) * 7.5; // max 7.5px/frame at full deflection
+                    const W = window.innerWidth;
+                    cannonX = Math.max(28, Math.min(W - 28, cannonX + speed));
+                    positionCannon();
+                    updateAimLine();
+                }
+                requestAnimationFrame(joyLoop);
+            }
+            requestAnimationFrame(joyLoop);
 
-            // Mouse events (desktop testing)
+            base.addEventListener('touchstart', e => { e.preventDefault(); startJoy(e.touches[0].clientX); }, {passive:false});
+            document.addEventListener('touchmove', e => { if(joyActive){ e.preventDefault(); moveJoy(e.touches[0].clientX); }}, {passive:false});
+            document.addEventListener('touchend', () => { if(joyActive) endJoy(); });
             base.addEventListener('mousedown', e => startJoy(e.clientX));
-            document.addEventListener('mousemove', e => { if(joyActive) joyMove(e.clientX); });
+            document.addEventListener('mousemove', e => { if(joyActive) moveJoy(e.clientX); });
             document.addEventListener('mouseup', () => { if(joyActive) endJoy(); });
         }
 
         function updateAimLine() {
             const line = document.getElementById('shooter-aim-line');
-            if (!line || !shooterLockedTarget) { if(line) line.style.opacity='0'; return; }
-            const tX = parseFloat(shooterLockedTarget.style.left)+38;
-            const tY = parseFloat(shooterLockedTarget.style.top)+38;
-            const cannonY = window.innerHeight-48;
-            const dx=tX-cannonX, dy=cannonY-tY;
-            const dist=Math.sqrt(dx*dx+dy*dy);
-            const angle=Math.atan2(dx,dy)*180/Math.PI;
-            line.style.left=cannonX+'px';
-            line.style.bottom='48px';
-            line.style.height=dist+'px';
-            line.style.transform=`translateX(-50%) rotate(${angle}deg)`;
-            line.style.opacity='0.75';
+            if (!line) return;
+            // Vertical aim line from cannon straight up
+            line.style.left   = cannonX + 'px';
+            line.style.bottom = '55px';
+            line.style.height = (window.innerHeight - 140) + 'px';
+            line.style.transform = 'translateX(-50%)';
+            line.style.opacity = '0.35';
         }
 
         function startShooterTimer() {
@@ -6492,6 +6544,7 @@ async function fetchLeaderboard() {
             document.getElementById('shooter-q-text').textContent=task.q;
             shooterAnswered=false; shooterLockedTarget=null;
             updateFireBtn();
+            updateAimLine();
             setTimeout(()=>{spawnTargets(task);startShooterTimer();},80);
         }
 
@@ -6534,7 +6587,7 @@ async function fetchLeaderboard() {
                 el.dataset.vx=(Math.random()-0.5)*1.2;
                 el.dataset.vy=(Math.random()*0.5+0.2)*(Math.random()>0.5?1:-1);
                 el.dataset.correct=(opt===task.ans)?'1':'0';
-                el.addEventListener('click',()=>lockTarget(el));
+                el.addEventListener('click',()=>directShoot(el));
                 document.body.appendChild(el);
                 shooterTargets.push(el);
             });
@@ -6550,29 +6603,38 @@ async function fetchLeaderboard() {
         }
 
         function updateFireBtn() {
-            const btn=document.getElementById('shooter-fire-btn');
-            if(!btn)return;
-            if(shooterLockedTarget){btn.classList.remove('no-target');btn.textContent='🔴';}
-            else{btn.classList.add('no-target');btn.textContent='⭕';}
+            const btn = document.getElementById('shooter-fire-btn');
+            if (!btn) return;
+            btn.classList.remove('no-target');
+            btn.textContent = '🔴';
+        }
+
+        // 直接點擊泡泡即射 (方案B tap-to-shoot)
+        function directShoot(el) {
+            if (shooterAnswered) return;
+            shooterLockedTarget = el;
+            shooterTargets.forEach(t => t.classList.remove('locked'));
+            el.classList.add('locked');
+            clearInterval(shooterTimerInterval);
+            shooterAnswered = true;
+            const tX = parseFloat(el.style.left) + 38;
+            const tY = parseFloat(el.style.top)  + 38;
+            const cannonY = window.innerHeight - 55;
+            fireBulletAnim(cannonX, cannonY, tX, tY, true, () => onBulletHit(el.dataset.correct === '1'));
         }
 
         window.fireShooter = function() {
-            if(!shooterLockedTarget||shooterAnswered)return;
-            const tX=parseFloat(shooterLockedTarget.style.left)+38;
-            const tY=parseFloat(shooterLockedTarget.style.top)+38;
-            const cannonY=window.innerHeight-48;
-            const dx=tX-cannonX, dy=cannonY-tY;
-            const angle=Math.abs(Math.atan2(dx,dy)*180/Math.PI);
-            if(angle>25){
-                showShooterMsg('💨 脫靶！移動炮台再試','#FF9800');
-                flashMiss();
-                fireBulletAnim(cannonX,cannonY,cannonX+dx*0.4,tY+30,false,null);
-                return;
-            }
-            clearInterval(shooterTimerInterval);
-            shooterAnswered=true;
-            const correct=shooterLockedTarget.dataset.correct==='1';
-            fireBulletAnim(cannonX,cannonY,tX,tY,true,()=>onBulletHit(correct));
+            if (shooterAnswered || shooterTargets.length === 0) return;
+            // Find closest bubble to cannon horizontally
+            let closest = null, minDist = Infinity;
+            shooterTargets.forEach(el => {
+                if (!el.parentNode) return;
+                const tx = parseFloat(el.style.left) + 38;
+                const dist = Math.abs(tx - cannonX);
+                if (dist < minDist) { minDist = dist; closest = el; }
+            });
+            if (!closest) return;
+            directShoot(closest);
         };
 
         function fireBulletAnim(x0,y0,x1,y1,hit,cb) {
