@@ -6860,7 +6860,7 @@ async function fetchLeaderboard() {
             cancelAnimationFrame(shooterAnimFrame);
             document.querySelectorAll('.shooter-target').forEach(el=>el.remove());
             if ((inventory.shooterScore||0) < shooterScore) { inventory.shooterScore = shooterScore; }
-            playSound('error'); saveGame();
+            playSound('error'); saveGame(); submitScore(true).catch(()=>{});
             const arena=document.getElementById('shooter-arena');
             if(arena) arena.innerHTML=`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;"><div style="font-size:2.5em;margin-bottom:10px;">💀</div><div style="font-size:1.2em;font-weight:900;color:#FF8A80;">飛船被擊落！</div><div style="font-size:0.9em;margin-top:8px;color:#FFF8E7;">得分：${shooterScore}</div><button onclick="goHome()" style="margin-top:20px;background:#C62828;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:1em;cursor:pointer;">🏠 返回</button></div>`;
         }
