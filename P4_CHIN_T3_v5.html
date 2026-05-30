@@ -3444,7 +3444,7 @@
             dailyQuestDate: "", dailyQuests: [], dailyQuestProgress: {}, gachaDrawsToday: 0, 
             scrollBoughtDate: "", hasLegendaryBuff: false,
             bloodMoonActive: false, bloodMoonTarget: 0, bloodMoonStreak: 0, bloodMoonLeft: 0, unlockedCards: [], cardStats: {}, potions: 0,
-            epicWins: 0, legendaryWins: 0, moShuCorrect: 0, dailyQuestsCompleted: 0, examBonusScore: 0, rcCorrectAnswers: 0, wildWins: 0
+            epicWins: 0, legendaryWins: 0, moShuCorrect: 0, dailyQuestsCompleted: 0, examBonusScore: 0, rcCorrectAnswers: 0, wildWins: 0, shooterScore: 0, dinoScore: 0
         };
         let inventory = { ...defaultInv };
 
@@ -6355,6 +6355,14 @@ async function fetchLeaderboard() {
                 const data = await getRes.json();
                 let entries = (data && data.entries) ? [...data.entries] : [];
 
+                // 1b. Deduplicate entries by playerId/name (keep highest score entry)
+                const seen = new Map();
+                entries = entries.filter(e => {
+                    const key = (e.playerId && e.playerId !== '') ? e.playerId : e.name;
+                    if (!seen.has(key)) { seen.set(key, true); return true; }
+                    return false;
+                });
+
                 // 2. Update or insert this player
                 const bwSnap = inventory.bossWins || {};
                 const myEntry = {
@@ -6419,7 +6427,10 @@ async function fetchLeaderboard() {
                     coins:          inventory.coins          || 0,
                     timestamp:      new Date().toISOString()
                 };
-                const existIdx = entries.findIndex(e => e.playerId && e.playerId === inventory.playerId); // 🔧 playerId only — prevents name spoofing
+                const existIdx = entries.findIndex(e => 
+                        (e.playerId && inventory.playerId && e.playerId === inventory.playerId) ||
+                        (!e.playerId && e.name === inventory.playerName)
+                    ); // match by playerId first, fallback to name
                 if (existIdx >= 0) {
                     // ✅ FIX B5 v2: 分項取最大值合併，分數只升不降（防跨裝置覆蓋問題）
                     const old = entries[existIdx];
