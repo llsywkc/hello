@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="王家駿 (Wong Ka-Chun)">
+    <meta name="author" content="王家駿 (Wang Ka-Chun)">
     <meta name="copyright" content="© 2025-2026 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
     <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, noarchive">
@@ -1432,11 +1432,7 @@
                         <div class="mc-title">礦洞尋寶</div>
                         <div class="mc-sub">填充題</div>
                     </div>
-                    <div class="menu-card" onclick="startGame('match-word')" style="border-color:#2196F3;">
-                        <div class="mc-icon">🔮</div>
-                        <div class="mc-title">符文解密</div>
-                        <div class="mc-sub">配詞題</div>
-                    </div>
+                    
                     <div class="menu-card" onclick="startGame('punct')" style="border-color:#9E9E9E;">
                         <div class="mc-icon">📜</div>
                         <div class="mc-title">古卷修復</div>
@@ -1468,7 +1464,7 @@
                     <div class="menu-card menu-card-lg" onclick="startShooter('shooter-all')" style="border-color:#FF6F00;background:linear-gradient(135deg,rgba(255,111,0,0.15),rgba(198,40,40,0.15));">
                         <div class="mc-icon">🚀</div>
                         <div class="mc-title">綜合射擊</div>
-                        <div class="mc-sub">混合所有題型 · 隨機15題</div>
+                        <div class="mc-sub">3關 × 10題 · 最高30分</div>
                     </div>
                     <div class="menu-card" onclick="startShooter('chengyu')" style="border-color:#E91E63;">
                         <div class="mc-icon">🐉</div>
@@ -2339,9 +2335,7 @@
             { q: "要在馬拉松比賽脱穎而出，最 ______ 的不是跑步的速度，而是個人的耐力和毅力。", ans: "要緊", options: ["要緊", "隨便", "普通", "次要"] }
         ];
 
-        const matchTasks = []; // 已移除配詞題
-
-        const punctTasks = [
+                const punctTasks = [
             { q: "夾娃娃店職員説 ___「你只剩下最後一次機會，要好好把握啊！」", ans: "：", options: ["：", "，", "。", "；"] },
             { q: "夾娃娃店職員説：「你只剩下最後一次機會，要好好把握啊 ___ 」", ans: "！", options: ["！", "。", "？", "，"] },
             { q: "「滴答 ___ 滴答……」扭不緊的水龍頭不時往下滴。", ans: "、", options: ["、", "——", "，", "。"] },
@@ -2640,7 +2634,6 @@
 
         const mcConfigs = {
             'fill': { title: "⛏️ 礦洞尋寶 (填充題)", subtitle: "敲碎正確的字詞礦石，填補句子！", tasks: fillTasks },
-            'match-word': { title: "🔮 符文解密 (配詞題)", subtitle: "找出最適合句子語境的詞語！", tasks: matchTasks },
             'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
             'fa-mc': { title: "📝 FA温習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks },
             'dictation2-mc': { title: "📖 默書温習(二) (填充題)", subtitle: "選擇正確的詞語完成句子！", tasks: dictation2Tasks },
@@ -5206,7 +5199,7 @@ function checkDailyReset() {
                 else { potionBtn.style.display = 'inline-block'; }
             }
 
-            let qPool = [...fillTasks, ...matchTasks, ...punctTasks, ...faMCTasks, ...dictation2Tasks, ...advTasks, ...appearanceTasks];
+            let qPool = [...fillTasks, ...punctTasks, ...faMCTasks, ...dictation2Tasks, ...advTasks, ...appearanceTasks];
             currentCombatQ = qPool[Math.floor(Math.random() * qPool.length)];
             document.getElementById('boss-question').textContent = currentCombatQ.q;
             // 超夢：確保每題文字持續顛倒
@@ -6500,6 +6493,7 @@ async function fetchLeaderboard() {
         let shooterStreak = 0, shooterActive = false, shooterAnimFrame = null;
         let shooterTargets = [], shooterSpeed = 0.35, shooterAnswered = false;
         let shooterLockedTarget = null;
+        let shooterRound = 1, shooterMaxRounds = 1, shooterAllPool = [], shooterIsMultiRound = false;
         let shooterTimerInterval = null, shooterTimeLeft = 8;
         let cannonX = 200;
         let shooterStarCtx = null, shooterStars = [];
@@ -6548,19 +6542,27 @@ async function fetchLeaderboard() {
             const gs = document.getElementById('game-shooter');
             gs.classList.remove('hidden'); gs.style.display = 'block';
             if (type === 'shooter-all') {
-                const allPool = shuffle([...fillTasks, ...term3VocabTasks, ...faMCTasks, ...advTasks, ...chengyuTasks, ...gushiTasks, ...changyongTasks]);
-                shooterTasks = allPool.slice(0, 15);
+                shooterAllPool = shuffle([...fillTasks, ...term3VocabTasks, ...faMCTasks, ...advTasks, ...chengyuTasks, ...gushiTasks, ...changyongTasks]);
+                shooterIsMultiRound = true;
+                shooterMaxRounds = 3;
+                shooterRound = 1;
+                shooterTasks = shooterAllPool.slice(0, 10);
             } else if (type === 'chengyu') {
                 shooterTasks = shuffle([...chengyuTasks]);
+                shooterIsMultiRound = false;
             } else if (type === 'gushi') {
                 shooterTasks = shuffle([...gushiTasks]);
+                shooterIsMultiRound = false;
             } else if (type === 'changyong') {
                 shooterTasks = shuffle([...changyongTasks]);
+                shooterIsMultiRound = false;
             } else {
                 shooterTasks = shuffle([...cfg.tasks]);
+                shooterIsMultiRound = false;
             }
             shooterIdx=0; shooterHP=3; shooterScore=0;
-            shooterStreak=0; shooterActive=true; shooterSpeed=0.35;
+            shooterStreak=0; shooterActive=true;
+            shooterSpeed = shooterIsMultiRound ? 0.3 : 0.35;
             shooterLockedTarget=null;
             cannonX = window.innerWidth / 2;
             positionCannon();
@@ -6669,13 +6671,57 @@ async function fetchLeaderboard() {
         }
 
         function loadShooterQuestion() {
-            if(shooterIdx>=shooterTasks.length){shooterWin();return;}
+            if(shooterIdx>=shooterTasks.length){
+                if(shooterIsMultiRound && shooterRound < shooterMaxRounds){
+                    showRoundClear();
+                } else {
+                    shooterWin();
+                }
+                return;
+            }
             const task=shooterTasks[shooterIdx];
+            // Update round display
+            const rdEl = document.getElementById('shooter-round-disp');
+            if(rdEl) rdEl.textContent = shooterIsMultiRound ? `第${shooterRound}關` : '';
             document.getElementById('shooter-q-text').textContent=task.q;
             shooterAnswered=false; shooterLockedTarget=null;
             updateFireBtn();
             updateAimLine();
             setTimeout(()=>{spawnTargets(task);startShooterTimer();},80);
+        }
+
+        function showRoundClear() {
+            shooterActive = false;
+            clearInterval(shooterTimerInterval);
+            cancelAnimationFrame(shooterAnimFrame);
+            document.querySelectorAll('.shooter-target').forEach(el=>el.remove());
+            const arena = document.getElementById('shooter-arena');
+            const speedLabels = ['','慢速','中速','快速'];
+            const nextRound = shooterRound + 1;
+            const nextSpeedLabel = speedLabels[nextRound] || '極速';
+            if(arena) arena.innerHTML = `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#FFD700;">
+                <div style="font-size:2.5em;margin-bottom:8px;">⭐</div>
+                <div style="font-size:1.3em;font-weight:900;">第${shooterRound}關完成！</div>
+                <div style="font-size:0.9em;margin:8px 0;color:#FFF8E7;">目前得分：${shooterScore} 分</div>
+                <div style="font-size:0.85em;color:#FFB74D;margin-bottom:16px;">第${nextRound}關：${nextSpeedLabel}模式</div>
+                <button onclick="startNextRound()" style="background:linear-gradient(135deg,#FF6F00,#C62828);color:#fff;border:none;border-radius:12px;padding:12px 32px;font-size:1.1em;font-weight:900;cursor:pointer;box-shadow:0 4px 0 #7f2700;">
+                    🚀 繼續第${nextRound}關
+                </button>
+            </div>`;
+        }
+
+        function startNextRound() {
+            shooterRound++;
+            const speeds = [0.3, 0.5, 0.75];
+            shooterSpeed = speeds[shooterRound-1] || 0.75;
+            shooterTasks = shooterAllPool.slice((shooterRound-1)*10, shooterRound*10);
+            shooterIdx = 0;
+            shooterActive = true;
+            shooterAnswered = false;
+            shooterLockedTarget = null;
+            const arena = document.getElementById('shooter-arena');
+            if(arena) arena.innerHTML = '';
+            loadShooterQuestion();
         }
 
         function spawnTargets(task) {
@@ -6861,9 +6907,26 @@ async function fetchLeaderboard() {
             shooterActive=false; clearInterval(shooterTimerInterval);
             cancelAnimationFrame(shooterAnimFrame);
             document.querySelectorAll('.shooter-target').forEach(el=>el.remove());
-            if ((inventory.shooterScore||0) < shooterScore) { inventory.shooterScore = shooterScore; } playSound('bosswin'); gainExp(shooterScore*2,'射擊道場'); saveGame(); submitScore(true).catch(()=>{});
+            if ((inventory.shooterScore||0) < shooterScore) { inventory.shooterScore = shooterScore; }
+            playSound('bosswin'); gainExp(shooterScore*2,'射擊道場'); saveGame(); submitScore(true).catch(()=>{});
             const arena=document.getElementById('shooter-arena');
-            if(arena) arena.innerHTML=`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#FFD700;"><div style="font-size:2.5em;margin-bottom:10px;">🏆</div><div style="font-size:1.2em;font-weight:900;">全部完成！</div><div style="font-size:0.9em;margin-top:8px;color:#FFF8E7;">得分：${shooterScore} · EXP +${shooterScore*2}</div><button onclick="goHome()" style="margin-top:20px;background:#1565C0;color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:1em;cursor:pointer;">🏠 返回</button></div>`;
+            const isFullClear = shooterIsMultiRound && shooterRound >= shooterMaxRounds;
+            const titleText = isFullClear ? '🎖️ 三關全制霸！' : '全部完成！';
+            const titleIcon = isFullClear ? '🏆🏆🏆' : '🏆';
+            const maxPossible = shooterIsMultiRound ? shooterMaxRounds * 10 : shooterTasks.length;
+            const pct = Math.round(shooterScore / maxPossible * 100);
+            const stars = pct >= 90 ? '⭐⭐⭐' : pct >= 70 ? '⭐⭐' : '⭐';
+            if(arena) arena.innerHTML=`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#FFD700;padding:20px;">
+                <div style="font-size:2.5em;margin-bottom:8px;">${titleIcon}</div>
+                <div style="font-size:1.3em;font-weight:900;">${titleText}</div>
+                <div style="font-size:1.1em;margin:10px 0;">${stars}</div>
+                <div style="font-size:0.95em;color:#FFF8E7;margin-bottom:4px;">得分：<strong style="color:#FFD700;font-size:1.2em;">${shooterScore}</strong> / ${maxPossible}</div>
+                <div style="font-size:0.85em;color:#A5D6A7;">EXP +${shooterScore*2}</div>
+                <div style="display:flex;gap:10px;justify-content:center;margin-top:18px;">
+                    <button onclick="startShooter('shooter-all')" style="background:linear-gradient(135deg,#FF6F00,#C62828);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:0.95em;font-weight:bold;cursor:pointer;">🔄 再玩</button>
+                    <button onclick="goHome()" style="background:#1565C0;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:0.95em;cursor:pointer;">🏠 返回</button>
+                </div>
+            </div>`;
         }
 
         function shooterGameOver() {
@@ -9007,6 +9070,7 @@ window.closeRC = function() {
           <div id="shooter-q-text">載入中…</div>
           <div id="shooter-timer-wrap"><div id="shooter-timer-bar"></div></div>
           <div id="shooter-hud">
+            <span id="shooter-round-disp" style="color:#FFD700;font-weight:900;min-width:40px;"></span>
             <span>🎯 <span id="shooter-score">0</span></span>
             <span>🔥 <span id="shooter-streak-disp">0</span>連</span>
             <span>❤️ <span id="shooter-hp-disp">3</span></span>
