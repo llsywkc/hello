@@ -9813,7 +9813,7 @@ window.closeRC = function() {
     if(!ltActive) return;
     ltTotal++;
     const correct = ans === ltQ.ans;
-    if(correct){ ltScore++; btn.style.background='#1B5E20'; document.getElementById('lt-feedback').style.color='#69F0AE'; document.getElementById('lt-feedback').textContent='✅ 正確！'; }
+    if(correct){ ltScore++; btn.style.background='#1B5E20'; document.getElementById('lt-feedback').style.color='#69F0AE'; document.getElementById('lt-feedback').textContent='✅ 正確！'; if(window.gainExp) gainExp(1,'閃電答題'); }
     else { btn.style.background='#B71C1C'; document.getElementById('lt-feedback').style.color='#F44336'; document.getElementById('lt-feedback').textContent='❌ 正確：'+ltQ.ans; }
     // highlight correct
     Array.from(document.getElementById('lt-opts').children).forEach(b=>{ if(b.textContent===ltQ.ans) b.style.background='#1B5E20'; });
@@ -10109,6 +10109,7 @@ window.closeRC = function() {
     const fb=document.getElementById('sort-feedback');
     if(attempt===q.ans){
       fb.style.color='#69F0AE'; fb.textContent='✅ 正確！';
+      if(window.gainExp) gainExp(3, '句子排序');
       setTimeout(()=>{ sortIdx++; if(sortIdx>=SENTENCES.length){ fb.textContent='🎉 全部完成！'; return; } loadSortQ(); },900);
     } else {
       fb.style.color='#F44336'; fb.textContent='❌ 再試試！';
@@ -10190,6 +10191,7 @@ window.closeRC = function() {
     document.querySelectorAll('#cloze-opts button').forEach(b=>b.disabled=true);
     if(ans===correct){
       btn.style.background='#1B5E20'; fb.style.color='#69F0AE'; fb.textContent='✅ 正確！';
+      if(window.gainExp) gainExp(2, '課文填充');
     } else {
       btn.style.background='#B71C1C'; fb.style.color='#F44336'; fb.textContent='❌ 正確答案：'+correct;
       document.querySelectorAll('#cloze-opts button').forEach(b=>{ if(b.textContent===correct) b.style.background='#1B5E20'; });
@@ -10259,6 +10261,7 @@ window.closeRC = function() {
     document.querySelectorAll('#poem-opts button').forEach(b=>b.disabled=true);
     if(ans===correct){
       btn.style.background='#1B5E20'; fb.style.color='#69F0AE'; fb.textContent='✅ 正確！';
+      if(window.gainExp) gainExp(2, '古詩配對');
     } else {
       btn.style.background='#B71C1C'; fb.style.color='#F44336'; fb.textContent='❌ 正確：'+correct;
       document.querySelectorAll('#poem-opts button').forEach(b=>{ if(b.textContent===correct) b.style.background='#1B5E20'; });
@@ -10344,6 +10347,7 @@ window.closeRC = function() {
     document.querySelectorAll('#sa-opts button').forEach(b=>b.disabled=true);
     if(ans===correct){
       btn.style.background='#1B5E20'; fb.style.color='#69F0AE'; fb.textContent='✅ 正確！';
+      if(window.gainExp) gainExp(2, '近義反義詞');
     } else {
       btn.style.background='#B71C1C'; fb.style.color='#F44336'; fb.textContent='❌ 正確答案：'+correct;
       document.querySelectorAll('#sa-opts button').forEach(b=>{ if(b.textContent===correct) b.style.background='#1B5E20'; });
