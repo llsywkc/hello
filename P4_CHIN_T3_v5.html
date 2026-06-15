@@ -9833,7 +9833,7 @@ window.closeRC = function() {
     if(window.inventory){
       if(!inventory.lightningScore || ltScore > inventory.lightningScore){
         inventory.lightningScore = ltScore;
-        saveInventory();
+        saveGame();
         // submit to leaderboard
         if(typeof submitScore==='function') submitScore(true);
       }
@@ -9995,7 +9995,7 @@ window.closeRC = function() {
         unlockAchievement('ach_wordle_win');
         if(guessCount===1) unlockAchievement('ach_wordle_ace');
       }
-      if(window.saveInventory) saveInventory();
+      saveGame();
       document.getElementById('wd-msg').textContent=`🎉 答對了！獲得 +${expReward} EXP`;
       document.getElementById('wd-result').style.display='block';
       document.getElementById('wd-answer').textContent='答案：'+wdAnswer;
@@ -10092,13 +10092,15 @@ window.closeRC = function() {
   }
   function removeFromTarget(tag, chip){
     tag.remove();
-    sortPlaced=sortPlaced.filter(w=>w!==chip.dataset.word || (()=>{chip.dataset.placed='';return false;})());
-    chip.dataset.placed=''; chip.style.opacity='1'; chip.style.cursor='pointer';
-    // simpler: just remove last occurrence
-    const idx=sortPlaced.lastIndexOf(chip.dataset.word);
-    if(idx!==-1) sortPlaced.splice(idx,1);
-    if(document.getElementById('sort-target').children.length===0)
-      document.getElementById('sort-target').innerHTML='<span style="color:#555;font-size:0.82em;">點擊詞語放入這裡</span>';
+    // Remove exactly one (last) occurrence from sortPlaced
+    const ri = sortPlaced.lastIndexOf(chip.dataset.word);
+    if(ri !== -1) sortPlaced.splice(ri, 1);
+    chip.dataset.placed = '';
+    chip.style.opacity = '1';
+    chip.style.cursor = 'pointer';
+    const tgt = document.getElementById('sort-target');
+    if(tgt && tgt.children.length === 0)
+      tgt.innerHTML = '<span style="color:#555;font-size:0.82em;">點擊詞語放入這裡</span>';
   }
 
   window.checkSort=function(){
