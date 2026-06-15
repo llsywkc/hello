@@ -9634,7 +9634,7 @@ window.closeRC = function() {
       <span style="color:#69F0AE;font-size:1.2em;font-weight:bold;">🟩 成語 Wordle</span>
       <div style="font-size:0.75em;color:#aaa;margin-top:3px;">猜今日的四字成語</div>
     </div>
-    <div id="wd-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;"></div>
+    <div id="wd-grid" style="display:grid;grid-template-columns:repeat(4,60px);gap:6px;margin-bottom:14px;justify-content:center;"></div>
     <div id="wd-keyboard" style="margin-bottom:10px;"></div>
     <div id="wd-msg" style="text-align:center;min-height:24px;font-size:0.9em;font-weight:bold;color:#FFD700;"></div>
     <div id="wd-result" style="display:none;text-align:center;padding:8px 0;">
@@ -9725,16 +9725,37 @@ window.closeRC = function() {
 // ══════════════════════════════════════════════════════════
 (function(){
   const ALL_POOLS = () => {
-    const pools = [];
-    if(window.chTasks)        pools.push(...chTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
-    if(window.geoTasks)       pools.push(...geoTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
-    if(window.animalTasks)    pools.push(...animalTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
-    if(window.foodTasks)      pools.push(...foodTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
-    if(window.sportsTasks)    pools.push(...sportsTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
-    if(window.spaceTasks)     pools.push(...spaceTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
-    if(window.engVocabTasks)  pools.push(...engVocabTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
-    if(window.mathTasks)      pools.push(...mathTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
-    return pools.sort(()=>Math.random()-0.5);
+    const pool = [];
+    // helper: safe push from any task array that has {q, ans, options}
+    const add = (arr) => {
+      if(arr && arr.length) arr.forEach(t => {
+        if(t.q && t.ans && t.options && t.options.length >= 2)
+          pool.push({q: t.q, ans: t.ans, opts: t.options.slice(0,4)});
+      });
+    };
+    add(window.geoTasks);
+    add(window.animalTasks);
+    add(window.foodTasks);
+    add(window.sportsTasks);
+    add(window.spaceTasks);
+    add(window.engVocabTasks);
+    add(window.mathTasks);
+    add(window.chengyuTasks);
+    add(window.term3VocabTasks);
+    add(window.dictation2Tasks);
+    add(window.changyongTasks);
+    add(window.movieTasks);
+    add(window.appearanceTasks);
+    // Fallback: if still empty, use built-in mini pool
+    if(pool.length === 0) {
+      [{q:'「一石二鳥」是什麼意思？',ans:'一個行動達到兩個目的',opts:['一個行動達到兩個目的','做事不專心','半途放棄','等待機會']},
+       {q:'「垂頭喪氣」形容什麼？',ans:'情緒低落失去信心',opts:['情緒低落失去信心','非常高興','做事慌亂','準備迎戰']},
+       {q:'「迫不及待」的意思是？',ans:'急切得等不及',opts:['急切得等不及','從容不迫','猶豫不決','三心二意']},
+       {q:'法國的首都是哪個城市？',ans:'巴黎',opts:['巴黎','柏林','羅馬','倫敦']},
+       {q:'陸地上跑得最快的動物是？',ans:'獵豹',opts:['獵豹','獅子','馬','鴕鳥']},
+      ].forEach(t => pool.push(t));
+    }
+    return pool.sort(()=>Math.random()-0.5);
   };
 
   let ltTimer, ltTime, ltQ, ltScore, ltTotal, ltPool, ltActive=false;
@@ -9768,7 +9789,8 @@ window.closeRC = function() {
   };
 
   function nextLtQ(){
-    if(!ltActive || ltPool.length===0) return;
+    if(!ltActive) return;
+    if(ltPool.length===0){ document.getElementById('lt-q').textContent='🎉 題目全部答完！繼續等倒數…'; document.getElementById('lt-opts').innerHTML=''; return; }
     ltQ = ltPool.pop();
     document.getElementById('lt-progress').textContent = `✅ 答對：${ltScore}　已答：${ltTotal}`;
     document.getElementById('lt-q').textContent = ltQ.q;
@@ -9879,7 +9901,7 @@ window.closeRC = function() {
 
   window.launchWordle=function(){
     const idiom = getTodayIdiom();
-    wdAnswer = idiom.ans; wdGuesses=[]; wdDone=false;
+    wdAnswer = idiom.ans; wdGuesses=[]; wdDone=false; wdInput='';
     document.getElementById('wordle-modal').removeAttribute('hidden');
     document.getElementById('wordle-modal').style.display='block';
     document.getElementById('wd-result').style.display='none';
@@ -9894,7 +9916,7 @@ window.closeRC = function() {
     for(let r=0;r<wdMaxGuess;r++){
       for(let c=0;c<4;c++){
         const cell=document.createElement('div');
-        cell.style.cssText='width:100%;aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.3em;font-weight:bold;';
+        cell.style.cssText='width:100%;height:58px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4em;font-weight:bold;transition:all 0.15s;';
         if(r<wdGuesses.length){
           const g=wdGuesses[r]; const ch=g[c]||'';
           if(ch===wdAnswer[c]){ cell.style.background='#388E3C'; cell.style.color='#fff'; }
@@ -9917,9 +9939,10 @@ window.closeRC = function() {
     const kb=document.getElementById('wd-keyboard');
     kb.innerHTML='';
     // Build char selector from answer chars + random chars
-    const chars = new Set(wdAnswer.split(''));
-    // add random chars from pool
-    while(chars.size<16){ chars.add(CHARS_POOL[Math.floor(Math.random()*CHARS_POOL.length)]); }
+    const chars = new Set(wdAnswer.split('')); // guaranteed: all 4 answer chars always present
+    let _safety=0;
+    while(chars.size<16 && _safety<200){ chars.add(CHARS_POOL[Math.floor(Math.random()*CHARS_POOL.length)]); _safety++; }
+    wdAnswer.split('').forEach(c=>chars.add(c)); // re-add in case of edge case
     const arr=[...chars].sort(()=>Math.random()-0.5);
     const wrap=document.createElement('div');
     wrap.style.cssText='display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:8px;';
