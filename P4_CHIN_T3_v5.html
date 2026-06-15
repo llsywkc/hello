@@ -6894,8 +6894,9 @@ async function fetchLeaderboard() {
         function openLeaderboard() {
             playSound('click'); hideAll();
             document.getElementById('leaderboard-screen').classList.remove('hidden');
-            // Always submit latest score when opening LB (force refresh)
-            submitScore(false);
+            // Submit latest score, then always fetch fresh LB data
+            submitScore(true);
+            setTimeout(fetchLeaderboard, 800);
         }
 
         // ══════════ 🎯 SHOOTER GAME ══════════
