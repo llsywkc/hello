@@ -1487,6 +1487,41 @@
                     <div class="menu-card menu-card-lg" onclick="launchDinoGK()" style="border-color:#AB47BC;background:linear-gradient(135deg,rgba(171,71,188,0.15),rgba(74,20,140,0.15));"><div class="mc-icon">🦕🌍</div><div class="mc-title">課外知識恐龍</div><div class="mc-sub">科學·心理·歷史·冷知識 60題</div></div>
                 </div>
 
+                <div class="menu-section-label">✨ 新玩法</div>
+                <div class="menu-card-grid">
+                    <div class="menu-card menu-card-lg" onclick="launchLightning()" style="border-color:#FFD700;background:linear-gradient(135deg,rgba(255,215,0,0.18),rgba(255,111,0,0.15));position:relative;overflow:hidden;">
+                        <div style="position:absolute;top:6px;right:8px;font-size:0.65em;background:#FFD700;color:#000;border-radius:8px;padding:2px 7px;font-weight:bold;">🏆 有排行榜</div>
+                        <div class="mc-icon">⚡</div>
+                        <div class="mc-title">閃電問答</div>
+                        <div class="mc-sub">Lightning Round · 30秒極速挑戰</div>
+                    </div>
+                    <div class="menu-card menu-card-lg" onclick="launchWordle()" style="border-color:#69F0AE;background:linear-gradient(135deg,rgba(105,240,174,0.15),rgba(0,105,92,0.15));">
+                        <div class="mc-icon">🟩</div>
+                        <div class="mc-title">成語 Wordle</div>
+                        <div class="mc-sub">猜4字成語 · 每日一題</div>
+                    </div>
+                    <div class="menu-card" onclick="launchSentenceSort()" style="border-color:#CE93D8;background:linear-gradient(135deg,rgba(206,147,216,0.15),rgba(106,27,154,0.15));">
+                        <div class="mc-icon">🔀</div>
+                        <div class="mc-title">句子排序</div>
+                        <div class="mc-sub">拖拉詞語·砌正確句子</div>
+                    </div>
+                    <div class="menu-card" onclick="launchCloze()" style="border-color:#80DEEA;background:linear-gradient(135deg,rgba(128,222,234,0.15),rgba(0,96,100,0.15));">
+                        <div class="mc-icon">📖</div>
+                        <div class="mc-title">課文填充</div>
+                        <div class="mc-sub">克漏字 · 課文句子</div>
+                    </div>
+                    <div class="menu-card" onclick="launchPoem()" style="border-color:#FFAB91;background:linear-gradient(135deg,rgba(255,171,145,0.15),rgba(191,54,12,0.15));">
+                        <div class="mc-icon">🌸</div>
+                        <div class="mc-title">古詩配對</div>
+                        <div class="mc-sub">詩句上下句配對</div>
+                    </div>
+                    <div class="menu-card" onclick="launchSynAnt()" style="border-color:#B39DDB;background:linear-gradient(135deg,rgba(179,157,219,0.15),rgba(69,39,160,0.15));">
+                        <div class="mc-icon">↔️</div>
+                        <div class="mc-title">近義反義詞</div>
+                        <div class="mc-sub">詞語配對 · MC選擇</div>
+                    </div>
+                </div>
+
                 <div class="menu-section-label">🎯 射擊道場</div>
                 <div class="menu-card-grid">
                     <div class="menu-card menu-card-lg" onclick="startShooter('shooter-all')" style="border-color:#FF6F00;background:linear-gradient(135deg,rgba(255,111,0,0.15),rgba(198,40,40,0.15));">
@@ -1728,7 +1763,8 @@
                 <button id="lb-tab-4" class="lb-tab-btn" onclick="switchLbTab(4)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">💰 材料榜</button>
                 <button id="lb-tab-5" class="lb-tab-btn" onclick="switchLbTab(5)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🦕 恐龍榜</button>
                 <button id="lb-tab-6" class="lb-tab-btn" onclick="switchLbTab(6)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🎯 射擊榜</button>
-                <button id="lb-tab-7" class="lb-tab-btn" onclick="switchLbTab(7)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🃏 翻牌榜</button>
+                <button id="lb-tab-7" class="lb-tab-btn" onclick="switchLbTab(7)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">⚡ 閃電榜</button>
+                <button id="lb-tab-8" class="lb-tab-btn" onclick="switchLbTab(8)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🃏 翻牌榜</button>
             </div>
 
             <div id="lb-tab-desc" style="font-size:0.75em;color:#aaa;margin-bottom:6px;text-align:center;"></div>
@@ -3904,6 +3940,9 @@
             { id: 'ach_lv10',          icon: '🌱',  name: '初階冒險者', desc: '達到 Lv 10' },
             { id: 'ach_lv50',          icon: '🌟',  name: '資深冒險者', desc: '達到 Lv 50' },
             { id: 'ach_lv100',         icon: '👑',  name: '傳説冒險者', desc: '達到 Lv 100' },
+            // ── Wordle 成就 ──
+            { id: 'ach_wordle_win',    icon: '🟩',  name: '成語達人',   desc: '成語 Wordle 猜中一次' },
+            { id: 'ach_wordle_ace',    icon: '🏅',  name: '成語天才',   desc: '成語 Wordle 第一次就猜中！' },
         ];
 
         function unlockAchievement(id) {
@@ -6562,6 +6601,23 @@ function checkDailyReset() {
                 }
             },
             {
+                label: '⚡ 閃電榜',
+                desc:  '⚡ 閃電問答30秒最高分',
+                score: e => e.lightningScore || 0,
+                row: (e, rank, score) => {
+                    const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'#'+rank;
+                    const isMe  = e.name === inventory.playerName;
+                    const cardBg = isMe
+                        ? 'background:linear-gradient(135deg,#1a1200,#2a1f00);border:1px solid #FFD700;'
+                        : 'background:#0d1117;border-left:3px solid '+(rank<=3?'#FFD700':'#333')+';';
+                    return '<div style="'+cardBg+'border-radius:10px;margin-bottom:5px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;">'
+                        +'<span style="color:#FFD700;font-weight:bold;min-width:28px;">'+medal+'</span>'
+                        +'<span style="flex:1;margin-left:8px;color:'+(isMe?'#FFD700':'#eee')+';font-weight:'+(isMe?'bold':'normal')+';">'
+                        +'<span style="margin-right:3px;">'+(e.avatar||'🐉')+'</span>'+(e.name||'?')+(isMe?' 👤':'')+'</span>'
+                        +'<span style="color:#FFD700;font-size:0.85em;font-weight:bold;">⚡ '+score+'分</span></div>';
+                }
+            },
+            {
                 label: '🃏 翻牌榜',
                 desc:  '記憶翻牌最快完成時間',
                 score: e => e.flipScore || 0,
@@ -6585,7 +6641,7 @@ function checkDailyReset() {
         window.switchLbTab = function(tabIdx) {
             currentLbTab = tabIdx;
             // Tab accent colours: 0=blue(study), 1=red(combat), 2=purple(partner), 3=green(build), 4=gold(material)
-            const tabColors = ['#1565C0','#C62828','#6A1B9A','#2E7D32','#F57F17','#1B5E20','#E65100','#7B1FA2'];
+            const tabColors = ['#1565C0','#C62828','#6A1B9A','#2E7D32','#F57F17','#1B5E20','#E65100','#FF6F00','#7B1FA2'];
             document.querySelectorAll('.lb-tab-btn').forEach((btn, i) => {
                 btn.style.background = i === tabIdx ? (tabColors[i]||'#1565C0') : '#333';
                 btn.style.color      = i === tabIdx ? '#fff' : '#aaa';
@@ -6725,6 +6781,7 @@ async function fetchLeaderboard() {
                     shooterScore:      inventory.shooterScore || 0,
                     flipScore:         inventory.flipScore    || 0,
                     flipBestTime:      inventory.flipBestTime || 0,
+                    lightningScore:    inventory.lightningScore || 0,
                     correctAnswers: inventory.totalCorrectAnswers || 0,
                     bossWins:       inventory.totalBossWins || 0,
                     bossWinsDetail: {
@@ -9406,6 +9463,20 @@ window.closeRC = function() {
                     if (typeof saveToLocalStorage === 'function') saveToLocalStorage();
                 }
             }
+            if (e.data && e.data.type === 'flipScore') {
+                const s = e.data.score || 0;
+                const t = e.data.bestTime || 0;
+                if ((inventory.flipScore || 0) < s) {
+                    inventory.flipScore = s;
+                    if (t > 0 && (!inventory.flipBestTime || t < inventory.flipBestTime))
+                        inventory.flipBestTime = t;
+                    if (typeof saveToLocalStorage === 'function') saveToLocalStorage();
+                    if (typeof submitScore === 'function') submitScore(true);
+                }
+            }
+            if (e.data && e.data.type === 'closeFlip') {
+                closeFlip();
+            }
         });
 
         let _dinoBlobUrl = null;
@@ -9440,6 +9511,11 @@ window.closeRC = function() {
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             iframe.onload = null;
+        }
+
+        function closeFlip() {
+            document.getElementById('flip-modal').style.display = 'none';
+            document.body.style.overflow = '';
         }
 
         let _dinoGKBlobUrl = null;
@@ -9516,8 +9592,745 @@ window.closeRC = function() {
 
 
         <!-- FLIP CARD MODAL -->
-        <div id="flip-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:10000;align-items:center;justify-content:center;">
-          <iframe id="flip-iframe" style="width:100%;max-width:480px;height:100vh;border:none;" allowtransparency="true"></iframe>
+        <div id="flip-modal" style="display:none;position:fixed;inset:0;z-index:10000;background:#000;flex-direction:column;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:#0d1b2a;">
+                <span style="color:#FFD700;font-weight:bold;font-size:1em;">🃏 記憶翻牌</span>
+                <button onclick="closeFlip()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:6px 18px;border-radius:20px;font-size:0.85em;cursor:pointer;">✕ 返回</button>
+            </div>
+          <iframe id="flip-iframe" style="width:100%;flex:1;border:none;" allowtransparency="true"></iframe>
         </div>
+
+<!-- ══════════════════════════════════════════
+     ⚡ LIGHTNING ROUND MODAL
+════════════════════════════════════════════ -->
+<div id="lightning-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9000;align-items:center;justify-content:center;flex-direction:column;" hidden>
+  <div style="background:linear-gradient(135deg,#1a1200,#2a1f00);border:2px solid #FFD700;border-radius:18px;padding:22px 20px;width:93%;max-width:420px;position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <span style="color:#FFD700;font-size:1.2em;font-weight:bold;">⚡ 閃電問答</span>
+      <span id="lt-timer" style="font-size:1.5em;font-weight:bold;color:#FF6F00;background:#1a0a00;padding:4px 12px;border-radius:10px;">30</span>
+    </div>
+    <div id="lt-progress" style="font-size:0.78em;color:#aaa;margin-bottom:8px;text-align:center;">準備開始…</div>
+    <div id="lt-q" style="color:#fff;font-size:1.05em;font-weight:bold;min-height:52px;margin-bottom:12px;text-align:center;line-height:1.5;"></div>
+    <div id="lt-opts" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;"></div>
+    <div id="lt-feedback" style="min-height:22px;text-align:center;font-size:0.9em;font-weight:bold;"></div>
+    <div id="lt-result" style="display:none;text-align:center;padding:10px 0;">
+      <div style="font-size:2em;font-weight:bold;color:#FFD700;" id="lt-final-score"></div>
+      <div style="color:#aaa;font-size:0.85em;margin:4px 0;" id="lt-final-msg"></div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
+        <button onclick="startLightning()" style="background:#FF6F00;color:#fff;border:none;padding:10px 20px;border-radius:12px;font-size:0.95em;cursor:pointer;font-weight:bold;">🔄 再玩</button>
+        <button onclick="closeLightning()" style="background:#333;color:#aaa;border:none;padding:10px 20px;border-radius:12px;font-size:0.95em;cursor:pointer;">✕ 關閉</button>
+      </div>
+    </div>
+    <button onclick="closeLightning()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#aaa;font-size:1.2em;cursor:pointer;">✕</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     🟩 WORDLE MODAL
+════════════════════════════════════════════ -->
+<div id="wordle-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9000;overflow-y:auto;" hidden>
+  <div style="background:linear-gradient(135deg,#0a1a0a,#0d2b0d);border:2px solid #69F0AE;border-radius:18px;padding:22px 18px;width:93%;max-width:400px;margin:20px auto;position:relative;">
+    <div style="text-align:center;margin-bottom:10px;">
+      <span style="color:#69F0AE;font-size:1.2em;font-weight:bold;">🟩 成語 Wordle</span>
+      <div style="font-size:0.75em;color:#aaa;margin-top:3px;">猜今日的四字成語</div>
+    </div>
+    <div id="wd-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;"></div>
+    <div id="wd-keyboard" style="margin-bottom:10px;"></div>
+    <div id="wd-msg" style="text-align:center;min-height:24px;font-size:0.9em;font-weight:bold;color:#FFD700;"></div>
+    <div id="wd-result" style="display:none;text-align:center;padding:8px 0;">
+      <div id="wd-answer" style="font-size:1.1em;color:#69F0AE;font-weight:bold;margin-bottom:8px;"></div>
+      <button onclick="closeWordle()" style="background:#69F0AE;color:#000;border:none;padding:10px 24px;border-radius:12px;font-size:0.95em;cursor:pointer;font-weight:bold;">✓ 完成</button>
+    </div>
+    <button onclick="closeWordle()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#aaa;font-size:1.2em;cursor:pointer;">✕</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     🔀 SENTENCE SORT MODAL
+════════════════════════════════════════════ -->
+<div id="sort-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9000;overflow-y:auto;" hidden>
+  <div style="background:linear-gradient(135deg,#130a1f,#1e0d30);border:2px solid #CE93D8;border-radius:18px;padding:22px 18px;width:93%;max-width:440px;margin:20px auto;position:relative;">
+    <div style="text-align:center;margin-bottom:10px;">
+      <span style="color:#CE93D8;font-size:1.2em;font-weight:bold;">🔀 句子排序</span>
+      <div id="sort-progress" style="font-size:0.75em;color:#aaa;margin-top:3px;"></div>
+    </div>
+    <div id="sort-q" style="color:#FFD700;font-size:0.88em;text-align:center;margin-bottom:10px;min-height:32px;"></div>
+    <div id="sort-target" style="display:flex;flex-wrap:wrap;gap:6px;min-height:46px;background:rgba(255,255,255,0.05);border:2px dashed #CE93D8;border-radius:10px;padding:8px;margin-bottom:10px;justify-content:center;align-items:center;">
+      <span style="color:#555;font-size:0.82em;">拖拉詞語到這裡</span>
+    </div>
+    <div id="sort-chips" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:12px;"></div>
+    <div style="display:flex;gap:8px;justify-content:center;">
+      <button onclick="checkSort()" style="background:#CE93D8;color:#000;border:none;padding:10px 22px;border-radius:12px;font-size:0.95em;cursor:pointer;font-weight:bold;">✓ 確認</button>
+      <button onclick="resetSort()" style="background:#333;color:#aaa;border:none;padding:10px 18px;border-radius:12px;font-size:0.9em;cursor:pointer;">↺ 重排</button>
+    </div>
+    <div id="sort-feedback" style="text-align:center;min-height:24px;font-size:0.9em;font-weight:bold;margin-top:8px;"></div>
+    <button onclick="closeSort()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#aaa;font-size:1.2em;cursor:pointer;">✕</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     📖 CLOZE MODAL
+════════════════════════════════════════════ -->
+<div id="cloze-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9000;overflow-y:auto;" hidden>
+  <div style="background:linear-gradient(135deg,#001a1f,#002a30);border:2px solid #80DEEA;border-radius:18px;padding:22px 18px;width:93%;max-width:440px;margin:20px auto;position:relative;">
+    <div style="text-align:center;margin-bottom:10px;">
+      <span style="color:#80DEEA;font-size:1.2em;font-weight:bold;">📖 課文填充</span>
+      <div id="cloze-progress" style="font-size:0.75em;color:#aaa;margin-top:3px;"></div>
+    </div>
+    <div id="cloze-q" style="color:#fff;font-size:1em;line-height:1.8;text-align:center;margin-bottom:14px;min-height:60px;"></div>
+    <div id="cloze-opts" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;"></div>
+    <div id="cloze-feedback" style="text-align:center;min-height:24px;font-size:0.9em;font-weight:bold;"></div>
+    <button onclick="closeCloze()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#aaa;font-size:1.2em;cursor:pointer;">✕</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     🌸 POEM MATCHING MODAL
+════════════════════════════════════════════ -->
+<div id="poem-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9000;overflow-y:auto;" hidden>
+  <div style="background:linear-gradient(135deg,#1f0a05,#30150d);border:2px solid #FFAB91;border-radius:18px;padding:22px 18px;width:93%;max-width:440px;margin:20px auto;position:relative;">
+    <div style="text-align:center;margin-bottom:10px;">
+      <span style="color:#FFAB91;font-size:1.2em;font-weight:bold;">🌸 古詩配對</span>
+      <div id="poem-progress" style="font-size:0.75em;color:#aaa;margin-top:3px;"></div>
+    </div>
+    <div style="color:#FFAB91;font-size:0.82em;text-align:center;margin-bottom:8px;">👇 選出正確的下句</div>
+    <div id="poem-q" style="color:#fff;font-size:1.1em;font-weight:bold;text-align:center;margin-bottom:14px;min-height:36px;letter-spacing:2px;"></div>
+    <div id="poem-opts" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;"></div>
+    <div id="poem-feedback" style="text-align:center;min-height:24px;font-size:0.9em;font-weight:bold;"></div>
+    <button onclick="closePoem()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#aaa;font-size:1.2em;cursor:pointer;">✕</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ↔️ SYNONYM/ANTONYM MODAL
+════════════════════════════════════════════ -->
+<div id="synant-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9000;overflow-y:auto;" hidden>
+  <div style="background:linear-gradient(135deg,#0d0520,#170830);border:2px solid #B39DDB;border-radius:18px;padding:22px 18px;width:93%;max-width:440px;margin:20px auto;position:relative;">
+    <div style="text-align:center;margin-bottom:10px;">
+      <span style="color:#B39DDB;font-size:1.2em;font-weight:bold;">↔️ 近義反義詞</span>
+      <div id="sa-progress" style="font-size:0.75em;color:#aaa;margin-top:3px;"></div>
+    </div>
+    <div id="sa-type" style="text-align:center;margin-bottom:6px;font-size:0.82em;font-weight:bold;"></div>
+    <div id="sa-q" style="color:#fff;font-size:1.2em;font-weight:bold;text-align:center;margin-bottom:14px;min-height:36px;"></div>
+    <div id="sa-opts" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;"></div>
+    <div id="sa-feedback" style="text-align:center;min-height:24px;font-size:0.9em;font-weight:bold;"></div>
+    <button onclick="closeSynAnt()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#aaa;font-size:1.2em;cursor:pointer;">✕</button>
+  </div>
+</div>
+
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  ⚡ LIGHTNING ROUND
+// ══════════════════════════════════════════════════════════
+(function(){
+  const ALL_POOLS = () => {
+    const pools = [];
+    if(window.chTasks)        pools.push(...chTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
+    if(window.geoTasks)       pools.push(...geoTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
+    if(window.animalTasks)    pools.push(...animalTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
+    if(window.foodTasks)      pools.push(...foodTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
+    if(window.sportsTasks)    pools.push(...sportsTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
+    if(window.spaceTasks)     pools.push(...spaceTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
+    if(window.engVocabTasks)  pools.push(...engVocabTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
+    if(window.mathTasks)      pools.push(...mathTasks.map(t=>({q:t.q,ans:t.ans,opts:t.options})));
+    return pools.sort(()=>Math.random()-0.5);
+  };
+
+  let ltTimer, ltTime, ltQ, ltScore, ltTotal, ltPool, ltActive=false;
+
+  window.launchLightning = function(){
+    document.getElementById('lightning-modal').removeAttribute('hidden');
+    document.getElementById('lightning-modal').style.display='flex';
+    document.getElementById('lt-result').style.display='none';
+    document.getElementById('lt-opts').style.display='grid';
+    document.getElementById('lt-q').style.display='';
+    document.getElementById('lt-progress').style.display='';
+    startLightning();
+  };
+
+  window.startLightning = function(){
+    ltPool = ALL_POOLS();
+    ltScore = 0; ltTotal = 0; ltTime = 30; ltActive = true;
+    document.getElementById('lt-result').style.display='none';
+    document.getElementById('lt-opts').style.display='grid';
+    document.getElementById('lt-timer').textContent = ltTime;
+    document.getElementById('lt-timer').style.color = '#FF6F00';
+    document.getElementById('lt-feedback').textContent = '';
+    clearInterval(ltTimer);
+    ltTimer = setInterval(()=>{
+      ltTime--;
+      document.getElementById('lt-timer').textContent = ltTime;
+      if(ltTime <= 5) document.getElementById('lt-timer').style.color='#F44336';
+      if(ltTime <= 0){ clearInterval(ltTimer); ltActive=false; endLightning(); }
+    }, 1000);
+    nextLtQ();
+  };
+
+  function nextLtQ(){
+    if(!ltActive || ltPool.length===0) return;
+    ltQ = ltPool.pop();
+    document.getElementById('lt-progress').textContent = `✅ 答對：${ltScore}　已答：${ltTotal}`;
+    document.getElementById('lt-q').textContent = ltQ.q;
+    document.getElementById('lt-feedback').textContent='';
+    const opts = document.getElementById('lt-opts');
+    opts.innerHTML = '';
+    const shuffled = [...ltQ.opts].sort(()=>Math.random()-0.5);
+    shuffled.forEach(o=>{
+      const btn = document.createElement('button');
+      btn.textContent = o;
+      btn.style.cssText='background:#1a1a2e;color:#eee;border:1px solid #333;padding:9px 6px;border-radius:10px;font-size:0.88em;cursor:pointer;transition:0.15s;';
+      btn.onmouseenter=()=>btn.style.background='#2a2a4e';
+      btn.onmouseleave=()=>btn.style.background='#1a1a2e';
+      btn.onclick=()=>answerLt(o, btn);
+      opts.appendChild(btn);
+    });
+  }
+
+  function answerLt(ans, btn){
+    if(!ltActive) return;
+    ltTotal++;
+    const correct = ans === ltQ.ans;
+    if(correct){ ltScore++; btn.style.background='#1B5E20'; document.getElementById('lt-feedback').style.color='#69F0AE'; document.getElementById('lt-feedback').textContent='✅ 正確！'; }
+    else { btn.style.background='#B71C1C'; document.getElementById('lt-feedback').style.color='#F44336'; document.getElementById('lt-feedback').textContent='❌ 正確：'+ltQ.ans; }
+    // highlight correct
+    Array.from(document.getElementById('lt-opts').children).forEach(b=>{ if(b.textContent===ltQ.ans) b.style.background='#1B5E20'; });
+    setTimeout(nextLtQ, 600);
+  }
+
+  function endLightning(){
+    document.getElementById('lt-opts').style.display='none';
+    document.getElementById('lt-q').style.display='none';
+    document.getElementById('lt-progress').style.display='none';
+    document.getElementById('lt-feedback').textContent='';
+    document.getElementById('lt-result').style.display='block';
+    document.getElementById('lt-final-score').textContent = `⚡ ${ltScore} 分`;
+    const acc = ltTotal>0 ? Math.round(ltScore/ltTotal*100) : 0;
+    document.getElementById('lt-final-msg').textContent = `共答 ${ltTotal} 題 · 正確率 ${acc}%`;
+    // Save to inventory
+    if(window.inventory){
+      if(!inventory.lightningScore || ltScore > inventory.lightningScore){
+        inventory.lightningScore = ltScore;
+        saveInventory();
+        // submit to leaderboard
+        if(typeof submitScore==='function') submitScore(true);
+      }
+    }
+  }
+
+  window.closeLightning=function(){
+    clearInterval(ltTimer); ltActive=false;
+    document.getElementById('lightning-modal').style.display='none';
+    document.getElementById('lightning-modal').setAttribute('hidden','');
+  };
+})();
+
+// ══════════════════════════════════════════════════════════
+//  🟩 WORDLE (4-char idiom)
+// ══════════════════════════════════════════════════════════
+(function(){
+  const IDIOMS = [
+    {ans:'守株待兔',hint:'比喻死守成規，不知變通，等待意外之財'},
+    {ans:'一石二鳥',hint:'比喻一個行動同時達到兩個目的'},
+    {ans:'半途而廢',hint:'比喻做事沒有恆心，中途放棄'},
+    {ans:'亡羊補牢',hint:'比喻出了差錯之後才設法補救'},
+    {ans:'對牛彈琴',hint:'比喻對不懂道理的人講道理，白費心機'},
+    {ans:'馬到成功',hint:'形容事情一開始就順利成功'},
+    {ans:'三心二意',hint:'形容意志不堅定，猶豫不決'},
+    {ans:'異口同聲',hint:'形容許多人說的話完全相同'},
+    {ans:'喜出望外',hint:'遇到超出預期的好事，感到非常高興'},
+    {ans:'眉飛色舞',hint:'形容非常高興、得意的神情'},
+    {ans:'垂頭喪氣',hint:'形容情緒低落、失去信心的樣子'},
+    {ans:'摩拳擦掌',hint:'形容興奮期待、躍躍欲試的樣子'},
+    {ans:'手忙腳亂',hint:'形容做事慌張混亂，不知所措'},
+    {ans:'前功盡廢',hint:'以前做的努力全部白費了'},
+    {ans:'無中生有',hint:'憑空捏造，製造不存在的事'},
+    {ans:'大開眼界',hint:'見到新鮮事物，增廣見聞'},
+    {ans:'談天說地',hint:'形容無所不談，閒話家常'},
+    {ans:'迫不及待',hint:'形容急切得完全等不及'},
+    {ans:'忍無可忍',hint:'忍耐到了極限，再也無法忍受'},
+    {ans:'愁眉苦臉',hint:'形容憂愁痛苦、面容憔悴的樣子'},
+    {ans:'興高采烈',hint:'形容非常高興、精神振奮'},
+    {ans:'有始有終',hint:'做事能夠堅持到底，善始善終'},
+    {ans:'全力以赴',hint:'把全部力量都投入進去'},
+    {ans:'齊心協力',hint:'大家同心同德，共同努力'},
+    {ans:'不知不覺',hint:'沒有意識到，在不知道的情況下'},
+    {ans:'左思右想',hint:'反覆思考，猶豫不決'},
+    {ans:'自言自語',hint:'自己跟自己說話'},
+    {ans:'又驚又喜',hint:'既感到驚訝又感到高興'},
+    {ans:'不慌不忙',hint:'形容鎮定從容，不急不慌'},
+    {ans:'來來往往',hint:'形容人或事物不斷地往返'},
+    {ans:'高高興興',hint:'形容心情非常愉快'},
+    {ans:'清清楚楚',hint:'形容非常清晰明白'},
+    {ans:'仔仔細細',hint:'形容做事非常認真細緻'},
+    {ans:'認認真真',hint:'形容做事非常嚴肅認真'},
+    {ans:'快快樂樂',hint:'形容心情非常愉快開心'},
+  ];
+
+  // Pick today's idiom based on date
+  function getTodayIdiom(){
+    const d = new Date();
+    const idx = (d.getFullYear()*365 + d.getMonth()*31 + d.getDate()) % IDIOMS.length;
+    return IDIOMS[idx];
+  }
+
+  let wdAnswer='', wdGuesses=[], wdMaxGuess=6, wdDone=false;
+  const CHARS_POOL = '一二三四五六七八九十百千萬上下左右大小中外東西南北天地人心手口目耳山水火木金土日月星風雨雲龍虎鳥魚牛馬羊狗貓花草樹葉春夏秋冬前後古今新舊好壞高低長短快慢多少';
+
+  window.launchWordle=function(){
+    const idiom = getTodayIdiom();
+    wdAnswer = idiom.ans; wdGuesses=[]; wdDone=false;
+    document.getElementById('wordle-modal').removeAttribute('hidden');
+    document.getElementById('wordle-modal').style.display='block';
+    document.getElementById('wd-result').style.display='none';
+    document.getElementById('wd-msg').textContent='提示：'+idiom.hint;
+    renderWdGrid();
+    renderWdKeyboard();
+  };
+
+  function renderWdGrid(){
+    const grid = document.getElementById('wd-grid');
+    grid.innerHTML='';
+    for(let r=0;r<wdMaxGuess;r++){
+      for(let c=0;c<4;c++){
+        const cell=document.createElement('div');
+        cell.style.cssText='width:100%;aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.3em;font-weight:bold;';
+        if(r<wdGuesses.length){
+          const g=wdGuesses[r]; const ch=g[c]||'';
+          if(ch===wdAnswer[c]){ cell.style.background='#388E3C'; cell.style.color='#fff'; }
+          else if(wdAnswer.includes(ch)){ cell.style.background='#F57F17'; cell.style.color='#fff'; }
+          else { cell.style.background='#37474F'; cell.style.color='#aaa'; }
+          cell.textContent=ch;
+        } else if(r===wdGuesses.length){
+          cell.style.background='#1a2a1a'; cell.style.border='2px solid #69F0AE';
+          cell.id=`wd-cur-${c}`; cell.textContent='';
+        } else {
+          cell.style.background='#111'; cell.style.border='1px solid #333';
+        }
+        grid.appendChild(cell);
+      }
+    }
+  }
+
+  let wdInput='';
+  function renderWdKeyboard(){
+    const kb=document.getElementById('wd-keyboard');
+    kb.innerHTML='';
+    // Build char selector from answer chars + random chars
+    const chars = new Set(wdAnswer.split(''));
+    // add random chars from pool
+    while(chars.size<16){ chars.add(CHARS_POOL[Math.floor(Math.random()*CHARS_POOL.length)]); }
+    const arr=[...chars].sort(()=>Math.random()-0.5);
+    const wrap=document.createElement('div');
+    wrap.style.cssText='display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:8px;';
+    arr.forEach(ch=>{
+      const btn=document.createElement('button');
+      btn.textContent=ch; btn.dataset.ch=ch;
+      btn.style.cssText='background:#1e3a1e;color:#69F0AE;border:1px solid #2e6b2e;padding:7px 10px;border-radius:8px;font-size:1em;cursor:pointer;min-width:36px;';
+      btn.onclick=()=>wdType(ch);
+      wrap.appendChild(btn);
+    });
+    // Del + Enter
+    const del=document.createElement('button');
+    del.textContent='⌫'; del.style.cssText='background:#333;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:1em;cursor:pointer;';
+    del.onclick=()=>wdDel();
+    const ent=document.createElement('button');
+    ent.textContent='確認'; ent.style.cssText='background:#388E3C;color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:1em;cursor:pointer;font-weight:bold;';
+    ent.onclick=()=>wdSubmit();
+    const row2=document.createElement('div');
+    row2.style.cssText='display:flex;gap:8px;justify-content:center;margin-top:5px;';
+    row2.appendChild(del); row2.appendChild(ent);
+    kb.appendChild(wrap); kb.appendChild(row2);
+  }
+
+  function wdType(ch){
+    if(wdDone||wdInput.length>=4) return;
+    wdInput+=ch;
+    for(let c=0;c<4;c++){
+      const cell=document.getElementById(`wd-cur-${c}`);
+      if(cell) cell.textContent=wdInput[c]||'';
+    }
+  }
+  function wdDel(){
+    if(wdDone||!wdInput.length) return;
+    wdInput=wdInput.slice(0,-1);
+    for(let c=0;c<4;c++){
+      const cell=document.getElementById(`wd-cur-${c}`);
+      if(cell) cell.textContent=wdInput[c]||'';
+    }
+  }
+  function wdSubmit(){
+    if(wdDone||wdInput.length!==4){ document.getElementById('wd-msg').textContent='請輸入4個字！'; return; }
+    wdGuesses.push(wdInput); wdInput='';
+    renderWdGrid(); renderWdKeyboard();
+    if(wdGuesses[wdGuesses.length-1]===wdAnswer){
+      wdDone=true;
+      const guessCount = wdGuesses.length;
+      const expReward = guessCount===1?50:guessCount===2?40:guessCount===3?30:guessCount<=5?20:15;
+      if(window.gainExp) gainExp(expReward, 'Wordle成語');
+      if(window.unlockAchievement){
+        unlockAchievement('ach_wordle_win');
+        if(guessCount===1) unlockAchievement('ach_wordle_ace');
+      }
+      if(window.saveInventory) saveInventory();
+      document.getElementById('wd-msg').textContent=`🎉 答對了！獲得 +${expReward} EXP`;
+      document.getElementById('wd-result').style.display='block';
+      document.getElementById('wd-answer').textContent='答案：'+wdAnswer;
+    } else if(wdGuesses.length>=wdMaxGuess){
+      wdDone=true;
+      document.getElementById('wd-msg').textContent='😢 答案是：'+wdAnswer;
+      document.getElementById('wd-result').style.display='block';
+      document.getElementById('wd-answer').textContent='';
+    } else {
+      document.getElementById('wd-msg').textContent=`還有 ${wdMaxGuess-wdGuesses.length} 次機會`;
+    }
+  }
+  window.closeWordle=function(){
+    document.getElementById('wordle-modal').style.display='none';
+    document.getElementById('wordle-modal').setAttribute('hidden','');
+  };
+})();
+
+// ══════════════════════════════════════════════════════════
+//  🔀 SENTENCE SORT
+// ══════════════════════════════════════════════════════════
+(function(){
+  const SENTENCES = [
+    {hint:'重組句子',words:['小明','每天','上學','步行'],ans:'小明每天步行上學'},
+    {hint:'重組句子',words:['她','非常','喜歡','吃','水果'],ans:'她非常喜歡吃水果'},
+    {hint:'重組句子',words:['爸爸','幫我','買了','一本','新書'],ans:'爸爸幫我買了一本新書'},
+    {hint:'重組句子',words:['同學們','在','操場','踢足球'],ans:'同學們在操場踢足球'},
+    {hint:'重組句子',words:['老師','今天','教我們','寫作文'],ans:'老師今天教我們寫作文'},
+    {hint:'課文句子（填詞）',words:['郊野公園','的','環境','非常','美麗'],ans:'郊野公園的環境非常美麗'},
+    {hint:'課文句子',words:['我們','要','愛護','身邊','的','環境'],ans:'我們要愛護身邊的環境'},
+    {hint:'重組句子',words:['妹妹','畫了','一幅','很漂亮','的圖畫'],ans:'妹妹畫了一幅很漂亮的圖畫'},
+    {hint:'重組句子',words:['我','最喜歡','和','朋友','一起','玩'],ans:'我最喜歡和朋友一起玩'},
+    {hint:'課文句子',words:['大家','各自','帶走','自己','的','垃圾'],ans:'大家各自帶走自己的垃圾'},
+    {hint:'重組句子',words:['天空','上','有','許多','星星'],ans:'天空上有許多星星'},
+    {hint:'重組句子',words:['運動','有益','身心','健康'],ans:'運動有益身心健康'},
+    {hint:'重組句子',words:['媽媽','煮了','一頓','豐盛','的晚餐'],ans:'媽媽煮了一頓豐盛的晚餐'},
+    {hint:'重組句子',words:['小貓','懶洋洋','地','躺','在','沙發上'],ans:'小貓懶洋洋地躺在沙發上'},
+    {hint:'重組句子',words:['今天','的天氣','晴朗','而且','涼快'],ans:'今天的天氣晴朗而且涼快'},
+    {hint:'課文句子',words:['這次','經歷','讓我','明白到','環保的重要'],ans:'這次經歷讓我明白到環保的重要'},
+    {hint:'課文句子',words:['失物','要','交給','老師','處理'],ans:'失物要交給老師處理'},
+    {hint:'重組句子',words:['他','每天','堅持','練習','書法'],ans:'他每天堅持練習書法'},
+    {hint:'重組句子',words:['圖書館','裏','有','很多','書籍'],ans:'圖書館裏有很多書籍'},
+    {hint:'重組句子',words:['我們','要','珍惜','食物','不要浪費'],ans:'我們要珍惜食物不要浪費'},
+    {hint:'重組句子',words:['她','高高興興地','去','上學','了'],ans:'她高高興興地去上學了'},
+    {hint:'重組句子',words:['秋天','的樹葉','變成','金黃色','了'],ans:'秋天的樹葉變成金黃色了'},
+    {hint:'重組句子',words:['同學們','仔細地','聽','老師','講故事'],ans:'同學們仔細地聽老師講故事'},
+    {hint:'成語句子',words:['他','做事','有始有終','從不','半途而廢'],ans:'他做事有始有終從不半途而廢'},
+    {hint:'成語句子',words:['大家','齊心協力','終於','完成','了任務'],ans:'大家齊心協力終於完成了任務'},
+    {hint:'重組句子',words:['弟弟','興高采烈地','告訴','媽媽','好消息'],ans:'弟弟興高采烈地告訴媽媽好消息'},
+    {hint:'課文句子',words:['郊野公園','環境','優美','吸引','遊客'],ans:'郊野公園環境優美吸引遊客'},
+  ];
+
+  let sortIdx=0, sortOrder=[], sortPlaced=[];
+
+  window.launchSentenceSort=function(){
+    sortIdx=0; loadSortQ();
+    document.getElementById('sort-modal').removeAttribute('hidden');
+    document.getElementById('sort-modal').style.display='block';
+  };
+  function loadSortQ(){
+    const q=SENTENCES[sortIdx%SENTENCES.length];
+    document.getElementById('sort-progress').textContent=`第 ${sortIdx+1} / ${SENTENCES.length} 題`;
+    document.getElementById('sort-q').textContent='💡 '+q.hint+'：請將以下詞語砌成正確句子';
+    document.getElementById('sort-feedback').textContent='';
+    sortPlaced=[];
+    // Shuffle words
+    const shuffled=[...q.words].sort(()=>Math.random()-0.5);
+    // Render chips
+    const chips=document.getElementById('sort-chips');
+    chips.innerHTML='';
+    shuffled.forEach((w,i)=>{
+      const chip=document.createElement('div');
+      chip.textContent=w; chip.dataset.word=w; chip.dataset.i=i;
+      chip.style.cssText='background:#2a1a40;color:#CE93D8;border:1px solid #CE93D8;padding:8px 14px;border-radius:20px;cursor:pointer;font-size:0.95em;user-select:none;';
+      chip.onclick=()=>placeChip(chip);
+      chips.appendChild(chip);
+    });
+    // Clear target
+    document.getElementById('sort-target').innerHTML='<span style="color:#555;font-size:0.82em;">點擊詞語放入這裡</span>';
+  }
+
+  function placeChip(chip){
+    if(chip.dataset.placed) return;
+    chip.dataset.placed='1';
+    chip.style.opacity='0.3'; chip.style.cursor='default';
+    sortPlaced.push(chip.dataset.word);
+    const tgt=document.getElementById('sort-target');
+    if(tgt.querySelector('span')) tgt.innerHTML='';
+    const tag=document.createElement('div');
+    tag.textContent=chip.dataset.word;
+    tag.style.cssText='background:#4a1a6a;color:#CE93D8;border:1px solid #CE93D8;padding:7px 12px;border-radius:20px;font-size:0.95em;cursor:pointer;';
+    tag.onclick=()=>removeFromTarget(tag, chip);
+    tgt.appendChild(tag);
+  }
+  function removeFromTarget(tag, chip){
+    tag.remove();
+    sortPlaced=sortPlaced.filter(w=>w!==chip.dataset.word || (()=>{chip.dataset.placed='';return false;})());
+    chip.dataset.placed=''; chip.style.opacity='1'; chip.style.cursor='pointer';
+    // simpler: just remove last occurrence
+    const idx=sortPlaced.lastIndexOf(chip.dataset.word);
+    if(idx!==-1) sortPlaced.splice(idx,1);
+    if(document.getElementById('sort-target').children.length===0)
+      document.getElementById('sort-target').innerHTML='<span style="color:#555;font-size:0.82em;">點擊詞語放入這裡</span>';
+  }
+
+  window.checkSort=function(){
+    const q=SENTENCES[sortIdx%SENTENCES.length];
+    const attempt=sortPlaced.join('');
+    const fb=document.getElementById('sort-feedback');
+    if(attempt===q.ans){
+      fb.style.color='#69F0AE'; fb.textContent='✅ 正確！';
+      setTimeout(()=>{ sortIdx++; if(sortIdx>=SENTENCES.length){ fb.textContent='🎉 全部完成！'; return; } loadSortQ(); },900);
+    } else {
+      fb.style.color='#F44336'; fb.textContent='❌ 再試試！';
+    }
+  };
+  window.resetSort=function(){
+    document.querySelectorAll('#sort-chips [data-word]').forEach(c=>{c.dataset.placed='';c.style.opacity='1';c.style.cursor='pointer';});
+    sortPlaced=[];
+    document.getElementById('sort-target').innerHTML='<span style="color:#555;font-size:0.82em;">點擊詞語放入這裡</span>';
+    document.getElementById('sort-feedback').textContent='';
+  };
+  window.closeSort=function(){
+    document.getElementById('sort-modal').style.display='none';
+    document.getElementById('sort-modal').setAttribute('hidden','');
+  };
+})();
+
+// ══════════════════════════════════════════════════════════
+//  📖 CLOZE (課文填充)
+// ══════════════════════════════════════════════════════════
+(function(){
+  const CLOZE = [
+    {q:'愛護___，人人都有責任。',ans:'郊野公園',opts:['郊野公園','自然環境','城市街道','身邊動物']},
+    {q:'大家各自___自己的垃圾。',ans:'帶走',opts:['帶走','清理','丟掉','撿起']},
+    {q:'這次___讓我明白到環保的重要。',ans:'經歷',opts:['經歷','活動','比賽','旅行']},
+    {q:'媽媽忙得___，連吃飯的時間也沒有。',ans:'手忙腳亂',opts:['手忙腳亂','喜出望外','垂頭喪氣','摩拳擦掌']},
+    {q:'他考試失敗後，整天___，一點精神也沒有。',ans:'垂頭喪氣',opts:['垂頭喪氣','興高采烈','眉飛色舞','喜出望外']},
+    {q:'比賽快開始了，大家都___，準備全力以赴。',ans:'摩拳擦掌',opts:['摩拳擦掌','垂頭喪氣','手忙腳亂','愁眉苦臉']},
+    {q:'他做事___，從不中途放棄。',ans:'有始有終',opts:['有始有終','半途而廢','三心二意','手忙腳亂']},
+    {q:'他解決問題的方法非常巧妙，真是___。',ans:'一石二鳥',opts:['一石二鳥','守株待兔','半途而廢','亡羊補牢']},
+    {q:'郊野公園的___非常美麗，吸引了很多遊客。',ans:'環境',opts:['環境','風景','設施','空氣']},
+    {q:'同學們___地完成了這次的清潔活動。',ans:'齊心協力',opts:['齊心協力','各自為政','漫不經心','半途而廢']},
+    {q:'她看到窗外下雪，___地大叫起來。',ans:'喜出望外',opts:['喜出望外','垂頭喪氣','忍無可忍','無可奈何']},
+    {q:'老師___地向我們解釋了這道難題。',ans:'耐心',opts:['耐心','急切','敷衍','馬虎']},
+    {q:'小鳥在樹上___地唱歌，聲音非常好聽。',ans:'快樂',opts:['快樂','傷心','緊張','疲憊']},
+    {q:'這幅畫的___非常鮮艷，令人印象深刻。',ans:'顏色',opts:['顏色','形狀','大小','重量']},
+    {q:'他非常___，無論遇到什麼困難都不放棄。',ans:'堅強',opts:['堅強','脆弱','懶惰','粗心']},
+    {q:'媽媽___地叮囑我早點回家。',ans:'再三',opts:['再三','有時','偶爾','忽然']},
+    {q:'弟弟把玩具___在地板上，媽媽叫他收拾好。',ans:'散落',opts:['散落','放置','整理','擺設']},
+    {q:'她___地完成了功課，字跡非常工整。',ans:'仔細',opts:['仔細','馬虎','粗心','隨意']},
+    {q:'運動有益___健康，我們要多做運動。',ans:'身心',opts:['身心','體力','精神','心理']},
+    {q:'他___地向老師道謝，令老師感到很高興。',ans:'誠心誠意',opts:['誠心誠意','半途而廢','三心二意','手忙腳亂']},
+    {q:'同學們___，齊力完成了壁報板的製作。',ans:'齊心協力',opts:['齊心協力','各自為政','三心二意','手忙腳亂']},
+    {q:'他___地向我解釋，直至我完全明白為止。',ans:'耐心',opts:['耐心','急切','敷衍','馬虎']},
+    {q:'天空上的星星___地閃爍，景色非常美麗。',ans:'一閃一閃',opts:['一閃一閃','慢慢地','安靜地','輕輕地']},
+    {q:'我們要___自己的文化，讓它代代相傳。',ans:'珍惜',opts:['珍惜','忽略','放棄','遺忘']},
+    {q:'他___地站在台上，完全不感到緊張。',ans:'從容不迫',opts:['從容不迫','手忙腳亂','迫不及待','垂頭喪氣']},
+    {q:'媽媽___地整理好房間，令家居煥然一新。',ans:'仔仔細細',opts:['仔仔細細','馬馬虎虎','慢慢吞吞','高高興興']},
+    {q:'郊遊那天，大家都___，一起出發去郊野公園。',ans:'興高采烈',opts:['興高采烈','垂頭喪氣','愁眉苦臉','無精打采']},
+    {q:'老師叫我們___地書寫，不要潦草。',ans:'工工整整',opts:['工工整整','馬馬虎虎','隨隨便便','草草了事']},
+    {q:'看到朋友送來的驚喜，她___地說不出話來。',ans:'喜出望外',opts:['喜出望外','忍無可忍','垂頭喪氣','愁眉苦臉']},
+  ];
+
+  let czIdx=0, czShuffled=[];
+  window.launchCloze=function(){
+    czShuffled=[...CLOZE].sort(()=>Math.random()-0.5);
+    czIdx=0; loadClozeQ();
+    document.getElementById('cloze-modal').removeAttribute('hidden');
+    document.getElementById('cloze-modal').style.display='block';
+  };
+  function loadClozeQ(){
+    const q=czShuffled[czIdx%czShuffled.length];
+    document.getElementById('cloze-progress').textContent=`第 ${czIdx+1} / ${czShuffled.length} 題`;
+    document.getElementById('cloze-feedback').textContent='';
+    // Render question with blank highlighted
+    document.getElementById('cloze-q').innerHTML=q.q.replace('___','<span style="background:#FF6F00;color:#fff;padding:2px 10px;border-radius:6px;font-weight:bold;">＿＿</span>');
+    const opts=document.getElementById('cloze-opts');
+    opts.innerHTML='';
+    [...q.opts].sort(()=>Math.random()-0.5).forEach(o=>{
+      const btn=document.createElement('button');
+      btn.textContent=o;
+      btn.style.cssText='background:#001a20;color:#80DEEA;border:1px solid #80DEEA;padding:10px 8px;border-radius:10px;font-size:0.9em;cursor:pointer;';
+      btn.onclick=()=>answerCloze(o,q.ans,btn);
+      opts.appendChild(btn);
+    });
+  }
+  function answerCloze(ans,correct,btn){
+    const fb=document.getElementById('cloze-feedback');
+    document.querySelectorAll('#cloze-opts button').forEach(b=>b.disabled=true);
+    if(ans===correct){
+      btn.style.background='#1B5E20'; fb.style.color='#69F0AE'; fb.textContent='✅ 正確！';
+    } else {
+      btn.style.background='#B71C1C'; fb.style.color='#F44336'; fb.textContent='❌ 正確答案：'+correct;
+      document.querySelectorAll('#cloze-opts button').forEach(b=>{ if(b.textContent===correct) b.style.background='#1B5E20'; });
+    }
+    setTimeout(()=>{ czIdx++; if(czIdx>=czShuffled.length){ fb.textContent='🎉 全部完成！'; return; } loadClozeQ(); },900);
+  }
+  window.closeCloze=function(){
+    document.getElementById('cloze-modal').style.display='none';
+    document.getElementById('cloze-modal').setAttribute('hidden','');
+  };
+})();
+
+// ══════════════════════════════════════════════════════════
+//  🌸 POEM MATCHING
+// ══════════════════════════════════════════════════════════
+(function(){
+  const POEMS = [
+    {top:'床前明月光',ans:'疑是地上霜',opts:['疑是地上霜','低頭思故鄉','舉頭望明月','千里共嬋娟'],poem:'靜夜思'},
+    {top:'舉頭望明月',ans:'低頭思故鄉',opts:['低頭思故鄉','疑是地上霜','月是故鄉明','萬里送行舟'],poem:'靜夜思'},
+    {top:'春眠不覺曉',ans:'處處聞啼鳥',opts:['處處聞啼鳥','夜來風雨聲','花落知多少','不知細葉誰裁出'],poem:'春曉'},
+    {top:'夜來風雨聲',ans:'花落知多少',opts:['花落知多少','處處聞啼鳥','春眠不覺曉','二月春風似剪刀'],poem:'春曉'},
+    {top:'碧玉妝成一樹高',ans:'萬條垂下綠絲絛',opts:['萬條垂下綠絲絛','不知細葉誰裁出','二月春風似剪刀','千里共嬋娟'],poem:'詠柳'},
+    {top:'不知細葉誰裁出',ans:'二月春風似剪刀',opts:['二月春風似剪刀','萬條垂下綠絲絛','碧玉妝成一樹高','花落知多少'],poem:'詠柳'},
+    {top:'鋤禾日當午',ans:'汗滴禾下土',opts:['汗滴禾下土','粒粒皆辛苦','誰知盤中飧','春種一粒粟'],poem:'憫農'},
+    {top:'誰知盤中飧',ans:'粒粒皆辛苦',opts:['粒粒皆辛苦','汗滴禾下土','鋤禾日當午','秋收萬顆子'],poem:'憫農'},
+    {top:'白日依山盡',ans:'黃河入海流',opts:['黃河入海流','欲窮千里目','更上一層樓','疑是地上霜'],poem:'登鸛雀樓'},
+    {top:'欲窮千里目',ans:'更上一層樓',opts:['更上一層樓','黃河入海流','白日依山盡','花落知多少'],poem:'登鸛雀樓'},
+    {top:'鵝鵝鵝',ans:'曲項向天歌',opts:['曲項向天歌','白毛浮綠水','紅掌撥清波','歌聲振林樾'],poem:'詠鵝'},
+    {top:'白毛浮綠水',ans:'紅掌撥清波',opts:['紅掌撥清波','曲項向天歌','鵝鵝鵝','綠水映白鵝'],poem:'詠鵝'},
+    {top:'春種一粒粟',ans:'秋收萬顆子',opts:['秋收萬顆子','汗滴禾下土','粒粒皆辛苦','四海無閒田'],poem:'憫農二'},
+    {top:'四海無閒田',ans:'農夫猶餓死',opts:['農夫猶餓死','秋收萬顆子','汗滴禾下土','粒粒皆辛苦'],poem:'憫農二'},
+    {top:'離離原上草',ans:'一歲一枯榮',opts:['一歲一枯榮','野火燒不盡','春風吹又生','遠芳侵古道'],poem:'賦得古原草送別'},
+    {top:'野火燒不盡',ans:'春風吹又生',opts:['春風吹又生','一歲一枯榮','離離原上草','遠芳侵古道'],poem:'賦得古原草送別'},
+    {top:'朝辭白帝彩雲間',ans:'千里江陵一日還',opts:['千里江陵一日還','兩岸猿聲啼不住','輕舟已過萬重山','白帝城高急暮砧'],poem:'早發白帝城'},
+    {top:'兩岸猿聲啼不住',ans:'輕舟已過萬重山',opts:['輕舟已過萬重山','千里江陵一日還','朝辭白帝彩雲間','萬里送行舟'],poem:'早發白帝城'},
+    {top:'故人西辭黃鶴樓',ans:'煙花三月下揚州',opts:['煙花三月下揚州','孤帆遠影碧空盡','唯見長江天際流','白帝城高急暮砧'],poem:'黃鶴樓送孟浩然之廣陵'},
+    {top:'孤帆遠影碧空盡',ans:'唯見長江天際流',opts:['唯見長江天際流','煙花三月下揚州','故人西辭黃鶴樓','千里江陵一日還'],poem:'黃鶴樓送孟浩然之廣陵'},
+    {top:'遠芳侵古道',ans:'晴翠接荒城',opts:['晴翠接荒城','春風吹又生','一歲一枯榮','野火燒不盡'],poem:'賦得古原草送別'},
+    {top:'舉頭紅日近',ans:'回首白雲低',opts:['回首白雲低','更上一層樓','黃河入海流','春風吹又生'],poem:'登山'},
+    {top:'千里鶯啼綠映紅',ans:'水村山郭酒旗風',opts:['水村山郭酒旗風','南朝四百八十寺','多少樓台煙雨中','春風十里揚州路'],poem:'江南春'},
+  ];
+
+  let pmIdx=0, pmShuffled=[];
+  window.launchPoem=function(){
+    pmShuffled=[...POEMS].sort(()=>Math.random()-0.5);
+    pmIdx=0; loadPoemQ();
+    document.getElementById('poem-modal').removeAttribute('hidden');
+    document.getElementById('poem-modal').style.display='block';
+  };
+  function loadPoemQ(){
+    const q=pmShuffled[pmIdx%pmShuffled.length];
+    document.getElementById('poem-progress').textContent=`第 ${pmIdx+1} / ${pmShuffled.length} 題　📜 ${q.poem}`;
+    document.getElementById('poem-feedback').textContent='';
+    document.getElementById('poem-q').textContent=q.top;
+    const opts=document.getElementById('poem-opts');
+    opts.innerHTML='';
+    [...q.opts].sort(()=>Math.random()-0.5).forEach(o=>{
+      const btn=document.createElement('button');
+      btn.textContent=o;
+      btn.style.cssText='background:#1f0a05;color:#FFAB91;border:1px solid #FFAB91;padding:10px 6px;border-radius:10px;font-size:0.88em;cursor:pointer;letter-spacing:1px;';
+      btn.onclick=()=>answerPoem(o,q.ans,btn);
+      opts.appendChild(btn);
+    });
+  }
+  function answerPoem(ans,correct,btn){
+    const fb=document.getElementById('poem-feedback');
+    document.querySelectorAll('#poem-opts button').forEach(b=>b.disabled=true);
+    if(ans===correct){
+      btn.style.background='#1B5E20'; fb.style.color='#69F0AE'; fb.textContent='✅ 正確！';
+    } else {
+      btn.style.background='#B71C1C'; fb.style.color='#F44336'; fb.textContent='❌ 正確：'+correct;
+      document.querySelectorAll('#poem-opts button').forEach(b=>{ if(b.textContent===correct) b.style.background='#1B5E20'; });
+    }
+    setTimeout(()=>{ pmIdx++; if(pmIdx>=pmShuffled.length){ fb.textContent='🎉 全部完成！'; return; } loadPoemQ(); },900);
+  }
+  window.closePoem=function(){
+    document.getElementById('poem-modal').style.display='none';
+    document.getElementById('poem-modal').setAttribute('hidden','');
+  };
+})();
+
+// ══════════════════════════════════════════════════════════
+//  ↔️ SYNONYM / ANTONYM
+// ══════════════════════════════════════════════════════════
+(function(){
+  const SA = [
+    {type:'近義詞',q:'勇敢',ans:'英勇',opts:['英勇','膽怯','懦弱','害怕']},
+    {type:'反義詞',q:'勇敢',ans:'膽怯',opts:['膽怯','英勇','無畏','果斷']},
+    {type:'近義詞',q:'高興',ans:'快樂',opts:['快樂','傷心','難過','痛苦']},
+    {type:'反義詞',q:'高興',ans:'難過',opts:['難過','快樂','開心','雀躍']},
+    {type:'近義詞',q:'美麗',ans:'漂亮',opts:['漂亮','醜陋','平凡','普通']},
+    {type:'反義詞',q:'美麗',ans:'醜陋',opts:['醜陋','漂亮','美觀','好看']},
+    {type:'近義詞',q:'聰明',ans:'聰慧',opts:['聰慧','愚笨','遲鈍','糊塗']},
+    {type:'反義詞',q:'聰明',ans:'愚笨',opts:['愚笨','聰慧','靈敏','機智']},
+    {type:'近義詞',q:'悲傷',ans:'傷心',opts:['傷心','快樂','高興','歡喜']},
+    {type:'反義詞',q:'悲傷',ans:'快樂',opts:['快樂','傷心','悲痛','哀愁']},
+    {type:'近義詞',q:'整齊',ans:'整潔',opts:['整潔','凌亂','雜亂','骯髒']},
+    {type:'反義詞',q:'整齊',ans:'凌亂',opts:['凌亂','雜亂','骯髒','零散']},
+    {type:'近義詞',q:'認真',ans:'仔細',opts:['仔細','馬虎','粗心','草率']},
+    {type:'反義詞',q:'認真',ans:'馬虎',opts:['馬虎','仔細','用心','謹慎']},
+    {type:'近義詞',q:'迅速',ans:'快速',opts:['快速','緩慢','遲鈍','慢慢']},
+    {type:'反義詞',q:'迅速',ans:'緩慢',opts:['緩慢','快速','迅捷','敏捷']},
+    {type:'近義詞',q:'愁眉苦臉',ans:'垂頭喪氣',opts:['垂頭喪氣','喜出望外','眉飛色舞','興高采烈']},
+    {type:'反義詞',q:'垂頭喪氣',ans:'眉飛色舞',opts:['眉飛色舞','愁眉苦臉','悶悶不樂','一臉愁容']},
+    {type:'近義詞',q:'迫不及待',ans:'急不可待',opts:['急不可待','從容不迫','慢條斯理','不緊不慢']},
+    {type:'反義詞',q:'迫不及待',ans:'從容不迫',opts:['從容不迫','急不可待','慢條斯理','不緊不慢']},
+    {type:'近義詞',q:'開心',ans:'快樂',opts:['快樂','傷心','煩惱','痛苦']},
+    {type:'反義詞',q:'開心',ans:'傷心',opts:['傷心','快樂','高興','雀躍']},
+    {type:'近義詞',q:'生氣',ans:'憤怒',opts:['憤怒','平靜','開心','高興']},
+    {type:'反義詞',q:'生氣',ans:'平靜',opts:['平靜','憤怒','發怒','暴躁']},
+    {type:'近義詞',q:'困難',ans:'艱難',opts:['艱難','容易','簡單','輕鬆']},
+    {type:'反義詞',q:'困難',ans:'容易',opts:['容易','艱難','困苦','麻煩']},
+    {type:'近義詞',q:'害怕',ans:'恐懼',opts:['恐懼','勇敢','無畏','大膽']},
+    {type:'反義詞',q:'害怕',ans:'勇敢',opts:['勇敢','恐懼','膽怯','畏縮']},
+    {type:'近義詞',q:'清潔',ans:'乾淨',opts:['乾淨','骯髒','凌亂','污穢']},
+    {type:'反義詞',q:'清潔',ans:'骯髒',opts:['骯髒','乾淨','整潔','清爽']},
+    {type:'近義詞',q:'喜出望外',ans:'欣喜若狂',opts:['欣喜若狂','垂頭喪氣','愁眉苦臉','悶悶不樂']},
+    {type:'反義詞',q:'興高采烈',ans:'無精打采',opts:['無精打采','垂頭喪氣','愁眉苦臉','悶悶不樂']},
+    {type:'近義詞',q:'仔細',ans:'謹慎',opts:['謹慎','馬虎','粗心','草率']},
+    {type:'反義詞',q:'仔細',ans:'草率',opts:['草率','謹慎','小心','細心']},
+    {type:'近義詞',q:'著名',ans:'聞名',opts:['聞名','無名','普通','平凡']},
+    {type:'反義詞',q:'著名',ans:'無名',opts:['無名','平凡','普通','默默無聞']},
+  ];
+
+  let saIdx=0, saShuffled=[];
+  window.launchSynAnt=function(){
+    saShuffled=[...SA].sort(()=>Math.random()-0.5);
+    saIdx=0; loadSAQ();
+    document.getElementById('synant-modal').removeAttribute('hidden');
+    document.getElementById('synant-modal').style.display='block';
+  };
+  function loadSAQ(){
+    const q=saShuffled[saIdx%saShuffled.length];
+    document.getElementById('sa-progress').textContent=`第 ${saIdx+1} / ${saShuffled.length} 題`;
+    document.getElementById('sa-feedback').textContent='';
+    const typeEl=document.getElementById('sa-type');
+    typeEl.textContent=(q.type==='近義詞'?'👬 請選出「':'🔄 請選出「')+q.q+'」的'+q.type+'：';
+    typeEl.style.color=q.type==='近義詞'?'#69F0AE':'#FFD700';
+    document.getElementById('sa-q').textContent=q.q;
+    const opts=document.getElementById('sa-opts');
+    opts.innerHTML='';
+    [...q.opts].sort(()=>Math.random()-0.5).forEach(o=>{
+      const btn=document.createElement('button');
+      btn.textContent=o;
+      btn.style.cssText='background:#0d0520;color:#B39DDB;border:1px solid #B39DDB;padding:10px 8px;border-radius:10px;font-size:0.95em;cursor:pointer;';
+      btn.onclick=()=>answerSA(o,q.ans,btn);
+      opts.appendChild(btn);
+    });
+  }
+  function answerSA(ans,correct,btn){
+    const fb=document.getElementById('sa-feedback');
+    document.querySelectorAll('#sa-opts button').forEach(b=>b.disabled=true);
+    if(ans===correct){
+      btn.style.background='#1B5E20'; fb.style.color='#69F0AE'; fb.textContent='✅ 正確！';
+    } else {
+      btn.style.background='#B71C1C'; fb.style.color='#F44336'; fb.textContent='❌ 正確答案：'+correct;
+      document.querySelectorAll('#sa-opts button').forEach(b=>{ if(b.textContent===correct) b.style.background='#1B5E20'; });
+    }
+    setTimeout(()=>{ saIdx++; if(saIdx>=saShuffled.length){ fb.textContent='🎉 全部完成！'; return; } loadSAQ(); },900);
+  }
+  window.closeSynAnt=function(){
+    document.getElementById('synant-modal').style.display='none';
+    document.getElementById('synant-modal').setAttribute('hidden','');
+  };
+})();
+</script>
+
 </body>
 </html>
