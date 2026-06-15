@@ -1728,6 +1728,7 @@
                 <button id="lb-tab-4" class="lb-tab-btn" onclick="switchLbTab(4)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">💰 材料榜</button>
                 <button id="lb-tab-5" class="lb-tab-btn" onclick="switchLbTab(5)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🦕 恐龍榜</button>
                 <button id="lb-tab-6" class="lb-tab-btn" onclick="switchLbTab(6)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🎯 射擊榜</button>
+                <button id="lb-tab-7" class="lb-tab-btn" onclick="switchLbTab(7)" style="font-size:0.82em;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#333;color:#aaa;">🃏 翻牌榜</button>
             </div>
 
             <div id="lb-tab-desc" style="font-size:0.75em;color:#aaa;margin-bottom:6px;text-align:center;"></div>
@@ -6584,7 +6585,7 @@ function checkDailyReset() {
         window.switchLbTab = function(tabIdx) {
             currentLbTab = tabIdx;
             // Tab accent colours: 0=blue(study), 1=red(combat), 2=purple(partner), 3=green(build), 4=gold(material)
-            const tabColors = ['#1565C0','#C62828','#6A1B9A','#2E7D32','#F57F17'];
+            const tabColors = ['#1565C0','#C62828','#6A1B9A','#2E7D32','#F57F17','#1B5E20','#E65100','#7B1FA2'];
             document.querySelectorAll('.lb-tab-btn').forEach((btn, i) => {
                 btn.style.background = i === tabIdx ? (tabColors[i]||'#1565C0') : '#333';
                 btn.style.color      = i === tabIdx ? '#fff' : '#aaa';
@@ -6604,6 +6605,27 @@ function checkDailyReset() {
             if (!list) return;
             if (sorted.length === 0) { list.innerHTML = '<div style="color:#aaa;padding:20px;text-align:center;">暫無數據</div>'; return; }
             list.innerHTML = sorted.map(({e,s},i) => tab.row(e, i+1, s)).join('');
+
+            // ── Pin my rank at bottom ──
+            const myName = inventory.playerName;
+            if (!myName) return;
+            const myIdx = sorted.findIndex(({e}) => e.name === myName || (e.playerId && e.playerId === (inventory.playerId||'')));
+            const existingPin = document.getElementById('lb-my-pin');
+            if (existingPin) existingPin.remove();
+            if (myIdx === -1) return; // not on board yet
+            const myRank = myIdx + 1;
+            const myScore = sorted[myIdx].s;
+            // Only show pin if not already visible in top 8
+            const pin = document.createElement('div');
+            pin.id = 'lb-my-pin';
+            pin.style.cssText = 'margin-top:6px;padding:10px 14px;border-radius:10px;background:linear-gradient(135deg,#1a1500,#2a2200);border:2px solid #FFD700;display:flex;align-items:center;justify-content:space-between;font-size:0.9em;';
+            const medal = myRank===1?'🥇':myRank===2?'🥈':myRank===3?'🥉':'#'+myRank;
+            pin.innerHTML = '<span style="color:#aaa;font-size:0.78em;margin-right:6px;">👤 我的排名</span>'
+                + '<span style="color:#FFD700;font-weight:bold;min-width:28px;">' + medal + '</span>'
+                + '<span style="flex:1;margin-left:8px;color:#FFD700;font-weight:bold;">'
+                + (inventory.avatar||'🐉') + ' ' + myName + '</span>'
+                + '<span style="color:#FFD700;font-weight:bold;">' + myScore + ' 分</span>';
+            list.parentNode.insertBefore(pin, list.nextSibling);
         }
         // ==================== END 四榜計分函數 ====================
 
