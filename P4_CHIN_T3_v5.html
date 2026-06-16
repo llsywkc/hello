@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="王家駿 (Wong Ka-Chun)">
+    <meta name="author" content="王家駿 (Wang Ka-Chun)">
     <meta name="copyright" content="© 2025-2026 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
     <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, noarchive">
@@ -9461,7 +9461,7 @@ window.closeRC = function() {
                 const s = e.data.score || 0;
                 if ((inventory.dinoScore || 0) < s) {
                     inventory.dinoScore = s;
-                    if (typeof saveToLocalStorage === 'function') saveToLocalStorage();
+                    saveGame();
                 }
             }
             if (e.data && e.data.type === 'flipScore') {
@@ -9471,7 +9471,7 @@ window.closeRC = function() {
                     inventory.flipScore = s;
                     if (t > 0 && (!inventory.flipBestTime || t < inventory.flipBestTime))
                         inventory.flipBestTime = t;
-                    if (typeof saveToLocalStorage === 'function') saveToLocalStorage();
+                    saveGame();
                     if (typeof submitScore === 'function') submitScore(true);
                 }
             }
@@ -9830,14 +9830,13 @@ window.closeRC = function() {
     document.getElementById('lt-final-score').textContent = `⚡ ${ltScore} 分`;
     const acc = ltTotal>0 ? Math.round(ltScore/ltTotal*100) : 0;
     document.getElementById('lt-final-msg').textContent = `共答 ${ltTotal} 題 · 正確率 ${acc}%`;
-    // Save to inventory
+    // Save to inventory - keep best score, always submit to keep LB fresh
     if(window.inventory){
       if(!inventory.lightningScore || ltScore > inventory.lightningScore){
         inventory.lightningScore = ltScore;
-        saveGame();
-        // submit to leaderboard
-        if(typeof submitScore==='function') submitScore(true);
       }
+      saveGame();
+      if(typeof submitScore==='function') submitScore(true);
     }
   }
 
