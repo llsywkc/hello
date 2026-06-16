@@ -615,6 +615,54 @@
             <span class="btn-icon">🔮</span>
             <span class="btn-text"><span class="btn-title">文化交融</span><span class="btn-sub">幻影遺跡 · 超能系精靈出沒</span></span>
         </button>
+
+        <div style="width:95%;max-width:800px;text-align:center;margin:12px 0 4px;padding:6px;background:rgba(255,215,0,0.1);border-radius:10px;border:1px solid rgba(255,215,0,0.3);">
+            <span style="color:#FFD700;font-weight:bold;font-size:0.88em;letter-spacing:1px;">✨ 課外挑戰關卡 ✨</span>
+        </div>
+        <button class="map-action-btn" style="background:linear-gradient(135deg,#1565C0,#1E88E5);border:3px solid #42A5F5;box-shadow:0 4px 0 #0D47A1;" onclick="startGame('eng_vocab')">
+            <span class="btn-icon">🐠</span>
+            <span class="btn-text"><span class="btn-title">English Vocab (海底世界)</span><span class="btn-sub">P3 English Vocabulary</span></span>
+        </button>
+        <button class="map-action-btn" style="background:linear-gradient(135deg,#4527A0,#7B1FA2);border:3px solid #CE93D8;box-shadow:0 4px 0 #311B92;" onclick="startGame('eng_grammar')">
+            <span class="btn-icon">⚡</span>
+            <span class="btn-text"><span class="btn-title">English Grammar (雷電峽谷)</span><span class="btn-sub">P3 English Grammar</span></span>
+        </button>
+        <button class="map-action-btn" style="background:linear-gradient(135deg,#E65100,#F57C00);border:3px solid #FFCC02;box-shadow:0 4px 0 #BF360C;" onclick="startGame('math')">
+            <span class="btn-icon">🧮</span>
+            <span class="btn-text"><span class="btn-title">數學冒險 (數字迷宮)</span><span class="btn-sub">小三數學題目</span></span>
+        </button>
+        <button class="map-action-btn" style="background:linear-gradient(135deg,#880E4F,#C2185B);border:3px solid #F48FB1;box-shadow:0 4px 0 #560027;" onclick="startGame('chinese')">
+            <span class="btn-icon">📜</span>
+            <span class="btn-text"><span class="btn-title">中文闖關 (古代王城)</span><span class="btn-sub">成語 · 古詩</span></span>
+        </button>
+        <button class="map-action-btn" style="background:linear-gradient(135deg,#1A237E,#283593);border:3px solid #7986CB;box-shadow:0 4px 0 #0D1642;" onclick="startGame('general')">
+            <span class="btn-icon">🔭</span>
+            <span class="btn-text"><span class="btn-title">課外秘境 (宇宙秘境)</span><span class="btn-sub">科學 · 心理 · IQ · 冷知識</span></span>
+        </button>
+
+        <div style="width:95%;max-width:800px;text-align:center;margin:12px 0 4px;padding:6px;background:rgba(100,255,150,0.08);border-radius:10px;border:1px solid rgba(100,255,150,0.3);">
+            <span style="color:#69F0AE;font-weight:bold;font-size:0.88em;letter-spacing:1px;">🆕 進階挑戰關卡 🆕</span>
+        </div>
+        <button class="map-action-btn" style="background:linear-gradient(135deg,#FF6F00,#FF8F00);border:3px solid #FFD54F;box-shadow:0 4px 0 #E65100;" onclick="startGame('math2')">
+            <span class="btn-icon">🚀</span>
+            <span class="btn-text"><span class="btn-title">數學 II (星際計算站)</span><span class="btn-sub">應用題 · 圖形 · 測量</span></span>
+        </button>
+        <button class="map-action-btn" style="background:linear-gradient(135deg,#006064,#00838F);border:3px solid #80DEEA;box-shadow:0 4px 0 #004D40;" onclick="startGame('eng2')">
+            <span class="btn-icon">🌊</span>
+            <span class="btn-text"><span class="btn-title">English II (英語島)</span><span class="btn-sub">Vocabulary · Grammar · Reading</span></span>
+        </button>
+        <button class="map-action-btn" style="background:linear-gradient(135deg,#B71C1C,#C62828);border:3px solid #EF9A9A;box-shadow:0 4px 0 #7F0000;" onclick="startGame('chinese2')">
+            <span class="btn-icon">🐉</span>
+            <span class="btn-text"><span class="btn-title">中文 II (龍宮詩詞殿)</span><span class="btn-sub">成語 · 古詩 · 寓言</span></span>
+        </button>
+        <button class="map-action-btn" style="background:linear-gradient(135deg,#1B5E20,#2E7D32);border:3px solid #A5D6A7;box-shadow:0 4px 0 #0A280E;" onclick="startGame('science')">
+            <span class="btn-icon">🧪</span>
+            <span class="btn-text"><span class="btn-title">科學實驗室 (生命禁區)</span><span class="btn-sub">動植物 · 人體 · 物理 · 天文</span></span>
+        </button>
+        <button class="map-action-btn" style="background:linear-gradient(135deg,#37474F,#455A64);border:3px solid #B0BEC5;box-shadow:0 4px 0 #1C313A;" onclick="startGame('cold')">
+            <span class="btn-icon">❄️</span>
+            <span class="btn-text"><span class="btn-title">冷知識秘庫 (冰封古城)</span><span class="btn-sub">地理 · 動物 · 世界奇聞</span></span>
+        </button>
         <button class="map-action-btn mab-red" onclick="startGame('exam')" style="background: linear-gradient(135deg, #b71c1c, #e53935); border: 2px solid #ff8f00;">
             <span class="btn-icon">📝</span>
             <span class="btn-text"><span class="btn-title">T3考試温習</span><span class="btn-sub">全科混合 · 共50題</span></span>
@@ -1108,8 +1156,350 @@
           { q: "[時事題] 2025年底，香港新增了哪條鐵路線投入服務？", ans: "東涌綫延伸段（至東涌東站）", options: ["東涌綫延伸段（至東涌東站）", "沙中綫南段", "北環綫", "屯馬綫延伸段"] },
         ];
 
+
+        const dbEngVocab = [
+          { q: "What is the English word for 貓?", ans: "cat", options: ["cat", "dog", "bird", "fish"] },
+          { q: "What is the English word for 蘋果?", ans: "apple", options: ["apple", "orange", "banana", "grape"] },
+          { q: "What is the English word for 學校?", ans: "school", options: ["school", "hospital", "library", "park"] },
+          { q: "What is the English word for 老師?", ans: "teacher", options: ["teacher", "doctor", "nurse", "driver"] },
+          { q: "What is the English word for 書?", ans: "book", options: ["book", "pen", "ruler", "bag"] },
+          { q: "What is the English word for 紅色?", ans: "red", options: ["red", "blue", "green", "yellow"] },
+          { q: "What is the English word for 快樂?", ans: "happy", options: ["happy", "sad", "angry", "tired"] },
+          { q: "What is the English word for 大?", ans: "big", options: ["big", "small", "tall", "short"] },
+          { q: "What is the English word for 跑?", ans: "run", options: ["run", "jump", "swim", "fly"] },
+          { q: "What is the English word for 家?", ans: "home", options: ["home", "shop", "farm", "office"] },
+          { q: "What is the English word for 朋友?", ans: "friend", options: ["friend", "enemy", "stranger", "neighbour"] },
+          { q: "What is the English word for 水?", ans: "water", options: ["water", "milk", "juice", "tea"] },
+          { q: "What is the English word for 太陽?", ans: "sun", options: ["sun", "moon", "star", "cloud"] },
+          { q: "What is the English word for 花?", ans: "flower", options: ["flower", "tree", "grass", "leaf"] },
+          { q: "What is the English word for 車?", ans: "car", options: ["car", "bus", "train", "plane"] },
+          { q: "What is the English word for 醫生?", ans: "doctor", options: ["doctor", "teacher", "farmer", "pilot"] },
+          { q: "What is the English word for 橙色?", ans: "orange", options: ["orange", "purple", "pink", "brown"] },
+          { q: "What is the English word for 睡覺?", ans: "sleep", options: ["sleep", "eat", "drink", "play"] },
+          { q: "What is the English word for 山?", ans: "mountain", options: ["mountain", "river", "ocean", "forest"] },
+          { q: "What is the English word for 雨?", ans: "rain", options: ["rain", "snow", "wind", "storm"] },
+          { q: "What is the English word for 兔?", ans: "rabbit", options: ["rabbit", "tiger", "elephant", "monkey"] },
+          { q: "What is the English word for 廚房?", ans: "kitchen", options: ["kitchen", "bedroom", "bathroom", "garden"] },
+          { q: "What is the English word for 早晨?", ans: "morning", options: ["morning", "afternoon", "evening", "night"] },
+          { q: "What is the English word for 藍色?", ans: "blue", options: ["blue", "white", "black", "grey"] },
+          { q: "What is the English word for 吃?", ans: "eat", options: ["eat", "cook", "wash", "clean"] },
+          { q: "What is the English word for 小?", ans: "small", options: ["small", "long", "heavy", "light"] },
+          { q: "What is the English word for 弟弟?", ans: "brother", options: ["brother", "sister", "mother", "father"] },
+          { q: "What is the English word for 魚?", ans: "fish", options: ["fish", "crab", "frog", "snake"] },
+          { q: "What is the English word for 鉛筆?", ans: "pencil", options: ["pencil", "pen", "brush", "crayon"] },
+          { q: "What is the English word for 超市?", ans: "supermarket", options: ["supermarket", "restaurant", "cinema", "museum"] },
+        ];
+
+        const dbEngGrammar = [
+          { q: "She ___ a student.", ans: "is", options: ["is", "are", "am", "be"] },
+          { q: "They ___ playing football now.", ans: "are", options: ["are", "is", "am", "was"] },
+          { q: "I ___ to school every day.", ans: "go", options: ["go", "goes", "going", "went"] },
+          { q: "He ___ an apple yesterday.", ans: "ate", options: ["ate", "eat", "eats", "eating"] },
+          { q: "There ___ two cats on the table.", ans: "are", options: ["are", "is", "am", "be"] },
+          { q: "She has ___ umbrella.", ans: "an", options: ["an", "a", "the", "—"] },
+          { q: "The book is ___ the bag.", ans: "in", options: ["in", "on", "at", "under"] },
+          { q: "We ___ watching TV now.", ans: "are", options: ["are", "is", "am", "were"] },
+          { q: "This is ___ bag. (belonging to me)", ans: "my", options: ["my", "your", "his", "her"] },
+          { q: "___ you like ice cream?", ans: "Do", options: ["Do", "Does", "Did", "Is"] },
+          { q: "He ___ not like vegetables.", ans: "does", options: ["does", "do", "is", "are"] },
+          { q: "The bird can ___.", ans: "fly", options: ["fly", "flies", "flying", "flew"] },
+          { q: "It is ___ sunny day.", ans: "a", options: ["a", "an", "the", "—"] },
+          { q: "We went to the park ___ Sunday.", ans: "on", options: ["on", "in", "at", "by"] },
+          { q: "___ is your name?", ans: "What", options: ["What", "Who", "Where", "When"] },
+          { q: "She ___ her homework last night.", ans: "did", options: ["did", "does", "do", "doing"] },
+          { q: "The children are ___ in the pool.", ans: "swimming", options: ["swimming", "swim", "swam", "swims"] },
+          { q: "I have ___ orange and a banana.", ans: "an", options: ["an", "a", "the", "some"] },
+          { q: "___ does he live?", ans: "Where", options: ["Where", "What", "Who", "How"] },
+          { q: "She is taller ___ her sister.", ans: "than", options: ["than", "then", "that", "this"] },
+          { q: "The cat ___ on the sofa right now.", ans: "is sitting", options: ["is sitting", "sit", "sat", "sits"] },
+          { q: "___ many students are in the class?", ans: "How", options: ["How", "What", "Which", "Who"] },
+          { q: "Please ___ quiet in the library.", ans: "be", options: ["be", "is", "are", "am"] },
+          { q: "They ___ to the zoo last week.", ans: "went", options: ["went", "go", "goes", "going"] },
+          { q: "This is the ___ cake I have ever eaten. (最好)", ans: "best", options: ["best", "better", "good", "well"] },
+          { q: "She has two ___. (腳)", ans: "feet", options: ["feet", "foots", "foot", "feets"] },
+          { q: "I brush my teeth ___ the morning.", ans: "in", options: ["in", "on", "at", "by"] },
+          { q: "There is ___ milk in the glass. (一些)", ans: "some", options: ["some", "any", "many", "much"] },
+          { q: "___ is your favourite colour?", ans: "What", options: ["What", "Which", "Who", "How"] },
+          { q: "He runs ___ than me. (更快)", ans: "faster", options: ["faster", "fastest", "fast", "more fast"] },
+        ];
+
+        const dbMath = [
+          { q: "35 ÷ 5 = ?", ans: "7", options: ["7", "6", "8", "9"] },
+          { q: "24 × 3 = ?", ans: "72", options: ["72", "62", "82", "70"] },
+          { q: "100 - 37 = ?", ans: "63", options: ["63", "73", "53", "67"] },
+          { q: "48 + 56 = ?", ans: "104", options: ["104", "94", "114", "100"] },
+          { q: "6 × 8 = ?", ans: "48", options: ["48", "42", "54", "46"] },
+          { q: "72 ÷ 9 = ?", ans: "8", options: ["8", "7", "9", "6"] },
+          { q: "一個正方形有多少條邊？", ans: "4條", options: ["4條", "3條", "5條", "6條"] },
+          { q: "一個三角形有多少個角？", ans: "3個", options: ["3個", "4個", "2個", "5個"] },
+          { q: "半小時等於多少分鐘？", ans: "30分鐘", options: ["30分鐘", "15分鐘", "45分鐘", "60分鐘"] },
+          { q: "1公斤等於多少克？", ans: "1000克", options: ["1000克", "100克", "500克", "2000克"] },
+          { q: "125 + 75 = ?", ans: "200", options: ["200", "190", "210", "205"] },
+          { q: "200 - 88 = ?", ans: "112", options: ["112", "122", "102", "108"] },
+          { q: "7 × 7 = ?", ans: "49", options: ["49", "42", "56", "48"] },
+          { q: "63 ÷ 7 = ?", ans: "9", options: ["9", "8", "7", "6"] },
+          { q: "1/2 + 1/2 = ?", ans: "1", options: ["1", "1/4", "2", "1/2"] },
+          { q: "一個圓形有多少條邊？", ans: "0條", options: ["0條", "1條", "2條", "無限"] },
+          { q: "3時30分的時針指向哪個數字？", ans: "3", options: ["3", "6", "9", "12"] },
+          { q: "$50 買了一件 $23 的東西，找回多少錢？", ans: "$27", options: ["$27", "$37", "$17", "$23"] },
+          { q: "一打等於多少個？", ans: "12個", options: ["12個", "10個", "6個", "24個"] },
+          { q: "4 × 9 = ?", ans: "36", options: ["36", "32", "40", "45"] },
+          { q: "81 ÷ 9 = ?", ans: "9", options: ["9", "8", "7", "6"] },
+          { q: "最小的兩位數是？", ans: "10", options: ["10", "11", "12", "9"] },
+          { q: "1小時15分鐘等於多少分鐘？", ans: "75分鐘", options: ["75分鐘", "65分鐘", "80分鐘", "70分鐘"] },
+          { q: "5 × 6 + 2 = ?", ans: "32", options: ["32", "28", "30", "35"] },
+          { q: "99 + 1 = ?", ans: "100", options: ["100", "98", "101", "99"] },
+          { q: "一個長方形有多少個直角？", ans: "4個", options: ["4個", "2個", "0個", "3個"] },
+          { q: "56 ÷ 8 = ?", ans: "7", options: ["7", "6", "8", "9"] },
+          { q: "哪個分數最大？", ans: "3/4", options: ["3/4", "1/4", "1/2", "2/4"] },
+          { q: "$100 買了3件 $25 的東西，找回多少錢？", ans: "$25", options: ["$25", "$35", "$15", "$50"] },
+          { q: "8 × 8 = ?", ans: "64", options: ["64", "56", "72", "68"] },
+          { q: "由 7:00am 到 9:30am 共多少分鐘？", ans: "150分鐘", options: ["150分鐘", "120分鐘", "130分鐘", "140分鐘"] },
+          { q: "三角形三個角加起來等於多少度？", ans: "180度", options: ["180度", "90度", "360度", "270度"] },
+          { q: "1000 - 456 = ?", ans: "544", options: ["544", "554", "534", "546"] },
+          { q: "最大的一位數是？", ans: "9", options: ["9", "8", "10", "7"] },
+          { q: "6 × 6 × 0 = ?", ans: "0", options: ["0", "36", "6", "12"] },
+        ];
+
+        const dbChinese = [
+          { q: "「一石二鳥」的意思是？", ans: "一個行動達到兩個目的", options: ["一個行動達到兩個目的", "用石頭打鳥", "石頭上有兩隻鳥", "打獵的方法"] },
+          { q: "「半途而廢」的意思是？", ans: "做事做到一半就放棄", options: ["做事做到一半就放棄", "走到一半的路", "廢物半途出現", "完成了一半工作"] },
+          { q: "「對牛彈琴」比喻甚麼？", ans: "對不懂欣賞的人說道理", options: ["對不懂欣賞的人說道理", "農夫為牛演奏音樂", "牛喜歡聽琴聲", "音樂很難學習"] },
+          { q: "「亡羊補牢」的意思是？", ans: "出了問題及時補救，還不算太遲", options: ["出了問題及時補救，還不算太遲", "羊跑走了要補圍欄", "補破爛的牢籠", "什麼都來不及了"] },
+          { q: "「雪中送炭」比喻甚麼？", ans: "在別人困難時給予幫助", options: ["在別人困難時給予幫助", "冬天送炭取暖", "雪地裡生火", "多此一舉的行為"] },
+          { q: "《靜夜思》的作者是誰？", ans: "李白", options: ["李白", "杜甫", "白居易", "王維"] },
+          { q: "《靜夜思》：「床前明月光，疑是___。」", ans: "地上霜", options: ["地上霜", "天上雲", "窗外雨", "路旁冰"] },
+          { q: "《春曉》的作者是誰？", ans: "孟浩然", options: ["孟浩然", "李白", "杜甫", "蘇軾"] },
+          { q: "《春曉》：「春眠不覺曉，處處聞___。」", ans: "啼鳥", options: ["啼鳥", "花香", "風聲", "雨聲"] },
+          { q: "「三人行，必有我師」出自哪本書？", ans: "《論語》", options: ["《論語》", "《詩經》", "《孟子》", "《老子》"] },
+          { q: "「畫蛇添足」的意思是？", ans: "做了多餘的事反而弄巧成拙", options: ["做了多餘的事反而弄巧成拙", "蛇有四隻腳", "畫畫的技巧", "添加美麗的圖案"] },
+          { q: "「守株待兔」比喻甚麼？", ans: "不勞而獲，坐等好運", options: ["不勞而獲，坐等好運", "農夫在樹下休息", "兔子撞樹而死", "耐心等待的人"] },
+          { q: "「馬到成功」是甚麼意思？", ans: "做事立刻就能成功", options: ["做事立刻就能成功", "騎馬比賽獲勝", "馬上學習", "快速到達"] },
+          { q: "「大公無私」的意思是？", ans: "辦事公正，沒有私心", options: ["辦事公正，沒有私心", "大家一起工作", "沒有個人財產", "很大方的人"] },
+          { q: "「囫圇吞棗」比喻甚麼？", ans: "理解事物不求甚解，含混籠統", options: ["理解事物不求甚解，含混籠統", "把棗子整個吞下", "吃東西很快", "消化能力強"] },
+          { q: "《登鸛雀樓》：「白日依山盡，___。」", ans: "黃河入海流", options: ["黃河入海流", "江水向東流", "清風吹萬里", "雲霧遮山川"] },
+          { q: "《登鸛雀樓》的作者是誰？", ans: "王之渙", options: ["王之渙", "李白", "杜甫", "白居易"] },
+          { q: "「欲窮千里目，更上一層樓」出自哪首詩？", ans: "《登鸛雀樓》", options: ["《登鸛雀樓》", "《靜夜思》", "《春曉》", "《望廬山瀑布》"] },
+          { q: "「狐假虎威」比喻甚麼？", ans: "借助別人的威勢嚇唬人", options: ["借助別人的威勢嚇唬人", "狐狸比老虎厲害", "動物之間的朋友", "假裝成老虎的狐狸"] },
+          { q: "「水滴石穿」比喻甚麼？", ans: "只要堅持不懈，就能成功", options: ["只要堅持不懈，就能成功", "水很有力量", "石頭被水侵蝕", "大自然的力量"] },
+          { q: "「一箭雙鵰」是甚麼意思？", ans: "一個行動達到兩個目的", options: ["一個行動達到兩個目的", "射箭的技術", "獵人很厲害", "兩隻雕一起飛"] },
+          { q: "「青出於藍」是甚麼意思？", ans: "學生超越老師", options: ["學生超越老師", "藍色比綠色好看", "顏料的製作", "天空的顏色"] },
+          { q: "「磨杵成針」比喻甚麼？", ans: "只要有毅力，再難的事也能做到", options: ["只要有毅力，再難的事也能做到", "磨鐵棒的方法", "製造針的過程", "很花時間的工作"] },
+          { q: "《望廬山瀑布》：「飛流直下___，疑是銀河落九天。」", ans: "三千尺", options: ["三千尺", "千萬里", "百丈高", "萬重山"] },
+          { q: "《望廬山瀑布》的作者是？", ans: "李白", options: ["李白", "杜甫", "蘇軾", "孟浩然"] },
+          { q: "「知己知彼，百戰百勝」出自哪本書？", ans: "《孫子兵法》", options: ["《孫子兵法》", "《論語》", "《三國演義》", "《史記》"] },
+          { q: "「班門弄斧」的意思是？", ans: "在行家面前賣弄本事", options: ["在行家面前賣弄本事", "用斧頭做木工", "勤奮練習技藝", "不懂裝懂"] },
+          { q: "「天下無難事，只怕有心人」的意思是？", ans: "只要有決心，沒有做不成的事", options: ["只要有決心，沒有做不成的事", "天下事情都很容易", "有心人很特別", "難事不可能做到"] },
+          { q: "「塞翁失馬」的寓意是？", ans: "壞事可能變好事，好事也可能變壞事", options: ["壞事可能變好事，好事也可能變壞事", "馬跑走了很可惜", "邊塞地區的故事", "失去的東西可以找回"] },
+          { q: "《靜夜思》：「舉頭望明月，___。」", ans: "低頭思故鄉", options: ["低頭思故鄉", "閉眼聽風聲", "側耳聽水聲", "回頭望家鄉"] },
+        ];
+
+        const dbGeneral = [
+          { q: "[科學] 人體最大的器官是？", ans: "皮膚", options: ["皮膚", "心臟", "肝臟", "大腦"] },
+          { q: "[科學] 太陽系中最大的行星是？", ans: "木星", options: ["木星", "土星", "地球", "海王星"] },
+          { q: "[科學] 光的速度每秒約多少公里？", ans: "約30萬公里", options: ["約30萬公里", "約3萬公里", "約3000公里", "約300公里"] },
+          { q: "[科學] 蝙蝠是用甚麼方式在黑暗中辨別方向？", ans: "超聲波", options: ["超聲波", "視力", "嗅覺", "觸覺"] },
+          { q: "[科學] 水在攝氏幾度時沸騰？", ans: "100度", options: ["100度", "80度", "120度", "90度"] },
+          { q: "[科學] 植物進行光合作用需要甚麼氣體？", ans: "二氧化碳", options: ["二氧化碳", "氧氣", "氮氣", "氫氣"] },
+          { q: "[科學] 彩虹有多少種顏色？", ans: "7種", options: ["7種", "6種", "5種", "8種"] },
+          { q: "[科學] 地球自轉一圈需要多少時間？", ans: "約24小時", options: ["約24小時", "約12小時", "約48小時", "約365天"] },
+          { q: "[心理] 當你很緊張時，心跳會變得怎樣？", ans: "加快", options: ["加快", "減慢", "停止", "不變"] },
+          { q: "[心理] 以下哪種顏色通常令人感到平靜？", ans: "藍色", options: ["藍色", "紅色", "橙色", "黃色"] },
+          { q: "[心理] 「同理心」是指甚麼？", ans: "能理解和感受別人的感受", options: ["能理解和感受別人的感受", "只顧自己的感受", "不理會別人", "模仿別人的行為"] },
+          { q: "[心理] 睡眠不足會對小朋友有甚麼影響？", ans: "注意力下降，情緒變差", options: ["注意力下降，情緒變差", "令人更精力充沛", "提升記憶力", "沒有任何影響"] },
+          { q: "[心理] 笑一笑能幫助釋放哪種令人快樂的物質？", ans: "安多芬（內啡肽）", options: ["安多芬（內啡肽）", "腎上腺素", "皮質醇", "胰島素"] },
+          { q: "[宗教] 佛教的創辦人是誰？", ans: "釋迦牟尼", options: ["釋迦牟尼", "孔子", "耶穌", "穆罕默德"] },
+          { q: "[宗教] 基督教的聖典叫做甚麼？", ans: "聖經", options: ["聖經", "可蘭經", "佛經", "論語"] },
+          { q: "[宗教] 伊斯蘭教的聖典叫做甚麼？", ans: "可蘭經", options: ["可蘭經", "聖經", "佛經", "吠陀經"] },
+          { q: "[宗教] 一年有多少個主要中國傳統節日（以農曆計）？", ans: "農曆新年、清明、端午、中秋、重陽", options: ["農曆新年、清明、端午、中秋、重陽", "只有農曆新年", "農曆新年和中秋", "共有10個"] },
+          { q: "[宗教] 端午節吃粽子是為了紀念哪位古人？", ans: "屈原", options: ["屈原", "岳飛", "諸葛亮", "孔子"] },
+          { q: "[冷知識] 世界上最高的山是？", ans: "珠穆朗瑪峰", options: ["珠穆朗瑪峰", "K2", "乞力馬扎羅山", "富士山"] },
+          { q: "[冷知識] 章魚有多少隻腳？", ans: "8隻", options: ["8隻", "6隻", "10隻", "12隻"] },
+          { q: "[冷知識] 世界上跑得最快的陸地動物是？", ans: "獵豹", options: ["獵豹", "馬", "獅子", "羚羊"] },
+          { q: "[冷知識] 地球上面積最大的海洋是？", ans: "太平洋", options: ["太平洋", "大西洋", "印度洋", "北冰洋"] },
+          { q: "[冷知識] 人的身體有多少塊骨頭？（成年人）", ans: "206塊", options: ["206塊", "100塊", "300塊", "150塊"] },
+          { q: "[冷知識] 哪種動物的懷孕期最長？", ans: "大象（約22個月）", options: ["大象（約22個月）", "馬（約11個月）", "長頸鹿（約15個月）", "河馬（約8個月）"] },
+          { q: "[冷知識] 世界上最長的河流是？", ans: "尼羅河", options: ["尼羅河", "亞馬遜河", "長江", "密西西比河"] },
+          { q: "[IQ題] 1, 2, 4, 8, 16, ___ 下一個數是？", ans: "32", options: ["32", "24", "28", "30"] },
+          { q: "[IQ題] 小明比小華高，小華比小強高。三人中誰最矮？", ans: "小強", options: ["小強", "小華", "小明", "三人一樣高"] },
+          { q: "[IQ題] 甚麼東西越洗越髒？", ans: "水", options: ["水", "手", "衣服", "碗"] },
+          { q: "[IQ題] 2, 3, 5, 8, 13, ___ 下一個數是？（前兩數之和）", ans: "21", options: ["21", "18", "20", "16"] },
+          { q: "[IQ題] 一個房間有4個角，每個角有1隻貓，每隻貓面前有3隻貓，房間裡共有幾隻貓？", ans: "4隻", options: ["4隻", "12隻", "16隻", "8隻"] },
+          { q: "[IQ題] A比B高，B比C高，C比D高。誰最矮？", ans: "D", options: ["D", "C", "B", "A"] },
+          { q: "[IQ題] 一條繩子對摺再對摺，共有幾層？", ans: "4層", options: ["4層", "2層", "3層", "8層"] },
+          { q: "[科學] 蜜蜂跳舞是為了甚麼？", ans: "告訴同伴食物的位置", options: ["告訴同伴食物的位置", "求偶", "慶祝", "運動"] },
+          { q: "[冷知識] 月球上有沒有空氣？", ans: "沒有", options: ["沒有", "有少量", "有很多", "視乎地點"] },
+          { q: "[科學] 哪種氣體佔地球大氣層約78%？", ans: "氮氣", options: ["氮氣", "氧氣", "二氧化碳", "氫氣"] },
+        ];
+
+
+        const dbMath2 = [
+          { q: "小明有24粒糖，分給6個朋友，每人得多少粒？", ans: "4粒", options: ["4粒", "5粒", "6粒", "3粒"] },
+          { q: "一本書有120頁，小華每天讀15頁，幾天讀完？", ans: "8天", options: ["8天", "6天", "10天", "7天"] },
+          { q: "345 + 278 = ?", ans: "623", options: ["623", "613", "633", "603"] },
+          { q: "506 - 189 = ?", ans: "317", options: ["317", "307", "327", "297"] },
+          { q: "9 × 7 = ?", ans: "63", options: ["63", "56", "72", "54"] },
+          { q: "一個長方形，長8cm，闊5cm，面積是多少？", ans: "40cm²", options: ["40cm²", "26cm²", "13cm²", "45cm²"] },
+          { q: "一個正方形，每邊長6cm，周界是多少？", ans: "24cm", options: ["24cm", "12cm", "36cm", "18cm"] },
+          { q: "小麗有$85，買了一本$38的書，還剩多少錢？", ans: "$47", options: ["$47", "$57", "$37", "$43"] },
+          { q: "4 × 25 = ?", ans: "100", options: ["100", "80", "120", "90"] },
+          { q: "一箱有24個橙，5箱共有多少個橙？", ans: "120個", options: ["120個", "100個", "110個", "130個"] },
+          { q: "8 × 0 + 99 = ?", ans: "99", options: ["99", "0", "107", "98"] },
+          { q: "3/4 是多少個 1/4？", ans: "3個", options: ["3個", "4個", "2個", "1個"] },
+          { q: "從8:15到9:00，共多少分鐘？", ans: "45分鐘", options: ["45分鐘", "55分鐘", "40分鐘", "50分鐘"] },
+          { q: "999 + 1 = ?", ans: "1000", options: ["1000", "998", "1001", "999"] },
+          { q: "兩個完全相同的直角三角形可以拼成一個甚麼圖形？", ans: "長方形", options: ["長方形", "圓形", "五邊形", "梯形"] },
+          { q: "$1 = 多少角？", ans: "10角", options: ["10角", "100角", "5角", "20角"] },
+          { q: "5 + 5 + 5 + 5 = 5 × ?", ans: "4", options: ["4", "5", "3", "6"] },
+          { q: "一個長方體有多少個面？", ans: "6個", options: ["6個", "4個", "8個", "5個"] },
+          { q: "256 ÷ 4 = ?", ans: "64", options: ["64", "54", "74", "56"] },
+          { q: "最小的三位數是？", ans: "100", options: ["100", "101", "99", "111"] },
+          { q: "1/2 of 80 = ?", ans: "40", options: ["40", "20", "60", "45"] },
+          { q: "45 × 2 = ?", ans: "90", options: ["90", "80", "100", "85"] },
+          { q: "一個五邊形有多少個角？", ans: "5個", options: ["5個", "4個", "6個", "3個"] },
+          { q: "小強每分鐘跑100米，5分鐘跑多少米？", ans: "500米", options: ["500米", "400米", "600米", "550米"] },
+          { q: "2026年是哪個世紀？", ans: "21世紀", options: ["21世紀", "20世紀", "22世紀", "19世紀"] },
+          { q: "0.5 = 幾分之幾？", ans: "1/2", options: ["1/2", "1/4", "1/5", "1/3"] },
+          { q: "一個六邊形有多少條邊？", ans: "6條", options: ["6條", "5條", "7條", "8條"] },
+          { q: "47 × 3 = ?", ans: "141", options: ["141", "131", "151", "144"] },
+          { q: "圓形的直徑是半徑的多少倍？", ans: "2倍", options: ["2倍", "3倍", "4倍", "1倍"] },
+          { q: "999 - 111 = ?", ans: "888", options: ["888", "878", "898", "880"] },
+        ];
+
+        const dbEng2 = [
+          { q: "Which word means the opposite of 'hot'?", ans: "cold", options: ["cold", "warm", "cool", "mild"] },
+          { q: "Which word means the opposite of 'heavy'?", ans: "light", options: ["light", "dark", "thin", "tall"] },
+          { q: "A baby dog is called a ___.", ans: "puppy", options: ["puppy", "kitten", "cub", "chick"] },
+          { q: "A baby cat is called a ___.", ans: "kitten", options: ["kitten", "puppy", "foal", "lamb"] },
+          { q: "Which animal lives in the sea?", ans: "shark", options: ["shark", "lion", "eagle", "wolf"] },
+          { q: "What do bees make?", ans: "honey", options: ["honey", "milk", "butter", "jam"] },
+          { q: "How many days are there in a week?", ans: "seven", options: ["seven", "five", "six", "eight"] },
+          { q: "Which month comes after March?", ans: "April", options: ["April", "May", "February", "June"] },
+          { q: "What is the past tense of 'go'?", ans: "went", options: ["went", "goed", "gone", "going"] },
+          { q: "What is the plural of 'child'?", ans: "children", options: ["children", "childs", "childrens", "child"] },
+          { q: "Which word means very big?", ans: "huge", options: ["huge", "tiny", "narrow", "shallow"] },
+          { q: "I ___ my teeth every morning.", ans: "brush", options: ["brush", "brushes", "brushed", "brushing"] },
+          { q: "The opposite of 'noisy' is ___.", ans: "quiet", options: ["quiet", "loud", "busy", "fast"] },
+          { q: "Which season comes after summer?", ans: "autumn", options: ["autumn", "spring", "winter", "rainy"] },
+          { q: "She ___ a letter to her friend yesterday.", ans: "wrote", options: ["wrote", "write", "writes", "writing"] },
+          { q: "What is the past tense of 'see'?", ans: "saw", options: ["saw", "seen", "seed", "sawed"] },
+          { q: "Which word is a verb?", ans: "run", options: ["run", "happy", "big", "flower"] },
+          { q: "Which word is an adjective?", ans: "beautiful", options: ["beautiful", "walk", "quickly", "eat"] },
+          { q: "___ cat is black and white.", ans: "The", options: ["The", "A", "An", "—"] },
+          { q: "Tom is ___ his homework now.", ans: "doing", options: ["doing", "does", "done", "did"] },
+          { q: "Which word rhymes with 'cat'?", ans: "bat", options: ["bat", "bit", "but", "bot"] },
+          { q: "What does 'delicious' mean?", ans: "very tasty", options: ["very tasty", "very big", "very loud", "very fast"] },
+          { q: "Which word is a noun?", ans: "mountain", options: ["mountain", "jump", "quickly", "green"] },
+          { q: "She is ___ than her brother. (高)", ans: "taller", options: ["taller", "tallest", "tall", "more tall"] },
+          { q: "I have ___ idea! (一個好主意)", ans: "an", options: ["an", "a", "the", "some"] },
+          { q: "They ___ soccer every Saturday.", ans: "play", options: ["play", "plays", "played", "playing"] },
+          { q: "What is the plural of 'tooth'?", ans: "teeth", options: ["teeth", "tooths", "teeths", "tooth"] },
+          { q: "Which word means 'afraid'?", ans: "scared", options: ["scared", "brave", "kind", "proud"] },
+          { q: "The dog ___ under the table.", ans: "is sleeping", options: ["is sleeping", "sleep", "slept", "sleeps"] },
+          { q: "What does 'enormous' mean?", ans: "very large", options: ["very large", "very small", "very fast", "very slow"] },
+        ];
+
+        const dbChinese2 = [
+          { q: "「勤能補拙」的意思是？", ans: "勤奮可以彌補天資的不足", options: ["勤奮可以彌補天資的不足", "勤勞的人很笨", "努力是沒用的", "天才不需努力"] },
+          { q: "「一鳴驚人」的意思是？", ans: "平時默默無聞，突然做出驚人的事", options: ["平時默默無聞，突然做出驚人的事", "鳥叫聲很響亮", "令人害怕的聲音", "一個人很出名"] },
+          { q: "「掩耳盜鈴」比喻甚麼？", ans: "自欺欺人", options: ["自欺欺人", "偷竊的技術", "保護耳朵", "假裝聽不見"] },
+          { q: "「刻舟求劍」比喻甚麼？", ans: "思想方法保守，不知變通", options: ["思想方法保守，不知變通", "尋找失落的劍", "在船上刻字", "努力尋找東西"] },
+          { q: "「愚公移山」的寓意是？", ans: "只要有恆心，甚麼困難都能克服", options: ["只要有恆心，甚麼困難都能克服", "搬山是不可能的", "愚笨的人才努力", "山可以被移走"] },
+          { q: "「破釜沉舟」比喻甚麼？", ans: "下定決心，不留退路", options: ["下定決心，不留退路", "破壞廚具", "船沉了怎辦", "放棄一切"] },
+          { q: "「臥薪嘗膽」的意思是？", ans: "刻苦自勵，立志復仇或成功", options: ["刻苦自勵，立志復仇或成功", "睡在柴草上很辛苦", "嚐苦味食物", "忍受痛苦生活"] },
+          { q: "「三顧茅廬」指的是甚麼？", ans: "劉備三次拜訪諸葛亮請他出山", options: ["劉備三次拜訪諸葛亮請他出山", "三個人住在茅屋", "參觀茅廬三次", "拜訪三個朋友"] },
+          { q: "《憫農》：「鋤禾日當午，___。」", ans: "汗滴禾下土", options: ["汗滴禾下土", "農夫辛苦耕", "粒粒皆辛苦", "田間忙碌時"] },
+          { q: "《憫農》的作者是誰？", ans: "李紳", options: ["李紳", "李白", "杜甫", "白居易"] },
+          { q: "《憫農》：「誰知盤中餐，___。」", ans: "粒粒皆辛苦", options: ["粒粒皆辛苦", "農民種的米", "飯菜很美味", "每粒都珍貴"] },
+          { q: "「不恥下問」的意思是？", ans: "不因向學問較低的人請教而感到羞恥", options: ["不因向學問較低的人請教而感到羞恥", "不喜歡問問題", "羞於發問", "向比自己聰明的人學習"] },
+          { q: "「草木皆兵」比喻甚麼？", ans: "形容人心驚膽戰，疑神疑鬼", options: ["形容人心驚膽戰，疑神疑鬼", "草和樹木都是士兵", "大自然很危險", "軍隊藏在樹叢中"] },
+          { q: "「胸有成竹」的意思是？", ans: "做事前已有充分的計劃和把握", options: ["做事前已有充分的計劃和把握", "心裡有一根竹子", "喜歡畫竹子", "胸口很寬闊"] },
+          { q: "「葉公好龍」比喻甚麼？", ans: "表面喜歡某事物，實際上卻害怕", options: ["表面喜歡某事物，實際上卻害怕", "葉公很喜歡龍", "龍喜歡葉公", "真心喜歡神話"] },
+          { q: "《遊子吟》：「誰言寸草心，___。」", ans: "報得三春暉", options: ["報得三春暉", "母愛最偉大", "春天的陽光", "感謝母親恩"] },
+          { q: "《遊子吟》的作者是誰？", ans: "孟郊", options: ["孟郊", "孟浩然", "李白", "杜甫"] },
+          { q: "《回鄉偶書》：「少小離家老大回，___。」", ans: "鄉音無改鬢毛衰", options: ["鄉音無改鬢毛衰", "家鄉風景依舊", "兒童相見不相識", "歸來淚滿巾"] },
+          { q: "《回鄉偶書》的作者是誰？", ans: "賀知章", options: ["賀知章", "王維", "李白", "杜甫"] },
+          { q: "「紙上談兵」比喻甚麼？", ans: "空談理論，不能解決實際問題", options: ["空談理論，不能解決實際問題", "在紙上畫兵器", "討論軍事策略", "紙做的士兵"] },
+          { q: "「南轅北轍」比喻甚麼？", ans: "行動與目標相反", options: ["行動與目標相反", "向南向北走", "迷失方向", "兩條相反的路"] },
+          { q: "「一諾千金」的意思是？", ans: "答應的事一定做到，信用極好", options: ["答應的事一定做到，信用極好", "承諾要給很多錢", "黃金很貴重", "說話算數的人"] },
+          { q: "《春夜喜雨》：「好雨知時節，___。」", ans: "當春乃發生", options: ["當春乃發生", "滋潤萬物生", "潤物細無聲", "春雨綿綿時"] },
+          { q: "《春夜喜雨》的作者是誰？", ans: "杜甫", options: ["杜甫", "李白", "白居易", "王維"] },
+          { q: "「掩耳盜鈴」出自哪個故事？", ans: "一個人偷鈴鐺時捂住自己的耳朵", options: ["一個人偷鈴鐺時捂住自己的耳朵", "偷鈴鐺的士兵", "不喜歡鈴聲的人", "用耳朵聽鈴聲"] },
+          { q: "「三人成虎」比喻甚麼？", ans: "謠言重複多次，就會被人相信", options: ["謠言重複多次，就會被人相信", "三個人打一隻虎", "老虎怕人群", "三個人很勇敢"] },
+          { q: "「精衛填海」象徵甚麼精神？", ans: "意志堅定，不屈不撓", options: ["意志堅定，不屈不撓", "填海造陸的方法", "鳥類的習性", "大海的力量"] },
+          { q: "「開門見山」的意思是？", ans: "說話直接，不拐彎抹角", options: ["說話直接，不拐彎抹角", "打開門看到山", "直接進入主題", "風景很美麗"] },
+          { q: "《楓橋夜泊》：「姑蘇城外寒山寺，___。」", ans: "夜半鐘聲到客船", options: ["夜半鐘聲到客船", "月落烏啼霜滿天", "江楓漁火對愁眠", "霜天曉角數聲殘"] },
+          { q: "《楓橋夜泊》的作者是誰？", ans: "張繼", options: ["張繼", "李白", "杜甫", "白居易"] },
+        ];
+
+        const dbScience = [
+          { q: "植物製造食物需要甚麼？", ans: "陽光、水和二氧化碳", options: ["陽光、水和二氧化碳", "泥土和肥料", "雨水和氧氣", "風和陽光"] },
+          { q: "以下哪種動物是哺乳類？", ans: "鯨魚", options: ["鯨魚", "鯊魚", "青蛙", "蜥蜴"] },
+          { q: "人體負責輸送血液的器官是？", ans: "心臟", options: ["心臟", "肺", "腎臟", "肝臟"] },
+          { q: "以下哪種是可再生能源？", ans: "太陽能", options: ["太陽能", "煤", "石油", "天然氣"] },
+          { q: "月球繞地球一圈需要大約多少時間？", ans: "約1個月", options: ["約1個月", "約1年", "約1星期", "約1天"] },
+          { q: "固體、液體、氣體是物質的三種甚麼？", ans: "狀態", options: ["狀態", "顏色", "形狀", "重量"] },
+          { q: "水蒸氣冷卻後會變成甚麼？", ans: "液態水", options: ["液態水", "冰", "雪", "霧"] },
+          { q: "哪種動物是卵生的？", ans: "雞", options: ["雞", "狗", "兔", "牛"] },
+          { q: "磁鐵的哪兩極會互相排斥？", ans: "相同的極（N與N或S與S）", options: ["相同的極（N與N或S與S）", "不同的極（N與S）", "任何兩極", "只有N極"] },
+          { q: "空氣中含量最多的氣體是？", ans: "氮氣", options: ["氮氣", "氧氣", "二氧化碳", "水蒸氣"] },
+          { q: "聲音是如何傳播的？", ans: "通過物質振動傳播", options: ["通過物質振動傳播", "通過光線傳播", "通過電流傳播", "在真空中傳播"] },
+          { q: "以下哪種是昆蟲？", ans: "蝴蝶", options: ["蝴蝶", "蜘蛛", "蚯蚓", "螃蟹"] },
+          { q: "人體最小的骨頭在哪裏？", ans: "耳朵（中耳）", options: ["耳朵（中耳）", "手指", "腳趾", "鼻子"] },
+          { q: "地球上最大的動物是？", ans: "藍鯨", options: ["藍鯨", "大象", "長頸鹿", "鯊魚"] },
+          { q: "水在攝氏幾度時結冰？", ans: "0度", options: ["0度", "-10度", "5度", "10度"] },
+          { q: "植物的根的主要作用是？", ans: "吸收水分和固定植物", options: ["吸收水分和固定植物", "製造食物", "進行光合作用", "吸收陽光"] },
+          { q: "以下哪個是食草動物？", ans: "斑馬", options: ["斑馬", "老虎", "鱷魚", "老鷹"] },
+          { q: "電燈泡將電能轉化為甚麼？", ans: "光能和熱能", options: ["光能和熱能", "動能", "聲能", "化學能"] },
+          { q: "地球的形狀是？", ans: "橢圓球形（近似球形）", options: ["橢圓球形（近似球形）", "正圓形", "正方形", "圓柱形"] },
+          { q: "青蛙屬於哪類動物？", ans: "兩棲類", options: ["兩棲類", "爬行類", "哺乳類", "魚類"] },
+          { q: "以下哪種食物含最多蛋白質？", ans: "雞蛋", options: ["雞蛋", "白飯", "蘋果", "糖果"] },
+          { q: "彩虹出現時，天空中有甚麼？", ans: "陽光和水珠", options: ["陽光和水珠", "月光和雲", "星光和霧", "雷電和雨"] },
+          { q: "人體有多少個主要感官？", ans: "5個", options: ["5個", "3個", "4個", "6個"] },
+          { q: "以下哪個是植物的生殖器官？", ans: "花", options: ["花", "葉", "莖", "根"] },
+          { q: "冰融化後會變成甚麼？", ans: "水", options: ["水", "水蒸氣", "雪", "霧"] },
+          { q: "太陽系有幾多顆行星？", ans: "8顆", options: ["8顆", "9顆", "7顆", "10顆"] },
+          { q: "蠶吃甚麼食物？", ans: "桑葉", options: ["桑葉", "樹皮", "草", "花蜜"] },
+          { q: "以下哪種材料能導電？", ans: "銅線", options: ["銅線", "木棒", "橡皮", "玻璃"] },
+          { q: "人體消化食物的起點是？", ans: "口腔", options: ["口腔", "胃", "小腸", "食道"] },
+          { q: "以下哪個天氣現象與水循環有關？", ans: "下雨", options: ["下雨", "地震", "火山爆發", "日食"] },
+        ];
+
+        const dbCold = [
+          { q: "世界上面積最大的國家是？", ans: "俄羅斯", options: ["俄羅斯", "加拿大", "中國", "美國"] },
+          { q: "世界上人口最多的國家是？", ans: "印度", options: ["印度", "中國", "美國", "巴西"] },
+          { q: "香港的英文名是？", ans: "Hong Kong", options: ["Hong Kong", "Hung Kong", "Hong Cong", "Hong Kang"] },
+          { q: "奧運會每幾年舉辦一次？", ans: "4年", options: ["4年", "2年", "5年", "3年"] },
+          { q: "以下哪種動物不能飛？", ans: "企鵝", options: ["企鵝", "老鷹", "蝴蝶", "蜜蜂"] },
+          { q: "足球比賽每隊有多少名球員上場？", ans: "11名", options: ["11名", "9名", "10名", "12名"] },
+          { q: "世界上最大的熱帶沙漠是？", ans: "撒哈拉沙漠", options: ["撒哈拉沙漠", "戈壁沙漠", "納米布沙漠", "塔克拉瑪干沙漠"] },
+          { q: "鑽石由甚麼元素組成？", ans: "碳", options: ["碳", "鐵", "矽", "鋁"] },
+          { q: "以下哪個城市是法國的首都？", ans: "巴黎", options: ["巴黎", "倫敦", "柏林", "羅馬"] },
+          { q: "中國的萬里長城主要建於哪個朝代？", ans: "明朝", options: ["明朝", "漢朝", "唐朝", "清朝"] },
+          { q: "以下哪種動物睡覺時是站立的？", ans: "馬", options: ["馬", "貓", "狗", "熊"] },
+          { q: "鸚鵡學說話靠的是甚麼能力？", ans: "模仿聲音", options: ["模仿聲音", "理解語言", "超聲波", "心靈感應"] },
+          { q: "一年有多少個星期？", ans: "52個", options: ["52個", "48個", "50個", "54個"] },
+          { q: "長頸鹿的脖子有幾塊頸椎骨？", ans: "7塊（與人類相同）", options: ["7塊（與人類相同）", "15塊", "20塊", "3塊"] },
+          { q: "地球距離太陽約多遠？", ans: "約1.5億公里", options: ["約1.5億公里", "約150公里", "約1500萬公里", "約150億公里"] },
+          { q: "以下哪個國家的國旗是楓葉圖案？", ans: "加拿大", options: ["加拿大", "日本", "韓國", "澳洲"] },
+          { q: "人體血液是甚麼顏色？", ans: "紅色", options: ["紅色", "藍色", "黃色", "綠色"] },
+          { q: "以下哪種動物是夜行性動物？", ans: "貓頭鷹", options: ["貓頭鷹", "麻雀", "老鷹", "孔雀"] },
+          { q: "世界最高建築物（截至2026年）是哪座？", ans: "哈里發塔（杜拜）", options: ["哈里發塔（杜拜）", "帝國大廈（紐約）", "東方明珠（上海）", "環球貿易廣場（香港）"] },
+          { q: "以下哪種食物是發酵食品？", ans: "芝士", options: ["芝士", "蘋果", "白飯", "薯片"] },
+          { q: "蜘蛛有多少條腿？", ans: "8條", options: ["8條", "6條", "10條", "4條"] },
+          { q: "「謝謝」的日文是？", ans: "ありがとう（Arigatou）", options: ["ありがとう（Arigatou）", "こんにちは（Konnichiwa）", "さようなら（Sayonara）", "はい（Hai）"] },
+          { q: "以下哪種顏色不在彩虹中？", ans: "粉紅色", options: ["粉紅色", "橙色", "靛色", "紫色"] },
+          { q: "月球是地球的甚麼？", ans: "天然衛星", options: ["天然衛星", "行星", "小行星", "彗星"] },
+          { q: "象牙實際上是大象的甚麼？", ans: "門齒（長牙）", options: ["門齒（長牙）", "骨頭", "角", "爪子"] },
+          { q: "以下哪個不是七大洲之一？", ans: "北極洲", options: ["北極洲", "南極洲", "大洋洲", "非洲"] },
+          { q: "蝸牛的殼轉向哪個方向（大多數）？", ans: "順時針方向", options: ["順時針方向", "逆時針方向", "不規則", "直線"] },
+          { q: "音樂中，Do Re Mi Fa Sol La Si，「Sol」是第幾音？", ans: "第5音", options: ["第5音", "第4音", "第6音", "第3音"] },
+          { q: "以下哪個是香港的著名地標？", ans: "維多利亞港", options: ["維多利亞港", "東京鐵塔", "埃菲爾鐵塔", "自由女神像"] },
+          { q: "冰箱發明前，人們用甚麼方法保存食物？", ans: "鹽醃、曬乾或放入冰窖", options: ["鹽醃、曬乾或放入冰窖", "放在地下", "包在布裡", "用火烤"] },
+        ];
+
         // 時事題暫時關閉
-        const dbT3News = [];  const allMiningTasks = [...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom, ...dbCulture, ...dbExam, ...dbT3Extra];
+        const dbT3News = [];  const allMiningTasks = [...dbHK, ...dbHouse, ...dbEnergy, ...dbFreedom, ...dbCulture, ...dbExam, ...dbT3Extra, ...dbEngVocab, ...dbEngGrammar, ...dbMath, ...dbChinese, ...dbGeneral, ...dbMath2, ...dbEng2, ...dbChinese2, ...dbScience, ...dbCold];
         let currentCategory = 'energy';
         let currentMiningIdx = 0, currentMiningTasks = [];
 
@@ -1161,7 +1551,7 @@
                     if(inventory.bloodMoonLeft === undefined) inventory.bloodMoonLeft = 0;
                     if(inventory.starterPackClaimed === undefined) inventory.starterPackClaimed = (parsed.giftClaimed || false);
                     
-                    if(inventory.playerName) { document.getElementById('display-name').textContent = inventory.playerName; goHome(); }
+                    if(inventory.playerName) { document.getElementById('display-name').textContent = inventory.playerName; goHome(); } else { showLoginScreen(); }
                     // Restore exam state if was mid-exam
                     if (inventory.examActive) {
                         examActive = inventory.examActive;
@@ -1169,8 +1559,15 @@
                         examAnswered = inventory.examAnswered || 0;
                         examTotal = inventory.examTotal || 0;
                     }
-                } catch (e) { inventory = { ...defaultInv }; }
+                } catch (e) { inventory = { ...defaultInv }; showLoginScreen(); }
+            } else {
+                showLoginScreen();
             }
+        }
+
+        function showLoginScreen() {
+            hideAll();
+            document.getElementById('login-screen').classList.remove('hidden');
         }
 
         function saveGame() {
@@ -1628,13 +2025,23 @@
 
         function startGame(cat) {
             playSound('click'); hideAll(); currentCategory = cat;
-            let titles = {'hk':"🌊 香港是我家 (蔚藍之海)", 'house':"🌳 安居樂 (豐饒之森)", 'energy':"🌋 能源世界 (烈焰火山)", 'freedom':"⛰️ 自由與守規 (雷霆高原)", 'culture':"🔮 文化交融 (幻影遺跡)", 'exam':"📝 T3考試温習"};
+            let titles = {'hk':"🌊 香港是我家 (蔚藍之海)", 'house':"🌳 安居樂 (豐饒之森)", 'energy':"🌋 能源世界 (烈焰火山)", 'freedom':"⛰️ 自由與守規 (雷霆高原)", 'culture':"🔮 文化交融 (幻影遺跡)", 'exam':"📝 T3考試温習", 'eng_vocab':"🐠 English Vocab (海底世界)", 'eng_grammar':"⚡ English Grammar (雷電峽谷)", 'math':"🧮 數學冒險 (數字迷宮)", 'chinese':"📜 中文闖關 (古代王城)", 'general':"🔭 課外秘境 (宇宙秘境)", 'math2':"🚀 數學 II (星際計算站)", 'eng2':"🌊 English II (英語島)", 'chinese2':"🐉 中文 II (龍宮詩詞殿)", 'science':"🧪 科學實驗室 (生命禁區)", 'cold':"❄️ 冷知識秘庫 (冰封古城)"};
             document.getElementById('level-title').innerHTML = titles[cat];
             if(cat === 'hk') currentMiningTasks = shuffle(dbHK); 
             else if (cat === 'house') currentMiningTasks = shuffle(dbHouse); 
             else if (cat === 'energy') currentMiningTasks = shuffle(dbEnergy); 
             else if (cat === 'freedom') currentMiningTasks = shuffle(dbFreedom);
             else if (cat === 'culture') currentMiningTasks = shuffle(dbCulture);
+            else if (cat === 'eng_vocab') currentMiningTasks = shuffle(dbEngVocab);
+            else if (cat === 'eng_grammar') currentMiningTasks = shuffle(dbEngGrammar);
+            else if (cat === 'math') currentMiningTasks = shuffle(dbMath);
+            else if (cat === 'chinese') currentMiningTasks = shuffle(dbChinese);
+            else if (cat === 'general') currentMiningTasks = shuffle(dbGeneral);
+            else if (cat === 'math2') currentMiningTasks = shuffle(dbMath2);
+            else if (cat === 'eng2') currentMiningTasks = shuffle(dbEng2);
+            else if (cat === 'chinese2') currentMiningTasks = shuffle(dbChinese2);
+            else if (cat === 'science') currentMiningTasks = shuffle(dbScience);
+            else if (cat === 'cold') currentMiningTasks = shuffle(dbCold);
             else if (cat === 'exam') {
                 // 只有第一次進入才重新生成題目
                 if (!examActive || currentCategory !== 'exam') {
@@ -1695,6 +2102,16 @@
                 else if (currentCategory === 'energy') currentMiningTasks = shuffle(dbEnergy);
                 else if (currentCategory === 'freedom') currentMiningTasks = shuffle(dbFreedom);
                 else if (currentCategory === 'culture') currentMiningTasks = shuffle(dbCulture);
+                else if (currentCategory === 'eng_vocab') currentMiningTasks = shuffle(dbEngVocab);
+                else if (currentCategory === 'eng_grammar') currentMiningTasks = shuffle(dbEngGrammar);
+                else if (currentCategory === 'math') currentMiningTasks = shuffle(dbMath);
+                else if (currentCategory === 'chinese') currentMiningTasks = shuffle(dbChinese);
+                else if (currentCategory === 'general') currentMiningTasks = shuffle(dbGeneral);
+                else if (currentCategory === 'math2') currentMiningTasks = shuffle(dbMath2);
+                else if (currentCategory === 'eng2') currentMiningTasks = shuffle(dbEng2);
+                else if (currentCategory === 'chinese2') currentMiningTasks = shuffle(dbChinese2);
+                else if (currentCategory === 'science') currentMiningTasks = shuffle(dbScience);
+                else if (currentCategory === 'cold') currentMiningTasks = shuffle(dbCold);
                 currentMiningIdx = 0;
             }
             let t = currentMiningTasks[currentMiningIdx];
