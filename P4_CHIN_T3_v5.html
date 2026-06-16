@@ -9488,6 +9488,7 @@ window.closeRC = function() {
                 if ((inventory.dinoScore || 0) < s) {
                     inventory.dinoScore = s;
                     saveGame();
+                    submitScore(true).catch(()=>{});
                 }
             }
             if (e.data && e.data.type === 'flipScore') {
