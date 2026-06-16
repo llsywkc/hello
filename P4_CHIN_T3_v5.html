@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="王家駿 (Wang Ka-Chun)">
+    <meta name="author" content="王家駿 (Wong Ka-Chun)">
     <meta name="copyright" content="© 2025-2026 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
     <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, noarchive">
@@ -3943,6 +3943,12 @@
             // ── Wordle 成就 ──
             { id: 'ach_wordle_win',    icon: '🟩',  name: '成語達人',   desc: '成語 Wordle 猜中一次' },
             { id: 'ach_wordle_ace',    icon: '🏅',  name: '成語天才',   desc: '成語 Wordle 第一次就猜中！' },
+            // ── 閃電問答成就 ──
+            { id: 'ach_lightning_win',  icon: '⚡',  name: '閃電初鳴',   desc: '完成閃電問答一次' },
+            { id: 'ach_lightning_ace',  icon: '🌩️', name: '閃電全中',   desc: '閃電問答全部答對（至少5題）' },
+            // ── 翻牌記憶成就 ──
+            { id: 'ach_flip_win',       icon: '🃏',  name: '記憶初開',   desc: '完成翻牌記憶一次' },
+            { id: 'ach_flip_speed',     icon: '🚀',  name: '記憶閃光',   desc: '翻牌記憶 60 秒內完成' },
         ];
 
         function unlockAchievement(id) {
@@ -6884,7 +6890,17 @@ async function fetchLeaderboard() {
                     body: JSON.stringify({ entries })
                 });
                 if (!putRes.ok) throw new Error('上傳失敗 HTTP ' + putRes.status);
-                if (!silent) { status.textContent = `✅ 分數已上傳！你的分數：${myEntry.score}`; setTimeout(fetchLeaderboard, 600); }
+                if (!silent) { status.textContent = `✅ 分數已上傳！你的分數：${myEntry.score}`; }
+                // Optimistic local cache update
+                const savedEntry = existIdx >= 0 ? entries[existIdx] : myEntry;
+                if (window._lbEntries) {
+                    const ci = window._lbEntries.findIndex(e => (e.playerId && e.playerId === (inventory.playerId||'')) || e.name === inventory.playerName);
+                    if (ci >= 0) window._lbEntries[ci] = savedEntry; else window._lbEntries.push(savedEntry);
+                }
+                // If LB panel is open, refresh immediately
+                const lbOpen = !document.getElementById('leaderboard-screen').classList.contains('hidden');
+                if (lbOpen) { if (typeof renderLbTab === 'function') renderLbTab(window._lbEntries || []); setTimeout(fetchLeaderboard, 400); }
+                else if (!silent) { setTimeout(fetchLeaderboard, 400); }
                 window._lastLbSubmit = Date.now(); // update throttle timer
             } catch(e) {
                 if (!silent) status.textContent = '❌ 上傳失敗：' + e.message;
@@ -6895,8 +6911,11 @@ async function fetchLeaderboard() {
             playSound('click'); hideAll();
             document.getElementById('leaderboard-screen').classList.remove('hidden');
             // Submit latest score, then always fetch fresh LB data
-            submitScore(true);
-            setTimeout(fetchLeaderboard, 800);
+            submitScore(true).then(() => {
+                fetchLeaderboard();
+            }).catch(() => {
+                fetchLeaderboard();
+            });
         }
 
         // ══════════ 🎯 SHOOTER GAME ══════════
@@ -9467,13 +9486,30 @@ window.closeRC = function() {
             if (e.data && e.data.type === 'flipScore') {
                 const s = e.data.score || 0;
                 const t = e.data.bestTime || 0;
+                // ── Always give rewards ──
+                const fpExp    = Math.max(5, s * 3);
+                const fpCoins  = Math.max(10, s * 5);
+                const fpWood   = Math.floor(s / 2);
+                const fpStone  = Math.floor(s / 4);
+                const fpFrag   = s >= 8 ? 1 : 0;
+                if (typeof gainExp === 'function') gainExp(fpExp, '翻牌記憶');
+                inventory.coins    = (inventory.coins    || 0) + fpCoins;
+                if (fpWood  > 0) inventory.wood      = (inventory.wood      || 0) + fpWood;
+                if (fpStone > 0) inventory.stone     = (inventory.stone     || 0) + fpStone;
+                if (fpFrag  > 0) inventory.fragment  = (inventory.fragment  || 0) + fpFrag;
+                // ── Achievements ──
+                if (typeof unlockAchievement === 'function') {
+                    unlockAchievement('ach_flip_win');
+                    if (t > 0 && t <= 60) unlockAchievement('ach_flip_speed');
+                }
+                // ── Update best score ──
                 if ((inventory.flipScore || 0) < s) {
                     inventory.flipScore = s;
                     if (t > 0 && (!inventory.flipBestTime || t < inventory.flipBestTime))
                         inventory.flipBestTime = t;
-                    saveGame();
-                    if (typeof submitScore === 'function') submitScore(true);
                 }
+                saveGame(); updateUI();
+                if (typeof submitScore === 'function') submitScore(true);
             }
             if (e.data && e.data.type === 'closeFlip') {
                 closeFlip();
@@ -9835,7 +9871,30 @@ window.closeRC = function() {
       if(!inventory.lightningScore || ltScore > inventory.lightningScore){
         inventory.lightningScore = ltScore;
       }
-      saveGame();
+      // ── Rewards ──
+      const ltExp   = ltScore * 2;
+      const ltCoins = ltScore * 3;
+      const ltWood  = Math.floor(ltScore / 3);
+      const ltStone = Math.floor(ltScore / 5);
+      const ltGem   = ltScore >= 15 ? 1 : 0;
+      if(ltExp > 0 && typeof gainExp === 'function') gainExp(ltExp, '閃電問答');
+      inventory.coins    = (inventory.coins    || 0) + ltCoins;
+      if(ltWood  > 0) inventory.wood      = (inventory.wood      || 0) + ltWood;
+      if(ltStone > 0) inventory.stone     = (inventory.stone     || 0) + ltStone;
+      if(ltGem   > 0) inventory.gem       = (inventory.gem       || 0) + ltGem;
+      // ── Achievements ──
+      if(typeof unlockAchievement === 'function'){
+        unlockAchievement('ach_lightning_win');
+        if(ltTotal > 0 && ltScore === ltTotal && ltTotal >= 5) unlockAchievement('ach_lightning_ace');
+      }
+      // ── Show reward toast ──
+      let rewardMsg = `🎁 獲得 💰${ltCoins}`;
+      if(ltWood  > 0) rewardMsg += ` 🪵${ltWood}`;
+      if(ltStone > 0) rewardMsg += ` 🧱${ltStone}`;
+      if(ltGem   > 0) rewardMsg += ` 💎${ltGem}`;
+      rewardMsg += ` ✨${ltExp} EXP`;
+      document.getElementById('lt-final-msg').textContent += '　' + rewardMsg;
+      saveGame(); updateUI();
       if(typeof submitScore==='function') submitScore(true);
     }
   }
