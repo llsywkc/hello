@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中文寫作練習｜一節有趣的課堂</title>
+  <style>
+    :root{
+      --bg:#f0f7ff;--panel:#fff;--panel-soft:#e8f4ff;
+      --text:#1e3a5f;--muted:#5f7285;
+      --primary:#4d9ff5;--primary-dark:#2b7de0;
+      --accent:#ffd76a;--good:#39b36b;--warn:#ff9f43;--bad:#ef5b5b;
+      --border:#c8e0f5;--shadow:0 12px 36px rgba(30,80,160,.11);--radius:22px;
+    }
+    body.theme-green{
+      --bg:#f0fff5;--panel:#fff;--panel-soft:#e5fff0;
+      --text:#1a3d28;--muted:#4d7060;
+      --primary:#48c27a;--primary-dark:#2e9e5c;--border:#c2e8d0;
+    }
+    body.theme-orange{
+      --bg:#fff8f0;--panel:#fff;--panel-soft:#fff2e0;
+      --text:#3d2a10;--muted:#8a6640;
+      --primary:#ff9f43;--primary-dark:#e07a10;--border:#f5d8a8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html,body{font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+      background:var(--bg);color:var(--text);min-height:100vh;}
+
+    #stageOverlay{
+      position:fixed;inset:0;z-index:9999;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,#1a3d7c,#4d9ff5);
+      opacity:0;pointer-events:none;transition:opacity .3s ease;
+    }
+    #stageOverlay.show{opacity:1;pointer-events:all;}
+    .overlay-star-field{position:absolute;inset:0;overflow:hidden;}
+    .overlay-star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 1.5s infinite;}
+    @keyframes twinkle{0%,100%{opacity:.3}50%{opacity:1}}
+    .overlay-badge{
+      background:rgba(255,255,255,.15);border:3px solid rgba(255,255,255,.4);
+      border-radius:24px;padding:28px 40px;text-align:center;color:#fff;
+      position:relative;z-index:1;
+      animation:badgePop .4s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes badgePop{from{transform:scale(0) rotate(-8deg);opacity:0}to{transform:scale(1);opacity:1}}
+    .overlay-num{font-size:80px;font-weight:900;line-height:1;}
+    .overlay-title{font-size:26px;margin-top:8px;}
+    .overlay-stars{font-size:36px;margin-top:12px;}
+    .overlay-tip{margin-top:14px;font-size:15px;opacity:.88;padding:10px 14px;
+      background:rgba(255,255,255,.1);border-radius:12px;}
+    .star-item{opacity:0;transform:scale(0);display:inline-block;animation:starPop .4s ease forwards;}
+    @keyframes starPop{to{opacity:1;transform:scale(1);}}
+
+    .confetti-piece{
+      position:fixed;top:-20px;border-radius:4px;
+      animation:confettiFall linear forwards;z-index:10000;pointer-events:none;
+    }
+    @keyframes confettiFall{to{transform:translateY(110vh) rotate(540deg);opacity:0;}}
+
+    #spiritContainer{
+      position:fixed;bottom:20px;right:20px;z-index:800;
+      display:flex;flex-direction:column;align-items:flex-end;max-width:240px;
+    }
+    #spiritBubble{
+      background:#fff;border:2px solid var(--border);
+      border-radius:18px 18px 4px 18px;
+      padding:12px 14px;font-size:14px;line-height:1.7;
+      color:var(--text);box-shadow:var(--shadow);
+      margin-bottom:8px;max-width:240px;text-align:right;
+      animation:bubblePop .3s ease;
+    }
+    @keyframes bubblePop{from{transform:scale(.8) translateY(10px);opacity:0}to{transform:scale(1);opacity:1}}
+    #spiritFace{
+      font-size:48px;cursor:pointer;align-self:flex-end;
+      filter:drop-shadow(0 4px 8px rgba(0,0,0,.15));
+      animation:spiritBounce 2.5s ease-in-out infinite;
+      user-select:none;display:block;transition:transform .2s;
+    }
+    #spiritFace:hover{transform:scale(1.15) rotate(10deg);}
+    @keyframes spiritBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+    .app{max-width:1440px;margin:0 auto;padding:16px;}
+    .header{
+      background:linear-gradient(135deg,#fff,var(--panel-soft));
+      border:2px solid var(--border);border-radius:26px;
+      box-shadow:var(--shadow);padding:20px;margin-bottom:16px;
+      position:relative;overflow:hidden;
+    }
+    .header::before{
+      content:'';position:absolute;top:-40px;right:-40px;
+      width:180px;height:180px;border-radius:50%;
+      background:radial-gradient(circle,var(--primary),transparent 70%);opacity:.2;
+    }
+    .header-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+    .school{font-size:13px;color:var(--muted);margin-bottom:4px;}
+    h1{font-size:28px;line-height:1.2;color:var(--primary-dark);}
+    .subtitle{font-size:17px;font-weight:700;margin-top:6px;}
+
+    .theme-switcher{display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:relative;z-index:10;}
+    .theme-dot{
+      width:42px;height:42px;border-radius:999px;
+      border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25);
+      cursor:pointer;transition:transform .2s;outline:none;display:inline-block;
+    }
+    .theme-dot:hover{transform:scale(1.25);}
+    .theme-dot:active{transform:scale(.9);}
+    .theme-blue-btn{background:#4d9ff5;}
+    .theme-green-btn{background:#48c27a;}
+    .theme-orange-btn{background:#ff9f43;}
+
+    .progress-wrap{margin-top:16px;}
+    .progress-info-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+    .progress-info{font-size:15px;font-weight:800;color:var(--primary-dark);}
+    .progress-bar{height:20px;background:#dde8f5;border-radius:999px;overflow:hidden;border:1px solid var(--border);}
+    .progress-fill{height:100%;width:0%;
+      background:linear-gradient(90deg,var(--primary),var(--accent),#ff9f43);
+      border-radius:999px;transition:width .5s cubic-bezier(.34,1.2,.64,1);}
+    .stage-dots{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+    .stage-dot{
+      width:36px;height:36px;border-radius:50%;
+      border:2px solid var(--border);background:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:700;color:var(--muted);transition:.2s;
+    }
+    .stage-dot.done{background:var(--good);border-color:#25905a;color:#fff;}
+    .stage-dot.current{
+      background:var(--primary);border-color:var(--primary-dark);color:#fff;
+      box-shadow:0 0 0 4px rgba(77,159,245,.25);transform:scale(1.12);
+    }
+
+    .layout{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:start;}
+    .left-col,.right-col{display:flex;flex-direction:column;gap:16px;}
+
+    .card{background:var(--panel);border:2px solid var(--border);
+      border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;}
+    .card.glow{border-color:var(--primary);animation:cardGlow 1.5s ease infinite alternate;}
+    @keyframes cardGlow{
+      from{box-shadow:var(--shadow),0 0 0 3px rgba(77,159,245,.1);}
+      to{box-shadow:var(--shadow),0 0 0 8px rgba(77,159,245,.2);}
+    }
+    .stage-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:linear-gradient(90deg,var(--primary),var(--primary-dark));
+      color:#fff;border-radius:999px;padding:8px 16px;
+      font-size:14px;font-weight:700;margin-bottom:14px;
+      box-shadow:0 4px 12px rgba(77,159,245,.35);
+    }
+    .question-title{font-size:24px;margin-bottom:10px;line-height:1.35;}
+    .hint{
+      background:linear-gradient(135deg,#fff8dd,#fff3c4);
+      border-left:5px solid var(--accent);border-radius:14px;
+      padding:12px 14px;color:#5a4200;margin-bottom:14px;font-size:15px;line-height:1.75;
+    }
+    .section-label{margin:16px 0 8px;font-size:15px;font-weight:800;color:var(--primary-dark);}
+    .options{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+    .option{
+      border:2px solid var(--border);background:#fafcff;border-radius:18px;
+      padding:11px 16px;cursor:pointer;transition:.18s ease;font-size:15px;
+      display:flex;align-items:center;justify-content:center;text-align:center;user-select:none;
+    }
+    .option:hover{transform:translateY(-2px);border-color:var(--primary);box-shadow:0 4px 12px rgba(77,159,245,.18);}
+    .option.active{
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+      color:#fff;border-color:var(--primary-dark);font-weight:700;
+      box-shadow:0 6px 16px rgba(77,159,245,.35);transform:translateY(-1px) scale(1.03);
+    }
+    .option-block{
+      border:2px solid var(--border);background:#fafcff;border-radius:18px;
+      padding:13px 16px;cursor:pointer;transition:.18s ease;font-size:15px;
+      text-align:left;line-height:1.8;user-select:none;width:100%;display:block;
+      white-space:normal;
+    }
+    .option-block:hover{border-color:var(--primary);background:#f0f8ff;transform:translateX(3px);}
+    .option-block.active{
+      background:linear-gradient(135deg,#eaf4ff,#d8ecff);
+      border-color:var(--primary);border-width:2.5px;font-weight:700;color:var(--primary-dark);
+    }
+    select{
+      width:100%;border:2px solid var(--border);border-radius:16px;
+      padding:12px 14px;font-size:15px;outline:none;
+      background:#fff;color:var(--text);transition:.2s;font-family:inherit;
+    }
+    select:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(77,159,245,.14);}
+    textarea{
+      width:100%;border:2px solid var(--border);border-radius:16px;
+      padding:12px 14px;font-size:15px;outline:none;
+      background:#fff;color:var(--text);transition:.2s;font-family:inherit;
+      min-height:88px;resize:vertical;
+    }
+    textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(77,159,245,.14);}
+    .inline-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .three-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+    .sentence-box{
+      background:linear-gradient(135deg,#f7fbff,#eef6ff);
+      border:2px dashed var(--primary);border-radius:18px;
+      padding:16px;margin:10px 0;line-height:1.9;min-height:76px;font-size:15px;
+      position:relative;
+    }
+    .sentence-box::before{content:'✏️';position:absolute;top:10px;right:12px;font-size:18px;opacity:.4;}
+    button{
+      border:none;border-radius:18px;padding:13px 18px;
+      font-size:15px;cursor:pointer;font-weight:700;transition:.2s ease;font-family:inherit;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+      color:#fff;box-shadow:0 6px 18px rgba(77,159,245,.35);
+    }
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(77,159,245,.45);}
+    .btn-soft{background:#f0f6ff;color:var(--text);border:2px solid var(--border);}
+    .btn-soft:hover{border-color:var(--primary);transform:translateY(-1px);}
+    .btn-warn{background:#fff6e0;color:#8a5a00;border:2px solid #ffd897;}
+    .btn-danger{background:#fff0f0;color:#a33;border:2px solid #ffcccc;}
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+    .footer-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+    .mini{font-size:14px;padding:10px 14px;border-radius:14px;}
+
+    .preview-title{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+    .count-chip{
+      display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;
+      background:var(--panel-soft);border:1px solid var(--border);
+      font-weight:700;color:var(--primary-dark);font-size:14px;
+    }
+    .count-chip.ok{background:#ecfff5;border-color:#8bddaf;color:#196e3d;}
+    .count-chip.warn{background:#fff7e8;border-color:#ffd088;color:#7a4f00;}
+    .essay-board{
+      min-height:460px;white-space:pre-wrap;line-height:2.2;
+      background:
+        linear-gradient(rgba(255,255,255,.88),rgba(255,255,255,.88)),
+        repeating-linear-gradient(to bottom,#fff 0,#fff 37px,#d8eaf7 38px,#fff 39px);
+      border:2px solid var(--border);border-radius:20px;padding:20px;font-size:17px;
+    }
+    .essay-para{animation:paraSlideIn .4s ease;margin-bottom:1em;}
+    @keyframes paraSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+    .checklist{display:grid;gap:8px;margin-top:10px;}
+    .check-item{
+      display:flex;gap:10px;align-items:flex-start;
+      padding:10px 12px;border-radius:14px;background:#fafcff;border:1px solid var(--border);
+    }
+    .check-item.ok{background:#f0fff7;border-color:#a8dfc2;}
+    .check-item.bad{background:#fff8f8;border-color:#f5c0c0;}
+    .msg{margin-top:10px;padding:12px 14px;border-radius:14px;font-size:14px;line-height:1.75;}
+    .msg.good{background:#edfff4;color:#17693c;border:1px solid #a7e6c2;}
+    .msg.warn{background:#fff9e0;color:#8a5a00;border:1px solid #f5da89;}
+    .msg.bad{background:#fff3f3;color:#a33;border:1px solid #f2b8b8;}
+    .small-note{color:var(--muted);font-size:13px;line-height:1.7;margin-top:6px;}
+    .tag{display:inline-block;padding:6px 11px;border-radius:999px;
+      background:var(--panel-soft);border:1px solid var(--border);margin:3px;font-size:13px;}
+    .hidden{display:none !important;}
+    .template-box{
+      background:linear-gradient(135deg,#f0fff5,#e5fff0);
+      border:2px solid var(--good);border-radius:18px;
+      padding:16px;margin:10px 0;line-height:2.2;font-size:15px;
+    }
+
+    @media(max-width:980px){
+      .layout{grid-template-columns:1fr;}
+      .essay-board{min-height:280px;}
+      #spiritContainer{display:none;}
+    }
+    @media(max-width:680px){
+      h1{font-size:22px;}.question-title{font-size:20px;}
+      .inline-grid,.three-grid{grid-template-columns:1fr;}
+      .toolbar,.footer-actions{display:grid;grid-template-columns:1fr 1fr;}
+    }
+    @media print{
+      body{background:#fff;}
+      .no-print{display:none !important;}
+      #spiritContainer,#stageOverlay{display:none !important;}
+      .app{max-width:none;padding:0;}
+      .layout{grid-template-columns:1fr;}
+      .card,.header{box-shadow:none;border:1px solid #bbb;}
+      .essay-board{background:#fff;border:1px solid #999;min-height:auto;}
+    }
+  </style>
+</head>
+<body class="theme-blue">
+
+<div id="stageOverlay">
+  <div class="overlay-star-field" id="overlayStarField"></div>
+  <div class="overlay-badge">
+    <div class="overlay-num" id="overlayNum">2</div>
+    <div class="overlay-title" id="overlayTitle">睹物回憶</div>
+    <div class="overlay-stars" id="overlayStars">⭐</div>
+    <div class="overlay-tip" id="overlayTip">加油！</div>
+  </div>
+</div>
+
+<div id="spiritContainer" class="no-print">
+  <div id="spiritBubble">🤖 你好！我是寫作機械人，點我打氣！</div>
+  <span id="spiritFace" onclick="changeSpiritMood()">🤖</span>
+</div>
+
+<div class="app">
+  <div class="header no-print">
+    <div class="header-top">
+      <div>
+        <div class="school">勵志會梁李秀娛紀念小學 ｜ 中文科寫作小天地</div>
+        <h1>中文寫作互動闖關遊戲 🏆</h1>
+        <div class="subtitle">題目：《一節有趣的課堂》</div>
+      </div>
+      <div class="theme-switcher">
+        <span class="small-note">主題色：</span>
+        <span class="theme-dot theme-blue-btn" title="藍色" onclick="applyTheme('blue')"></span>
+        <span class="theme-dot theme-green-btn" title="綠色" onclick="applyTheme('green')"></span>
+        <span class="theme-dot theme-orange-btn" title="橙色" onclick="applyTheme('orange')"></span>
+      </div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-info-row">
+        <div class="progress-info" id="progressText">第 1 關 / 共 6 關</div>
+        <div class="count-chip" id="saveChip">草稿已儲存 ✓</div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="stage-dots" id="stageDots"></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="left-col">
+      <div class="card glow no-print">
+        <div class="stage-badge" id="stageBadge">第 1 關｜先看清題目</div>
+        <div id="questionCard"></div>
+        <div class="toolbar">
+          <button class="btn-soft" onclick="prevStage()">⬅ 上一步</button>
+          <button class="btn-soft" onclick="resetCurrentStage()">🔄 重新選擇</button>
+          <button class="btn-primary" onclick="nextStage()">下一步 ➡</button>
+        </div>
+        <div id="stageMsg" class="hidden"></div>
+      </div>
+
+      <div class="card no-print">
+        <div class="section-label">功能按鈕</div>
+        <div class="footer-actions">
+          <button class="btn-soft mini" onclick="prevStage()">⬅ 上一步</button>
+          <button class="btn-primary mini" onclick="nextStage()">下一步 ➡</button>
+          <button class="btn-soft mini" onclick="resetCurrentStage()">🔄 重新選擇</button>
+          <button class="btn-danger mini" onclick="resetAll()">🗑 重設全文</button>
+          <button class="btn-soft mini" onclick="copyEssay()">📋 複製全文</button>
+          <button class="btn-warn mini" onclick="window.print()">🖨 列印作文</button>
+        </div>
+        <p class="small-note">草稿自動儲存，下次打開仍保留進度。列印時自動隱藏提示和按鈕。</p>
+      </div>
+
+      <div class="card">
+        <div class="section-label">完成檢查清單</div>
+        <div class="checklist" id="checklist"></div>
+        <div id="finalMessage" class="hidden"></div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="card">
+        <div class="preview-title">
+          <div>
+            <div class="section-label" style="margin:0">📄 作文預覽區</div>
+            <div class="small-note">每完成一關，作文即時更新。</div>
+          </div>
+          <div class="count-chip" id="wordCountChip">字數：<span id="wordCount">0</span></div>
+        </div>
+        <div class="essay-board" id="essayBoard">（你的作文會在這裏一步一步完成。）</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const THEME_KEY="class_essay_theme_v2";
+function applyTheme(t){
+  document.body.classList.remove("theme-blue","theme-green","theme-orange");
+  document.body.classList.add("theme-"+t);
+  localStorage.setItem(THEME_KEY,t);
+}
+(function(){
+  const t=localStorage.getItem(THEME_KEY)||"blue";
+  document.body.classList.remove("theme-blue","theme-green","theme-orange");
+  document.body.classList.add("theme-"+t);
+})();
+
+const STORAGE_KEY="class_essay_data_v2";
+const TOTAL=6;
+const data={
+  currentStage:1,
+  s1:{object:"",memory:0,customObject:""},
+  s2:{subject:"",classType:"",learnWhat:"",introIdx:0},
+  s3:{activity:"",interesting:"",processIdx:0},
+  s4:{act1:"",act2:"",act3:"",highlight:"",actionIdx:0},
+  s5:{result:"",feeling:""},
+  s6:{learn:"",emotion:"",hope:"",conclusionIdx:0}
+};
+
+const OPTS={
+  objects:[
+    {label:"一件實驗器材（試管、量杯等）",emoji:"🧪"},
+    {label:"一本課本或工作紙",emoji:"📖"},
+    {label:"一張照片或圖畫",emoji:"🖼️"},
+    {label:"一件手工藝品",emoji:"🎨"},
+    {label:"一份植物標本",emoji:"🌿"},
+    {label:"一個小模型",emoji:"🏗️"},
+    {label:"一條繩",emoji:"🪢"},
+    {label:"一支直笛",emoji:"🎵"},
+    {label:"其他（自行輸入）",emoji:"✏️"}
+  ],
+  memoryTemplates:[
+    "那{object}靜靜地躺在桌上，表面光滑，顏色依舊鮮艷。我無意間一眼瞥見它，腦海中頓時浮現出那節令我難以忘懷的課堂……",
+    "我從書包底部摸出那{object}，它的觸感熟悉而真實，彷彿把我拉回到那個歡笑聲不斷的下午。每次看到它，我便想起了那節精彩的課……",
+    "那{object}安靜地掛在牆上，模樣與當天一模一樣。望着它，我不禁深深吸了一口氣，心裏湧起一陣溫暖，那節有趣的課堂的畫面又清晰地浮現眼前……",
+    "直到現在，每當我看到那{object}，心裏仍然充滿興奮與感動。它雖然普普通通，卻承載着那節課最美好的回憶，讓我久久不能忘懷……"
+  ],
+  subjects:["常識課","科學課","特色課","美術課","視藝課","體育課","音樂課","圖書課"],
+  classTypes:[
+    "做實驗／觀察活動",
+    "小組討論和匯報",
+    "戶外學習／參觀",
+    "動手製作手工",
+    "角色扮演遊戲",
+    "觀看影片和分析",
+    "進行體能訓練和計時挑戰",
+    "練習樂器和合奏表演"
+  ],
+  learnWhats:{
+    "常識課":["認識植物的生長過程","了解香港不同的地方","學習保護環境的方法","認識人體各個器官"],
+    "科學課":["探究水的變化（蒸發、凝結）","了解磁力的特性","研究植物如何進行光合作用","測試不同物料的導電性"],
+    "特色課":["學習基本急救知識","認識不同國家的文化","練習解難和創意思考","學習烹飪基本技巧"],
+    "美術課":["學習水彩畫的技法","製作立體紙雕","設計和製作版畫","學習素描基礎"],
+    "視藝課":["設計和製作面具","學習拼貼畫技法","創作主題海報","製作立體模型"],
+    "體育課":["學習籃球基本動作","練習游泳技巧","學習羽毛球打法","進行跳繩訓練和計時挑戰"],
+    "音樂課":["學習敲擊樂器的節奏","練習合唱技巧","認識不同樂器的音色","練習直笛吹奏指定曲目"],
+    "圖書課":["學習如何閱讀報章新聞","認識不同類型的書籍","學習做讀書報告","練習講故事技巧"]
+  },
+  activities:[
+    "分組做實驗，每組輪流嘗試",
+    "老師先示範，然後同學自己動手",
+    "先觀看短片，再討論和分析",
+    "玩問答遊戲，答對的可得分",
+    "各組輪流上台展示成果",
+    "用工作紙記錄，邊做邊填寫",
+    "進行體能訓練和計時挑戰",
+    "練習樂器和合奏表演"
+  ],
+  interestings:[
+    "實驗出現意想不到的結果，令大家驚訝不已",
+    "老師帶來真實的材料讓我們親手觸摸和觀察",
+    "同學們有各種不同的有趣答案，笑聲不斷",
+    "老師用魔術一樣的方法展示課題，令人大開眼界",
+    "可以自由創作，每個人的作品都截然不同",
+    "分組競賽，全班都非常投入，氣氛熱烈",
+    "老師設計了計時挑戰，同學們個個卯足全力，奮力爭勝",
+    "大家第一次合奏成功，那一刻的音樂令人感動不已"
+  ],
+  processActsMap:{
+    "分組做實驗，每組輪流嘗試":["小心地量度所需的份量","把材料按步驟混合在一起","仔細觀察並記錄實驗結果"],
+    "老師先示範，然後同學自己動手":["專心觀看老師的示範步驟","拿起材料，按照方法嘗試","完成後跟同學比較各自的結果"],
+    "先觀看短片，再討論和分析":["聚精會神地觀看影片內容","把重點記錄在工作紙上","舉手發言，說出自己的想法"],
+    "玩問答遊戲，答對的可得分":["認真聆聽老師的問題","迅速在腦海中搜尋答案","搶先舉手，大聲說出答案"],
+    "各組輪流上台展示成果":["和組員商量展示的內容","在台上清楚地講解作品","禮貌地回答同學的提問"],
+    "用工作紙記錄，邊做邊填寫":["細心閱讀工作紙上的指示","邊觀察邊把結果填寫上去","完成後檢查答案是否正確"],
+    "進行體能訓練和計時挑戰":["先做熱身運動，活動筋骨","按老師的口令開始計時挑戰","挑戰完成後記錄自己的成績"],
+    "練習樂器和合奏表演":["先獨自練習自己負責的樂句","和同學合奏，互相配合節奏","最後一起完整演奏整首樂曲"]
+  },
+  highlights:[
+    "當實驗出現神奇的變化時，全班都忍不住發出驚呼",
+    "老師突然問了一條意想不到的問題，令我們哄堂大笑",
+    "我們組的作品得到老師的讚賞，大家都非常高興",
+    "同學的回答出乎意料，讓全班笑聲連連",
+    "老師用小遊戲讓我們鞏固知識，氣氛非常熱鬧",
+    "最後揭曉答案的一刻，令所有人都驚喜萬分"
+  ],
+  results:[
+    "我順利完成了今天的學習活動，感到非常滿足",
+    "雖然過程中遇到一些困難，但最終都成功完成了",
+    "我和組員齊心合力，終於完成了所有任務",
+    "在老師和同學的幫助下，我成功克服了難關"
+  ],
+  feelings:[
+    "心裏充滿了成就感，覺得自己真的學到了新知識",
+    "感到非常興奮和快樂，笑容一直掛在臉上",
+    "有點意猶未盡，希望下次能再有這樣的課堂",
+    "對這個課題產生了濃厚的興趣，想回家繼續探究"
+  ],
+  learns:[
+    "原來學習可以這麼有趣，只要用心參與，便能學到很多",
+    "做實驗比背課本更能讓我理解知識，印象深刻得多",
+    "團隊合作非常重要，大家齊心才能完成任務",
+    "主動發問和參與，才能真正享受學習的樂趣"
+  ],
+  emotions:[
+    "學習是一件快樂的事，只要保持好奇心，處處都是學問",
+    "課堂上師生之間的互動，令我感受到學校生活的美好",
+    "每一節課都是一次探索，讓我對世界有更多的認識",
+    "老師的用心和同學的配合，讓課堂充滿了歡笑和溫暖"
+  ],
+  hopes:[
+    "以後能多參與這類有趣的課堂活動，從中發現學習的樂趣",
+    "能把今天學到的知識好好運用，也和家人朋友分享",
+    "在每一節課都積極參與，讓自己的學習更加豐富精彩",
+    "老師能多設計類似的活動，讓同學們在快樂中學習"
+  ]
+};
+
+const spiritMsgs=[
+  "🤖 系統偵測到你正在努力寫作，繼續加油！",
+  "🦋 每一段都是一隻蝴蝶，寫完就展翅飛翔！",
+  "🦁 獅子王說：勇敢寫下去，你是最棒的！",
+  "🤖 Robot正在為你的作文充電，快快完成！",
+  "🦜 鸚鵡Polly說：好詞好句要多用，加油呀！",
+  "🐉 神龍降臨！為你的寫作帶來神秘力量！",
+  "🤖 寫作機械人報告：你的進度非常優秀！",
+  "🦩 火烈鳥說：站得穩，寫得靚，你做得到！"
+];
+const spiritFaces=["🤖","🦁","🐉","🦜","🦋","🦩","🦊","🐺"];
+let spiritIdx=0;
+function changeSpiritMood(){
+  spiritIdx=(spiritIdx+1)%spiritFaces.length;
+  document.getElementById("spiritFace").textContent=spiritFaces[spiritIdx];
+  const q=[
+    "嗨！我是R2-D2的親戚，我來幫你寫作！",
+    "吼！獅子王命令你繼續寫下去！",
+    "我是神龍！為你的作文賜予神力！",
+    "Polly說：換我出場！你寫得超棒！",
+    "我是蝴蝶仙子！作文越寫越美麗！",
+    "我是火烈鳥！站穩立場，寫出好文！",
+    "狐狸說：你的作文狡猾地精彩！",
+    "狼說：我嗅到一篇出色作文的氣息！"
+  ];
+  setSpiritMsg(q[spiritIdx]);
+}
+function setSpiritMsg(msg){
+  const el=document.getElementById("spiritBubble");
+  el.style.animation="none"; void el.offsetWidth;
+  el.style.animation="bubblePop .3s ease";
+  el.textContent=msg;
+}
+function randomSpirit(){ setSpiritMsg(spiritMsgs[Math.floor(Math.random()*spiritMsgs.length)]); }
+
+const stageTitles={1:"睹物回憶（引子）",2:"起因",3:"經過（上課形式）",4:"經過（精彩過程）",5:"結果",6:"得着／收穫"};
+const stageTips={1:"用一件物品引出回憶，吸引讀者！",2:"介紹這節課的背景和主要內容！",3:"描述上課形式和最有趣的地方！",4:"寫出最精彩的學習過程！",5:"說說你完成了甚麼，感受如何？",6:"最後一關！寫出你的得着，大功告成！"};
+
+function showStageTransition(num,title,tip,cb){
+  const ov=document.getElementById("stageOverlay");
+  document.getElementById("overlayNum").textContent=num;
+  document.getElementById("overlayTitle").textContent=title;
+  document.getElementById("overlayTip").textContent=tip;
+  const sf=document.getElementById("overlayStarField"); sf.innerHTML="";
+  for(let i=0;i<40;i++){
+    const s=document.createElement("div"); s.className="overlay-star";
+    const sz=2+Math.random()*5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*1.5}s;animation-duration:${1+Math.random()}s;`;
+    sf.appendChild(s);
+  }
+  document.getElementById("overlayStars").innerHTML=
+    Array.from({length:Math.min(num,6)},(_,i)=>`<span class="star-item" style="animation-delay:${i*.12}s">⭐</span>`).join("");
+  ov.classList.add("show"); spawnConfetti();
+  setTimeout(()=>{ ov.classList.remove("show"); if(cb)cb(); },2000);
+}
+function spawnConfetti(){
+  const colors=["#ffd76a","#5aa9ff","#ff9f43","#39b36b","#f070b8","#fff"];
+  for(let i=0;i<60;i++){
+    const el=document.createElement("div"); el.className="confetti-piece";
+    const delay=Math.random()*.8,dur=.8+Math.random();
+    el.style.cssText=`left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${dur}s;animation-delay:${delay}s;width:${8+Math.random()*8}px;height:${10+Math.random()*14}px;transform:rotate(${Math.random()*360}deg);`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),(delay+dur)*1000+300);
+  }
+}
+
+function prevStage(){ if(data.currentStage>1){ data.currentStage--; save(); render(); } }
+function nextStage(){
+  if(!validate(data.currentStage,true)) return;
+  if(data.currentStage<TOTAL){
+    const next=data.currentStage+1;
+    showStageTransition(next,stageTitles[next],stageTips[next],()=>{
+      data.currentStage=next; randomSpirit(); save(); render();
+    });
+  } else { render(); showTempMsg("🎉 恭喜你完成全部6關！作文已生成！","good"); spawnConfetti(); }
+}
+function resetCurrentStage(){
+  const i=data.currentStage;
+  if(i===1) data.s1={object:"",memory:0};
+  else if(i===2) data.s2={subject:"",classType:"",learnWhat:"",introIdx:0};
+  else if(i===3) data.s3={activity:"",interesting:"",processIdx:0};
+  else if(i===4) data.s4={act1:"",act2:"",act3:"",highlight:"",actionIdx:0};
+  else if(i===5) data.s5={result:"",feeling:""};
+  else if(i===6) data.s6={learn:"",emotion:"",hope:"",conclusionIdx:0};
+  save(); render();
+}
+function resetAll(){
+  if(!confirm("確定要重設全文嗎？所有進度都會清除。")) return;
+  localStorage.removeItem(STORAGE_KEY); location.reload();
+}
+function copyEssay(){
+  navigator.clipboard.writeText(buildEssay())
+    .then(()=>showTempMsg("已複製！可貼到任何文件中。","good"))
+    .catch(()=>showTempMsg("請手動選取作文內容複製。","warn"));
+}
+function showTempMsg(msg,type){
+  const el=document.getElementById("stageMsg");
+  el.className="msg "+type; el.textContent=msg; el.classList.remove("hidden");
+  setTimeout(()=>el.classList.add("hidden"),2400);
+}
+
+function validate(stage,showMsg){
+  let ok=true,msg="";
+  if(stage===1){ if(!data.s1.object){ok=false;msg="請選一件令你想起課堂的物品！";} }
+  if(stage===2){ if(!data.s2.subject||!data.s2.classType||!data.s2.learnWhat){ok=false;msg="請選科目、上課形式，以及這節課學的主要內容！";} }
+  if(stage===3){ if(!data.s3.activity||!data.s3.interesting){ok=false;msg="請選上課活動形式，以及最有趣的地方！";} }
+  if(stage===4){ if(!data.s4.act1||!data.s4.act2||!data.s4.act3||!data.s4.highlight){ok=false;msg="請完成三個連續動作和最精彩時刻！";} }
+  if(stage===5){ if(!data.s5.result||!data.s5.feeling){ok=false;msg="請選結果和你的感受！";} }
+  if(stage===6){ if(!data.s6.learn||!data.s6.emotion||!data.s6.hope){ok=false;msg="請完成得着、感受和期望三個部分！";} }
+  if(showMsg&&!ok) showTempMsg(msg,"warn");
+  return ok;
+}
+
+function getObjectLabel(){
+  if(data.s1.object==="其他（自行輸入）") return data.s1.customObject||"那件物品";
+  const found=OPTS.objects.find(o=>o.label===data.s1.object);
+  return found?found.label.replace(/（.*?）/,""):data.s1.object;
+}
+function genOpening(){
+  if(!data.s1.object) return "";
+  if(data.s1.object==="其他（自行輸入）"&&!data.s1.customObject) return "";
+  const tpl=OPTS.memoryTemplates[data.s1.memory||0];
+  const obj=getObjectLabel();
+  return tpl.replace("{object}",obj);
+}
+function genIntro(){
+  if(!data.s2.subject||!data.s2.classType||!data.s2.learnWhat) return "";
+  const sub=data.s2.subject,ct=data.s2.classType,lw=data.s2.learnWhat;
+  const tpl=[
+    `那是一節${sub}，老師帶領我們進行了${ct}。這節課我們主要學習${lw}。上課的方式非常特別，令我們都感到十分期待。`,
+    `記得那天是${sub}，老師說我們將會進行${ct}。聽到這個消息，全班同學都興奮起來，因為這節課我們要學習${lw}。`,
+    `那節課是${sub}，老師一開始便宣布：今天我們要${ct}！同學們聽到都精神為之一振，因為這次要學習的是${lw}。`,
+    `那是一個普通的上午，${sub}開始了。老師告訴我們，今天的主題是${lw}，而且要透過${ct}來學習，令大家都迫不及待。`
+  ];
+  return tpl[data.s2.introIdx%tpl.length];
+}
+function genProcess(){
+  if(!data.s3.activity||!data.s3.interesting) return "";
+  const act=data.s3.activity,intr=data.s3.interesting;
+  const tpl=[
+    `上課時，老師安排我們${act}。整個過程中，最有趣的是${intr}，令課室裏充滿了歡笑聲。`,
+    `老師的安排十分特別，我們${act}。就在這個時候，${intr}，大家都忍不住驚嘆起來。`,
+    `這節課的形式是${act}，跟平時的課堂很不一樣。最讓我難忘的是${intr}，那一刻全班都非常投入。`,
+    `課堂進行得十分順暢，${act}。其中最有趣的是${intr}，讓每個同學都笑得合不攏嘴。`
+  ];
+  return tpl[data.s3.processIdx%tpl.length];
+}
+function genAction(){
+  if(!data.s4.act1||!data.s4.act2||!data.s4.act3||!data.s4.highlight) return "";
+  const a1=data.s4.act1,a2=data.s4.act2,a3=data.s4.act3,hl=data.s4.highlight;
+  const tpl=[
+    `在學習過程中，我先${a1}，再${a2}，最後${a3}。整個過程令我全神貫注，不敢有絲毫鬆懈。其中最精彩的時刻是：${hl}`,
+    `我認真地參與其中，先${a1}，然後${a2}，最後${a3}。不知不覺間，我已完全沉浸在學習之中。特別令我難忘的是：${hl}`,
+    `整個學習活動中，我先${a1}，接着${a2}，最後才${a3}，步驟清晰，絲毫不馬虎。當中最精彩的地方是：${hl}`,
+    `面對今天的任務，我先${a1}，再仔細地${a2}，最後${a3}。每個步驟我都認真對待，而最令我印象深刻的是：${hl}`
+  ];
+  return tpl[data.s4.actionIdx%tpl.length];
+}
+function genResult(){
+  if(!data.s5.result||!data.s5.feeling) return "";
+  const res=data.s5.result,feel=data.s5.feeling;
+  const tpl=[
+    `最終，${res}。那一刻，${feel}，這節課在我心中留下了深深的印記。`,
+    `下課鈴聲響起，${res}。${feel}，我真心覺得這是一節非常難忘的課堂。`,
+    `經過大家的努力，${res}。回頭想想，${feel}，這樣的課堂真是太有意義了。`
+  ];
+  return tpl[0];
+}
+function genConclusion(){
+  if(!data.s6.learn||!data.s6.emotion||!data.s6.hope) return "";
+  const sub=data.s2.subject||"這節課";
+  return `從這節${sub}，我學會了${data.s6.learn}（得着）\n也讓我體會／感受到${data.s6.emotion}（感受）\n我希望${data.s6.hope}（期望）`;
+}
+function buildEssay(){
+  const parts=[];
+  const p1=genOpening(); if(p1) parts.push(p1);
+  const p2=genIntro(); if(p2) parts.push(p2);
+  const p3=genProcess(); if(p3) parts.push(p3);
+  const p4=genAction(); if(p4) parts.push(p4);
+  const p5=genResult(); if(p5) parts.push(p5);
+  const p6=genConclusion(); if(p6) parts.push(p6);
+  return parts.join("\n\n");
+}
+function charCount(s){ return s.replace(/\s/g,"").length; }
+
+function save(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+  const chip=document.getElementById("saveChip");
+  if(chip) chip.textContent="草稿已儲存 ✓";
+}
+function loadDraft(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(raw){ const d=JSON.parse(raw); Object.assign(data,d); }
+  }catch(e){}
+}
+
+function render(){
+  const stage=data.currentStage;
+  document.getElementById("stageBadge").textContent=`第 ${stage} 關｜${stageTitles[stage]}`;
+  document.getElementById("progressText").textContent=`第 ${stage} 關 / 共 ${TOTAL} 關`;
+  document.getElementById("progressFill").style.width=`${(stage/TOTAL)*100}%`;
+  renderDots();
+  renderChecklist();
+  renderEssay();
+  document.getElementById("questionCard").innerHTML=renderStage(stage);
+}
+function renderDots(){
+  const wrap=document.getElementById("stageDots");
+  wrap.innerHTML="";
+  for(let i=1;i<=TOTAL;i++){
+    const d=document.createElement("div");
+    d.className="stage-dot"+(i<data.currentStage?" done":i===data.currentStage?" current":"");
+    d.textContent=i<data.currentStage?"✓":i;
+    d.title=stageTitles[i];
+    wrap.appendChild(d);
+  }
+}
+function renderEssay(){
+  const essay=buildEssay();
+  const board=document.getElementById("essayBoard");
+  if(!essay){ board.innerHTML="（你的作文會在這裏一步一步完成。）"; }
+  else {
+    board.innerHTML=essay.split("\n\n").map(p=>`<div class="essay-para">${p.replace(/\n/g,"<br>")}</div>`).join("");
+  }
+  const cnt=charCount(essay);
+  document.getElementById("wordCount").textContent=cnt;
+  const chip=document.getElementById("wordCountChip");
+  chip.className="count-chip"+(cnt>=180?" ok":cnt>80?" warn":"");
+}
+function renderChecklist(){
+  const items=[
+    {label:"睹物回憶（引子）",done:!!(data.s1.object)},
+    {label:"起因（科目、上課形式、學習內容）",done:!!(data.s2.subject&&data.s2.classType&&data.s2.learnWhat)},
+    {label:"經過（活動形式、有趣之處）",done:!!(data.s3.activity&&data.s3.interesting)},
+    {label:"經過（學習過程、精彩時刻）",done:!!(data.s4.act1&&data.s4.act2&&data.s4.act3&&data.s4.highlight)},
+    {label:"結果（完成情況、感受）",done:!!(data.s5.result&&data.s5.feeling)},
+    {label:"得着／收穫（得着、感受、期望）",done:!!(data.s6.learn&&data.s6.emotion&&data.s6.hope)}
+  ];
+  const cl=document.getElementById("checklist");
+  cl.innerHTML=items.map(it=>`
+    <div class="check-item ${it.done?"ok":"bad"}">
+      <span>${it.done?"✅":"⬜"}</span>
+      <span>${it.label}</span>
+    </div>
+  `).join("");
+  const done=items.filter(i=>i.done).length;
+  const fm=document.getElementById("finalMessage");
+  const essay=buildEssay();
+  const cnt=charCount(essay);
+  if(done===TOTAL){
+    fm.className="msg good";
+    fm.innerHTML=`🎉 全部完成！字數：${cnt} 字。${cnt>=180?"字數達標，做得棒極了！":"建議再補充細節至180字以上。"}`;
+    fm.classList.remove("hidden");
+  } else fm.classList.add("hidden");
+}
+function esc(s){ return s.replace(/\\/g,"\\\\").replace(/'/g,"\\'"); }
+
+function renderStage(stage){
+  if(stage===1) return `
+    <h2 class="question-title">睹物回憶（引子）👀</h2>
+    <div class="hint">🌟 「睹物回憶」是一種很有效的寫作技巧！先描述物品的外觀（顏色、觸感、狀態），再引出課堂回憶，寫成2–3句完整段落，讓讀者有身臨其境的感覺。</div>
+    <div class="section-label">選一件令你想起那節課堂的物品</div>
+    <div class="options" style="flex-direction:column;gap:10px">
+      ${OPTS.objects.map(o=>`<div class="option-block ${data.s1.object===o.label?"active":""}" onclick="sv('s1.object','${esc(o.label)}')">${o.emoji} ${o.label}</div>`).join("")}
+    </div>
+    ${data.s1.object==="其他（自行輸入）"?`
+      <div class="section-label">請輸入你的物品名稱</div>
+      <input type="text" class="text-input" placeholder="例如：一個水壺、一塊橡皮擦……"
+        value="${data.s1.customObject||""}"
+        oninput="sv('s1.customObject',this.value);renderStage(currentStage)"
+        style="font-size:1rem;padding:10px 14px;border-radius:12px;border:2px solid var(--border);width:100%;margin-bottom:4px">
+    `:""}
+    ${(data.s1.object&&(data.s1.object!=="其他（自行輸入）"||(data.s1.customObject&&data.s1.customObject.trim())))?`
+      <div class="section-label">選一個開場句式</div>
+      <div class="options" style="flex-direction:column;gap:10px">
+        ${OPTS.memoryTemplates.map((t,i)=>`<div class="option-block ${data.s1.memory==i?"active":""}" onclick="sv('s1.memory',${i})">${t.replace("{object}",getObjectLabel())}</div>`).join("")}
+      </div>
+      <div class="section-label">即時生成的引子段落</div>
+      <div class="sentence-box">${genOpening()}</div>
+    `:""}
+  `;
+
+  if(stage===2){
+    const learnList=data.s2.subject?(OPTS.learnWhats[data.s2.subject]||[]):[];
+    return `
+      <h2 class="question-title">起因 📚</h2>
+      <div class="hint">🌟 介紹這是甚麼課，以及這節課主要學習甚麼。這節課的形式有甚麼特別？</div>
+      <div class="section-label">這是甚麼科目？</div>
+      <div class="options">
+        ${OPTS.subjects.map(s=>`<div class="option ${data.s2.subject===s?"active":""}" onclick="selectSubject('${esc(s)}')">${s}</div>`).join("")}
+      </div>
+      ${data.s2.subject?`
+        <div class="section-label">這節課主要學習甚麼？</div>
+        <div class="options" style="flex-direction:column;gap:10px">
+          ${learnList.map(l=>`<div class="option-block ${data.s2.learnWhat===l?"active":""}" onclick="sv('s2.learnWhat','${esc(l)}')">${l}</div>`).join("")}
+        </div>
+      `:""}
+      <div class="section-label">上課形式是甚麼？</div>
+      <div class="options" style="flex-direction:column;gap:10px">
+        ${OPTS.classTypes.map(c=>`<div class="option-block ${data.s2.classType===c?"active":""}" onclick="sv('s2.classType','${esc(c)}')">${c}</div>`).join("")}
+      </div>
+      ${data.s2.subject&&data.s2.classType&&data.s2.learnWhat?`
+        <div class="section-label">即時生成的起因段落</div>
+        <div class="sentence-box">${genIntro()}</div>
+        <button class="btn-soft mini" style="margin-top:6px" onclick="cycle('intro')">🔄 換一句</button>
+      `:""}
+    `;
+  }
+
+  if(stage===3) return `
+    <h2 class="question-title">經過（上課形式）🎯</h2>
+    <div class="hint">🌟 這節課怎樣進行的？有甚麼地方令人覺得特別有趣？讓讀者感受到課堂的氣氛！</div>
+    <div class="section-label">你們進行了甚麼活動？</div>
+    <div class="options" style="flex-direction:column;gap:10px">
+      ${OPTS.activities.map(a=>`<div class="option-block ${data.s3.activity===a?"active":""}" onclick="selectActivity('${esc(a)}')">${a}</div>`).join("")}
+    </div>
+    ${data.s3.activity?`
+      <div class="section-label">最有趣的地方是甚麼？</div>
+      <div class="options" style="flex-direction:column;gap:10px">
+        ${OPTS.interestings.map(intr=>`<div class="option-block ${data.s3.interesting===intr?"active":""}" onclick="sv('s3.interesting','${esc(intr)}')">${intr}</div>`).join("")}
+      </div>
+    `:""}
+    ${data.s3.activity&&data.s3.interesting?`
+      <div class="section-label">即時生成的經過段落（一）</div>
+      <div class="sentence-box">${genProcess()}</div>
+      <button class="btn-soft mini" style="margin-top:6px" onclick="cycle('process')">🔄 換一句</button>
+    `:""}
+  `;
+
+  if(stage===4){
+    const actList=data.s3.activity?(OPTS.processActsMap[data.s3.activity]||[]):[];
+    const actSel=(label,key)=>`
+      <div>
+        <div class="section-label">${label}</div>
+        <select onchange="sv('s4.${key}',this.value)">
+          <option value="">請選擇</option>
+          ${actList.map(x=>`<option ${data.s4[key]===x?"selected":""}>${x}</option>`).join("")}
+        </select>
+      </div>`;
+    return `
+      <h2 class="question-title">經過（精彩過程）🏃</h2>
+      <div class="hint">🌟 用「先、再、最後」寫出你的學習步驟，再描述最精彩的一刻！</div>
+      ${data.s3.activity?`
+        <div class="three-grid">
+          ${actSel("先做甚麼？","act1")}
+          ${actSel("再做甚麼？","act2")}
+          ${actSel("最後做甚麼？","act3")}
+        </div>
+      `:`<div class="msg warn">⚠️ 請先在第3關選擇上課活動，才可選擇動作！</div>`}
+      <div class="section-label">課堂上最精彩／最特別的時刻是？</div>
+      <div class="options" style="flex-direction:column;gap:10px">
+        ${OPTS.highlights.map(h=>`<div class="option-block ${data.s4.highlight===h?"active":""}" onclick="sv('s4.highlight','${esc(h)}')">${h}</div>`).join("")}
+      </div>
+      ${data.s4.act1&&data.s4.act2&&data.s4.act3&&data.s4.highlight?`
+        <div class="section-label">即時生成的經過段落（二）</div>
+        <div class="sentence-box">${genAction()}</div>
+        <button class="btn-soft mini" style="margin-top:6px" onclick="cycle('action')">🔄 換一句</button>
+      `:""}
+    `;
+  }
+
+  if(stage===5) return `
+    <h2 class="question-title">結果 🏁</h2>
+    <div class="hint">🌟 你最終有沒有完成學習活動？當時你有甚麼感受？真實地描述出來吧！</div>
+    <div class="section-label">最後的結果是甚麼？</div>
+    <div class="options" style="flex-direction:column;gap:10px">
+      ${OPTS.results.map(r=>`<div class="option-block ${data.s5.result===r?"active":""}" onclick="sv('s5.result','${esc(r)}')">${r}</div>`).join("")}
+    </div>
+    <div class="section-label">當時你有甚麼感受？</div>
+    <div class="options" style="flex-direction:column;gap:10px">
+      ${OPTS.feelings.map(f=>`<div class="option-block ${data.s5.feeling===f?"active":""}" onclick="sv('s5.feeling','${esc(f)}')">${f}</div>`).join("")}
+    </div>
+    ${data.s5.result&&data.s5.feeling?`
+      <div class="section-label">即時生成的結果段落</div>
+      <div class="sentence-box">${genResult()}</div>
+    `:""}
+  `;
+
+  if(stage===6){
+    const sub=data.s2.subject||"這節課";
+    return `
+      <h2 class="question-title">得着／收穫 🌟</h2>
+      <div class="hint">🌟 最後一段，用以下格式寫出你的得着：<br>從這節____課，我學會了____（得着）<br>也讓我體會／感受到____（感受）<br>我希望____（期望）</div>
+      <div class="section-label">你學會了甚麼？（得着）</div>
+      <div class="options" style="flex-direction:column;gap:10px">
+        ${OPTS.learns.map(l=>`<div class="option-block ${data.s6.learn===l?"active":""}" onclick="sv('s6.learn','${esc(l)}')">${l}</div>`).join("")}
+      </div>
+      <div class="section-label">你有甚麼體會或感受？</div>
+      <div class="options" style="flex-direction:column;gap:10px">
+        ${OPTS.emotions.map(e=>`<div class="option-block ${data.s6.emotion===e?"active":""}" onclick="sv('s6.emotion','${esc(e)}')">${e}</div>`).join("")}
+      </div>
+      <div class="section-label">你有甚麼期望？</div>
+      <div class="options" style="flex-direction:column;gap:10px">
+        ${OPTS.hopes.map(h=>`<div class="option-block ${data.s6.hope===h?"active":""}" onclick="sv('s6.hope','${esc(h)}')">${h}</div>`).join("")}
+      </div>
+      ${data.s6.learn&&data.s6.emotion&&data.s6.hope?`
+        <div class="section-label">即時生成的得着段落</div>
+        <div class="template-box">
+          從這節<strong>${sub}</strong>，<br>
+          我學會了<strong>${data.s6.learn}</strong>（得着）<br>
+          也讓我體會／感受到<strong>${data.s6.emotion}</strong>（感受）<br>
+          我希望<strong>${data.s6.hope}</strong>（期望）
+        </div>
+        <div class="msg ${charCount(buildEssay())>=180?"good":"warn"}" style="margin-top:14px">
+          目前字數：${charCount(buildEssay())} 字。
+          ${charCount(buildEssay())<180?"請補充更多細節，達到180字要求。":"🎉 字數達標！做得非常好！"}
+        </div>
+      `:""}
+    `;
+  }
+  return "";
+}
+
+function sv(path,value){
+  const keys=path.split(".");
+  let obj=data;
+  while(keys.length>1) obj=obj[keys.shift()];
+  obj[keys[0]]=value;
+  save(); render();
+}
+function cycle(section){
+  const map={intro:"s2.introIdx",process:"s3.processIdx",action:"s4.actionIdx"};
+  if(map[section]){
+    const keys=map[section].split(".");
+    let obj=data;
+    while(keys.length>1) obj=obj[keys.shift()];
+    obj[keys[0]]=(obj[keys[0]]+1)%4;
+  }
+  save(); render();
+}
+function selectSubject(sub){
+  data.s2.subject=sub; data.s2.learnWhat="";
+  save(); render();
+}
+function selectActivity(act){
+  data.s3.activity=act;
+  data.s4.act1=data.s4.act2=data.s4.act3="";
+  save(); render();
+}
+
+loadDraft();
+render();
+</script>
+</body>
+</html>
