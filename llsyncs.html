@@ -76,6 +76,14 @@
     .tabs{display:none}.tabs.active{display:grid;gap:var(--space-8)}
     .hero{display:grid;grid-template-columns:1.4fr .9fr;gap:var(--space-6);padding:var(--space-8);background:linear-gradient(135deg,var(--color-surface) 0%,var(--color-surface-2) 100%);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-md)}
     .hero h2{font-size:clamp(1.8rem,1.4rem + 1vw,2.5rem);line-height:1.1;margin:var(--space-3) 0 var(--space-4)} .hero p{max-width:64ch;color:var(--color-text-muted)} .hero-actions{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-6)}
+    .hero-summary{background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4)}
+    .hero-summary-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-3)}
+    .hero-summary-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem}
+    .hero-summary-item{display:flex;align-items:center;gap:.75rem;font-size:var(--text-sm);padding:.4rem 0;border-bottom:1px solid var(--color-border)}
+    .hero-summary-item.urgent{color:var(--color-error);font-weight:700}
+    .hero-summary-date{font-family:monospace;color:var(--color-text-muted);min-width:40px}
+    .hero-summary-empty{color:var(--color-text-muted);font-style:italic;list-style:none}
+    .comment-content{margin-top:.3rem}
     .btn{display:inline-flex;align-items:center;gap:var(--space-2);padding:.85rem 1.05rem;border-radius:var(--radius-lg);font-size:var(--text-sm);font-weight:700}
     .btn-primary{background:var(--color-primary);color:#fff}.btn-secondary{background:var(--color-surface-offset);border:1px solid var(--color-border)}.btn-danger{background:var(--color-error);color:#fff}
     .card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6);box-shadow:var(--shadow-sm)}
@@ -181,23 +189,17 @@
     <div class="wrap">
       <section class="tabs active" id="tab-dashboard">
         <div class="hero">
-          <div>
-            <div class="tag blue">方案一 + 方案二 混合版</div>
-            <h2>用一個清晰的 HTML 系統管理 NCS 學生、學年任務、學習班與待補資料。</h2>
-            <p>側邊欄已分為「總覽 / 學生管理 / 學年事務」三組；Dashboard只顯示統計數字，姓名及聯絡電話等個人資料需進入「學生 Profile」並按「顯示」才會現形。</p>
-            <div class="hero-actions">
-              <button class="btn btn-primary" data-open-modal="student"><i data-lucide="user-plus"></i>新增學生</button>
-              <button class="btn btn-secondary" data-open-modal="task"><i data-lucide="list-plus"></i>新增任務</button>
-              <button class="btn btn-secondary" data-open-modal="schedule"><i data-lucide="calendar-plus"></i>新增活動</button>
+          <div class="hero-summary">
+            <div class="hero-summary-head">
+              <h3>本月重要事項</h3>
+              <span class="tag mono" id="heroMonthLabel">--</span>
             </div>
+            <ul class="hero-summary-list" id="heroSummaryList"></ul>
           </div>
-          <div class="card">
-            <div class="section-head"><h3>本版重點</h3></div>
-            <ul class="list">
-              <li class="list-item"><div class="list-main"><div class="list-title">19位學生目標</div><div class="list-meta">系統會顯示尚欠幾位未輸入</div></div><span class="tag warn" id="missingTargetBadge">--</span></li>
-              <li class="list-item"><div class="list-main"><div class="list-title">資料缺漏提示</div><div class="list-meta">例如缺中文名、未設程度、未填支援類型</div></div><span class="tag error" id="hintCountBadge">--</span></li>
-              <li class="list-item"><div class="list-main"><div class="list-title">EDB 時間表</div><div class="list-meta">已預載津貼及試驗計劃任務</div></div><span class="tag success">已加入</span></li>
-            </ul>
+          <div class="hero-actions">
+            <button class="btn btn-primary" data-open-modal="student"><i data-lucide="user-plus"></i>新增學生</button>
+            <button class="btn btn-secondary" data-open-modal="task"><i data-lucide="list-plus"></i>新增任務</button>
+            <button class="btn btn-secondary" data-open-modal="schedule"><i data-lucide="calendar-plus"></i>新增活動</button>
           </div>
         </div>
 
@@ -280,6 +282,11 @@
               <tbody id="studentTable"></tbody>
             </table>
           </div>
+        </div>
+
+        <div class="card">
+          <div class="section-head"><h3>學年評語</h3><span class="muted small">按「顯示評語」展開個別學生內容 · 可直接編輯</span></div>
+          <div id="yearCommentBox" class="list"></div>
         </div>
       </section>
 
@@ -945,8 +952,66 @@ function renderResources(){
     </div>`).join('');
 }
 
+function renderYearComments(){
+  const box = byId('yearCommentBox');
+  if(!box) return;
+  box.innerHTML = appState.students.map(s => `
+    <div class="list-item" style="align-items:flex-start;flex-direction:column;gap:.5rem">
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;flex-wrap:wrap;gap:.5rem">
+        <div>
+          <div class="list-title">${escapeHtml((s.chineseName && s.chineseName!=='NA') ? s.chineseName : s.englishName)}</div>
+          <div class="list-meta">${escapeHtml(s.className||'未設班別')}${escapeHtml(String(s.classNo||''))}號 · ${escapeHtml(s.level||'未設程度')} · ${escapeHtml(s.ethnicity||'')}</div>
+        </div>
+        <button type="button" class="btn btn-secondary tiny" data-comment-toggle="${s.id}"><i data-lucide="eye"></i>顯示評語</button>
+      </div>
+      <div class="comment-content" data-comment-id="${s.id}" style="display:none;width:100%">
+        <textarea class="editable-cell" data-comment-field="${s.id}" rows="4" placeholder="輸入學年評語...">${escapeHtml(s.yearComment||'')}</textarea>
+      </div>
+    </div>`).join('') || '<div class="empty">未有學生資料</div>';
+}
+
+function renderHeroSummary(){
+  const label = byId('heroMonthLabel');
+  const list = byId('heroSummaryList');
+  if(!label || !list) return;
+
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const monthEnd = new Date(now.getFullYear(), now.getMonth()+1, 0);
+  label.textContent = `${now.getFullYear()}年${now.getMonth()+1}月`;
+
+  const items = [];
+  appState.tasks.forEach(t=>{
+    if(t.status === '完成' || !t.deadline) return;
+    const d = new Date(t.deadline+'T00:00:00');
+    if(d >= monthStart && d <= monthEnd){
+      items.push({ date:d, title:t.title, type:'任務', urgent: d < now });
+    }
+  });
+  appState.schedule.forEach(s=>{
+    if(!s.day) return;
+    const d = new Date(s.day+'T00:00:00');
+    if(d >= now && d <= monthEnd){
+      items.push({ date:d, title:s.title, type:'活動', urgent:false });
+    }
+  });
+  items.sort((a,b)=>a.date - b.date);
+
+  if(items.length === 0){
+    list.innerHTML = `<li class="hero-summary-empty">本月暫無緊急事項</li>`;
+    return;
+  }
+  list.innerHTML = items.slice(0,5).map(it => `
+    <li class="hero-summary-item ${it.urgent ? 'urgent' : ''}">
+      <span class="hero-summary-date">${it.date.getMonth()+1}/${it.date.getDate()}</span>
+      <span class="hero-summary-title">${escapeHtml(it.title)}</span>
+      <span class="tag mono tiny">${it.type}</span>
+      ${it.urgent ? '<span class="tag error tiny">逾期</span>' : ''}
+    </li>`).join('');
+}
+
 function renderAll(){
-  renderDashboard(); renderTasks(); renderSchedule(); renderStudents(); renderAssessment(); renderInputCenter(); renderResources(); renderAnnualPlan(); renderAnnualReport(); renderUploadedFiles(); renderAnnualReviews();
+  renderDashboard(); renderTasks(); renderSchedule(); renderStudents(); renderYearComments(); renderHeroSummary(); renderAssessment(); renderInputCenter(); renderResources(); renderAnnualPlan(); renderAnnualReport(); renderUploadedFiles(); renderAnnualReviews();
   lucide.createIcons();
 }
 
@@ -1042,7 +1107,8 @@ function studentFormHtml(s={}){ return `
   <div class="field"><label>監護人2關係</label><input name="guardian2Relation" value="${escapeHtml(s.guardian2Relation||'')}" /></div>
   <div class="field"><label>監護人2電話</label><div class="sensitive-cell"><input type="password" name="guardian2Phone" value="${escapeHtml(s.guardian2Phone||'')}" style="flex:1" /><button type="button" class="reveal-btn" data-reveal-target="guardian2Phone"><i data-lucide="eye"></i>顯示</button></div></div>
   <div class="field full"><label>支援類型（以逗號分隔）</label><input name="supportTypes" value="${escapeHtml((s.supportTypes||[]).join(', '))}" placeholder="入班, 抽離, 課後班" /></div>
-  <div class="field full"><label>備註</label><textarea name="notes">${escapeHtml(s.notes||'')}</textarea></div>`; }
+  <div class="field full"><label>備註</label><textarea name="notes">${escapeHtml(s.notes||'')}</textarea></div>
+  <div class="field full"><label>學年評語</label><textarea name="yearComment" rows="4">${escapeHtml(s.yearComment||'')}</textarea></div>`; }
 
 function taskFormHtml(t={}){ return `
   <div class="field full"><label>任務名稱</label><input name="title" value="${escapeHtml(t.title||'')}" /></div>
@@ -1084,7 +1150,7 @@ function saveModal(){
   }
   const data = collectForm();
   if(modalMode === 'student'){
-    const payload = {id: editingId || uid('s'), className:data.className||'', classNo:Number(data.classNo)||'', chineseName:data.chineseName||'', englishName:data.englishName||'', gender:data.gender||'', ethnicity:data.ethnicity||'', sen:data.sen==='true', senType:data.senType||'', homeLanguage:data.homeLanguage||'', guardian1Relation:data.guardian1Relation||'', guardian1Phone:data.guardian1Phone||'', guardian2Relation:data.guardian2Relation||'', guardian2Phone:data.guardian2Phone||'', level:data.level||'未設定', supportTypes:(data.supportTypes||'').split(',').map(x=>x.trim()).filter(Boolean), notes:data.notes||''};
+    const payload = {id: editingId || uid('s'), className:data.className||'', classNo:Number(data.classNo)||'', chineseName:data.chineseName||'', englishName:data.englishName||'', gender:data.gender||'', ethnicity:data.ethnicity||'', sen:data.sen==='true', senType:data.senType||'', homeLanguage:data.homeLanguage||'', guardian1Relation:data.guardian1Relation||'', guardian1Phone:data.guardian1Phone||'', guardian2Relation:data.guardian2Relation||'', guardian2Phone:data.guardian2Phone||'', level:data.level||'未設定', supportTypes:(data.supportTypes||'').split(',').map(x=>x.trim()).filter(Boolean), notes:data.notes||'', yearComment:data.yearComment||''};
     if(editingId){ const idx = appState.students.findIndex(s => s.id===editingId); appState.students[idx] = payload; }
     else appState.students.push(payload);
   }
@@ -1438,6 +1504,24 @@ function bind(){
   byId('addReportSectionBtn').addEventListener('click', () => {
     appState.annualReportSections.push({id:'sec'+Date.now(),title:'新段落標題',content:''});
     renderAnnualReport(); lucide.createIcons(); pushToCloud();
+  });
+
+  byId('yearCommentBox').addEventListener('click', e => {
+    const btn = e.target.closest('[data-comment-toggle]');
+    if(!btn) return;
+    const id = btn.dataset.commentToggle;
+    const panel = document.querySelector(`[data-comment-id="${id}"]`);
+    const showing = panel.style.display !== 'none';
+    panel.style.display = showing ? 'none' : 'block';
+    btn.innerHTML = showing ? '<i data-lucide="eye"></i>顯示評語' : '<i data-lucide="eye-off"></i>收起評語';
+    lucide.createIcons();
+  });
+
+  byId('yearCommentBox').addEventListener('change', e => {
+    if(!e.target.matches('[data-comment-field]')) return;
+    const id = e.target.dataset.commentField;
+    const s = appState.students.find(x => x.id === id);
+    if(s){ s.yearComment = e.target.value; pushToCloud(); }
   });
 
   const dropZone = byId('dropZone');
