@@ -75,7 +75,7 @@
     .wrap{padding:var(--space-8);display:grid;gap:var(--space-8)}
     .tabs{display:none}.tabs.active{display:grid;gap:var(--space-8)}
     .hero{display:grid;grid-template-columns:1.4fr .9fr;gap:var(--space-6);padding:var(--space-8);background:linear-gradient(135deg,var(--color-surface) 0%,var(--color-surface-2) 100%);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-md)}
-    .hero h2{font-size:clamp(1.8rem,1.4rem + 1vw,2.5rem);line-height:1.1;margin:var(--space-3) 0 var(--space-4)} .hero p{max-width:64ch;color:var(--color-text-muted)} .hero-actions{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-6)}
+    .hero h2{font-size:clamp(1.8rem,1.4rem + 1vw,2.5rem);line-height:1.1;margin:var(--space-3) 0 var(--space-4)} .hero p{max-width:64ch;color:var(--color-text-muted)} .hero-actions{display:flex;flex-wrap:wrap;gap:var(--space-3);align-content:center;align-items:flex-start}
     .hero-summary{background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4)}
     .hero-summary-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-3)}
     .hero-summary-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem}
@@ -586,9 +586,11 @@ function getUpcoming(){
 
 function renderDashboard(){
   const stats = getStats();
-  byId('missingTargetBadge').textContent = `欠 ${stats.missingTarget}`;
+  const missingBadge = byId('missingTargetBadge');
+  if(missingBadge) missingBadge.textContent = `欠 ${stats.missingTarget}`;
   const hints = getHints({anonymize:true});
-  byId('hintCountBadge').textContent = `${hints.length} 項`;
+  const hintBadge = byId('hintCountBadge');
+  if(hintBadge) hintBadge.textContent = `${hints.length} 項`;
   byId('statsGrid').innerHTML = [
     {label:'現有學生',value:stats.total,note:`目標 ${appState.targetStudentCount} 位`,icon:'users'},
     {label:'SEN 學生',value:stats.senCount,note:'需額外支援留意',icon:'shield-alert'},
