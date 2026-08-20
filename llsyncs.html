@@ -124,6 +124,23 @@
     .login-sub{color:var(--color-text-muted);font-size:var(--text-sm)}
     .login-card .field{text-align:left}
     .login-error{color:var(--color-error);font-size:var(--text-sm);margin-top:.7rem;min-height:1.2em}
+    .student-groups{display:flex;flex-direction:column;gap:.6rem}
+.student-class-head{width:100%;display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-md);cursor:pointer;font-weight:700}
+.student-class-title{flex:1;text-align:left}
+.class-chevron{transition:transform .15s}
+.student-class-head.open .class-chevron{transform:rotate(90deg)}
+.student-class-body{display:flex;flex-direction:column;gap:.4rem;padding:.5rem 0 .5rem 1rem}
+.student-card{border:1px solid var(--color-border);border-radius:var(--radius-md);overflow:hidden}
+.student-card-head{width:100%;display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;background:var(--color-surface);cursor:pointer;flex-wrap:wrap}
+.student-card-name{font-weight:600}
+.student-card-chevron{margin-left:auto;transition:transform .15s}
+.student-card-head.open .student-card-chevron{transform:rotate(180deg)}
+.student-card-body{padding:.8rem;background:var(--color-surface-offset);border-top:1px solid var(--color-border)}
+.student-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.6rem}
+.flag-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block}
+.flag-dot.flag-high{background:var(--color-error)}
+.flag-dot.flag-low{background:var(--color-warning)}
+.flag-dot.flag-ok{background:var(--color-success)}
 </style>
 </head>
 <body>
@@ -150,20 +167,22 @@
       </div>
     </div>
     <nav class="nav" aria-label="主要功能">
-      <div class="nav-group-label">總覽</div>
-      <button class="nav-btn active" data-tab="dashboard"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></button>
-      <div class="nav-group-label">學生管理</div>
-      <button class="nav-btn" data-tab="students"><i data-lucide="users"></i><span>學生 Profile</span></button>
-      <button class="nav-btn" data-tab="assessment"><i data-lucide="clipboard-list"></i><span>評估追蹤</span></button>
-      <div class="nav-group-label">學年事務</div>
-      <button class="nav-btn" data-tab="tasks"><i data-lucide="list-todo"></i><span>任務清單</span></button>
-      <button class="nav-btn" data-tab="schedule"><i data-lucide="calendar-range"></i><span>Schedule</span></button>
-      <button class="nav-btn" data-tab="input"><i data-lucide="sparkles"></i><span>輸入中心</span></button>
-      <button class="nav-btn" data-tab="resources"><i data-lucide="link"></i><span>資源與連結</span></button>
-      <button class="nav-btn" data-tab="upload"><i data-lucide="upload-cloud"></i><span>文件上傳</span></button>
-      <div class="nav-group-label">學年報告</div>
-      <button class="nav-btn" data-tab="annualReview"><i data-lucide="star"></i><span>25-26學年評語</span></button>
-    </nav>
+     <nav class="nav" aria-label="主要功能">
+  <div class="nav-group-label">總覽</div>
+  <button class="nav-btn active" data-tab="dashboard"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></button>
+
+  <div class="nav-group-label">學生管理</div>
+  <button class="nav-btn" data-tab="students"><i data-lucide="users"></i><span>學生 Profile</span></button>
+  <button class="nav-btn" data-tab="assessment"><i data-lucide="clipboard-list"></i><span>評估追蹤</span></button>
+  <button class="nav-btn" data-tab="annualReview"><i data-lucide="star"></i><span>25-26學年評語</span></button>
+
+  <div class="nav-group-label">學年事務</div>
+  <button class="nav-btn" data-tab="tasks"><i data-lucide="list-todo"></i><span>任務清單</span></button>
+  <button class="nav-btn" data-tab="schedule"><i data-lucide="calendar-range"></i><span>Schedule</span></button>
+  <button class="nav-btn" data-tab="input"><i data-lucide="sparkles"></i><span>輸入中心</span></button>
+  <button class="nav-btn" data-tab="resources"><i data-lucide="link"></i><span>資源與連結</span></button>
+  <button class="nav-btn" data-tab="upload"><i data-lucide="upload-cloud"></i><span>文件上傳</span></button>
+</nav>
     <div class="sidebar-footer">
       <button class="soft-btn" id="themeToggle"><i data-lucide="moon"></i><span>切換主題</span></button>
       <button class="soft-btn" id="exportBtn"><i data-lucide="download"></i><span>匯出 JSON</span></button>
@@ -276,12 +295,12 @@
             <select id="ethnicityFilter"><option value="all">全部種族</option></select>
             <select id="levelFilter"><option value="all">全部程度</option><option value="初">初</option><option value="中">中</option><option value="高">高</option><option value="未設定">未設定</option></select>
           </div>
-          <div style="overflow:auto">
-            <table>
-              <thead><tr><th>班別</th><th>姓名</th><th>性別</th><th>種族</th><th>常用語言</th><th>SEN</th><th>程度</th><th>支援</th><th>操作</th></tr></thead>
-              <tbody id="studentTable"></tbody>
-            </table>
-          </div>
+       <div class="toolbar" style="margin-bottom:.8rem">
+  <label style="display:flex;align-items:center;gap:.4rem;font-size:var(--text-sm)">
+    <input type="checkbox" id="missingOnlyToggle" /> 只顯示資料缺漏學生
+  </label>
+</div>
+<div id="studentGroups" class="student-groups"></div>
         </div>
 
         <div class="card">
@@ -675,32 +694,99 @@ function renderSchedule(){
 }
 
 function renderStudents(){
+function gradeLabel(className){
+  const num = parseInt((className||'').match(/\d+/)?.[0] || '', 10);
+  const map = {1:'小一',2:'小二',3:'小三',4:'小四',5:'小五',6:'小六'};
+  return map[num] || '未分年級';
+}
+
+function studentMissingInfo(s){
+  const missing = [];
+  if((!s.chineseName || s.chineseName === 'N/A') && !s.chineseNameConfirmed) missing.push('中文姓名');
+  if(!s.level || s.level === '未設定') missing.push('中文程度');
+  if(!s.supportTypes || s.supportTypes.length === 0) missing.push('支援類型');
+  return missing;
+}
+
+function studentCardHtml(s){
+  const missing = studentMissingInfo(s);
+  const flagClass = missing.length >= 2 ? 'flag-high' : missing.length === 1 ? 'flag-low' : 'flag-ok';
+  const displayName = (s.chineseName && s.chineseName !== 'N/A') ? s.chineseName : s.englishName;
+  return `
+    <div class="student-card">
+      <button type="button" class="student-card-head" data-student-toggle="${s.id}">
+        <span class="flag-dot ${flagClass}"></span>
+        <span class="student-card-name">${escapeHtml(s.className||'')}${s.classNo?' ('+escapeHtml(String(s.classNo))+')':''} · ${escapeHtml(displayName)}</span>
+        ${missing.length ? `<span class="tag warn tiny">缺 ${missing.length} 項</span>` : `<span class="tag success tiny">資料齊全</span>`}
+        <i data-lucide="chevron-down" class="student-card-chevron"></i>
+      </button>
+      <div class="student-card-body" style="display:none">
+        <div class="student-card-grid">
+          <div><div class="tiny muted">英文姓名</div><div>${escapeHtml(s.englishName||'-')}</div></div>
+          <div><div class="tiny muted">性別</div><div>${s.gender==='M'?'男':s.gender==='F'?'女':'未設定'}</div></div>
+          <div><div class="tiny muted">種族</div><div>${escapeHtml(s.ethnicity||'-')}</div></div>
+          <div><div class="tiny muted">常用語言</div><div>${escapeHtml(s.homeLanguage||'-')}</div></div>
+          <div><div class="tiny muted">SEN</div><div>${s.sen?`<span class="tag error tiny">${escapeHtml(s.senType||'SEN')}</span>`:'否'}</div></div>
+          <div><div class="tiny muted">中文程度</div><div><span class="tag ${(!s.level||s.level==='未設定')?'warn':'success'} tiny">${escapeHtml(s.level||'未設定')}</span></div></div>
+        </div>
+        <div style="margin-top:.6rem">
+          <div class="tiny muted">支援類型</div>
+          <div style="margin-top:.3rem">${(s.supportTypes||[]).length ? s.supportTypes.map(x=>`<span class="tag blue tiny" style="margin-right:.3rem">${escapeHtml(x)}</span>`).join('') : `<span class="tag warn tiny">未填</span>`}</div>
+        </div>
+        <div style="display:flex;gap:.5rem;margin-top:.8rem">
+          <button class="btn btn-secondary tiny" onclick="viewStudent('${s.id}')">查看／編輯</button>
+          <button class="btn btn-danger tiny" onclick="deleteStudent('${s.id}')">刪除</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderStudents(){
   const keyword = byId('studentSearch').value.trim().toLowerCase();
   const ethnicity = byId('ethnicityFilter').value;
   const level = byId('levelFilter').value;
-  const set = new Set(appState.students.map(s => s.ethnicity));
+  const missingOnly = byId('missingOnlyToggle').checked;
+  const set = new Set(appState.students.map(s => s.ethnicity).filter(Boolean));
   byId('ethnicityFilter').innerHTML = `<option value="all">全部種族</option>` + [...set].sort().map(v => `<option value="${escapeHtml(v)}" ${ethnicity===v?'selected':''}>${escapeHtml(v)}</option>`).join('');
-  const rows = appState.students.filter(s => {
+
+  const filtered = appState.students.filter(s => {
     const hitKeyword = [s.className,s.chineseName,s.englishName].join(' ').toLowerCase().includes(keyword);
     const hitEthnicity = ethnicity === 'all' || s.ethnicity === ethnicity;
     const hitLevel = level === 'all' || (level === '未設定' ? (!s.level || s.level === '未設定') : s.level === level);
-    return hitKeyword && hitEthnicity && hitLevel;
-  }).sort((a,b) => a.className.localeCompare(b.className,'en') || a.classNo - b.classNo);
-  byId('studentTable').innerHTML = rows.map(s => `
-    <tr>
-      <td>${escapeHtml(s.className)} (${s.classNo})</td>
-      <td><div class="list-title">${s.chineseName && s.chineseName !== 'N/A' ? escapeHtml(s.chineseName) : (s.chineseNameConfirmed ? '<span class=\'tag success tiny\'>已確認無中文名</span>' : '<span class=\'tag warn tiny\'>待確認</span>')}</div><div class="tiny muted">${escapeHtml(s.englishName)}</div></td>
-      <td>${s.gender === 'M' ? '男' : s.gender === 'F' ? '女' : '<span class="tag warn tiny">未設定</span>'}</td>
-      <td>${escapeHtml(s.ethnicity)}</td>
-      <td>${escapeHtml(s.homeLanguage)}</td>
-      <td>${s.sen ? `<span class="tag error">${escapeHtml(s.senType || 'SEN')}</span>` : `<span class="tag success">否</span>`}</td>
-      <td><span class="tag ${s.level==='未設定'||!s.level ? 'warn' : 'success'}">${escapeHtml(s.level || '未設定')}</span></td>
-      <td>${(s.supportTypes||[]).length ? s.supportTypes.map(x=>`<span class="tag blue" style="margin-right:.3rem">${escapeHtml(x)}</span>`).join('') : `<span class="tag warn">未填</span>`}</td>
-      <td style="display:flex;gap:.4rem;flex-wrap:wrap">
-        <button class="btn btn-secondary tiny" onclick="viewStudent('${s.id}')">查看／編輯</button>
-        <button class="btn btn-danger tiny" onclick="deleteStudent('${s.id}')">刪除</button>
-      </td>
-    </tr>`).join('');
+    const hitMissing = !missingOnly || studentMissingInfo(s).length > 0;
+    return hitKeyword && hitEthnicity && hitLevel && hitMissing;
+  });
+
+  const gradeOrder = ['小一','小二','小三','小四','小五','小六','未分年級'];
+  const groups = {};
+  filtered.forEach(s => {
+    const grade = gradeLabel(s.className);
+    (groups[grade] = groups[grade] || []).push(s);
+  });
+
+  const sortedGrades = Object.keys(groups).sort((a,b) => gradeOrder.indexOf(a) - gradeOrder.indexOf(b));
+  const box = byId('studentGroups');
+
+  if(sortedGrades.length === 0){
+    box.innerHTML = `<div class="empty">找不到符合條件的學生。</div>`;
+    return;
+  }
+
+  box.innerHTML = sortedGrades.map(grade => {
+    const students = groups[grade].sort((a,b) => a.className.localeCompare(b.className,'en') || (Number(a.classNo)||0) - (Number(b.classNo)||0));
+    const groupId = 'grade-' + grade;
+    return `
+      <button type="button" class="student-class-head open" data-class-toggle="${groupId}">
+        <i data-lucide="chevron-right" class="class-chevron"></i>
+        <span class="student-class-title">${grade}</span>
+        <span class="tag mono">${students.length} 位</span>
+      </button>
+      <div class="student-class-body" data-class-body="${groupId}" style="display:flex">
+        ${students.map(s => studentCardHtml(s)).join('')}
+      </div>`;
+  }).join('');
+
+  lucide.createIcons();
 }
 
 function renderAssessment(){
@@ -1461,6 +1547,34 @@ function bind(){
   byId('studentSearch').addEventListener('input', renderStudents);
   byId('ethnicityFilter').addEventListener('change', renderStudents);
   byId('levelFilter').addEventListener('change', renderStudents);
+  byId('missingOnlyToggle').addEventListener('change', renderStudents);
+document.addEventListener('click', e => {
+  const classBtn = e.target.closest('[data-class-toggle]');
+  if(classBtn){
+    const body = document.querySelector(`[data-class-body="${classBtn.dataset.classToggle}"]`);
+    const showing = body.style.display !== 'none';
+    body.style.display = showing ? 'none' : 'block';
+    classBtn.classList.toggle('open', !showing);
+    return;
+  }
+  const cardBtn = e.target.closest('[data-student-toggle]');
+  if(cardBtn){
+    const body = document.querySelector(`[data-student-body="${cardBtn.dataset.studentToggle}"]`);
+    const showing = body.style.display !== 'none';
+    body.style.display = showing ? 'none' : 'flex';
+    cardBtn.classList.toggle('open', !showing);
+    return;
+  }
+  const revealBtn = e.target.closest('[data-profile-reveal]');
+  if(revealBtn){
+    const input = byId(revealBtn.dataset.profileReveal);
+    if(!input) return;
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    revealBtn.innerHTML = showing ? '<i data-lucide="eye"></i>' : '<i data-lucide="eye-off"></i>';
+    lucide.createIcons();
+  }
+});
   byId('taskStatusFilter').addEventListener('change', renderTasks);
   byId('taskCategoryFilter').addEventListener('change', renderTasks);
   byId('modalBackdrop').addEventListener('click', e => { if(e.target === byId('modalBackdrop')) closeModal(); });
