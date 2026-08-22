@@ -12,7 +12,8 @@
         }
 
         body {
-            font-family: 'Comic Sans MS', 'Arial', cursive, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial,
+             "PingFang HK", "PingFang TC", "Microsoft JhengHei", sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -334,50 +335,48 @@
         }
 
         function spinWheel() {
-            if (isSpinning) return;
-            
-            isSpinning = true;
-            spinBtn.disabled = true;
-            
-            const segmentAngle = 360 / segments.length;
-            
-            // Pick a random segment
-            const randomSegmentIndex = Math.floor(Math.random() * segments.length);
-            
-            // Calculate exact rotation to center the chosen segment at the pointer (0 degrees)
-            const segmentCenter = randomSegmentIndex * segmentAngle + segmentAngle / 2;
-            const targetRotation = -segmentCenter;
-            
-            // Add multiple full rotations (8-12 complete spins)
-            const fullRotations = 360 * (8 + Math.floor(Math.random() * 5));
-            
-            // Calculate final rotation
-            currentRotation = fullRotations + targetRotation;
-            
-            spinner.style.transform = `rotate(${currentRotation}deg)`;
-            
-            // Show result after animation completes
-            setTimeout(() => {
-                const result = segments[randomSegmentIndex];
-                
-                showResult(result);
-                createConfetti();
-                
-                // Remove the selected segment
-                segments.splice(randomSegmentIndex, 1);
-                
-                // Check if all segments are used
-                if (segments.length === 0) {
-                    resetBtn.style.display = 'inline-block';
-                    spinBtn.disabled = true;
-                } else {
-                    // Recreate spinner with remaining segments (keep current rotation, don't reset)
-                    createSpinner();
-                    spinBtn.disabled = false;
-                    isSpinning = false;
-                }
-            }, 4000);
-        }
+  if (isSpinning) return;
+  isSpinning = true;
+  spinBtn.disabled = true;
+
+  const segmentAngle = 360 / segments.length;
+  const randomSegmentIndex = Math.floor(Math.random() * segments.length);
+  const segmentCenter = randomSegmentIndex * segmentAngle + segmentAngle / 2;
+
+  const pointerAngle = 90; // pointer在3點鐘方向
+  let requiredMod = (pointerAngle - segmentCenter) % 360;
+  if (requiredMod < 0) requiredMod += 360;
+
+  const currentMod = ((currentRotation % 360) + 360) % 360;
+  let diff = requiredMod - currentMod;
+  if (diff < 0) diff += 360;
+
+  const minSpins = 5, maxSpins = 9;
+  const extraSpinsForFewOptions = segments.length <= 3 ? 3 : 0;
+  const fullTurns = minSpins + Math.floor(Math.random() * (maxSpins - minSpins + 1)) + extraSpinsForFewOptions;
+  const duration = 4.2 + Math.random() * 1.3;
+
+  currentRotation += fullTurns * 360 + diff;
+  spinner.style.transition = `transform ${duration}s cubic-bezier(0.15, 0.65, 0.25, 1)`;
+  spinner.style.transform = `rotate(${currentRotation}deg)`;
+
+  setTimeout(() => {
+    const result = segments[randomSegmentIndex];
+    showResult(result);
+    createConfetti();
+
+    segments.splice(randomSegmentIndex, 1);
+
+    if (segments.length === 0) {
+      resetBtn.style.display = 'inline-block';
+      spinBtn.disabled = true;
+    } else {
+      createSpinner();
+      spinBtn.disabled = false;
+    }
+    isSpinning = false;
+  }, duration * 1000);
+}
 
         function showResult(result) {
             resultBox.innerHTML = `
