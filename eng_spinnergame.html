@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get to Know You - Spinner Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
+
+        .spinner-wrapper {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .spinner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 10px solid #667eea;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        }
+
+        .pointer {
+            position: absolute;
+            top: 50%;
+            right: -25px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 30px solid transparent;
+            border-bottom: 30px solid transparent;
+            border-right: 60px solid #ff6b6b;
+            z-index: 20;
+            filter: drop-shadow(-4px 0 6px rgba(0,0,0,0.3));
+        }
+
+        .center-circle {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 15;
+            border: 5px solid #667eea;
+        }
+
+        .spin-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 25px 70px;
+            font-size: 2.5em;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .spin-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .spin-button:active {
+            transform: translateY(0);
+        }
+
+        .spin-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 20px;
+            padding: 40px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .result-emoji {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: bounce 0.5s ease infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        .result-text {
+            color: white;
+            font-size: 2.2em;
+            font-weight: bold;
+            line-height: 1.4;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        .instruction-text {
+            color: white;
+            font-size: 1.8em;
+            font-style: italic;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 3px solid rgba(255,255,255,0.5);
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall linear forwards;
+            z-index: 1000;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5em;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(240, 147, 251, 0.6);
+        }
+
+        .reset-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎉 Get to Know You! 🎉</h1>
+        <p class="subtitle">Spin the wheel and follow the instruction!</p>
+        
+        <div class="spinner-wrapper">
+            <div class="spinner" id="spinner">
+                <!-- Segments will be added by JavaScript -->
+            </div>
+            <div class="pointer"></div>
+            <div class="center-circle">🎯</div>
+        </div>
+
+        <button class="spin-button" id="spinBtn" onclick="spinWheel()">
+            🎲 SPIN! 🎲
+        </button>
+
+        <div class="result-box" id="resultBox">
+            <div class="result-emoji">👋</div>
+            <div class="result-text">Ready to play?</div>
+            <div class="instruction-text">Click SPIN to start!</div>
+        </div>
+
+        <button class="reset-btn" id="resetBtn" onclick="resetGame()" style="display: none;">
+            🔄 Play Again! 🔄
+        </button>
+    </div>
+
+    <script>
+        const allSegments = [
+            {
+                text: "I am 5 years old.",
+                emoji: "🎂",
+                color: "#FF6B6B",
+                instruction: "Jump 3 times!"
+            },
+            {
+                text: "I have a brother.",
+                emoji: "👨‍👩‍👧‍👦",
+                color: "#4ECDC4",
+                instruction: "Clap your hands 5 times!"
+            },
+            {
+                text: "I like ice cream.",
+                emoji: "🍦",
+                color: "#45B7D1",
+                instruction: "Say 'YUM!' loudly!"
+            },
+            {
+                text: "I have a pet.",
+                emoji: "🐶",
+                color: "#96CEB4",
+                instruction: "Make an animal sound!"
+            },
+            {
+                text: "I like drawing.",
+                emoji: "🎨",
+                color: "#FFEAA7",
+                instruction: "Show us your best pose!"
+            },
+            {
+                text: "I live in Shau Kei Wan.",
+                emoji: "🏠",
+                color: "#DDA0DD",
+                instruction: "Spin around one time!"
+            },
+            {
+                text: "I like blue.",
+                emoji: "💙",
+                color: "#74B9FF",
+                instruction: "Wave your hands!"
+            },
+            {
+                text: "I like reading stories.",
+                emoji: "📚",
+                color: "#FD79A8",
+                instruction: "Give a thumbs up!"
+            },
+            {
+                text: "I know 5-point check.",
+                emoji: "✋",
+                color: "#2ECC71",
+                instruction: "Sit in a 5-point check!"
+            }
+        ];
+
+        let segments = [];
+        const spinner = document.getElementById('spinner');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultBox = document.getElementById('resultBox');
+        const resetBtn = document.getElementById('resetBtn');
+        let currentRotation = 0;
+        let isSpinning = false;
+
+        // Initialize game
+        function initGame() {
+            segments = [...allSegments];
+            currentRotation = 0;
+            spinner.style.transform = `rotate(0deg)`;
+            spinner.style.background = '';
+            createSpinner();
+            resultBox.innerHTML = `
+                <div class="result-emoji">👋</div>
+                <div class="result-text">Ready to play?</div>
+                <div class="instruction-text">Click SPIN to start!</div>
+            `;
+            resetBtn.style.display = 'none';
+            spinBtn.disabled = false;
+        }
+
+        // Create spinner segments with equal sized wedges using conic gradient
+        function createSpinner() {
+            // Create conic gradient with equal segments
+            const segmentAngle = 360 / segments.length;
+            let gradientParts = [];
+            
+            segments.forEach((segment, index) => {
+                const startAngle = index * segmentAngle;
+                const endAngle = (index + 1) * segmentAngle;
+                gradientParts.push(`${segment.color} ${startAngle}deg ${endAngle}deg`);
+            });
+            
+            spinner.style.background = `conic-gradient(${gradientParts.join(', ')})`;
+        }
+
+        function spinWheel() {
+            if (isSpinning) return;
+            
+            isSpinning = true;
+            spinBtn.disabled = true;
+            
+            const segmentAngle = 360 / segments.length;
+            
+            // Pick a random segment
+            const randomSegmentIndex = Math.floor(Math.random() * segments.length);
+            
+            // Calculate exact rotation to center the chosen segment at the pointer (0 degrees)
+            const segmentCenter = randomSegmentIndex * segmentAngle + segmentAngle / 2;
+            const targetRotation = -segmentCenter;
+            
+            // Add multiple full rotations (8-12 complete spins)
+            const fullRotations = 360 * (8 + Math.floor(Math.random() * 5));
+            
+            // Calculate final rotation
+            currentRotation = fullRotations + targetRotation;
+            
+            spinner.style.transform = `rotate(${currentRotation}deg)`;
+            
+            // Show result after animation completes
+            setTimeout(() => {
+                const result = segments[randomSegmentIndex];
+                
+                showResult(result);
+                createConfetti();
+                
+                // Remove the selected segment
+                segments.splice(randomSegmentIndex, 1);
+                
+                // Check if all segments are used
+                if (segments.length === 0) {
+                    resetBtn.style.display = 'inline-block';
+                    spinBtn.disabled = true;
+                } else {
+                    // Recreate spinner with remaining segments (keep current rotation, don't reset)
+                    createSpinner();
+                    spinBtn.disabled = false;
+                    isSpinning = false;
+                }
+            }, 4000);
+        }
+
+        function showResult(result) {
+            resultBox.innerHTML = `
+                <div class="result-emoji">${result.emoji}</div>
+                <div class="result-text">${result.text}</div>
+                <div class="instruction-text">${result.instruction}</div>
+            `;
+        }
+
+        function createConfetti() {
+            const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#74B9FF', '#FD79A8', '#2ECC71'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        function resetGame() {
+            initGame();
+        }
+
+        // Initialize on load
+        initGame();
+    </script>
+</body>
+</html>
