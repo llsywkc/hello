@@ -127,17 +127,18 @@
   }
   .seat::before { left: 5px; }
   .seat::after { right: 5px; }
+  .seat.seat-empty { border-style: dashed; opacity: 0.55; }
   .group-box .seat { width: 100%; }
   .seat.seat-selected {
     box-shadow: 0 0 0 3px var(--accent-red), 0 5px 0 rgba(241,6,11,0.35), 0 6px 12px rgba(0,0,0,0.15);
     border-color: var(--accent-red); border-top-color: var(--accent-red); transform: scale(1.06);
   }
   .seat:active { transform: scale(0.97); }
-  .name-zh { font-size: 14px; font-weight: 700; color: var(--text-main); pointer-events: none; }
-  .name-en { font-size: 11px; color: var(--text-sub); margin-top: 2px; pointer-events: none; }
+  .name-zh { font-size: 14px; font-weight: 700; color: var(--text-main); }
+  .name-en { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
   .seat input {
     width: 90%; text-align: center; border: none; background: transparent; font-size: 13px;
-    font-weight: 700; outline: none; color: var(--text-main); pointer-events: auto;
+    font-weight: 700; outline: none; color: var(--text-main);
   }
   .seat input.en-input { font-size: 10px; font-weight: 400; color: var(--text-sub); }
   .footer-banner { text-align: center; margin-top: 30px; }
@@ -189,7 +190,7 @@
 </div>
 <div class="save-status" id="saveStatus">已同步</div>
 
-<p class="instruction">點選第一位學生（會出現紅框），再點選要交換的另一位學生，即完成互換座位｜雙擊姓名可直接編輯｜雙擊標題可修改班別名稱｜所有改動會自動同步到雲端,任何裝置打開都會看到最新排位</p>
+<p class="instruction">點選第一位學生（會出現紅框），再點選要交換的另一位學生（可以是空白座位），即完成互換座位｜雙擊姓名可直接編輯｜雙擊標題可修改班別名稱｜所有改動會自動同步到雲端</p>
 
 <div id="board"></div>
 
@@ -215,7 +216,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const planRef = db.collection("seatingPlans").doc(PLAN_DOC_ID);
 
-const defaultStudents = [
+const originalDefaultStudents = [
   {zh:"區錦浩",   en:"AU KAM HO"},
   {zh:"張敏敏",   en:"CHEUNG MAN MAN"},
   {zh:"趙家樂",   en:"CHIU KA LOK"},
@@ -233,6 +234,20 @@ const defaultStudents = [
   {zh:"黃溢鋒",   en:"WONG YAT FUNG Tyrus"},
   {zh:"曾溱翔",   en:"ZENG TSUN CHEUNG"}
 ];
+
+const STANDARD_TOTAL_PAIRS = 3;
+const STANDARD_ROWS_PER_PAIR = 2;
+const STANDARD_TOTAL_ROWS = STANDARD_TOTAL_PAIRS * STANDARD_ROWS_PER_PAIR;
+
+function padToStandardSize(list) {
+  const perRow = Math.ceil(list.length / STANDARD_TOTAL_ROWS) || 1;
+  const totalSeats = perRow * STANDARD_TOTAL_ROWS;
+  const padded = list.slice();
+  while (padded.length < totalSeats) padded.push({ zh: "", en: "" });
+  return padded;
+}
+
+const defaultStudents = padToStandardSize(originalDefaultStudents);
 
 let students = JSON.parse(JSON.stringify(defaultStudents));
 let currentMode = "standard";
@@ -277,19 +292,31 @@ function swapSeatContent(seatA, seatB) {
   const tmpZh = zhA.textContent, tmpEn = enA.textContent;
   zhA.textContent = zhB.textContent; enA.textContent = enB.textContent;
   zhB.textContent = tmpZh; enB.textContent = tmpEn;
+  updateEmptyStyle(seatA);
+  updateEmptyStyle(seatB);
+}
+
+function updateEmptyStyle(seatEl) {
+  const zh = seatEl.querySelector(".name-zh")?.textContent.trim() || "";
+  const en = seatEl.querySelector(".name-en")?.textContent.trim() || "";
+  seatEl.classList.toggle("seat-empty", !zh && !en);
+}
+
+function cancelPendingClickTimer(seatEl) {
+  const t = clickTimers.get(seatEl);
+  if (t) { clearTimeout(t); clickTimers.delete(seatEl); }
 }
 
 function attachSeatInteraction(seatEl) {
   seatEl.addEventListener("click", (e) => {
     if (e.target.tagName === "INPUT") return;
-    const existing = clickTimers.get(seatEl);
-    if (existing) clearTimeout(existing);
-    const t = setTimeout(() => { handleSeatClick(seatEl); clickTimers.delete(seatEl); }, 220);
+    cancelPendingClickTimer(seatEl);
+    const t = setTimeout(() => { handleSeatClick(seatEl); clickTimers.delete(seatEl); }, 280);
     clickTimers.set(seatEl, t);
   });
-  seatEl.addEventListener("dblclick", () => {
-    const existing = clickTimers.get(seatEl);
-    if (existing) { clearTimeout(existing); clickTimers.delete(seatEl); }
+  seatEl.addEventListener("dblclick", (e) => {
+    if (e.target.tagName === "INPUT") return;
+    cancelPendingClickTimer(seatEl);
   });
 }
 
@@ -297,9 +324,12 @@ function makeSeatEl(s, i) {
   const seat = document.createElement("div");
   seat.className = "seat";
   seat.dataset.index = i;
+  const zhDisplay = s.zh || "";
+  const enDisplay = s.en || "";
+  if (!zhDisplay && !enDisplay) seat.classList.add("seat-empty");
   seat.innerHTML = `
-    <span class="name-zh" ondblclick="editName(event, this, 'zh')">${s.zh || ""}</span>
-    <span class="name-en" ondblclick="editName(event, this, 'en')">${s.en || ""}</span>
+    <span class="name-zh" ondblclick="editName(event, this, 'zh')">${zhDisplay}</span>
+    <span class="name-en" ondblclick="editName(event, this, 'en')">${enDisplay}</span>
   `;
   attachSeatInteraction(seat);
   return seat;
@@ -327,6 +357,8 @@ function editTitle() {
 
 function editName(event, span, type) {
   event.stopPropagation();
+  const seatEl = span.closest(".seat");
+  if (seatEl) cancelPendingClickTimer(seatEl);
   clearSelection();
   isEditingSomething = true;
   const current = span.textContent;
@@ -339,6 +371,7 @@ function editName(event, span, type) {
     newSpan.textContent = input.value.trim();
     newSpan.setAttribute("ondblclick", `editName(event, this, '${type}')`);
     input.replaceWith(newSpan);
+    if (seatEl) updateEmptyStyle(seatEl);
     isEditingSomething = false;
     syncStudentsFromDOM();
     if (pendingRemoteData) { const d = pendingRemoteData; pendingRemoteData = null; applyRemoteData(d); }
@@ -354,24 +387,25 @@ function syncStudentsFromDOM() {
   seatEls.forEach(el => {
     const zh = el.querySelector(".name-zh")?.textContent.trim() || "";
     const en = el.querySelector(".name-en")?.textContent.trim() || "";
-    if (zh || en) newStudents.push({ zh, en });
+    newStudents.push({ zh, en });
   });
-  if (newStudents.length > 0) students = newStudents;
+  students = newStudents;
 }
 
 function renderStandard() {
   board.className = ""; board.innerHTML = ""; clearSelectionSilently();
-  const totalPairs = 3, rowsPerPair = 2, totalRows = totalPairs * rowsPerPair;
-  const perRow = Math.ceil(students.length / totalRows);
-  const totalSeats = perRow * totalRows;
-  const padded = students.slice();
-  while (padded.length < totalSeats) padded.push({ zh: "", en: "" });
+  if (students.length < STANDARD_TOTAL_ROWS) students = padToStandardSize(students);
+  const perRow = Math.ceil(students.length / STANDARD_TOTAL_ROWS);
   let idx = 0;
-  for (let p = 0; p < totalPairs; p++) {
+  for (let p = 0; p < STANDARD_TOTAL_PAIRS; p++) {
     const pair = document.createElement("div"); pair.className = "row-pair";
-    for (let r = 0; r < rowsPerPair; r++) {
+    for (let r = 0; r < STANDARD_ROWS_PER_PAIR; r++) {
       const rowEl = document.createElement("div"); rowEl.className = "seat-row";
-      for (let c = 0; c < perRow; c++) { rowEl.appendChild(makeSeatEl(padded[idx], idx)); idx++; }
+      for (let c = 0; c < perRow; c++) {
+        const s = students[idx] || { zh: "", en: "" };
+        rowEl.appendChild(makeSeatEl(s, idx));
+        idx++;
+      }
       pair.appendChild(rowEl);
     }
     board.appendChild(pair);
@@ -399,7 +433,11 @@ function renderGroup() {
   for (let g = 0; g < totalGroups; g++) {
     const box = document.createElement("div"); box.className = "group-box";
     box.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-    for (let k = 0; k < groupSize && idx < students.length; k++) { box.appendChild(makeSeatEl(students[idx], idx)); idx++; }
+    for (let k = 0; k < groupSize; k++) {
+      if (idx >= students.length) break;
+      box.appendChild(makeSeatEl(students[idx], idx));
+      idx++;
+    }
     board.appendChild(box);
   }
 }
