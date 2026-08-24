@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>課室座位表 Seating Plan</title>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <style>
@@ -27,7 +27,6 @@
     background: linear-gradient(180deg, #a9cdf0 0%, #cfe4f8 180px, var(--bg) 380px);
     margin: 0;
     padding: 20px;
-    touch-action: none;
     color: var(--text-main);
     overflow-x: hidden;
     min-height: 100vh;
@@ -109,8 +108,12 @@
     background: var(--card-bg); border: 2px solid var(--wood-dark); border-top: 6px solid var(--accent-yellow);
     border-radius: 8px; padding: 10px 4px; text-align: center; min-height: 76px; width: 100px;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    cursor: grab; user-select: none; box-shadow: 0 3px 0 rgba(139,90,43,0.35), 0 4px 6px rgba(0,0,0,0.08);
-    transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.1s ease; position: relative;
+    cursor: grab; user-select: none;
+    box-shadow: 0 3px 0 rgba(139,90,43,0.35), 0 4px 6px rgba(0,0,0,0.08);
+    transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    position: relative;
+    touch-action: manipulation;
+    -webkit-user-drag: element;
   }
   .seat::before, .seat::after {
     content: ""; position: absolute; width: 5px; height: 5px; background: var(--wood-dark);
@@ -124,6 +127,11 @@
     border-color: var(--accent-red); border-top-color: var(--accent-red); transform: scale(1.05) rotate(-1deg);
   }
   .seat.sortable-ghost { opacity: 0.3; }
+  .sortable-fallback {
+    opacity: 0.9 !important;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.25) !important;
+    transform: scale(1.08) rotate(-2deg) !important;
+  }
   .name-zh { font-size: 14px; font-weight: 700; color: var(--text-main); }
   .name-en { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
   .seat input {
@@ -302,13 +310,21 @@ function destroySortables() {
 function attachSortable(container) {
   const inst = Sortable.create(container, {
     group: "seats",
-    animation: 200,
+    animation: 150,
+    easing: "cubic-bezier(0.25, 1, 0.5, 1)",
     swap: true,
     swapClass: "sortable-swap-highlight",
-    delay: 150,
+    swapThreshold: 0.65,
+
+    delay: 120,
     delayOnTouchOnly: true,
-    touchStartThreshold: 5,
-    forceFallback: false,
+    touchStartThreshold: 8,
+    forceFallback: true,
+    fallbackOnBody: true,
+    fallbackTolerance: 3,
+    scrollSensitivity: 60,
+    scrollSpeed: 12,
+
     onChoose: (evt) => { evt.item.style.cursor = "grabbing"; },
     onUnchoose: (evt) => { evt.item.style.cursor = "grab"; },
     onEnd: () => {
