@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>課室座位表 Seating Plan</title>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <style>
   :root {
     --primary: #1A48A0;
@@ -94,6 +93,9 @@
     height: 18px; margin-top: -6px; margin-bottom: 6px; opacity: 0; transition: opacity 0.3s ease;
   }
   .save-status.show { opacity: 1; }
+  .instruction {
+    text-align: center; font-size: 12.5px; color: var(--text-sub); margin: 0 0 14px 0;
+  }
   #board { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: row; justify-content: center; gap: 48px; position: relative; }
   .row-pair { display: flex; flex-direction: row; gap: 8px; }
   .seat-row { display: flex; flex-direction: column; gap: 8px; align-items: center; }
@@ -108,12 +110,10 @@
     background: var(--card-bg); border: 2px solid var(--wood-dark); border-top: 6px solid var(--accent-yellow);
     border-radius: 8px; padding: 10px 4px; text-align: center; min-height: 76px; width: 100px;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    cursor: grab; user-select: none;
+    cursor: pointer; user-select: none; -webkit-touch-callout: none;
     box-shadow: 0 3px 0 rgba(139,90,43,0.35), 0 4px 6px rgba(0,0,0,0.08);
     transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
     position: relative;
-    touch-action: manipulation;
-    -webkit-user-drag: element;
   }
   .seat::before, .seat::after {
     content: ""; position: absolute; width: 5px; height: 5px; background: var(--wood-dark);
@@ -122,21 +122,20 @@
   .seat::before { left: 5px; }
   .seat::after { right: 5px; }
   .group-box .seat { width: 100%; }
-  .seat.sortable-chosen {
-    box-shadow: 0 5px 0 rgba(241,6,11,0.35), 0 6px 12px rgba(0,0,0,0.15);
-    border-color: var(--accent-red); border-top-color: var(--accent-red); transform: scale(1.05) rotate(-1deg);
+  .seat.seat-selected {
+    box-shadow: 0 0 0 3px var(--accent-red), 0 5px 0 rgba(241,6,11,0.35), 0 6px 12px rgba(0,0,0,0.15);
+    border-color: var(--accent-red);
+    border-top-color: var(--accent-red);
+    transform: scale(1.06);
   }
-  .seat.sortable-ghost { opacity: 0.3; }
-  .sortable-fallback {
-    opacity: 0.9 !important;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.25) !important;
-    transform: scale(1.08) rotate(-2deg) !important;
+  .seat:active {
+    transform: scale(0.97);
   }
-  .name-zh { font-size: 14px; font-weight: 700; color: var(--text-main); }
-  .name-en { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+  .name-zh { font-size: 14px; font-weight: 700; color: var(--text-main); pointer-events: none; }
+  .name-en { font-size: 11px; color: var(--text-sub); margin-top: 2px; pointer-events: none; }
   .seat input {
     width: 90%; text-align: center; border: none; background: transparent; font-size: 13px;
-    font-weight: 700; outline: none; color: var(--text-main);
+    font-weight: 700; outline: none; color: var(--text-main); pointer-events: auto;
   }
   .seat input.en-input { font-size: 10px; font-weight: 400; color: var(--text-sub); }
   .footer-banner { text-align: center; margin-top: 30px; }
@@ -186,6 +185,8 @@
 </div>
 <div class="save-status" id="saveStatus">已儲存</div>
 
+<p class="instruction">點選第一位學生（會出現紅框），再點選要交換的另一位學生，即完成互換座位｜雙擊姓名可直接編輯｜雙擊標題可修改班別名稱</p>
+
 <div id="board"></div>
 
 <div class="footer-banner">
@@ -234,8 +235,66 @@ let currentMode = savedData ? (savedData.mode || "standard") : "standard";
 let currentGroupSize = savedData ? (savedData.groupSize || 4) : 4;
 
 const board = document.getElementById("board");
-let sortableInstances = [];
 let saveTimer = null;
+
+let selectedSeat = null;
+let clickTimers = new WeakMap();
+
+function clearSelection() {
+  if (selectedSeat) {
+    selectedSeat.classList.remove("seat-selected");
+    selectedSeat = null;
+  }
+}
+
+function handleSeatClick(seatEl) {
+  if (seatEl.querySelector("input")) return;
+
+  if (!selectedSeat) {
+    selectedSeat = seatEl;
+    seatEl.classList.add("seat-selected");
+  } else if (selectedSeat === seatEl) {
+    clearSelection();
+  } else {
+    swapSeatContent(selectedSeat, seatEl);
+    clearSelection();
+    syncStudentsFromDOM();
+    scheduleAutoSave();
+  }
+}
+
+function swapSeatContent(seatA, seatB) {
+  const zhA = seatA.querySelector(".name-zh");
+  const enA = seatA.querySelector(".name-en");
+  const zhB = seatB.querySelector(".name-zh");
+  const enB = seatB.querySelector(".name-en");
+  const tmpZh = zhA.textContent;
+  const tmpEn = enA.textContent;
+  zhA.textContent = zhB.textContent;
+  enA.textContent = enB.textContent;
+  zhB.textContent = tmpZh;
+  enB.textContent = tmpEn;
+}
+
+function attachSeatInteraction(seatEl) {
+  seatEl.addEventListener("click", (e) => {
+    if (e.target.tagName === "INPUT") return;
+    const existing = clickTimers.get(seatEl);
+    if (existing) clearTimeout(existing);
+    const t = setTimeout(() => {
+      handleSeatClick(seatEl);
+      clickTimers.delete(seatEl);
+    }, 220);
+    clickTimers.set(seatEl, t);
+  });
+  seatEl.addEventListener("dblclick", () => {
+    const existing = clickTimers.get(seatEl);
+    if (existing) {
+      clearTimeout(existing);
+      clickTimers.delete(seatEl);
+    }
+  });
+}
 
 function makeSeatEl(s, i) {
   const seat = document.createElement("div");
@@ -243,9 +302,10 @@ function makeSeatEl(s, i) {
   seat.dataset.index = i;
   const zhDisplay = s.zh || "";
   seat.innerHTML = `
-    <span class="name-zh" ondblclick="editName(this, 'zh')">${zhDisplay}</span>
-    <span class="name-en" ondblclick="editName(this, 'en')">${s.en || ""}</span>
+    <span class="name-zh" ondblclick="editName(event, this, 'zh')">${zhDisplay}</span>
+    <span class="name-en" ondblclick="editName(event, this, 'en')">${s.en || ""}</span>
   `;
+  attachSeatInteraction(seat);
   return seat;
 }
 
@@ -270,7 +330,9 @@ function editTitle() {
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") input.blur(); });
 }
 
-function editName(span, type) {
+function editName(event, span, type) {
+  event.stopPropagation();
+  clearSelection();
   const current = span.textContent;
   const input = document.createElement("input");
   input.className = type === "en" ? "en-input" : "";
@@ -282,7 +344,7 @@ function editName(span, type) {
     const newSpan = document.createElement("span");
     newSpan.className = type === "en" ? "name-en" : "name-zh";
     newSpan.textContent = input.value.trim();
-    newSpan.setAttribute("ondblclick", `editName(this, '${type}')`);
+    newSpan.setAttribute("ondblclick", `editName(event, this, '${type}')`);
     input.replaceWith(newSpan);
     syncStudentsFromDOM();
     scheduleAutoSave();
@@ -302,42 +364,10 @@ function syncStudentsFromDOM() {
   if (newStudents.length > 0) students = newStudents;
 }
 
-function destroySortables() {
-  sortableInstances.forEach(s => s.destroy());
-  sortableInstances = [];
-}
-
-function attachSortable(container) {
-  const inst = Sortable.create(container, {
-    group: "seats",
-    animation: 150,
-    easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-    swap: true,
-    swapClass: "sortable-swap-highlight",
-    swapThreshold: 0.65,
-
-    delay: 120,
-    delayOnTouchOnly: true,
-    touchStartThreshold: 8,
-    forceFallback: true,
-    fallbackOnBody: true,
-    fallbackTolerance: 3,
-    scrollSensitivity: 60,
-    scrollSpeed: 12,
-
-    onChoose: (evt) => { evt.item.style.cursor = "grabbing"; },
-    onUnchoose: (evt) => { evt.item.style.cursor = "grab"; },
-    onEnd: () => {
-      syncStudentsFromDOM();
-      scheduleAutoSave();
-    }
-  });
-  sortableInstances.push(inst);
-}
-
 function renderStandard() {
   board.className = "";
   board.innerHTML = "";
+  clearSelection();
   const totalPairs = 3;
   const rowsPerPair = 2;
   const totalRows = totalPairs * rowsPerPair;
@@ -361,7 +391,6 @@ function renderStandard() {
         idx++;
       }
       pair.appendChild(rowEl);
-      attachSortable(rowEl);
     }
     board.appendChild(pair);
   }
@@ -379,6 +408,7 @@ function getGroupGridColumns(size) {
 function renderGroup() {
   board.className = "group-mode";
   board.innerHTML = "";
+  clearSelection();
   const groupSize = currentGroupSize;
   const cols = getGroupGridColumns(groupSize);
   let idx = 0;
@@ -392,20 +422,17 @@ function renderGroup() {
       idx++;
     }
     board.appendChild(box);
-    attachSortable(box);
   }
 }
 
 function onGroupSizeChange() {
   currentGroupSize = parseInt(document.getElementById("groupSizeSelect").value, 10);
-  destroySortables();
   renderGroup();
   scheduleAutoSave();
 }
 
 function setMode(mode) {
   currentMode = mode;
-  destroySortables();
   document.getElementById("btnStandard").classList.toggle("active", mode === "standard");
   document.getElementById("btnGroup").classList.toggle("active", mode === "group");
   document.getElementById("groupSizeControl").classList.toggle("visible", mode === "group");
