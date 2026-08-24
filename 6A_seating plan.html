@@ -242,12 +242,18 @@ const board = document.getElementById("board");
 let saveTimer = null;
 let isApplyingRemoteUpdate = false;
 let isEditingSomething = false;
+let pendingRemoteData = null;
 
 let selectedSeat = null;
 let clickTimers = new WeakMap();
 
 function clearSelection() {
   if (selectedSeat) { selectedSeat.classList.remove("seat-selected"); selectedSeat = null; }
+  if (pendingRemoteData) {
+    const data = pendingRemoteData;
+    pendingRemoteData = null;
+    applyRemoteData(data);
+  }
 }
 
 function handleSeatClick(seatEl) {
@@ -312,6 +318,7 @@ function editTitle() {
     newH1.textContent = input.value.trim() || current;
     input.replaceWith(newH1);
     isEditingSomething = false;
+    if (pendingRemoteData) { const d = pendingRemoteData; pendingRemoteData = null; applyRemoteData(d); }
     scheduleCloudSave();
   }
   input.addEventListener("blur", save);
@@ -334,7 +341,8 @@ function editName(event, span, type) {
     input.replaceWith(newSpan);
     isEditingSomething = false;
     syncStudentsFromDOM();
-    scheduleCloudSave();
+    if (pendingRemoteData) { const d = pendingRemoteData; pendingRemoteData = null; applyRemoteData(d); }
+    else { scheduleCloudSave(); }
   }
   input.addEventListener("blur", save);
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") input.blur(); });
@@ -352,7 +360,7 @@ function syncStudentsFromDOM() {
 }
 
 function renderStandard() {
-  board.className = ""; board.innerHTML = ""; clearSelection();
+  board.className = ""; board.innerHTML = ""; clearSelectionSilently();
   const totalPairs = 3, rowsPerPair = 2, totalRows = totalPairs * rowsPerPair;
   const perRow = Math.ceil(students.length / totalRows);
   const totalSeats = perRow * totalRows;
@@ -370,6 +378,10 @@ function renderStandard() {
   }
 }
 
+function clearSelectionSilently() {
+  if (selectedSeat) { selectedSeat = null; }
+}
+
 function getGroupGridColumns(size) {
   if (size <= 2) return size;
   if (size === 3) return 3;
@@ -380,7 +392,7 @@ function getGroupGridColumns(size) {
 }
 
 function renderGroup() {
-  board.className = "group-mode"; board.innerHTML = ""; clearSelection();
+  board.className = "group-mode"; board.innerHTML = ""; clearSelectionSilently();
   const groupSize = currentGroupSize, cols = getGroupGridColumns(groupSize);
   let idx = 0;
   const totalGroups = Math.ceil(students.length / groupSize);
@@ -423,7 +435,6 @@ function buildDataPayload() {
 }
 
 function saveToCloud(showToast) {
-  if (isApplyingRemoteUpdate) return;
   const data = buildDataPayload();
   planRef.set(data)
     .then(() => { if (showToast) showSaveStatus("已同步 " + new Date().toLocaleTimeString("zh-HK"), false); })
@@ -453,19 +464,7 @@ function setSyncIndicator(status) {
   else text.textContent = "連接中...";
 }
 
-let firstSnapshotHandled = false;
-planRef.onSnapshot((doc) => {
-  setSyncIndicator("online");
-  if (!doc.exists) {
-    if (!firstSnapshotHandled) {
-      firstSnapshotHandled = true;
-      saveToCloud(false);
-    }
-    return;
-  }
-  const data = doc.data();
-  if (isEditingSomething) return;
-
+function applyRemoteData(data) {
   isApplyingRemoteUpdate = true;
   students = Array.isArray(data.students) ? data.students : students;
   currentMode = data.mode || "standard";
@@ -477,6 +476,33 @@ planRef.onSnapshot((doc) => {
   document.getElementById("groupSizeControl").classList.toggle("visible", currentMode === "group");
   if (currentMode === "standard") renderStandard(); else renderGroup();
   isApplyingRemoteUpdate = false;
+}
+
+let firstSnapshotHandled = false;
+planRef.onSnapshot({ includeMetadataChanges: true }, (doc) => {
+  setSyncIndicator("online");
+
+  if (doc.metadata.hasPendingWrites) {
+    return;
+  }
+
+  if (!doc.exists) {
+    if (!firstSnapshotHandled) {
+      firstSnapshotHandled = true;
+      saveToCloud(false);
+    }
+    return;
+  }
+
+  const data = doc.data();
+  if (isEditingSomething) return;
+
+  if (selectedSeat) {
+    pendingRemoteData = data;
+    return;
+  }
+
+  applyRemoteData(data);
   firstSnapshotHandled = true;
 }, (err) => {
   console.error("Firestore監聽錯誤:", err);
