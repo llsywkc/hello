@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>課室座位表 Seating Plan</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <style>
   :root {
     --primary: #1A48A0;
@@ -24,15 +28,10 @@
   body {
     font-family: -apple-system, "PingFang HK", "Microsoft JhengHei", sans-serif;
     background: linear-gradient(180deg, #a9cdf0 0%, #cfe4f8 180px, var(--bg) 380px);
-    margin: 0;
-    padding: 20px;
-    color: var(--text-main);
-    overflow-x: hidden;
-    min-height: 100vh;
+    margin: 0; padding: 20px; color: var(--text-main);
+    overflow-x: hidden; min-height: 100vh;
   }
-  .cloud {
-    position: absolute; background: #ffffff; border-radius: 50px; opacity: 0.9; z-index: 0; pointer-events: none;
-  }
+  .cloud { position: absolute; background: #ffffff; border-radius: 50px; opacity: 0.9; z-index: 0; pointer-events: none; }
   .cloud::before, .cloud::after { content: ""; position: absolute; background: #ffffff; border-radius: 50%; }
   .cloud1 { width: 90px; height: 30px; top: 18px; left: 6%; }
   .cloud1::before { width: 45px; height: 45px; top: -20px; left: 8px; }
@@ -89,13 +88,20 @@
   .group-size-control.visible { display: flex; }
   .group-size-control label { font-size: 13px; color: var(--text-sub); font-weight: 700; }
   .save-status {
-    text-align: center; font-size: 12px; color: var(--accent-green); font-weight: 600;
+    text-align: center; font-size: 12px; font-weight: 600;
     height: 18px; margin-top: -6px; margin-bottom: 6px; opacity: 0; transition: opacity 0.3s ease;
+    color: var(--accent-green);
   }
   .save-status.show { opacity: 1; }
-  .instruction {
-    text-align: center; font-size: 12.5px; color: var(--text-sub); margin: 0 0 14px 0;
+  .save-status.error { color: var(--accent-red); }
+  .sync-indicator {
+    text-align: center; font-size: 11px; color: var(--text-sub); margin-bottom: 10px;
+    display: flex; justify-content: center; align-items: center; gap: 6px;
   }
+  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; transition: background 0.3s ease; }
+  .sync-dot.online { background: var(--accent-green); }
+  .sync-dot.offline { background: var(--accent-red); }
+  .instruction { text-align: center; font-size: 12.5px; color: var(--text-sub); margin: 0 0 14px 0; }
   #board { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: row; justify-content: center; gap: 48px; position: relative; }
   .row-pair { display: flex; flex-direction: row; gap: 8px; }
   .seat-row { display: flex; flex-direction: column; gap: 8px; align-items: center; }
@@ -124,13 +130,9 @@
   .group-box .seat { width: 100%; }
   .seat.seat-selected {
     box-shadow: 0 0 0 3px var(--accent-red), 0 5px 0 rgba(241,6,11,0.35), 0 6px 12px rgba(0,0,0,0.15);
-    border-color: var(--accent-red);
-    border-top-color: var(--accent-red);
-    transform: scale(1.06);
+    border-color: var(--accent-red); border-top-color: var(--accent-red); transform: scale(1.06);
   }
-  .seat:active {
-    transform: scale(0.97);
-  }
+  .seat:active { transform: scale(0.97); }
   .name-zh { font-size: 14px; font-weight: 700; color: var(--text-main); pointer-events: none; }
   .name-en { font-size: 11px; color: var(--text-sub); margin-top: 2px; pointer-events: none; }
   .seat input {
@@ -139,9 +141,7 @@
   }
   .seat input.en-input { font-size: 10px; font-weight: 400; color: var(--text-sub); }
   .footer-banner { text-align: center; margin-top: 30px; }
-  .footer-banner img {
-    max-width: 100%; max-height: 160px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
+  .footer-banner img { max-width: 100%; max-height: 160px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
   #importFileInput { display: none; }
 </style>
 </head>
@@ -161,6 +161,11 @@
   <h1 id="planTitle" ondblclick="editTitle()">6A 課室座位表</h1>
 </div>
 
+<div class="sync-indicator">
+  <span class="sync-dot" id="syncDot"></span>
+  <span id="syncText">連接中...</span>
+</div>
+
 <div class="toolbar">
   <button id="btnStandard" class="active" onclick="setMode('standard')">標準排列（雙行成組）</button>
   <button id="btnGroup" onclick="setMode('group')">分組排列</button>
@@ -177,79 +182,76 @@
 </div>
 
 <div class="toolbar">
-  <button class="save-btn" onclick="manualSave()">&#128190; 儲存座位</button>
   <button class="reset-btn" onclick="resetToDefault()">&#8635; 還原預設名單</button>
   <button onclick="exportData()">&#11015; 匯出備份 (JSON)</button>
   <button onclick="document.getElementById('importFileInput').click()">&#11014; 匯入備份</button>
   <input type="file" id="importFileInput" accept=".json" onchange="importData(event)">
 </div>
-<div class="save-status" id="saveStatus">已儲存</div>
+<div class="save-status" id="saveStatus">已同步</div>
 
-<p class="instruction">點選第一位學生（會出現紅框），再點選要交換的另一位學生，即完成互換座位｜雙擊姓名可直接編輯｜雙擊標題可修改班別名稱</p>
+<p class="instruction">點選第一位學生（會出現紅框），再點選要交換的另一位學生，即完成互換座位｜雙擊姓名可直接編輯｜雙擊標題可修改班別名稱｜所有改動會自動同步到雲端,任何裝置打開都會看到最新排位</p>
 
 <div id="board"></div>
 
 <div class="footer-banner">
-  <!-- 請把你的橫幅圖檔重新命名為 To-Infinity-and-Beyond.jpg，並放入與本HTML同一資料夾下的 images 子資料夾內 -->
   <img src="images/To-Infinity-and-Beyond.jpg" alt="To Infinity and Beyond" onerror="this.style.display='none'">
 </div>
 
 </div>
 
 <script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDfVyD6Qupj-upM6I4-6ytThBW8yIudNEQ",
+  authDomain: "a-seating-plan-ee22d.firebaseapp.com",
+  projectId: "a-seating-plan-ee22d",
+  storageBucket: "a-seating-plan-ee22d.firebasestorage.app",
+  messagingSenderId: "172329225759",
+  appId: "1:172329225759:web:a4e62342f4eb6cad0acf2a"
+};
+
+const PLAN_DOC_ID = "6A";
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const planRef = db.collection("seatingPlans").doc(PLAN_DOC_ID);
+
 const defaultStudents = [
-  {no:1,  zh:"區錦浩",   en:"AU KAM HO"},
-  {no:2,  zh:"張敏敏",   en:"CHEUNG MAN MAN"},
-  {no:3,  zh:"趙家樂",   en:"CHIU KA LOK"},
-  {no:4,  zh:"",         en:"GABRIEL PHILIP MILNE"},
-  {no:5,  zh:"韓伊晨",   en:"HAN YI SEN"},
-  {no:6,  zh:"詹皓然",   en:"JIM HO YIN"},
-  {no:7,  zh:"林卓瑤",   en:"LAM CHEUK YIU"},
-  {no:8,  zh:"梁家逸",   en:"LEUNG KA YAT"},
-  {no:9,  zh:"梁念恩",   en:"LEUNG NIM YAN"},
-  {no:10, zh:"李韋成",   en:"LI WAI SHING"},
-  {no:11, zh:"李彦彤",   en:"LI YANTONG"},
-  {no:12, zh:"文諾彥",   en:"MAN NOK YIN"},
-  {no:13, zh:"吳梓淇",   en:"NG TSZ KI"},
-  {no:14, zh:"黃倬朣",   en:"WONG CHEUK TUNG"},
-  {no:15, zh:"黃溢鋒",   en:"WONG YAT FUNG Tyrus"},
-  {no:16, zh:"曾溱翔",   en:"ZENG TSUN CHEUNG"}
+  {zh:"區錦浩",   en:"AU KAM HO"},
+  {zh:"張敏敏",   en:"CHEUNG MAN MAN"},
+  {zh:"趙家樂",   en:"CHIU KA LOK"},
+  {zh:"",         en:"GABRIEL PHILIP MILNE"},
+  {zh:"韓伊晨",   en:"HAN YI SEN"},
+  {zh:"詹皓然",   en:"JIM HO YIN"},
+  {zh:"林卓瑤",   en:"LAM CHEUK YIU"},
+  {zh:"梁家逸",   en:"LEUNG KA YAT"},
+  {zh:"梁念恩",   en:"LEUNG NIM YAN"},
+  {zh:"李韋成",   en:"LI WAI SHING"},
+  {zh:"李彦彤",   en:"LI YANTONG"},
+  {zh:"文諾彥",   en:"MAN NOK YIN"},
+  {zh:"吳梓淇",   en:"NG TSZ KI"},
+  {zh:"黃倬朣",   en:"WONG CHEUK TUNG"},
+  {zh:"黃溢鋒",   en:"WONG YAT FUNG Tyrus"},
+  {zh:"曾溱翔",   en:"ZENG TSUN CHEUNG"}
 ];
 
-const STORAGE_KEY = "seatingPlanData_6A";
-
-function loadSavedData() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (parsed && Array.isArray(parsed.students)) return parsed;
-    }
-  } catch (e) { console.warn("讀取本機儲存資料失敗", e); }
-  return null;
-}
-
-const savedData = loadSavedData();
-let students = savedData ? savedData.students : JSON.parse(JSON.stringify(defaultStudents));
-let currentMode = savedData ? (savedData.mode || "standard") : "standard";
-let currentGroupSize = savedData ? (savedData.groupSize || 4) : 4;
+let students = JSON.parse(JSON.stringify(defaultStudents));
+let currentMode = "standard";
+let currentGroupSize = 4;
 
 const board = document.getElementById("board");
 let saveTimer = null;
+let isApplyingRemoteUpdate = false;
+let isEditingSomething = false;
 
 let selectedSeat = null;
 let clickTimers = new WeakMap();
 
 function clearSelection() {
-  if (selectedSeat) {
-    selectedSeat.classList.remove("seat-selected");
-    selectedSeat = null;
-  }
+  if (selectedSeat) { selectedSeat.classList.remove("seat-selected"); selectedSeat = null; }
 }
 
 function handleSeatClick(seatEl) {
   if (seatEl.querySelector("input")) return;
-
   if (!selectedSeat) {
     selectedSeat = seatEl;
     seatEl.classList.add("seat-selected");
@@ -259,21 +261,16 @@ function handleSeatClick(seatEl) {
     swapSeatContent(selectedSeat, seatEl);
     clearSelection();
     syncStudentsFromDOM();
-    scheduleAutoSave();
+    scheduleCloudSave();
   }
 }
 
 function swapSeatContent(seatA, seatB) {
-  const zhA = seatA.querySelector(".name-zh");
-  const enA = seatA.querySelector(".name-en");
-  const zhB = seatB.querySelector(".name-zh");
-  const enB = seatB.querySelector(".name-en");
-  const tmpZh = zhA.textContent;
-  const tmpEn = enA.textContent;
-  zhA.textContent = zhB.textContent;
-  enA.textContent = enB.textContent;
-  zhB.textContent = tmpZh;
-  enB.textContent = tmpEn;
+  const zhA = seatA.querySelector(".name-zh"), enA = seatA.querySelector(".name-en");
+  const zhB = seatB.querySelector(".name-zh"), enB = seatB.querySelector(".name-en");
+  const tmpZh = zhA.textContent, tmpEn = enA.textContent;
+  zhA.textContent = zhB.textContent; enA.textContent = enB.textContent;
+  zhB.textContent = tmpZh; enB.textContent = tmpEn;
 }
 
 function attachSeatInteraction(seatEl) {
@@ -281,18 +278,12 @@ function attachSeatInteraction(seatEl) {
     if (e.target.tagName === "INPUT") return;
     const existing = clickTimers.get(seatEl);
     if (existing) clearTimeout(existing);
-    const t = setTimeout(() => {
-      handleSeatClick(seatEl);
-      clickTimers.delete(seatEl);
-    }, 220);
+    const t = setTimeout(() => { handleSeatClick(seatEl); clickTimers.delete(seatEl); }, 220);
     clickTimers.set(seatEl, t);
   });
   seatEl.addEventListener("dblclick", () => {
     const existing = clickTimers.get(seatEl);
-    if (existing) {
-      clearTimeout(existing);
-      clickTimers.delete(seatEl);
-    }
+    if (existing) { clearTimeout(existing); clickTimers.delete(seatEl); }
   });
 }
 
@@ -300,9 +291,8 @@ function makeSeatEl(s, i) {
   const seat = document.createElement("div");
   seat.className = "seat";
   seat.dataset.index = i;
-  const zhDisplay = s.zh || "";
   seat.innerHTML = `
-    <span class="name-zh" ondblclick="editName(event, this, 'zh')">${zhDisplay}</span>
+    <span class="name-zh" ondblclick="editName(event, this, 'zh')">${s.zh || ""}</span>
     <span class="name-en" ondblclick="editName(event, this, 'en')">${s.en || ""}</span>
   `;
   attachSeatInteraction(seat);
@@ -310,21 +300,19 @@ function makeSeatEl(s, i) {
 }
 
 function editTitle() {
+  isEditingSomething = true;
   const h1 = document.getElementById("planTitle");
   const current = h1.textContent;
   const input = document.createElement("input");
-  input.id = "titleInput";
-  input.value = current;
-  h1.replaceWith(input);
-  input.focus();
-  input.select();
+  input.id = "titleInput"; input.value = current;
+  h1.replaceWith(input); input.focus(); input.select();
   function save() {
     const newH1 = document.createElement("h1");
-    newH1.id = "planTitle";
-    newH1.setAttribute("ondblclick", "editTitle()");
+    newH1.id = "planTitle"; newH1.setAttribute("ondblclick", "editTitle()");
     newH1.textContent = input.value.trim() || current;
     input.replaceWith(newH1);
-    scheduleAutoSave();
+    isEditingSomething = false;
+    scheduleCloudSave();
   }
   input.addEventListener("blur", save);
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") input.blur(); });
@@ -333,21 +321,20 @@ function editTitle() {
 function editName(event, span, type) {
   event.stopPropagation();
   clearSelection();
+  isEditingSomething = true;
   const current = span.textContent;
   const input = document.createElement("input");
   input.className = type === "en" ? "en-input" : "";
-  input.value = current;
-  span.replaceWith(input);
-  input.focus();
-  input.select();
+  input.value = current; span.replaceWith(input); input.focus(); input.select();
   function save() {
     const newSpan = document.createElement("span");
     newSpan.className = type === "en" ? "name-en" : "name-zh";
     newSpan.textContent = input.value.trim();
     newSpan.setAttribute("ondblclick", `editName(event, this, '${type}')`);
     input.replaceWith(newSpan);
+    isEditingSomething = false;
     syncStudentsFromDOM();
-    scheduleAutoSave();
+    scheduleCloudSave();
   }
   input.addEventListener("blur", save);
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") input.blur(); });
@@ -365,31 +352,18 @@ function syncStudentsFromDOM() {
 }
 
 function renderStandard() {
-  board.className = "";
-  board.innerHTML = "";
-  clearSelection();
-  const totalPairs = 3;
-  const rowsPerPair = 2;
-  const totalRows = totalPairs * rowsPerPair;
+  board.className = ""; board.innerHTML = ""; clearSelection();
+  const totalPairs = 3, rowsPerPair = 2, totalRows = totalPairs * rowsPerPair;
   const perRow = Math.ceil(students.length / totalRows);
   const totalSeats = perRow * totalRows;
-
-  const paddedStudents = students.slice();
-  while (paddedStudents.length < totalSeats) {
-    paddedStudents.push({ zh: "", en: "" });
-  }
-
+  const padded = students.slice();
+  while (padded.length < totalSeats) padded.push({ zh: "", en: "" });
   let idx = 0;
   for (let p = 0; p < totalPairs; p++) {
-    const pair = document.createElement("div");
-    pair.className = "row-pair";
+    const pair = document.createElement("div"); pair.className = "row-pair";
     for (let r = 0; r < rowsPerPair; r++) {
-      const rowEl = document.createElement("div");
-      rowEl.className = "seat-row";
-      for (let c = 0; c < perRow; c++) {
-        rowEl.appendChild(makeSeatEl(paddedStudents[idx], idx));
-        idx++;
-      }
+      const rowEl = document.createElement("div"); rowEl.className = "seat-row";
+      for (let c = 0; c < perRow; c++) { rowEl.appendChild(makeSeatEl(padded[idx], idx)); idx++; }
       pair.appendChild(rowEl);
     }
     board.appendChild(pair);
@@ -406,21 +380,14 @@ function getGroupGridColumns(size) {
 }
 
 function renderGroup() {
-  board.className = "group-mode";
-  board.innerHTML = "";
-  clearSelection();
-  const groupSize = currentGroupSize;
-  const cols = getGroupGridColumns(groupSize);
+  board.className = "group-mode"; board.innerHTML = ""; clearSelection();
+  const groupSize = currentGroupSize, cols = getGroupGridColumns(groupSize);
   let idx = 0;
   const totalGroups = Math.ceil(students.length / groupSize);
   for (let g = 0; g < totalGroups; g++) {
-    const box = document.createElement("div");
-    box.className = "group-box";
+    const box = document.createElement("div"); box.className = "group-box";
     box.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-    for (let k = 0; k < groupSize && idx < students.length; k++) {
-      box.appendChild(makeSeatEl(students[idx], idx));
-      idx++;
-    }
+    for (let k = 0; k < groupSize && idx < students.length; k++) { box.appendChild(makeSeatEl(students[idx], idx)); idx++; }
     board.appendChild(box);
   }
 }
@@ -428,7 +395,7 @@ function renderGroup() {
 function onGroupSizeChange() {
   currentGroupSize = parseInt(document.getElementById("groupSizeSelect").value, 10);
   renderGroup();
-  scheduleAutoSave();
+  scheduleCloudSave();
 }
 
 function setMode(mode) {
@@ -436,77 +403,104 @@ function setMode(mode) {
   document.getElementById("btnStandard").classList.toggle("active", mode === "standard");
   document.getElementById("btnGroup").classList.toggle("active", mode === "group");
   document.getElementById("groupSizeControl").classList.toggle("visible", mode === "group");
-  if (mode === "standard") renderStandard();
-  else renderGroup();
-  scheduleAutoSave();
+  if (mode === "standard") renderStandard(); else renderGroup();
+  scheduleCloudSave();
 }
 
 function getCurrentTitle() {
   return document.getElementById("planTitle")?.textContent || "課室座位表";
 }
 
-function saveToStorage(showToast) {
+function buildDataPayload() {
   syncStudentsFromDOM();
-  const data = {
+  return {
     title: getCurrentTitle(),
     students: students,
     mode: currentMode,
     groupSize: currentGroupSize,
-    savedAt: new Date().toISOString()
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   };
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    if (showToast) showSaveStatus("已儲存 " + new Date().toLocaleTimeString("zh-HK"));
-  } catch (e) {
-    if (showToast) showSaveStatus("儲存失敗,請檢查瀏覽器儲存空間");
-  }
 }
 
-function scheduleAutoSave() {
+function saveToCloud(showToast) {
+  if (isApplyingRemoteUpdate) return;
+  const data = buildDataPayload();
+  planRef.set(data)
+    .then(() => { if (showToast) showSaveStatus("已同步 " + new Date().toLocaleTimeString("zh-HK"), false); })
+    .catch((err) => { console.error(err); if (showToast) showSaveStatus("同步失敗,請檢查網絡", true); });
+}
+
+function scheduleCloudSave() {
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => saveToStorage(true), 400);
+  saveTimer = setTimeout(() => saveToCloud(true), 500);
 }
 
-function manualSave() {
-  saveToStorage(true);
-}
-
-function showSaveStatus(msg) {
+function showSaveStatus(msg, isError) {
   const el = document.getElementById("saveStatus");
   el.textContent = msg;
+  el.classList.toggle("error", !!isError);
   el.classList.add("show");
   clearTimeout(el._hideTimer);
-  el._hideTimer = setTimeout(() => el.classList.remove("show"), 2000);
+  el._hideTimer = setTimeout(() => el.classList.remove("show"), 2500);
 }
 
+function setSyncIndicator(status) {
+  const dot = document.getElementById("syncDot");
+  const text = document.getElementById("syncText");
+  dot.className = "sync-dot " + status;
+  if (status === "online") text.textContent = "已連接雲端,即時同步中";
+  else if (status === "offline") text.textContent = "連接中斷,將於恢復連線後同步";
+  else text.textContent = "連接中...";
+}
+
+let firstSnapshotHandled = false;
+planRef.onSnapshot((doc) => {
+  setSyncIndicator("online");
+  if (!doc.exists) {
+    if (!firstSnapshotHandled) {
+      firstSnapshotHandled = true;
+      saveToCloud(false);
+    }
+    return;
+  }
+  const data = doc.data();
+  if (isEditingSomething) return;
+
+  isApplyingRemoteUpdate = true;
+  students = Array.isArray(data.students) ? data.students : students;
+  currentMode = data.mode || "standard";
+  currentGroupSize = data.groupSize || 4;
+  document.getElementById("planTitle").textContent = data.title || "課室座位表";
+  document.getElementById("groupSizeSelect").value = String(currentGroupSize);
+  document.getElementById("btnStandard").classList.toggle("active", currentMode === "standard");
+  document.getElementById("btnGroup").classList.toggle("active", currentMode === "group");
+  document.getElementById("groupSizeControl").classList.toggle("visible", currentMode === "group");
+  if (currentMode === "standard") renderStandard(); else renderGroup();
+  isApplyingRemoteUpdate = false;
+  firstSnapshotHandled = true;
+}, (err) => {
+  console.error("Firestore監聽錯誤:", err);
+  setSyncIndicator("offline");
+});
+
 function resetToDefault() {
-  if (!confirm("確定要還原成預設名單嗎?這會清除目前已儲存的座位異動。")) return;
+  if (!confirm("確定要還原成預設名單嗎?這會覆蓋雲端上目前的座位資料,所有裝置都會看到還原後的結果。")) return;
   students = JSON.parse(JSON.stringify(defaultStudents));
-  currentMode = "standard";
-  currentGroupSize = 4;
-  localStorage.removeItem(STORAGE_KEY);
+  currentMode = "standard"; currentGroupSize = 4;
   document.getElementById("planTitle").textContent = "6A 課室座位表";
   setMode("standard");
-  showSaveStatus("已還原為預設名單");
+  saveToCloud(true);
 }
 
 function exportData() {
   syncStudentsFromDOM();
-  const data = {
-    title: getCurrentTitle(),
-    students: students,
-    mode: currentMode,
-    groupSize: currentGroupSize,
-    exportedAt: new Date().toISOString()
-  };
+  const data = { title: getCurrentTitle(), students, mode: currentMode, groupSize: currentGroupSize, exportedAt: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url;
-  a.download = "seating_plan_backup_" + new Date().toISOString().slice(0,10) + ".json";
-  a.click();
-  URL.revokeObjectURL(url);
-  showSaveStatus("已匯出備份檔");
+  a.href = url; a.download = "seating_plan_backup_" + new Date().toISOString().slice(0,10) + ".json";
+  a.click(); URL.revokeObjectURL(url);
+  showSaveStatus("已匯出備份檔", false);
 }
 
 function importData(event) {
@@ -523,8 +517,7 @@ function importData(event) {
       document.getElementById("planTitle").textContent = data.title || "課室座位表";
       document.getElementById("groupSizeSelect").value = String(currentGroupSize);
       setMode(currentMode);
-      saveToStorage(true);
-      showSaveStatus("已匯入備份並儲存");
+      saveToCloud(true);
     } catch (err) {
       alert("匯入失敗,檔案格式不正確");
     }
@@ -533,9 +526,7 @@ function importData(event) {
   event.target.value = "";
 }
 
-document.getElementById("planTitle").textContent = savedData ? (savedData.title || "6A 課室座位表") : "6A 課室座位表";
-document.getElementById("groupSizeSelect").value = String(currentGroupSize);
-setMode(currentMode);
+setMode("standard");
 </script>
 </body>
 </html>
