@@ -89,7 +89,7 @@
   .group-size-control label { font-size: 13px; color: var(--text-sub); font-weight: 700; }
   .save-status {
     text-align: center; font-size: 12px; font-weight: 600;
-    height: 18px; margin-top: -6px; margin-bottom: 6px; opacity: 0; transition: opacity 0.3s ease;
+    min-height: 18px; margin-top: -6px; margin-bottom: 6px; opacity: 0; transition: opacity 0.3s ease;
     color: var(--accent-green);
   }
   .save-status.show { opacity: 1; }
@@ -183,6 +183,7 @@
 </div>
 
 <div class="toolbar">
+  <button class="save-btn" onclick="manualSave()">&#128190; 立即儲存</button>
   <button class="reset-btn" onclick="resetToDefault()">&#8635; 還原預設名單</button>
   <button onclick="exportData()">&#11015; 匯出備份 (JSON)</button>
   <button onclick="document.getElementById('importFileInput').click()">&#11014; 匯入備份</button>
@@ -190,7 +191,7 @@
 </div>
 <div class="save-status" id="saveStatus">已同步</div>
 
-<p class="instruction">點選第一位學生（會出現紅框），再點選要交換的另一位學生（可以是空白座位），即完成互換座位｜雙擊姓名可直接編輯｜雙擊標題可修改班別名稱｜所有改動會自動同步到雲端</p>
+<p class="instruction">點選第一位學生（會出現紅框），再點選要交換的另一位學生（可以是空白座位），即完成互換座位｜雙擊姓名可直接編輯｜雙擊標題可修改班別名稱｜所有改動會自動同步到雲端，也可以按「立即儲存」手動確認</p>
 
 <div id="board"></div>
 
@@ -551,14 +552,17 @@ function getCurrentTitle() {
 }
 
 function buildDataPayload() {
-  return {
+  const payload = {
     title: getCurrentTitle(),
     students: students,
     mode: currentMode,
     groupSize: currentGroupSize,
-    groupOrder: groupOrder,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   };
+  if (Array.isArray(groupOrder)) {
+    payload.groupOrder = groupOrder;
+  }
+  return payload;
 }
 
 function saveToCloud(showToast) {
@@ -570,10 +574,15 @@ function saveToCloud(showToast) {
       if (showToast) showSaveStatus("已同步 " + new Date().toLocaleTimeString("zh-HK"), false);
     })
     .catch((err) => {
-      console.error(err);
+      console.error("Firestore寫入失敗:", err);
       hasUnsavedLocalChange = false;
-      if (showToast) showSaveStatus("同步失敗,請檢查網絡", true);
+      if (showToast) showSaveStatus("同步失敗: " + (err && err.message ? err.message : "未知錯誤"), true);
     });
+}
+
+function manualSave() {
+  showSaveStatus("儲存中...", false);
+  saveToCloud(true);
 }
 
 function scheduleCloudSave() {
@@ -587,7 +596,7 @@ function showSaveStatus(msg, isError) {
   el.classList.toggle("error", !!isError);
   el.classList.add("show");
   clearTimeout(el._hideTimer);
-  el._hideTimer = setTimeout(() => el.classList.remove("show"), 2500);
+  el._hideTimer = setTimeout(() => el.classList.remove("show"), 3000);
 }
 
 function setSyncIndicator(status) {
