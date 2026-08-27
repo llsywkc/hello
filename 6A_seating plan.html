@@ -102,10 +102,10 @@
   .sync-dot.online { background: var(--accent-green); }
   .sync-dot.offline { background: var(--accent-red); }
   .instruction { text-align: center; font-size: 12.5px; color: var(--text-sub); margin: 0 0 14px 0; }
-  #board { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: row; justify-content: center; gap: 48px; position: relative; }
+  #board { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 48px; position: relative; }
   .row-pair { display: flex; flex-direction: row; gap: 8px; }
   .seat-row { display: flex; flex-direction: column; gap: 8px; align-items: center; }
-  #board.group-mode { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  #board.group-mode { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; align-items: start; }
   .group-box {
     display: grid; gap: 6px;
     background: repeating-linear-gradient(135deg, #f4e3c8, #f4e3c8 10px, #eed9b8 10px, #eed9b8 20px);
@@ -235,32 +235,56 @@ const originalDefaultStudents = [
   {zh:"曾溱翔",   en:"ZENG TSUN CHEUNG"}
 ];
 
-const STANDARD_TOTAL_PAIRS = 3;
-const STANDARD_ROWS_PER_PAIR = 2;
-const STANDARD_TOTAL_ROWS = STANDARD_TOTAL_PAIRS * STANDARD_ROWS_PER_PAIR;
+const STANDARD_GROUPS_CONFIG = [
+  { cols: 2, rows: 3 },
+  { cols: 2, rows: 4 },
+  { cols: 2, rows: 3 }
+];
 
-function padToStandardSize(list) {
-  const perRow = Math.ceil(list.length / STANDARD_TOTAL_ROWS) || 1;
-  const totalSeats = perRow * STANDARD_TOTAL_ROWS;
-  const padded = list.slice();
-  while (padded.length < totalSeats) padded.push({ zh: "", en: "" });
-  return padded;
+function getStandardCapacity() {
+  return STANDARD_GROUPS_CONFIG.reduce((sum, g) => sum + g.cols * g.rows, 0);
 }
 
-const defaultStudents = padToStandardSize(originalDefaultStudents);
+const BLANK = { zh: "", en: "" };
+
+function buildDefaultLayout(list16) {
+  const left = list16.slice(0, 4);
+  const middle = list16.slice(4, 12);
+  const right = list16.slice(12, 16);
+  return [
+    ...left, BLANK, BLANK,
+    ...middle,
+    ...right, BLANK, BLANK
+  ];
+}
+
+const defaultStudents = buildDefaultLayout(originalDefaultStudents);
+
+function padToStandardSize(list) {
+  const capacity = getStandardCapacity();
+  const padded = list.slice();
+  while (padded.length < capacity) padded.push({ zh: "", en: "" });
+  if (padded.length > capacity) padded.length = capacity;
+  return padded;
+}
 
 let students = JSON.parse(JSON.stringify(defaultStudents));
 let currentMode = "standard";
 let currentGroupSize = 4;
+
+let groupOrder = null;
+let groupOrderSize = null;
 
 const board = document.getElementById("board");
 let saveTimer = null;
 let isApplyingRemoteUpdate = false;
 let isEditingSomething = false;
 let pendingRemoteData = null;
+let hasUnsavedLocalChange = false;
 
-let selectedSeat = null;
-let clickTimers = new WeakMap();
+function isRealStudent(s) {
+  return !!((s.zh && s.zh.trim()) || (s.en && s.en.trim()));
+}
 
 function clearSelection() {
   if (selectedSeat) { selectedSeat.classList.remove("seat-selected"); selectedSeat = null; }
@@ -271,6 +295,14 @@ function clearSelection() {
   }
 }
 
+function clearSelectionForLocalAction() {
+  if (selectedSeat) { selectedSeat.classList.remove("seat-selected"); selectedSeat = null; }
+  pendingRemoteData = null;
+}
+
+let selectedSeat = null;
+let clickTimers = new WeakMap();
+
 function handleSeatClick(seatEl) {
   if (seatEl.querySelector("input")) return;
   if (!selectedSeat) {
@@ -280,8 +312,9 @@ function handleSeatClick(seatEl) {
     clearSelection();
   } else {
     swapSeatContent(selectedSeat, seatEl);
-    clearSelection();
-    syncStudentsFromDOM();
+    clearSelectionForLocalAction();
+    hasUnsavedLocalChange = true;
+    syncFromDOM();
     scheduleCloudSave();
   }
 }
@@ -348,7 +381,7 @@ function editTitle() {
     newH1.textContent = input.value.trim() || current;
     input.replaceWith(newH1);
     isEditingSomething = false;
-    if (pendingRemoteData) { const d = pendingRemoteData; pendingRemoteData = null; applyRemoteData(d); }
+    hasUnsavedLocalChange = true;
     scheduleCloudSave();
   }
   input.addEventListener("blur", save);
@@ -359,7 +392,7 @@ function editName(event, span, type) {
   event.stopPropagation();
   const seatEl = span.closest(".seat");
   if (seatEl) cancelPendingClickTimer(seatEl);
-  clearSelection();
+  clearSelectionForLocalAction();
   isEditingSomething = true;
   const current = span.textContent;
   const input = document.createElement("input");
@@ -373,9 +406,9 @@ function editName(event, span, type) {
     input.replaceWith(newSpan);
     if (seatEl) updateEmptyStyle(seatEl);
     isEditingSomething = false;
-    syncStudentsFromDOM();
-    if (pendingRemoteData) { const d = pendingRemoteData; pendingRemoteData = null; applyRemoteData(d); }
-    else { scheduleCloudSave(); }
+    hasUnsavedLocalChange = true;
+    syncFromDOM();
+    scheduleCloudSave();
   }
   input.addEventListener("blur", save);
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") input.blur(); });
@@ -392,16 +425,49 @@ function syncStudentsFromDOM() {
   students = newStudents;
 }
 
+function syncGroupOrderFromDOM() {
+  const seatEls = board.querySelectorAll(".seat");
+  const newOrder = [];
+  seatEls.forEach(el => {
+    const zh = el.querySelector(".name-zh")?.textContent.trim() || "";
+    const en = el.querySelector(".name-en")?.textContent.trim() || "";
+    newOrder.push({ zh, en });
+  });
+  groupOrder = newOrder;
+
+  const newRealOrder = newOrder.filter(isRealStudent);
+  let ptr = 0;
+  students = students.map((s) => {
+    if (isRealStudent(s)) {
+      const val = newRealOrder[ptr] || s;
+      ptr++;
+      return val;
+    }
+    return s;
+  });
+}
+
+function syncFromDOM() {
+  if (currentMode === "group") {
+    syncGroupOrderFromDOM();
+  } else {
+    syncStudentsFromDOM();
+  }
+}
+
 function renderStandard() {
   board.className = ""; board.innerHTML = ""; clearSelectionSilently();
-  if (students.length < STANDARD_TOTAL_ROWS) students = padToStandardSize(students);
-  const perRow = Math.ceil(students.length / STANDARD_TOTAL_ROWS);
+
+  students = padToStandardSize(students);
+
   let idx = 0;
-  for (let p = 0; p < STANDARD_TOTAL_PAIRS; p++) {
-    const pair = document.createElement("div"); pair.className = "row-pair";
-    for (let r = 0; r < STANDARD_ROWS_PER_PAIR; r++) {
-      const rowEl = document.createElement("div"); rowEl.className = "seat-row";
-      for (let c = 0; c < perRow; c++) {
+  STANDARD_GROUPS_CONFIG.forEach((group) => {
+    const pair = document.createElement("div");
+    pair.className = "row-pair";
+    for (let c = 0; c < group.cols; c++) {
+      const rowEl = document.createElement("div");
+      rowEl.className = "seat-row";
+      for (let r = 0; r < group.rows; r++) {
         const s = students[idx] || { zh: "", en: "" };
         rowEl.appendChild(makeSeatEl(s, idx));
         idx++;
@@ -409,7 +475,7 @@ function renderStandard() {
       pair.appendChild(rowEl);
     }
     board.appendChild(pair);
-  }
+  });
 }
 
 function clearSelectionSilently() {
@@ -425,17 +491,37 @@ function getGroupGridColumns(size) {
   return Math.ceil(Math.sqrt(size));
 }
 
+function buildFreshGroupOrder(groupSize) {
+  const realStudents = students.filter(isRealStudent);
+  const padded = realStudents.slice();
+  while (padded.length % groupSize !== 0) padded.push({ zh: "", en: "" });
+  for (let i = 0; i < groupSize; i++) padded.push({ zh: "", en: "" });
+  return padded;
+}
+
+function ensureGroupOrder(groupSize) {
+  const currentRealCount = students.filter(isRealStudent).length;
+  const existingRealCount = groupOrder ? groupOrder.filter(isRealStudent).length : -1;
+  if (!groupOrder || groupOrderSize !== groupSize || existingRealCount !== currentRealCount) {
+    groupOrder = buildFreshGroupOrder(groupSize);
+    groupOrderSize = groupSize;
+  }
+  return groupOrder;
+}
+
 function renderGroup() {
   board.className = "group-mode"; board.innerHTML = ""; clearSelectionSilently();
   const groupSize = currentGroupSize, cols = getGroupGridColumns(groupSize);
+
+  const order = ensureGroupOrder(groupSize);
+
+  const totalGroups = order.length / groupSize;
   let idx = 0;
-  const totalGroups = Math.ceil(students.length / groupSize);
   for (let g = 0; g < totalGroups; g++) {
     const box = document.createElement("div"); box.className = "group-box";
     box.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
     for (let k = 0; k < groupSize; k++) {
-      if (idx >= students.length) break;
-      box.appendChild(makeSeatEl(students[idx], idx));
+      box.appendChild(makeSeatEl(order[idx], idx));
       idx++;
     }
     board.appendChild(box);
@@ -444,6 +530,8 @@ function renderGroup() {
 
 function onGroupSizeChange() {
   currentGroupSize = parseInt(document.getElementById("groupSizeSelect").value, 10);
+  groupOrder = null;
+  hasUnsavedLocalChange = true;
   renderGroup();
   scheduleCloudSave();
 }
@@ -453,6 +541,7 @@ function setMode(mode) {
   document.getElementById("btnStandard").classList.toggle("active", mode === "standard");
   document.getElementById("btnGroup").classList.toggle("active", mode === "group");
   document.getElementById("groupSizeControl").classList.toggle("visible", mode === "group");
+  hasUnsavedLocalChange = true;
   if (mode === "standard") renderStandard(); else renderGroup();
   scheduleCloudSave();
 }
@@ -462,12 +551,12 @@ function getCurrentTitle() {
 }
 
 function buildDataPayload() {
-  syncStudentsFromDOM();
   return {
     title: getCurrentTitle(),
     students: students,
     mode: currentMode,
     groupSize: currentGroupSize,
+    groupOrder: groupOrder,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   };
 }
@@ -475,8 +564,16 @@ function buildDataPayload() {
 function saveToCloud(showToast) {
   const data = buildDataPayload();
   planRef.set(data)
-    .then(() => { if (showToast) showSaveStatus("已同步 " + new Date().toLocaleTimeString("zh-HK"), false); })
-    .catch((err) => { console.error(err); if (showToast) showSaveStatus("同步失敗,請檢查網絡", true); });
+    .then(() => {
+      hasUnsavedLocalChange = false;
+      pendingRemoteData = null;
+      if (showToast) showSaveStatus("已同步 " + new Date().toLocaleTimeString("zh-HK"), false);
+    })
+    .catch((err) => {
+      console.error(err);
+      hasUnsavedLocalChange = false;
+      if (showToast) showSaveStatus("同步失敗,請檢查網絡", true);
+    });
 }
 
 function scheduleCloudSave() {
@@ -507,6 +604,8 @@ function applyRemoteData(data) {
   students = Array.isArray(data.students) ? data.students : students;
   currentMode = data.mode || "standard";
   currentGroupSize = data.groupSize || 4;
+  groupOrder = Array.isArray(data.groupOrder) ? data.groupOrder : null;
+  groupOrderSize = groupOrder ? currentGroupSize : null;
   document.getElementById("planTitle").textContent = data.title || "課室座位表";
   document.getElementById("groupSizeSelect").value = String(currentGroupSize);
   document.getElementById("btnStandard").classList.toggle("active", currentMode === "standard");
@@ -535,7 +634,7 @@ planRef.onSnapshot({ includeMetadataChanges: true }, (doc) => {
   const data = doc.data();
   if (isEditingSomething) return;
 
-  if (selectedSeat) {
+  if (selectedSeat || hasUnsavedLocalChange) {
     pendingRemoteData = data;
     return;
   }
@@ -551,14 +650,15 @@ function resetToDefault() {
   if (!confirm("確定要還原成預設名單嗎?這會覆蓋雲端上目前的座位資料,所有裝置都會看到還原後的結果。")) return;
   students = JSON.parse(JSON.stringify(defaultStudents));
   currentMode = "standard"; currentGroupSize = 4;
+  groupOrder = null;
   document.getElementById("planTitle").textContent = "6A 課室座位表";
+  hasUnsavedLocalChange = true;
   setMode("standard");
   saveToCloud(true);
 }
 
 function exportData() {
-  syncStudentsFromDOM();
-  const data = { title: getCurrentTitle(), students, mode: currentMode, groupSize: currentGroupSize, exportedAt: new Date().toISOString() };
+  const data = { title: getCurrentTitle(), students, mode: currentMode, groupSize: currentGroupSize, groupOrder, exportedAt: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -578,8 +678,11 @@ function importData(event) {
       students = data.students;
       currentMode = data.mode || "standard";
       currentGroupSize = data.groupSize || 4;
+      groupOrder = Array.isArray(data.groupOrder) ? data.groupOrder : null;
+      groupOrderSize = groupOrder ? currentGroupSize : null;
       document.getElementById("planTitle").textContent = data.title || "課室座位表";
       document.getElementById("groupSizeSelect").value = String(currentGroupSize);
+      hasUnsavedLocalChange = true;
       setMode(currentMode);
       saveToCloud(true);
     } catch (err) {
