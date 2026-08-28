@@ -71,6 +71,21 @@
     color: var(--wood-dark); border: none; border-bottom: 3px solid var(--accent-red);
     border-radius: 0; padding: 8px 16px; outline: none; font-family: inherit; max-width: 90%; background: #fff8ec;
   }
+
+  .main-tabs {
+    display: flex; justify-content: center; gap: 10px; margin: 16px 0 4px 0;
+  }
+  .main-tabs button {
+    padding: 10px 24px; border-radius: 10px 10px 0 0; border: 2px solid var(--wood-dark);
+    border-bottom: none; background: #e8dcc8; font-size: 14px; font-weight: 700;
+    color: var(--wood-dark); cursor: pointer;
+  }
+  .main-tabs button.active {
+    background: var(--card-bg); color: var(--primary); position: relative; top: 2px;
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
   .toolbar { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 22px 0; flex-wrap: wrap; }
   .toolbar button, .toolbar select {
     padding: 8px 18px; border-radius: 6px; background: var(--card-bg); font-size: 13px; font-weight: 700;
@@ -78,15 +93,8 @@
     box-shadow: 0 3px 0 var(--border), 0 4px 6px rgba(0,0,0,0.1); border: 2px solid var(--border);
   }
   .toolbar button:hover { transform: translateY(-1px); }
-  .toolbar button.active {
-    background: var(--accent-red); color: #fff; border-color: #b30000;
-    box-shadow: 0 3px 0 #8f0000, 0 4px 6px rgba(0,0,0,0.15);
-  }
   .toolbar button.save-btn { background: var(--accent-green); color: #fff; border-color: #3a7130; }
   .toolbar button.reset-btn { background: #fff; color: var(--text-sub); }
-  .group-size-control { display: none; align-items: center; gap: 6px; }
-  .group-size-control.visible { display: flex; }
-  .group-size-control label { font-size: 13px; color: var(--text-sub); font-weight: 700; }
   .save-status {
     text-align: center; font-size: 12px; font-weight: 600;
     min-height: 18px; margin-top: -6px; margin-bottom: 6px; opacity: 0; transition: opacity 0.3s ease;
@@ -105,13 +113,6 @@
   #board { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 48px; position: relative; }
   .row-pair { display: flex; flex-direction: row; gap: 8px; }
   .seat-row { display: flex; flex-direction: column; gap: 8px; align-items: center; }
-  #board.group-mode { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; align-items: start; }
-  .group-box {
-    display: grid; gap: 6px;
-    background: repeating-linear-gradient(135deg, #f4e3c8, #f4e3c8 10px, #eed9b8 10px, #eed9b8 20px);
-    border: 3px solid var(--wood-dark); border-radius: 12px; padding: 10px;
-    box-shadow: 0 4px 0 rgba(139,90,43,0.3), inset 0 0 0 3px rgba(255,255,255,0.4);
-  }
   .seat {
     background: var(--card-bg); border: 2px solid var(--wood-dark); border-top: 6px solid var(--accent-yellow);
     border-radius: 8px; padding: 10px 4px; text-align: center; min-height: 76px; width: 100px;
@@ -128,7 +129,6 @@
   .seat::before { left: 5px; }
   .seat::after { right: 5px; }
   .seat.seat-empty { border-style: dashed; opacity: 0.55; }
-  .group-box .seat { width: 100%; }
   .seat.seat-selected {
     box-shadow: 0 0 0 3px var(--accent-red), 0 5px 0 rgba(241,6,11,0.35), 0 6px 12px rgba(0,0,0,0.15);
     border-color: var(--accent-red); border-top-color: var(--accent-red); transform: scale(1.06);
@@ -144,6 +144,24 @@
   .footer-banner { text-align: center; margin-top: 30px; }
   .footer-banner img { max-width: 100%; max-height: 160px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
   #importFileInput { display: none; }
+
+  .roster-wrap { max-width: 700px; margin: 20px auto 40px; background: var(--card-bg); border: 3px solid var(--wood-dark); border-radius: 14px; padding: 16px; box-shadow: 0 4px 0 rgba(139,90,43,0.3); }
+  table.roster-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.roster-table th {
+    background: var(--primary); color: #fff; padding: 10px 6px; font-weight: 700;
+    border: 1px solid var(--border); position: sticky; top: 0;
+  }
+  table.roster-table td {
+    padding: 8px 6px; border: 1px solid var(--border); text-align: center; background: #fff;
+  }
+  table.roster-table tr:nth-child(even) td { background: #fbf5e8; }
+  table.roster-table td.editable { cursor: pointer; }
+  table.roster-table td.editable:hover { background: var(--primary-light); }
+  table.roster-table td input {
+    width: 90%; text-align: center; border: 1px solid var(--primary); border-radius: 4px;
+    font-size: 13px; padding: 3px;
+  }
+  .roster-hint { text-align: center; font-size: 12px; color: var(--text-sub); margin-bottom: 10px; }
 </style>
 </head>
 <body>
@@ -167,20 +185,12 @@
   <span id="syncText">連接中...</span>
 </div>
 
-<div class="toolbar">
-  <button id="btnStandard" class="active" onclick="setMode('standard')">標準排列（雙行成組）</button>
-  <button id="btnGroup" onclick="setMode('group')">分組排列</button>
-  <div class="group-size-control" id="groupSizeControl">
-    <label for="groupSizeSelect">每組人數:</label>
-    <select id="groupSizeSelect" onchange="onGroupSizeChange()">
-      <option value="2">2人</option>
-      <option value="3">3人</option>
-      <option value="4" selected>4人</option>
-      <option value="5">5人</option>
-      <option value="6">6人</option>
-    </select>
-  </div>
+<div class="main-tabs">
+  <button id="mainTabSeating" class="active" onclick="switchMainTab('seating')">座位表</button>
+  <button id="mainTabRoster" onclick="switchMainTab('roster')">Student List</button>
 </div>
+
+<div id="panelSeating" class="tab-panel active">
 
 <div class="toolbar">
   <button class="save-btn" onclick="manualSave()">&#128190; 立即儲存</button>
@@ -197,6 +207,26 @@
 
 <div class="footer-banner">
   <img src="images/To-Infinity-and-Beyond.jpg" alt="To Infinity and Beyond" onerror="this.style.display='none'">
+</div>
+
+</div>
+
+<div id="panelRoster" class="tab-panel">
+  <p class="roster-hint">雙擊姓名或性別欄位可直接編輯｜班別與學號為固定資料｜修改後自動同步到雲端</p>
+  <div class="roster-wrap">
+    <table class="roster-table" id="rosterTable">
+      <thead>
+        <tr>
+          <th>班別</th>
+          <th>學號</th>
+          <th>中文姓名</th>
+          <th>英文姓名</th>
+          <th>性別</th>
+        </tr>
+      </thead>
+      <tbody id="rosterTbody"></tbody>
+    </table>
+  </div>
 </div>
 
 </div>
@@ -236,6 +266,27 @@ const originalDefaultStudents = [
   {zh:"曾溱翔",   en:"ZENG TSUN CHEUNG"}
 ];
 
+const defaultRoster = [
+  { class: "6A", no: 1,  zh: "區錦浩", en: "AU KAM HO",           gender: "M" },
+  { class: "6A", no: 2,  zh: "張敏敏", en: "CHEUNG MAN MAN",      gender: "F" },
+  { class: "6A", no: 3,  zh: "趙家樂", en: "CHIU KA LOK",         gender: "M" },
+  { class: "6A", no: 4,  zh: "",       en: "GABRIEL PHILIP MILNE", gender: "M" },
+  { class: "6A", no: 5,  zh: "韓伊晨", en: "HAN YI SEN",          gender: "F" },
+  { class: "6A", no: 6,  zh: "詹皓然", en: "JIM HO YIN",          gender: "M" },
+  { class: "6A", no: 7,  zh: "林卓瑤", en: "LAM CHEUK YIU",       gender: "F" },
+  { class: "6A", no: 8,  zh: "梁家逸", en: "LEUNG KA YAT",        gender: "M" },
+  { class: "6A", no: 9,  zh: "梁念恩", en: "LEUNG NIM YAN",       gender: "F" },
+  { class: "6A", no: 10, zh: "李韋成", en: "LI WAI SHING",        gender: "M" },
+  { class: "6A", no: 11, zh: "李彦彤", en: "LI YANTONG",          gender: "F" },
+  { class: "6A", no: 12, zh: "文諾彥", en: "MAN NOK YIN",         gender: "M" },
+  { class: "6A", no: 13, zh: "吳梓淇", en: "NG TSZ KI",           gender: "F" },
+  { class: "6A", no: 14, zh: "黃倬朣", en: "WONG CHEUK TUNG",     gender: "M" },
+  { class: "6A", no: 15, zh: "黃溢鋒", en: "WONG YAT FUNG Tyrus", gender: "M" },
+  { class: "6A", no: 16, zh: "曾溱翔", en: "ZENG TSUN CHEUNG",    gender: "M" }
+];
+
+let roster = JSON.parse(JSON.stringify(defaultRoster));
+
 const STANDARD_GROUPS_CONFIG = [
   { cols: 2, rows: 3 },
   { cols: 2, rows: 4 },
@@ -270,21 +321,61 @@ function padToStandardSize(list) {
 }
 
 let students = JSON.parse(JSON.stringify(defaultStudents));
-let currentMode = "standard";
-let currentGroupSize = 4;
-
-let groupOrder = null;
-let groupOrderSize = null;
 
 const board = document.getElementById("board");
 let saveTimer = null;
-let isApplyingRemoteUpdate = false;
 let isEditingSomething = false;
 let pendingRemoteData = null;
 let hasUnsavedLocalChange = false;
 
 function isRealStudent(s) {
   return !!((s.zh && s.zh.trim()) || (s.en && s.en.trim()));
+}
+
+function switchMainTab(tab) {
+  document.getElementById("mainTabSeating").classList.toggle("active", tab === "seating");
+  document.getElementById("mainTabRoster").classList.toggle("active", tab === "roster");
+  document.getElementById("panelSeating").classList.toggle("active", tab === "seating");
+  document.getElementById("panelRoster").classList.toggle("active", tab === "roster");
+  if (tab === "roster") renderRoster();
+}
+
+function renderRoster() {
+  const tbody = document.getElementById("rosterTbody");
+  tbody.innerHTML = "";
+  roster.forEach((r, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${r.class}</td>
+      <td>${r.no}</td>
+      <td class="editable" ondblclick="editRosterCell(event, this, ${i}, 'zh')">${r.zh || ""}</td>
+      <td class="editable" ondblclick="editRosterCell(event, this, ${i}, 'en')">${r.en || ""}</td>
+      <td class="editable" ondblclick="editRosterCell(event, this, ${i}, 'gender')">${r.gender || ""}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function editRosterCell(event, td, index, field) {
+  event.stopPropagation();
+  const current = td.textContent;
+  const input = document.createElement("input");
+  input.value = current;
+  td.textContent = "";
+  td.appendChild(input);
+  input.focus();
+  input.select();
+  function save() {
+    const newVal = input.value.trim();
+    roster[index][field] = newVal;
+    td.innerHTML = "";
+    td.textContent = newVal;
+    td.setAttribute("ondblclick", `editRosterCell(event, this, ${index}, '${field}')`);
+    hasUnsavedLocalChange = true;
+    scheduleCloudSave();
+  }
+  input.addEventListener("blur", save);
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") input.blur(); });
 }
 
 function clearSelection() {
@@ -315,7 +406,7 @@ function handleSeatClick(seatEl) {
     swapSeatContent(selectedSeat, seatEl);
     clearSelectionForLocalAction();
     hasUnsavedLocalChange = true;
-    syncFromDOM();
+    syncStudentsFromDOM();
     scheduleCloudSave();
   }
 }
@@ -408,7 +499,7 @@ function editName(event, span, type) {
     if (seatEl) updateEmptyStyle(seatEl);
     isEditingSomething = false;
     hasUnsavedLocalChange = true;
-    syncFromDOM();
+    syncStudentsFromDOM();
     scheduleCloudSave();
   }
   input.addEventListener("blur", save);
@@ -426,38 +517,8 @@ function syncStudentsFromDOM() {
   students = newStudents;
 }
 
-function syncGroupOrderFromDOM() {
-  const seatEls = board.querySelectorAll(".seat");
-  const newOrder = [];
-  seatEls.forEach(el => {
-    const zh = el.querySelector(".name-zh")?.textContent.trim() || "";
-    const en = el.querySelector(".name-en")?.textContent.trim() || "";
-    newOrder.push({ zh, en });
-  });
-  groupOrder = newOrder;
-
-  const newRealOrder = newOrder.filter(isRealStudent);
-  let ptr = 0;
-  students = students.map((s) => {
-    if (isRealStudent(s)) {
-      const val = newRealOrder[ptr] || s;
-      ptr++;
-      return val;
-    }
-    return s;
-  });
-}
-
-function syncFromDOM() {
-  if (currentMode === "group") {
-    syncGroupOrderFromDOM();
-  } else {
-    syncStudentsFromDOM();
-  }
-}
-
 function renderStandard() {
-  board.className = ""; board.innerHTML = ""; clearSelectionSilently();
+  board.innerHTML = ""; clearSelectionSilently();
 
   students = padToStandardSize(students);
 
@@ -483,86 +544,17 @@ function clearSelectionSilently() {
   if (selectedSeat) { selectedSeat = null; }
 }
 
-function getGroupGridColumns(size) {
-  if (size <= 2) return size;
-  if (size === 3) return 3;
-  if (size === 4) return 2;
-  if (size === 5) return 3;
-  if (size === 6) return 3;
-  return Math.ceil(Math.sqrt(size));
-}
-
-function buildFreshGroupOrder(groupSize) {
-  const realStudents = students.filter(isRealStudent);
-  const padded = realStudents.slice();
-  while (padded.length % groupSize !== 0) padded.push({ zh: "", en: "" });
-  for (let i = 0; i < groupSize; i++) padded.push({ zh: "", en: "" });
-  return padded;
-}
-
-function ensureGroupOrder(groupSize) {
-  const currentRealCount = students.filter(isRealStudent).length;
-  const existingRealCount = groupOrder ? groupOrder.filter(isRealStudent).length : -1;
-  if (!groupOrder || groupOrderSize !== groupSize || existingRealCount !== currentRealCount) {
-    groupOrder = buildFreshGroupOrder(groupSize);
-    groupOrderSize = groupSize;
-  }
-  return groupOrder;
-}
-
-function renderGroup() {
-  board.className = "group-mode"; board.innerHTML = ""; clearSelectionSilently();
-  const groupSize = currentGroupSize, cols = getGroupGridColumns(groupSize);
-
-  const order = ensureGroupOrder(groupSize);
-
-  const totalGroups = order.length / groupSize;
-  let idx = 0;
-  for (let g = 0; g < totalGroups; g++) {
-    const box = document.createElement("div"); box.className = "group-box";
-    box.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-    for (let k = 0; k < groupSize; k++) {
-      box.appendChild(makeSeatEl(order[idx], idx));
-      idx++;
-    }
-    board.appendChild(box);
-  }
-}
-
-function onGroupSizeChange() {
-  currentGroupSize = parseInt(document.getElementById("groupSizeSelect").value, 10);
-  groupOrder = null;
-  hasUnsavedLocalChange = true;
-  renderGroup();
-  scheduleCloudSave();
-}
-
-function setMode(mode) {
-  currentMode = mode;
-  document.getElementById("btnStandard").classList.toggle("active", mode === "standard");
-  document.getElementById("btnGroup").classList.toggle("active", mode === "group");
-  document.getElementById("groupSizeControl").classList.toggle("visible", mode === "group");
-  hasUnsavedLocalChange = true;
-  if (mode === "standard") renderStandard(); else renderGroup();
-  scheduleCloudSave();
-}
-
 function getCurrentTitle() {
   return document.getElementById("planTitle")?.textContent || "課室座位表";
 }
 
 function buildDataPayload() {
-  const payload = {
+  return {
     title: getCurrentTitle(),
     students: students,
-    mode: currentMode,
-    groupSize: currentGroupSize,
+    roster: roster,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   };
-  if (Array.isArray(groupOrder)) {
-    payload.groupOrder = groupOrder;
-  }
-  return payload;
 }
 
 function saveToCloud(showToast) {
@@ -609,19 +601,11 @@ function setSyncIndicator(status) {
 }
 
 function applyRemoteData(data) {
-  isApplyingRemoteUpdate = true;
   students = Array.isArray(data.students) ? data.students : students;
-  currentMode = data.mode || "standard";
-  currentGroupSize = data.groupSize || 4;
-  groupOrder = Array.isArray(data.groupOrder) ? data.groupOrder : null;
-  groupOrderSize = groupOrder ? currentGroupSize : null;
+  roster = Array.isArray(data.roster) ? data.roster : roster;
   document.getElementById("planTitle").textContent = data.title || "課室座位表";
-  document.getElementById("groupSizeSelect").value = String(currentGroupSize);
-  document.getElementById("btnStandard").classList.toggle("active", currentMode === "standard");
-  document.getElementById("btnGroup").classList.toggle("active", currentMode === "group");
-  document.getElementById("groupSizeControl").classList.toggle("visible", currentMode === "group");
-  if (currentMode === "standard") renderStandard(); else renderGroup();
-  isApplyingRemoteUpdate = false;
+  renderStandard();
+  if (document.getElementById("panelRoster").classList.contains("active")) renderRoster();
 }
 
 let firstSnapshotHandled = false;
@@ -658,16 +642,15 @@ planRef.onSnapshot({ includeMetadataChanges: true }, (doc) => {
 function resetToDefault() {
   if (!confirm("確定要還原成預設名單嗎?這會覆蓋雲端上目前的座位資料,所有裝置都會看到還原後的結果。")) return;
   students = JSON.parse(JSON.stringify(defaultStudents));
-  currentMode = "standard"; currentGroupSize = 4;
-  groupOrder = null;
+  roster = JSON.parse(JSON.stringify(defaultRoster));
   document.getElementById("planTitle").textContent = "6A 課室座位表";
   hasUnsavedLocalChange = true;
-  setMode("standard");
+  renderStandard();
   saveToCloud(true);
 }
 
 function exportData() {
-  const data = { title: getCurrentTitle(), students, mode: currentMode, groupSize: currentGroupSize, groupOrder, exportedAt: new Date().toISOString() };
+  const data = { title: getCurrentTitle(), students, roster, exportedAt: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -685,14 +668,10 @@ function importData(event) {
       const data = JSON.parse(e.target.result);
       if (!Array.isArray(data.students)) throw new Error("格式不正確");
       students = data.students;
-      currentMode = data.mode || "standard";
-      currentGroupSize = data.groupSize || 4;
-      groupOrder = Array.isArray(data.groupOrder) ? data.groupOrder : null;
-      groupOrderSize = groupOrder ? currentGroupSize : null;
+      roster = Array.isArray(data.roster) ? data.roster : roster;
       document.getElementById("planTitle").textContent = data.title || "課室座位表";
-      document.getElementById("groupSizeSelect").value = String(currentGroupSize);
       hasUnsavedLocalChange = true;
-      setMode(currentMode);
+      renderStandard();
       saveToCloud(true);
     } catch (err) {
       alert("匯入失敗,檔案格式不正確");
@@ -702,7 +681,7 @@ function importData(event) {
   event.target.value = "";
 }
 
-setMode("standard");
+renderStandard();
 </script>
 </body>
 </html>
