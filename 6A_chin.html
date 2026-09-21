@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="王家駿 (Wang Ka-Chun)">
-    <meta name="copyright" content="© 2025-2026 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
+    <meta name="author" content="王家駿 (Wong Ka-Chun)">
+    <meta name="copyright" content="© 2026-2027 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
     <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, noarchive">
     <meta name="description" content="私人教學工具 — 未經授權不得複製或分發">
@@ -1449,8 +1449,27 @@
 
             <!-- Username -->
             <div style="width:100%;position:relative;">
-              <div style="font-size:0.72em;color:rgba(200,168,75,0.8);letter-spacing:2px;margin-bottom:6px;text-align:left;">✦ 冒險者名稱</div>
-              <input type="text" id="input-name" maxlength="10" placeholder="輸入名字..." style="width:100%;box-sizing:border-box;background:rgba(10,20,40,0.7);border:1px solid rgba(200,168,75,0.5);border-radius:8px;padding:12px 16px;color:#F0E6C8;font-size:1.1em;font-family:'Noto Serif TC',serif;outline:none;backdrop-filter:blur(8px);">
+              <div style="font-size:0.72em;color:rgba(200,168,75,0.8);letter-spacing:2px;margin-bottom:6px;text-align:left;">✦ 請選擇你的名字</div>
+              <select id="input-seat" style="width:100%;box-sizing:border-box;background:rgba(10,20,40,0.7);border:1px solid rgba(200,168,75,0.5);border-radius:8px;padding:12px 16px;color:#F0E6C8;font-size:1.1em;font-family:'Noto Serif TC',serif;outline:none;backdrop-filter:blur(8px);">
+                <option value="">請選擇...</option>
+                <option value="1">1. 區錦浩</option>
+                <option value="2">2. 張敏敏</option>
+                <option value="3">3. 趙家樂</option>
+                <option value="4">4. Gabriel</option>
+                <option value="5">5. 韓伊晨</option>
+                <option value="6">6. 詹皓然</option>
+                <option value="7">7. 林卓瑤</option>
+                <option value="8">8. 梁家逸</option>
+                <option value="9">9. 梁念恩</option>
+                <option value="10">10. 李韋成</option>
+                <option value="11">11. 李彦彤</option>
+                <option value="12">12. 文諾彥</option>
+                <option value="13">13. 吳梓淇</option>
+                <option value="14">14. 黃倬朣</option>
+                <option value="15">15. 黃溢鋒</option>
+                <option value="16">16. 曾溱翔</option>
+                <option value="17">17. WONG SIR</option>
+              </select>
             </div>
 
             <!-- Password -->
@@ -1465,7 +1484,7 @@
             <button class="btn-purple" onclick="loginPlayer()" style="width:100%;font-size:1.05em;letter-spacing:3px;padding:14px;border-radius:8px;margin:0;">▶ 開 始 冒 險</button>
 
             <!-- New player hint -->
-            <div id="login-hint" style="font-size:0.72em;color:rgba(200,168,75,0.5);text-align:center;letter-spacing:1px;">首次登入？密碼即為你的專屬密碼，輸入後記住！</div>
+            <div id="login-hint" style="font-size:0.72em;color:rgba(200,168,75,0.5);text-align:center;letter-spacing:1px;">請先揀名，再輸入 4 位數字密碼</div>
 
             <!-- Forgot password -->
             <div style="margin-top:4px;color:rgba(200,168,75,0.4);font-size:0.7em;letter-spacing:1px;">忘記密碼？請找老師幫忙 🔑</div>
@@ -1593,13 +1612,9 @@
                             <span class="la-icon">↔️</span>
                             <span class="la-text"><span class="la-title">近義反義詞</span><span class="la-sub">詞語配對 · MC選擇</span></span>
                         </button>
-                        <button class="list-action-btn la-lang" data-lvl="adv-mc-lang" onclick="startGame('adv-mc')">
+                        <button class="list-action-btn la-lang" onclick="startGame('adv-mc')">
                             <span class="la-icon">⏳</span>
-                            <span class="la-text"><span class="la-title">副詞特訓</span></span>
-                        </button>
-                        <button class="list-action-btn la-lang" data-lvl="t1-vocab" onclick="startGame('t1-vocab')">
-                            <span class="la-icon">📖</span>
-                            <span class="la-text"><span class="la-title">T1 單元一詞語填充</span></span>
+                            <span class="la-text"><span class="la-title">副詞特訓</span><span class="la-sub">初/高階</span></span>
                         </button>
                     </div>
                     <div class="subtab-panel" id="subpanel-poem">
@@ -3003,48 +3018,12 @@
             { q: "為了在這次比賽中奪冠，整支隊伍抱着＿＿的決心，拚命練習。", ans: "破釜沉舟", options: ["破釜沉舟", "一本正經", "爽快", "愛惜"] }
         ];
 
-
-        // ══ T1 單元一：詞語填充 ══
-        const t1VocabTasks = [
-            { q: "小明＿＿＿＿忘記帶功課，老師提醒他要養成收拾書包的習慣。", ans: "屢次", options: ["屢次","醉心","分佈","研製"] },
-            { q: "強烈颱風吹倒不少樹木，對市民的安全造成＿＿＿＿。", ans: "威脅", options: ["義務","威脅","宗旨","尊嚴"] },
-            { q: "過馬路時要＿＿＿＿車輛和交通燈，不能只顧着聊天。", ans: "留神", options: ["掙錢","創建","留神","依賴"] },
-            { q: "我們漸漸長大，應學會照顧自己，不應過分＿＿＿＿父母。", ans: "依賴", options: ["依賴","震盪","分佈","醉心"] },
-            { q: "地震發生時，地面會猛烈＿＿＿＿，人們應盡快到安全地方避險。", ans: "震盪", options: ["創建","研製","震盪","掙錢"] },
-            { q: "科學家努力＿＿＿＿新的環保物料，希望減少塑膠垃圾。", ans: "研製", options: ["留神","研製","屢次","分佈"] },
-            { q: "運動會當天陽光猛烈，運動員跑完長跑後已經＿＿＿＿。", ans: "汗流浹背", options: ["百折不撓","汗流浹背","醉心","屢次"] },
-            { q: "雖然練習時遇到很多困難，他仍然＿＿＿＿，沒有放棄學習游泳。", ans: "百折不撓", options: ["百折不撓","留神","分佈","威脅"] },
-            { q: "姐姐＿＿＿＿繪畫，常常利用課餘時間到美術館參觀。", ans: "醉心", options: ["震盪","醉心","依賴","掙錢"] },
-            { q: "一群熱心人士＿＿＿＿了環保小組，定期到海灘清理垃圾。", ans: "創建", options: ["屢次","威脅","創建","留神"] },
-            { q: "這個慈善機構的＿＿＿＿是幫助有需要的長者改善生活。", ans: "宗旨", options: ["宗旨","尊嚴","義務","分佈"] },
-            { q: "香港的人口主要＿＿＿＿在市區和新市鎮一帶。", ans: "分佈", options: ["醉心","分佈","研製","汗流浹背"] },
-            { q: "保護校園環境是每一位學生的＿＿＿＿，大家都不應亂拋垃圾。", ans: "義務", options: ["威脅","宗旨","義務","震盪"] },
-            { q: "即使家境不富裕，我們也要憑自己的努力生活，維護個人的＿＿＿＿。", ans: "尊嚴", options: ["尊嚴","分佈","留神","屢次"] },
-            { q: "爸爸每天努力工作＿＿＿＿，讓家人過着安定的生活。", ans: "掙錢", options: ["研製","掙錢","創建","震盪"] },
-            { q: "老師＿＿＿＿提醒大家不可在走廊奔跑，可是仍有同學沒有遵守規則。", ans: "屢次", options: ["屢次","宗旨","醉心","尊嚴"] },
-            { q: "網上陌生人可能會提出不合理要求，同學必須提高警覺，避免受到＿＿＿＿。", ans: "威脅", options: ["分佈","威脅","義務","研製"] },
-            { q: "使用剪刀時要特別＿＿＿＿，以免弄傷自己或同學。", ans: "留神", options: ["創建","掙錢","留神","百折不撓"] },
-            { q: "小妹妹起初很＿＿＿＿媽媽幫她收拾玩具，後來終於學會自己完成。", ans: "依賴", options: ["醉心","依賴","屢次","震盪"] },
-            { q: "巴士突然急煞，車廂內的乘客感到一陣＿＿＿＿。", ans: "震盪", options: ["震盪","宗旨","義務","尊嚴"] },
-            { q: "工程師正在＿＿＿＿一種能節省電力的新型冷氣機。", ans: "研製", options: ["留神","研製","分佈","掙錢"] },
-            { q: "清潔工人在炎熱的天氣下工作，不一會兒便＿＿＿＿。", ans: "汗流浹背", options: ["汗流浹背","百折不撓","醉心","創建"] },
-            { q: "失敗後重新嘗試，需要＿＿＿＿的精神和堅強的意志。", ans: "百折不撓", options: ["百折不撓","屢次","威脅","分佈"] },
-            { q: "哥哥＿＿＿＿研究昆蟲，家中收藏了很多相關書籍。", ans: "醉心", options: ["留神","震盪","醉心","義務"] },
-            { q: "校長希望＿＿＿＿閱讀角，讓學生能在小息時安靜看書。", ans: "創建", options: ["創建","掙錢","依賴","威脅"] },
-            { q: "圖書館的＿＿＿＿是鼓勵市民閱讀和善用知識。", ans: "宗旨", options: ["尊嚴","宗旨","屢次","汗流浹背"] },
-            { q: "這些候鳥＿＿＿＿在不同的濕地，方便研究人員觀察牠們。", ans: "分佈", options: ["分佈","留神","創建","醉心"] },
-            { q: "照顧家中的小動物，不只是興趣，也是主人應盡的＿＿＿＿。", ans: "義務", options: ["威脅","震盪","義務","屢次"] },
-            { q: "無論別人怎樣嘲笑他，他都努力完成工作，以行動維護自己的＿＿＿＿。", ans: "尊嚴", options: ["尊嚴","宗旨","分佈","研製"] },
-            { q: "那位青年白天上學，晚上兼職＿＿＿＿，希望減輕家庭的負擔。", ans: "掙錢", options: ["創建","留神","掙錢","依賴"] },
-        ];
-
         const mcConfigs = {
             'fill': { title: "⛏️ 礦洞尋寶 (填充題)", subtitle: "敲碎正確的字詞礦石，填補句子！", tasks: fillTasks },
             'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
             'fa-mc': { title: "📝 FA温習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks },
             'dictation2-mc': { title: "📖 默書温習(二) (填充題)", subtitle: "選擇正確的詞語完成句子！", tasks: dictation2Tasks },
             'adv-mc': { title: "⏳ 時間法師 (副詞題)", subtitle: "選擇正確的時間副詞完成句子！", tasks: advTasks },
-            't1-vocab': { title: "📖 T1 單元一：詞語填充", subtitle: "30 條詞語填充題，溫習 T1 單元一詞語！", tasks: t1VocabTasks },
             'appearance-mc': { title: "👤 變身畫家 (外貌描寫)", subtitle: "選出最適合描寫人物外貌的詞語！", tasks: appearanceTasks },
             'term3-vocab': { title: "📚 第三學期詞語温習", subtitle: "温習第三學期詞語，鞏固基礎！", tasks: term3VocabTasks },
             'shooter-all': { title: "🚀 射擊道場（綜合）", subtitle: "混合所有題型，隨機15題！", tasks: [] },
@@ -3841,7 +3820,20 @@
         });
 
         // ================== 存檔與資料設定 ==================
-        const defaultInv = { 
+        
+        // ══════════════════════════════════════════════════
+        // 班別花名冊（座號 + 名字）
+        // ══════════════════════════════════════════════════
+        const CLASS_ROSTER = [
+            { seat: 1, name: "區錦浩" }, { seat: 2, name: "張敏敏" }, { seat: 3, name: "趙家樂" }, { seat: 4, name: "Gabriel" }, { seat: 5, name: "韓伊晨" },
+            { seat: 6, name: "詹皓然" }, { seat: 7, name: "林卓瑤" }, { seat: 8, name: "梁家逸" }, { seat: 9, name: "梁念恩" }, { seat: 10, name: "李韋成" },
+            { seat: 11, name: "李彦彤" }, { seat: 12, name: "文諾彥" }, { seat: 13, name: "吳梓淇" }, { seat: 14, name: "黃倬朣" }, { seat: 15, name: "黃溢鋒" },
+            { seat: 16, name: "曾溱翔" }, { seat: 17, name: "WONG SIR" }
+        ];
+        function findRosterBySeat(seat) { return CLASS_ROSTER.find(r => String(r.seat) === String(seat)); }
+        function findRosterByName(name) { return CLASS_ROSTER.find(r => r.name === name); }
+
+const defaultInv = { 
             playerName: "", playerId: "", giftClaimed: false, nameChangeUsed: false, playerExp: 0, playerLv: 1, examCompletedCount: 0, wood: 0, stone: 0, gem: 0, star: 0, manuscript: 0, fragment: 0, 
             coins: 0, dropBuffLeft: 0, 
             streak: 0, maxStreak: 0, superWeaponLv: 0, superShieldLv: 0, superStoneLv: 0, hut: 0, tower: 0, castles: 0, flyingCastle: 0, ferrisWheel: 0, 
