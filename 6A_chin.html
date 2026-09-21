@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="王家駿 (Wong Ka-Chun)">
-    <meta name="copyright" content="© 2026-2027 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
+    <meta name="copyright" content="© 2025-2026 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
     <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, noarchive">
     <meta name="description" content="私人教學工具 — 未經授權不得複製或分發">
@@ -1470,6 +1470,10 @@
                 <option value="16">16. 曾溱翔</option>
                 <option value="17">17. WONG SIR</option>
               </select>
+              <div style="width:100%;position:relative;margin-top:12px;">
+                <div style="font-size:0.72em;color:rgba(200,168,75,0.8);letter-spacing:2px;margin-bottom:6px;text-align:left;">✎ 自訂暱稱（可選，留空即用真名）</div>
+                <input type="text" id="input-nickname" maxlength="8" placeholder="輸入你嘅暱稱..." style="width:100%;box-sizing:border-box;background:rgba(10,20,40,0.7);border:1px solid rgba(200,168,75,0.5);border-radius:8px;padding:12px 16px;color:#F0E6C8;font-size:1.1em;font-family:'Noto Serif TC',serif;outline:none;backdrop-filter:blur(8px);">
+              </div>
             </div>
 
             <!-- Password -->
@@ -1763,6 +1767,11 @@
                         <div class="mc-icon" id="system-avatar-icon">🐉</div>
                         <div class="mc-title">更改頭像</div>
                         <div class="mc-sub">選擇你的圖示</div>
+                    </div>
+                    <div class="menu-card" onclick="changeNickname()" style="border-color:#9C27B0;">
+                        <div class="mc-icon">✎</div>
+                        <div class="mc-title">自訂暱稱</div>
+                        <div class="mc-sub">改變顯示名稱</div>
                     </div>
                     <div class="menu-card" onclick="openInstructions()" style="border-color:#2E7D32;">
                         <div class="mc-icon">📖</div>
@@ -3017,6 +3026,27 @@
             { q: "頌文決定＿＿，不再給自己留退路，全力以赴完成這項挑戰。", ans: "破釜沉舟", options: ["破釜沉舟", "率直", "視覺", "愁眉苦臉"] },
             { q: "為了在這次比賽中奪冠，整支隊伍抱着＿＿的決心，拚命練習。", ans: "破釜沉舟", options: ["破釜沉舟", "一本正經", "爽快", "愛惜"] }
         ];
+
+
+        // ══════════════════════════════════════════════════
+        // 自訂暱稱功能
+        // ══════════════════════════════════════════════════
+        function getDisplayName() {
+            return (inventory.nickname && inventory.nickname.trim()) ? inventory.nickname.trim() : inventory.playerName;
+        }
+        window.getDisplayName = getDisplayName;
+        window.changeNickname = async function() {
+            playSound('click');
+            if (!inventory.playerName) return alert('請先登入！');
+            const cur = inventory.nickname || '';
+            const nn = prompt('輸入你嘅新暱稱（留空即係用返真名顯示）：', cur);
+            if (nn === null) return;
+            const trimmed = nn.trim().slice(0, 8);
+            inventory.nickname = trimmed;
+            saveGame();
+            document.getElementById('display-name').textContent = getDisplayName();
+            alert(trimmed ? `✅ 暱稱已改為「${trimmed}」！` : '✅ 已改用真名顯示。');
+        };
 
         const mcConfigs = {
             'fill': { title: "⛏️ 礦洞尋寶 (填充題)", subtitle: "敲碎正確的字詞礦石，填補句子！", tasks: fillTasks },
@@ -4367,7 +4397,7 @@ function checkDailyReset() {
                     inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
                 }
                 saveGame();
-                document.getElementById('display-name').textContent = session.name;
+                document.getElementById('display-name').textContent = getDisplayName();
                 document.body.classList.remove('on-login');
                 setAvatarUI();
                 goHome();
