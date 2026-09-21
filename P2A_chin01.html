@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>「還」句式練習 20 題</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: "PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+    background: #fdf6ec;
+    margin: 0;
+    padding: 16px;
+    color: #3a2e26;
+  }
+  h1 {
+    text-align: center;
+    color: #d9772f;
+    font-size: 1.6em;
+    margin-bottom: 4px;
+  }
+  .subtitle { text-align:center; color:#8a6f5c; margin-bottom:20px; font-size:0.95em;}
+  .section {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    border: 2px solid #f3e0c8;
+  }
+  .section h2 {
+    color: #c1571f;
+    font-size: 1.2em;
+    margin-top: 0;
+    border-bottom: 2px dashed #f0c896;
+    padding-bottom: 8px;
+  }
+  .q {
+    margin: 18px 0;
+    padding: 14px;
+    background: #fffaf2;
+    border-radius: 12px;
+    border: 1px solid #f0e2c9;
+  }
+  .q-title { font-weight: bold; margin-bottom: 8px; }
+  .options label {
+    display: block;
+    padding: 8px 10px;
+    margin: 6px 0;
+    background: #fff;
+    border: 1px solid #e6d5b8;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .options label:hover { background: #fdeecb; }
+  .options input { margin-right: 8px; }
+
+  .tiles { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; min-height:44px;}
+  .tile {
+    background:#ffe0a8; border:1px solid #e0a544; border-radius:8px;
+    padding:8px 14px; cursor:pointer; user-select:none; font-size:1.05em;
+    transition:0.15s;
+  }
+  .tile:hover { background:#ffd07f; }
+  .tile.used { opacity:0.35; pointer-events:none; }
+  .answer-line {
+    min-height:46px; border:2px dashed #c9a86a; border-radius:10px;
+    padding:8px; background:#fff8ec; display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+  }
+  .answer-line .tile { background:#c9e8c1; border-color:#7fbf6a; }
+  .clear-btn {
+    margin-top:8px; background:#eee; border:none; border-radius:6px; padding:6px 12px;
+    cursor:pointer; font-size:0.9em; color:#666;
+  }
+
+  .drag-sentence {
+    display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-size:1.15em; line-height:2.2;
+    margin-bottom:14px;
+  }
+  .slot {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:52px; height:38px; border:2px dashed #c9a86a; border-radius:8px;
+    background:#fff8ec; vertical-align:middle; margin:0 2px;
+  }
+  .slot.filled { border-style:solid; background:#dff0d8; }
+  .slot.correct { border-color:#3fa34d; background:#d7f5da; }
+  .slot.wrong { border-color:#d9534f; background:#fbe0df; }
+  .chip-tray { margin-top:6px; min-height:50px; display:flex; gap:10px; }
+  .chip {
+    width:52px; height:38px; display:flex; align-items:center; justify-content:center;
+    background:#ffb74d; border:2px solid #d9772f; border-radius:8px;
+    font-weight:bold; font-size:1.1em; cursor:grab; touch-action:none;
+    color:#5a3a10; box-shadow:0 2px 4px rgba(0,0,0,0.15);
+  }
+  .chip.dragging { opacity:0.85; box-shadow:0 6px 14px rgba(0,0,0,0.3); z-index:50; position:fixed; pointer-events:none; }
+
+  .fill input[type=text] {
+    width: 90%; max-width:280px; padding:6px 8px; border:1px solid #ccc; border-radius:6px; font-size:1em;
+  }
+  .toggle-ans {
+    margin-top:6px; font-size:0.85em; color:#c1571f; cursor:pointer; text-decoration:underline;
+  }
+  .ref-answer { display:none; margin-top:6px; padding:6px 10px; background:#eef7ee; border-radius:6px; color:#2e6b2e; font-size:0.9em;}
+
+  .controls { text-align:center; margin: 20px 0; }
+  .controls button {
+    background:#d9772f; color:#fff; border:none; padding:12px 26px; border-radius:24px;
+    font-size:1.05em; margin:0 8px; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,0.15);
+  }
+  .controls button.secondary { background:#8a8a8a; }
+  #scoreBox {
+    text-align:center; font-size:1.3em; font-weight:bold; color:#c1571f; margin-top:10px; min-height:1.6em;
+  }
+  .result-mark { font-weight:bold; margin-left:8px; }
+  .result-mark.correct { color:#3fa34d; }
+  .result-mark.wrong { color:#d9534f; }
+</style>
+</head>
+<body>
+
+<h1>「還」句式練習 20 題</h1>
+<p class="subtitle">句式：A……還……B（在同一類事情上，多加一項）</p>
+
+<!-- ============ 第一部分：選擇題 ============ -->
+<div class="section">
+  <h2>第一部分：選擇題（MC）</h2>
+  <div id="mc-container"></div>
+</div>
+
+<!-- ============ 第二部分：句子重組 ============ -->
+<div class="section">
+  <h2>第二部分：句子重組（點擊詞卡，依次組成正確句子）</h2>
+  <div id="reorder-container"></div>
+</div>
+
+<!-- ============ 第三部分：拖曳題 ============ -->
+<div class="section">
+  <h2>第三部分：拖曳題 — 把「還」拖到正確位置</h2>
+  <div id="drag-container"></div>
+</div>
+
+<!-- ============ 第四部分：綜合應用 / 仿寫 ============ -->
+<div class="section">
+  <h2>第四部分：綜合應用 / 仿寫（自由作答，可參考答案）</h2>
+  <div id="fill-container"></div>
+</div>
+
+<div class="controls">
+  <button id="checkBtn">檢查答案</button>
+  <button id="resetBtn" class="secondary">重新開始</button>
+</div>
+<div id="scoreBox"></div>
+
+<script>
+/* ---------------- 資料 ---------------- */
+
+const mcData = [
+  { q: "1. 請選出「還」用得正確的句子：",
+    opts: ["我還喜歡吃蘋果，喜歡吃香蕉。","我喜歡吃蘋果，還喜歡吃香蕉。","我喜歡還吃蘋果，吃香蕉。","還我喜歡吃蘋果，喜歡吃香蕉。"],
+    ans: 1 },
+  { q: "2.「我不喜歡黑色，＿＿＿不喜歡灰色。」空格應填：",
+    opts: ["也","還","就","都"], ans: 1 },
+  { q: "3. 下面哪一句「還」的位置正確？",
+    opts: ["我愛吃西瓜，還愛吃芒果。","我愛吃西瓜，愛還吃芒果。","我還愛吃西瓜，愛吃芒果。","我愛吃西瓜還，愛吃芒果。"], ans: 0 },
+  { q: "4.「我喜歡自己穿衣服，＿＿＿自己收拾書包。」最合適的詞是：",
+    opts: ["但是","還","因為","所以"], ans: 1 },
+  { q: "5. 選出意思正確、句式完整的句子：",
+    opts: ["姐姐會彈琴，還跳舞。","姐姐會彈琴，還會跳舞。","姐姐還會彈琴，會跳舞。","姐姐會還彈琴，跳舞。"], ans: 1 },
+];
+
+const reorderData = [
+  { q: "6.", tiles: ["我","喜歡","吃蘋果","，","還","喜歡","吃橙","。"], ans: ["我","喜歡","吃蘋果","，","還","喜歡","吃橙","。"] },
+  { q: "7.", tiles: ["妹妹","會","唱歌","，","還","會","跳舞","。"], ans: ["妹妹","會","唱歌","，","還","會","跳舞","。"] },
+  { q: "8.", tiles: ["老師","教","我們","中文","，","還","教","英文","。"], ans: ["老師","教","我們","中文","，","還","教","英文","。"] },
+  { q: "9.", tiles: ["我","不","喜歡","打籃球","，","還","不","喜歡","踢足球","。"], ans: ["我","不","喜歡","打籃球","，","還","不","喜歡","踢足球","。"] },
+  { q: "10.", tiles: ["爸爸","愛","看書","，","還","愛","看電視","。"], ans: ["爸爸","愛","看書","，","還","愛","看電視","。"] },
+];
+
+/* dragData: parts 為固定文字，slots 位置在 parts 之間，correctSlot 為插入「還」的正確 slot 索引 (0-based) */
+const dragData = [
+  { q: "11.", parts: ["我","喜歡","媽媽陪我做功課，","喜歡","爸爸陪我看圖書。"], correctSlot: 2 },
+  { q: "12.", parts: ["我","愛","吃西瓜，","愛","吃香蕉。"], correctSlot: 2 },
+  { q: "13.", parts: ["弟弟","會","游泳，","會","踢足球。"], correctSlot: 2 },
+  { q: "14.", parts: ["我","不","喜歡吃辣，","不","喜歡吃酸。"], correctSlot: 2 },
+  { q: "15.", parts: ["同學們","喜歡","畫畫，","喜歡","做手工。"], correctSlot: 2 },
+];
+
+const fillData = [
+  { q: "16. 我喜歡＿＿＿＿＿＿＿＿，還喜歡＿＿＿＿＿＿＿＿。", ref: "例：我喜歡畫畫，還喜歡唱歌。" },
+  { q: "17. 我不喜歡＿＿＿＿＿＿＿＿，還不喜歡＿＿＿＿＿＿＿＿。", ref: "例：我不喜歡吃苦瓜，還不喜歡吃洋蔥。" },
+  { q: "18. 我愛＿＿＿＿＿＿＿＿，還愛＿＿＿＿＿＿＿＿。", ref: "例：我愛打籃球，還愛游泳。" },
+  { q: "19. ＿＿＿＿＿＿會＿＿＿＿＿＿，還會＿＿＿＿＿＿。", ref: "例：哥哥會彈琴，還會下棋。" },
+  { q: "20. 用「還」寫一句完整句子，說一說自己喜歡做的兩件事：", ref: "例：我喜歡看書，還喜歡踢足球。" },
+];
+
+/* ---------------- 產生：選擇題 ---------------- */
+const mcContainer = document.getElementById("mc-container");
+mcData.forEach((item, i) => {
+  const div = document.createElement("div");
+  div.className = "q";
+  div.innerHTML = `<div class="q-title">${item.q}</div>
+    <div class="options">
+      ${item.opts.map((o,j) => `<label><input type="radio" name="mc${i}" value="${j}"> ${String.fromCharCode(65+j)}. ${o}</label>`).join("")}
+    </div>
+    <span class="result-mark" id="mcResult${i}"></span>`;
+  mcContainer.appendChild(div);
+});
+
+/* ---------------- 產生：句子重組 ---------------- */
+const reorderContainer = document.getElementById("reorder-container");
+const reorderState = [];
+reorderData.forEach((item, i) => {
+  const div = document.createElement("div");
+  div.className = "q";
+  const shuffled = [...item.tiles].sort(() => Math.random() - 0.5);
+  reorderState[i] = [];
+  div.innerHTML = `<div class="q-title">${item.q} 請點擊詞卡依次組成正確句子</div>
+    <div class="tiles" id="pool${i}"></div>
+    <div class="answer-line" id="ans${i}"></div>
+    <button class="clear-btn" data-idx="${i}">清空重排</button>
+    <span class="result-mark" id="reorderResult${i}"></span>`;
+  reorderContainer.appendChild(div);
+
+  const pool = div.querySelector(`#pool${i}`);
+  shuffled.forEach((word, wi) => {
+    const t = document.createElement("span");
+    t.className = "tile";
+    t.textContent = word;
+    t.dataset.word = word;
+    t.dataset.used = "false";
+    t.addEventListener("click", () => {
+      if (t.dataset.used === "true") return;
+      t.dataset.used = "true";
+      t.classList.add("used");
+      reorderState[i].push(word);
+      renderAnswerLine(i);
+    });
+    pool.appendChild(t);
+  });
+
+  div.querySelector(".clear-btn").addEventListener("click", () => {
+    reorderState[i] = [];
+    pool.querySelectorAll(".tile").forEach(t => { t.dataset.used = "false"; t.classList.remove("used"); });
+    renderAnswerLine(i);
+  });
+});
+
+function renderAnswerLine(i) {
+  const ansDiv = document.getElementById(`ans${i}`);
+  ansDiv.innerHTML = "";
+  reorderState[i].forEach((word, wi) => {
+    const t = document.createElement("span");
+    t.className = "tile";
+    t.textContent = word;
+    t.addEventListener("click", () => {
+      reorderState[i].splice(wi, 1);
+      const pool = document.getElementById(`pool${i}`);
+      const same = [...pool.querySelectorAll(".tile")].find(el => el.dataset.word === word && el.dataset.used === "true");
+      if (same) { same.dataset.used = "false"; same.classList.remove("used"); }
+      renderAnswerLine(i);
+    });
+    ansDiv.appendChild(t);
+  });
+}
+
+/* ---------------- 產生：拖曳題 ---------------- */
+const dragContainer = document.getElementById("drag-container");
+const dragState = [];
+dragData.forEach((item, i) => {
+  const div = document.createElement("div");
+  div.className = "q";
+  div.innerHTML = `<div class="q-title">${item.q} 把「還」拖到正確的空格</div>
+    <div class="drag-sentence" id="sentence${i}"></div>
+    <div class="chip-tray" id="tray${i}"></div>
+    <span class="result-mark" id="dragResult${i}"></span>`;
+  dragContainer.appendChild(div);
+
+  const sentence = div.querySelector(`#sentence${i}`);
+  dragState[i] = { filledSlot: null };
+
+  item.parts.forEach((part, pi) => {
+    const span = document.createElement("span");
+    span.textContent = part;
+    sentence.appendChild(span);
+    if (pi < item.parts.length - 1) {
+      const slot = document.createElement("span");
+      slot.className = "slot";
+      slot.dataset.qIdx = i;
+      slot.dataset.slotIdx = pi;
+      sentence.appendChild(slot);
+    }
+  });
+
+  const tray = div.querySelector(`#tray${i}`);
+  const chip = document.createElement("div");
+  chip.className = "chip";
+  chip.textContent = "還";
+  chip.dataset.qIdx = i;
+  tray.appendChild(chip);
+
+  makeDraggable(chip, i);
+});
+
+function makeDraggable(chip, qIdx) {
+  chip.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    chip.setPointerCapture(e.pointerId);
+    const rect = chip.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+    chip.classList.add("dragging");
+    chip.style.left = rect.left + "px";
+    chip.style.top = rect.top + "px";
+    chip.style.width = rect.width + "px";
+    chip.style.height = rect.height + "px";
+    document.body.appendChild(chip);
+
+    function onMove(ev) {
+      chip.style.left = (ev.clientX - offsetX) + "px";
+      chip.style.top = (ev.clientY - offsetY) + "px";
+    }
+    function onUp(ev) {
+      chip.classList.remove("dragging");
+      chip.style.position = "";
+      chip.style.left = ""; chip.style.top = ""; chip.style.width = ""; chip.style.height = "";
+      chip.releasePointerCapture(ev.pointerId);
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerup", onUp);
+
+      const dropX = ev.clientX, dropY = ev.clientY;
+      const slots = document.querySelectorAll(`.slot[data-q-idx="${qIdx}"]`);
+      let target = null;
+      slots.forEach(s => {
+        const r = s.getBoundingClientRect();
+        if (dropX >= r.left-8 && dropX <= r.right+8 && dropY >= r.top-8 && dropY <= r.bottom+8) target = s;
+      });
+      document.querySelectorAll(`.slot[data-q-idx="${qIdx}"]`).forEach(s => { s.classList.remove("filled"); s.innerHTML=""; });
+
+      if (target) {
+        target.appendChild(chip);
+        target.classList.add("filled");
+        dragState[qIdx].filledSlot = parseInt(target.dataset.slotIdx);
+      } else {
+        document.getElementById(`tray${qIdx}`).appendChild(chip);
+        dragState[qIdx].filledSlot = null;
+      }
+    }
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
+  });
+}
+
+/* ---------------- 產生：綜合應用 ---------------- */
+const fillContainer = document.getElementById("fill-container");
+fillData.forEach((item, i) => {
+  const div = document.createElement("div");
+  div.className = "q fill";
+  div.innerHTML = `<div class="q-title">${item.q}</div>
+    <input type="text" placeholder="請輸入答案">
+    <div class="toggle-ans" data-idx="${i}">顯示參考答案</div>
+    <div class="ref-answer" id="ref${i}">${item.ref}</div>`;
+  fillContainer.appendChild(div);
+});
+fillContainer.querySelectorAll(".toggle-ans").forEach(el => {
+  el.addEventListener("click", () => {
+    const ref = document.getElementById("ref" + el.dataset.idx);
+    ref.style.display = ref.style.display === "block" ? "none" : "block";
+  });
+});
+
+/* ---------------- 檢查答案 ---------------- */
+document.getElementById("checkBtn").addEventListener("click", () => {
+  let correctCount = 0, total = mcData.length + reorderData.length + dragData.length;
+
+  mcData.forEach((item, i) => {
+    const sel = document.querySelector(`input[name="mc${i}"]:checked`);
+    const mark = document.getElementById(`mcResult${i}`);
+    if (sel && parseInt(sel.value) === item.ans) { mark.textContent = "✔ 正確"; mark.className = "result-mark correct"; correctCount++; }
+    else { mark.textContent = "✘ 錯誤"; mark.className = "result-mark wrong"; }
+  });
+
+  reorderData.forEach((item, i) => {
+    const mark = document.getElementById(`reorderResult${i}`);
+    const isCorrect = JSON.stringify(reorderState[i]) === JSON.stringify(item.ans);
+    if (isCorrect) { mark.textContent = "✔ 正確"; mark.className = "result-mark correct"; correctCount++; }
+    else { mark.textContent = "✘ 錯誤"; mark.className = "result-mark wrong"; }
+  });
+
+  dragData.forEach((item, i) => {
+    const mark = document.getElementById(`dragResult${i}`);
+    const slots = document.querySelectorAll(`.slot[data-q-idx="${i}"]`);
+    const isCorrect = dragState[i].filledSlot === item.correctSlot;
+    slots.forEach(s => {
+      if (parseInt(s.dataset.slotIdx) === item.correctSlot) s.classList.add("correct");
+    });
+    if (isCorrect) { mark.textContent = "✔ 正確"; mark.className = "result-mark correct"; correctCount++; }
+    else { mark.textContent = "✘ 錯誤（正確位置已標綠）"; mark.className = "result-mark wrong"; }
+  });
+
+  document.getElementById("scoreBox").textContent = `你答對了 ${correctCount} / ${total} 題（自動評分部分）`;
+});
+
+document.getElementById("resetBtn").addEventListener("click", () => location.reload());
+</script>
+</body>
+</html>
