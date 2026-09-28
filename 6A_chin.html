@@ -10243,6 +10243,13 @@ window.rcAnswer = function(btn, chosen, correct, hint) {
   const nextBtn = document.getElementById('rc-next-btn');
   if (nextBtn) nextBtn.style.display = 'inline-block';
 
+  // 🔧 BUG FIX：每日任務「完成閱讀道場 3 題」原意係「完成3題」（做咗就得，唔限答對），
+  // 之前只有答對先計入進度，令答錯嘅同學要做多過3題先達標，同任務描述唔一致，而家改成
+  // 「每答一題（啱錯都計）」就計入進度，先符合「完成 3 題」呢個描述，並即時更新任務清單顯示
+  if (typeof updateQuestProgress === 'function') { updateQuestProgress('reading3'); }
+  if (typeof saveGame === 'function') saveGame();
+  if (typeof renderDailyQuests === 'function') { renderDailyQuests(); }
+
   if (isCorrect) {
     rcCorrect++; rcTotalCorrect++;
     rcSessionExp += 3;
@@ -10254,7 +10261,6 @@ window.rcAnswer = function(btn, chosen, correct, hint) {
       inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers||0) + 1;
       inventory.rcCorrectAnswers = (inventory.rcCorrectAnswers||0) + 1;  // ✅ FIX B1
     }
-    if (typeof updateQuestProgress === 'function') { updateQuestProgress('reading3'); }
     if (typeof saveGame === 'function') saveGame();  // ✅ FIX B1
     rcToast('✅ 答對！✨+3 EXP  💰+3');
   } else {
