@@ -1612,8 +1612,18 @@
             </script>
 
             <!-- ══ DAILY QUEST (always visible) ══ -->
+            <div class="quest-panel" id="weekly-hub" style="margin-bottom:10px;">
+                <h3 style="margin:0 0 6px;">🌍 全班世界 Boss <span style="font-size:0.75em;color:#81D4FA;font-weight:600;">(每日重置)</span></h3>
+                <div id="wb-box" style="font-size:0.9em;">載入中…</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+                    <button class="btn-purple" style="flex:1;min-width:130px;margin:0;font-size:0.85em;padding:8px 6px;" onclick="openWeakBoss()">👹 我嘅弱點 Boss<span id="weak-count"></span></button>
+                    <button class="btn-blue" style="flex:1;min-width:100px;margin:0;font-size:0.85em;padding:8px 6px;" onclick="openStudentQSubmit()">✍️ 我出題</button>
+                    <button class="btn-green" style="flex:1;min-width:100px;margin:0;font-size:0.85em;padding:8px 6px;" onclick="openStudentQs()">📚 同學出題</button>
+                </div>
+            </div>
+
             <div class="quest-panel" id="daily-quest-panel" style="margin-bottom:10px;">
-                <h3 style="margin:0 0 6px;">📋 每日任務 <span id="quest-reset-hint" style="font-size:0.75em;color:#81D4FA;font-weight:600;">(每日重置)</span></h3>
+                <h3 style="margin:0 0 6px;">📋 每日任務 <span id="quest-reset-hint" style="font-size:0.75em;color:#81D4FA;font-weight:600;">(每日重置・5 揀 3)</span></h3>
                 <div id="quest-list"></div>
             </div>
 
@@ -2132,6 +2142,8 @@
                 <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
             </div>
         </div>
+
+        <div id="weak-boss-screen" class="screen hidden"></div>
 
         <div id="fa1-review-screen" class="screen hidden">
             <h2 style="color:#6A1B9A;">📝 P6 T1 FA1溫習</h2>
@@ -3813,7 +3825,7 @@
   ]
  }
 ];
-        const fa1NobelReorderTasks = [["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。"], ["他期望研發出來的炸藥", "可以造福人羣，", "可是，", "一些人扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["他期望研發出來的炸藥", "可以造福人羣，", "可是，", "一些人扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。", "他", "痛心極了。"], ["諾貝爾", "憑着", "百折不撓", "的毅力，", "終於", "研製出", "安全", "又可靠的", "烈性炸藥。"], ["他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。", "他期望研發出來的炸藥", "可以造福人羣，", "可是，", "一些人扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["他期望", "研發出來的炸藥", "可以", "造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥", "用於", "傷害性命的戰爭上。"], ["他期望", "研發出來的炸藥", "可以", "造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥", "用於", "傷害性命的戰爭上。", "他", "痛心極了。"], ["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。", "他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。", "他期望", "研發出來的炸藥", "可以", "造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥", "用於", "傷害性命的戰爭上。", "他", "痛心極了。"]];
+        const fa1NobelReorderTasks = [["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。"], ["他期望研發出來的炸藥", "可以造福人羣，", "可是，", "一些人扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["他期望研發出來的炸藥", "可以造福人羣，", "可是，", "一些人扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。", "他痛心極了。"], ["諾貝爾", "憑着", "百折不撓的", "毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。"], ["他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥", "用於傷害性命的", "戰爭上。"], ["他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥", "用於傷害性命的", "戰爭上。", "他痛心極了。"], ["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。", "他期望研發出來的炸藥", "可以造福人羣，", "可是，", "一些人扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。", "他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。", "他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥", "用於傷害性命的", "戰爭上。", "他痛心極了。"]];
 
         const mcConfigs = {
             'fill': { title: "⛏️ 礦洞尋寶 (填充題)", subtitle: "敲碎正確的字詞礦石，填補句子！", tasks: fillTasks },
@@ -4707,17 +4719,34 @@
             { id: 'q_streak5',    desc: '連續答對 5 題',           type: 'streak5',   target: 1,  reward: { manuscript: 80, wood: 20, fragment: 1 } },
             { id: 'q_training10', desc: '完成 10 題特訓 (任何關卡，不包括FA/考試)', type: 'training10', target: 10, reward: { manuscript: 100, star: 1 } },
             { id: 'q_reading3',   desc: '完成閱讀道場 3 題',        type: 'reading3',  target: 3,  reward: { manuscript: 60, gem: 1 } },
+            { id: 'q_moshu5',     desc: '漢字道場答對 5 題',        type: 'moshu5',    target: 5,  reward: { manuscript: 70, wood: 20 } },
+            { id: 'q_weakboss',   desc: '擊敗一次「我嘅弱點 Boss」', type: 'weakboss',  target: 1,  reward: { manuscript: 90, star: 1 } },
         ];
+        const QUEST_PICK_COUNT = 3;
 
         function generateDailyQuests() {
             let today = new Date().toDateString();
-            const currentIds = QUEST_POOL.map(q => q.id).sort().join(',');
-            const savedIds = (inventory.dailyQuests || []).map(q => q.id).sort().join(',');
-            if (inventory.dailyQuestDate === today && savedIds === currentIds) return;
-            inventory.dailyQuestDate = today;
-            inventory.dailyQuests = QUEST_POOL.map(q => ({ ...q, claimed: false }));
-            inventory.dailyQuestProgress = {};
-            saveGame();
+            if (inventory.dailyQuestDate !== today) {
+                inventory.dailyQuestDate = today;
+                inventory.dailyQuests = [];
+                inventory.dailyQuestProgress = {};
+                saveGame();
+            }
+            if (!inventory.dailyQuests) inventory.dailyQuests = [];
+            if (!inventory.dailyQuestProgress) inventory.dailyQuestProgress = {};
+        }
+        window._qPicks = window._qPicks || [];
+        function toggleQuestPick(id) {
+            const k = window._qPicks.indexOf(id);
+            if (k >= 0) window._qPicks.splice(k, 1);
+            else if (window._qPicks.length < QUEST_PICK_COUNT) window._qPicks.push(id);
+            renderDailyQuests();
+        }
+        function confirmQuestPicks() {
+            if (window._qPicks.length !== QUEST_PICK_COUNT) return;
+            inventory.dailyQuests = QUEST_POOL.filter(q => window._qPicks.includes(q.id)).map(q => ({ ...q, claimed: false }));
+            window._qPicks = [];
+            saveGame(); renderDailyQuests();
         }
 
         function renderDailyQuests() {
@@ -4726,29 +4755,43 @@
             let container = document.getElementById('quest-list');
             if (!container) return;
             container.innerHTML = '';
-            (inventory.dailyQuests || []).forEach((q, i) => {
-                let prog = (inventory.dailyQuestProgress || {})[q.id] || 0;
-                let done = prog >= q.target;
-                let claimed = q.claimed;
-                let pct = Math.min(100, Math.round(prog / q.target * 100));
-                const icons = { manuscript:'📜', star:'🌟', gem:'💎', fragment:'🔮', wood:'🪵', stone:'🧱', coins:'🪙' };
-                let rewardText = Object.entries(q.reward).map(([k,v]) => `${icons[k]||''}${v}`).join(' ');
-                let div = document.createElement('div');
-                div.className = 'quest-item' + (claimed ? ' claimed' : done ? ' done' : '');
-                div.innerHTML = `
-                    <span>${q.desc}</span>
-                    <span class="quest-progress">${Math.min(prog, q.target)}/${q.target}</span>
-                    <div class="quest-mini-bar-bg"><div class="quest-mini-bar-fill" style="width:${claimed?100:pct}%"></div></div>
-                    ${done && !claimed ? `<button class="btn-green quest-claim-btn" onclick="claimQuest(${i})">領取 ${rewardText}</button>` : ''}
-                    ${claimed ? '<span style="font-size:0.75em;color:#4CAF50;margin-left:auto;">✅已領</span>' : ''}
-                `;
-                container.appendChild(div);
-            });
+            const icons = { manuscript:'📜', star:'🌟', gem:'💎', fragment:'🔮', wood:'🪵', stone:'🧱', coins:'🪙' };
             if (!inventory.dailyQuests || inventory.dailyQuests.length === 0) {
-                container.innerHTML = '<div class="empty-state"><div class="es-art">📋<br>✨</div><div class="es-title">今日尚無任務</div><div class="es-sub">明天再來挑戰吧！</div></div>';
-            } else if ((inventory.dailyQuests || []).every(q => q.claimed)) {
-                container.innerHTML += '<div class="empty-state" style="margin-top:6px;"><div class="es-art">🎉</div><div class="es-title">全部任務完成！</div><div class="es-sub">你真的太厲害了！明天繼續加油 💪</div></div>';
+                const picks = window._qPicks || [];
+                let html = '<div style="font-size:0.85em;color:#FFD54F;font-weight:bold;margin-bottom:6px;">🎯 今日任務：5 揀 3（已揀 ' + picks.length + '/' + QUEST_PICK_COUNT + '）</div>';
+                QUEST_POOL.forEach(q => {
+                    const prog = Math.min(q.target, (inventory.dailyQuestProgress || {})[q.id] || 0);
+                    const on = picks.includes(q.id);
+                    const rewardText = Object.entries(q.reward).map(([k,v]) => (icons[k]||'') + v).join(' ');
+                    html += '<div class="quest-item' + (on ? ' done' : '') + '" style="cursor:pointer;" onclick="toggleQuestPick(\'' + q.id + '\')">'
+                         + '<span>' + (on ? '☑️ ' : '⬜ ') + q.desc + '</span>'
+                         + '<span class="quest-progress">' + rewardText + (prog ? '　進度 ' + prog + '/' + q.target : '') + '</span></div>';
+                });
+                html += '<button class="btn-green" style="width:100%;margin:6px 0 0;' + (picks.length === QUEST_PICK_COUNT ? '' : 'opacity:.45;') + '" onclick="confirmQuestPicks()">' + (picks.length === QUEST_PICK_COUNT ? '✅ 確定今日任務' : '請揀 3 個任務') + '</button>';
+                container.innerHTML = html;
+            } else {
+                inventory.dailyQuests.forEach((q, i) => {
+                    let prog = (inventory.dailyQuestProgress || {})[q.id] || 0;
+                    let done = prog >= q.target;
+                    let claimed = q.claimed;
+                    let pct = Math.min(100, Math.round(prog / q.target * 100));
+                    let rewardText = Object.entries(q.reward).map(([k,v]) => `${icons[k]||''}${v}`).join(' ');
+                    let div = document.createElement('div');
+                    div.className = 'quest-item' + (claimed ? ' claimed' : done ? ' done' : '');
+                    div.innerHTML = `
+                        <span>${q.desc}</span>
+                        <span class="quest-progress">${Math.min(prog, q.target)}/${q.target}</span>
+                        <div class="quest-mini-bar-bg"><div class="quest-mini-bar-fill" style="width:${claimed?100:pct}%"></div></div>
+                        ${done && !claimed ? `<button class="btn-green quest-claim-btn" onclick="claimQuest(${i})">領取 ${rewardText}</button>` : ''}
+                        ${claimed ? '<span style="font-size:0.75em;color:#4CAF50;margin-left:auto;">✅已領</span>' : ''}
+                    `;
+                    container.appendChild(div);
+                });
+                if (inventory.dailyQuests.every(q => q.claimed)) {
+                    container.innerHTML += '<div class="empty-state" style="margin-top:6px;"><div class="es-art">🎉</div><div class="es-title">全部任務完成！</div><div class="es-sub">你真的太厲害了！明天繼續加油 💪</div></div>';
+                }
             }
+            if (typeof hubRefresh === 'function') hubRefresh();
         }
 
         function claimQuest(idx) {
@@ -4765,12 +4808,13 @@
         }
 
         function updateQuestProgress(type, amount = 1) {
-            if (!inventory.dailyQuests || !inventory.dailyQuestProgress) return;
-            inventory.dailyQuests.forEach(q => {
-                if (q.claimed) return;
-                if (q.type === type) {
-                    inventory.dailyQuestProgress[q.id] = Math.min(q.target, (inventory.dailyQuestProgress[q.id] || 0) + amount);
-                }
+            if (!inventory.dailyQuestProgress) inventory.dailyQuestProgress = {};
+            // 所有 5 個任務類型都會累積進度（包括未揀嘅），揀咗先可領獎
+            QUEST_POOL.forEach(q => {
+                if (q.type !== type) return;
+                const chosen = (inventory.dailyQuests || []).find(x => x.id === q.id);
+                if (chosen && chosen.claimed) return;
+                inventory.dailyQuestProgress[q.id] = Math.min(q.target, (inventory.dailyQuestProgress[q.id] || 0) + amount);
             });
         }
 
@@ -6277,6 +6321,7 @@ function checkDailyReset() {
                         btn.style.backgroundColor = '#F44336';
                         document.getElementById('mc-msg').innerHTML = `<span style="color:#F44336">❌ 答錯！正確答案：<b>${task.ans}</b></span>`;
                         showAnswerCard(false, task.ans, 2500);
+                        if (typeof recordWrong === 'function') recordWrong(task);
                         playSound('error'); inventory.streak = 0; handleBloodMoon(false); updateUI(); saveGame();
                     }
                     document.getElementById('btn-next-mc').classList.remove('hidden');
@@ -8660,6 +8705,8 @@ async function fetchLeaderboard() {
               <div style="background:#1a1a2e;border-radius:16px;padding:20px;width:100%;max-width:420px;color:#eee;font-size:0.92em;max-height:90vh;overflow-y:auto;">
                 <div style="font-size:1.15em;font-weight:900;color:#FFD700;margin-bottom:14px;">🔑 老師管理介面</div>
 
+                <button onclick="tpStudentQs()" style="width:100%;background:#6A1B9A;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:bold;margin-bottom:12px;cursor:pointer;">✍️ 同學出題審批</button>
+
                 <div style="background:#0d1117;border-radius:10px;padding:14px;margin-bottom:12px;">
                   <div style="font-weight:bold;color:#64B5F6;margin-bottom:10px;">👤 學生帳號管理</div>
                   <div style="display:flex;gap:8px;margin-bottom:8px;">
@@ -9767,6 +9814,8 @@ function addScore(pts) {
     const expGain = mode === 'dictation' ? 4 : 2;
     if (typeof gainExp === 'function') gainExp(expGain, '漢字道場');
     msSessionExp += expGain;
+    if (typeof updateQuestProgress === 'function') updateQuestProgress('moshu5');
+    if (typeof wbOnCorrect === 'function') wbOnCorrect();
     // 期間限定：聆聽默寫 +100分
     const dictBonus = (mode === 'dictation' && msDictBonusActive()) ? MS_DICT_BONUS : 0;
     if (dictBonus > 0 && typeof inventory !== 'undefined') {
@@ -10533,6 +10582,7 @@ window.rcAnswer = function(btn, chosen, correct, hint) {
       inventory.coins = (inventory.coins||0) + 3;
       inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers||0) + 1;
       inventory.rcCorrectAnswers = (inventory.rcCorrectAnswers||0) + 1;  // ✅ FIX B1
+      if (typeof wbOnCorrect === 'function') wbOnCorrect();
     }
     if (typeof saveGame === 'function') saveGame();  // ✅ FIX B1
     rcToast('✅ 答對！✨+3 EXP  💰+3');
@@ -11579,6 +11629,302 @@ window.closeRC = function() {
     document.getElementById('synant-modal').style.display='none';
     document.getElementById('synant-modal').setAttribute('hidden','');
   };
+})();
+</script>
+
+
+<script>
+/* ═══════════ 每週挑戰模組：世界 Boss／弱點 Boss／同學出題 ═══════════ */
+(function(){
+  const WB = {
+    HP: 120,            // 全班每日要集合嘅答對題數
+    NEED: 5,            // 個人最少貢獻幾多題先可領獎
+    REWARD: { manuscript: 50, star: 50, fragment: 50 },
+    BOSSES: [
+      { n:'超夢',     id:150 }, { n:'烈空坐',   id:384 }, { n:'帝牙盧卡', id:382 },
+      { n:'鳳王',     id:250 }, { n:'洛奇亞',   id:249 }, { n:'固拉多',   id:383 }, { n:'阿爾宙斯', id:493 }
+    ]
+  };
+  const WEAK = { PER_RUN: 8, WIN_RATIO: 0.75, BANK_MAX: 60, REWARD: { manuscript: 40, star: 1 } };
+  const SQ = { DAILY_LIMIT: 3, CREDIT: { manuscript: 50, star: 2 } };
+
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const safeKey = n => String(n || '').replace(/[.#$\/\[\]]/g, '_');
+  function hkDate() {
+    try { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Hong_Kong' }).format(new Date()); }
+    catch (e) { return new Date(Date.now() + 8*3600*1000).toISOString().slice(0,10); }
+  }
+  function weekId() {
+    const d = new Date(hkDate() + 'T00:00:00Z'); const day = (d.getUTCDay() + 6) % 7;
+    d.setUTCDate(d.getUTCDate() - day); return d.toISOString().slice(0,10);
+  }
+  function toast(msg) {
+    let t = document.getElementById('hub-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'hub-toast';
+      t.style.cssText = 'position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:10050;background:#1a1a2e;color:#FFD700;border:2px solid #FFD700;border-radius:14px;padding:10px 18px;font-weight:bold;font-size:0.92em;max-width:90vw;text-align:center;display:none;';
+      document.body.appendChild(t); }
+    t.textContent = msg; t.style.display = 'block'; clearTimeout(t._t); t._t = setTimeout(() => t.style.display = 'none', 3200);
+  }
+  const DB = () => FIREBASE_DB_URL;
+  async function jget(path) { const r = await fetch(DB() + path + '.json?_=' + Date.now(), { cache: 'no-store' }); if (!r.ok) throw new Error(r.status); return r.json(); }
+  async function jsend(method, path, body) { const r = await fetch(DB() + path + '.json', { method, headers: { 'Content-Type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) }); if (!r.ok) throw new Error(r.status); return r.json().catch(() => null); }
+  function giveReward(rw) { Object.entries(rw).forEach(([k, v]) => { inventory[k] = (inventory[k] || 0) + v; }); }
+  const ICON = { manuscript:'📜', star:'🌟', gem:'💎', fragment:'🔮', wood:'🪵', stone:'🧱', coins:'🪙' };
+  const rwText = rw => Object.entries(rw).map(([k, v]) => (ICON[k] || '') + v).join(' ');
+
+  /* ───────── 世界 Boss ───────── */
+  let wbState = null;
+  function wbBoss(date) { return WB.BOSSES[parseInt(date.replace(/-/g, ''), 10) % WB.BOSSES.length]; }
+  window.wbOnCorrect = function () {
+    if (!inventory || !inventory.playerName) return;
+    const d = hkDate();
+    inventory.wbPend = inventory.wbPend || {};
+    inventory.wbPend[d] = (inventory.wbPend[d] || 0) + 1;
+  };
+  window.wbFlush = async function () {
+    if (!inventory || !inventory.playerName || !inventory.wbPend) return;
+    const key = safeKey(inventory.playerName);
+    for (const d of Object.keys(inventory.wbPend)) {
+      const n = inventory.wbPend[d];
+      if (!n || n < 1) { delete inventory.wbPend[d]; continue; }
+      try {
+        await jsend('PATCH', '/worldBoss/' + d, { dmg: { '.sv': { increment: n } }, ['players/' + key]: { '.sv': { increment: n } } });
+        inventory.wbPend[d] = Math.max(0, (inventory.wbPend[d] || 0) - n);
+        if (!inventory.wbPend[d]) delete inventory.wbPend[d];
+      } catch (e) { break; }
+    }
+  };
+  window.wbRefresh = async function () {
+    const box = document.getElementById('wb-box'); if (!box || !inventory.playerName) return;
+    const d = hkDate(), boss = wbBoss(d), key = safeKey(inventory.playerName);
+    let data = null, err = false;
+    try { data = await jget('/worldBoss/' + d) || {}; } catch (e) { err = true; }
+    const pend = (inventory.wbPend && inventory.wbPend[d]) || 0;
+    const dmg = ((data && data.dmg) || 0) + pend;
+    const mine = ((data && data.players && data.players[key]) || 0) + pend;
+    wbState = { d, dmg, mine, ok: !err };
+    const left = Math.max(0, WB.HP - dmg), pct = Math.round(left / WB.HP * 100);
+    const img = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + boss.id + '.png';
+    const dead = dmg >= WB.HP, claimed = inventory.wbClaimed === d;
+    let action = '';
+    if (dead && claimed) action = '<div style="color:#81C784;font-weight:bold;margin-top:6px;">✅ 今日獎勵已領取</div>';
+    else if (dead && mine >= WB.NEED) action = '<button class="btn-gold" style="width:100%;margin:6px 0 0;" onclick="wbClaim()">🎁 領取全班獎勵 ' + rwText(WB.REWARD) + '</button>';
+    else if (dead) action = '<div style="color:#FFB74D;margin-top:6px;">你今日只貢獻咗 ' + mine + ' 題，需要至少 ' + WB.NEED + ' 題先可領獎，再答幾題啦！</div>';
+    else action = '<div style="color:#B0BEC5;margin-top:6px;font-size:0.85em;">打爆全班獎勵：' + rwText(WB.REWARD) + '（個人最少貢獻 ' + WB.NEED + ' 題）</div>';
+    box.innerHTML = '<div style="display:flex;gap:10px;align-items:center;">'
+      + '<img src="' + img + '" alt="" style="width:64px;height:64px;object-fit:contain;' + (dead ? 'filter:grayscale(1);' : '') + '" onerror="this.style.display=\'none\'">'
+      + '<div style="flex:1;text-align:left;"><div style="font-weight:900;color:#FFD54F;">' + esc(boss.n) + (dead ? '　💥 已被擊倒！' : '') + '</div>'
+      + '<div style="background:#333;border-radius:8px;height:16px;overflow:hidden;margin:4px 0;"><div style="height:100%;width:' + pct + '%;background:linear-gradient(90deg,#E53935,#FF7043);transition:width .5s;"></div></div>'
+      + '<div style="font-size:0.82em;color:#E8F0F8;">HP ' + left + ' / ' + WB.HP + '　｜　我今日貢獻 <b>' + mine + '</b> 題</div></div></div>'
+      + (err ? '<div style="color:#FF8A80;font-size:0.8em;margin-top:4px;">📡 暫時未能連線世界 Boss（我嘅答題仍會記錄，連線後自動補上）</div>' : '') + action;
+  };
+  window.wbClaim = async function () {
+    await window.wbFlush(); await window.wbRefresh();
+    const s = wbState; if (!s || !s.ok) return toast('📡 未能連線，請稍後再試');
+    if (inventory.wbClaimed === s.d) return;
+    if (s.dmg < WB.HP || s.mine < WB.NEED) return toast('條件未達成');
+    inventory.wbClaimed = s.d; inventory.worldBossWins = (inventory.worldBossWins || 0) + 1;
+    giveReward(WB.REWARD); saveGame(); updateUI();
+    toast('🎉 世界 Boss 獎勵：' + rwText(WB.REWARD)); window.wbRefresh();
+  };
+
+  /* ───────── 我嘅弱點 Boss ───────── */
+  window.recordWrong = function (task) {
+    try {
+      if (!task || !task.q || !task.ans || !Array.isArray(task.options)) return;
+      const bank = inventory.wrongBank = inventory.wrongBank || [];
+      const k = bank.findIndex(x => x.q === task.q);
+      const entry = { q: task.q, ans: task.ans, options: task.options.slice(), t: Date.now(), n: (k >= 0 ? (bank[k].n || 1) : 0) + 1 };
+      if (k >= 0) bank[k] = entry; else bank.push(entry);
+      while (bank.length > WEAK.BANK_MAX) bank.shift();
+      weakLabel();
+    } catch (e) {}
+  };
+  function weakLabel() { const el = document.getElementById('weak-count'); if (el) el.textContent = '（' + ((inventory.wrongBank || []).length) + '）'; }
+  let wk = null;
+  function wkScreen() { return document.getElementById('weak-boss-screen'); }
+  window.openWeakBoss = function () {
+    if (!inventory.playerName) return;
+    playSound('click'); hideAll(); wkScreen().classList.remove('hidden');
+    ['player-tag','top-nav','exp-bar-wrap'].forEach(id => { const e = document.getElementById(id); if (e) e.classList.remove('hidden'); });
+    const bank = inventory.wrongBank || [];
+    if (!bank.length) { wk = null; return wkRenderEmpty(); }
+    wk = { qs: shuffle([...bank]).slice(0, WEAK.PER_RUN), i: 0, ok: 0 };
+    wkRenderQ();
+  };
+  function wkStats() {
+    const w = weekId(); const wkw = (inventory.weakWeek && inventory.weakWeek.w === w) ? inventory.weakWeek.n : 0;
+    return '<div style="display:flex;gap:8px;justify-content:center;font-size:0.82em;margin:8px 0;color:#E8F0F8;">'
+      + '<span>🗓️ 本週攻克 <b>' + wkw + '</b></span><span>🏆 累計攻克 <b>' + (inventory.weakCleared || 0) + '</b></span><span>👹 剩餘弱點 <b>' + (inventory.wrongBank || []).length + '</b></span></div>';
+  }
+  function wkLogHtml() {
+    const log = inventory.weakLog || []; if (!log.length) return '';
+    const rows = log.slice(-5).reverse().map(r => '<div style="display:flex;justify-content:space-between;font-size:0.82em;padding:3px 0;border-bottom:1px solid #333;"><span>' + esc(r.d) + '</span><span>' + r.ok + ' / ' + r.n + '　' + (r.win ? '✅ 打贏' : '❌ 再接再厲') + '</span></div>').join('');
+    let trend = '';
+    if (log.length >= 2) { const a = log[log.length - 1], b = log[log.length - 2]; const ra = a.ok / a.n, rb = b.ok / b.n; trend = ra > rb ? '<div style="color:#81C784;font-weight:bold;margin:4px 0;">📈 比上次進步咗！</div>' : ra < rb ? '<div style="color:#FFB74D;margin:4px 0;">💪 比上次少少退步，再試一次！</div>' : '<div style="color:#B0BEC5;margin:4px 0;">➡️ 同上次一樣</div>'; }
+    return '<div style="margin-top:10px;text-align:left;"><div style="font-weight:bold;color:#FFD54F;">📊 進步紀錄</div>' + trend + rows + '</div>';
+  }
+  function wkShell(inner) {
+    wkScreen().innerHTML = '<h2 style="color:#CE93D8;">👹 我嘅弱點 Boss</h2><div id="wk-body" style="max-width:520px;margin:0 auto;background:rgba(0,0,0,0.35);border-radius:14px;padding:14px;color:#fff;">' + inner + '</div>'
+      + '<button class="btn-red" onclick="goHome()" style="margin-top:14px;">🏠 返回主畫面</button>';
+  }
+  function wkRenderEmpty() {
+    wkShell('<div style="font-size:2.2em;">🛡️</div><div style="font-weight:bold;margin:6px 0;">你暫時冇弱點！</div><div style="font-size:0.88em;color:#B0BEC5;">答錯嘅選擇題會自動收集到呢度，之後就可以挑戰「弱點 Boss」將佢哋逐條擊破。</div>' + wkStats() + wkLogHtml());
+  }
+  function wkRenderQ() {
+    const q = wk.qs[wk.i], n = wk.qs.length, left = n - wk.ok, pct = Math.round(left / n * 100);
+    const opts = shuffle([...q.options]);
+    wkShell('<div style="font-weight:bold;color:#CE93D8;">👹 弱點 Boss　第 ' + (wk.i + 1) + ' / ' + n + ' 題</div>'
+      + '<div style="background:#333;border-radius:8px;height:14px;overflow:hidden;margin:6px 0;"><div style="height:100%;width:' + pct + '%;background:linear-gradient(90deg,#8E24AA,#E040FB);"></div></div>'
+      + '<div style="font-size:1.05em;font-weight:bold;margin:10px 0;line-height:1.6;text-align:left;">' + esc(q.q) + '</div>'
+      + '<div id="wk-opts" style="display:grid;gap:8px;"></div><div id="wk-msg" style="min-height:24px;margin-top:8px;font-weight:bold;"></div>'
+      + '<button id="wk-next" class="btn-blue hidden" style="margin-top:6px;" onclick="wkNext()">下一題 ➡️</button>');
+    const box = document.getElementById('wk-opts');
+    opts.forEach(o => {
+      const b = document.createElement('button'); b.className = 'btn-blue'; b.textContent = o; b.style.margin = '0';
+      b.onclick = () => wkAnswer(o, b); box.appendChild(b);
+    });
+  }
+  function wkAnswer(o, btn) {
+    const q = wk.qs[wk.i]; const box = document.getElementById('wk-opts');
+    [...box.children].forEach(b => b.disabled = true);
+    const msg = document.getElementById('wk-msg');
+    if (o === q.ans) {
+      btn.style.backgroundColor = '#4CAF50'; msg.innerHTML = '<span style="color:#81C784">✅ 擊中弱點！</span>'; wk.ok++;
+      playSound('win'); addStreak();
+      const bank = inventory.wrongBank || []; const k = bank.findIndex(x => x.q === q.q);
+      if (k >= 0) bank.splice(k, 1);
+      inventory.weakCleared = (inventory.weakCleared || 0) + 1;
+      const w = weekId(); if (!inventory.weakWeek || inventory.weakWeek.w !== w) inventory.weakWeek = { w, n: 0 };
+      inventory.weakWeek.n++;
+    } else {
+      btn.style.backgroundColor = '#F44336'; msg.innerHTML = '<span style="color:#FF8A80">❌ 正確答案：' + esc(q.ans) + '</span>';
+      [...box.children].forEach(b => { if (b.textContent === q.ans) b.style.backgroundColor = '#4CAF50'; });
+      playSound('error'); inventory.streak = 0;
+    }
+    saveGame(); weakLabel(); document.getElementById('wk-next').classList.remove('hidden');
+  }
+  window.wkNext = function () { wk.i++; if (wk.i >= wk.qs.length) wkResult(); else wkRenderQ(); };
+  function wkResult() {
+    const n = wk.qs.length, ok = wk.ok, win = ok >= Math.ceil(n * WEAK.WIN_RATIO);
+    inventory.weakLog = (inventory.weakLog || []).concat([{ d: hkDate(), n, ok, win }]).slice(-10);
+    let extra = '';
+    if (win) { giveReward(WEAK.REWARD); updateQuestProgress('weakboss'); extra = '<div style="color:#FFD54F;font-weight:bold;margin:6px 0;">🎁 獎勵 ' + rwText(WEAK.REWARD) + '</div>'; playSound('win'); }
+    saveGame(); updateUI(); weakLabel();
+    wkShell('<div style="font-size:2.4em;">' + (win ? '🏆' : '💪') + '</div><div style="font-size:1.2em;font-weight:900;margin:4px 0;">' + (win ? '弱點 Boss 被你擊敗！' : '差少少，再接再厲！') + '</div>'
+      + '<div style="font-size:1.6em;font-weight:900;color:#E040FB;">' + ok + ' / ' + n + '</div>' + extra + wkStats() + wkLogHtml()
+      + ((inventory.wrongBank || []).length ? '<button class="btn-purple" style="margin-top:10px;" onclick="openWeakBoss()">⚔️ 再挑戰一次</button>' : '<div style="margin-top:8px;color:#81C784;font-weight:bold;">🎉 所有弱點已清空！</div>'));
+  }
+
+  /* ───────── 同學出題 ───────── */
+  window.openStudentQSubmit = function () {
+    if (!inventory.playerName) return;
+    const today = hkDate(); const used = (inventory.sqDay === today) ? (inventory.sqCount || 0) : 0;
+    let m = document.getElementById('sq-modal'); if (m) m.remove();
+    m = document.createElement('div'); m.id = 'sq-modal';
+    m.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;padding:14px;';
+    const inp = 'width:100%;box-sizing:border-box;padding:8px;border-radius:8px;border:1px solid #555;background:#12122a;color:#eee;font-size:0.95em;margin-bottom:6px;font-family:inherit;';
+    m.innerHTML = '<div style="background:#1a1a2e;border-radius:16px;padding:18px;width:100%;max-width:420px;color:#eee;max-height:92vh;overflow-y:auto;">'
+      + '<div style="font-size:1.1em;font-weight:900;color:#FFD700;margin-bottom:4px;">✍️ 我出題</div>'
+      + '<div style="font-size:0.8em;color:#B0BEC5;margin-bottom:10px;">出一條選擇題（課文或詞語都得）。老師審批後會放入遊戲並署名表揚，被採用仲有獎勵 ' + rwText(SQ.CREDIT) + '！今日仲可提交 ' + Math.max(0, SQ.DAILY_LIMIT - used) + ' 條。</div>'
+      + '<textarea id="sq-q" rows="2" maxlength="60" placeholder="題目（例如：「毅力」嘅意思係？）" style="' + inp + '"></textarea>'
+      + '<input id="sq-a" maxlength="14" placeholder="✅ 正確答案" style="' + inp + 'border-color:#4CAF50;">'
+      + '<input id="sq-w1" maxlength="14" placeholder="❌ 錯誤選項 1" style="' + inp + '">'
+      + '<input id="sq-w2" maxlength="14" placeholder="❌ 錯誤選項 2" style="' + inp + '">'
+      + '<input id="sq-w3" maxlength="14" placeholder="❌ 錯誤選項 3" style="' + inp + '">'
+      + '<div id="sq-msg" style="min-height:20px;font-size:0.85em;color:#FFB74D;margin-bottom:6px;"></div>'
+      + '<div style="display:flex;gap:8px;"><button class="btn-green" style="flex:1;margin:0;" onclick="submitStudentQ()">📤 提交</button><button class="btn-grey" style="flex:1;margin:0;" onclick="document.getElementById(\'sq-modal\').remove()">取消</button></div></div>';
+    document.body.appendChild(m);
+  };
+  window.submitStudentQ = async function () {
+    const v = id => (document.getElementById(id).value || '').trim();
+    const q = v('sq-q'), a = v('sq-a'), w = [v('sq-w1'), v('sq-w2'), v('sq-w3')], msg = document.getElementById('sq-msg');
+    const today = hkDate(); const used = (inventory.sqDay === today) ? (inventory.sqCount || 0) : 0;
+    if (used >= SQ.DAILY_LIMIT) return msg.textContent = '今日提交次數已用完，聽日再出！';
+    if (q.length < 4) return msg.textContent = '題目最少 4 個字';
+    if (!a || w.some(x => !x)) return msg.textContent = '請填好正確答案同 3 個錯誤選項';
+    if (new Set([a, ...w]).size !== 4) return msg.textContent = '4 個選項不可以重複';
+    try {
+      await jsend('POST', '/studentQs/pending', { name: inventory.playerName, q, ans: a, wrong: w, ts: Date.now(), week: weekId() });
+      inventory.sqDay = today; inventory.sqCount = used + 1; saveGame();
+      document.getElementById('sq-modal').remove(); toast('📤 已提交！老師審批後會放入遊戲');
+    } catch (e) { msg.textContent = '📡 提交失敗（可能老師未開放資料庫權限），請稍後再試'; }
+  };
+  window.openStudentQs = async function () {
+    if (!inventory.playerName) return;
+    let data;
+    try { data = await jget('/studentQs/featured'); } catch (e) { return toast('📡 未能連線同學出題'); }
+    const list = data ? Object.values(data) : [];
+    if (!list.length) return toast('暫時未有同學出題，快啲去「我出題」啦！');
+    mcConfigs['student-qs'] = { title: '📚 同學出題', subtitle: '由同學出題，答啱有獎勵！',
+      tasks: list.map(x => ({ q: '✍️【' + x.name + ' 出題】' + x.q, ans: x.ans, options: x.options })) };
+    startGame('student-qs');
+  };
+  async function sqCheckCredit() {
+    try {
+      const data = await jget('/studentQs/credit/' + safeKey(inventory.playerName)); if (!data) return;
+      inventory.sqClaimed = inventory.sqClaimed || []; let n = 0;
+      Object.keys(data).forEach(id => { if (!inventory.sqClaimed.includes(id)) { inventory.sqClaimed.push(id); giveReward(SQ.CREDIT); n++; } });
+      if (n) { saveGame(); updateUI(); toast('🌟 你有 ' + n + ' 條題目被老師採用！獎勵 ' + rwText(SQ.CREDIT) + ' ×' + n); }
+    } catch (e) {}
+  }
+
+  /* 老師審批 */
+  window.tpStudentQs = async function () {
+    let m = document.getElementById('tp-sq-modal'); if (m) m.remove();
+    m = document.createElement('div'); m.id = 'tp-sq-modal';
+    m.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;padding:14px;';
+    m.innerHTML = '<div style="background:#1a1a2e;border-radius:16px;padding:18px;width:100%;max-width:480px;color:#eee;max-height:92vh;overflow-y:auto;"><div style="font-weight:900;color:#FFD700;font-size:1.1em;margin-bottom:8px;">✍️ 同學出題審批</div><div id="tp-sq-body">載入中…</div><button class="btn-grey" style="width:100%;margin-top:10px;" onclick="document.getElementById(\'tp-sq-modal\').remove()">關閉</button></div>';
+    document.body.appendChild(m); window.tpSqRender();
+  };
+  window.tpSqRender = async function () {
+    const body = document.getElementById('tp-sq-body'); if (!body) return;
+    let pend, feat;
+    try { pend = await jget('/studentQs/pending') || {}; feat = await jget('/studentQs/featured') || {}; }
+    catch (e) { body.innerHTML = '<div style="color:#FF8A80;">📡 讀取失敗：請確認 Firebase 規則已開放 studentQs 路徑。</div>'; return; }
+    const card = (id, x, kind) => '<div style="background:#0d1117;border-radius:10px;padding:10px;margin-bottom:8px;font-size:0.9em;">'
+      + '<div style="color:#64B5F6;font-weight:bold;">' + esc(x.name) + '</div><div style="margin:4px 0;">' + esc(x.q) + '</div>'
+      + '<div style="color:#81C784;">✅ ' + esc(x.ans) + '</div><div style="color:#FF8A80;font-size:0.9em;">❌ ' + esc((x.wrong || x.options.filter(o => o !== x.ans)).join('、')) + '</div>'
+      + '<div style="display:flex;gap:6px;margin-top:6px;">'
+      + (kind === 'p' ? '<button class="btn-green" style="flex:1;margin:0;padding:6px;" onclick="tpSqAdopt(\'' + id + '\')">✅ 採用</button>' : '')
+      + '<button class="btn-red" style="flex:1;margin:0;padding:6px;" onclick="tpSqDel(\'' + kind + '\',\'' + id + '\')">🗑 刪除</button></div></div>';
+    const pk = Object.keys(pend), fk = Object.keys(feat);
+    body.innerHTML = '<div style="font-weight:bold;margin:4px 0;color:#FFB74D;">待審批（' + pk.length + '）</div>' + (pk.map(k => card(k, pend[k], 'p')).join('') || '<div style="color:#888;margin-bottom:8px;">暫時冇</div>')
+      + '<div style="font-weight:bold;margin:10px 0 4px;color:#81C784;">已上線（' + fk.length + '）</div>' + (fk.map(k => card(k, feat[k], 'f')).join('') || '<div style="color:#888;">暫時冇</div>');
+    window._tpSq = { pend };
+  };
+  window.tpSqAdopt = async function (id) {
+    const x = window._tpSq.pend[id]; if (!x) return;
+    const options = shuffle([x.ans, ...x.wrong]);
+    try {
+      await jsend('PUT', '/studentQs/featured/' + id, { name: x.name, q: x.q, ans: x.ans, options, ts: Date.now(), week: x.week || weekId() });
+      await jsend('PUT', '/studentQs/credit/' + safeKey(x.name) + '/' + id, true);
+      await jsend('DELETE', '/studentQs/pending/' + id);
+    } catch (e) { alert('操作失敗：' + e.message); }
+    window.tpSqRender();
+  };
+  window.tpSqDel = async function (kind, id) {
+    if (!confirm('確定刪除？')) return;
+    try { await jsend('DELETE', '/studentQs/' + (kind === 'p' ? 'pending' : 'featured') + '/' + id); } catch (e) { alert('操作失敗：' + e.message); }
+    window.tpSqRender();
+  };
+
+  /* ───────── 主頁刷新／計時 ───────── */
+  let lastSq = 0;
+  window.hubRefresh = function () {
+    if (!inventory || !inventory.playerName) return;
+    weakLabel(); window.wbRefresh();
+    if (Date.now() - lastSq > 60000) { lastSq = Date.now(); sqCheckCredit(); }
+  };
+  setInterval(() => { if (inventory && inventory.playerName) window.wbFlush(); }, 10000);
+  setInterval(() => { const b = document.getElementById('wb-box'); if (b && b.offsetParent !== null && inventory.playerName) window.wbRefresh(); }, 30000);
+  document.addEventListener('visibilitychange', () => { if (document.hidden && window.wbFlush) window.wbFlush(); });
+
+  // 每次答對都經 addStreak → 計入世界 Boss
+  if (typeof addStreak === 'function') {
+    const _orig = addStreak;
+    window.addStreak = addStreak = function () { const r = _orig.apply(this, arguments); try { window.wbOnCorrect(); } catch (e) {} return r; };
+  }
 })();
 </script>
 
