@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>升中面試：自我介紹練習</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:#eef2ff;color:#1f2937;font-size:18px;line-height:1.7}
+.wrap{max-width:1180px;margin:0 auto;padding:18px}
+header{text-align:center;padding:14px 0 6px}
+header .sch{font-size:13px;color:#64748b}
+header h1{font-size:30px;color:#4338ca;font-weight:900}
+header p{color:#475569;font-size:16px}
+.prog{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.prog button{flex:1;min-width:72px;border:2px solid #c7d2fe;background:#fff;border-radius:10px;padding:6px 2px;font-size:13px;font-weight:700;color:#6366f1;cursor:pointer;font-family:inherit}
+.prog button.on{background:#4338ca;color:#fff;border-color:#4338ca}
+.prog button.done{background:#e0e7ff}
+.prog button.opt{border-style:dashed}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.main.full{grid-template-columns:1fr}
+.card{background:#fff;border:3px solid #6366f1;border-radius:18px;padding:22px;box-shadow:0 4px 0 #c7d2fe}
+.card h2{font-size:25px;color:#3730a3;margin-bottom:2px}
+.live{position:sticky;top:12px;background:#fff;border:3px solid #16a34a;border-radius:16px;padding:12px 14px;box-shadow:0 4px 0 #bbf7d0;max-height:92vh;overflow:auto}
+.live h3{font-size:18px;color:#166534}
+.live .lh{font-size:12px;color:#15803d;margin-bottom:8px}
+.lp{border:2px solid #d1fae5;border-radius:10px;padding:6px 10px;margin-bottom:8px;font-size:15px;line-height:1.8;background:#f0fdf4}
+.lp small{display:block;font-size:11px;font-weight:900;color:#16a34a}
+.lp.empty{background:#f8fafc;border-style:dashed;border-color:#cbd5e1;color:#94a3b8}
+.lp.empty small{color:#94a3b8}
+.lp.now{border-color:#f59e0b;background:#fffbeb;box-shadow:0 0 0 3px #fde68a}
+.lp.now small{color:#b45309}
+u.bl{background:#fde68a;text-decoration:none;border-radius:3px}
+.lcount{font-size:13px;color:#166534;text-align:right}
+.why{background:#fef9c3;border:2px dashed #eab308;border-radius:12px;padding:8px 14px;font-size:15px;color:#713f12;margin:10px 0 14px}
+.optb{background:#f0f9ff;border:2px dashed #38bdf8;border-radius:12px;padding:6px 14px;font-size:14px;color:#075985;margin-bottom:10px}
+.ask{background:#fdf2f8;border:2px solid #f9a8d4;border-radius:12px;padding:8px 14px;font-size:16px;color:#831843;margin-bottom:6px}
+.ask b{display:block;font-size:14px;color:#be185d}
+.q{font-weight:900;font-size:19px;margin:16px 0 4px;color:#111}
+.hint{font-size:14px;color:#64748b;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{border:2px solid #a5b4fc;background:#f5f3ff;color:#3730a3;border-radius:999px;padding:7px 16px;font-size:17px;cursor:pointer;font-family:inherit}
+.chip:hover{background:#e0e7ff}
+.chip.sel{background:#4338ca;color:#fff;border-color:#312e81;font-weight:700}
+.chip .ex{display:block;font-size:12px;opacity:.8;font-weight:400}
+input.own,textarea.pr{border:2px solid #a5b4fc;border-radius:10px;padding:7px 12px;font-size:16px;font-family:inherit;width:100%;max-width:520px;margin-top:8px}
+textarea.pr{max-width:100%;min-height:62px;border-color:#f472b6;background:#fff}
+.probe{background:#fff7fb;border:2px dashed #f472b6;border-radius:12px;padding:10px 14px;margin-top:14px}
+.probe .pq{font-weight:900;color:#9d174d}
+.probe small{color:#be185d;font-size:13px}
+.uniq{background:#fff7ed;border:2px solid #fb923c;border-radius:10px;padding:6px 12px;font-size:15px;color:#9a3412;margin-top:10px}
+.warn{background:#fee2e2;border:2px solid #ef4444;border-radius:10px;padding:6px 12px;font-size:15px;color:#991b1b;margin-top:10px}
+.lenbox{background:#eff6ff;border:3px solid #3b82f6;border-radius:14px;padding:12px 14px;margin-top:16px}
+.lenbox h3{font-size:19px;color:#1d4ed8}
+.lenbox input.num{width:90px;max-width:90px;text-align:center;font-size:20px;margin:0 6px}
+.lenbox .note{background:#dbeafe;border-radius:8px;padding:6px 10px;margin-top:10px;font-size:14px;color:#1e3a8a}
+.prof{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.prof .pf{display:flex;align-items:center;border:2px solid #3b82f6;border-radius:999px;background:#fff;overflow:hidden}
+.prof .pf button{border:none;background:none;padding:5px 12px;font-size:15px;cursor:pointer;font-family:inherit;color:#1d4ed8;font-weight:700}
+.prof .pf button.x{color:#dc2626;padding:5px 9px;border-left:1px solid #bfdbfe}
+.pats{margin-top:24px;border-top:3px dashed #c7d2fe;padding-top:14px}
+.pats h3{font-size:21px;color:#047857}
+.sent{background:#f0fdf4;border:2px solid #86efac;border-radius:14px;padding:10px 12px;margin-top:12px}
+.sent.off{opacity:.5}
+.sent .sl{font-weight:900;color:#166534;font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sent .sl label{font-weight:400;font-size:13px;color:#64748b;cursor:pointer}
+.pat{display:block;width:100%;text-align:left;border:2px solid #bbf7d0;background:#fff;border-radius:10px;padding:7px 12px;margin-top:7px;font-size:16.5px;line-height:1.8;cursor:pointer;font-family:inherit;color:#1f2937}
+.pat:hover{background:#ecfdf5}
+.pat.sel{background:#16a34a;color:#fff;border-color:#166534;font-weight:700}
+.pat.sel u.bl{color:#713f12}
+.nav{display:flex;justify-content:space-between;margin-top:22px}
+.btn{border:none;border-radius:12px;padding:11px 26px;font-size:18px;font-weight:900;cursor:pointer;font-family:inherit}
+.btn.p{background:#4338ca;color:#fff}.btn.s{background:#e2e8f0;color:#334155}.btn.g{background:#16a34a;color:#fff}.btn.o{background:#f97316;color:#fff}.btn.r{background:#dc2626;color:#fff}.btn.b{background:#2563eb;color:#fff}
+.btn.sm{padding:3px 10px;font-size:14px;border-radius:8px}
+.out .pc{background:#fff;border:2px solid #c7d2fe;border-radius:12px;padding:10px 16px;margin-bottom:10px}
+.out .pc h4{font-size:13px;color:#6366f1;font-weight:900}
+.sr{display:flex;gap:8px;align-items:flex-start;font-size:19px;line-height:2;border-bottom:1px dotted #e2e8f0}
+.sr span.tx{flex:1}
+.sr span.btns{white-space:nowrap;padding-top:6px}
+textarea#ta{width:100%;min-height:300px;border:3px solid #6366f1;border-radius:12px;padding:14px;font-size:20px;line-height:2;font-family:inherit}
+.meter{display:flex;gap:14px;align-items:center;margin:10px 0;flex-wrap:wrap;font-size:16px}
+.bar{flex:1;min-width:180px;height:16px;background:#e2e8f0;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:#22c55e;width:0;transition:width .3s}
+.sec{margin-top:22px;border-top:3px dashed #c7d2fe;padding-top:16px}
+.sec h3{font-size:21px;color:#3730a3}
+.timer{text-align:center;background:#f5f3ff;border:3px solid #6366f1;border-radius:16px;padding:14px}
+.timer .t{font-size:56px;font-weight:900;color:#4338ca}
+.timer .tb{height:20px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin:6px 0 12px}
+.timer .tb i{display:block;height:100%;width:0;background:#6366f1}
+.kw{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.kw div{background:#fef9c3;border:3px solid #eab308;border-radius:14px;padding:14px 8px;text-align:center;font-size:22px;font-weight:900;color:#713f12}
+.kw div small{display:block;font-size:12px;font-weight:400;color:#a16207}
+.chk label{display:block;background:#f0fdf4;border:2px solid #86efac;border-radius:10px;padding:7px 12px;margin-bottom:6px;font-size:17px;cursor:pointer}
+.chk input{width:20px;height:20px;vertical-align:middle;margin-right:8px}
+.tips{background:#ecfdf5;border:2px solid #34d399;border-radius:12px;padding:10px 16px;margin-top:14px;font-size:16px}
+.tips li{margin-left:20px}
+@media(max-width:860px){.main{grid-template-columns:1fr}.live{position:static;order:-1;max-height:none}}
+@media print{body{background:#fff}.prog,.nav,header p,.timer,.btn,.live{display:none}.card{box-shadow:none}}
+</style></head><body><div class="wrap">
+<header><div class="sch">勵志會梁李秀娛紀念小學</div><h1>🎤 升中面試：自我介紹練習</h1><p>跟着步驟揀一揀、想一想，右邊會即時砌出你的自我介紹。長短由你決定！</p></header>
+<div class="prog" id="prog"></div>
+<div class="main" id="main"><div class="card" id="card"></div><aside class="live" id="live"></aside></div>
+</div>
+<script>
+const B='＿＿＿';
+const S={name:'',school:'',style:'',mins:2,who:'',trait:[],interest:[],evType:'',evWhat:'',diff:'',act:'',res:'',lesson:'',
+ gType:'',gWhere:'',gFeel:'',gLearn:'',hAct:'',hRole:'',hDo:'',hGain:'',iWho:'',iHow:'',iChange:'',
+ weak:'',fix:'',fixRes:'',ms:'',reasons:[],contrib:'',pass:'',dream:'',
+ pr:{trait:'',interest:'',story:'',gDetail:'',hDetail:'',iScene:'',weak:''},pat:{},off:{},ta:null,chk:{}};
+/* 長度分級 */
+const TIER2=['a3','b2','c3','d2','d4'];                 // 約 1.5 分鐘或以上
+const MOD=['g1','g4','g2','g3','h1','h2','h3','h4','i1','i2','i3','i4'];  // 選填內容段落：2 分鐘或以上
+const MODDETAIL=['g4','h4','i2','i4'];                  // 段落細節：3 分鐘或以上
+const TIER3=['f1','f2'];                                // 約 2.5 分鐘或以上
+function applyMins(m){
+ S.mins=m;
+ TIER2.forEach(id=>{S.off[id]=!(m===0||m>=1.5)});
+ MOD.forEach(id=>{S.off[id]=!(m===0||m>=2)});
+ MODDETAIL.forEach(id=>{S.off[id]=!(m===0||m>=3)});
+ TIER3.forEach(id=>{S.off[id]=!(m===0||m>=2.5)});
+}
+applyMins(2);
+let PROF=[];try{PROF=JSON.parse(localStorage.getItem('selfIntroProfiles')||'[]')}catch(e){}
+function saveProf(){try{localStorage.setItem('selfIntroProfiles',JSON.stringify(PROF))}catch(e){}}
+function addProf(){const n=($('pn').value||'').trim();if(!n)return;PROF=PROF.filter(p=>p.n!==n);PROF.push({n:n,m:S.mins});saveProf();render(true)}
+function useProf(i){const p=PROF[i];S.ms=p.n;applyMins(p.m);render(true)}
+function delProf(i){PROF.splice(i,1);saveProf();render(true)}
+function setMins(m){applyMins(m);render(true)}
+function setMinsInput(v){const m=parseFloat(v);if(!isNaN(m)&&m>=0.5&&m<=10){applyMins(m);render(true)}}
+function advice(m){
+ if(m===0)return '不限時間：所有段落都可以使用，揀你想講的就可以。';
+ if(m<2)return '1 分鐘版本：以第 ①–④、⑧、⑩ 步為主，第 ⑤⑥⑦⑨ 步的選填段落會自動略去。';
+ if(m<3)return '約 2 分鐘：建議在第 ⑤⑥⑦ 步揀 1 至 2 個選填段落（校園故事、課外活動、家庭朋友）。';
+ return '約 3 分鐘或以上：建議把第 ⑤⑥⑦ 步都填寫，再加第 ⑨ 步「想讀的中學」，內容會更充實。';
+}
+function lenBox(){
+ const pre=[[1,'1 分鐘'],[2,'2 分鐘'],[3,'3 分鐘'],[5,'5 分鐘'],[0,'不限時間']];
+ const nOff=SENT.filter(s=>S.off[s.id]&&(s.pr||s.opt||TIER2.includes(s.id))).length;
+ let h='<div class="lenbox"><h3>⏱️ 這間學校的面試，自我介紹有多長？</h3><div class="hint">揀了時間，系統會自動幫你開關較長或較短的句子；之後仍可逐句調整。不同學校可以分別儲存。</div><div class="chips">';
+ h+=pre.map(x=>'<button class="chip '+(S.mins===x[0]?'sel':'')+'" onclick="setMins('+x[0]+')">'+x[1]+'</button>').join('');
+ h+='</div><div style="margin-top:10px">或自訂：<input class="own num" type="number" step="0.5" min="0.5" max="10" value="'+(S.mins||'')+'" onchange="setMinsInput(this.value)">分鐘（0.5 至 10）</div>';
+ h+='<div class="note">🎯 目標約 '+(S.mins?Math.round(S.mins*230)+' 字':'不限字數')+'（每分鐘約 230 字）。<br>📌 '+advice(S.mins)+'<br>目前有 '+nOff+' 個句子因時間設定而暫時略去。</div>';
+ h+='<div style="margin-top:12px;font-weight:900;color:#1d4ed8">💾 儲存成「學校預設」</div><div class="hint">輸入學校名稱，會連同目前的時間一起儲存在這部電腦的瀏覽器裏，下次一按就套用。</div>';
+ h+='<input class="own" id="pn" style="max-width:260px" placeholder="例：○○中學" value="'+S.ms+'"> <button class="btn b sm" onclick="addProf()">儲存</button>';
+ if(PROF.length){h+='<div class="prof">'+PROF.map((p,i)=>'<span class="pf"><button onclick="useProf('+i+')">'+p.n+'・'+(p.m?p.m+' 分鐘':'不限')+'</button><button class="x" onclick="delProf('+i+')">✕</button></span>').join('')+'</div>'}
+ else h+='<div class="hint" style="margin-top:6px">（暫時未有儲存的學校）</div>';
+ return h+'</div>';
+}
+const COMMON={'閱讀':'很多同學都愛閱讀！試在追問寫出你最近讀的一本書，或它令你學到的一件事。','細心':'「細心」很常見，追問時寫一個你「細心」的真實例子，才有説服力。','害羞／怕生':'不少同學都選這項，重點是下一步的「改善行動」要具體。','比賽':'比賽很常見，故事裏要寫出「你自己」做了甚麼，而不只是結果。','堅持':'「堅持」是好詞語，但需要一件事來證明它。','成功完成':'結果可以多一點細節，例如「用了多久」「得到甚麼成果」。','好奇心強':'很好！追問時寫一個你曾經「追問到底」的問題。','球類運動':'試寫你最特別的一個運動時刻。'};
+const OPTNOTE='📎 這是選填段落。不填就會自動略去；填了之後，會因應你在第 ① 步設定的時間而包括或略去較長的句子。';
+const steps=[
+{t:'① 打個招呼',w:'面試官第一眼看到你，好感從這裏開始。',ask:['想像一下：你走進面試室，第一句想怎樣開口？','你想老師覺得你是一個怎樣的人？'],custom:lenBox,qs:[
+ {k:'name',type:'text',q:'你的名字？',ph:'例：陳小明'},
+ {k:'school',type:'text',q:'你就讀的小學？',ph:'例：勵志會梁李秀娛紀念小學'},
+ {k:'style',type:'one',q:'你想用哪種「語氣」？（影響整篇的説話味道）',hint:'揀一個最似你的',o:[['穩重','沉穩、有禮、清晰'],['活潑','開朗、有精神、親切'],['真誠','自然、像跟人聊天']]}]},
+{t:'② 別人眼中的我',w:'用別人的説話介紹自己，比自己稱讚自己更有説服力。',ask:['上星期有誰稱讚過你？他説了甚麼？','如果問你的好朋友「他是怎樣的人」，他會答甚麼？'],qs:[
+ {k:'who',type:'one',q:'誰最了解你？',o:['老師','同學','媽媽','爸爸','家人','朋友','班主任','教練／導師']},
+ {k:'trait',type:'multi',max:3,keep:2,q:'他們會用哪些詞語形容你？（先揀 3 個，再刪走 1 個，留下最似你的 2 個）',hint:'想想：他們真的説過嗎？',o:['坐得定','好奇心強','細心','可靠','停不下來','精力充沛','樂於助人','有責任感','有創意','勤力','幽默','有禮貌','堅持','愛思考','有耐性','熱心','肯承擔','愛發問']}],
+ probe:{k:'trait',q:'🔎 追問：他們在甚麼情況下這樣形容你？（寫一個小例子）',ph:'例：我每次小組討論都會提醒組員準時交功課'}},
+{t:'③ 興趣與長處',w:'面試官想知道你是怎樣的人，興趣最能反映。',ask:['放學後你最想做的事是甚麼？','有甚麼事你做得特別久也不覺得悶？'],qs:[
+ {k:'interest',type:'multi',max:3,keep:2,q:'你最喜歡／最擅長甚麼？（先揀 3 個，再刪走 1 個，留下 2 個）',o:['閱讀','科學實驗','數學','寫作','畫畫','音樂／樂器','合唱','田徑','游泳','球類運動','編程／STEAM','棋類','手工','攝影','烹飪','服務同學','辯論／演講','戲劇','舞蹈','製作模型']}],
+ probe:{k:'interest',q:'🔎 追問：關於這個興趣，有甚麼「只有你才有」的細節？',ph:'例：我自己用紙皮做了一個會轉動的太陽系模型'}},
+{t:'④ 真實的小故事',w:'「故事」比「形容詞」更有力量，也最難被背稿答案取代！',ask:['想一件你「本來想放棄，但最後沒有放棄」的事。','那一刻你的心情是怎樣的？'],qs:[
+ {k:'evType',type:'one',q:'故事發生在甚麼場合？',o:['比賽','專題研習','學校表演','運動會','服務／義工','家中練習','考試前','小組合作','旅行／活動','日常小事']},
+ {k:'evWhat',type:'text',q:'用幾個字寫下具體的事（可留空，會用通用句）',ph:'例：代表學校參加朗誦比賽'},
+ {k:'diff',type:'one',q:'當時遇到甚麼困難？',o:['時間不夠','很緊張','不懂怎樣做','意見不合','身體受傷','失敗過','被人取笑','資料難找','沒有信心','屢次出錯']},
+ {k:'act',type:'one',q:'你怎樣克服？（要具體！）',o:['每天多練習','請教老師','上網／圖書館查資料','與組員好好溝通','堅持不放棄','重新計劃','深呼吸、冷靜','向家人預演','逐步分拆目標','不斷改良']},
+ {k:'res',type:'one',q:'結果怎樣？',o:['成功完成','得到獎項','進步很多','建立了自信','贏得同學信任','雖未得獎但學到很多','成為隊伍支柱','突破了自己']},
+ {k:'lesson',type:'one',q:'這件事讓你明白甚麼道理？',o:['只要堅持就會成功','遇事要冷靜面對','合作比單打獨鬥更好','失敗是進步的開始','不懂就要主動問','努力一定有回報','要敢於嘗試','刨根問底，難題自會解開']}],
+ probe:{k:'story',q:'🔎 追問：最困難的那一刻，你心裏想甚麼？（寫一句內心話）',ph:'例：不如再試一次，這次一定可以！'}},
+{t:'⑤ 校園生活的另一個故事（選填）',opt:1,w:'第 ④ 步的故事是「克服困難」；這裏可以講一個不同類型的校園小故事，讓老師看到你更多面。',ask:['在學校裏，有哪一天你特別開心或特別難忘？','有沒有一次，你幫過別人，或別人幫過你？'],qs:[
+ {k:'gType',type:'one',q:'發生了甚麼事？',o:['幫助了一位同學','得到老師稱讚','做錯事後勇敢承認','負責當值日生','和同學和好','第一次上台表演','代表班別參賽','學會一項新技能']},
+ {k:'gWhere',type:'one',q:'在甚麼時候／地方？',o:['課堂上','小息時','午膳時','考試前','班會中','旅行日','早會時']},
+ {k:'gFeel',type:'one',q:'當時你感覺怎樣？',o:['很開心','很感動','很緊張','很內疚','很自豪','很驚訝']},
+ {k:'gLearn',type:'one',q:'你從中學到甚麼？',o:['要主動關心別人','做錯事要勇敢承認','溝通可以解決誤會','只要嘗試就有進步','互相幫助令人快樂','要珍惜身邊的人']}],
+ probe:{k:'gDetail',q:'🔎 追問：用一句話寫出當時發生的具體情況。',ph:'例：我見到同學忘記帶筆，就把自己的一支借給他'}},
+{t:'⑥ 課外活動或服務經歷（選填）',opt:1,w:'升中面試很重視課外活動和服務經歷，這能顯示你的責任感和投入程度。',ask:['你在學校參加過哪些活動或崗位？','有沒有一次，你覺得自己特別有貢獻？'],qs:[
+ {k:'hAct',type:'one',q:'你參加了甚麼活動／崗位？',o:['校隊','合唱團','制服團體','風紀隊','圖書館管理員','環保大使','義工探訪','班長','興趣班','學會幹事']},
+ {k:'hRole',type:'one',q:'你擔任甚麼角色？',o:['成員','隊長','負責人','新手學習者','助手']},
+ {k:'hDo',type:'one',q:'你主要做甚麼？',o:['每星期準時練習','照顧新加入的同學','帶領小組完成任務','協助籌備活動','探訪長者並陪他們聊天','整理資料和器材']},
+ {k:'hGain',type:'one',q:'你從中學到甚麼？',o:['合作的重要','責任感','堅持的意義','守時','關心別人','領導和聆聽']}],
+ probe:{k:'hDetail',q:'🔎 追問：有沒有一次最難忘的活動或表現？（一句）',ph:'例：我們在校際比賽中得到第二名'}},
+{t:'⑦ 家庭和朋友的影響（選填）',opt:1,w:'談談誰影響了你，能讓老師看到你的價值觀，以及你怎樣成長。',ask:['誰最常鼓勵你或提醒你？','他（她）説過哪一句話，你至今仍記得？'],qs:[
+ {k:'iWho',type:'one',q:'誰對你影響最大？',o:['爸爸','媽媽','爺爺嫲嫲／公公婆婆','哥哥姐姐','好朋友','補習導師','鄰居']},
+ {k:'iHow',type:'one',q:'他（她）教了你甚麼？',o:['做事要堅持到底','做人要誠實','要多關心別人','閱讀的樂趣','面對失敗不要氣餒','要懂得感恩','做事要守時']},
+ {k:'iChange',type:'one',q:'你因此有甚麼改變？',o:['變得更有耐性','學會欣賞別人','更懂得感恩','做事更主動','變得勇敢','更願意幫助別人']}],
+ probe:{k:'iScene',q:'🔎 追問：他（她）説過或做過甚麼，令你記得很深？（一句）',ph:'例：他每晚都陪我温習，從不抱怨'}},
+{t:'⑧ 真實的缺點',w:'老師最欣賞「肯承認缺點＋有行動改善」的學生，這一步反而最加分！',ask:['媽媽或老師最常提醒你甚麼？','你最想改掉哪一個習慣？'],qs:[
+ {k:'weak',type:'one',q:'你過去較弱的地方？',o:['害羞／怕生','急躁','粗心','容易緊張','拖延','愛猶豫','不夠自信','太執着完美','容易分心','不太敢發問']},
+ {k:'fix',type:'one',q:'你做了甚麼去改善？',o:['報名朗誦／演講','做事前列檢查清單','發言前深呼吸','多向家人預演','訂立每日時間表','主動向老師發問','把大事分成小步','每晚回顧當天','多和同學合作','擔任小組長鍛鍊自己']},
+ {k:'fixRes',type:'one',q:'現在有甚麼進步？',o:['已進步很多','比以前自信','出錯少了','敢於在人前發言','懂得管理時間','仍在努力，但已見成效']}],
+ probe:{k:'weak',q:'🔎 追問：最能顯示這個缺點的一次是怎樣的？（簡單一句）',ph:'例：以前上台前我手心會出汗，説話會發抖'}},
+{t:'⑨ 想讀的中學（選填）',opt:1,w:'説得出「為甚麼是這間學校」，會令老師覺得你有認真準備。',ask:['你是怎樣知道這間中學的？','有甚麼是這間學校有、而其他學校沒有的？'],qs:[
+ {k:'ms',type:'text',q:'你想升讀的中學名稱？',ph:'例：○○中學（留空則寫「貴校」）'},
+ {k:'reasons',type:'multi',max:3,keep:3,q:'你喜歡這間學校的甚麼？（最多 3 個）',o:['校風親切友善','課外活動多元化','老師認真關心學生','學術水平優良','重視學生品德培養','有我喜歡的學會／校隊','環境優美、設施完善','有學長姐推薦','重視閱讀和思考','有很多服務學習機會']},
+ {k:'contrib',type:'one',q:'如果入讀，你可以為學校做甚麼？',o:['參加校隊為學校爭光','協助老師照顧同學','在學會分享我的興趣','與同學互相學習','積極參與服務活動','用心學習、做好榜樣','參加比賽為學校增光']}]},
+{t:'⑩ 志向與結尾',w:'好的結尾要有方向感，讓面試官記住你。',ask:['十年後你希望別人怎樣形容你？','你希望升上中學後學到甚麼？'],qs:[
+ {k:'pass',type:'one',q:'你想繼續保持的特質？',o:['熱誠','好奇心','堅持','責任感','求知慾','同理心','創意','勇氣']},
+ {k:'dream',type:'one',q:'你想成為怎樣的人？',o:['有擔當的人','能幫助別人的人','創科研究員','充滿正能量的人','終身學習的人','尊重他人的領袖','能為社會出力的人','敢於創新的人']}]}
+];
+const FINAL=steps.length;
+function ctx(T){
+ const st=T.style||'真誠';
+ const c={st};
+ c.hi={穩重:'各位面試老師，你們好！',活潑:'老師們好！很開心今天能在這裏跟大家見面！',真誠:'各位老師，你好！'}[st];
+ c.nm=T.name||'XXX';c.sc=T.school||'XXX 小學';c.who=T.who||'身邊的人';
+ c.tr=T.trait.length?T.trait.join('」又「'):'細心';
+ c.it=T.interest.length?T.interest.join('和'):'閱讀';
+ c.ev=T.evWhat||(T.evType?('參加了一次'+T.evType):'發生了一件事');
+ c.df=T.diff||'遇到困難';c.ac=T.act||'堅持努力';c.rs=T.res||'成功完成';c.ls=T.lesson||'只要肯努力就有成果';
+ c.gt=T.gType||'發生了一件事';c.gw=T.gWhere||'在學校';c.gf=T.gFeel||'很開心';c.gl=T.gLearn||'要珍惜身邊的人';
+ c.ha=T.hAct||'學校活動';c.hr=T.hRole||'成員';c.hd=T.hDo||'盡力完成任務';c.hg=T.hGain||'合作的重要';
+ c.iw=T.iWho||'家人';c.ih=T.iHow||'做事要堅持到底';c.ic=T.iChange||'變得更有耐性';
+ c.w=T.weak||'容易緊張';c.fx=T.fix||'不斷練習';c.fr=T.fixRes||'已有進步';
+ c.ms=T.ms||'貴校';c.rsn=T.reasons.length?T.reasons.join('，而且'):'校風良好';c.ct=T.contrib||'用心學習';
+ c.ps=T.pass||'好奇心';c.dm=T.dream||'有擔當的人';
+ c.link={穩重:'記得有一次，',活潑:'我最難忘的是有一次，',真誠:'記得有一次，'}[st];
+ c.p=T.pr;return c;
+}
+const SENT=[
+{id:'a1',p:0,label:'問候和自我介紹',need:['name','school'],pats:c=>[
+ `${c.hi}我是${c.nm}，就讀${c.sc}。`,`${c.hi}我叫${c.nm}，現在就讀${c.sc}。`,`${c.hi}我是來自${c.sc}的${c.nm}。`,`${c.hi}我的名字是${c.nm}，是${c.sc}的學生。`,`${c.hi}很榮幸今天可以向各位介紹自己。我是${c.nm}，來自${c.sc}。`]},
+{id:'a2',p:0,label:'別人眼中的我',need:['who','trait'],pats:c=>[
+ `${c.who}都覺得我是一個「${c.tr}」的孩子。`,`在${c.who}眼中，我是一個「${c.tr}」的人。`,`如果問${c.who}我是怎樣的人，他們一定會説我是「${c.tr}」的孩子。`,`我常常聽到${c.who}形容我「${c.tr}」。`,`用一句話介紹自己，我會説我是個「${c.tr}」的人，這也是${c.who}給我的評語。`]},
+{id:'a3',p:0,label:'舉例説明（來自追問）',pr:'trait',need:['trait'],pats:c=>[
+ `例如，${c.p.trait}。`,`記得${c.p.trait}，所以他們才這樣説。`,`像${c.p.trait}，他們都看在眼裏。`]},
+{id:'b1',p:1,label:'我的興趣',need:['interest'],pats:c=>[
+ `我最大的興趣是${c.it}。`,`我平時最喜歡${c.it}。`,`説到興趣，我最愛${c.it}。`,`課餘時間，我總愛${c.it}，因為它令我很快樂。`,`我對${c.it}特別感興趣，它是我生活的一部分。`]},
+{id:'b2',p:1,label:'興趣的獨特細節（來自追問）',pr:'interest',need:['interest'],pats:c=>[
+ `例如，${c.p.interest}。`,`我曾經${c.p.interest.replace(/^我/,'')}。`,`像${c.p.interest}。`]},
+{id:'c1',p:1,label:'引入故事',need:['evType','evWhat'],pats:c=>[
+ `${c.link}${c.ev}。`,`有一次，${c.ev}，那是令我最難忘的經歷。`,`最令我難忘的，是${c.ev}的經歷。`,`要説最深刻的經歷，就是${c.ev}。`]},
+{id:'c2',p:1,label:'遇到困難',need:['diff'],pats:c=>[
+ `過程中，我遇到「${c.df}」的問題。`,`可是，我遇到「${c.df}」。`,`當時，「${c.df}」成為了我最大的難關。`,`最困難的是，我發現自己「${c.df}」。`,`但事情並不順利，因為「${c.df}」。`]},
+{id:'c3',p:1,label:'內心話（來自追問）',pr:'story',need:['diff'],pats:c=>[
+ `當時我心想：「${c.p.story}」`,`我在心裏對自己説：「${c.p.story}」`,`那一刻，我心裏只有一個念頭：「${c.p.story}」`]},
+{id:'c4',p:1,label:'怎樣克服',need:['act'],pats:c=>[
+ `於是我選擇「${c.ac}」。`,`幸好我「${c.ac}」。`,`我決定「${c.ac}」，不輕易放棄。`,`為了解決問題，我開始「${c.ac}」。`,`經過思考，我想到的辦法是「${c.ac}」。`]},
+{id:'c5',p:1,label:'結果',need:['res'],pats:c=>[
+ `最後「${c.rs}」。`,`結果「${c.rs}」。`,`經過努力，我終於「${c.rs}」。`,`雖然過程辛苦，但最後我「${c.rs}」，感到十分滿足。`]},
+{id:'c6',p:1,label:'體會',need:['lesson'],pats:c=>[
+ `這段經歷讓我明白到：${c.ls}。`,`我因此明白：${c.ls}。`,`我學到：${c.ls}。`,`從這件事中，我深深體會到：${c.ls}。`,`這次經歷改變了我，我相信${c.ls}。`]},
+/* 校園另一個故事 */
+{id:'g1',p:2,label:'引入校園故事',opt:true,need:['gType','gWhere'],pats:c=>[
+ `除了剛才的經歷，我在學校還有一件難忘的事：${c.gw}${c.gt}。`,`在學校生活中，我也有一次特別的經歷。那是${c.gw}，我${c.gt}。`,`説到校園生活，我最記得${c.gw}${c.gt}的那一刻。`]},
+{id:'g4',p:2,label:'故事的具體情況（來自追問）',pr:'gDetail',opt:true,need:['gType'],pats:c=>[
+ `事情是這樣的：${c.p.gDetail}。`,`詳細來説，${c.p.gDetail}。`,`記得${c.p.gDetail}。`]},
+{id:'g2',p:2,label:'當時的感受',opt:true,need:['gFeel'],pats:c=>[
+ `那一刻，我感到${c.gf}。`,`當時我心裏${c.gf}。`,`事後回想，我仍然覺得${c.gf}。`]},
+{id:'g3',p:2,label:'從中學到的',opt:true,need:['gLearn'],pats:c=>[
+ `這件事令我明白到：${c.gl}。`,`我從中學到：${c.gl}。`,`從那天起，我深深相信：${c.gl}。`]},
+/* 課外活動／服務 */
+{id:'h1',p:3,label:'參加的活動',opt:true,need:['hAct','hRole'],pats:c=>[
+ `課餘時間，我參加了${c.ha}，擔任${c.hr}。`,`除了讀書，我也積極參與${c.ha}，在其中擔任${c.hr}。`,`我是${c.ha}的${c.hr}，這對我來説非常有意義。`]},
+{id:'h2',p:3,label:'主要工作',opt:true,need:['hDo'],pats:c=>[
+ `我的工作包括：${c.hd}。`,`在活動中，我會${c.hd}。`,`我平日的任務是${c.hd}。`]},
+{id:'h3',p:3,label:'學到的東西',opt:true,need:['hGain'],pats:c=>[
+ `這段經歷令我學會了${c.hg}。`,`通過參與活動，我明白到${c.hg}。`,`我體會到${c.hg}，這是課堂上學不到的。`]},
+{id:'h4',p:3,label:'難忘的一次（來自追問）',pr:'hDetail',opt:true,need:['hAct'],pats:c=>[
+ `最難忘的是，${c.p.hDetail}。`,`記得有一次，${c.p.hDetail}。`,`例如，${c.p.hDetail}。`]},
+/* 家庭和朋友 */
+{id:'i1',p:4,label:'誰影響了我',opt:true,need:['iWho','iHow'],pats:c=>[
+ `對我影響最大的人是${c.iw}，他（她）教我${c.ih}。`,`在我的成長中，${c.iw}一直影響着我，教會我${c.ih}。`,`我很感謝${c.iw}，因為他（她）讓我明白${c.ih}。`]},
+{id:'i2',p:4,label:'印象深刻的片段（來自追問）',pr:'iScene',opt:true,need:['iWho'],pats:c=>[
+ `記得${c.p.iScene}。`,`有一次，${c.p.iScene}。`,`我至今仍記得，${c.p.iScene}。`]},
+{id:'i3',p:4,label:'我的改變',opt:true,need:['iChange'],pats:c=>[
+ `因為這樣，我${c.ic}。`,`受到影響後，我${c.ic}。`,`這令我慢慢${c.ic}。`]},
+{id:'i4',p:4,label:'把影響傳下去',opt:true,need:['iWho'],pats:c=>[
+ `所以，我也想成為一個能影響別人的人。`,`我希望將來也可以像${c.iw}一樣，成為別人的支持。`,`我會珍惜這份影響，並把它傳給身邊的人。`]},
+/* 缺點 */
+{id:'d1',p:5,label:'承認缺點',need:['weak'],pats:c=>[
+ `坦白説，我過去比較${c.w}。`,`我也有自己的缺點，就是比較${c.w}。`,`我並不完美，以前我${c.w}。`,`我必須承認，我的弱點是${c.w}。`,`説到不足，我以前常常${c.w}。`]},
+{id:'d2',p:5,label:'缺點的例子（來自追問）',pr:'weak',need:['weak'],pats:c=>[
+ `${c.p.weak}。`,`例如，${c.p.weak}。`,`記得有一次，${c.p.weak}。`]},
+{id:'d3',p:5,label:'改善行動',need:['fix'],pats:c=>[
+ `為了改善，我${c.fx}。`,`後來我決定${c.fx}。`,`於是我開始${c.fx}。`,`我知道要改變，所以我${c.fx}。`,`我給自己訂下目標：${c.fx}。`]},
+{id:'d4',p:5,label:'現在的進步',need:['fixRes'],pats:c=>[
+ `現在我${c.fr}。`,`到現在，我${c.fr}。`,`經過努力，我${c.fr}，我會繼續改進。`,`雖然未算完美，但我${c.fr}。`]},
+{id:'f1',p:6,label:'為甚麼想讀這間中學',opt:true,need:['ms','reasons'],pats:c=>[
+ `我很希望能升讀${c.ms}，因為它${c.rsn}。`,`我選擇${c.ms}，是因為它${c.rsn}。`,`在眾多學校中，${c.ms}最吸引我的地方是它${c.rsn}。`,`我了解過${c.ms}，發現它${c.rsn}，這正是我所追求的。`]},
+{id:'f2',p:6,label:'我可以為學校做甚麼',opt:true,need:['contrib'],pats:c=>[
+ `如果有機會入讀，我會${c.ct}。`,`升上中學後，我希望可以${c.ct}。`,`我相信自己能夠${c.ct}，為校園出一分力。`]},
+{id:'e1',p:7,label:'志向',need:['pass','dream'],pats:c=>[
+ `展望將來，我希望能繼續保持這份${c.ps}，努力成為一個${c.dm}。`,`升上中學後，我會繼續保持${c.ps}，希望將來成為一個${c.dm}。`,`我的目標是成為${c.dm}，所以我會一直保持這份${c.ps}。`,`將來，我想成為${c.dm}，而${c.ps}會是我最大的動力。`]},
+{id:'e2',p:7,label:'結尾',need:['style'],pats:c=>({穩重:['謝謝各位老師。','感謝各位老師給我這個機會，謝謝。','我的介紹完畢，謝謝各位老師。'],活潑:['謝謝老師！我很期待成為貴校的一分子！','多謝老師們聆聽，希望很快能再見！','謝謝大家！我已經準備好迎接中學生活了！'],真誠:['謝謝老師！','謝謝老師們願意聽我説這些，我很開心。','以上就是我，謝謝老師！']})[c.st]}
+];
+const PARA=['第 1 段：問候＋他人眼中的我','第 2 段：興趣＋真實故事','校園生活的另一個故事（選填）','課外活動／服務經歷（選填）','家庭和朋友的影響（選填）','缺點＋改善','想讀的中學（選填）','志向＋結尾'];
+const STEPSENT=[['a1'],['a2','a3'],['b1','b2'],['c1','c2','c3','c4','c5','c6'],['g1','g4','g2','g3'],['h1','h2','h3','h4'],['i1','i2','i3','i4'],['d1','d2','d3','d4'],['f1','f2'],['e1','e2']];
+const STEP2P=[0,0,1,1,2,3,4,5,6,7];
+const sdef=id=>SENT.find(s=>s.id==id);
+const filled=k=>{const v=S[k];return Array.isArray(v)?v.length>0:!!v};
+function liveS(){
+ const T=JSON.parse(JSON.stringify(S));
+ ['name','school','who','evType','diff','act','res','lesson','gType','gWhere','gFeel','gLearn','hAct','hRole','hDo','hGain','iWho','iHow','iChange','weak','fix','fixRes','contrib','pass','dream'].forEach(k=>{if(!T[k])T[k]=B});
+ if(!T.evWhat&&!S.evType)T.evWhat=B;
+ if(!T.trait.length)T.trait=[B];if(!T.interest.length)T.interest=[B];if(!T.reasons.length)T.reasons=[B];
+ return T;
+}
+function sentText(s,c){const arr=s.pats(c);const i=(S.pat[s.id]||0)%arr.length;return arr[i]}
+function included(s,live){
+ if(S.off[s.id])return false;
+ if(s.pr&&!S.pr[s.pr])return false;
+ if(live||s.opt)return s.need.some(filled);
+ return true;
+}
+function paras(live){
+ const T=live?liveS():S,c=ctx(T);
+ return PARA.map((nm,i)=>({name:nm,sents:SENT.filter(s=>s.p==i&&included(s,live)).map(s=>({id:s.id,text:sentText(s,c)}))}));
+}
+const plain=t=>t.replace(/＿/g,'').replace(/\s/g,'');
+const blk=t=>t.replace(/(＿＿＿)/g,'<u class="bl">＿＿＿</u>');
+const targetChars=()=>Math.round(S.mins*230);
+const $=id=>document.getElementById(id);
+let cur=0;
+function updLive(){
+ const el=$('live');if(!el)return;
+ if(cur>=FINAL){el.style.display='none';$('main').className='main full';return}
+ el.style.display='';$('main').className='main';
+ const ps=paras(true),now=STEP2P[cur];let n=0;
+ let h='<h3>📄 我的自我介紹（即時）</h3><div class="lh">你每揀一個選項或句式，這裏就即時更新。＿＿＿ 代表未揀。</div>';
+ ps.forEach((p,i)=>{
+  const parts=p.name.split('：');
+  const tag=(parts.length>1?parts[0]+'　'+parts[1]:p.name)+(i==now?' ← 正在寫':'');
+  if(p.sents.length){const t=p.sents.map(x=>x.text).join('');n+=plain(t).length;
+   h+='<div class="lp '+(i==now?'now':'')+'"><small>'+tag+'</small>'+blk(t)+'</div>'}
+  else if(i==now||!/選填/.test(p.name))h+='<div class="lp empty '+(i==now?'now':'')+'"><small>'+tag+'</small>（完成這一部分後，句子會出現在這裏）</div>';
+ });
+ h+='<div class="lcount">目前約 '+n+' 字'+(S.mins?'（目標約 '+targetChars()+' 字・'+S.mins+' 分鐘）':'（不限字數）')+'</div>';
+ el.innerHTML=h;
+}
+function renderProg(){$('prog').innerHTML=steps.map((s,i)=>'<button class="'+(i==cur?'on':(i<cur?'done':''))+(s.opt?' opt':'')+'" onclick="go('+i+')">'+s.t.slice(0,1)+'<br><span style="font-weight:400">'+s.t.slice(2).replace('（選填）','').replace('校園生活的另一個故事','校園故事').replace('課外活動或服務經歷','課外服務').replace('家庭和朋友的影響','家庭朋友')+'</span></button>').join('')+'<button class="'+(cur==FINAL?'on':'')+'" onclick="go('+FINAL+')">✍️<br><span style="font-weight:400">修改練習</span></button>'}
+function go(i){if(i>cur&&!canNext())return;cur=i;render();window.scrollTo(0,0)}
+function findQ(k){for(const s of steps)for(const q of s.qs)if(q.k==k)return q}
+function canNext(){if(cur>=FINAL)return true;return !steps[cur].qs.some(q=>q.type=='multi'&&S[q.k].length>q.keep)}
+function pick(k,v){
+ const d=findQ(k);
+ if(d.type=='one'){S[k]=(S[k]===v)?'':v}
+ else{const a=S[k],i=a.indexOf(v);if(i>=0)a.splice(i,1);else{if(a.length>=d.max)a.shift();a.push(v)}}
+ render(true);
+}
+function addOwn(k,el){const v=el.value.trim();if(v)pick(k,v)}
+function setPat(id,i){S.pat[id]=i;render(true)}
+function toggleOff(id,v){S.off[id]=v;render(true)}
+function chips(q){
+ const val=S[q.k];
+ let h=q.o.map(o=>{const lab=Array.isArray(o)?o[0]:o,ex=Array.isArray(o)?o[1]:'';
+  const on=Array.isArray(val)?val.includes(lab):val===lab;
+  return '<button class="chip '+(on?'sel':'')+'" onclick="pick(\''+q.k+'\',\''+lab+'\')">'+lab+(ex?'<span class="ex">'+ex+'</span>':'')+'</button>'}).join('');
+ h+='<div style="width:100%"><input class="own" placeholder="✏️ 想自己寫？輸入後按 Enter" onkeydown="if(event.key==\'Enter\'){addOwn(\''+q.k+'\',this)}"></div>';
+ return h;
+}
+function patSection(){
+ const ids=STEPSENT[cur];if(!ids)return '';
+ const c=ctx(liveS());
+ let h='<div class="pats"><h3>🎨 揀句式：同一個意思，有不同的説法</h3><div class="hint">每句都有幾種寫法，點選最啱你的口吻（綠色＝已選）。覺得這句不需要，可剔「不用這句」。</div>';
+ let any=false;
+ ids.forEach(id=>{const s=sdef(id);
+  if(s.pr&&!S.pr[s.pr])return;
+  any=true;const arr=s.pats(c),sel=(S.pat[id]||0)%arr.length,off=!!S.off[id];
+  h+='<div class="sent '+(off?'off':'')+'"><div class="sl"><span>📝 '+s.label+(off?'（目前時間設定下已略去，取消剔選可加入）':'')+'</span><label><input type="checkbox" '+(off?'checked':'')+' onchange="toggleOff(\''+id+'\',this.checked)"> 不用這句</label></div>';
+  arr.forEach((t,i)=>{h+='<button class="pat '+(i==sel?'sel':'')+'" onclick="setPat(\''+id+'\','+i+')">'+(i+1)+'. '+blk(t)+'</button>'});
+  h+='</div>'});
+ if(!any)h+='<div class="hint">（寫了上面的「追問」後，就會多出一句可揀句式。）</div>';
+ return h+'</div>';
+}
+function render(keep){
+ renderProg();
+ if(cur>=FINAL){renderFinal();updLive();return}
+ const s=steps[cur];let h='<h2>'+s.t+'</h2><div class="why">💡 '+s.w+'</div>';
+ if(s.opt)h+='<div class="optb">'+OPTNOTE+'</div>';
+ h+='<div class="ask"><b>🤔 先想一想（不用寫出來）</b>'+s.ask.map(a=>'• '+a).join('<br>')+'</div>';
+ if(s.custom)h+=s.custom();
+ s.qs.forEach(q=>{h+='<div class="q">'+q.q+'</div>'+(q.hint?'<div class="hint">'+q.hint+'</div>':'');
+  if(q.type=='text')h+='<input class="own" style="max-width:100%" value="'+S[q.k]+'" placeholder="'+q.ph+'" oninput="S[\''+q.k+'\']=this.value;updLive()" onchange="render(true)">';
+  else{h+='<div class="chips">'+chips(q)+'</div>';
+   if(q.type=='multi'&&S[q.k].length>q.keep)h+='<div class="warn">⚠️ 你揀了 '+S[q.k].length+' 個。請點一下已選的詞語刪走 1 個，只留下最似你的 '+q.keep+' 個。</div>';
+   [].concat(S[q.k]).filter(x=>COMMON[x]).forEach(x=>{h+='<div class="uniq">🌟 「'+x+'」：'+COMMON[x]+'</div>'});}});
+ if(s.probe){h+='<div class="probe"><div class="pq">'+s.probe.q+'</div><small>⭐ 寫了會令你的自我介紹更獨特，可留空</small><textarea class="pr" placeholder="'+s.probe.ph+'" oninput="S.pr[\''+s.probe.k+'\']=this.value;updLive()" onchange="render(true)">'+S.pr[s.probe.k]+'</textarea></div>'}
+ h+=patSection();
+ h+='<div class="nav"><button class="btn s" onclick="go('+(cur-1)+')" '+(cur==0?'style="visibility:hidden"':'')+'>← 上一步</button><button class="btn p" onclick="go('+(cur+1)+')">'+(cur==FINAL-1?'完成，去修改和練習 ✨':(s.opt?'下一步（可略過此段）→':'下一步 →'))+'</button></div>';
+ const y=window.scrollY;$('card').innerHTML=h;if(keep)window.scrollTo(0,y);
+ updLive();
+}
+function draft(){return paras(false).filter(p=>p.sents.length).map(p=>p.sents.map(x=>x.text).join('')).join('\n\n')}
+function nextPat(id){const s=sdef(id),c=ctx(S),n=s.pats(c).length;S.pat[id]=((S.pat[id]||0)+1)%n;$('s_'+id).innerHTML=sentText(s,c)}
+function dropS(id){S.off[id]=true;render()}
+function restoreAll(){S.off={};render()}
+function useDraft(){$('ta').value=draft();S.ta=$('ta').value;count()}
+function keywords(){
+ const k=[];
+ if(S.trait.length)k.push(['他人眼中',S.trait.join('・')]);
+ if(S.interest.length)k.push(['興趣',S.interest.join('・')]);
+ if(S.evWhat||S.evType)k.push(['故事',S.evWhat||S.evType]);
+ if(S.diff)k.push(['困難',S.diff]);
+ if(S.act)k.push(['克服',S.act]);
+ if(S.lesson)k.push(['體會',S.lesson]);
+ if(S.gType)k.push(['校園故事',S.gType]);
+ if(S.hAct)k.push(['課外活動',S.hAct]);
+ if(S.iWho)k.push(['影響我的人',S.iWho]);
+ if(S.weak)k.push(['缺點',S.weak]);
+ if(S.fix)k.push(['改善',S.fix]);
+ if(S.ms||S.reasons.length)k.push(['想讀的中學',S.ms||S.reasons.join('・')]);
+ if(S.dream)k.push(['志向',S.dream]);
+ return k;
+}
+const CHECK=['聲音夠大聲、清楚','望着「老師」，不是望地下','語速適中，沒有趕','沒有背稿的「讀書語氣」','有微笑','在自己訂的時間內完成','故事部分有加入自己的細節','結尾有停頓，並有禮貌地道謝'];
+let timer=null,secs=0,dur=null;
+const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function renderFinal(){
+ if(S.ta===null)S.ta=draft();
+ if(dur===null)dur=Math.round(S.mins*60);
+ let h='<h2>✍️ 你的自我介紹初稿</h2><div class="why">💡 目前設定：'+(S.mins?S.mins+' 分鐘版本（約 '+targetChars()+' 字）':'不限時間')+(S.ms?'・'+S.ms:'')+'。每句旁邊可以按「🔄」換另一種句式，或按「🗑」刪走這句；然後在下面的修改格用自己的説話改寫。想改長短，可回到第 ① 步重設時間。</div><div class="out">';
+ paras(false).forEach(p=>{if(!p.sents.length)return;
+  h+='<div class="pc"><h4>'+p.name+'</h4>'+p.sents.map(x=>'<div class="sr"><span class="tx" id="s_'+x.id+'">'+x.text+'</span><span class="btns"><button class="btn o sm" onclick="nextPat(\''+x.id+'\')">🔄</button> <button class="btn s sm" onclick="dropS(\''+x.id+'\')">🗑</button></span></div>').join('')+'</div>'});
+ if(Object.keys(S.off).some(k=>S.off[k]))h+='<button class="btn s sm" onclick="restoreAll()">↩︎ 還原全部被刪走的句子</button>';
+ h+='</div><div class="q">📝 我的修改版（可直接修改，長短不限）</div><button class="btn s sm" onclick="useDraft()" style="margin-bottom:6px">⬇️ 用上面的初稿覆蓋修改版</button><textarea id="ta" oninput="S.ta=this.value;count()">'+S.ta+'</textarea>'
+ +'<div class="meter"><span id="cnt"></span><div class="bar"><i id="bar"></i></div><span id="tm"></span></div>'
+ +'<div class="sec"><h3>⏱️ 練習一：計時朗讀</h3><div class="timer"><div class="chips" style="justify-content:center;margin-bottom:8px" id="durs"></div><div class="t" id="tt">00:00</div><div class="tb"><i id="tbar"></i></div><button class="btn g" onclick="startT()">▶ 開始</button> <button class="btn r" onclick="stopT()">■ 停止</button><div id="tmsg" style="margin-top:8px;font-size:16px;color:#475569">先揀時間，然後看着修改版大聲朗讀！</div></div></div>'
+ +'<div class="sec"><h3>🗝️ 練習二：關鍵詞卡（脱稿練習）</h3><div class="hint">只看這些詞語，嘗試把整篇説出來。</div><div class="kw">'+keywords().map(x=>'<div><small>'+x[0]+'</small>'+x[1]+'</div>').join('')+'</div></div>'
+ +'<div class="sec"><h3>✅ 練習三：自評清單</h3><div class="chk">'+CHECK.map((t,i)=>'<label><input type="checkbox" '+(S.chk[i]?'checked':'')+' onchange="S.chk['+i+']=this.checked">'+t+'</label>').join('')+'</div></div>'
+ +'<div class="tips"><b>🎯 修改小貼士</b><ul><li>用口語説出來，不要像讀書：「我覺得」比「本人認為」自然。</li><li>不同學校的面試時間不同，建議準備 1 分鐘、2 分鐘和 3 分鐘三個長度，面試時按需要增減。</li><li>朗讀 3 次：第一次看稿，第二次看關鍵詞，第三次望着「老師」説。</li></ul></div>'
+ +'<div class="nav"><button class="btn s" onclick="go('+(FINAL-1)+')">← 返回修改選項</button><button class="btn g" onclick="window.print()">🖨️ 列印</button></div>';
+ $('card').innerHTML=h;count();durBtns();showT();
+}
+function count(){const t=$('ta').value.replace(/\s/g,'').length;$('cnt').textContent=t+' 字';
+ const tg=targetChars();$('bar').style.width=(tg?Math.min(100,t/tg*100):Math.min(100,t/10))+'%';
+ const sec=Math.round(t/3.8);let msg='朗讀約 '+Math.floor(sec/60)+' 分 '+(sec%60)+' 秒';
+ if(tg){msg+=t<tg*0.8?'　偏短，可加細節':t>tg*1.2?'　偏長，可刪減':'　✅ 接近目標'}
+ $('tm').textContent=msg;}
+function durBtns(){let o=[60,120,180,300];const m=Math.round(S.mins*60);if(m&&!o.includes(m))o.push(m);o.sort((a,b)=>a-b);
+ const list=o.map(x=>[x,(x/60)+' 分鐘']);list.push([0,'自由計時']);
+ $('durs').innerHTML=list.map(x=>'<button class="chip '+(dur===x[0]?'sel':'')+'" onclick="setDur('+x[0]+')">'+x[1]+'</button>').join('')}
+function setDur(d){dur=d;stopT(true);secs=0;durBtns();showT()}
+function showT(){$('tt').textContent=dur?fmt(Math.max(dur-secs,0)):fmt(secs);$('tbar').style.width=dur?Math.min(100,secs/dur*100)+'%':'0%'}
+function startT(){stopT(true);secs=0;showT();timer=setInterval(()=>{secs++;showT();if(dur&&secs>=dur){stopT(true);$('tmsg').textContent='🎉 時間到！有沒有在時間內説完？'}},1000);$('tmsg').textContent='開始！保持微笑、望着前方';}
+function stopT(q){if(timer){clearInterval(timer);timer=null}if(!q){$('tmsg').textContent='已停止，用了 '+fmt(secs)+'。再試一次吧！'}}
+render();
+</script></body></html>
