@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="王家駿 (Wong Ka-Chun)">
+    <meta name="author" content="王家駿 (Wang Ka-Chun)">
     <meta name="copyright" content="© 2026－27 勵志會梁李秀娛紀念小學 · 王家駿老師 · All Rights Reserved">
     <meta name="robots" content="noindex, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, noarchive">
@@ -5111,6 +5111,11 @@ function checkDailyReset() {
                 await fbPatchPlayer(name, { save: inventory });
                 return 'migrated';
             }
+            // ✅ FIX：冇雲端存檔、本機亦冇自己嘅存檔 → 一定要用全新存檔。
+            // 之前冇重設，會沿用同一部裝置上一位同學留喺記憶體嘅資料（包括 playerId、分數），
+            // 令排行榜將兩個人當成同一個人，用新名字蓋過原本最高分嘅同學。
+            inventory = JSON.parse(JSON.stringify(defaultInv));
+            inventory.playerId = '';
             return 'new';
         }
 
@@ -7939,7 +7944,7 @@ function checkDailyReset() {
             // ── Pin my rank at bottom ──
             const myName = inventory.playerName;
             if (!myName) return;
-            const myIdx = sorted.findIndex(({e}) => e.name === myName || (e.playerId && e.playerId === (inventory.playerId||'')));
+            const myIdx = sorted.findIndex(({e}) => e.name === myName);
             const existingPin = document.getElementById('lb-my-pin');
             if (existingPin) existingPin.remove();
             if (myIdx === -1) return; // not on board yet
@@ -8027,13 +8032,15 @@ async function fetchLeaderboard() {
                 const data = await getRes.json();
                 let entries = (data && data.entries) ? [...data.entries] : [];
 
-                // 1b. Deduplicate entries by playerId/name (keep highest score entry)
-                const seen = new Map();
-                entries = entries.filter(e => {
-                    const key = (e.playerId && e.playerId !== '') ? e.playerId : e.name;
-                    if (!seen.has(key)) { seen.set(key, true); return true; }
-                    return false;
-                });
+                // 1b. 以名字去重（每位同學名字唯一）；同名多筆時保留分數最高嗰筆
+                {
+                    const best = new Map();
+                    entries.forEach(e => {
+                        const k = e.name;
+                        if (!best.has(k) || (e.score || 0) > (best.get(k).score || 0)) best.set(k, e);
+                    });
+                    entries = entries.filter(e => best.get(e.name) === e);
+                }
 
                 // 2. Update or insert this player
                 const bwSnap = inventory.bossWins || {};
@@ -8102,10 +8109,7 @@ async function fetchLeaderboard() {
                     coins:          inventory.coins          || 0,
                     timestamp:      new Date().toISOString()
                 };
-                const existIdx = entries.findIndex(e => 
-                        (e.playerId && inventory.playerId && e.playerId === inventory.playerId) ||
-                        (!e.playerId && e.name === inventory.playerName)
-                    ); // match by playerId first, fallback to name
+                const existIdx = entries.findIndex(e => e.name === inventory.playerName); // ✅ 只按名字配對，避免 playerId 重複時蓋過別人
                 if (existIdx >= 0) {
                     // ✅ FIX B5 v2: 分項取最大值合併，分數只升不降（防跨裝置覆蓋問題）
                     const old = entries[existIdx];
@@ -8163,7 +8167,7 @@ async function fetchLeaderboard() {
                 // Optimistic local cache update
                 const savedEntry = existIdx >= 0 ? entries[existIdx] : myEntry;
                 if (window._lbEntries) {
-                    const ci = window._lbEntries.findIndex(e => (e.playerId && e.playerId === (inventory.playerId||'')) || e.name === inventory.playerName);
+                    const ci = window._lbEntries.findIndex(e => e.name === inventory.playerName);
                     if (ci >= 0) window._lbEntries[ci] = savedEntry; else window._lbEntries.push(savedEntry);
                 }
                 // If LB panel is open, refresh immediately
@@ -8839,6 +8843,7 @@ async function fetchLeaderboard() {
                         <button onclick="trSaveEntry()" style="flex:1;background:#1565C0;color:#fff;border:none;border-radius:8px;padding:10px;font-weight:bold;cursor:pointer;">💾 儲存修復</button>
                         <button onclick="document.getElementById('teacher-repair-edit').style.display='none'" style="flex:1;background:#555;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">取消</button>
                       </div>
+                      <button onclick="trDeleteEntry()" style="width:100%;margin-top:8px;background:#B71C1C;color:#fff;border:none;border-radius:8px;padding:10px;font-weight:bold;cursor:pointer;">🗑 刪除此排行榜紀錄</button>
                     </div>
                     <button onclick="document.getElementById('teacher-repair-modal').remove()" style="width:100%;background:#333;color:#eee;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:0.9em;">✕ 關閉</button>
                   </div>`;
@@ -8947,6 +8952,39 @@ async function fetchLeaderboard() {
                 status.textContent = '❌ 儲存失敗：' + err.message;
             }
         };
+
+        // 🗑 刪除排行榜紀錄（只刪排行榜上嘅一筆，唔影響學生嘅遊戲存檔）
+        window.trDeleteEntry = async function() {
+            const idx = window._trEditIdx;
+            const en  = (window._trEntries || [])[idx];
+            if (!en) return;
+            if (!confirm('確定由排行榜刪除「' + (en.name || '?') + '」嘅紀錄？\n\n只會刪除排行榜上呢一筆，唔會影響該學生嘅遊戲存檔。\n學生下次登入後會自動重新上傳。')) return;
+            const status = document.getElementById('teacher-repair-status');
+            status.textContent = '⏳ 刪除中...';
+            try {
+                const remaining = window._trEntries.filter((_, i) => i !== idx);
+                const putRes = await fetch(FIREBASE_LB_URL, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ entries: remaining })
+                });
+                if (!putRes.ok) throw new Error('HTTP ' + putRes.status);
+                window._trEntries = remaining;
+                status.textContent = '✅ 已刪除「' + (en.name || '?') + '」嘅排行榜紀錄';
+                document.getElementById('teacher-repair-edit').style.display = 'none';
+                const list = document.getElementById('teacher-repair-list');
+                list.innerHTML = window._trEntries.map((x, i) => `
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin-bottom:4px;background:#0d1117;border-radius:8px;border:1px solid #333;">
+                    <div>
+                      <span style="color:#FFD700;font-weight:bold;">#${i+1} ${x.name||'?'}</span>
+                      <span style="color:#FF6F00;font-size:0.85em;margin-left:8px;">${x.score||0}分</span>
+                    </div>
+                    <button onclick="trEditEntry(${i})" style="background:#1565C0;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:0.82em;cursor:pointer;">✏️ 修改</button>
+                  </div>`).join('');
+            } catch (err) {
+                status.textContent = '❌ 刪除失敗：' + err.message;
+            }
+        };;
         // ==================== END 老師修復工具 ====================
 
 
