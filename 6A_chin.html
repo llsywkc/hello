@@ -5082,6 +5082,26 @@ function checkDailyReset() {
             } catch(e) {}
         }
 
+        /* ── ✅ 確保 playerId 唯一（防止兩位同學共用同一個 ID）── */
+        // 已知個案：黃溢鋒曾沿用文諾彥嘅 playerId，登入時會自動換新 ID 並存返雲端
+        const PLAYER_ID_BLOCKLIST = { '黃溢鋒': ['p_mucjhiqdl23ts'] };
+        function newPlayerId() { return 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+        async function ensureUniquePlayerId() {
+            try {
+                if (!inventory.playerName) return;
+                // 1) 指定修復
+                const bad = PLAYER_ID_BLOCKLIST[inventory.playerName];
+                if (bad && bad.includes(inventory.playerId)) { inventory.playerId = newPlayerId(); return; }
+                // 2) 自動偵測：排行榜上另一個名字已經用咗同一個 ID，就換新 ID
+                const r = await fetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache: 'no-store' });
+                if (!r.ok) return;
+                const data = await r.json();
+                const entries = (data && data.entries) || [];
+                const clash = entries.some(e => e && e.playerId && e.playerId === inventory.playerId && e.name !== inventory.playerName);
+                if (clash) inventory.playerId = newPlayerId();
+            } catch (e) { /* 網絡問題時唔影響登入 */ }
+        }
+
         /* ── Save to Firebase (called alongside localStorage) ── */
         async function saveToFirebase() {
             if (!inventory.playerName) return;
@@ -5161,6 +5181,7 @@ function checkDailyReset() {
                 if (!inventory.playerId) {
                     inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
                 }
+                await ensureUniquePlayerId();
                 // Restore avatar from remote
                 if (remote && remote.avatar) inventory.avatar = remote.avatar;
 
@@ -5225,6 +5246,7 @@ function checkDailyReset() {
                 if (!inventory.playerId) {
                     inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
                 }
+                await ensureUniquePlayerId();
                 saveGame();
                 document.getElementById('display-name').textContent = session.name;
                 document.body.classList.remove('on-login');
