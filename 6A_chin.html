@@ -1711,6 +1711,10 @@
                             <span class="la-icon">📝</span>
                             <span class="la-text"><span class="la-title">P6 T1 FA1溫習</span></span>
                         </button>
+                        <button class="list-action-btn la-lang" onclick="openFA2Review()">
+                            <span class="la-icon">📝</span>
+                            <span class="la-text"><span class="la-title">P6 T1 FA2温習</span><span class="la-sub">詞語填充＋寫字練習（第五課／第七課）</span></span>
+                        </button>
                     </div>
                     <div class="subtab-panel" id="subpanel-poem">
                         <button class="list-action-btn la-poem" onclick="launchWordle()">
@@ -1918,6 +1922,7 @@
             </div>
 
             <div id="lb-tab-desc" style="font-size:0.75em;color:#aaa;margin-bottom:6px;text-align:center;"></div>
+            <div id="lb-sync" style="font-size:0.78em;color:#81D4FA;margin:2px 0;min-height:1.2em;text-align:center;"></div>
             <div id="lb-status" style="font-size:0.82em;color:#aaa;margin:4px 0;"></div>
             <div id="lb-list" style="width:95%;margin:0 auto;max-height:55vh;overflow-y:auto;"></div>
             <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
@@ -2144,6 +2149,18 @@
         </div>
 
         <div id="weak-boss-screen" class="screen hidden"></div>
+
+        <div id="fa2-review-screen" class="screen hidden">
+            <h2 style="color:#00695C;">📝 P6 T1 FA2温習</h2>
+            <p style="text-align:center;color:#666;font-size:0.9em;margin-top:-6px;">第五課〈一公分鉛筆〉／第七課〈要挑最大的〉</p>
+            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:15px;max-width:720px;margin:0 auto;">
+                <div class="menu-card" onclick="startGame('fa2-l5-mc')" style="border-color:#00897B;min-width:220px;"><div class="mc-icon">📖</div><div class="mc-title">第五課 詞語填充</div><div class="mc-sub">〈一公分鉛筆〉· 14 題</div></div>
+                <div class="menu-card" onclick="startGame('fa2-l7-mc')" style="border-color:#FB8C00;min-width:220px;"><div class="mc-icon">📖</div><div class="mc-title">第七課 詞語填充</div><div class="mc-sub">〈要挑最大的〉· 24 題</div></div>
+                <div class="menu-card" onclick="openMoShuFA2('fa2_l5')" style="border-color:#00897B;min-width:220px;"><div class="mc-icon">✏️</div><div class="mc-title">第五課 寫字練習</div><div class="mc-sub">聆聽拼字／聆聽默寫 · 7 個詞語</div></div>
+                <div class="menu-card" onclick="openMoShuFA2('fa2_l7')" style="border-color:#FB8C00;min-width:220px;"><div class="mc-icon">✏️</div><div class="mc-title">第七課 寫字練習</div><div class="mc-sub">聆聽拼字／聆聽默寫 · 12 個詞語</div></div>
+            </div>
+            <button class="btn-red" onclick="goHome()" style="margin-top:20px;">🏠 返回主畫面</button>
+        </div>
 
         <div id="fa1-review-screen" class="screen hidden">
             <h2 style="color:#6A1B9A;">📝 P6 T1 FA1溫習</h2>
@@ -3827,12 +3844,61 @@
 ];
         const fa1NobelReorderTasks = [["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。"], ["他期望研發出來的炸藥", "可以造福人羣，", "可是，", "一些人扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["他期望研發出來的炸藥", "可以造福人羣，", "可是，", "一些人扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。", "他痛心極了。"], ["諾貝爾", "憑着", "百折不撓的", "毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。"], ["他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥", "用於傷害性命的", "戰爭上。"], ["他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥", "用於傷害性命的", "戰爭上。", "他痛心極了。"], ["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。", "他期望研發出來的炸藥", "可以造福人羣，", "可是，", "一些人扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。", "他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥用於", "傷害性命的戰爭上。"], ["諾貝爾", "憑着", "百折不撓的毅力，", "終於", "研製出", "安全又可靠的", "烈性炸藥。", "他期望", "研發出來的炸藥", "可以造福人羣，", "可是，", "一些人", "扭曲了", "他的原意，", "把炸藥", "用於傷害性命的", "戰爭上。", "他痛心極了。"]];
 
+
+        // ══ P6 T1 FA2溫習：第五課〈一公分鉛筆〉詞語填充 (14題) ══
+        const fa2L5Tasks = [
+            { q: "山區學校的設備十分＿＿＿＿，課室裏只有幾張舊桌椅，連電燈也沒有。", ans: "簡陋", options: ["齊全", "簡陋", "華麗", "先進"] },
+            { q: "弟弟在泥地上摔了一跤，褲子和鞋子都＿＿＿＿了泥巴。", ans: "沾滿", options: ["裝滿", "鋪滿", "填滿", "沾滿"] },
+            { q: "小欣主動幫助新同學適應校園生活，老師在班會上＿＿＿＿她樂於助人。", ans: "誇獎", options: ["誇獎", "責備", "催促", "勸告"] },
+            { q: "校隊代表上台領獎時，全場響起了＿＿＿＿的掌聲，久久沒有停下來。", ans: "熱烈", options: ["冷淡", "微弱", "熱烈", "零星"] },
+            { q: "看見妹妹終於學會騎自行車，哥哥豎起＿＿＿＿，稱讚她真厲害。", ans: "大拇指", options: ["食指", "大拇指", "尾指", "中指"] },
+            { q: "這件外套的袖口已經磨穿，衣襟也有幾個洞，實在太＿＿＿＿了，難以再穿。", ans: "破爛", options: ["整潔", "厚實", "鮮豔", "破爛"] },
+            { q: "叔叔經營的小店雖然規模不大，但每個月也能＿＿＿＿到足夠維持生活的錢。", ans: "賺", options: ["賺", "借", "欠", "賠"] },
+            { q: "救援隊暫時住在一間＿＿＿＿的木屋裏，屋內沒有床鋪，只能把木板當作床。", ans: "簡陋", options: ["豪華", "舒適", "簡陋", "寬敞"] },
+            { q: "爸爸替牆壁刷油漆時不小心打翻了油漆桶，工作服上＿＿＿＿了白色油漆。", ans: "沾滿", options: ["掛滿", "沾滿", "堆滿", "裝滿"] },
+            { q: "教練＿＿＿＿小健在比賽落後時仍不放棄，展現了堅毅的精神。", ans: "誇獎", options: ["懷疑", "取笑", "責怪", "誇獎"] },
+            { q: "同學們對「減少校園廢物」這個議題展開了＿＿＿＿的討論，紛紛舉手提出意見。", ans: "熱烈", options: ["熱烈", "沉悶", "冷清", "平淡"] },
+            { q: "美術課上，我們把五隻手指張開印在紙上；其中最粗、位於手掌一側的那一隻是＿＿＿＿。", ans: "大拇指", options: ["無名指", "中指", "大拇指", "尾指"] },
+            { q: "這把傘不但傘面有多個破洞，連傘骨也折斷了，十分＿＿＿＿，已不能用來擋雨。", ans: "破爛", options: ["精緻", "破爛", "完整", "輕巧"] },
+            { q: "學校舉行慈善義賣，我們扣除製作成本後，共＿＿＿＿了五百元，全部捐給有需要的人。", ans: "賺", options: ["花", "欠", "賠", "賺"] }
+        ];
+
+        // ══ P6 T1 FA2溫習：第七課〈要挑最大的〉詞語填充 (24題) ══
+        const fa2L7Tasks = [
+            { q: "我們沿着小路一直走，來到小路的＿＿＿＿，才發現前面是一面石壁，已無路可走。", ans: "盡頭", options: ["盡頭", "中段", "起點", "入口"] },
+            { q: "小明只顧在月台上看手機，沒有留意列車已經到站，結果＿＿＿＿了那班車。", ans: "錯過", options: ["趕上", "登上", "錯過", "追上"] },
+            { q: "圖書館訂下了不得高聲談話的＿＿＿＿，所有讀者都必須遵守。", ans: "規矩", options: ["願望", "規矩", "消息", "建議"] },
+            { q: "書包太重了，小華決定＿＿＿＿一些不必要的物品，只帶當天上課需要的東西。", ans: "捨棄", options: ["收藏", "添置", "保留", "捨棄"] },
+            { q: "老師沒有示意，同學們也沒有事先商量，卻在看見校工搬運重物時＿＿＿＿地上前幫忙。", ans: "不約而同", options: ["不約而同", "各自為政", "猶豫不決", "爭先恐後"] },
+            { q: "秋天到了，田裏成熟的稻穗一片＿＿＿＿，在陽光下閃着耀眼的光芒。", ans: "金燦燦", options: ["白茫茫", "黑漆漆", "金燦燦", "綠油油"] },
+            { q: "媽媽把剛買的西瓜放進我的袋子裏，袋子立刻變得＿＿＿＿，提起來十分吃力。", ans: "沉甸甸", options: ["空蕩蕩", "沉甸甸", "輕飄飄", "軟綿綿"] },
+            { q: "爺爺＿＿＿＿地對我說：「答應別人的事情，就要努力做到，不能隨便失信。」", ans: "語重心長", options: ["得意洋洋", "漫不經心", "怒氣沖沖", "語重心長"] },
+            { q: "聽了老師逐步講解後，我才＿＿＿＿，原來一直把題目中的兩個條件弄反了。", ans: "恍然大悟", options: ["恍然大悟", "百思不解", "半信半疑", "不知所措"] },
+            { q: "山村通往外面的＿＿＿＿一座橋被洪水沖毀了，村民再沒有其他橋可以過河。", ans: "惟一", options: ["普通", "多餘", "惟一", "臨時"] },
+            { q: "這次學校邀請作家到校分享，是向他請教寫作方法的＿＿＿＿，我們應好好把握。", ans: "良機", options: ["阻礙", "良機", "考驗", "負擔"] },
+            { q: "在候診室等了兩個多小時仍未輪到我，這段等待的時間顯得格外＿＿＿＿。", ans: "漫長", options: ["短暫", "急促", "迅速", "漫長"] },
+            { q: "跑道的＿＿＿＿設有一道拱門，選手穿過拱門後，便完成整段賽程。", ans: "盡頭", options: ["盡頭", "起點", "中央", "旁邊"] },
+            { q: "我忘記了報名截止日期，結果＿＿＿＿了參加這次比賽的機會。", ans: "錯過", options: ["創造", "把握", "錯過", "爭取"] },
+            { q: "玩遊戲前，大家先說清楚＿＿＿＿，例如每人每次只能移動一枚棋子，免得爭吵。", ans: "規矩", options: ["感受", "規矩", "經歷", "願望"] },
+            { q: "為了讓文章重點更清晰，我＿＿＿＿了幾段與主題無關的內容，保留最重要的部分。", ans: "捨棄", options: ["補充", "擴寫", "加入", "捨棄"] },
+            { q: "主持人問大家最喜歡哪項活動，幾位同學沒有商量，便＿＿＿＿地回答：「露營！」", ans: "不約而同", options: ["不約而同", "七嘴八舌", "竊竊私語", "吞吞吐吐"] },
+            { q: "陽光照在金色的獎盃上，獎盃顯得＿＿＿＿，十分耀眼。", ans: "金燦燦", options: ["紅彤彤", "灰濛濛", "金燦燦", "白皚皚"] },
+            { q: "農夫把剛挖出的番薯裝滿一籃，我雙手提起那＿＿＿＿的籃子，走了幾步便要停下休息。", ans: "沉甸甸", options: ["輕飄飄", "沉甸甸", "空蕩蕩", "亮晶晶"] },
+            { q: "班主任＿＿＿＿地提醒我們：「成績固然重要，但誠實做人更加重要，千萬不要作弊。」", ans: "語重心長", options: ["興高采烈", "冷嘲熱諷", "不耐煩", "語重心長"] },
+            { q: "看見弟弟嘴角的朱古力痕跡，我才＿＿＿＿，明白桌上的朱古力為甚麼不見了。", ans: "恍然大悟", options: ["恍然大悟", "迷惑不解", "大失所望", "猶豫不決"] },
+            { q: "其他參賽者都未能答對最後一題，小敏是＿＿＿＿答對的參賽者，因此獨得特別獎。", ans: "惟一", options: ["多位", "最後", "惟一", "普通"] },
+            { q: "教練認為這次公開選拔是加入校隊的＿＿＿＿，鼓勵有實力的同學積極參加。", ans: "良機", options: ["難題", "良機", "意外", "障礙"] },
+            { q: "修復這座古建築需要經過＿＿＿＿的過程，專家預計要花十年才能完成。", ans: "漫長", options: ["短促", "瞬間", "急速", "漫長"] }
+        ];
+
         const mcConfigs = {
             'fill': { title: "⛏️ 礦洞尋寶 (填充題)", subtitle: "敲碎正確的字詞礦石，填補句子！", tasks: fillTasks },
             'punct': { title: "📜 古卷修復 (標點題)", subtitle: "選擇正確的標點符號修復古卷！", tasks: punctTasks },
             'fa-mc': { title: "📝 FA温習特訓 (綜合題)", subtitle: "進展性評估專屬：詞語、便條與標點！", tasks: faMCTasks },
             'dictation2-mc': { title: "📖 默書温習(二) (填充題)", subtitle: "選擇正確的詞語完成句子！", tasks: dictation2Tasks },
             'adv-mc': { title: "⏳ 時間法師 (副詞題)", subtitle: "選擇正確的時間副詞完成句子！", tasks: advTasks },
+            'fa2-l5-mc': { title: "📝 FA2 第五課〈一公分鉛筆〉：詞語填充", subtitle: "14 條詞語填充題", tasks: fa2L5Tasks },
+            'fa2-l7-mc': { title: "📝 FA2 第七課〈要挑最大的〉：詞語填充", subtitle: "24 條詞語填充題", tasks: fa2L7Tasks },
             'fa1-vocab': { title: "📝 P6 T1 FA1溫習：重點詞語", subtitle: "30 條詞語填充題（複句句式）", tasks: fa1VocabTasks },
             'fa1-nobel-fill': { title: "📝 諾貝爾讀默：填充", subtitle: "10 條填充題，依原文選出準確用字", tasks: fa1NobelFillTasks },
             't1-vocab': { title: "📖 T1 單元一：詞語填充", subtitle: "30 條詞語填充題，溫習 T1 單元一詞語！", tasks: t1VocabTasks },
@@ -5386,12 +5452,8 @@ function checkDailyReset() {
                 try { localStorage.setItem(SAVE_KEY, JSON.stringify(inventory)); } catch(e) {}
                 // Push save to Firebase /players (fast, no read needed)
                 saveToFirebase().catch(()=>{});
-                // Auto-submit leaderboard — throttled to once per 60s
-                const now = Date.now();
-                if (now - _lastLbSubmit > 30000) {
-                    _lastLbSubmit = now; // set immediately to prevent parallel calls
-                    submitScore(true).catch(()=>{});
-                }
+                // Auto-submit leaderboard — 防抖＋尾端補交（最後一次答題一定會上傳）
+                scheduleLbSubmit();
                 document.getElementById('save-indicator').classList.remove('hidden');
                 setTimeout(() => document.getElementById('save-indicator').classList.add('hidden'), 2000);
             }
@@ -5522,7 +5584,7 @@ function checkDailyReset() {
         function hideAll() { document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); }
         
         function goHome() {
-            playSound('click'); updateUI(); renderDailyQuests(); hideAll(); clearInterval(combatTimerInterval);
+            playSound('click'); scheduleLbSubmit(); updateUI(); renderDailyQuests(); hideAll(); clearInterval(combatTimerInterval);
             stopContinuousShake(); fxFlipText(false);
             // Cleanup shooter
             shooterActive = false; if (shooterAnimFrame) cancelAnimationFrame(shooterAnimFrame); document.querySelectorAll('.shooter-target').forEach(el => el.remove()); document.querySelectorAll('.particle').forEach(el => el.remove()); const _gs = document.getElementById('game-shooter'); if (_gs) _gs.style.display = '';
@@ -5539,6 +5601,7 @@ function checkDailyReset() {
 
         function openInstructions() { playSound('click'); hideAll(); document.getElementById('instruction-screen').classList.remove('hidden'); }
         function openSuperForge() { playSound('click'); openTrainingGround(); }
+        function openFA2Review() { playSound('click'); hideAll(); document.getElementById('fa2-review-screen').classList.remove('hidden'); }
         function openFA1Review() { playSound('click'); hideAll(); document.getElementById('fa1-review-screen').classList.remove('hidden'); }
         function openForgeZone() { playSound('click'); hideAll(); document.getElementById('forge-zone').classList.remove('hidden'); }
         
@@ -7389,7 +7452,47 @@ function checkDailyReset() {
         // 🔧 Firebase Database URL:
         const FIREBASE_DB_URL = 'https://achin-593e5-default-rtdb.asia-southeast1.firebasedatabase.app';
         const FIREBASE_LB_URL = FIREBASE_DB_URL + '/leaderboard.json';
-        let _lastLbSubmit = 0;  // throttle: auto-submit at most once per 60s
+        let _lastLbSubmit = 0;
+        /* ═══ 排行榜上傳排程：防抖＋尾端補交＋失敗重試＋同步狀態 ═══ */
+        const LB_MIN_GAP = 15000;           // 兩次自動上傳最少相隔 15 秒（減少 Firebase 流量）
+        const LB_RETRY_DELAYS = [2000, 5000, 10000];
+        let _lbDirty = false, _lbTimer = null, _lbBusy = false, _lbFail = 0, _lbLastOk = 0;
+        function setLbSync(state) {
+            window._lbSyncState = state;
+            const el = document.getElementById('lb-sync'); if (!el) return;
+            const t = _lbLastOk ? '（' + new Date(_lbLastOk).toLocaleTimeString('zh-HK') + '）' : '';
+            el.textContent = state === 'ok' ? '☁️ 你嘅分數已同步' + t
+                : state === 'pending' ? '⏳ 待同步…'
+                : state === 'retry' ? '🔁 同步失敗，自動重試中…'
+                : state === 'fail' ? '⚠️ 暫時未能同步，繼續答題時會再試' : '';
+        }
+        function scheduleLbSubmit(immediate) {
+            if (!inventory || !inventory.playerName) return;
+            _lbDirty = true;
+            if (_lbTimer) return;
+            const wait = immediate ? 0 : Math.max(0, LB_MIN_GAP - (Date.now() - _lastLbSubmit));
+            _lbTimer = setTimeout(runLbSubmit, wait);
+            if (!_lbBusy) setLbSync('pending');
+        }
+        async function runLbSubmit() {
+            _lbTimer = null;
+            if (_lbBusy) { _lbTimer = setTimeout(runLbSubmit, 1500); return; }
+            if (!_lbDirty) return;
+            _lbBusy = true; _lbDirty = false; _lastLbSubmit = Date.now();
+            let ok = false;
+            try { ok = await submitScore(true); } catch (e) { ok = false; }
+            _lbBusy = false;
+            if (ok) { _lbFail = 0; _lbLastOk = Date.now(); setLbSync('ok'); }
+            else {
+                _lbDirty = true; _lbFail++;
+                if (_lbFail <= LB_RETRY_DELAYS.length) { setLbSync('retry'); if (!_lbTimer) _lbTimer = setTimeout(runLbSubmit, LB_RETRY_DELAYS[_lbFail - 1]); }
+                else { setLbSync('fail'); _lbFail = 0; }
+            }
+            if (_lbDirty && !_lbTimer && ok) scheduleLbSubmit();   // 上傳期間又有新答題
+        }
+        // 離開／鎖屏／切換 App 時即時補交
+        document.addEventListener('visibilitychange', () => { if (document.hidden) scheduleLbSubmit(true); });
+        window.addEventListener('pagehide', () => scheduleLbSubmit(true));
 
         function calcScore() {
             const bw = inventory.bossWins || {};
@@ -8000,11 +8103,11 @@ function checkDailyReset() {
         }
         // ==================== END 四榜計分函數 ====================
 
-async function fetchLeaderboard() {
+async function fetchLeaderboard(_auto) {
+            const auto = (_auto === true);
             const status = document.getElementById('lb-status');
             const list   = document.getElementById('lb-list');
-            status.textContent = '⏳ 載入中...';
-            list.innerHTML = '';
+            if (!auto) { status.textContent = '⏳ 載入中...'; list.innerHTML = ''; }
             try {
                 // cache-busting: append timestamp to force fresh fetch every time
                 const bust = '?_=' + Date.now();
@@ -8019,8 +8122,10 @@ async function fetchLeaderboard() {
                 renderLbTab(entries);
                 status.textContent = `✅ 共 ${entries.length} 位冒險者 · 最後更新：${new Date().toLocaleTimeString('zh-HK')}`;
             } catch(e) {
-                status.textContent = '❌ 載入失敗：' + e.message;
-                list.innerHTML = '<div style="color:#F44336;padding:10px;font-size:0.85em;">請檢查 Firebase 連線。</div>';
+                if (!auto) {
+                    status.textContent = '❌ 載入失敗：' + e.message;
+                    list.innerHTML = '<div style="color:#F44336;padding:10px;font-size:0.85em;">請檢查 Firebase 連線。</div>';
+                } else { status.textContent = '⚠️ 自動更新失敗，稍後再試（顯示緊舊資料）'; }
             }
         }
 
@@ -8057,7 +8162,7 @@ async function fetchLeaderboard() {
                      + '</div></div>';
             }).join('');
         }
-        async function submitScore(silent = false) {
+        async function submitScore(silent = false, _attempt = 0) {
             const status = document.getElementById('lb-status');
             if (!inventory.playerName) { if (!silent) alert('請先設定冒險者名字！'); return; }
             if (!silent) status.textContent = '⏳ 上傳中...';
@@ -8211,14 +8316,32 @@ async function fetchLeaderboard() {
                 if (lbOpen) { if (typeof renderLbTab === 'function') renderLbTab(window._lbEntries || []); setTimeout(fetchLeaderboard, 400); }
                 else if (!silent) { setTimeout(fetchLeaderboard, 400); }
                 window._lastLbSubmit = Date.now(); // update throttle timer
+                // 驗證：確保自己嘅紀錄冇被其他同學同一時間上傳覆蓋，被蓋走就重新上傳（最多 3 次嘗試）
+                await new Promise(r => setTimeout(r, 700 + Math.random() * 500));
+                const vr = await fetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache: 'no-store' });
+                if (vr.ok) {
+                    const vd = await vr.json();
+                    const mine = ((vd && vd.entries) || []).find(e => e && e.name === inventory.playerName);
+                    if (!mine || String(mine.timestamp || '') < String(myEntry.timestamp)) {
+                        if (_attempt < 2) return await submitScore(silent, _attempt + 1);
+                        return false;   // 3 次都被覆蓋 → 回報失敗，交俾自動重試排程
+                    }
+                }
+                return true;
             } catch(e) {
                 if (!silent) status.textContent = '❌ 上傳失敗：' + e.message;
+                return false;
             }
         }
         // ── Expose core functions to window for cross-closure access ──
         window.saveGame     = saveGame;
         window.updateUI     = updateUI;
         window.submitScore  = submitScore;
+        window.scheduleLbSubmit = scheduleLbSubmit;
+        setInterval(() => {
+            const scr = document.getElementById('leaderboard-screen');
+            if (scr && !scr.classList.contains('hidden') && !document.hidden) fetchLeaderboard(true);
+        }, 20000);
         window.gainExp      = gainExp;
 
 
@@ -9820,6 +9943,35 @@ const MS_WORD_SETS = {
       {char:'一竅不通', meaning:'一竅不通 — 完全不懂', hint:''},
       {char:'亡羊補牢', meaning:'亡羊補牢 — 出事後及時補救', hint:''}
     ]
+  },
+  fa2_l5: {
+    label:'📝 FA2 第五課〈一公分鉛筆〉',
+    items:[
+      {char:'簡陋', meaning:'簡陋 — 簡單粗糙，不完善', hint:''},
+      {char:'沾滿', meaning:'沾滿 — 滿是附着（污漬或物品）', hint:''},
+      {char:'誇獎', meaning:'誇獎 — 稱讚、表揚', hint:''},
+      {char:'熱烈', meaning:'熱烈 — 情緒興奮、氣氛高漲', hint:''},
+      {char:'大拇指', meaning:'大拇指 — 手上最粗最短的手指', hint:''},
+      {char:'破爛', meaning:'破爛 — 破舊殘缺', hint:''},
+      {char:'賺', meaning:'賺 — 獲得利潤、掙取金錢', hint:''}
+    ]
+  },
+  fa2_l7: {
+    label:'📝 FA2 第七課〈要挑最大的〉',
+    items:[
+      {char:'盡頭', meaning:'盡頭 — 最後、最末端的地方', hint:''},
+      {char:'錯過', meaning:'錯過 — 失去機會或沒有趕上', hint:''},
+      {char:'規矩', meaning:'規矩 — 約定或規定要遵守的準則', hint:''},
+      {char:'捨棄', meaning:'捨棄 — 放棄、不要', hint:''},
+      {char:'不約而同', meaning:'不約而同 — 事先沒有約定，想法或行動卻一致', hint:''},
+      {char:'金燦燦', meaning:'金燦燦 — 形容金色閃閃發光', hint:''},
+      {char:'沉甸甸', meaning:'沉甸甸 — 形容很重', hint:''},
+      {char:'語重心長', meaning:'語重心長 — 說話懇切有分量，情意深長', hint:''},
+      {char:'恍然大悟', meaning:'恍然大悟 — 一下子明白過來', hint:''},
+      {char:'惟一', meaning:'惟一 — 只有一個', hint:''},
+      {char:'良機', meaning:'良機 — 好機會', hint:''},
+      {char:'漫長', meaning:'漫長 — 很長，好像沒有盡頭', hint:''}
+    ]
   }
 };
 
@@ -10208,6 +10360,13 @@ window.openMoShu = function() {
 window.openMoShuFA1 = function() {
     puzzleSet = 'fa1'; puzzleIdx = 0; _puzzleItems = null;
     dictSet = 'fa1'; dictIdx = 0; _dictItems = null;
+    openMoShu();
+};
+
+window.openMoShuFA2 = function(setKey) {
+    if (!MS_WORD_SETS[setKey]) return;
+    puzzleSet = setKey; puzzleIdx = 0; _puzzleItems = null;
+    dictSet = setKey; dictIdx = 0; _dictItems = null;
     openMoShu();
 };
 
