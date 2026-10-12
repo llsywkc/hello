@@ -5087,19 +5087,23 @@ function checkDailyReset() {
         const PLAYER_ID_BLOCKLIST = { '黃溢鋒': ['p_mucjhiqdl23ts'] };
         function newPlayerId() { return 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
         async function ensureUniquePlayerId() {
+            if (!inventory.playerName) return { ok: false, reason: '未有登入名稱' };
+            // Known collision: 黃溢鋒 inherited 文諾彥's old id.
+            if (inventory.playerName === '黃溢鋒' && inventory.playerId === 'p_mucjhiqdl23ts') {
+                inventory.playerId = newPlayerId();
+                return { ok: true, changed: true };
+            }
             try {
-                if (!inventory.playerName) return;
-                // 1) 指定修復
-                const bad = PLAYER_ID_BLOCKLIST[inventory.playerName];
-                if (bad && bad.includes(inventory.playerId)) { inventory.playerId = newPlayerId(); return; }
-                // 2) 自動偵測：排行榜上另一個名字已經用咗同一個 ID，就換新 ID
                 const r = await fetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache: 'no-store' });
-                if (!r.ok) return;
+                if (!r.ok) return { ok: false, reason: '排行榜暫時讀取失敗（HTTP ' + r.status + '）' };
                 const data = await r.json();
-                const entries = (data && data.entries) || [];
+                const entries = (data && Array.isArray(data.entries)) ? data.entries : [];
                 const clash = entries.some(e => e && e.playerId && e.playerId === inventory.playerId && e.name !== inventory.playerName);
                 if (clash) inventory.playerId = newPlayerId();
-            } catch (e) { /* 網絡問題時唔影響登入 */ }
+                return { ok: true, changed: clash };
+            } catch (e) {
+                return { ok: false, reason: '排行榜暫時未能連線，為避免覆蓋其他同學資料，請連線後再登入。' };
+            }
         }
 
         /* ── Save to Firebase (called alongside localStorage) ── */
@@ -5181,7 +5185,12 @@ function checkDailyReset() {
                 if (!inventory.playerId) {
                     inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
                 }
-                await ensureUniquePlayerId();
+                const _idCheck = await ensureUniquePlayerId();
+                if (!_idCheck || !_idCheck.ok) {
+                    alert('⚠️ ' + ((_idCheck && _idCheck.reason) || '未能確認 playerId 安全，請稍後重試。'));
+                    if (btn) { btn.disabled = false; btn.textContent = '▶ 開 始 冒 險'; }
+                    return;
+                }
                 // Restore avatar from remote
                 if (remote && remote.avatar) inventory.avatar = remote.avatar;
 
@@ -5246,7 +5255,12 @@ function checkDailyReset() {
                 if (!inventory.playerId) {
                     inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
                 }
-                await ensureUniquePlayerId();
+                const _idCheck = await ensureUniquePlayerId();
+                if (!_idCheck || !_idCheck.ok) {
+                    alert('⚠️ ' + ((_idCheck && _idCheck.reason) || '未能確認 playerId 安全，請稍後重試。'));
+                    if (btn) { btn.disabled = false; btn.textContent = '▶ 開 始 冒 險'; }
+                    return;
+                }
                 saveGame();
                 document.getElementById('display-name').textContent = session.name;
                 document.body.classList.remove('on-login');
@@ -8054,14 +8068,14 @@ async function fetchLeaderboard() {
                 const data = await getRes.json();
                 let entries = (data && data.entries) ? [...data.entries] : [];
 
-                // 1b. 以名字去重（每位同學名字唯一）；同名多筆時保留分數最高嗰筆
+                // 1b. 姓名係排行榜身份：只合併同名重複紀錄；唔同姓名即使舊 playerId 撞號都保留。
                 {
                     const best = new Map();
                     entries.forEach(e => {
-                        const k = e.name;
+                        const k = String(e.name || '');
                         if (!best.has(k) || (e.score || 0) > (best.get(k).score || 0)) best.set(k, e);
                     });
-                    entries = entries.filter(e => best.get(e.name) === e);
+                    entries = Array.from(best.values());
                 }
 
                 // 2. Update or insert this player
