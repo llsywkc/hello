@@ -8930,6 +8930,7 @@ async function fetchLeaderboard(_auto) {
                       <button onclick="tpChangePwd()" style="background:#2E7D32;color:#fff;border:none;border-radius:6px;padding:8px 12px;cursor:pointer;">改密碼</button>
                     </div>
                     <button onclick="tpLoginAs()" style="background:#6A1B9A;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-weight:bold;">🚀 以此學生身份登入</button>
+                    <button onclick="tpRestoreCloudSave()" style="background:#1565C0;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-weight:bold;">☁️ 從雲端重新載入材料／夥伴</button>
                     <button onclick="tpResetName()" style="background:#E65100;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">🔄 重設帳號（保留進度）</button>
                     <button onclick="tpFullReset()" style="background:#B71C1C;color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;">💥 完全清除此學生資料</button>
                   </div>
@@ -8968,12 +8969,30 @@ async function fetchLeaderboard(_auto) {
             alert('✅ 已成功更改「' + name + '」的密碼為：' + pwd);
         };
 
+        window.tpRestoreCloudSave = async function() {
+            const name = document.getElementById('tp-student-name').value.trim();
+            if (!name) return;
+            if (!confirm('從雲端重新讀取「' + name + '」的材料、夥伴與所有進度？\n\n只會讀取並顯示雲端資料，不會清除任何雲端內容。')) return;
+            try {
+                const remote = await fbGetPlayer(name);
+                if (!remote || !remote.save) return alert('⚠️ 找不到完整雲端存檔。');
+                const s = remote.save;
+                const mats = '🪵' + (s.wood||0) + '　🧱' + (s.stone||0) + '　💎' + (s.gem||0) + '　🌟' + (s.star||0) + '　📜' + (s.manuscript||0) + '　🔮' + (s.fragment||0) + '　🪙' + (s.coins||0);
+                const partner = s.partnerId ? (s.partnerId + ' Lv' + (s.partnerLv||0) + '・餵食Lv' + (s.partnerFeedLv||0)) : '未選擇';
+                alert('✅ 雲端資料正常存在\n\n' + name + '\n夥伴：' + partner + '\n材料：' + mats + '\n答對題數：' + (s.totalCorrectAnswers||0));
+            } catch (e) { alert('⚠️ 雲端讀取失敗，請檢查網絡後重試。'); }
+        };
+
         window.tpLoginAs = async function() {
             const name = document.getElementById('tp-student-name').value.trim();
             if (!name) return;
             if (!confirm('以「' + name + '」身份登入？')) return;
+            const result = await loadFromFirebase(name);
+            if (!result || result.source === 'error') {
+                alert('⚠️ ' + ((result && result.reason) || '雲端存檔載入失敗，未有切換學生身份。'));
+                return;
+            }
             document.getElementById('teacher-panel-modal').remove();
-            await loadFromFirebase(name);
             inventory.playerName = name;
             const session = { name, loginAt: Date.now(), avatar: getAvatar() };
             try { localStorage.setItem(AUTH_KEY, JSON.stringify(session)); } catch(e) {}
