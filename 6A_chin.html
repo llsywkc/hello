@@ -5122,12 +5122,10 @@ function checkDailyReset() {
 
         /* ── Firebase player CRUD ── */
         async function fbGetPlayer(name) {
-            try {
-                const url = FIREBASE_PLAYERS_URL + '/' + encodeURIComponent(name) + '.json?_=' + Date.now();
-                const r = await fetch(url, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
-                if (!r.ok) return null;
-                return await r.json();
-            } catch(e) { return null; }
+            const url = FIREBASE_PLAYERS_URL + '/' + encodeURIComponent(name) + '.json?_=' + Date.now();
+            const r = await fetch(url, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
+            if (!r.ok) throw new Error('Firebase 讀取失敗（HTTP ' + r.status + '）');
+            return await r.json(); // 真正不存在嘅節點才會回傳 null
         }
         async function fbSetPlayer(name, data) {
             try {
@@ -5139,13 +5137,13 @@ function checkDailyReset() {
             } catch(e) {}
         }
         async function fbPatchPlayer(name, patch) {
-            try {
-                await fetch(FIREBASE_PLAYERS_URL + '/' + encodeURIComponent(name) + '.json', {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(patch)
-                });
-            } catch(e) {}
+            const r = await fetch(FIREBASE_PLAYERS_URL + '/' + encodeURIComponent(name) + '.json', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(patch)
+            });
+            if (!r.ok) throw new Error('Firebase 儲存失敗（HTTP ' + r.status + '）');
+            return true;
         }
 
         /* ── ✅ 確保 playerId 唯一（防止兩位同學共用同一個 ID）── */
@@ -5173,40 +5171,57 @@ function checkDailyReset() {
         }
 
         /* ── Save to Firebase (called alongside localStorage) ── */
+        function materialTotal(x) {
+            if (!x) return 0;
+            return ['wood','stone','gem','star','manuscript','fragment','coins'].reduce((s,k) => s + (Number(x[k]) || 0), 0);
+        }
         async function saveToFirebase() {
-            if (!inventory.playerName) return;
+            if (!inventory.playerName) return false;
+            // 只有確認完整雲端存檔已載入後才可寫回；防止本機舊 cache／空白存檔覆蓋雲端。
+            if (!window._cloudSaveVerified) throw new Error('雲端存檔尚未驗證，取消自動儲存。');
+            const remote = await fbGetPlayer(inventory.playerName);
+            const remoteSave = remote && remote.save;
+            // 只要本機材料總數低過剛載入雲端快照一半，視作危險回退，不寫入。
+            // 正常消費不會一次少於一半；這條保護可避免「材料全沒」覆蓋雲端。
+            const before = window._cloudMaterialSnapshot || materialTotal(remoteSave);
+            const now = materialTotal(inventory);
+            if (before > 0 && now < before * 0.5) {
+                throw new Error('偵測到本機材料異常減少，已停止儲存以保護雲端資料。請重新登入。');
+            }
             await fbPatchPlayer(inventory.playerName, { save: inventory });
+            window._cloudMaterialSnapshot = Math.max(before, now);
+            return true;
         }
 
         /* ── Load from Firebase; migrate localStorage if needed ── */
         async function loadFromFirebase(name) {
-            const remote = await fbGetPlayer(name);
+            let remote;
+            try { remote = await fbGetPlayer(name); }
+            catch (e) { return { source:'error', reason:'未能連線雲端存檔' }; }
+            // fbGetPlayer 舊版本會將錯誤回傳 null；有登入者絕不能把 null 當作「新玩家」。
             if (remote && remote.save) {
-                // Firebase has data → use it
-                inventory = { ...defaultInv, ...remote.save,
-                    equip: { ...defaultInv.equip, ...(remote.save.equip || {}) },
-                    medals: remote.save.medals || [] };
-                // Sync to localStorage as cache
+                const s = remote.save;
+                // 基本完整性驗證：已有進度的帳號必須至少帶有材料／夥伴／統計欄位其中之一。
+                const hasCore = ['wood','stone','gem','star','manuscript','fragment','coins','partnerId','totalCorrectAnswers'].some(k => Object.prototype.hasOwnProperty.call(s, k));
+                if (!hasCore) return { source:'error', reason:'雲端存檔資料不完整，已停止載入以保護資料。' };
+                inventory = { ...defaultInv, ...s,
+                    equip: { ...defaultInv.equip, ...(s.equip || {}) },
+                    medals: s.medals || [] };
+                window._cloudSaveVerified = true;
+                window._cloudMaterialSnapshot = materialTotal(inventory);
                 try { localStorage.setItem(SAVE_KEY, JSON.stringify(inventory)); } catch(e) {}
-                return 'firebase';
+                return { source:'firebase', remote };
             }
-            // No Firebase save → try localStorage migration
-            let local = null;
-            try { local = JSON.parse(localStorage.getItem(SAVE_KEY)); } catch(e) {}
-            if (local && local.playerName === name) {
-                inventory = { ...defaultInv, ...local,
-                    equip: { ...defaultInv.equip, ...(local.equip || {}) },
-                    medals: local.medals || [] };
-                // Silently migrate to Firebase
-                await fbPatchPlayer(name, { save: inventory });
-                return 'migrated';
+            // 有帳號資料（例如老師剛重設密碼）但未有 save：建立真正的新存檔。
+            if (remote) {
+                inventory = JSON.parse(JSON.stringify(defaultInv));
+                inventory.playerId = '';
+                window._cloudSaveVerified = true;
+                window._cloudMaterialSnapshot = 0;
+                return { source:'new', remote };
             }
-            // ✅ FIX：冇雲端存檔、本機亦冇自己嘅存檔 → 一定要用全新存檔。
-            // 之前冇重設，會沿用同一部裝置上一位同學留喺記憶體嘅資料（包括 playerId、分數），
-            // 令排行榜將兩個人當成同一個人，用新名字蓋過原本最高分嘅同學。
-            inventory = JSON.parse(JSON.stringify(defaultInv));
-            inventory.playerId = '';
-            return 'new';
+            // remote === null：班級名單已有帳號，為安全起見一律不以本機 cache 建立／覆蓋資料。
+            return { source:'error', reason:'未能確認雲端帳號資料，請檢查網絡後重試。' };
         }
 
         /* ── Main login ── */
@@ -5245,8 +5260,13 @@ function checkDailyReset() {
                     await fbPatchPlayer(name, { password: hashed });
                 }
 
-                // Load save (Firebase → localStorage migration)
-                const origin = await loadFromFirebase(name);
+                // Load cloud save first. Never continue with local cache if cloud confirmation failed.
+                const loadResult = await loadFromFirebase(name);
+                if (!loadResult || loadResult.source === 'error') {
+                    alert('⚠️ ' + ((loadResult && loadResult.reason) || '雲端存檔載入失敗，為保護你的材料與搭檔資料，暫時未能登入。'));
+                    return;
+                }
+                const origin = loadResult.source;
                 inventory.playerName = name;
                 if (!inventory.playerId) {
                     inventory.playerId = 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
@@ -5278,7 +5298,7 @@ function checkDailyReset() {
                     setTimeout(() => alert('✅ 偵測到舊存檔，已自動同步到雲端！\n以後換任何裝置都能保留進度。'), 600);
                 }
             } catch(e) {
-                alert('⚠️ 網絡錯誤，請重試。');
+                alert('⚠️ 未能連線雲端存檔，為保護材料與搭檔資料，今次未有登入。請檢查網絡後重試。');
             } finally {
                 if (btn) { btn.disabled = false; btn.textContent = '▶ 開 始 冒 險'; }
             }
@@ -5314,8 +5334,25 @@ function checkDailyReset() {
             if (session && session.name && session.loginAt &&
                 (Date.now() - session.loginAt < SESSION_EXPIRY_MS)) {
                 // Valid session – auto-login
-                const remote = await fbGetPlayer(session.name);
-                const origin = await loadFromFirebase(session.name);
+                let remote, loadResult;
+                try {
+                    remote = await fbGetPlayer(session.name);
+                    loadResult = await loadFromFirebase(session.name);
+                } catch (e) {
+                    try { localStorage.removeItem(AUTH_KEY); } catch(x) {}
+                    alert('⚠️ 未能連線雲端存檔，為保護資料已停止自動登入。');
+                    document.getElementById('login-screen').classList.remove('hidden');
+                    document.body.classList.add('on-login');
+                    return;
+                }
+                if (!loadResult || loadResult.source === 'error') {
+                    try { localStorage.removeItem(AUTH_KEY); } catch(e) {}
+                    alert('⚠️ ' + ((loadResult && loadResult.reason) || '雲端存檔載入失敗，為保護資料已停止自動登入。'));
+                    document.getElementById('login-screen').classList.remove('hidden');
+                    document.body.classList.add('on-login');
+                    return;
+                }
+                const origin = loadResult.source;
                 inventory.playerName = session.name;
                 if (remote && remote.avatar) inventory.avatar = remote.avatar;
                 if (!inventory.playerId) {
@@ -5324,7 +5361,6 @@ function checkDailyReset() {
                 const _idCheck = await ensureUniquePlayerId();
                 if (!_idCheck || !_idCheck.ok) {
                     alert('⚠️ ' + ((_idCheck && _idCheck.reason) || '未能確認 playerId 安全，請稍後重試。'));
-                    if (btn) { btn.disabled = false; btn.textContent = '▶ 開 始 冒 險'; }
                     return;
                 }
                 saveGame();
@@ -5450,8 +5486,12 @@ function checkDailyReset() {
         function saveGame() {
             if(inventory.playerName) {
                 try { localStorage.setItem(SAVE_KEY, JSON.stringify(inventory)); } catch(e) {}
-                // Push save to Firebase /players (fast, no read needed)
-                saveToFirebase().catch(()=>{});
+                // Push save to Firebase only after verified cloud load; failed writes stay local and are retried by next save.
+                saveToFirebase().then(() => { window._lastCloudSaveError = ''; }).catch(e => {
+                    window._lastCloudSaveError = e.message;
+                    const ind = document.getElementById('save-indicator');
+                    if (ind) { ind.textContent = '⚠️ 未能安全儲存，請重新登入'; ind.classList.remove('hidden'); }
+                });
                 // Auto-submit leaderboard — 防抖＋尾端補交（最後一次答題一定會上傳）
                 scheduleLbSubmit();
                 document.getElementById('save-indicator').classList.remove('hidden');
@@ -5584,7 +5624,8 @@ function checkDailyReset() {
         function hideAll() { document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); }
         
         function goHome() {
-            playSound('click'); scheduleLbSubmit(); updateUI(); renderDailyQuests(); hideAll(); clearInterval(combatTimerInterval);
+            playSound('click'); scheduleLbSubmit(); updateUI(); renderDailyQuests();
+            if (window._lastCloudSaveError) setTimeout(() => alert('⚠️ 雲端存檔保護：' + window._lastCloudSaveError), 200); hideAll(); clearInterval(combatTimerInterval);
             stopContinuousShake(); fxFlipText(false);
             // Cleanup shooter
             shooterActive = false; if (shooterAnimFrame) cancelAnimationFrame(shooterAnimFrame); document.querySelectorAll('.shooter-target').forEach(el => el.remove()); document.querySelectorAll('.particle').forEach(el => el.remove()); const _gs = document.getElementById('game-shooter'); if (_gs) _gs.style.display = '';
