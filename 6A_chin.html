@@ -5171,25 +5171,12 @@ function checkDailyReset() {
         }
 
         /* ── Save to Firebase (called alongside localStorage) ── */
-        function materialTotal(x) {
-            if (!x) return 0;
-            return ['wood','stone','gem','star','manuscript','fragment','coins'].reduce((s,k) => s + (Number(x[k]) || 0), 0);
-        }
         async function saveToFirebase() {
             if (!inventory.playerName) return false;
             // 只有確認完整雲端存檔已載入後才可寫回；防止本機舊 cache／空白存檔覆蓋雲端。
             if (!window._cloudSaveVerified) throw new Error('雲端存檔尚未驗證，取消自動儲存。');
-            const remote = await fbGetPlayer(inventory.playerName);
-            const remoteSave = remote && remote.save;
-            // 只要本機材料總數低過剛載入雲端快照一半，視作危險回退，不寫入。
-            // 正常消費不會一次少於一半；這條保護可避免「材料全沒」覆蓋雲端。
-            const before = window._cloudMaterialSnapshot || materialTotal(remoteSave);
-            const now = materialTotal(inventory);
-            if (before > 0 && now < before * 0.5) {
-                throw new Error('偵測到本機材料異常減少，已停止儲存以保護雲端資料。請重新登入。');
-            }
+            // 本機消耗材料係正常遊戲操作；只要雲端存檔成功載入並驗證，就正常保存遊戲現況。
             await fbPatchPlayer(inventory.playerName, { save: inventory });
-            window._cloudMaterialSnapshot = Math.max(before, now);
             return true;
         }
 
@@ -5208,7 +5195,6 @@ function checkDailyReset() {
                     equip: { ...defaultInv.equip, ...(s.equip || {}) },
                     medals: s.medals || [] };
                 window._cloudSaveVerified = true;
-                window._cloudMaterialSnapshot = materialTotal(inventory);
                 try { localStorage.setItem(SAVE_KEY, JSON.stringify(inventory)); } catch(e) {}
                 return { source:'firebase', remote };
             }
@@ -5217,7 +5203,6 @@ function checkDailyReset() {
                 inventory = JSON.parse(JSON.stringify(defaultInv));
                 inventory.playerId = '';
                 window._cloudSaveVerified = true;
-                window._cloudMaterialSnapshot = 0;
                 return { source:'new', remote };
             }
             // remote === null：班級名單已有帳號，為安全起見一律不以本機 cache 建立／覆蓋資料。
@@ -5487,10 +5472,14 @@ function checkDailyReset() {
             if(inventory.playerName) {
                 try { localStorage.setItem(SAVE_KEY, JSON.stringify(inventory)); } catch(e) {}
                 // Push save to Firebase only after verified cloud load; failed writes stay local and are retried by next save.
-                saveToFirebase().then(() => { window._lastCloudSaveError = ''; }).catch(e => {
+                saveToFirebase().then(() => {
+                    window._lastCloudSaveError = '';
+                    const ind = document.getElementById('save-indicator');
+                    if (ind && ind.textContent.startsWith('⚠️ 雲端未同步')) ind.textContent = '✅ 已儲存';
+                }).catch(e => {
                     window._lastCloudSaveError = e.message;
                     const ind = document.getElementById('save-indicator');
-                    if (ind) { ind.textContent = '⚠️ 未能安全儲存，請重新登入'; ind.classList.remove('hidden'); }
+                    if (ind) { ind.textContent = '⚠️ 雲端未同步：' + e.message; ind.classList.remove('hidden'); }
                 });
                 // Auto-submit leaderboard — 防抖＋尾端補交（最後一次答題一定會上傳）
                 scheduleLbSubmit();
@@ -5625,7 +5614,11 @@ function checkDailyReset() {
         
         function goHome() {
             playSound('click'); scheduleLbSubmit(); updateUI(); renderDailyQuests();
-            if (window._lastCloudSaveError) setTimeout(() => alert('⚠️ 雲端存檔保護：' + window._lastCloudSaveError), 200); hideAll(); clearInterval(combatTimerInterval);
+            if (window._lastCloudSaveError) {
+                const _sv = document.getElementById('save-indicator');
+                if (_sv) { _sv.textContent = '⚠️ 雲端未同步：' + window._lastCloudSaveError; _sv.classList.remove('hidden'); }
+            }
+            hideAll(); clearInterval(combatTimerInterval);
             stopContinuousShake(); fxFlipText(false);
             // Cleanup shooter
             shooterActive = false; if (shooterAnimFrame) cancelAnimationFrame(shooterAnimFrame); document.querySelectorAll('.shooter-target').forEach(el => el.remove()); document.querySelectorAll('.particle').forEach(el => el.remove()); const _gs = document.getElementById('game-shooter'); if (_gs) _gs.style.display = '';
