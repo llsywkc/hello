@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>作文小助手</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans TC","PingFang HK","Microsoft JhengHei",sans-serif;background:#fff4e0;color:#333}
+#app{max-width:760px;margin:0 auto;height:100vh;display:flex;flex-direction:column;background:#fffaf0;box-shadow:0 0 20px #0002}
+header{background:#ff9f43;color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:20px;margin:0}
+#badges{font-size:18px}
+#progress{height:8px;background:#ffe0b3}
+#bar{height:100%;width:0;background:#2ecc71;transition:width .4s}
+#chat{flex:1;overflow-y:auto;padding:14px}
+.msg{max-width:85%;padding:10px 14px;margin:8px 0;border-radius:16px;line-height:1.7;font-size:17px;white-space:pre-wrap;word-break:break-word}
+.bot{background:#fff;border:2px solid #ffd08a;border-top-left-radius:2px}
+.user{background:#74b9ff;color:#fff;margin-left:auto;border-top-right-radius:2px}
+.choices{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
+.choices button{font-size:16px;padding:8px 14px;border:2px solid #ff9f43;background:#fff;color:#d35400;border-radius:20px;cursor:pointer}
+.choices button:hover{background:#ff9f43;color:#fff}
+#inputArea{display:flex;gap:8px;padding:10px;background:#ffe9c7}
+textarea{flex:1;font-size:17px;padding:8px;border:2px solid #ffc16b;border-radius:10px;resize:none;height:84px;font-family:inherit}
+#sendBtn{width:84px;font-size:18px;border:none;border-radius:10px;background:#ff9f43;color:#fff;cursor:pointer}
+#count{font-size:12px;color:#888;padding:0 12px 4px;background:#ffe9c7;text-align:right}
+</style>
+</head>
+<body>
+<div id="app">
+ <header><h1>📝 作文小助手</h1><div id="badges" title="我的作文星"></div></header>
+ <div id="progress"><div id="bar"></div></div>
+ <div id="chat"></div>
+ <div id="count"><span id="cnt">0</span> 字</div>
+ <div id="inputArea">
+  <textarea id="box" placeholder="在這裏輸入…(Ctrl+Enter 送出)"></textarea>
+  <button id="sendBtn">送出</button>
+ </div>
+</div>
+
+<script>
+const W={
+ time:['早上','上午','中午','下午','晚上','昨天','今天','那天','有一天','星期','暑假','週末','周末','去年','小時候','清晨','黃昏','傍晚','假期'],
+ place:['學校','家','公園','街','海邊','教室','操場','山','商場','房間','餐廳','地鐵','香港','圖書館','球場','廚房','客廳','沙灘','市場'],
+ people:['我','媽媽','爸爸','老師','同學','朋友','哥哥','姐姐','弟弟','妹妹','婆婆','公公','外婆','外公','奶奶','爺爺'],
+ sense:['看見','看到','聽見','聽到','聞到','嚐','摸','香','甜','酸','苦','辣','響','吵','軟','硬','冷','熱','閃','亮','顏色','色','味道','聲音'],
+ simile:['好像','像','彷彿','如同','猶如','似的','就像','宛如','猶似'],
+ feel:['開心','高興','快樂','難過','傷心','緊張','害怕','感動','興奮','驚訝','後悔','驕傲','失望','擔心','溫暖','感謝','難忘','感到','覺得','心情','思念','懷念'],
+ seq:['首先','然後','接着','接著','後來','最後','突然','於是','過了一會','隨後','不久'],
+ learn:['明白','學會','懂得','知道','難忘','啟發','得到','相信','以後','從此','教訓','體會'],
+ reason:['因為','所以','由於','因此','例如','比如','譬如','可見','舉例'],
+ concede:['雖然','但是','然而','不過','可是','固然'],
+ conclude:['總括','總之','因此','所以','綜上','可見','由此','總而言之'],
+ list:['第一','第二','首先','其次','另外','此外','還有','最後','一方面'],
+ num:['百分','倍','公里','公斤','米','%','種','個','分鐘','小時','厘米'],
+ greet:['你好','您好','近來','好嗎','安好','敬啟者','親愛','敬愛','久違'],
+ close:['此致','敬禮','祝','順祝','謹上','敬上','身體健康','學業進步'],
+ date:['年','月','日'],
+ dialog:['「','“','"','說','問','叫']
+};
+const LABEL={time:'時間',place:'地點',people:'人物',sense:'五感描寫(看、聽、聞、嚐、摸)',simile:'比喻(好像、彷彿…)',feel:'心情感受',seq:'連接詞(首先、然後、後來…)',learn:'得着或領悟',reason:'原因或例子(因為、例如…)',concede:'轉折詞(雖然…但是…)',conclude:'總結詞(因此、總之…)',list:'列舉詞(第一、第二、此外…)',num:'數字或量詞',greet:'問候語',close:'祝頌語(此致、敬禮…)',date:'日期(年月日)',dialog:'對話或說話描寫'};
+const WORDS={
+ time:'有一天、清晨、黃昏、那個星期六',
+ sense:'清脆、香噴噴、軟綿綿、金黃色、嘈吵、涼颼颼',
+ feel:'興奮、忐忑不安、喜出望外、依依不捨、感動',
+ action:'飛奔、凝視、擁抱、低頭、拍手、緊握',
+ simile:'像一把傘、彷彿童話世界、好像棉花糖'
+};
+const GENRES=[
+{n:'記敍文',e:'📖',intro:'記敍文是把一件事清楚說出來,要交代:甚麼時候、在哪裏、有誰、發生甚麼事、結果怎樣,還有你的感受。',
+ themes:['友情珍貴','堅持就會成功','家人的愛','誠實的重要','勇於嘗試'],
+ secs:[
+ {n:'開頭(起因)',min:30,tip:'交代時間、地點和人物,再說事情為甚麼發生。',start:'「有一天,我和……在……」',need:['time','place','people']},
+ {n:'經過(上)',min:40,tip:'按次序寫事情的發展,用連接詞,例如:首先、然後、接着。',start:'「首先,我……接着,……」',need:['seq','people']},
+ {n:'高潮',min:40,tip:'寫最難忘、最緊張的一刻。加入動作、對話和心情。',start:'「突然,……我心裏……」',need:['feel','dialog']},
+ {n:'結尾(感受)',min:30,tip:'說出結果,還有你學到甚麼,首尾要呼應。',start:'「經過這件事,我明白了……」',need:['learn','feel']}
+ ]},
+{n:'描寫文',e:'🎨',intro:'描寫文要把人、物或景象寫得像畫一樣。多用五感(看、聽、聞、嚐、摸)和比喻。',
+ themes:['我愛家鄉的……','一個難忘的人','美麗的景色','我最喜愛的物件'],
+ secs:[
+ {n:'總說(第一印象)',min:25,tip:'用一兩句說出描寫對象和整體印象。',start:'「……是我最喜歡的……,它……」',need:['feel']},
+ {n:'分述(一):外形和顏色',min:40,tip:'由上到下或由近到遠,寫形狀、顏色,用比喻。',start:'「它的……像……」',need:['sense','simile']},
+ {n:'分述(二):聲音、氣味和感覺',min:40,tip:'換個感官再寫,例如聲音、氣味、觸感。',start:'「我聽到……,還聞到……」',need:['sense']},
+ {n:'感受',min:30,tip:'說出你對描寫對象的感情。',start:'「每當我……,心裏就……」',need:['feel']}
+ ]},
+{n:'抒情文',e:'💗',intro:'抒情文借人、事或物,表達心中的感情。感情要真,還要有具體的事作例子。',
+ themes:['思念','感恩','懷念舊日時光','惜別'],
+ secs:[
+ {n:'引入',min:30,tip:'從一件事物引出你的感情,例如一張相片、一件舊物。',start:'「看着……,我想起……」',need:['feel']},
+ {n:'回憶片段',min:50,tip:'寫一件具體的小事,交代時間、地點和人物。',start:'「記得那年……」',need:['time','people']},
+ {n:'抒發感情',min:40,tip:'直接說出感受,再加一個比喻。',start:'「那份……像……一樣……」',need:['feel','simile']},
+ {n:'昇華',min:30,tip:'由個人感情,想到更大的道理或願望。',start:'「我會……,因為……」',need:['learn']}
+ ]},
+{n:'說明文',e:'🔍',intro:'說明文要把事物介紹清楚。要有條理,用列舉、例子和數字,令讀者明白。',
+ themes:['介紹一種動物','介紹一個節日','如何保持健康','介紹一項運動'],
+ secs:[
+ {n:'引言',min:25,tip:'說明介紹甚麼,為甚麼值得認識。',start:'「今天我想介紹……」',need:[]},
+ {n:'特點(一)',min:40,tip:'用「首先」「第一」開始,說一個特點,再舉例。',start:'「首先,……例如……」',need:['list','reason']},
+ {n:'特點(二)',min:40,tip:'用「其次」「此外」,加入數字或比較更清楚。',start:'「此外,……大約有……」',need:['list','num']},
+ {n:'總結',min:25,tip:'簡單總結,再加一個建議或呼籲。',start:'「總括而言,……」',need:['conclude']}
+ ]},
+{n:'議論文',e:'⚖️',intro:'議論文要有清楚的論點,再用理由和例子支持,最後作結論。',
+ themes:['應否帶手機回校','學生應否做家務','運動重要嗎','閱讀的好處'],
+ secs:[
+ {n:'提出論點',min:30,tip:'清楚說出你的意見,不要模稜兩可。',start:'「我認為……,因為……」',need:['reason']},
+ {n:'論據一:理由和例子',min:50,tip:'用「因為」說理由,用「例如」舉例。',start:'「第一,……例如……」',need:['reason','list']},
+ {n:'論據二:反面意見',min:45,tip:'先承認別人的看法,再說明你的看法更好。',start:'「雖然有人認為……但是……」',need:['concede']},
+ {n:'結論',min:30,tip:'重申論點,並提出建議。',start:'「因此,我們應該……」',need:['conclude']}
+ ]},
+{n:'書信',e:'✉️',intro:'書信格式:稱呼 → 問候 → 正文 → 祝頌語 → 署名和日期。',
+ themes:['寫給朋友','寫給老師','寫給家人','感謝信'],
+ secs:[
+ {n:'稱呼和問候',min:15,tip:'先寫稱呼(例如:親愛的小明),下一行寫問候。',start:'「親愛的……:你好嗎?近來……」',need:['greet']},
+ {n:'正文',min:60,tip:'說明寫信原因,內容分段寫清楚。',start:'「我寫信給你,是想告訴你……」',need:['people']},
+ {n:'結尾和祝頌',min:15,tip:'簡單作結,寫祝頌語:此致/敬禮、祝……',start:'「祝你身體健康,學業進步!」',need:['close']},
+ {n:'署名和日期',min:5,tip:'右下角寫署名,下一行寫年月日。',start:'「你的朋友 …… 二○二六年十月十五日」',need:['date']}
+ ]}
+];
+const WRONG={'按步就班':'按部就班','迫不急待':'迫不及待','一愁莫展':'一籌莫展','再接再勵':'再接再厲','世外桃園':'世外桃源','走頭無路':'走投無路','甘敗下風':'甘拜下風','變本加利':'變本加厲'};
+
+const $=id=>document.getElementById(id);
+const chat=$('chat'),box=$('box');
+let S,badges=JSON.parse(localStorage.getItem('zw_badges')||'[]');
+
+function scroll(){chat.scrollTop=chat.scrollHeight}
+function bot(t){const d=document.createElement('div');d.className='msg bot';d.textContent=t;chat.appendChild(d);scroll()}
+function user(t){const d=document.createElement('div');d.className='msg user';d.textContent=t;chat.appendChild(d);scroll()}
+function choices(list){
+ const d=document.createElement('div');d.className='choices';
+ list.forEach(([label,fn])=>{const b=document.createElement('button');b.textContent=label;
+  b.onclick=()=>{d.remove();user(label);fn()};d.appendChild(b)});
+ chat.appendChild(d);scroll()}
+function setBar(p){$('bar').style.width=p+'%'}
+function showBadges(){$('badges').textContent=badges.slice(-8).join('')}
+function has(text,k){return W[k].some(w=>text.includes(w))}
+function count(t){return t.replace(/\s/g,'').length}
+
+function start(){
+ S={g:null,step:'genre',topic:'',theme:'',i:0,parts:[],last:''};
+ chat.innerHTML='';setBar(0);showBadges();box.value='';$('cnt').textContent=0;
+ bot('你好!我是作文小助手 🧑‍🏫\n我會一步一步帶你寫作文。我不會代你寫,但會給你提示和意見。\n\n你今天想寫哪種文體?');
+ choices(GENRES.map((g,i)=>[g.e+' '+g.n,()=>pickGenre(i)]));
+}
+function pickGenre(i){
+ S.g=GENRES[i];S.step='topic';
+ bot('【'+S.g.n+'】\n'+S.g.intro+'\n\n請輸入你的作文題目(例如《難忘的一天》)。\n沒有題目?按下面的按鈕。');
+ choices([['🎲 給我題目建議',()=>suggest()]]);
+}
+function suggest(){
+ const sug={記敍文:['難忘的一天','一次失敗的經驗','我學會了……'],描寫文:['我的家','雨後的公園','我的好朋友'],抒情文:['我想念……','一件舊物','謝謝你'],說明文:['我愛的動物','中秋節','怎樣保持健康'],議論文:['學生應否帶手機回校','閱讀的重要','做家務的好處'],書信:['給朋友的一封信','給老師的感謝信','給外國筆友的信']}[S.g.n];
+ bot('你可以選:\n• '+sug.join('\n• ')+'\n\n請把題目輸入下面。');
+}
+function askTheme(){
+ S.step='theme';
+ bot('📌 審題\n題目是《'+S.topic+'》。\n想一想:\n1. 題目要求寫甚麼?(人、事、物、景?)\n2. 你想表達甚麼中心思想?\n\n請用一句話寫出你的中心思想。也可以點選建議:');
+ choices(S.g.themes.map(t=>[t,()=>{S.theme=t;afterTheme()}]));
+}
+function afterTheme(){
+ S.step='sec';S.i=0;
+ bot('很好!中心思想:「'+S.theme+'」\n\n我們的大綱:\n'+S.g.secs.map((s,k)=>(k+1)+'. '+s.n).join('\n')+'\n\n開始吧!');
+ askSec();
+}
+function askSec(){
+ const s=S.g.secs[S.i];
+ setBar(Math.round(S.i/S.g.secs.length*100));
+ bot('✏️ 第'+(S.i+1)+'/'+S.g.secs.length+'段:'+s.n+'\n\n要點:'+s.tip+'\n句子開頭參考:'+s.start+'\n字數建議:最少 '+s.min+' 字');
+ choices([['💡 好詞庫',()=>{bot('好詞參考:\n• 時間:'+WORDS.time+'\n• 感官:'+WORDS.sense+'\n• 心情:'+WORDS.feel+'\n• 動作:'+WORDS.action+'\n• 比喻:'+WORDS.simile);}]]);
+ S.step='sec';box.value='';box.focus();
+}
+function review(text){
+ const s=S.g.secs[S.i];
+ const good=[],tips=[];
+ if(count(text)>=s.min)good.push('字數足夠('+count(text)+'字)');else tips.push('這段只有 '+count(text)+' 字,再多寫一些細節,最少 '+s.min+' 字。');
+ let hit=0;
+ s.need.forEach(k=>{if(has(text,k)){hit++;good.push('有'+LABEL[k].split('(')[0]);}else tips.push('試試加入「'+LABEL[k]+'」。');});
+ if(has(text,'simile')&&!s.need.includes('simile'))good.push('用了比喻,很生動');
+ if(has(text,'sense')&&!s.need.includes('sense'))good.push('有感官描寫');
+ if(/[,.!?;:]/.test(text))tips.push('請用中文標點:,.!? 要改成 ,。!?');
+ if(!/[。!?」)]$/.test(text.trim()))tips.push('句子結尾記得加標點(。!?)。');
+ Object.keys(WRONG).forEach(w=>{if(text.includes(w))tips.push('「'+w+'」應該寫「'+WRONG[w]+'」。')});
+ if(/(.{2,6})\1\1/.test(text))tips.push('有些詞語重複太多,試試換別的說法。');
+ return {good,tips:tips.slice(0,3),hit,need:s.need.length};
+}
+function handleSec(text){
+ const r=review(text);S.last=text;S.lastR=r;
+ let m='⭐ 優點:\n'+(r.good.length?r.good.slice(0,2).map(x=>'• '+x).join('\n'):'• 你已經開始寫了,很棒!');
+ if(r.tips.length)m+='\n\n💡 建議:\n'+r.tips.map(x=>'• '+x).join('\n');
+ else m+='\n\n🎉 這一段很完整!';
+ bot(m);
+ S.step='decide';
+ const btns=[];
+ if(r.tips.length)btns.push(['✏️ 我要修改',()=>{S.step='sec';box.value=S.last;box.focus();bot('好,請修改後再送出。');}]);
+ btns.push(['➡️ 繼續下一段',()=>next()]);
+ choices(btns);
+}
+function next(){
+ S.parts[S.i]={text:S.last,r:S.lastR};
+ S.i++;
+ if(S.i>=S.g.secs.length)finish();else askSec();
+}
+function finish(){
+ setBar(100);S.step='done';
+ const full=S.parts.map(p=>p.text).join('\n');
+ const hit=S.parts.reduce((a,p)=>a+p.r.hit,0),need=S.parts.reduce((a,p)=>a+p.r.need,0);
+ const content=need?Math.round(1+4*hit/need):4;
+ const lenOK=S.parts.filter((p,k)=>count(p.text)>=S.g.secs[k].min).length;
+ const struct=Math.round(1+4*lenOK/S.parts.length);
+ let lang=2+(has(full,'simile')?1:0)+(has(full,'sense')?1:0)+(has(full,'seq')?1:0);if(lang>5)lang=5;
+ let punc=5;if(/[,.!?;:]/.test(full))punc-=2;if((full.match(/。/g)||[]).length<S.parts.length)punc-=1;if(punc<1)punc=1;
+ const wrong=Object.keys(WRONG).filter(w=>full.includes(w));if(wrong.length)lang=Math.max(1,lang-1);
+ const total=content+struct+lang+punc;
+ const star=total>=18?'🌟':total>=14?'⭐':'🌱';
+ badges.push(S.g.e+star);localStorage.setItem('zw_badges',JSON.stringify(badges));showBadges();
+ bot('🎊 你完成了《'+S.topic+'》!\n\n📊 我的評分(滿分每項5分)\n內容:'+content+'/5\n結構:'+struct+'/5\n語言:'+lang+'/5\n標點:'+punc+'/5\n總分:'+total+'/20  '+star+'\n\n你得到一個徽章:'+S.g.e+star);
+ bot('📄 你的作文:\n\n《'+S.topic+'》\n'+full);
+ bot('最後提醒:請把作文讀一遍,檢查錯別字、標點,還有句子通不通順。完成後交給老師批改喔!');
+ choices([['📋 複製作文',()=>{navigator.clipboard&&navigator.clipboard.writeText('《'+S.topic+'》\n'+full);bot('已複製!')}],['🔄 再寫一篇',()=>start()]]);
+}
+function send(){
+ const t=box.value.trim();if(!t)return;
+ if(S.step==='genre'||S.step==='decide'||S.step==='done'){bot('請先按上面的按鈕選擇喔 👆');return}
+ user(t);box.value='';$('cnt').textContent=0;
+ if(S.step==='topic'){S.topic=t.replace(/[《》]/g,'');askTheme();}
+ else if(S.step==='theme'){S.theme=t;afterTheme();}
+ else if(S.step==='sec'){
+  if(count(t)<3){bot('多寫一些吧!');return}
+  handleSec(t);
+ }
+}
+$('sendBtn').onclick=send;
+box.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();send()}});
+box.addEventListener('input',()=>$('cnt').textContent=count(box.value));
+start();
+</script>
+</body>
+</html>
