@@ -7,10 +7,15 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:"Noto Sans TC","PingFang HK","Microsoft JhengHei",sans-serif;background:#fff4e0;color:#333}
-#app{max-width:760px;margin:0 auto;height:100vh;display:flex;flex-direction:column;background:#fffaf0;box-shadow:0 0 20px #0002}
-header{background:#ff9f43;color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+#app{max-width:820px;margin:0 auto;height:100vh;display:flex;flex-direction:column;background:#fffaf0;box-shadow:0 0 20px #0002}
+header{background:#ff9f43;color:#fff;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
 header h1{font-size:20px;margin:0}
 #badges{font-size:18px}
+#tabs{display:flex;background:#ffd9a0}
+#tabs button{flex:1;padding:10px 4px;font-size:16px;border:none;background:transparent;cursor:pointer;font-weight:bold;color:#a0521a;font-family:inherit}
+#tabs button.on{background:#fffaf0;color:#d35400;border-top:4px solid #d35400}
+.panel{display:none;flex:1;min-height:0;flex-direction:column}
+.panel.on{display:flex}
 #progress{height:8px;background:#ffe0b3}
 #bar{height:100%;width:0;background:#2ecc71;transition:width .4s}
 #chat{flex:1;overflow-y:auto;padding:14px}
@@ -18,27 +23,62 @@ header h1{font-size:20px;margin:0}
 .bot{background:#fff;border:2px solid #ffd08a;border-top-left-radius:2px}
 .user{background:#74b9ff;color:#fff;margin-left:auto;border-top-right-radius:2px}
 .choices{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
-.choices button{font-size:16px;padding:8px 14px;border:2px solid #ff9f43;background:#fff;color:#d35400;border-radius:20px;cursor:pointer}
-.choices button:hover{background:#ff9f43;color:#fff}
+.choices button,.chip,.btn{font-size:16px;padding:8px 14px;border:2px solid #ff9f43;background:#fff;color:#d35400;border-radius:20px;cursor:pointer;font-family:inherit}
+.choices button:hover,.chip:hover,.btn:hover{background:#ff9f43;color:#fff}
 #inputArea{display:flex;gap:8px;padding:10px;background:#ffe9c7}
-textarea{flex:1;font-size:17px;padding:8px;border:2px solid #ffc16b;border-radius:10px;resize:none;height:84px;font-family:inherit}
+#box{flex:1;font-size:17px;padding:8px;border:2px solid #ffc16b;border-radius:10px;resize:none;height:84px;font-family:inherit}
 #sendBtn{width:84px;font-size:18px;border:none;border-radius:10px;background:#ff9f43;color:#fff;cursor:pointer}
 #count{font-size:12px;color:#888;padding:0 12px 4px;background:#ffe9c7;text-align:right}
+#lesson{overflow-y:auto;padding:12px}
+details{background:#fff;border:2px solid #ffd08a;border-radius:14px;margin:10px 0;padding:6px 14px}
+summary{font-size:19px;font-weight:bold;color:#d35400;cursor:pointer;padding:8px 0}
+.note{background:#fff3cd;border-radius:10px;padding:8px 12px;margin:8px 0;line-height:1.7}
+.card{border:2px dashed #ffc16b;border-radius:12px;padding:8px 12px;margin:10px 0;background:#fffdf7}
+.card h4{margin:4px 0;font-size:18px;color:#c0392b}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.chip{padding:3px 10px;font-size:15px;border-width:1px}
+.sent{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dotted #ddd;line-height:1.7;font-size:17px}
+.sent span{flex:1}
+.sent button{flex:none;font-size:14px;padding:3px 8px;border:1px solid #2ecc71;background:#fff;color:#27ae60;border-radius:10px;cursor:pointer}
+.sent button:hover{background:#2ecc71;color:#fff}
+.tag{display:inline-block;font-size:13px;background:#e17055;color:#fff;border-radius:8px;padding:1px 8px;margin:2px 3px 2px 0}
+.para{line-height:1.9;font-size:17px;margin:8px 0;padding:8px;background:#fffdf7;border-left:5px solid #ff9f43;border-radius:6px}
+.pad{width:100%;font-size:17px;padding:8px;border:2px solid #ffc16b;border-radius:10px;resize:vertical;min-height:110px;font-family:inherit;line-height:1.7}
+.wbar{height:12px;background:#eee;border-radius:6px;overflow:hidden;margin:6px 0}
+.wbar div{height:100%;background:#2ecc71;width:0}
+.ck{line-height:2;font-size:17px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+td,th{border:1px solid #ffc16b;padding:4px 8px}
+#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#333c;color:#fff;padding:8px 18px;border-radius:20px;display:none;z-index:9}
+.frame{color:#2980b9}
 </style>
 </head>
 <body>
 <div id="app">
  <header><h1>📝 作文小助手</h1><div id="badges" title="我的作文星"></div></header>
- <div id="progress"><div id="bar"></div></div>
- <div id="chat"></div>
- <div id="count"><span id="cnt">0</span> 字</div>
- <div id="inputArea">
-  <textarea id="box" placeholder="在這裏輸入…(Ctrl+Enter 送出)"></textarea>
-  <button id="sendBtn">送出</button>
+ <div id="tabs">
+  <button id="t1" class="on">💬 文體學習</button>
+  <button id="t2">👤 記人:一位我欣賞的人</button>
  </div>
+ <div id="p1" class="panel on">
+  <div id="progress"><div id="bar"></div></div>
+  <div id="chat"></div>
+  <div id="count"><span id="cnt">0</span> 字</div>
+  <div id="inputArea">
+   <textarea id="box" placeholder="在這裏輸入…(Ctrl+Enter 送出)"></textarea>
+   <button id="sendBtn">送出</button>
+  </div>
+ </div>
+ <div id="p2" class="panel"><div id="lesson"></div></div>
 </div>
+<div id="toast"></div>
 
 <script>
+const $=id=>document.getElementById(id);
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',1600)}
+$('t1').onclick=()=>{$('t1').className='on';$('t2').className='';$('p1').className='panel on';$('p2').className='panel'};
+$('t2').onclick=()=>{$('t2').className='on';$('t1').className='';$('p2').className='panel on';$('p1').className='panel'};
+
 const W={
  time:['早上','上午','中午','下午','晚上','昨天','今天','那天','有一天','星期','暑假','週末','周末','去年','小時候','清晨','黃昏','傍晚','假期'],
  place:['學校','家','公園','街','海邊','教室','操場','山','商場','房間','餐廳','地鐵','香港','圖書館','球場','廚房','客廳','沙灘','市場'],
@@ -118,10 +158,8 @@ const GENRES=[
 ];
 const WRONG={'按步就班':'按部就班','迫不急待':'迫不及待','一愁莫展':'一籌莫展','再接再勵':'再接再厲','世外桃園':'世外桃源','走頭無路':'走投無路','甘敗下風':'甘拜下風','變本加利':'變本加厲'};
 
-const $=id=>document.getElementById(id);
 const chat=$('chat'),box=$('box');
 let S,badges=JSON.parse(localStorage.getItem('zw_badges')||'[]');
-
 function scroll(){chat.scrollTop=chat.scrollHeight}
 function bot(t){const d=document.createElement('div');d.className='msg bot';d.textContent=t;chat.appendChild(d);scroll()}
 function user(t){const d=document.createElement('div');d.className='msg user';d.textContent=t;chat.appendChild(d);scroll()}
@@ -138,7 +176,7 @@ function count(t){return t.replace(/\s/g,'').length}
 function start(){
  S={g:null,step:'genre',topic:'',theme:'',i:0,parts:[],last:''};
  chat.innerHTML='';setBar(0);showBadges();box.value='';$('cnt').textContent=0;
- bot('你好!我是作文小助手 🧑‍🏫\n我會一步一步帶你寫作文。我不會代你寫,但會給你提示和意見。\n\n你今天想寫哪種文體?');
+ bot('你好!我是作文小助手 🧑‍🏫\n我會一步一步帶你寫作文。我不會代你寫,但會給你提示和意見。\n\n你今天想寫哪種文體?\n(想專門練習《一位我欣賞的人》?請按上面第二個 Tab。)');
  choices(GENRES.map((g,i)=>[g.e+' '+g.n,()=>pickGenre(i)]));
 }
 function pickGenre(i){
@@ -231,6 +269,212 @@ $('sendBtn').onclick=send;
 box.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();send()}});
 box.addEventListener('input',()=>$('cnt').textContent=count(box.value));
 start();
+
+const TECH=[
+{n:'外貌描寫',e:'👀',words:['濃眉大眼','圓潤的臉蛋','烏黑亮麗','炯炯有神','瘦削','皮膚黝黑','高大魁梧','笑容滿面','戴着眼鏡','滿頭白髮','皺紋滿臉','梳着馬尾'],
+ frame:'他/她有一雙______的眼睛,配上______的頭髮,看起來______。',
+ sents:['他有一雙炯炯有神的眼睛,配上一頭烏黑亮麗的短髮,看起來特別精神。','他有一張圓圓的臉蛋,笑起來兩邊的酒窩若隱若現。','她個子高挑,皮膚白皙,梳着一條長長的馬尾辮。','老師戴着一副黑框眼鏡,鏡片後的眼睛總是帶着笑意。','他身材瘦削,皮膚黝黑,一看就知道是常常運動的人。','婆婆的頭髮已經花白,臉上布滿皺紋,像一張被摺過的紙。','爺爺的手又粗又糙,像樹皮一樣,那是一雙辛勤工作了幾十年的手。','她濃眉大眼,鼻樑高高的,穿上校服顯得特別精神。','媽媽有一頭齊肩的短髮,一笑起來,眼睛就彎成兩道月牙。','教練身材高大魁梧,皮膚被太陽曬得黑黝黝的,聲音洪亮。']},
+{n:'性格描寫',e:'💖',words:['樂於助人','寬宏大量','一絲不苟','堅毅不屈','和藹可親','風趣幽默','粗中有細','認真負責','勤奮好學','善解人意','謙虛有禮','堅持不懈'],
+ frame:'______是個______的人。',
+ sents:['他是個一絲不苟的人,就連很小的細節也不肯馬虎。','媽媽是個善解人意的人,總是第一個發現我心情不好。','老師是個和藹可親的人,同學們都喜歡跟她聊天。','他是個堅毅不屈的人,即使跌倒了,也會咬緊牙關站起來。','姐姐是個勤奮好學的人,每天晚上都會温習到很晚。','我的同桌是個風趣幽默的人,他的笑話常常逗得全班哈哈大笑。','爺爺是個粗中有細的人,外表嚴肅,卻會悄悄記住我愛吃的東西。','她是個認真負責的人,交給她的任務,她一定會做到最好。']},
+{n:'行為描寫',e:'🏃',words:['主動伸出援手','耐心地講解','二話不說','埋頭苦幹','輕手輕腳','小心翼翼','不厭其煩','全神貫注','一步一步','親自'],
+ frame:'見到______,他/她______地______。',
+ sents:['見同學跌倒,她二話不説便跑過去,輕手輕腳地扶他起來。','媽媽不厭其煩地一遍又一遍教我做這道數學題。','他全神貫注地練習投籃,汗水濕透了衣服也不肯休息。','老師蹲下身子,耐心地替低年級的同學繫好鞋帶。','爸爸埋頭苦幹,直到深夜才把壞了的單車修好。','她小心翼翼地把受傷的小鳥捧在手心,放進鋪了毛巾的紙盒裏。','見我拿不動書包,哥哥主動伸出援手,替我背了一段路。','他把座位讓給了老婆婆,自己抓着扶手站了一整程車。']},
+{n:'語言描寫',e:'💬',words:['溫柔地説','大聲呼喊','支支吾吾','脱口而出','語重心長','輕聲細語','笑着説','鼓勵地説'],
+ frame:'他/她______地對我説:「______。」',
+ sents:['他語重心長地對我説:「做人最緊要的,是對得起自己的良心。」','「別灰心,我們一起看看哪裏出了問題。」老師温柔地説。','媽媽輕聲細語地説:「慢慢來,不用急,媽媽陪着你。」','「再試一次吧,你一定可以的!」教練大聲地為我打氣。','「沒關係!沒關係!」他笑着拍拍我的肩膀,「下次小心點就好了。」','爺爺笑瞇瞇地説:「只要肯努力,石頭也能磨成針。」','「你先吃吧,我不餓。」媽媽把最後一塊雞翼夾到我的碗裏。','他支支吾吾地説:「對不起,我……我不是故意的。」']},
+{n:'心理描寫',e:'💭',words:['心裏暗自竊喜','七上八落','如釋重負','又驚又喜','忐忑不安','心頭一暖','暗下決心','百感交集'],
+ frame:'我心裏______,心想:「______。」',
+ sents:['看見成績單的一刻,我的心七上八落,久久不能平復。','我忐忑不安地走近辦公室,生怕被老師責罵。','聽見這個好消息,我又驚又喜,幾乎不敢相信自己的耳朵。','看到他的笑容,我心頭一暖,擔心一下子消失了。','我心想:「他為甚麼要這樣幫我呢?」','聽完老師的話,我暗下決心:以後一定要更加努力。','把鉛筆還給他後,我如釋重負,終於鬆了一口氣。','望着媽媽疲倦的背影,我心裏百感交集,眼眶也紅了。']},
+{n:'神態描寫',e:'😊',words:['眉頭緊鎖','笑容可掬','哭喪着臉','雙眼發亮','面紅耳赤','眉開眼笑','目不轉睛','嘴角上揚'],
+ frame:'他/她______,______地______。',
+ sents:['他聽到讚美,立即面紅耳赤,低下頭不敢望向大家。','聽到我的答案,老師笑容可掬地點點頭。','他眉頭緊鎖,盯着功課簿,好像遇到了大難題。','看見我哭喪着臉,媽媽的眼神一下子變得温柔。','説到籃球,他雙眼發亮,整個人精神起來。','她嘴角微微上揚,露出滿意的笑容。','弟弟眉開眼笑地接過禮物,連聲説謝謝。','爺爺目不轉睛地看着我寫字,臉上滿是欣慰。']},
+{n:'明喻和反襯',e:'✨',words:['像……一樣','好像','彷彿','猶如','比起……更','只有……卻'],
+ frame:'______像______一樣______。 / 別人都______,只有他/她______。',
+ sents:['他笑起來像一個「小彌勒佛」,讓人感到很親切。','老師的聲音像春風一樣温柔,聽着聽着,我的心情也平靜下來。','媽媽的手像一把保護傘,為我遮風擋雨。','同學們都生氣地責備他,只有他依然面帶微笑,輕聲説沒關係。','其他人看到難題都皺起眉頭,只有她雙眼發亮,認真地想辦法。','全班都吵吵鬧鬧,只有他靜靜地坐着看書。']}
+];
+const TRAITS=[
+{w:'樂於助人',open:'(主角)是個樂於助人的人,不論誰有困難,他/她都會主動伸出援手。',
+ act:['見同學抱着一大疊簿子,走得搖搖晃晃,他二話不說便跑過去,接過一半幫忙搬到課室。','我忘記帶尺,他立刻從筆盒裏拿出自己的尺,笑着遞給我。','有低年級同學找不到洗手間,他耐心地帶路,還輕聲提醒對方小心地滑。'],
+ say:['「別擔心,我來幫你!」他拍拍胸口説。','「不如我教你吧,這題其實不難。」他温柔地説。'],
+ end:['(主角)樂於助人的精神深深感動了我,我也要學習他,做一個肯幫助別人的人。','這件事令我明白,幫助別人不但讓別人快樂,自己也會感到温暖。']},
+{w:'寬宏大量',open:'(主角)是個寬宏大量的人,即使別人犯了錯,他/她也不會斤斤計較。',
+ act:['我不小心把水灑在他的畫上,他看了一眼,只是笑着説:「沒關係,再畫一張就好。」','同學不小心撞倒了他的椅子,他自己扶起來,還問對方有沒有受傷。','別人誤會了他,他沒有生氣,反而耐心地解釋清楚。'],
+ say:['「沒關係!沒關係!他不是故意的,我們不要生他的氣了。」他對大家説。','「每個人都會犯錯,下次小心就好了。」他輕聲説。'],
+ end:['老師説得好,原諒別人就是寬待自己。我真應該向(主角)學習。','有(主角)這樣寬宏大量的人在身邊,我們的班級氣氛特別融洽。']},
+{w:'一絲不苟',open:'(主角)是個一絲不苟的人,無論做甚麼事,都要求做到最好。',
+ act:['他寫字時總是端端正正,寫錯一個字,就把整行擦掉重寫。','她整理書包時,把課本按大小排好,連文具也放得整整齊齊。','做科學實驗時,他仔細記錄每一個數據,連小數點也不放過。'],
+ say:['「再檢查一遍吧,小心一點,不會吃虧。」她認真地説。','「這裏差了一點點,我們重新做吧!」他堅持地説。'],
+ end:['(主角)一絲不苟的態度令我佩服,我也要學習他,做事不再馬虎。','這件事令我明白,細心和認真是成功的基礎。']},
+{w:'堅毅不屈',open:'(主角)是個堅毅不屈的人,遇到困難時絕不輕易放棄。',
+ act:['比賽中他不小心跌倒,膝蓋流着血,但他咬緊牙關站起來,繼續跑向終點。','她練習跳繩,失敗了幾十次,仍然一次又一次重新開始。','他每天清晨五點便起牀練習,不論颳風下雨,從不間斷。'],
+ say:['「我還可以!再來一次!」他喘着氣大聲説。','「失敗不可怕,放棄才可怕。」她堅定地説。'],
+ end:['(主角)堅毅不屈的精神深深鼓勵了我,以後遇到困難,我也不會輕易放棄。','我明白了,只要堅持下去,困難終會被克服。']},
+{w:'和藹可親',open:'(主角)是個和藹可親的人,大家都喜歡親近他/她。',
+ act:['每天早上,她都站在校門口,笑着跟同學們打招呼。','見我愁眉苦臉,他主動坐到我身旁,輕聲問我發生了甚麼事。','她蹲下來,與低年級的小朋友視線齊平,耐心地聽他們説話。'],
+ say:['「來,慢慢説,老師在聽。」她温柔地説。','「不用怕,有甚麼事都可以告訴我。」他笑着説。'],
+ end:['(主角)和藹可親,令我感到温暖。我也要像他/她一樣,對人友善。','有(主角)在,我們感到特別安心,我真心欣賞他/她。']},
+{w:'風趣幽默',open:'(主角)是個風趣幽默的人,他/她總能令身邊的人開懷大笑。',
+ act:['上課氣氛沉悶時,他突然扮起小丑,把全班都逗得哈哈大笑。','她把枯燥的歷史故事説得生動有趣,連最頑皮的同學也聽得入神。','我考試失手心情低落,他學着卡通人物説話,讓我忍不住笑了出來。'],
+ say:['「我不是胖,是可愛得有點膨脹!」他摸着肚子説。','「笑一笑,十年少!」她眨眨眼説。'],
+ end:['(主角)的幽默感令人難忘,我也要學習用笑容面對生活。','我明白了,快樂是會傳染的,我也想把快樂帶給別人。']},
+{w:'認真負責',open:'(主角)是個認真負責的人,交給他/她的工作,一定會做到最好。',
+ act:['值日時,他把黑板擦得乾乾淨淨,連窗台也抹了一遍。','她是班長,每天最早回到課室,把全班的功課收齊整理好。','爸爸即使生病,仍堅持準時上班,不肯讓同事多做工作。'],
+ say:['「這是我的責任,我一定會做好。」他認真地説。','「還有誰未交功課?請今天交給我。」她大聲提醒大家。'],
+ end:['(主角)認真負責的態度,令我明白承擔責任的重要。','我也要學習他/她,做事有始有終。']},
+{w:'勤奮好學',open:'(主角)是個勤奮好學的人,總是不斷追求進步。',
+ act:['小息時,同學們都在玩耍,她卻坐在圖書館裏專心看書。','他遇到不明白的問題,一定追問到底,直到完全明白為止。','姐姐每晚温習到十一點,還把重點抄在小卡片上,放在口袋裏隨時溫習。'],
+ say:['「不懂就問,問清楚才不會忘記。」他笑着説。','「今天的進步,是明天的基礎。」她輕聲説。'],
+ end:['(主角)勤奮好學的精神,是我學習的榜樣。','我明白了,只要肯努力,每個人都能進步。']}
+];
+const CONN=['有一次,','記得那天,','那是一個……的早上/下午,','就在這個時候,','誰知道,','沒想到,','後來,','從那天起,','聽了這番話,','想到這裏,'];
+const REFLECT=['這件事令我明白,……','我從(主角)身上學會了……','我希望將來也能像他/她一樣……','這件事就像一盞明燈,照亮了我……','我要把(主角)的優點記在心裏,努力做一個……的人。'];
+
+const PAD_KEY='zw_pad_p6';
+const PARTS=['開首','事件一','事件二','結尾'];
+let curPart=0, selTrait=0;
+
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;return e}
+function sentRow(text){
+ const r=el('div','sent');const s=el('span');s.textContent=text;
+ const b=el('button');b.textContent='➕ 加入';b.onclick=()=>insertText(text);
+ r.appendChild(s);r.appendChild(b);return r;
+}
+function insertText(t){
+ const ta=document.getElementById('pad'+curPart);
+ ta.value=ta.value+t;
+ saveCount();toast('已加入「'+PARTS[curPart]+'」段,可以修改!');
+}
+function chipRow(words){
+ const d=el('div','chips');
+ words.forEach(w=>{const c=el('button','chip');c.textContent=w;c.onclick=()=>insertText(w);d.appendChild(c)});
+ return d;
+}
+function sec(title,open){const d=el('details');if(open)d.open=true;const s=el('summary');s.textContent=title;d.appendChild(s);return d}
+
+function renderLesson(){
+ const L=$('lesson');L.innerHTML='';
+ L.appendChild(el('div','note','<b>題目:《一位我欣賞的____》</b><br>介紹一位人士,並寫出他/她給你的啟示。字數不少於 <b>330</b> 字。<br>📌 小提示:點每句旁邊的「➕ 加入」,句子會放進下面的寫作區,再自己改成你的內容。'));
+
+ let d=sec('① 審題:圈出重點',true);
+ d.appendChild(el('div','note','請看題目,圈出三個重點:<br>① <b>一位</b> → 只寫一個人<br>② <b>欣賞</b> → 要寫他/她的優點(性格),並用事件證明<br>③ <b>啟示</b> → 結尾要寫你學到甚麼<br><br>想一想:<br>• 我最欣賞誰?(家人?老師?同學?朋友?)<br>• 他/她的外貌有甚麼特點?<br>• 他/她是個怎樣的人?(用一個詞語形容)<br>• 他/她做了甚麼事,令我覺得他/她是這樣的人?'));
+ L.appendChild(d);
+
+ d=sec('② 大綱:分四段寫',true);
+ d.appendChild(el('div','note','<table><tr><th>段落</th><th>內容</th><th>建議字數</th></tr><tr><td>開首</td><td>介紹人物 + 性格 + 外貌</td><td>約60字</td></tr><tr><td>事件一</td><td>一件事證明性格(用行為、語言、心理、神態)</td><td>約110字</td></tr><tr><td>事件二</td><td>第二件事再證明性格(可用反襯)</td><td>約110字</td></tr><tr><td>結尾</td><td>首尾呼應 + 感受 + 啟示</td><td>約60字</td></tr></table>'));
+ L.appendChild(d);
+
+ d=sec('③ 描寫手法錦囊(詞語+例句)',false);
+ TECH.forEach(t=>{
+  const c=el('div','card');
+  c.appendChild(el('h4',null,t.e+' '+t.n));
+  c.appendChild(el('div','frame','📐 句式:'+t.frame));
+  c.appendChild(el('div',null,'詞庫(按一下加入):'));
+  c.appendChild(chipRow(t.words));
+  t.sents.forEach(s=>c.appendChild(sentRow(s)));
+  d.appendChild(c);
+ });
+ L.appendChild(d);
+
+ d=sec('④ 選一個性格,看範例句子',true);
+ d.appendChild(el('div','note','先選你人物的性格,下面會出現「開首句、事件例句、對話、結尾句」。'));
+ const bt=el('div','chips');bt.id='traitBtns';d.appendChild(bt);
+ const box2=el('div');box2.id='traitBox';d.appendChild(box2);
+ L.appendChild(d);
+ renderTraits();
+
+ d=sec('⑤ 連接詞和啟示句',false);
+ d.appendChild(el('div',null,'<b>連接事件的詞語</b>'));d.appendChild(chipRow(CONN));
+ d.appendChild(el('div',null,'<br><b>寫啟示的句式</b>'));
+ REFLECT.forEach(s=>d.appendChild(sentRow(s)));
+ L.appendChild(d);
+
+ d=sec('⑥ 範文欣賞(《一位我欣賞的老師》)',false);
+ const M=[
+ ['開首','我欣賞的人是陳老師。她是個和藹可親又認真負責的人。她個子不高,戴着一副圓圓的眼鏡,鏡片後的眼睛彎彎的,笑起來像一彎新月。',['性格介紹','外貌描寫','明喻']],
+ ['事件一','有一次,我的數學測驗只得了五十分,心裏七上八落,連頭也不敢抬。放學後,陳老師把我叫到辦公室,我以為會被責罵,誰知她温柔地説:「別灰心,我們一起看看哪裏出了問題。」接着,她拿起筆,一步一步耐心地講解,直到我完全明白才停下來。那一刻,我的心暖暖的。',['心理描寫','語言描寫','行為描寫','心理變化']],
+ ['事件二','又有一次,班裏的同學都在吵鬧,課室像菜市場一樣。陳老師沒有大聲責罵,只是眉頭輕皺,靜靜地站在講台前。同學們看見她的神情,立刻安靜下來。她才語重心長地説:「每個人都有犯錯的時候,最重要的是學會改正。」',['明喻','神態描寫','反襯(別人吵鬧,老師冷靜)','語言描寫']],
+ ['結尾','陳老師和藹可親、認真負責,我真心欣賞她。她讓我明白,遇到困難不要輕易放棄,只要肯努力,一定能進步。我也要學習她,做一個肯幫助別人的人。',['首尾呼應','感受','啟示']]
+ ];
+ M.forEach(m=>{const p=el('div','para');p.innerHTML='<b>【'+m[0]+'】</b>'+m[1]+'<br>';m[2].forEach(t=>{const s=el('span','tag');s.textContent=t;p.appendChild(s)});d.appendChild(p)});
+ d.appendChild(el('div','note','想一想:這篇範文用了哪些描寫手法?你的文章可以用哪些?'));
+ L.appendChild(d);
+
+ d=sec('⑦ 我的寫作區',true);
+ const rg=el('div','chips');rg.id='partBtns';d.appendChild(rg);
+ const tgt=el('div','note','');tgt.id='tgt';d.appendChild(tgt);
+ const guide=[
+  '開首:介紹人物是個怎樣的人,再寫外貌。(約60字)',
+  '事件一:寫一件事,用行為、語言、心理或神態,表現他/她的性格。(約110字)',
+  '事件二:再寫一件事,可以用反襯。(約110字)',
+  '結尾:首尾呼應,寫感受和啟示。(約60字)'];
+ const saved=JSON.parse(localStorage.getItem(PAD_KEY)||'[]');
+ PARTS.forEach((p,i)=>{
+  const w=el('div');
+  w.appendChild(el('div',null,'<b>第'+(i+1)+'段:'+p+'</b> <span style="color:#888;font-size:14px">'+guide[i]+'</span>'));
+  const ta=el('textarea','pad');ta.id='pad'+i;ta.value=saved[i]||'';
+  ta.placeholder='在這裏寫第'+(i+1)+'段…';
+  ta.addEventListener('input',saveCount);ta.addEventListener('focus',()=>setPart(i));
+  w.appendChild(ta);d.appendChild(w);
+ });
+ d.appendChild(el('div',null,'<b>總字數:<span id="total">0</span> / 330</b>'));
+ d.appendChild(el('div','wbar','<div id="wfill"></div>'));
+ d.appendChild(el('div',null,'<b>自我檢查(會自動打剔)</b>'));
+ const ck=el('div','ck');ck.id='ck';d.appendChild(ck);
+ const act=el('div','chips');
+ const cp=el('button','btn');cp.textContent='📋 複製全文';cp.onclick=()=>{const t=PARTS.map((p,i)=>$('pad'+i).value).join('\n');navigator.clipboard&&navigator.clipboard.writeText(t);toast('已複製')};
+ const cl=el('button','btn');cl.textContent='🗑️ 清空';cl.onclick=()=>{if(confirm('確定清空全部內容?')){PARTS.forEach((p,i)=>$('pad'+i).value='');saveCount()}};
+ act.appendChild(cp);act.appendChild(cl);d.appendChild(act);
+ L.appendChild(d);
+
+ renderPartBtns();setPart(0);saveCount();
+}
+function renderTraits(){
+ const bt=$('traitBtns');bt.innerHTML='';
+ TRAITS.forEach((t,i)=>{const b=el('button','chip');b.textContent=t.w;if(i===selTrait){b.style.background='#ff9f43';b.style.color='#fff'}b.onclick=()=>{selTrait=i;renderTraits()};bt.appendChild(b)});
+ const t=TRAITS[selTrait],bx=$('traitBox');bx.innerHTML='';
+ const c=el('div','card');
+ c.appendChild(el('h4',null,'🔹 開首句(寫性格)'));c.appendChild(sentRow(t.open));
+ c.appendChild(el('h4',null,'🔹 事件例句(行為、神態)'));t.act.forEach(s=>c.appendChild(sentRow(s)));
+ c.appendChild(el('h4',null,'🔹 語言描寫'));t.say.forEach(s=>c.appendChild(sentRow(s)));
+ c.appendChild(el('h4',null,'🔹 結尾句(感受+啟示)'));t.end.forEach(s=>c.appendChild(sentRow(s)));
+ bx.appendChild(c);
+}
+function renderPartBtns(){
+ const rg=$('partBtns');rg.innerHTML='';
+ rg.appendChild(el('span',null,'句子要加到:'));
+ PARTS.forEach((p,i)=>{const b=el('button','chip');b.id='pb'+i;b.textContent=(i+1)+'. '+p;b.onclick=()=>{setPart(i);$('pad'+i).focus()};rg.appendChild(b)});
+}
+function setPart(i){
+ curPart=i;
+ PARTS.forEach((p,k)=>{const b=$('pb'+k);if(b){b.style.background=k===i?'#ff9f43':'#fff';b.style.color=k===i?'#fff':'#d35400'}});
+ const t=$('tgt');if(t)t.textContent='現在選了:第'+(i+1)+'段「'+PARTS[i]+'」。點上面任何「➕ 加入」,句子就會放到這一段。';
+}
+function anyHas(txt,list){return list.some(w=>txt.includes(w))}
+function saveCount(){
+ const vals=PARTS.map((p,i)=>$('pad'+i).value);
+ localStorage.setItem(PAD_KEY,JSON.stringify(vals));
+ const full=vals.join('');
+ const n=count(full);
+ $('total').textContent=n;
+ const f=$('wfill');f.style.width=Math.min(100,n/330*100)+'%';f.style.background=n>=330?'#2ecc71':'#f39c12';
+ const looks=['炯炯有神','烏黑','濃眉','圓圓','高大','瘦','皮膚','頭髮','眼睛','臉','戴着','個子','身材'];
+ const beh=['二話不','耐心','主動','輕手輕腳','小心翼翼','不厭其煩','埋頭','全神貫注'];
+ const psy=['心想','心裏','心頭','暗下決心','忐忑','七上八落','又驚又喜','如釋重負','百感交集'];
+ const exp=['眉頭','笑容','面紅耳赤','雙眼發亮','眉開眼笑','哭喪','嘴角','目不轉睛'];
+ const tech=[anyHas(full,beh)&&'行為',full.includes('「')&&'語言',anyHas(full,psy)&&'心理',anyHas(full,exp)&&'神態'].filter(Boolean);
+ const items=[
+  [n>=330,'字數不少於 330 字(現在 '+n+' 字)'],
+  [anyHas(vals[0],looks),'我有運用外貌描寫,具體描述人物的樣子'],
+  [tech.length>=1,'我有用行為/語言/心理/神態其中至少一種描寫手法(現在有:'+(tech.join('、')||'未有')+')'],
+  [/是個|是一個|是一位|是一名/.test(vals[0]),'我的開首有介紹人物是個怎樣的人'],
+  [anyHas(vals[3],W.learn)&&anyHas(vals[3],['欣賞','學習','佩服','希望','感']),'我的結尾有首尾呼應,並寫出感受、啟示或期望'],
+  [PARTS.every((p,i)=>vals[i].trim().length>0),'四段都有寫'],
+  [!/[,.!?;:]/.test(full),'標點都用了中文標點(,。!?)']
+ ];
+ $('ck').innerHTML=items.map(x=>(x[0]?'✅ ':'⬜ ')+x[1]).join('<br>');
+}
+renderLesson();
 </script>
 </body>
 </html>
