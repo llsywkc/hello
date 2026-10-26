@@ -2194,6 +2194,7 @@
 
                 <div id="game-tsa" class="screen hidden">
             <h2 id="tsa-title">📖 TSA試卷練習</h2>
+            <div class="blood-moon-ui hidden" id="tsa-bloodmoon-status"></div>
             <div class="status-msg" id="tsa-msg"></div>
             <div id="tsa-picker" class="menu-grid"></div>
             <div id="tsa-session" class="hidden">
@@ -2208,6 +2209,7 @@
 
         <div id="game-zici" class="screen hidden">
             <h2 id="zici-title">📚 字詞佳句修煉場</h2>
+            <div class="blood-moon-ui hidden" id="zici-bloodmoon-status"></div>
             <div class="status-msg" id="zici-msg"></div>
             <div id="zici-menu" class="menu-grid"></div>
             <div id="zici-session" class="hidden">
@@ -6588,6 +6590,13 @@ function checkDailyReset() {
         }
 
         
+                // 答對後觸發：血月神獸；否則按機率出現野生怪獸／傳說試煉（與選擇題關卡一致）
+        function postCorrectEvents(){
+            let epic=false; try{ epic=handleBloodMoon(true); }catch(e){}
+            const inCombat=!document.getElementById('boss-combat-screen').classList.contains('hidden');
+            const modal=document.getElementById('event-modal'); const modalOpen=modal&&!modal.classList.contains('hidden');
+            if(!epic&&!inCombat&&!modalOpen){ try{ checkInvasion(); }catch(e){} }
+        }
         // ================== TSA試卷練習 ==================
         let tsaPaper=null, tsaQIndex=0, tsaOrder=[];
         window.startTSA=function(){
@@ -6624,11 +6633,12 @@ function checkDailyReset() {
             else if(q.t==='order'){ tsaOrder=[]; const info=document.createElement('div'); info.className='tsa-order'; card.appendChild(info); const render=()=>{ info.innerHTML='你的次序：'+(tsaOrder.map(x=>'<span class="tsa-slot">'+x+'</span>').join(' ')||'<i>請點選下方項目</i>'); }; render(); q.items.forEach(it=>{ const chip=document.createElement('button'); chip.className='tsa-chip'; chip.textContent=it; chip.onclick=()=>{ if(tsaOrder.length>=q.items.length)return; tsaOrder.push(it); chip.disabled=true; render(); }; card.appendChild(chip); }); const ok=document.createElement('button'); ok.className='tsa-btn g'; ok.textContent='✅ 確認次序'; ok.style.marginTop='8px'; ok.onclick=()=>answerTSA(tsaOrder.join('')===q.a,q.a,null,box); card.appendChild(ok); }
         }
         function answerTSA(correct,ans,el,box){ [...box.querySelectorAll('button')].forEach(b=>b.disabled=true); const msg=document.getElementById('tsa-msg');
-            if(correct){ msg.innerHTML='<span style="color:#A5D6A7;font-weight:bold">✅ 答對了！</span>'; playSound('win'); addStreak(); handleBloodMoon(true); }
+            if(correct){ msg.innerHTML='<span style="color:#A5D6A7;font-weight:bold">✅ 答對了！</span>'; playSound('win'); addStreak(); }
             else{ msg.innerHTML='<span style="color:#FF8A80;font-weight:bold">❌ 答錯！正確答案：<b style="color:#fff">'+ans+'</b></span>'; playSound('error'); inventory.streak=0; handleBloodMoon(false); }
             if(el&&el.classList){ el.classList.add(correct?'tsa-ok':'tsa-bad'); }
             [...box.querySelectorAll('.tsa-opt')].forEach(b=>{ if(b.textContent===ans) b.classList.add('tsa-ok'); });
-            document.getElementById('btn-next-tsa').classList.remove('hidden'); updateUI(); saveGame(); }
+            document.getElementById('btn-next-tsa').classList.remove('hidden'); updateUI(); saveGame();
+            if(correct) postCorrectEvents(); }
         window.nextTSA=function(){ tsaQIndex++; loadTSAQuestion(); };
 
 
@@ -6796,10 +6806,11 @@ function checkDailyReset() {
             [...document.getElementById('zici-options').children].forEach(b=>b.disabled=true);
             const msg=document.getElementById('zici-msg');
             ziciMark(key,correct);
-            if(correct){ ziciCorrect++; msg.innerHTML='<span style="color:#A5D6A7;font-weight:bold">✅ 答對了！</span>'; playSound('win'); addStreak(); handleBloodMoon(true); if(el&&el.classList)el.classList.add('tsa-ok'); }
+            if(correct){ ziciCorrect++; msg.innerHTML='<span style="color:#A5D6A7;font-weight:bold">✅ 答對了！</span>'; playSound('win'); addStreak(); if(el&&el.classList)el.classList.add('tsa-ok'); }
             else{ msg.innerHTML='<span style="color:#FF8A80;font-weight:bold">❌ 答錯！正確答案：<b style="color:#fff">'+ans+'</b></span>'; playSound('error'); inventory.streak=0; handleBloodMoon(false); if(el&&el.classList)el.classList.add('tsa-bad'); [...document.getElementById('zici-options').children].forEach(b=>{ if(b.textContent===ans) b.classList.add('tsa-ok'); }); }
             if(ziciMode==='listen'){ const ex=ziciExampleFor(ans); document.getElementById('zici-card').innerHTML+='<div style="margin-top:8px;font-size:1.4em"><b>'+ans+'</b> '+ziciSpeakBtn(ans)+'</div>'+(ex?'<div style="margin-top:6px;line-height:1.8">例句：'+ziciHighlight(ex)+'</div>':''); }
             document.getElementById('btn-next-zici').classList.remove('hidden'); updateUI(); saveGame();
+            if(correct) postCorrectEvents();
             if(ziciAutoOn()&&window._ziciAfter) setTimeout(()=>ziciSpeak(window._ziciAfter),600);
         }
         function ziciNextSave(){ ziciIndex++; if(ziciIndex%5===0) saveGame(); loadZici(); }
@@ -6863,22 +6874,29 @@ function checkDailyReset() {
 
         // ================== 血月與天象異變系統 ==================
         function renderBloodMoonUI() {
-            const mcUI = document.getElementById('mc-bloodmoon-status');
-            const roUI = document.getElementById('reorder-bloodmoon-status');
-            
+            const ui = ['mc-bloodmoon-status','reorder-bloodmoon-status','tsa-bloodmoon-status','zici-bloodmoon-status']
+                .map(id => document.getElementById(id)).filter(Boolean);
             if (inventory.bloodMoonActive) {
                 document.body.classList.add('legendary-mode');
-                let txt = `🩸 血月異變！連對: <span style="font-size:1.2em;">${inventory.bloodMoonStreak} / ${inventory.bloodMoonTarget}</span> (剩餘機會: ${inventory.bloodMoonLeft})`;
-                if(mcUI) { mcUI.innerHTML = txt; mcUI.classList.remove('hidden'); }
-                if(roUI) { roUI.innerHTML = txt; roUI.classList.remove('hidden'); }
+                const txt = '🩸 血月異變！連對: <span style="font-size:1.2em;">' + inventory.bloodMoonStreak + ' / ' + inventory.bloodMoonTarget + '</span> (剩餘機會: ' + inventory.bloodMoonLeft + ')';
+                ui.forEach(el => { el.innerHTML = txt; el.classList.remove('hidden'); });
             } else {
                 document.body.classList.remove('legendary-mode');
-                if(mcUI) mcUI.classList.add('hidden');
-                if(roUI) roUI.classList.add('hidden');
+                ui.forEach(el => el.classList.add('hidden'));
             }
         }
 
+        // 同一題答對只計一次血月：addStreak() 內部已經呼叫過一次，關卡代碼再呼叫會令進度與機會被重複計算。
+        // 以「同一個同步事件（同一次點擊處理）」判斷，唔受 alert() 阻塞多久影響。BM_DEDUPE = false 即回復舊行為。
+        const BM_DEDUPE = true;
+        let _bmTick = false, _bmTickResult = false;
         function handleBloodMoon(isCorrect) {
+            if (BM_DEDUPE && isCorrect && _bmTick) return _bmTickResult;
+            const res = _handleBloodMoonCore(isCorrect);
+            if (BM_DEDUPE && isCorrect) { _bmTick = true; _bmTickResult = res; Promise.resolve().then(() => { _bmTick = false; }); }
+            return res;
+        }
+        function _handleBloodMoonCore(isCorrect) {
             const _bcsCheck = document.getElementById('boss-combat-screen');
             if (_bcsCheck && !_bcsCheck.classList.contains('hidden')) { return false; }
             if (inventory.bloodMoonActive) {
