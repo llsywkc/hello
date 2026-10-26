@@ -1397,14 +1397,42 @@
             .partner-col-left, .partner-col-right { flex:1 1 auto; width:100%; min-width:0; }
         }
 
-            .passage-box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px;max-height:38vh;overflow:auto;margin-bottom:10px;line-height:1.8;white-space:pre-wrap}
-        .tsa-q{background:rgba(255,255,255,.06);border-radius:12px;padding:12px;margin-bottom:10px}
-        .tsa-opt{display:block;width:100%;text-align:left;margin:6px 0;padding:10px;border-radius:10px;border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
-        .tsa-opt:hover{border-color:#FFD54F}
-        .tsa-input{width:min(320px,90%);padding:10px;border-radius:10px;border:2px solid #90CAF9;background:#101828;color:#fff}
-        .tsa-order{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-        .tsa-chip{padding:8px 12px;border-radius:999px;border:2px solid #90CAF9;background:#101828;color:#fff;cursor:pointer}
-        .tsa-slot{min-width:34px;display:inline-block;border-bottom:2px dashed #90CAF9;text-align:center;font-weight:bold}
+            /* ── TSA／字詞佳句：淺色高對比閱讀版面（主容器為白底）── */
+        #game-tsa,#game-zici{color:#ECEFF1}
+        #tsa-title,#zici-title{color:#FFE082 !important;font-size:1.45em !important;text-align:center}
+        #tsa-msg,#zici-msg{background:#16324F;color:#ECEFF1;border:1px solid #6F8FB0;border-radius:12px;padding:8px 16px;min-height:0 !important;font-size:1.1em !important;margin-bottom:6px;max-width:100%;box-sizing:border-box;text-align:center;line-height:1.7}
+        #tsa-msg:empty,#zici-msg:empty{display:none}
+        #tsa-msg small,#zici-msg small{color:#B0BEC5;font-size:.95em}
+        #tsa-msg span[style*="background"],#zici-msg span[style*="background"]{background:#BF360C !important;color:#fff !important;border-radius:6px;padding:2px 8px}
+        .passage-box{background:#FFF8E1;color:#212121;border:2px solid #FFB300;border-left:8px solid #F57C00;border-radius:12px;padding:14px 16px;max-height:46vh;overflow:auto;margin-bottom:12px;line-height:2;font-size:1.12em;width:100%;box-sizing:border-box;text-align:left;white-space:normal}
+        .passage-box .tsa-ptitle{font-weight:bold;color:#BF360C;font-size:1.05em;margin-bottom:6px}
+        .passage-box p{margin:0 0 8px;text-indent:2em;color:#212121}
+        .tsa-q{background:#F3E5F5;color:#1A1A1A;border:3px solid #8E24AA;border-radius:12px;padding:14px;margin-bottom:12px;font-size:1.12em;line-height:1.8;text-align:left;width:100%;box-sizing:border-box}
+        .tsa-q b{color:#4A148C}
+        .tsa-opt{display:block;width:100%;text-align:left;margin:8px 0;padding:12px 14px;border-radius:10px;border:2px solid #1565C0;background:#E3F2FD;color:#0D2B4E;font-size:1.05em;line-height:1.6;cursor:pointer}
+        .tsa-opt:hover:not(:disabled){background:#BBDEFB}
+        .tsa-opt:disabled{cursor:default}
+        .tsa-opt.tsa-ok,.tsa-chip.tsa-ok{background:#C8E6C9 !important;border-color:#2E7D32 !important;color:#1B5E20 !important;font-weight:bold}
+        .tsa-opt.tsa-bad{background:#FFCDD2 !important;border-color:#C62828 !important;color:#7F0000 !important}
+        .tsa-input{width:min(340px,90%);padding:11px;border-radius:10px;border:2px solid #1565C0;background:#FFFDE7;color:#1A1A1A;font-size:1.1em}
+        .tsa-input.tsa-ok{background:#C8E6C9;border-color:#2E7D32}
+        .tsa-input.tsa-bad{background:#FFCDD2;border-color:#C62828}
+        .tsa-order{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;color:#1A1A1A}
+        .tsa-chip{padding:9px 14px;border-radius:999px;border:2px solid #2E7D32;background:#E8F5E9;color:#1B5E20;font-size:1.02em;cursor:pointer}
+        .tsa-chip:hover:not(:disabled){background:#C8E6C9}
+        .tsa-chip:disabled{background:#ECEFF1;border-color:#B0BEC5;color:#546E7A;cursor:default}
+        .tsa-slot{min-width:34px;display:inline-block;border-bottom:3px dashed #1565C0;text-align:center;font-weight:bold;color:#0D47A1;padding:0 4px}
+        .zici-hl{background:#FFE082;color:#4E342E;border-radius:4px;padding:0 3px;font-weight:bold}
+        .tsa-btn{padding:10px 18px;border:none;border-radius:12px;font-size:1.05em;font-weight:bold;color:#fff;cursor:pointer;margin:4px;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+        .tsa-btn.g{background:#2E7D32}.tsa-btn.r{background:#C62828}.tsa-btn.o{background:#BF360C}
+        .tsa-btn.s{background:#FFF3E0;color:#7A3E00;border:2px solid #EF6C00;box-shadow:none}
+        .tsa-btn:disabled{opacity:.5;cursor:default}
+        .tsa-pick{display:block;width:100%;text-align:left;margin:6px 0;padding:12px 14px;border:2px solid #1565C0;border-radius:12px;background:#E3F2FD;color:#0D2B4E;font-size:1.05em;line-height:1.6;cursor:pointer}
+        .tsa-pick:hover:not(:disabled){background:#BBDEFB}
+        .tsa-pick:disabled{opacity:.5;cursor:default}
+        .tsa-pick small{color:#37474F}
+        .tsa-scope{padding:8px 14px;border:2px solid #1565C0;border-radius:999px;background:#E3F2FD;color:#0D2B4E;font-weight:bold;cursor:pointer;margin:2px}
+        .tsa-scope.on{background:#1565C0;color:#fff}
 </style>
 </head>
 <body class="on-login">
@@ -2172,8 +2200,8 @@
                 <div id="tsa-passage-box" class="passage-box"></div>
                 <div id="tsa-question-box"></div>
                 <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
-                    <button class="btn-green hidden" id="btn-next-tsa" onclick="nextTSA()">➡️ 下一題</button>
-                    <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
+                    <button class="tsa-btn g hidden" id="btn-next-tsa" onclick="nextTSA()">➡️ 下一題</button>
+                    <button class="tsa-btn r" onclick="goHome()">🏠 暫停退出</button>
                 </div>
             </div>
         </div>
@@ -2186,8 +2214,8 @@
                 <div id="zici-card" class="tsa-q"></div>
                 <div id="zici-options" class="word-bank"></div>
                 <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
-                    <button class="btn-green hidden" id="btn-next-zici" onclick="nextZici()">➡️ 下一題</button>
-                    <button class="btn-red" onclick="goHome()">🏠 暫停退出</button>
+                    <button class="tsa-btn g hidden" id="btn-next-zici" onclick="nextZici()">➡️ 下一題</button>
+                    <button class="tsa-btn r" onclick="goHome()">🏠 暫停退出</button>
                 </div>
             </div>
         </div>
@@ -5746,12 +5774,13 @@ function checkDailyReset() {
             const cur=navCurrentId();
             const show=!!(inventory&&inventory.playerName)&&cur&&!NAV_NO_BACK.includes(cur);
             b.classList.toggle('hidden',!show);
+            if(document.body.classList.contains('has-nav-back')!==!!show) document.body.classList.toggle('has-nav-back',!!show);
         }
         (function navInit(){
             const b=document.createElement('button'); b.id='nav-back-btn'; b.className='hidden'; b.type='button';
             b.textContent='⬅️ 上一頁'; b.onclick=()=>window.goBack();
-            b.style.cssText='position:fixed;left:10px;bottom:14px;z-index:950;padding:10px 16px;border:none;border-radius:999px;background:#37474F;color:#fff;font-size:15px;font-weight:bold;box-shadow:0 3px 10px rgba(0,0,0,.35);cursor:pointer;opacity:.95;';
-            const st=document.createElement('style'); st.textContent='#nav-back-btn.hidden{display:none!important}'; document.head.appendChild(st);
+            b.style.cssText='position:fixed;left:10px;bottom:52px;z-index:950;padding:10px 16px;border:2px solid #CFD8DC;border-radius:999px;background:#37474F;color:#fff;font-size:15px;font-weight:bold;box-shadow:0 3px 10px rgba(0,0,0,.45);cursor:pointer;opacity:.95;';
+            const st=document.createElement('style'); st.textContent='#nav-back-btn.hidden{display:none!important} body.has-nav-back{padding-bottom:130px !important}'; document.head.appendChild(st);
             document.body.appendChild(b);
             let pending=false; const sched=()=>{ if(pending) return; pending=true; requestAnimationFrame(()=>{ pending=false; navUpdateBtn(); }); };
             const mo=new MutationObserver(sched);
@@ -6572,7 +6601,7 @@ function checkDailyReset() {
             const picker=document.getElementById('tsa-picker'); picker.innerHTML='';
             TSA_PAPERS.forEach((p,i)=>{
                 const count=p.passages.reduce((s,x)=>s+x.qs.length,0);
-                const b=document.createElement('button'); b.className='btn-blue'; b.style.width='100%'; b.style.textAlign='left';
+                const b=document.createElement('button'); b.className='tsa-pick'; b.style.width='100%'; b.style.textAlign='left';
                 b.innerHTML='<b>'+p.title+'</b><br><small>'+p.passages.length+' 篇文章 · '+count+' 題</small>';
                 b.onclick=()=>beginTSAPaper(i); picker.appendChild(b);
             });
@@ -6587,17 +6616,18 @@ function checkDailyReset() {
             const flat=[]; tsaPaper.passages.forEach(pa=>pa.qs.forEach(q=>flat.push({pa,q})));
             if(tsaQIndex>=flat.length){ document.getElementById('tsa-question-box').innerHTML='<div class="tsa-q"><b>🎉 恭喜完成 '+tsaPaper.title+'！</b></div>'; document.getElementById('tsa-passage-box').innerHTML=''; document.getElementById('btn-next-tsa').classList.add('hidden'); return; }
             const {pa,q}=flat[tsaQIndex];
-            document.getElementById('tsa-passage-box').innerHTML='<b>'+pa.name+'</b>\n'+pa.text;
+            document.getElementById('tsa-passage-box').innerHTML='<div class="tsa-ptitle">📖 '+pa.name+'</div>'+pa.text.split('\n').filter(Boolean).map(p=>'<p>'+p+'</p>').join('');
             const box=document.getElementById('tsa-question-box'); box.innerHTML=''; document.getElementById('btn-next-tsa').classList.add('hidden');
             const card=document.createElement('div'); card.className='tsa-q'; card.innerHTML='<div><b>第 '+(tsaQIndex+1)+' 題</b>　'+q.q.replace(/\n/g,'<br>')+'</div>'; box.appendChild(card);
             if(q.t==='mc'){ shuffle([...q.o]).forEach(opt=>{ const b=document.createElement('button'); b.className='tsa-opt'; b.textContent=opt; b.onclick=()=>answerTSA(opt===q.o[q.a],q.o[q.a],b,box); card.appendChild(b); }); }
-            else if(q.t==='fill'){ const inp=document.createElement('input'); inp.className='tsa-input'; inp.placeholder='輸入答案'; const ok=document.createElement('button'); ok.className='btn-green'; ok.textContent='✅ 確認'; ok.style.marginLeft='8px'; ok.onclick=()=>answerTSA(inp.value.trim()===q.a[0],q.a[0],inp,box); card.appendChild(inp); card.appendChild(ok); inp.onkeydown=e=>{if(e.key==='Enter')ok.click()}; }
-            else if(q.t==='order'){ tsaOrder=[]; const info=document.createElement('div'); info.className='tsa-order'; card.appendChild(info); const render=()=>{ info.innerHTML='你的次序：'+(tsaOrder.map(x=>'<span class="tsa-slot">'+x+'</span>').join(' ')||'<i>請點選下方項目</i>'); }; render(); q.items.forEach(it=>{ const chip=document.createElement('button'); chip.className='tsa-chip'; chip.textContent=it; chip.onclick=()=>{ if(tsaOrder.length>=q.items.length)return; tsaOrder.push(it); chip.disabled=true; render(); }; card.appendChild(chip); }); const ok=document.createElement('button'); ok.className='btn-green'; ok.textContent='✅ 確認次序'; ok.style.marginTop='8px'; ok.onclick=()=>answerTSA(tsaOrder.join('')===q.a,q.a,null,box); card.appendChild(ok); }
+            else if(q.t==='fill'){ const inp=document.createElement('input'); inp.className='tsa-input'; inp.placeholder='輸入答案'; const ok=document.createElement('button'); ok.className='tsa-btn g'; ok.textContent='✅ 確認'; ok.style.marginLeft='8px'; ok.onclick=()=>answerTSA(inp.value.trim()===q.a[0],q.a[0],inp,box); card.appendChild(inp); card.appendChild(ok); inp.onkeydown=e=>{if(e.key==='Enter')ok.click()}; }
+            else if(q.t==='order'){ tsaOrder=[]; const info=document.createElement('div'); info.className='tsa-order'; card.appendChild(info); const render=()=>{ info.innerHTML='你的次序：'+(tsaOrder.map(x=>'<span class="tsa-slot">'+x+'</span>').join(' ')||'<i>請點選下方項目</i>'); }; render(); q.items.forEach(it=>{ const chip=document.createElement('button'); chip.className='tsa-chip'; chip.textContent=it; chip.onclick=()=>{ if(tsaOrder.length>=q.items.length)return; tsaOrder.push(it); chip.disabled=true; render(); }; card.appendChild(chip); }); const ok=document.createElement('button'); ok.className='tsa-btn g'; ok.textContent='✅ 確認次序'; ok.style.marginTop='8px'; ok.onclick=()=>answerTSA(tsaOrder.join('')===q.a,q.a,null,box); card.appendChild(ok); }
         }
         function answerTSA(correct,ans,el,box){ [...box.querySelectorAll('button')].forEach(b=>b.disabled=true); const msg=document.getElementById('tsa-msg');
-            if(correct){ msg.innerHTML='<span style="color:#4CAF50">✅ 答對了！</span>'; playSound('win'); addStreak(); handleBloodMoon(true); }
-            else{ msg.innerHTML='<span style="color:#F44336">❌ 答錯！正確答案：<b>'+ans+'</b></span>'; if(el&&el.style)el.style.borderColor='#F44336'; playSound('error'); inventory.streak=0; handleBloodMoon(false); }
-            if(el&&el.style&&correct)el.style.borderColor='#4CAF50';
+            if(correct){ msg.innerHTML='<span style="color:#A5D6A7;font-weight:bold">✅ 答對了！</span>'; playSound('win'); addStreak(); handleBloodMoon(true); }
+            else{ msg.innerHTML='<span style="color:#FF8A80;font-weight:bold">❌ 答錯！正確答案：<b style="color:#fff">'+ans+'</b></span>'; playSound('error'); inventory.streak=0; handleBloodMoon(false); }
+            if(el&&el.classList){ el.classList.add(correct?'tsa-ok':'tsa-bad'); }
+            [...box.querySelectorAll('.tsa-opt')].forEach(b=>{ if(b.textContent===ans) b.classList.add('tsa-ok'); });
             document.getElementById('btn-next-tsa').classList.remove('hidden'); updateUI(); saveGame(); }
         window.nextTSA=function(){ tsaQIndex++; loadTSAQuestion(); };
 
@@ -6620,7 +6650,7 @@ function checkDailyReset() {
         window.toggleZiciAuto=function(){ try{ localStorage.setItem('zici_auto', ziciAutoOn()?'0':'1'); }catch(e){} const b=document.getElementById('btn-zici-auto'); if(b) b.textContent=ziciAutoOn()?'🔊 自動朗讀：開':'🔇 自動朗讀：關'; if(!ziciAutoOn()&&window.speechSynthesis) window.speechSynthesis.cancel(); };
         window.ziciSpeakNow=function(t){ ziciSpeak(t); };
         function ziciEsc(t){ return t.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
-        function ziciSpeakBtn(text,label){ return '<button class="btn-gold" style="margin:6px 6px 0 0" onclick="ziciSpeakNow(\''+ziciEsc(text)+'\')">'+(label||'🔊 聽')+'</button>'; }
+        function ziciSpeakBtn(text,label){ return '<button class="tsa-btn s" style="margin:6px 6px 0 0" onclick="ziciSpeakNow(\''+ziciEsc(text)+'\')">'+(label||'🔊 聽')+'</button>'; }
         function ziciHasVoice(){ return !!(window.speechSynthesis&&window.SpeechSynthesisUtterance); }
 
         function ziciAllWords(){
@@ -6651,7 +6681,7 @@ function checkDailyReset() {
             const taken=new Array(t.length).fill(false), spans=[];
             words.forEach(w=>{ let i=t.indexOf(w); while(i>=0){ let free=true; for(let k=i;k<i+w.length;k++) if(taken[k]){free=false;break;} if(free){ for(let k=i;k<i+w.length;k++) taken[k]=true; spans.push([i,i+w.length]); } i=t.indexOf(w,i+1); } });
             spans.sort((a,b)=>a[0]-b[0]); let out='',p=0;
-            spans.forEach(([a,b])=>{ out+=t.slice(p,a)+'<b style="color:#FFD54F">'+t.slice(a,b)+'</b>'; p=b; });
+            spans.forEach(([a,b])=>{ out+=t.slice(p,a)+'<span class="zici-hl">'+t.slice(a,b)+'</span>'; p=b; });
             return out+t.slice(p);
         }
         function ziciExampleFor(word){ const s=ZICIJIAJU.sentences.find(x=>x.t&&x.t.indexOf(word)>=0); return s?s.t:null; }
@@ -6673,7 +6703,7 @@ function checkDailyReset() {
             document.getElementById('zici-msg').innerHTML='已掌握 <b>'+pr.mastered+' / '+pr.total+'</b> 個字詞（連續記住 2 次或以上算掌握）';
             const scopeRow=document.createElement('div'); scopeRow.style.cssText='display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px;';
             [['all','全部'],['寫人篇','寫人'],['寫物篇','寫物'],['寫景篇','寫景'],['說理篇','說理']].forEach(([id,name])=>{
-                const b=document.createElement('button'); b.className=(ziciScope===id?'btn-green':'btn-blue'); b.textContent=name;
+                const b=document.createElement('button'); b.className=('tsa-scope'+(ziciScope===id?' on':'')); b.textContent=name;
                 b.onclick=()=>{ ziciScope=id; renderZiciMenu(); }; scopeRow.appendChild(b); });
             menu.appendChild(scopeRow);
             const voiceOk=ziciHasVoice();
@@ -6686,10 +6716,10 @@ function checkDailyReset() {
                 ['review','🔁 錯題重溫','重溫標記「唔熟」或答錯嘅字詞',true]
             ];
             modes.forEach(([id,title,sub,enabled])=>{
-                const b=document.createElement('button'); b.className='btn-blue'; b.style.width='100%'; b.style.textAlign='left'; b.style.marginBottom='6px';
+                const b=document.createElement('button'); b.className='tsa-pick'; b.style.width='100%'; b.style.textAlign='left'; b.style.marginBottom='6px';
                 if(!enabled){ b.disabled=true; b.style.opacity='0.5'; }
                 b.innerHTML='<b>'+title+'</b><br><small>'+(enabled?sub:'此裝置不支援朗讀')+'</small>'; b.onclick=()=>beginZici(id); menu.appendChild(b); });
-            const tg=document.createElement('button'); tg.id='btn-zici-auto'; tg.className='btn-gold'; tg.style.width='100%'; tg.textContent=ziciAutoOn()?'🔊 自動朗讀：開':'🔇 自動朗讀：關'; tg.onclick=toggleZiciAuto; menu.appendChild(tg);
+            const tg=document.createElement('button'); tg.id='btn-zici-auto'; tg.className='tsa-btn s'; tg.style.width='100%'; tg.textContent=ziciAutoOn()?'🔊 自動朗讀：開':'🔇 自動朗讀：關'; tg.onclick=toggleZiciAuto; menu.appendChild(tg);
         }
         function beginZici(mode){
             ziciMode=mode; ziciIndex=0; ziciCorrect=0;
@@ -6710,7 +6740,7 @@ function checkDailyReset() {
             const rewarded=(ziciMode==='listen'||ziciMode==='classify'||ziciMode==='reorder');
             card.innerHTML='<b>🎉 完成！</b><br>'+(rewarded?('答對 '+ziciCorrect+' / '+ziciItems.length+' 題。'):('今次記住咗 '+ziciCorrect+' / '+ziciItems.length+'。'))+'<br><small>「唔熟」嘅字詞會喺「錯題重溫」同之後嘅閃卡優先出現。</small>';
             document.getElementById('zici-options').innerHTML='';
-            const again=document.createElement('button'); again.className='btn-green'; again.textContent='🔄 返回選單'; again.onclick=()=>{ saveGame(); startZici(); }; document.getElementById('zici-options').appendChild(again);
+            const again=document.createElement('button'); again.className='tsa-btn g'; again.textContent='🔄 返回選單'; again.onclick=()=>{ saveGame(); startZici(); }; document.getElementById('zici-options').appendChild(again);
             document.getElementById('btn-next-zici').classList.add('hidden'); saveGame();
         }
         function loadZici(){
@@ -6724,8 +6754,8 @@ function checkDailyReset() {
                 const ex=ziciExampleFor(item.w);
                 card.innerHTML='<div style="font-size:1.8em"><b>'+item.w+'</b> '+ziciSpeakBtn(item.w)+'</div><small>'+label(item.c,item.s,item.g)+'</small>'
                     +(ex?'<div style="margin-top:8px;line-height:1.8">例句：'+ziciHighlight(ex)+'<br>'+ziciSpeakBtn(ex,'🔊 聽例句')+'</div>':'');
-                const ok=document.createElement('button'); ok.className='btn-green'; ok.textContent='✅ 識'; ok.onclick=()=>{ ziciMark(item.w,true); ziciCorrect++; ziciNextSave(); }; opts.appendChild(ok);
-                const no=document.createElement('button'); no.className='btn-red'; no.textContent='🔁 唔熟'; no.onclick=()=>{ ziciMark(item.w,false); ziciNextSave(); }; opts.appendChild(no);
+                const ok=document.createElement('button'); ok.className='tsa-btn g'; ok.textContent='✅ 識'; ok.onclick=()=>{ ziciMark(item.w,true); ziciCorrect++; ziciNextSave(); }; opts.appendChild(ok);
+                const no=document.createElement('button'); no.className='tsa-btn r'; no.textContent='🔁 唔熟'; no.onclick=()=>{ ziciMark(item.w,false); ziciNextSave(); }; opts.appendChild(no);
                 if(ziciAutoOn()) setTimeout(()=>ziciSpeak(item.w),250); return;
             }
             if(ziciMode==='listen'){
@@ -6745,8 +6775,8 @@ function checkDailyReset() {
             }
             if(ziciMode==='read'){
                 card.innerHTML='<div><small>'+label(item.c,item.s)+'</small></div><div style="margin-top:8px;line-height:1.9;font-size:1.15em">'+ziciHighlight(item.t)+'</div><div>'+ziciSpeakBtn(item.t,'🔊 聽整句')+'</div>';
-                const ok=document.createElement('button'); ok.className='btn-green'; ok.textContent='✅ 我識讀'; ok.onclick=()=>{ ziciMark(ziciSentKey(item),true); ziciCorrect++; ziciNextSave(); }; opts.appendChild(ok);
-                const no=document.createElement('button'); no.className='btn-red'; no.textContent='🔁 再溫'; no.onclick=()=>{ ziciMark(ziciSentKey(item),false); ziciNextSave(); }; opts.appendChild(no);
+                const ok=document.createElement('button'); ok.className='tsa-btn g'; ok.textContent='✅ 我識讀'; ok.onclick=()=>{ ziciMark(ziciSentKey(item),true); ziciCorrect++; ziciNextSave(); }; opts.appendChild(ok);
+                const no=document.createElement('button'); no.className='tsa-btn r'; no.textContent='🔁 再溫'; no.onclick=()=>{ ziciMark(ziciSentKey(item),false); ziciNextSave(); }; opts.appendChild(no);
                 if(ziciAutoOn()) setTimeout(()=>ziciSpeak(item.t),250); return;
             }
             if(ziciMode==='reorder'){
@@ -6754,11 +6784,11 @@ function checkDailyReset() {
                 card.innerHTML='<div><b>🔀 將下面段落排成正確句子</b> '+ziciSpeakBtn(item.t,'🔊 聽原句')+'</div>';
                 const slot=document.createElement('div'); slot.className='tsa-order'; slot.style.margin='8px 0'; card.appendChild(slot);
                 const render=()=>{ slot.innerHTML='你的排列：'+(ziciOrder.length?ziciOrder.map(x=>'<span class="tsa-slot">'+x+'</span>').join(' '):'<i>請按次序點選段落</i>'); }; render();
-                const reset=document.createElement('button'); reset.className='btn-orange'; reset.textContent='↩️ 重排';
+                const reset=document.createElement('button'); reset.className='tsa-btn o'; reset.textContent='↩️ 重排';
                 const chips=[];
                 shuffle(clauses.map((c,i)=>({c,i}))).forEach(o=>{ const chip=document.createElement('button'); chip.className='tsa-chip'; chip.textContent=o.c; chip.onclick=()=>{ if(chip.disabled) return; chip.disabled=true; ziciOrder.push(o.c); render(); }; chips.push(chip); opts.appendChild(chip); });
                 reset.onclick=()=>{ ziciOrder=[]; chips.forEach(c=>c.disabled=false); render(); }; opts.appendChild(reset);
-                const ok=document.createElement('button'); ok.className='btn-green'; ok.textContent='✅ 確認'; ok.onclick=()=>{ if(ziciOrder.length<clauses.length) return; const right=ziciOrder.join('')===clauses.join(''); [...opts.children].forEach(b=>b.disabled=true); answerZici(right,item.t,null,ziciSentKey(item),true); }; opts.appendChild(ok);
+                const ok=document.createElement('button'); ok.className='tsa-btn g'; ok.textContent='✅ 確認'; ok.onclick=()=>{ if(ziciOrder.length<clauses.length) return; const right=ziciOrder.join('')===clauses.join(''); [...opts.children].forEach(b=>b.disabled=true); answerZici(right,item.t,null,ziciSentKey(item),true); }; opts.appendChild(ok);
                 window._ziciAfter=item.t; return;
             }
         }
@@ -6766,8 +6796,8 @@ function checkDailyReset() {
             [...document.getElementById('zici-options').children].forEach(b=>b.disabled=true);
             const msg=document.getElementById('zici-msg');
             ziciMark(key,correct);
-            if(correct){ ziciCorrect++; msg.innerHTML='<span style="color:#4CAF50">✅ 答對了！</span>'; playSound('win'); addStreak(); handleBloodMoon(true); if(el&&el.style)el.style.borderColor='#4CAF50'; }
-            else{ msg.innerHTML='<span style="color:#F44336">❌ 答錯！正確答案：<b>'+ans+'</b></span>'; playSound('error'); inventory.streak=0; handleBloodMoon(false); if(el&&el.style)el.style.borderColor='#F44336'; }
+            if(correct){ ziciCorrect++; msg.innerHTML='<span style="color:#A5D6A7;font-weight:bold">✅ 答對了！</span>'; playSound('win'); addStreak(); handleBloodMoon(true); if(el&&el.classList)el.classList.add('tsa-ok'); }
+            else{ msg.innerHTML='<span style="color:#FF8A80;font-weight:bold">❌ 答錯！正確答案：<b style="color:#fff">'+ans+'</b></span>'; playSound('error'); inventory.streak=0; handleBloodMoon(false); if(el&&el.classList)el.classList.add('tsa-bad'); [...document.getElementById('zici-options').children].forEach(b=>{ if(b.textContent===ans) b.classList.add('tsa-ok'); }); }
             if(ziciMode==='listen'){ const ex=ziciExampleFor(ans); document.getElementById('zici-card').innerHTML+='<div style="margin-top:8px;font-size:1.4em"><b>'+ans+'</b> '+ziciSpeakBtn(ans)+'</div>'+(ex?'<div style="margin-top:6px;line-height:1.8">例句：'+ziciHighlight(ex)+'</div>':''); }
             document.getElementById('btn-next-zici').classList.remove('hidden'); updateUI(); saveGame();
             if(ziciAutoOn()&&window._ziciAfter) setTimeout(()=>ziciSpeak(window._ziciAfter),600);
