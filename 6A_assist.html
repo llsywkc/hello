@@ -35,7 +35,7 @@ details summary{cursor:pointer;color:#2563eb;margin:4px 0}
 #toast.show{transform:translateX(-50%) scale(1)}
 .sec-t{background:#fecaca}.sec-j{background:#bbf7d0}.sec-x{background:#fbcfe8}.sec-k{background:#bfdbfe}.sec-u{background:#fde68a}.sec-g{background:#ddd6fe}.sec-m{background:#fed7aa}.sec-d{background:#a7f3d0}.sec-w{background:#fca5a5}
 .sample span{border-radius:6px;padding:1px 3px}.sample sup{font-size:11px;color:#444;font-weight:bold}
-.opt{background:#ede9fe;color:#4c1d95;margin:3px}
+.chip.full{background:#dcfce7;border-color:#22c55e;font-size:16px;padding:8px 12px}.chip.full:hover{background:#bbf7d0}.chip.full.used{background:#22c55e;color:#fff;border-color:#15803d}.chip.full.topic-m{border-width:3px;border-color:#f59e0b;background:#fef9c3}.chip.full.topic-m.used{background:#f59e0b}.kit{background:#fef3c7;border:3px dashed #f59e0b;border-radius:12px;padding:10px;margin:10px 0}.kit button{background:#f59e0b}.base{background:#e0f2fe;border:2px solid #38bdf8;border-radius:10px;padding:6px 10px;cursor:pointer;margin:3px;display:inline-block}.base.sel{background:#0284c7;color:#fff}.au-b{background:#ede9fe;color:#4c1d95;margin:3px;padding:6px 14px;font-size:16px}.au-b.sel{background:#5f27cd;color:#fff}.scard{border:3px solid #c4b5fd;border-radius:12px;padding:10px;margin:8px 0;background:#faf5ff}.scard.orig{border-color:#94a3b8;background:#f8fafc}.scard .t{font-size:19px;line-height:1.9}.scard small{color:#6b21a8}
 #bot{position:fixed;right:12px;bottom:12px;z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:6px;max-width:260px}
 #face{font-size:56px;cursor:pointer;background:#fff;border:4px solid #ff9f43;border-radius:50%;width:84px;height:84px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px #0004;user-select:none;animation:bob 2s ease-in-out infinite}
 #face.jump{animation:jump .6s}
@@ -50,7 +50,7 @@ details summary{cursor:pointer;color:#2563eb;margin:4px 0}
 @media print{.fw,button,.bar,header,#bot{display:none}}
 </style></head><body>
 <header><h1>✏️ 記敍文作文練習(約400字)</h1>
-<button onclick="setView('main')">📝 寫作</button><button onclick="setView('sample')">📖 示範範文</button><button onclick="setView('game')">🎮 名家猜猜看</button><button onclick="clearAll()">🗑 清除重寫</button></header>
+<button onclick="setView('main')">📝 寫作</button><button onclick="setView('sample')">📖 示範範文</button><button onclick="setView('style')">🎨 名家風格變身</button><button onclick="clearAll()">🗑 清除重寫</button></header>
 <div id="toast"></div>
 <div class="wrap"><div id="top"></div><div id="app"></div><div id="nav" style="text-align:center"><button class="g" onclick="go(-1)">⬅ 上一步</button><button onclick="go(1)" id="nx">下一步 ➡</button></div></div>
 <div id="bot"><div id="bubble"></div><div id="pick"></div><div style="display:flex;align-items:center;gap:6px"><button class="s" onclick="togglePick()">🔄 換小助手</button><div id="face" onclick="cheer()" title="點我打氣!">🐱</div></div></div>
@@ -114,6 +114,15 @@ const P=[
 {k:'wang',sec:3,lab:'🌟 忘',en:'I will never forget…',hint:'我永不會忘記這____的一天',conn:['最後,','無論如何,'],
  simple:[["我永不會忘記這難忘的一天。","I will never forget this unforgettable day."]],
  chips:[["我永不會忘記這難忘的一天!","基本"],["這一天,我永遠不會忘記,它是我成長路上最亮的一盞燈。","比喻"],["這段美好的回憶,將永遠留在我心底。","替代句式"],["無論過多少年,我都會記得這一天。","替代句式"]]}];
+const FULL={"shi": ["那是一個星期六的早上,我和家人一起出門。", "上個月的一天,我和同學們一起參加學校的活動。", "去年暑假的一個下午,發生了一件令我永遠難忘的事。", "那天是個特別的日子,我一早就醒來了。"], "jing": ["天空藍藍的,太陽暖暖地照着大地,四周的景色非常漂亮。", "街上人來人往,到處都很熱鬧,空氣中充滿了歡樂的氣氛。", "天空灰濛濛的,風一陣陣吹來,讓人覺得有點涼。", "微風輕輕吹過,樹葉沙沙作響,好像在歡迎我們。"], "xin": ["我的心情又興奮又緊張,心跳得像打鼓一樣。", "我心裏充滿期待,連走路都變得輕快起來。", "我有點害怕,手心不停冒汗。", "我心裏很不安,不知道接下來會發生什麼事。", "我暗暗告訴自己,不管發生什麼事,我都要盡力面對。"], "kai": ["一開始,一切都很順利,大家有說有笑。", "原來,今天要做一件很特別的事,我們都很期待。", "首先,我們做好準備,然後就出發了。", "家人向我們講解了今天要做的事,我們認真地聽着。"], "tu": ["就在這時,意想不到的事情發生了,我一下子呆住了。", "忽然,出現了一個問題,大家都慌張起來。", "正當我們以為一切順利時,突然發生了意外。", "我鼓起勇氣,深深吸了一口氣,決定自己去解決。"], "guo": ["最後,問題終於解決了,大家都鬆了一口氣,露出了笑容。", "雖然過程很辛苦,但我們終於完成了,心裏感到非常自豪。", "結果不太理想,但我已經盡了力,心裏沒有遺憾。", "事情圓滿結束,我的眼睛不知不覺濕了,心裏暖暖的。"], "ming": ["這件事讓我明白到,遇到困難不要怕,只要不放棄,就會有辦法。", "我明白到,有朋友和家人在身邊互相幫忙,是多麼幸福的事。", "我明白到,做事要細心和有耐性,才不會出錯。", "我明白到,犯了錯不要緊,勇敢承認和改正才是最重要的。", "這個道理雖然簡單,卻讓我受益終身。", "(替代句式)這件事讓我深深體會到,只要努力,就一定能夠進步。", "(替代句式)經過這次經歷,我終於懂得要珍惜身邊的人。"], "jue": ["我決定以後遇到困難時,絕不輕易放棄。", "我決定要多關心身邊的人,常常說「謝謝」和「對不起」。", "我決定每天進步一點點,做一個更好的自己。", "我決定以後做事要更加小心,認真做好每一件事。", "我也會把這個道理告訴身邊的朋友,讓大家一起進步。", "(替代句式)從今以後,我下定決心要勇敢面對每一個挑戰。", "(替代句式)我暗暗向自己許下承諾:以後一定要做一個有責任感的人。"], "wang": ["我永不會忘記這難忘的一天!", "這一天就像一盞明燈,我永不會忘記它帶給我的力量。", "這段回憶將永遠留在我的心底,我永不會忘記這一天。", "無論過多少年,我都永不會忘記這難忘的一天。", "每次想起,我都忍不住微笑。"]};
+const KIT={"一次難忘的旅行": ["去年暑假,我和爸爸媽媽一起到日本旅行,這是我第一次坐飛機。", "飛機降落後,眼前是一片藍天,街道乾淨整齊,路邊的樹木綠油油的,景色美極了。", "我既興奮又緊張,心跳得像打鼓一樣,好想快點看看這個新地方。", "我們先坐電車到酒店放下行李,然後拿着地圖,出發去遊覽。", "走着走着,我忽然發現自己和家人走散了,四周都是陌生的人,我一下子慌了起來。", "我想起爸爸說過要找穿制服的工作人員,便鼓起勇氣求助,不久就和家人團聚了,大家緊緊擁抱在一起。", "我明白到,遇到困難時要保持冷靜,勇敢向別人求助,事情就能解決。", "我決定以後出門要緊緊跟着家人,也要學好語言,做一個獨立的人。", "我永不會忘記這次難忘的旅行,它讓我學會了冷靜和勇敢。"], "一件開心的事": ["上星期六,是學校派發成績表的日子,我一早就來到學校。", "課室裏光猛明亮,窗外陽光燦爛,同學們都坐得端端正正,安靜地等待着。", "我坐在座位上,心裏既期待又緊張,手心都出汗了。", "老師一個一個地叫同學的名字,輪到我時,我慢慢走上前去。", "老師微笑着對我說:「恭喜你,這次你進步了很多,是全班進步最大的同學!」我一時呆住了,不敢相信自己的耳朵。", "同學們都為我鼓掌,我開心得笑了起來,眼睛也有點濕,心裏像開出了一朵花。", "我明白到,只要付出努力,一定會有回報。", "我決定以後繼續努力學習,也要鼓勵其他同學一起進步。", "我永不會忘記這開心的一天,它是我努力的最好證明。"], "一次難忘的比賽": ["上個月的一個星期五下午,學校舉行陸運會,我要參加四百米接力賽。", "操場上彩旗飄揚,同學們的歡呼聲此起彼落,太陽曬得跑道閃閃發亮。看台上,老師和家長都站了起來,為我們加油打氣。", "我站在起跑線上,心像一面小鼓,咚咚咚地亂跳,手心也冒出了汗。", "槍聲一響,第一棒的同學像箭一樣衝了出去,我在第三棒的位置焦急地等待着。", "就在交棒時,接力棒忽然掉到地上!全場一陣驚呼,我的腦海一片空白。第二棒的同學立刻彎腰拾起,拚命追趕,終於把棒交到我手裏,我使盡全身力氣向前衝。", "最後,我們只得第三名,可是大家抱在一起又笑又叫,比拿冠軍還要開心。", "我明白到,團結合作比輸贏更重要,只要不放棄,就一定有希望。", "我決定以後遇到困難都要堅持到底,也要主動鼓勵身邊的人。", "我永不會忘記這難忘的比賽,它像一盞小燈,一直照亮着我。"], "一次犯錯的經歷": ["上個學期的一個中午,我在課室裏和同學玩耍。", "課室裏吵吵鬧鬧,窗外的天空灰濛濛的,看起來快要下雨了。", "我覺得很無聊,心想:「老師不在,玩一會兒應該沒問題吧!」", "我拿起同學的水壺,和他你追我趕地跑來跑去。", "忽然,「砰」的一聲,水壺掉在地上,水濺得到處都是,同學的書本也濕了。我嚇得臉色發白,呆呆地站在原地。", "我鼓起勇氣向同學道歉,並幫忙抹乾書本,後來又主動告訴了老師。老師沒有責罵我,還稱讚我誠實。", "我明白到,犯了錯不要緊,勇敢承認和改正才是最重要的。", "我決定以後在課室裏要守規則,做事前先想一想後果。", "我永不會忘記這次犯錯的經歷,它教會了我要負責任。"], "一次幫助別人的經歷": ["上星期三放學後,我和同學一起走路回家。", "街上的車子來來往往,夕陽把天空染成了橙紅色,景色十分漂亮。", "我心情輕鬆,一邊走一邊和同學談笑。", "走到馬路旁,我看見一位老婆婆拿着很多東西,站在路邊。", "她想過馬路,卻因為手上的袋子太重,差點跌倒。我立刻跑上前去扶住她,心跳得很快。", "我幫她拿着袋子,慢慢陪她過了馬路,老婆婆笑着連聲說:「謝謝你,好孩子!」我心裏暖洋洋的。", "我明白到,幫助別人不需要很大的力量,一個小小的動作就能帶來溫暖。", "我決定以後多留意身邊需要幫助的人,盡自己所能去幫忙。", "我永不會忘記這次幫助別人的經歷,它讓我的心暖洋洋的。"], "我最難忘的一位老師": ["二年級的時候,我的班主任是我最難忘的老師。", "那天下午,課室裏很安靜,陽光從窗外灑進來,暖暖的。", "我對着一道數學題皺着眉頭,心裏又急又沮喪,差點哭了出來。", "下課後,老師走到我身邊,輕聲問我:「是不是遇到困難了?」", "老師沒有直接告訴我答案,而是一步一步地教我思考。在小息和放學後,她都耐心地陪着我練習,從來沒有不耐煩。", "後來,我終於弄懂了這道題,考試也取得了好成績,老師笑着向我豎起了大拇指,我開心極了。", "我明白到,老師的耐心和鼓勵,能讓我們有勇氣面對困難。", "我決定以後要努力學習,不辜負老師對我的期望。", "我永不會忘記這位難忘的老師,她的笑容會永遠留在我心裏。"], "一次迷路的經歷": ["去年的一個星期日,我和家人到商場購物。", "商場裏人山人海,燈光閃閃發亮,到處都是漂亮的商品。", "我被一間玩具店吸引住了,看得入迷,心裏開心極了。", "我看了好一會兒,才依依不捨地轉身,準備去找爸爸媽媽。", "可是,我一回頭,卻發現周圍都是陌生的面孔,爸爸媽媽不見了!我的心一下子跳得很快,眼淚也湧了出來。", "我想起老師說過要找保安幫忙,便走到服務台求助。不久,爸爸媽媽就趕來把我緊緊抱住,我終於放心了。", "我明白到,出門時要緊跟家人,遇到困難要冷靜,向可靠的人求助。", "我決定以後外出要緊緊跟着家人,不會隨便亂走。", "我永不會忘記這次迷路的經歷,它讓我學會了冷靜。"], "一個特別的生日": ["今年我的生日,是一個特別的日子。", "家裏掛滿了彩帶和氣球,桌上放着一個又大又漂亮的蛋糕,空氣中飄着甜甜的香味。", "我心裏充滿期待,不知道爸爸媽媽會給我什麼驚喜。", "晚上,家人和朋友都來了,大家圍在桌前,為我唱生日歌。", "燈忽然全部熄滅了,只剩下蛋糕上的燭光。這時,爸爸捧出了一份用心製作的禮物,是一本記錄我成長的相簿!", "我看着相簿裏一張張照片,感動得流下了眼淚,大家都為我鼓掌,我覺得自己好幸福。", "我明白到,最珍貴的禮物不是金錢,而是家人和朋友的愛。", "我決定以後要孝順父母,也要珍惜身邊每一個關心我的人。", "我永不會忘記這個特別的生日,它讓我感受到滿滿的愛。"], "一次勇敢的挑戰": ["上學期,學校舉辦故事比賽,我鼓起勇氣報名參加。", "比賽當天,禮堂裏坐滿了老師和同學,燈光明亮,氣氛十分緊張。", "我站在後台,雙腿發軟,心跳得連自己也聽得見。", "輪到我上台了,我深深吸了一口氣,一步一步走到麥克風前。", "開始講故事時,我的腦海忽然一片空白,忘記了接下來的內容,台下靜得連呼吸聲都聽得見。", "我定了定神,想起平日練習的情景,慢慢把故事講完。台下響起了熱烈的掌聲,我終於做到了!", "我明白到,勇敢不是不害怕,而是即使害怕也敢向前走。", "我決定以後遇到挑戰,都要勇敢嘗試,不再輕易退縮。", "我永不會忘記這次勇敢的挑戰,它讓我更有自信。"], "一次令我感動的事": ["去年冬天的一個晚上,我患了重感冒,發着高燒。", "窗外寒風呼呼地吹,房間裏只亮着一盞小小的檯燈,顯得格外安靜。", "我躺在牀上,全身無力,心裏又難受又害怕。", "媽媽發現後,立刻放下手上的工作,急忙走到我的牀邊。", "她用手摸摸我的額頭,二話不說就背起我,冒着寒風走到診所。我伏在她的背上,感覺到她的汗水濕透了衣服。", "醫生診治後,我吃了藥,慢慢退燒了。媽媽卻整夜沒睡,一直坐在牀邊照顧我,我的眼淚不知不覺流了下來。", "我明白到,媽媽的愛是無私的,她總是把我放在第一位。", "我決定要乖乖聽話,努力學習,將來好好報答媽媽。", "我永不會忘記這令我感動的一晚,媽媽的愛會永遠溫暖我的心。"]};
+const EX={"一次難忘的旅行": {"jing": "路上的行人說說笑笑,空氣中飄來陣陣食物的香味。", "kai": "爸爸媽媽帶我去了很多有趣的地方,我拍了很多照片。", "tu": "我的耳邊只剩下陌生的語言,眼淚差點流了下來。", "guo": "那一刻,我覺得家人就是我最大的依靠。"}, "一件開心的事": {"jing": "走廊上傳來陣陣說話聲,整間學校都充滿着熱鬧的氣氛。", "kai": "我望着老師手裏的成績表,心跳得更快了。", "tu": "那一刻,我感覺全世界都安靜了。", "guo": "我捧着成績表,一路笑着跑回家,想第一時間告訴媽媽。"}, "一次難忘的比賽": {"jing": "空氣中充滿了緊張和興奮的味道。", "kai": "我深深吸了一口氣,告訴自己:「加油,我一定可以!」", "tu": "我緊緊握着接力棒,咬緊牙關,拚命向前衝。", "guo": "看着隊友們滿頭大汗的笑臉,我的眼眶不禁熱了起來。"}, "一次犯錯的經歷": {"jing": "同學們的笑聲和腳步聲,在課室裏此起彼落。", "kai": "我們越玩越開心,完全忘記了老師說過的話。", "tu": "同學的臉漲得通紅,我不知道該說什麼才好。", "guo": "我的心情雖然忐忑,但說出真話後,覺得輕鬆多了。"}, "一次幫助別人的經歷": {"jing": "路邊的小樹在微風中輕輕搖擺,很是愜意。", "kai": "老婆婆一步一步地走,看起來有點吃力。", "tu": "附近的車子正好駛來,情況非常危險。", "guo": "看着她遠去的背影,我覺得自己好像長大了一點。"}, "我最難忘的一位老師": {"jing": "操場上傳來同學們玩耍的笑聲,可是我完全沒有心情。", "kai": "我低着頭,小聲地點了點頭,眼淚在眼眶裏打轉。", "tu": "老師溫柔地說:「不用怕,我們慢慢來,一定可以的。」", "guo": "從那天起,我對學習有了信心,也不再害怕數學。"}, "一次迷路的經歷": {"jing": "耳邊傳來嘈雜的人聲和音樂聲,我什麼也聽不清楚。", "kai": "我走過一個又一個的店鋪,四處張望。", "tu": "我蹲在地上,不知道該往哪裏走,心裏害怕極了。", "guo": "媽媽輕輕拍着我的背,說以後會一直拉着我的手。"}, "一個特別的生日": {"jing": "窗外的天空漸漸暗下來,屋裏卻亮着溫暖的燈光。", "kai": "我穿上新衣服,在鏡子前轉了一個圈,期待着晚上到來。", "tu": "我一時說不出話來,心裏又驚又喜。", "guo": "我吹熄了蠟燭,許下了一個願望,希望大家永遠快樂。"}, "一次勇敢的挑戰": {"jing": "舞台上的燈光很亮,照得我有點睜不開眼睛。", "kai": "我望着台下一雙雙眼睛,手心全是汗。", "tu": "我的雙腳像被釘住了一樣,一動也不能動。", "guo": "走下舞台時,我的腿還在發抖,心裏卻甜絲絲的。"}, "一次令我感動的事": {"jing": "屋外漆黑一片,只聽到風吹過窗戶的聲音。", "kai": "媽媽的手有點冰涼,但是她的眼神十分溫柔。", "tu": "走在路上,我聽到媽媽急促的呼吸聲,她一路上不停地安慰我。", "guo": "那一夜,我第一次明白什麼叫做愛。"}};
+const GEN={"xin": "我暗暗告訴自己,不管發生什麼事,我都要盡力面對。", "ming": "這個道理雖然簡單,卻讓我受益終身。", "jue": "我也會把這個道理告訴身邊的朋友,讓大家一起進步。", "wang": "每次想起,我都忍不住微笑。"};
+const KEYS=["shi", "jing", "xin", "kai", "tu", "guo", "ming", "jue", "wang"];
+const STY=[{"k": "shi", "base": "那天早上,我和家人出門。", "v": ["清晨的陽光軟軟地灑下來,我和家人輕輕地推開門,慢慢走了出去。", "那是一個晴朗而溫柔的早晨,我挽着家人的手,心裏暖暖的,一同走出家門。", "那天早上,天還沒全亮,我們一家人出了門,街上很靜。", "那天一大早,家裏就鬧騰開了,我們一家人收拾好東西,風風火火地出了門。", "那一年的一個早晨,我跟着家人出門,小小的我走在大人中間,一切都顯得那麼大。"]}, {"k": "jing", "base": "天氣很好,公園裏有很多花。", "v": ["天氣真好,天空藍得像洗過一樣,公園裏的花兒一朵一朵地開着,紅的、黃的、粉的,像撒了一地的彩色星星。", "天空像一塊透明的藍寶石,風裏飄着花的清香,滿園的花兒都在微笑。", "天是晴的,公園裏的花開着,紅紅黃黃,沒有人說話,只有蜜蜂在耳邊嗡嗡。", "好天氣!公園裏的花開得又多又熱鬧,簡直像是開了一場花兒的大聚會。", "那天的陽光很好,公園裏的花一叢一叢的,我蹲下來看,花瓣上還沾着小小的水珠。"]}, {"k": "jing", "base": "外面下着雨。", "v": ["雨絲細細密密地落下來,像無數根銀線,輕輕地、柔柔地織着整條街道。", "細雨像溫柔的低語,輕輕地落在屋頂上,也落在我的心頭。", "雨下着,灰灰的,街上的人都低着頭,急急地走。", "雨嘩啦嘩啦地下個不停,街上的人跑得像被趕的鴨子,一個個狼狽極了。", "雨淅淅瀝瀝地下着,我趴在窗前,看水珠沿着玻璃一滴一滴滑下來。"]}, {"k": "xin", "base": "我很緊張。", "v": ["我的心像一隻小鳥,在胸口撲通撲通地跳,怎麼也靜不下來。", "我的心像被輕輕握住,又緊張又期待,連呼吸都變得小心翼翼。", "我站着,手心潮濕,心跳得很響,好像整個房間都聽得見。", "我緊張得兩條腿直打顫,心跳得跟敲鼓似的,連話也說不利索了。", "我緊緊攥着衣角,心裏七上八下,卻又不敢讓別人看出來。"]}, {"k": "xin", "base": "我很開心。", "v": ["我的心裏像開了一朵花,甜甜的,暖暖的,連腳步也輕快起來。", "歡喜像泉水一樣在心裏湧出來,我覺得整個世界都在對我微笑。", "我沒有說話,嘴角卻不由自主地翹了起來。", "我樂得合不攏嘴,恨不得蹦起來,見人就想說:「我成功啦!」", "我心裏高興得很,卻只是抿着嘴笑,怕一出聲,這份快樂就會跑掉。"]}, {"k": "kai", "base": "比賽開始了,我跑得很快。", "v": ["比賽開始了,我像一隻小鹿,輕輕地、快快地向前跑去,風在耳邊呼呼地過。", "哨聲響起,我邁開腳步,心裏默默地念着:「加油,我可以的。」", "槍響了。我跑起來,風刮着臉,別的什麼也聽不見。", "「砰」的一聲,比賽開始!我腳底像裝了彈簧,噌地一下就躥了出去。", "哨聲一響,我跟着大家跑了出去,那時的我,只想着不要落在後面。"]}, {"k": "tu", "base": "突然,我摔倒了,很痛。", "v": ["忽然,我的腳一滑,整個人像一片落葉,輕輕地、重重地摔在地上。", "突然間,我跌倒了,膝蓋傳來陣陣疼痛,可我卻不願讓眼淚落下來。", "忽然,我摔倒了。膝蓋擦破了,血滲出來,四周靜了一下。", "忽然「哎呀」一聲,我來了個大馬趴,摔得眼冒金星,臉也丟光了。", "突然,我絆了一跤,膝蓋火辣辣地疼,我咬着嘴唇,不讓眼淚掉下來。"]}, {"k": "guo", "base": "媽媽走過來安慰我。", "v": ["媽媽輕輕地走過來,柔柔地摸着我的頭,說:「不要緊,慢慢來。」", "媽媽蹲下來,用溫暖的手擦去我的眼淚,她的懷抱像春天一樣柔軟。", "母親走過來,沒有多說,只是蹲下,拍了拍我肩上的灰。", "媽媽三步並作兩步跑過來,又心疼又好笑,一邊給我吹吹傷口,一邊說:「瞧你!」", "媽媽默默地走過來,掏出手帕,輕輕替我擦臉,什麼話也沒說,卻讓我安心了。"]}, {"k": "guo", "base": "最後,我們成功了,大家很高興。", "v": ["最後,我們終於成功了,歡呼聲像潮水一樣湧來,每個人的臉上都綻開了笑容。", "終於,我們成功了,大家的笑容像盛開的花,連空氣都是甜的。", "結果成功了。大家笑了,我也笑,只是笑得有些累。", "成啦!大家樂得又喊又跳,有人把帽子都扔到天上去了。", "後來,我們成功了,大家圍在一起笑,我偷偷擦了擦眼角,那一刻特別安靜,又特別暖。"]}, {"k": "ming", "base": "我明白到,不能放棄。", "v": ["我明白到,日子是一點一滴積起來的,不放棄,才能一步一步走到想去的地方。", "我明白到,堅持是一顆溫柔而有力量的種子,只要用心澆灌,就會開出花來。", "我明白到,不放棄並不容易,可是只有走下去,路才會出現。", "我明白到:光說不練假把式,只有咬牙堅持,事兒才能成。", "長大後我才明白到,那時的堅持,原來是我送給自己最好的禮物。"]}, {"k": "jue", "base": "我決定以後要努力。", "v": ["我決定以後要一點一點地努力,像小溪那樣,慢慢地流向遠方。", "我決定把這份力量收藏起來,在以後的日子裏,用愛和勇氣去面對一切。", "我決定了:以後無論多難,也要做下去,不再退縮。", "我決定從今兒起,不偷懶,不耍滑頭,踏踏實實地幹。", "我悄悄在心裏決定,以後要像她那樣,溫柔而堅強地對待每一件事。"]}, {"k": "wang", "base": "我永不會忘記這一天。", "v": ["這一天像一顆小小的珍珠,靜靜地躺在我的記憶裏,我永不會忘記它閃着的柔光。", "這一天是我心中最亮的星,我永不會忘記它帶給我的溫暖與勇氣。", "這一天我記住了,永不會忘記;它像一根細針,時時提醒着我。", "這一天,我一輩子也忘不了,永不會忘記!想起來就樂,心裏還熱乎乎的。", "那天的一切,我永不會忘記,它就像一盞不熄滅的小燈,一直陪着我長大。"]}];
+const AUTH={"朱自清": {"d": "比喻細膩、疊詞多,節奏柔和", "tips": ["愛用比喻(像……一樣)", "愛用疊詞(輕輕地、慢慢地)", "句子柔和有節奏"]}, "冰心": {"d": "清新溫柔,充滿愛與感恩", "tips": ["用溫柔的比喻(花、星、泉水)", "直接表達愛與感恩", "語氣乾淨清新"]}, "魯迅": {"d": "簡練冷靜,觀察入微", "tips": ["句子短而有力", "少用形容詞,多寫動作與細節", "語氣冷靜,留有餘味"]}, "老舍": {"d": "口語自然、幽默生動", "tips": ["像說話一樣自然", "用生活化的比喻和口語", "帶點幽默"]}, "林海音": {"d": "童真細膩,善寫人情與回憶", "tips": ["用小孩子的角度看", "寫小動作和小細節", "帶着回憶的溫柔"]}};
+const AUN=["朱自清", "冰心", "魯迅", "老舍", "林海音"];
+const PN={"shi": "⏰ 時", "jing": "🌳 景", "xin": "💗 心", "kai": "🚩 開", "tu": "⚡ 突", "guo": "🏁 果", "ming": "💡 明", "jue": "✊ 決", "wang": "🌟 忘"};
 const SEC={1:["第一段(約100字)","時景心","時間地點人物・環境景物・當時心情"],2:["第二段(約200字)","開突果","事情開始・突發/高潮・結果"],3:["第三段(約100字)","明決忘","我明白到・我決定・我永不會忘記"]};
 const AUK={1:'open',2:'mid',3:'end'};
 const steps=["選題與計劃","第一段:時・景・心","第二段:開・突・果","第三段:明・決・忘","完成與檢查"];
@@ -138,11 +147,11 @@ function topHTML(){const n=P.filter(p=>len(T.f[p.k])>=12).length;const B={b1:'�
 function chip(t,sub,cls,key){CH.push(t);return `<div class="chip ${cls}" onclick="addC(${CH.length-1},'${key||''}')">${t}${sub?`<small>${sub}</small>`:''}</div>`}
 function addC(i,key){key=key||active;if(!key)return;const ta=document.getElementById('ta_'+key);if(!ta)return;ta.value+=CH[i];onIn(key)}
 function addRaw(i,key){const ta=document.getElementById('ta_'+key);ta.value=CH[i]+ta.value;onIn(key)}
-function onIn(k){const ta=document.getElementById('ta_'+k);T.f[k]=ta.value;document.getElementById('c_'+k).textContent='字數:'+len(ta.value);reward();save();
+function onIn(k){const ta=document.getElementById('ta_'+k);T.f[k]=ta.value;document.getElementById('c_'+k).textContent='字數:'+len(ta.value);reward();save();markUsed(k);
  const sec=P.find(p=>p.k==k).sec;document.getElementById('chk').innerHTML=checkHTML(sec)}
 function speak(k){if(!window.speechSynthesis){toast('此瀏覽器不支援朗讀');return}const u=new SpeechSynthesisUtterance(T.f[k]||'');u.lang='zh-HK';speechSynthesis.cancel();speechSynthesis.speak(u)}
 function setActive(k){active=k;document.querySelectorAll('.part').forEach(e=>e.classList.toggle('act',e.id=='part_'+k))}
-function libSentences(){const a=[];P.forEach(p=>{p.chips.forEach(c=>a.push(c[0]));p.simple.forEach(c=>a.push(c[0]))});Object.values(AU).forEach(o=>['open','mid','end'].forEach(k=>o[k].forEach(s=>a.push(s))));return a.filter(s=>!s.includes('……'))}
+function libSentences(){const a=[];P.forEach(p=>{p.chips.forEach(c=>a.push(c[0]));p.simple.forEach(c=>a.push(c[0]))});Object.values(AU).forEach(o=>['open','mid','end'].forEach(k=>o[k].forEach(s=>a.push(s))));Object.values(FULL).forEach(l=>l.forEach(x=>a.push(x.replace(/^\(替代句式\)/,''))));Object.values(KIT).forEach(l=>l.forEach(x=>a.push(x)));STY.forEach(o=>o.v.forEach(x=>a.push(x)));return a.filter(s=>!s.includes('……'))}
 function checkHTML(sec){const txt=sec?secText(sec):all();const L=[];const n=len(txt);
  const goal={1:100,2:200,3:100}[sec]||400;L.push(`${n>=goal*0.9?'✅':'⬜'} 字數 ${n} / 約${goal}字`);
  const kw=(w)=>txt.includes(w);
@@ -151,15 +160,27 @@ function checkHTML(sec){const txt=sec?secText(sec):all();const L=[];const n=len(
  const d=(txt.match(/的/g)||[]).length,l=(txt.match(/了/g)||[]).length;
  if(n>0&&(d/n>0.07||l/n>0.05))L.push(`⚠️ 「的」${d}次、「了」${l}次,偏多,試試刪減或改寫`);
  const cp=libSentences().filter(s=>txt.includes(s)).length;
- L.push(cp>2?`⚠️ 有 ${cp} 句完全照抄佳句,請改寫部分字詞,加入自己的內容`:`✅ 照抄佳句 ${cp} 句(沒問題)`);
+ L.push(cp>0?`💡 使用了 ${cp} 句現成句子。有能力的話,試試改幾個字,加入自己的名字、地點或感受,令文章更有個性。`:`✅ 全部都是自己寫的句子,很棒!`);
  return '<b>🔍 自動檢查</b><br>'+L.join('<br>')}
-function pick(i){T.title=TOPICS[i][0];document.getElementById('ti').value=T.title;document.getElementById('hint').textContent='💭 想一想:'+TOPICS[i][1];document.querySelectorAll('.topic').forEach((e,j)=>e.classList.toggle('sel',i==j));save()}
-function partHTML(p,idx){const ch=simpleMode?p.simple.map(c=>chip(c[0],c[1],'sm',p.k)).join(''):p.chips.map(c=>chip(c[0],c[1],'',p.k)).join('');
- return `<div class="part ${active==p.k?'act':''}" id="part_${p.k}"><b style="font-size:18px">第${idx}句 ${p.lab}</b> <span class="ad">${p.en}・${p.hint}</span>
- <div class="ad">連接詞:</div><div class="chips">${p.conn.map(c=>{CH.push(c);return `<div class="chip cn" onclick="addRaw(${CH.length-1},'${p.k}')">${c}</div>`}).join('')}</div>
- <details ${simpleMode?'open':''}><summary>${simpleMode?'簡易佳句(含英文)':'佳句庫'}(點選加入)</summary><div class="chips">${ch}</div></details>
- <textarea id="ta_${p.k}" onfocus="setActive('${p.k}')" oninput="onIn('${p.k}')" placeholder="寫下「${p.lab}」…(點選佳句後,記得改成自己的內容)">${T.f[p.k]}</textarea>
- <div class="cnt"><span id="c_${p.k}">字數:${len(T.f[p.k])}</span> <button class="s" onclick="speak('${p.k}')">🔊 朗讀</button></div></div>`}
+function pick(i){T.title=TOPICS[i][0];document.getElementById('ti').value=T.title;document.getElementById('hint').textContent='💭 想一想:'+TOPICS[i][1];document.querySelectorAll('.topic').forEach((e,j)=>e.classList.toggle('sel',i==j));document.getElementById('kitbox').innerHTML=kitHTML();save()}
+function fchip(t,k,cls){CH.push(t);const lab=t.replace(/^\(替代句式\)/,'');return `<div class="chip full ${cls||''}" data-k="${k}" data-i="${CH.length-1}" onclick="addC(${CH.length-1},'${k}')">${lab}${t.startsWith('(替代句式)')?'<small>替代句式</small>':''}</div>`}
+function markUsed(k){document.querySelectorAll('.full[data-k="'+k+'"]').forEach(e=>e.classList.toggle('used',(T.f[k]||'').includes(CH[+e.dataset.i].replace(/^\(替代句式\)/,''))))}
+function markAll(){KEYS.forEach(markUsed)}
+function clearBox(k){const ta=document.getElementById('ta_'+k);ta.value='';onIn(k)}
+function topicSents(k){const t=KIT[T.title];if(!t)return[];const o=[t[KEYS.indexOf(k)]];if(EX[T.title]&&EX[T.title][k])o.push(EX[T.title][k]);return o}
+function kitHTML(){const t=KIT[T.title];if(!t)return `<div class="kit">🎁 <b>需要更多幫助?</b> 先在上面點選一個題目,就可以一鍵填入整篇完整示範。(自己填寫的題目沒有整篇示範,但每一格都有完整句子可以選。)</div>`;
+ return `<div class="kit">🎁 <b>超級支援</b>:已選「${T.title}」。按下面按鈕,會把整篇(約400字)完整示範填入九格,然後你可以逐句修改成自己的版本。<br><button onclick="fillKit()">🎁 一鍵填入完整示範</button></div>`}
+function fillKit(){const t=KIT[T.title];if(!t)return;if(len(all())>0&&!confirm('九格已有內容,會被覆蓋,確定嗎?'))return;
+ KEYS.forEach((k,i)=>{T.f[k]=t[i]+((EX[T.title]||{})[k]||'')+(GEN[k]||'')});reward();save();cur=1;view='main';render();scrollTo(0,0);setTimeout(()=>say('已幫你填好!請逐句讀一讀,改成自己的版本。'),300)}
+function partHTML(p,idx){const k=p.k;const ts=topicSents(k);
+ const full=ts.map(x=>fchip(x,k,'topic-m')).join('')+FULL[k].map(x=>fchip(x,k)).join('');
+ const old=simpleMode?p.simple.map(c=>chip(c[0],c[1],'sm',k)).join(''):p.chips.map(c=>chip(c[0],c[1],'',k)).join('');
+ return `<div class="part ${active==k?'act':''}" id="part_${k}"><b style="font-size:18px">第${idx}句 ${p.lab}</b> <span class="ad">${p.en}・${p.hint}</span>
+ <div class="ad">✅ 完整句子:直接點選就可以(${ts.length?'金色邊框是配合你題目的句子,':''}綠色代表已選用)</div><div class="chips">${full}</div>
+ ${simpleMode?`<div class="ad">簡易句子(附英文):</div><div class="chips">${old}</div>`:''}
+ <details><summary>進階:連接詞和更多佳句(想自己改寫的同學)</summary><div class="ad">連接詞:</div><div class="chips">${p.conn.map(c=>{CH.push(c);return `<div class="chip cn" onclick="addRaw(${CH.length-1},'${k}')">${c}</div>`}).join('')}</div>${simpleMode?'':`<div class="chips">${old}</div>`}</details>
+ <textarea id="ta_${k}" onfocus="setActive('${k}')" oninput="onIn('${k}')" placeholder="點選上面的完整句子,句子會出現在這裏。你可以再修改!">${T.f[k]}</textarea>
+ <div class="cnt"><span id="c_${k}">字數:${len(T.f[k])}</span> <button class="s" onclick="speak('${k}')">🔊 朗讀</button><button class="s" style="background:#94a3b8" onclick="clearBox('${k}')">🧹 清空此格</button></div></div>`}
 function auHTML(sec){return `<h3>📚 名家風格句(仿寫示範,點選加入「目前選中的格」)</h3>`+Object.entries(AU).map(([n,o])=>`<div class="ad"><b>${n}</b>:${o.d}</div><div class="chips">`+o[AUK[sec]].map(s=>chip(s,n,'au','')).join('')+`</div>`).join('')}
 function sample(){const S=[['t','時','上個月的一個星期五下午,學校舉行陸運會,我要參加四百米接力賽。'],['j','景','操場上彩旗飄揚,同學們的歡呼聲此起彼落,太陽曬得跑道閃閃發亮,連空氣都彷彿熱得冒煙。看台上,老師和家長都站了起來,為我們加油打氣。'],['x','心','我站在起跑線上,心像一面小鼓,咚咚咚地亂跳,手心也冒出了汗。'],
 ['k','開','槍聲一響,第一棒的同學像箭一樣衝了出去,我在第三棒的位置焦急地等待着,眼睛一眨也不敢眨。'],['u','突','就在他把接力棒交給第二棒時,忽然「啪」的一聲,接力棒掉到地上!全場一陣驚呼,我的腦海一片空白。只見第二棒的同學立刻彎腰拾起,咬緊牙關拚命追趕,終於把棒穩穩地交到我手裏。我緊緊握着接力棒,使盡全身力氣向前衝。'],['g','果','最後,我們只得到第三名,可是大家抱在一起又笑又叫,比拿了冠軍還要開心。看着隊友們滿頭大汗的笑臉,我的眼眶不禁熱了起來。'],
@@ -169,29 +190,33 @@ function sample(){const S=[['t','時','上個月的一個星期五下午,學校�
  <p style="font-size:18px;line-height:2.2">${S.map((x,i)=>(i==0||i==3||i==6?'<br>　　':'')+`<span class="sec-${x[0]}">${x[2]}<sup>${x[1]}</sup></span>`).join('')}</p>
  <p class="cnt">全文約 ${n} 字</p>
  <h3>🔎 寫作手法小分析</h3><div class="chk">・「景」:用視覺(彩旗、跑道閃亮)、聽覺(歡呼聲)描寫。<br>・「心」:用比喻「心像一面小鼓」寫緊張。<br>・「突」:用「忽然」帶出轉折,再用動作(彎腰、追趕、衝)寫高潮。<br>・「明決忘」:由事情引出道理,再寫決定和難忘的感受,最後呼應題目。</div></div>`}
-let G={i:0,score:0,q:[]};
-function gameInit(){const q=[];Object.entries(AU).forEach(([n,o])=>['open','mid','end'].forEach(k=>o[k].forEach(s=>q.push([s,n]))));q.sort(()=>Math.random()-0.5);G={i:0,score:0,q:q.slice(0,10)}}
-function gameHTML(){if(!G.q.length)gameInit();if(G.i>=G.q.length)return `<div class="card"><h2>🎮 完成!</h2><p style="font-size:22px">得分:${G.score} / ${G.q.length}</p><button onclick="gameInit();render()">再玩一次</button></div>`;
- const q=G.q[G.i];return `<div class="card"><h2>🎮 名家猜猜看 (${G.i+1}/${G.q.length})</h2><div class="tip">這句是模仿哪位作家的風格?(提示:比喻細膩→朱自清、溫柔感恩→冰心、簡練冷靜→魯迅、口語幽默→老舍、童真回憶→林海音)</div>
- <p style="font-size:20px;line-height:1.8">「${q[0]}」</p><div>${Object.keys(AU).map(n=>`<button class="opt" onclick="ans('${n}')">${n.replace('風格','')}</button>`).join('')}</div><p>得分:${G.score}</p></div>`}
-let locked=false;
-function ans(n){if(locked)return;locked=true;const q=G.q[G.i];if(n==q[1]){G.score++;toast('✅ 答對了!')}else toast('❌ 答案:'+q[1].replace('風格',''));G.i++;setTimeout(()=>{locked=false;render()},700)}
+let SB=0,SA='all';
+function styleHTML(){const o=STY[SB];const list=STY.map((x,i)=>`<span class="base ${i==SB?'sel':''}" onclick="SB=${i};render()">${PN[x.k]}:${x.base}</span>`).join('');
+ const bar=['all',...AUN].map(n=>`<button class="au-b ${SA==n?'sel':''}" onclick="SA='${n}';render()">${n=='all'?'全部':n}</button>`).join('');
+ const cards=AUN.map((n,i)=>({n,i})).filter(x=>SA=='all'||SA==x.n).map(x=>{const A=AUTH[x.n];return `<div class="scard"><b>${x.n}風格</b> <small>${A.d}</small><div class="t">${o.v[x.i]}</div><small>✏️ 寫法:${A.tips.join(' ‧ ')}</small><br><button class="s" onclick="useStyle(${x.i})">➕ 用這句(加入「${PN[o.k]}」格)</button></div>`}).join('');
+ return `<div class="card"><h2>🎨 名家風格變身</h2><div class="tip">第1步:揀一句簡單句子。第2步:看看不同作家會怎樣寫。第3步:揀一款風格加入自己的文章。</div>
+ <h3>① 揀一句簡單句子</h3>${list}<h3>② 揀作家風格</h3><div>${bar}</div>
+ <div class="scard orig"><b>原句(簡單版)</b> <small>${PN[o.k]}</small><div class="t">${o.base}</div><button class="s" onclick="useBase()">➕ 用原句</button></div>${cards}
+ <p class="ad">提示:這些是仿照各作家風格寫的示範句,不是作家原文。</p></div>`}
+function pushTo(k,t){T.f[k]=(T.f[k]||'')+t;reward();save();toast('✅ 已加入「'+PN[k]+'」格,可返回「📝 寫作」查看');setTimeout(()=>say('加入了!回到寫作頁看看吧。'),400)}
+function useStyle(i){const o=STY[SB];pushTo(o.k,o.v[i])}
+function useBase(){const o=STY[SB];pushTo(o.k,o.base)}
 function setView(v){view=v;render();scrollTo(0,0)}
 function copyEssay(){const t=T.title+'\n'+[1,2,3].map(secText).join('\n');if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>alert('已複製!'),()=>alert('複製失敗,請手動選取'));else alert('此瀏覽器不支援複製,請手動選取')}
 function go(d){cur=Math.max(0,Math.min(4,cur+d));save();render();scrollTo(0,0);setTimeout(cheer,300)}
 function render(){CH=[];const a=document.getElementById('app'),tp=document.getElementById('top'),nav=document.getElementById('nav');
- if(view!='main'){tp.innerHTML='';nav.style.display='none';a.innerHTML=view=='sample'?sample():gameHTML();return}
+ if(view!='main'){tp.innerHTML='';nav.style.display='none';a.innerHTML=view=='sample'?sample():styleHTML();return}
  nav.style.display='';tp.innerHTML=topHTML();document.getElementById('nx').style.display=cur==4?'none':'';
  if(cur==0){const has=len(all())>0;a.innerHTML=`<div class="card"><h2>第1步:揀題目</h2>${has?'<div class="tip">💾 已載入你上次的進度。</div>':''}
  <div class="rm">📌 記得三個口訣:<br><b>時景心</b>(開頭)→ <b>開突果</b>(經過)→ <b>明決忘</b>(結尾)<br><button class="s" onclick="setView('sample')">先看示範範文</button></div>
  <h3>👉 點選一個題目(或自己填寫)</h3><div class="chips">${TOPICS.map((t,i)=>`<div class="topic ${T.title==t[0]?'sel':''}" onclick="pick(${i})">${t[0]}</div>`).join('')}</div>
- <p>我的題目:<input type="text" id="ti" placeholder="或自己寫題目" value="${T.title}" oninput="T.title=this.value;save();document.querySelectorAll('.topic').forEach(e=>e.classList.remove('sel'))"></p>
- <div class="tip" id="hint">💭 選好題目後,這裏會有提示。</div>
- <p>我的計劃(誰、何時、何地、什麼事、結果、感受):</p><textarea oninput="T.plan=this.value;save()">${T.plan}</textarea>
+ <p>我的題目:<input type="text" id="ti" placeholder="或自己寫題目" value="${T.title}" oninput="T.title=this.value;save();document.querySelectorAll('.topic').forEach(e=>e.classList.remove('sel'));document.getElementById('kitbox').innerHTML=kitHTML()"></p>
+ <div class="tip" id="hint">💭 選好題目後,這裏會有提示。</div><div id="kitbox">${kitHTML()}</div>
+ <p>我的計劃(誰、何時、何地、什麼事、結果、感受)——可以不填:</p><textarea oninput="T.plan=this.value;save()">${T.plan}</textarea>
  <h3>⚙️ 支援選項</h3><label><input type="checkbox" ${simpleMode?'checked':''} onchange="simpleMode=this.checked;render()"> 簡易句子模式(句子較短,附英文翻譯 / Simple sentences with English)</label>
  <p class="ad">右下角的小助手會為你打氣,點牠或按「換小助手」可以更換!</p></div>`}
  else if(cur>=1&&cur<=3){const ps=P.filter(p=>p.sec==cur);if(!active||P.find(p=>p.k==active).sec!=cur)active=ps[0].k;
-  a.innerHTML=`<div class="card"><h2>${steps[cur]}</h2><div class="tip">題目:${T.title||'(未選)'}。逐格寫,每格一至兩句,最後會自動合併成段。</div>
+  a.innerHTML=`<div class="card"><h2>${steps[cur]}</h2><div class="tip">題目:${T.title||'(未選)'}。每格都有完整句子,直接點選就可以;想挑戰的同學可以自己改寫。想學名家寫法,請按上面「🎨 名家風格變身」。</div>
   <label><input type="checkbox" ${simpleMode?'checked':''} onchange="simpleMode=this.checked;render()"> 簡易句子模式(附英文)</label>
   ${ps.map((p,i)=>partHTML(p,(cur-1)*3+i+1)).join('')}${auHTML(cur)}<div class="chk" id="chk">${checkHTML(cur)}</div></div>`}
  else{const n=len(all());const segs=[1,2,3].map(secText);
@@ -200,6 +225,6 @@ function render(){CH=[];const a=document.getElementById('app'),tp=document.getEl
   <p class="cnt">總字數:<span class="${n>=400?'ok':''}">${n}</span> ${n>=400?'🎉 達標!':'(未夠400字,請補充)'}</p>
   <div class="chk">${checkHTML(0)}</div>
   <h3>✅ 自我檢查</h3>${["時:有時間、地點、人物","景:有環境描寫","心:有寫出心情","開:事情有清楚開始","突:有突發事件/高潮","果:有交代結果","明:我明白到……","決:我決定……","忘:我永不會忘記……","沒有錯別字、標點正確"].map(x=>`<label><input type="checkbox"> ${x}</label><br>`).join('')}
-  <button onclick="copyEssay()">📋 複製文章</button><button class="g" onclick="window.print()">🖨 列印</button></div>`}}
+  <button onclick="copyEssay()">📋 複製文章</button><button class="g" onclick="window.print()">🖨 列印</button></div>`}markAll()}
 showH();render();setTimeout(()=>say('你好!我是'+HELPERS[hi].n+',我會陪你一起寫作文!'),600);
 </script></body></html>
