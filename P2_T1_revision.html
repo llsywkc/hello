@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-HK"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>小二中文句式温習遊戲</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Microsoft JhengHei","PingFang HK","Noto Sans TC",sans-serif;font-weight:900;background:linear-gradient(135deg,#FFE066,#FF9ECD 50%,#7FDBFF);min-height:100vh;color:#5a2d82}
+#app{max-width:820px;margin:0 auto;padding:14px}
+.card{background:#fff;border:6px solid #ff7eb6;border-radius:28px;padding:22px;box-shadow:0 8px 0 #c94b8f;margin-bottom:14px;text-align:center}
+h1{font-size:2.2rem;margin:6px 0;color:#ff5a5f;text-shadow:3px 3px 0 #ffe066}
+.btn{font-family:inherit;font-weight:900;font-size:1.4rem;border:none;border-radius:20px;padding:12px 22px;margin:6px;color:#fff;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.25);transition:.1s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.b1{background:#ff5a5f}.b2{background:#2ecc71}.b3{background:#3498ff}.b4{background:#ff9f1a}.b5{background:#a55eea}
+.top{display:flex;justify-content:space-between;font-size:1.3rem;margin-bottom:8px}
+.bar{height:18px;background:#fff;border-radius:10px;border:3px solid #5a2d82;overflow:hidden;margin-bottom:12px}
+#fill{height:100%;background:linear-gradient(90deg,#2ecc71,#ffe066);width:0;transition:.3s}
+.tag{display:inline-block;background:#ffe066;border-radius:16px;padding:4px 14px;font-size:1.1rem;margin-bottom:10px;border:3px solid #ff9f1a}
+.q{font-size:2rem;line-height:1.6;margin:10px 0 16px;color:#2d3a8c}
+.opt{display:block;width:100%;font-size:1.7rem;margin:10px 0}
+.chip{display:inline-block;font-family:inherit;font-weight:900;font-size:1.6rem;margin:6px;padding:10px 16px;border-radius:18px;border:4px solid #fff;color:#fff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.zone{min-height:80px;border:4px dashed #3498ff;border-radius:20px;background:#eaf6ff;padding:8px;margin:8px 0}
+.fb{font-size:1.7rem;min-height:50px;margin-top:10px}
+.ok{color:#1fa65a}.no{color:#e84118}
+.good{animation:pop .4s}.bad{animation:shake .4s}
+@keyframes pop{50%{transform:scale(1.04)}}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.big{font-size:4rem}
+.hide{display:none}
+</style></head><body><div id="app"></div>
+<script>
+const P={"還":{n:"……，還……",c:"b2"},"可是":{n:"……，可是……",c:"b3"},"地":{n:"形容詞＋地＋動作",c:"b4"},"得":{n:"……得……",c:"b5"}};
+const MC=[
+["還","姐姐會唱歌，還會＿＿。",["跳舞","很高興","蘋果"],0],
+["還","書包裏有課本，還有＿＿。",["文具盒","跑步","很快"],0],
+["還","媽媽買了麵包，＿＿買了牛奶。",["還","可是","地"],0],
+["還","花園裏有蝴蝶，還有＿＿。",["蜜蜂","快樂","打球"],0],
+["還","我喜歡吃蘋果，還喜歡吃＿＿。",["香蕉","游泳","開心"],0],
+["還","哥哥會游泳，＿＿會打籃球。",["還","可是","得"],0],
+["可是","這個書包很漂亮，可是價錢太＿＿。",["貴","漂亮","高興"],0],
+["可是","我很想出去玩，可是外面正在＿＿。",["下大雨","很開心","唱歌"],0],
+["可是","今天陽光普照，＿＿天氣仍然很冷。",["可是","還","地"],0],
+["可是","弟弟很想吃蛋糕，可是蛋糕已經＿＿。",["吃完了","很好吃","真漂亮"],0],
+["可是","我找遍了房間，可是還是＿＿我的鉛筆盒。",["找不到","找到了","喜歡"],0],
+["可是","哥哥跑得很快，＿＿沒有得到冠軍。",["可是","還","得"],0],
+["地","弟弟收到生日禮物，＿＿地說：「謝謝媽媽！」",["高興","擔心","傷心"],0],
+["地","爸爸深夜還未回家，媽媽＿＿地說：「他沒事吧？」",["擔心","高興","神氣"],0],
+["地","弟弟弄壞姐姐的模型，姐姐＿＿地說：「你怎麼可以這樣！」",["生氣","高興","安靜"],0],
+["地","小金魚死了，妹妹＿＿地說：「我再也不能餵牠了。」",["傷心","神氣","興奮"],0],
+["地","小明戴着冠軍獎牌，＿＿地說：「我跑得最快！」",["神氣","傷心","擔心"],0],
+["地","老師講解課文，同學們都＿＿地聆聽。",["認真","興奮","傷心"],0],
+["地","地板濕滑，婆婆＿＿地走過去。",["小心","興奮","生氣"],0],
+["地","見到校長，小美＿＿地說：「校長，早安！」",["有禮貌","生氣","擔心"],0],
+["地","得知可以去海洋公園，弟弟＿＿地跳了起來。",["興奮","傷心","安靜"],0],
+["地","圖書館裏，大家都＿＿地看書。",["安靜","興奮","生氣"],0],
+["得","天氣很熱，弟弟熱得＿＿。",["滿頭大汗","很高興地","還有"],0],
+["得","北風吹來，妹妹冷得＿＿。",["全身發抖","滿頭大汗","笑哈哈地"],0],
+["得","看見爸爸回家，小狗高興得＿＿。",["不停地搖尾巴","全身發抖","很冷"],0],
+["得","烏龜爬得很＿＿。",["慢","快","高興"],0],
+["得","妹妹笑＿＿很開心。",["得","地","還"],0],
+["得","小美唱歌唱＿＿很好聽。",["得","地","可是"],0],
+["得","弟弟餓得＿＿。",["肚子咕咕叫","滿頭大汗","全身發抖"],0],
+["得","寶寶睡＿＿很香甜。",["得","地","可是"],0]
+];
+const RO=[
+["還",["媽媽","買了麵包","，還","買了牛奶"]],
+["還",["哥哥","會游泳","，還","會打籃球"]],
+["還",["花園裏","有蝴蝶","，還","有蜜蜂"]],
+["還",["小美","在圖書館看故事書","，還","借了兩本書"]],
+["可是",["這條裙子很漂亮","，可是","太小了"]],
+["可是",["我敲了很久的門","，可是","沒有人開門"]],
+["可是",["哥哥跑得很快","，可是","沒有得到冠軍"]],
+["可是",["我很想買這本故事書","，可是","我帶的錢不夠"]],
+["可是",["今天陽光普照","，可是","天氣仍然很冷"]],
+["地",["同學們","認真地","聆聽"]],
+["地",["婆婆","小心地","走過去"]],
+["地",["大家","安靜地","看書"]],
+["地",["弟弟","興奮地","跳了起來"]],
+["地",["姐姐","生氣地","說話"]],
+["得",["妹妹","笑得","很開心"]],
+["得",["哥哥","跑得","滿頭大汗"]],
+["得",["弟弟","餓得","肚子咕咕叫"]],
+["得",["寶寶","睡得","很香甜"]],
+["得",["小美","唱歌","唱得","很好聽"]]
+];
+const COL=["#ff5a5f","#2ecc71","#3498ff","#ff9f1a","#a55eea","#e84393"];
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const $=document.getElementById("app");
+let qs=[],i=0,score=0,streak=0,locked=false,sel="all";
+const PRAISE=["好棒呀！🎉","勁呀！⭐","正確！🌈","叻仔／叻女！🏆","太好了！🎈"];
+function home(){
+ $.innerHTML=`<div class="card"><div class="big">🌟📚🌟</div><h1>小二句式大挑戰</h1>
+ <div style="font-size:1.3rem">揀一個句式，開始温習啦！每次 10 題，題目隨機出現！</div><br>
+ <button class="btn b1" onclick="start('all')">🎲 全部句式</button><br>
+ ${Object.keys(P).map(k=>`<button class="btn ${P[k].c}" onclick="start('${k}')">${P[k].n}</button>`).join("")}</div>`;
+}
+function start(k){
+ sel=k;
+ let m=MC.filter(x=>k=="all"||x[0]==k).map(x=>({t:"mc",p:x[0],q:x[1],o:x[2],a:x[3]}));
+ let r=RO.filter(x=>k=="all"||x[0]==k).map(x=>({t:"ro",p:x[0],w:x[1]}));
+ qs=shuf(m.concat(r)).slice(0,10);i=0;score=0;streak=0;show();
+}
+function head(){
+ return `<div class="top"><span>第 ${i+1} / ${qs.length} 題</span><span>⭐ ${score}　🔥 ${streak}</span></div><div class="bar"><div id="fill" style="width:${i/qs.length*100}%"></div></div>`;
+}
+function show(){
+ if(i>=qs.length)return end();
+ locked=false;const q=qs[i];
+ if(q.t=="mc"){
+  const opts=shuf(q.o.map((t,n)=>({t,c:n==q.a})));
+  $.innerHTML=`<div class="card" id="c">${head()}<span class="tag">${P[q.p].n}・選擇題</span><div class="q">${q.q}</div>
+  ${opts.map((o,n)=>`<button class="btn opt" style="background:${COL[n%6]}" data-c="${o.c}" onclick="pick(this)">${["🅰","🅱","🅲"][n]} ${o.t}</button>`).join("")}<div class="fb" id="fb"></div></div>`;
+ }else{
+  let w=q.w.map((t,n)=>({t,n}));let s;do{s=shuf(w)}while(s.map(x=>x.n).join()==w.map(x=>x.n).join());
+  q.pool=s;q.ans=[];drawRO();
+ }
+}
+function drawRO(){
+ const q=qs[i];
+ $.innerHTML=`<div class="card" id="c">${head()}<span class="tag">${P[q.p].n}・重組句子</span><div class="q" style="font-size:1.4rem">㩒詞語，砌成正確句子！</div>
+ <div class="zone" id="za">${q.ans.map(x=>`<span class="chip" style="background:${COL[x.n%6]}" onclick="back(${x.n})">${x.t}</span>`).join("")}</div>
+ <div class="zone" style="background:#fff7d6;border-color:#ff9f1a">${q.pool.map(x=>`<span class="chip" style="background:${COL[x.n%6]}" onclick="add(${x.n})">${x.t}</span>`).join("")}</div>
+ <button class="btn b2" onclick="checkRO()">✅ 檢查</button><button class="btn b4" onclick="resetRO()">🔄 重來</button>
+ <div class="fb" id="fb"></div></div>`;
+}
+function add(n){if(locked)return;const q=qs[i];const x=q.pool.find(y=>y.n==n);q.pool=q.pool.filter(y=>y.n!=n);q.ans.push(x);drawRO()}
+function back(n){if(locked)return;const q=qs[i];const x=q.ans.find(y=>y.n==n);q.ans=q.ans.filter(y=>y.n!=n);q.pool.push(x);drawRO()}
+function resetRO(){if(locked)return;const q=qs[i];q.pool=q.pool.concat(q.ans);q.ans=[];drawRO()}
+function checkRO(){
+ if(locked)return;const q=qs[i];
+ if(q.pool.length){fb("請先用晒所有詞語喎！😮",false,true);return}
+ const ok=q.ans.every((x,k)=>x.n==k);
+ const full=q.w.join("")+"。";
+ if(ok)right(); else wrong("正確句子：<br>"+full);
+}
+function pick(b){
+ if(locked)return;locked=true;
+ const ok=b.dataset.c=="true";
+ document.querySelectorAll(".opt").forEach(x=>{if(x.dataset.c=="true")x.style.outline="6px solid #1fa65a"});
+ if(ok)right();else{b.style.opacity=.4;const q=qs[i];wrong("答案係：「"+q.o[q.a]+"」")}
+}
+function right(){locked=true;score++;streak++;fb(PRAISE[Math.floor(Math.random()*PRAISE.length)]+(streak>=3?" 連續答啱 "+streak+" 題！🔥":""),true);next()}
+function wrong(m){locked=true;streak=0;fb("加油！"+m,false);next()}
+function fb(m,ok,keep){
+ const f=document.getElementById("fb");f.className="fb "+(ok?"ok":"no");f.innerHTML=m;
+ const c=document.getElementById("c");c.classList.remove("good","bad");void c.offsetWidth;c.classList.add(ok?"good":"bad");
+}
+function next(){
+ const f=document.getElementById("fb");
+ f.insertAdjacentHTML("afterend",`<button class="btn b1" onclick="i++;show()">${i==qs.length-1?"看成績 🏁":"下一題 ➡️"}</button>`);
+}
+function end(){
+ const p=score/qs.length;
+ const m=p==1?"🏆 滿分！你係句式小天才！":p>=.7?"🌟 好叻呀！繼續努力！":p>=.4?"👍 唔錯！再玩多次會更好！":"💪 唔緊要，再試多次！";
+ $.innerHTML=`<div class="card"><div class="big">${p>=.7?"🎉🎊🎉":"🌈"}</div><h1>完成啦！</h1>
+ <div class="q">你答啱 ${score} / ${qs.length} 題</div><div class="q">${m}</div>
+ <button class="btn b2" onclick="start('${sel}')">🔁 再玩一次（新題目）</button><button class="btn b3" onclick="home()">🏠 返回主頁</button></div>`;
+}
+home();
+</script></body></html>
