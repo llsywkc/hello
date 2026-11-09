@@ -18,6 +18,7 @@ h1{font-size:2.2rem;margin:6px 0;color:#ff5a5f;text-shadow:3px 3px 0 #ffe066}
 .q{font-size:2rem;line-height:1.6;margin:10px 0 16px;color:#2d3a8c}
 .opt{display:block;width:100%;font-size:1.7rem;margin:10px 0}
 .chip{display:inline-block;font-family:inherit;font-weight:900;font-size:1.6rem;margin:6px;padding:10px 16px;border-radius:18px;border:4px solid #fff;color:#fff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.chip.p{min-width:58px;padding:10px 12px;background:#2d3a8c!important;font-size:1.8rem}
 .zone{min-height:80px;border:4px dashed #3498ff;border-radius:20px;background:#eaf6ff;padding:8px;margin:8px 0}
 .fb{font-size:1.7rem;min-height:50px;margin-top:10px}
 .ok{color:#1fa65a}.no{color:#e84118}
@@ -25,10 +26,9 @@ h1{font-size:2.2rem;margin:6px 0;color:#ff5a5f;text-shadow:3px 3px 0 #ffe066}
 @keyframes pop{50%{transform:scale(1.04)}}
 @keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 .big{font-size:4rem}
-.hide{display:none}
 </style></head><body><div id="app"></div>
 <script>
-const P={"還":{n:"……，還……",c:"b2"},"可是":{n:"……，可是……",c:"b3"},"地":{n:"形容詞＋地＋動作",c:"b4"},"得":{n:"……得……",c:"b5"}};
+const P={"還":{n:"……,還……",c:"b2"},"可是":{n:"……,可是……",c:"b3"},"地":{n:"形容詞+地+動作",c:"b4"},"得":{n:"……得……",c:"b5"}};
 const MC=[
 ["還","姐姐會唱歌，還會＿＿。",["跳舞","很高興","蘋果"],0],
 ["還","書包裏有課本，還有＿＿。",["文具盒","跑步","很快"],0],
@@ -60,17 +60,17 @@ const MC=[
 ["得","小美唱歌唱＿＿很好聽。",["得","地","可是"],0],
 ["得","弟弟餓得＿＿。",["肚子咕咕叫","滿頭大汗","全身發抖"],0],
 ["得","寶寶睡＿＿很香甜。",["得","地","可是"],0]
-];
-const RO=[
-["還",["媽媽","買了麵包","，還","買了牛奶"]],
-["還",["哥哥","會游泳","，還","會打籃球"]],
-["還",["花園裏","有蝴蝶","，還","有蜜蜂"]],
-["還",["小美","在圖書館看故事書","，還","借了兩本書"]],
-["可是",["這條裙子很漂亮","，可是","太小了"]],
-["可是",["我敲了很久的門","，可是","沒有人開門"]],
-["可是",["哥哥跑得很快","，可是","沒有得到冠軍"]],
-["可是",["我很想買這本故事書","，可是","我帶的錢不夠"]],
-["可是",["今天陽光普照","，可是","天氣仍然很冷"]],
+].map(x=>{x[1]=x[1].replace(/,/g,"，").replace(/:/g,"：").replace(/!/g,"!").replace(/\?/g,"?");return x});
+const RO_RAW=[
+["還",["媽媽","買了麵包","，","還","買了牛奶"]],
+["還",["哥哥","會游泳","，","還","會打籃球"]],
+["還",["花園裏","有蝴蝶","，","還","有蜜蜂"]],
+["還",["小美","在圖書館看故事書","，","還","借了兩本書"]],
+["可是",["這條裙子很漂亮","，","可是","太小了"]],
+["可是",["我敲了很久的門","，","可是","沒有人開門"]],
+["可是",["哥哥跑得很快","，","可是","沒有得到冠軍"]],
+["可是",["我很想買這本故事書","，","可是","我帶的錢不夠"]],
+["可是",["今天陽光普照","，","可是","天氣仍然很冷"]],
 ["地",["同學們","認真地","聆聽"]],
 ["地",["婆婆","小心地","走過去"]],
 ["地",["大家","安靜地","看書"]],
@@ -82,11 +82,14 @@ const RO=[
 ["得",["寶寶","睡得","很香甜"]],
 ["得",["小美","唱歌","唱得","很好聽"]]
 ];
+const RO=RO_RAW.map(x=>[x[0],x[1].concat(["。"])]);
+const isP=t=>t=="，"||t=="。";
 const COL=["#ff5a5f","#2ecc71","#3498ff","#ff9f1a","#a55eea","#e84393"];
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const $=document.getElementById("app");
 let qs=[],i=0,score=0,streak=0,locked=false,sel="all";
 const PRAISE=["好棒呀！🎉","勁呀！⭐","正確！🌈","叻仔／叻女！🏆","太好了！🎈"];
+function chip(x,fn){return `<span class="chip${isP(x.t)?" p":""}" style="background:${COL[x.n%6]}" onclick="${fn}(${x.n})">${x.t}</span>`}
 function home(){
  $.innerHTML=`<div class="card"><div class="big">🌟📚🌟</div><h1>小二句式大挑戰</h1>
  <div style="font-size:1.3rem">揀一個句式，開始温習啦！每次 10 題，題目隨機出現！</div><br>
@@ -116,9 +119,9 @@ function show(){
 }
 function drawRO(){
  const q=qs[i];
- $.innerHTML=`<div class="card" id="c">${head()}<span class="tag">${P[q.p].n}・重組句子</span><div class="q" style="font-size:1.4rem">㩒詞語，砌成正確句子！</div>
- <div class="zone" id="za">${q.ans.map(x=>`<span class="chip" style="background:${COL[x.n%6]}" onclick="back(${x.n})">${x.t}</span>`).join("")}</div>
- <div class="zone" style="background:#fff7d6;border-color:#ff9f1a">${q.pool.map(x=>`<span class="chip" style="background:${COL[x.n%6]}" onclick="add(${x.n})">${x.t}</span>`).join("")}</div>
+ $.innerHTML=`<div class="card" id="c">${head()}<span class="tag">${P[q.p].n}・重組句子</span><div class="q" style="font-size:1.4rem">㩒詞語同標點（，。）,砌成正確句子！</div>
+ <div class="zone" id="za">${q.ans.map(x=>chip(x,"back")).join("")}</div>
+ <div class="zone" style="background:#fff7d6;border-color:#ff9f1a">${q.pool.map(x=>chip(x,"add")).join("")}</div>
  <button class="btn b2" onclick="checkRO()">✅ 檢查</button><button class="btn b4" onclick="resetRO()">🔄 重來</button>
  <div class="fb" id="fb"></div></div>`;
 }
@@ -127,10 +130,9 @@ function back(n){if(locked)return;const q=qs[i];const x=q.ans.find(y=>y.n==n);q.
 function resetRO(){if(locked)return;const q=qs[i];q.pool=q.pool.concat(q.ans);q.ans=[];drawRO()}
 function checkRO(){
  if(locked)return;const q=qs[i];
- if(q.pool.length){fb("請先用晒所有詞語喎！😮",false,true);return}
+ if(q.pool.length){fb("請先用晒所有詞語同標點喎！😮",false);return}
  const ok=q.ans.every((x,k)=>x.n==k);
- const full=q.w.join("")+"。";
- if(ok)right(); else wrong("正確句子：<br>"+full);
+ if(ok)right(); else wrong("正確句子：<br>"+q.w.join(""));
 }
 function pick(b){
  if(locked)return;locked=true;
@@ -140,13 +142,12 @@ function pick(b){
 }
 function right(){locked=true;score++;streak++;fb(PRAISE[Math.floor(Math.random()*PRAISE.length)]+(streak>=3?" 連續答啱 "+streak+" 題！🔥":""),true);next()}
 function wrong(m){locked=true;streak=0;fb("加油！"+m,false);next()}
-function fb(m,ok,keep){
+function fb(m,ok){
  const f=document.getElementById("fb");f.className="fb "+(ok?"ok":"no");f.innerHTML=m;
  const c=document.getElementById("c");c.classList.remove("good","bad");void c.offsetWidth;c.classList.add(ok?"good":"bad");
 }
 function next(){
- const f=document.getElementById("fb");
- f.insertAdjacentHTML("afterend",`<button class="btn b1" onclick="i++;show()">${i==qs.length-1?"看成績 🏁":"下一題 ➡️"}</button>`);
+ document.getElementById("fb").insertAdjacentHTML("afterend",`<button class="btn b1" onclick="i++;show()">${i==qs.length-1?"看成績 🏁":"下一題 ➡️"}</button>`);
 }
 function end(){
  const p=score/qs.length;
