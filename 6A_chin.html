@@ -7900,13 +7900,13 @@ function checkDailyReset() {
             const t = _lbLastOk ? '（' + new Date(_lbLastOk).toLocaleTimeString('zh-HK') + '）' : '';
             el.textContent = state === 'ok' ? '☁️ 你嘅分數已同步' + t
                 : state === 'pending' ? '⏳ 待同步…'
-                : state === 'retry' ? '🔁 同步失敗，自動重試中…'
-                : state === 'fail' ? '⚠️ 暫時未能同步，繼續答題時會再試' : '';
+                : state === 'retry' ? '🔁 同步失敗：'+(window._lbLastError||'連線失敗')+'，自動重試中…'
+                : state === 'fail' ? '⚠️ 未同步：'+(window._lbLastError||'連線失敗')+'（30秒後再試）' : '';
         }
         function scheduleLbSubmit(immediate) {
             if (!inventory || !inventory.playerName) return;
             _lbDirty = true;
-            if (_lbTimer) return;
+            if (_lbTimer) { if(!immediate) return; clearTimeout(_lbTimer); _lbTimer=null; }
             const wait = immediate ? 0 : Math.max(0, LB_MIN_GAP - (Date.now() - _lastLbSubmit));
             _lbTimer = setTimeout(runLbSubmit, wait);
             if (!_lbBusy) setLbSync('pending');
@@ -7923,7 +7923,7 @@ function checkDailyReset() {
             else {
                 _lbDirty = true; _lbFail++;
                 if (_lbFail <= LB_RETRY_DELAYS.length) { setLbSync('retry'); if (!_lbTimer) _lbTimer = setTimeout(runLbSubmit, LB_RETRY_DELAYS[_lbFail - 1]); }
-                else { setLbSync('fail'); _lbFail = 0; }
+                else { setLbSync('fail'); _lbFail = 0; if(!_lbTimer) _lbTimer=setTimeout(runLbSubmit,30000); }
             }
             if (_lbDirty && !_lbTimer && ok) scheduleLbSubmit();   // 上傳期間又有新答題
         }
@@ -8548,13 +8548,13 @@ async function fetchLeaderboard(_auto) {
             try {
                 // cache-busting: append timestamp to force fresh fetch every time
                 const bust = '?_=' + Date.now();
-                const res = await fetch(FIREBASE_LB_URL + bust, {
+                const res = await lbFetch(FIREBASE_LB_URL + bust, {
                     cache: 'no-store',
                     headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
                 });
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
-                const entries = data && data.entries ? data.entries : [];
+                const entries = lbNormaliseEntries(data && data.entries);
                 window._lbEntries = entries;
                 renderLbTab(entries);
                 status.textContent = `✅ 共 ${entries.length} 位冒險者 · 最後更新：${new Date().toLocaleTimeString('zh-HK')}`;
@@ -8599,28 +8599,76 @@ async function fetchLeaderboard(_auto) {
                      + '</div></div>';
             }).join('');
         }
+        function lbInventorySnapshot(){ return JSON.parse(JSON.stringify({...inventory, _scoreSnapshot:calcScore()})); }
+        function lbNormaliseEntries(value){
+            if(value == null) return [];
+            if(typeof value !== 'object') throw new Error('排行榜格式不正確，未有寫入');
+            return Object.values(value).filter(e=>e && typeof e==='object' && typeof e.name==='string');
+        }
+        async function lbFetch(url, options={}){
+            const controller=new AbortController();
+            const timer=setTimeout(()=>controller.abort(),12000);
+            try { return await fetch(url,{...options,signal:controller.signal}); }
+            catch(e){ if(e.name==='AbortError') throw new Error('排行榜連線逾時（12秒）'); throw e; }
+            finally {clearTimeout(timer);}
+        }
+        /* ── 排行榜寫入模式 ──────────────────────────────────────────────
+           優先用 Firebase 條件寫入（ETag + if-match），避免多人同時上傳互相蓋走。
+           但瀏覽器未必准許網頁讀取 ETag（跨網域標頭預設唔公開），或者會封鎖自訂標頭。
+           所以：讀得到 ETag 就用條件寫入；讀唔到／被封鎖就自動回退舊方式（唔會停止上傳），
+           並於寫入後驗證自己嘅紀錄。 */
+        let _lbCas = null;   // null=未知, true=可用, false=唔可用
+        // true：由已驗證嘅雲端存檔衍生嘅統計欄位「跟隨存檔」（可升可降），避免榜上舊高位令新分數更新唔到。
+        // false：回復舊行為（所有欄位只升不降）。
+        const LB_FOLLOW_SAVE = true;
+        async function lbReadBoard(){
+            if (_lbCas !== false) {
+                try {
+                    const r = await lbFetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache:'no-store', headers:{ 'X-Firebase-ETag':'true' } });
+                    if (!r.ok) throw new Error('讀取失敗 HTTP ' + r.status);
+                    const etag = r.headers.get('ETag');
+                    const data = await r.json();
+                    if (etag) { _lbCas = true; return { data, etag }; }
+                    _lbCas = false; return { data, etag: null };
+                } catch (e) {
+                    if (!(e instanceof TypeError)) throw e;      // HTTP／逾時錯誤直接回報
+                    // TypeError＝網絡或 CORS 封鎖自訂標頭：試用普通讀取
+                    const r2 = await lbFetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache:'no-store' });
+                    if (!r2.ok) throw new Error('讀取失敗 HTTP ' + r2.status);
+                    _lbCas = false; return { data: await r2.json(), etag: null };
+                }
+            }
+            const r = await lbFetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache:'no-store' });
+            if (!r.ok) throw new Error('讀取失敗 HTTP ' + r.status);
+            return { data: await r.json(), etag: null };
+        }
+        async function lbWriteBoard(payload, etag){
+            const body = JSON.stringify(payload);
+            if (etag && _lbCas !== false) {
+                try { return { res: await lbFetch(FIREBASE_LB_URL, { method:'PUT', headers:{ 'Content-Type':'application/json', 'if-match': etag }, body }), conditional: true }; }
+                catch (e) { if (!(e instanceof TypeError)) throw e; _lbCas = false; }   // 自訂標頭被封鎖 → 回退
+            }
+            return { res: await lbFetch(FIREBASE_LB_URL, { method:'PUT', headers:{ 'Content-Type':'application/json' }, body }), conditional: false };
+        }
         async function submitScore(silent = false, _attempt = 0) {
+            const inventory = lbInventorySnapshot();
             const status = document.getElementById('lb-status');
-            if (!inventory.playerName) { if (!silent) alert('請先設定冒險者名字！'); return; }
+            if (!inventory.playerName) { if (!silent) alert('請先設定冒險者名字！'); return false; }
+            // 只有已由雲端驗證載入嘅存檔先可以更新排行榜，避免舊／空白資料拉低或蓋走分數
+            if (!window._cloudSaveVerified) { window._lbLastError = '雲端存檔未驗證，暫不上傳排行榜'; return false; }
             if (!silent) status.textContent = '⏳ 上傳中...';
             try {
-                // 1. Fetch current data from Firebase
-                const getRes = await fetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
-                if (!getRes.ok) throw new Error('讀取失敗 HTTP ' + getRes.status);
-                const data = await getRes.json();
-                let entries = (data && data.entries) ? [...data.entries] : [];
-
-                // 1b. 姓名係排行榜身份：只合併同名重複紀錄；唔同姓名即使舊 playerId 撞號都保留。
+                const { data, etag } = await lbReadBoard();
+                let entries = lbNormaliseEntries(data && data.entries);
+                // 姓名係排行榜身份：只合併同名重複紀錄（保留最新一筆）；唔同姓名一律保留。
                 {
                     const best = new Map();
                     entries.forEach(e => {
                         const k = String(e.name || '');
-                        if (!best.has(k) || (e.score || 0) > (best.get(k).score || 0)) best.set(k, e);
+                        if (!best.has(k) || String(e.timestamp || '') >= String(best.get(k).timestamp || '')) best.set(k, e);
                     });
                     entries = Array.from(best.values());
                 }
-
-                // 2. Update or insert this player
                 const bwSnap = inventory.bossWins || {};
                 const myEntry = {
                     name:              inventory.playerName,
@@ -8635,7 +8683,7 @@ async function fetchLeaderboard(_auto) {
                     examCount:         inventory.examCompletedCount || 0,
                     examBonusScore:    inventory.examBonusScore || 0,
                     rcCorrect:         inventory.rcCorrectAnswers || 0,
-                    score:             calcScore(),
+                    score:             inventory._scoreSnapshot,
                     dinoScore:         inventory.dinoScore || 0,
                     shooterScore:      inventory.shooterScore || 0,
                     flipScore:         inventory.flipScore    || 0,
@@ -8687,11 +8735,10 @@ async function fetchLeaderboard(_auto) {
                     coins:          inventory.coins          || 0,
                     timestamp:      new Date().toISOString()
                 };
-                const existIdx = entries.findIndex(e => e.name === inventory.playerName); // ✅ 只按名字配對，避免 playerId 重複時蓋過別人
+                const existIdx = entries.findIndex(e => e.name === inventory.playerName);
                 if (existIdx >= 0) {
-                    // ✅ FIX B5 v2: 分項取最大值合併，分數只升不降（防跨裝置覆蓋問題）
                     const old = entries[existIdx];
-                    const merged = {
+                    const legacy = (() => { return {
                         ...myEntry,
                         correctAnswers:  Math.max(old.correctAnswers  ||0, myEntry.correctAnswers  ||0),
                         moShuCorrect:    Math.max(old.moShuCorrect    ||0, myEntry.moShuCorrect    ||0),
@@ -8728,53 +8775,63 @@ async function fetchLeaderboard(_auto) {
                         manuscript:      myEntry.manuscript,
                         fragment:        myEntry.fragment,
                         coins:           myEntry.coins,
-                    };
-                    entries[existIdx] = merged;
+                    } ; })();
+                    if (LB_FOLLOW_SAVE) {
+                        const keepBest = k => Math.max(old[k] || 0, myEntry[k] || 0);   // 街機最高分：只升不降
+                        entries[existIdx] = {
+                            ...myEntry,
+                            dinoScore: keepBest('dinoScore'), shooterScore: keepBest('shooterScore'),
+                            lightningScore: keepBest('lightningScore'), flipScore: keepBest('flipScore'),
+                            flipBestTime: myEntry.flipBestTime > 0 ? (old.flipBestTime > 0 ? Math.min(old.flipBestTime, myEntry.flipBestTime) : myEntry.flipBestTime) : (old.flipBestTime || 0)
+                        };
+                    } else { entries[existIdx] = legacy; }
                 } else {
                     entries.push(myEntry);
                 }
-
-                // 3. Put updated data back to Firebase
-                const putRes = await fetch(FIREBASE_LB_URL, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ entries })
-                });
+                const payload = { ...((data && typeof data === 'object' && !Array.isArray(data)) ? data : {}), entries };
+                const { res: putRes, conditional } = await lbWriteBoard(payload, etag);
+                if (putRes.status === 412) {   // 讀取後有其他同學更新過 → 重新讀取再合併
+                    if (_attempt < 7) { await new Promise(r => setTimeout(r, 80 + Math.random() * 250)); return submitScore(silent, _attempt + 1); }
+                    throw new Error('多人同時上傳，稍後將自動重試');
+                }
                 if (!putRes.ok) throw new Error('上傳失敗 HTTP ' + putRes.status);
-                if (!silent) { status.textContent = `✅ 分數已上傳！你的分數：${myEntry.score}`; }
-                // Optimistic local cache update
-                const savedEntry = existIdx >= 0 ? entries[existIdx] : myEntry;
+                const savedEntry = entries.find(e => e.name === inventory.playerName) || myEntry;
+                if (!silent) { status.textContent = `✅ 分數已上傳！你的分數：${savedEntry.score}`; }
                 if (window._lbEntries) {
                     const ci = window._lbEntries.findIndex(e => e.name === inventory.playerName);
                     if (ci >= 0) window._lbEntries[ci] = savedEntry; else window._lbEntries.push(savedEntry);
                 }
-                // If LB panel is open, refresh immediately
                 const lbOpen = !document.getElementById('leaderboard-screen').classList.contains('hidden');
                 if (lbOpen) { if (typeof renderLbTab === 'function') renderLbTab(window._lbEntries || []); setTimeout(fetchLeaderboard, 400); }
                 else if (!silent) { setTimeout(fetchLeaderboard, 400); }
-                window._lastLbSubmit = Date.now(); // update throttle timer
-                // 驗證：確保自己嘅紀錄冇被其他同學同一時間上傳覆蓋，被蓋走就重新上傳（最多 3 次嘗試）
-                await new Promise(r => setTimeout(r, 700 + Math.random() * 500));
-                const vr = await fetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache: 'no-store' });
-                if (vr.ok) {
-                    const vd = await vr.json();
-                    const mine = ((vd && vd.entries) || []).find(e => e && e.name === inventory.playerName);
-                    if (!mine || String(mine.timestamp || '') < String(myEntry.timestamp)) {
-                        if (_attempt < 2) return await submitScore(silent, _attempt + 1);
-                        return false;   // 3 次都被覆蓋 → 回報失敗，交俾自動重試排程
+                window._lastLbSubmit = Date.now();
+                // 條件寫入已保證冇被蓋走；回退模式則驗證自己嘅紀錄仍然存在（最多重試 2 次）
+                if (!conditional) {
+                    await new Promise(r => setTimeout(r, 700 + Math.random() * 500));
+                    const vr = await lbFetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache: 'no-store' });
+                    if (vr.ok) {
+                        const vd = await vr.json();
+                        const mine = lbNormaliseEntries(vd && vd.entries).find(e => e.name === inventory.playerName);
+                        if (!mine || String(mine.timestamp || '') < String(myEntry.timestamp)) {
+                            if (_attempt < 2) return await submitScore(silent, _attempt + 1);
+                            throw new Error('紀錄被其他同學同時上傳覆蓋，稍後自動重試');
+                        }
                     }
                 }
+                window._lbLastError = '';
                 return true;
             } catch(e) {
-                if (!silent) status.textContent = '❌ 上傳失敗：' + e.message;
+                window._lbLastError = e.message || String(e);
+                if (!silent) status.textContent = '❌ 上傳失敗：' + window._lbLastError;
                 return false;
             }
         }
-        // ── Expose core functions to window for cross-closure access ──
+                // ── Expose core functions to window for cross-closure access ──
         window.saveGame     = saveGame;
         window.updateUI     = updateUI;
         window.submitScore  = submitScore;
         window.scheduleLbSubmit = scheduleLbSubmit;
+        window.addEventListener('online',()=>scheduleLbSubmit(true));
         setInterval(() => {
             const scr = document.getElementById('leaderboard-screen');
             if (scr && !scr.classList.contains('hidden') && !document.hidden) fetchLeaderboard(true);
@@ -8786,11 +8843,11 @@ async function fetchLeaderboard(_auto) {
             playSound('click'); hideAll();
             document.getElementById('leaderboard-screen').classList.remove('hidden');
             // Submit latest score, then always fetch fresh LB data
-            submitScore(true).then(() => {
-                fetchLeaderboard();
-            }).catch(() => {
-                fetchLeaderboard();
-            });
+            submitScore(true).then(async ok => {
+                await fetchLeaderboard();
+                if(ok){ _lbLastOk=Date.now(); setLbSync('ok'); }
+                else { setLbSync('fail'); scheduleLbSubmit(true); }
+            }).catch(e => { window._lbLastError=e.message; setLbSync('fail'); scheduleLbSubmit(true); });
         }
 
         // ══════════ 🎯 SHOOTER GAME ══════════
