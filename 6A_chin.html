@@ -1433,6 +1433,8 @@
         .tsa-pick small{color:#37474F}
         .tsa-scope{padding:8px 14px;border:2px solid #1565C0;border-radius:999px;background:#E3F2FD;color:#0D2B4E;font-weight:bold;cursor:pointer;margin:2px}
         .tsa-scope.on{background:#1565C0;color:#fff}
+.ew-badge{display:inline-block;background:#FFD54F;color:#4E342E;border-radius:999px;padding:1px 8px;margin-left:6px;font-size:.8em;font-weight:bold;white-space:nowrap}
+#exam-week-banner.hidden{display:none !important}
 </style>
 </head>
 <body class="on-login">
@@ -1647,6 +1649,7 @@
             })();
             </script>
 
+            <div id="exam-week-banner" class="hidden" style="margin:8px 10px;padding:10px 12px;border-radius:12px;background:linear-gradient(135deg,#FFE082,#FFB74D);color:#3E2723;border:2px solid #F57C00;font-size:0.92em;line-height:1.6;text-align:left;"></div>
             <!-- ══ DAILY QUEST (always visible) ══ -->
             <div class="quest-panel" id="weekly-hub" style="margin-bottom:10px;">
                 <h3 style="margin:0 0 6px;">🌍 全班世界 Boss <span style="font-size:0.75em;color:#81D4FA;font-weight:600;">(每日重置)</span></h3>
@@ -4804,7 +4807,7 @@ const mcConfigs = {
             dailyQuestDate: "", dailyQuests: [], dailyQuestProgress: {}, gachaDrawsToday: 0, 
             scrollBoughtDate: "", hasLegendaryBuff: false,
             bloodMoonActive: false, bloodMoonTarget: 0, bloodMoonStreak: 0, bloodMoonLeft: 0, unlockedCards: [], cardStats: {}, potions: 0,
-            epicWins: 0, legendaryWins: 0, moShuCorrect: 0, ziciBox: {}, dailyQuestsCompleted: 0, examBonusScore: 0, rcCorrectAnswers: 0, wildWins: 0, shooterScore: 0, dinoScore: 0
+            epicWins: 0, legendaryWins: 0, moShuCorrect: 0, ziciBox: {}, bonusPts: 0, dailyQuestsCompleted: 0, examBonusScore: 0, rcCorrectAnswers: 0, wildWins: 0, shooterScore: 0, dinoScore: 0
         };
         let inventory = { ...defaultInv };
         let currentTrainingType = null;
@@ -4842,6 +4845,9 @@ const mcConfigs = {
             }
             // ✅ 每日任務 & 成就 & 感情值
             inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers || 0) + 1;
+            { const _ew = examWeekOnCorrect('mc');
+              if (_ew) { const _el = document.querySelector('.screen:not(.hidden) .status-msg');
+                if (_el) _el.innerHTML += '<br><span style="color:#fff;background:#BF360C;padding:2px 8px;border-radius:6px;font-weight:bold;">🎓 考試週×' + EXAM_WEEK_MULT + ' 加分 +' + _ew + '</span>'; } }
             if (!FA_EXCLUDED_TYPES.includes(currentTrainingType)) { updateQuestProgress('training10'); }
             if (inventory.streak >= 5)  { updateQuestProgress('streak5');  unlockAchievement('ach_streak10'); }
             if (inventory.streak >= 10) { updateQuestProgress('streak10'); unlockAchievement('ach_streak10'); }
@@ -5233,10 +5239,8 @@ function checkDailyReset() {
                 return { ok: true, changed: true };
             }
             try {
-                const r = await fetch(FIREBASE_LB_URL + '?_=' + Date.now(), { cache: 'no-store' });
-                if (!r.ok) return { ok: false, reason: '排行榜暫時讀取失敗（HTTP ' + r.status + '）' };
-                const data = await r.json();
-                const entries = (data && Array.isArray(data.entries)) ? data.entries : [];
+                let entries;
+                try { entries = (await lbReadAll()).entries; } catch (e) { return { ok: false, reason: '排行榜暫時讀取失敗（' + (e.message || e) + '）' }; }
                 const clash = entries.some(e => e && e.playerId && e.playerId === inventory.playerId && e.name !== inventory.playerName);
                 if (clash) inventory.playerId = newPlayerId();
                 return { ok: true, changed: clash };
@@ -5688,6 +5692,7 @@ function checkDailyReset() {
         function hideAll() { try{ navRecord(); }catch(e){} document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden')); }
         
         function goHome() {
+            try { examWeekRefresh(); } catch (e) {}
             try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
             playSound('click'); scheduleLbSubmit(); updateUI(); renderDailyQuests();
             if (window._lastCloudSaveError) {
@@ -7950,6 +7955,7 @@ function checkDailyReset() {
                 + (inventory.examCompletedCount   ||0) * 500 // 模擬考試完成
                 + (inventory.dailyQuestsCompleted ||0) * 20  // 每日任務完成
                 + (inventory.examBonusScore       ||0)        // 模擬考試期間限定加分
+                + (inventory.bonusPts             ||0)        // 考試週加分
                 + (inventory.rcCorrectAnswers    ||0) * 10  // 閲讀理解答題
             );
         }
@@ -8145,7 +8151,7 @@ function checkDailyReset() {
         // ==================== 四榜計分函數 ====================
         let currentLbTab = 0;
 
-        function calcStudyScore(e) {
+        function calcStudyScoreRaw(e) {
             return Math.floor(
                   (e.playerLv        ||1) * 50
                 + (e.correctAnswers  ||0) * 15
@@ -8154,7 +8160,15 @@ function checkDailyReset() {
                 + (e.examCount       ||0) * 200
                 + (e.dailyQuestsDone ||0) * 20
                 + (e.examBonusScore  ||0)
+                + (e.bonusPts        ||0)
             );
+        }
+
+        function calcStudyScore(e) {
+            const raw = calcStudyScoreRaw(e);
+            if (!LB_SEASON) return raw;
+            if (e.season !== LB_SEASON) return LB_START_SCORE;              // 未加入本賽季：顯示起始分
+            return LB_START_SCORE + Math.max(0, raw - (e.studyBase || 0));
         }
 
         function calcPartnerScore(e) {
@@ -8260,7 +8274,7 @@ function checkDailyReset() {
                         </div>
                         <!-- Score breakdown bar -->
                         <div style="margin-top:8px;background:#111;border-radius:6px;padding:6px 8px;font-size:0.75em;color:#888;">
-                          分數構成：✏️${(e.correctAnswers||0)*15} + 📝${(e.moShuCorrect||0)*12} + 📖${(e.rcCorrect||0)*20} + 📋${(e.examCount||0)*200}
+                          分數構成：✏️${(e.correctAnswers||0)*15} + 📝${(e.moShuCorrect||0)*12} + 📖${(e.rcCorrect||0)*20} + 📋${(e.examCount||0)*200} + 🎓${e.bonusPts||0}
                         </div>
                       </div>
                     </div>`;
@@ -8508,7 +8522,7 @@ function checkDailyReset() {
         function renderLbTab(entries) {
             const tab  = LB_TABS[currentLbTab];
             const desc = document.getElementById('lb-tab-desc');
-            if (desc) desc.textContent = tab.desc;
+            if (desc) desc.textContent = tab.desc + ((LB_SEASON && tab.score === calcStudyScore) ? '｜新賽季：由 ' + LB_START_SCORE + ' 分起計' : '');
             const sorted = [...entries]
                 .map(e => ({ e, s: tab.score(e) }))
                 .sort((a,b) => b.s - a.s);
@@ -8547,14 +8561,7 @@ async function fetchLeaderboard(_auto) {
             if (!auto) { status.textContent = '⏳ 載入中...'; list.innerHTML = ''; }
             try {
                 // cache-busting: append timestamp to force fresh fetch every time
-                const bust = '?_=' + Date.now();
-                const res = await lbFetch(FIREBASE_LB_URL + bust, {
-                    cache: 'no-store',
-                    headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
-                });
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const data = await res.json();
-                const entries = lbNormaliseEntries(data && data.entries);
+                const entries = (await lbReadAll()).entries;
                 window._lbEntries = entries;
                 renderLbTab(entries);
                 status.textContent = `✅ 共 ${entries.length} 位冒險者 · 最後更新：${new Date().toLocaleTimeString('zh-HK')}`;
@@ -8599,7 +8606,7 @@ async function fetchLeaderboard(_auto) {
                      + '</div></div>';
             }).join('');
         }
-        function lbInventorySnapshot(){ return JSON.parse(JSON.stringify({...inventory, _scoreSnapshot:calcScore()})); }
+        function lbInventorySnapshot(){ lbEnsureSeasonBase(); return JSON.parse(JSON.stringify({...inventory, _scoreSnapshot:calcScore()})); }
         function lbNormaliseEntries(value){
             if(value == null) return [];
             if(typeof value !== 'object') throw new Error('排行榜格式不正確，未有寫入');
@@ -8650,26 +8657,67 @@ async function fetchLeaderboard(_auto) {
             }
             return { res: await lbFetch(FIREBASE_LB_URL, { method:'PUT', headers:{ 'Content-Type':'application/json' }, body }), conditional: false };
         }
-        async function submitScore(silent = false, _attempt = 0) {
-            const inventory = lbInventorySnapshot();
-            const status = document.getElementById('lb-status');
-            if (!inventory.playerName) { if (!silent) alert('請先設定冒險者名字！'); return false; }
-            // 只有已由雲端驗證載入嘅存檔先可以更新排行榜，避免舊／空白資料拉低或蓋走分數
-            if (!window._cloudSaveVerified) { window._lbLastError = '雲端存檔未驗證，暫不上傳排行榜'; return false; }
-            if (!silent) status.textContent = '⏳ 上傳中...';
-            try {
-                const { data, etag } = await lbReadBoard();
-                let entries = lbNormaliseEntries(data && data.entries);
-                // 姓名係排行榜身份：只合併同名重複紀錄（保留最新一筆）；唔同姓名一律保留。
-                {
-                    const best = new Map();
-                    entries.forEach(e => {
-                        const k = String(e.name || '');
-                        if (!best.has(k) || String(e.timestamp || '') >= String(best.get(k).timestamp || '')) best.set(k, e);
-                    });
-                    entries = Array.from(best.values());
-                }
-                const bwSnap = inventory.bossWins || {};
+
+        /* ══ 排行榜賽季（重新由 5000 分起計）══
+           LB_SEASON：賽季編號。改成新字串＝開新賽季（所有人重新由 5000 分起計）；設為 '' 即關閉賽季，回復累積總分。
+           只影響「📚 學習榜」：顯示分數 = 5000 + （而家學習分數 − 賽季開始時基準）。
+           基準存喺每位學生自己嘅雲端存檔（lbSeasonBase），跨裝置一致；舊榜分數唔會帶入新賽季，亦完全唔會被刪除。
+           LB_NEVER_DROP：賽季內學習數據只升不降。 */
+
+        /* ══ 考試週加分（FA／考試關卡「學習榜」得分 ×N）══
+           期間內，下列關卡每次答對都額外加分（額外分數 = 原本學習榜分數 ×（EXAM_WEEK_MULT − 1），即 ×2 就多加一倍）：
+             FA 溫習（T1 詞語、FA1、FA2、六上單元一至三詞語填充、FA 寫字練習）、TSA、模擬考試（含完成獎勵）、閱讀道場。
+           額外分數累積喺 inventory.bonusPts（跟存檔同步），計入學習榜同總分。EXP／材料獎勵不變。
+           日期用學生裝置時間（香港時間）；要改日期只需改下面兩行；EXAM_WEEK_MULT 設為 1 即關閉。 */
+        const EXAM_WEEK_FROM = new Date('2026-11-16T00:00:00+08:00').getTime();
+        const EXAM_WEEK_TO   = new Date('2026-11-25T00:00:00+08:00').getTime();   // 不含此刻：即 11月24日 24:00 結束（考試至 11月24日）
+        const EXAM_WEEK_MULT = 2;
+        const EXAM_WEEK_PTS  = { mc: 15, exam: 15, 'exam-done': 200, rc: 35, moshu: 27 };   // 各類答對原本喺學習榜嘅分數
+        const EW_FA_TYPE = /^(t1-vocab|fa1-|fa2-|fa-mc|fa-reorder|term3-vocab)/;
+        function examWeekState(now){ now = now || Date.now(); return now < EXAM_WEEK_FROM ? 'upcoming' : (now < EXAM_WEEK_TO ? 'active' : 'over'); }
+        function examWeekOnCorrect(kind, setKey){
+            if (examWeekState() !== 'active' || EXAM_WEEK_MULT <= 1) return 0;
+            if (kind === 'mc') { const t = (typeof currentTrainingType === 'string' ? currentTrainingType : '') || ''; if (!(EW_FA_TYPE.test(t) || t === 'tsa')) return 0; }
+            if (kind === 'moshu' && !/^fa/.test(setKey || '')) return 0;
+            const extra = Math.round((EXAM_WEEK_PTS[kind] || 0) * (EXAM_WEEK_MULT - 1));
+            if (extra <= 0) return 0;
+            inventory.bonusPts = (inventory.bonusPts || 0) + extra;
+            return extra;
+        }
+        function examWeekRefresh(){
+            const st = examWeekState(), bn = document.getElementById('exam-week-banner');
+            const fmt = t => { const d = new Date(t + 8 * 3600 * 1000); return (d.getUTCMonth() + 1) + '月' + d.getUTCDate() + '日'; };   // 固定用香港時間顯示，唔受裝置時區影響
+            const list = 'FA 溫習・模擬考試・TSA・閱讀道場・FA 寫字練習';
+            if (bn) {
+                if (st === 'active') { bn.innerHTML = '🎓 <b>考試週加分進行中！</b>' + list + '，得分 <b>×' + EXAM_WEEK_MULT + '</b>（至 ' + fmt(EXAM_WEEK_TO - 86400000) + '）'; bn.classList.remove('hidden'); }
+                else if (st === 'upcoming' && EXAM_WEEK_FROM - Date.now() <= 14 * 86400000) { bn.innerHTML = '🎓 <b>考試週加分</b>將於 ' + fmt(EXAM_WEEK_FROM) + ' 開始：' + list + '，得分 <b>×' + EXAM_WEEK_MULT + '</b>'; bn.classList.remove('hidden'); }
+                else bn.classList.add('hidden');
+            }
+            document.querySelectorAll('#subpanel-fa .la-title, #subpanel-exam .la-title').forEach(el => {
+                let b = el.querySelector('.ew-badge');
+                if (st === 'active') { if (!b) { b = document.createElement('span'); b.className = 'ew-badge'; el.appendChild(b); } b.textContent = '🎓×' + EXAM_WEEK_MULT; }
+                else if (b) b.remove();
+            });
+        }
+        setInterval(function(){ try { examWeekRefresh(); } catch (e) {} }, 60000);
+        document.addEventListener('DOMContentLoaded', function(){ try { examWeekRefresh(); } catch (e) {} });
+        
+        const LB_SEASON = 'S2-20261110';
+        const LB_START_SCORE = 5000;
+        const LB_NEVER_DROP = true;
+        const LB_ACT_KEYS = ['playerLv','correctAnswers','moShuCorrect','rcCorrect','examCount','examBonusScore','dailyQuestsDone','bonusPts'];
+        function lbEnsureSeasonBase(){
+            if (!LB_SEASON) return;
+            const sb = inventory.lbSeasonBase;
+            if (sb && sb.season === LB_SEASON && sb.name === inventory.playerName) return;   // 基準屬於同一賽季同一位學生先沿用
+            if (!window._cloudSaveVerified || !inventory.playerName) return;      // 未驗證存檔唔建立基準
+            const raw = calcStudyScoreRaw(lbBuildEntry(inventory));
+            inventory.lbSeasonBase = { season: LB_SEASON, name: inventory.playerName, study: raw, at: new Date().toISOString() };
+            try { saveGame(); } catch (e) {}
+        }
+        
+        function lbBuildEntry(inventory){
+            const bwSnap = inventory.bossWins || {};
                 const myEntry = {
                     name:              inventory.playerName,
                     avatar:            inventory.avatar || '🐉',
@@ -8682,6 +8730,7 @@ async function fetchLeaderboard(_auto) {
                     dailyQuestsDone:   inventory.dailyQuestsCompleted || 0,
                     examCount:         inventory.examCompletedCount || 0,
                     examBonusScore:    inventory.examBonusScore || 0,
+                    bonusPts:          inventory.bonusPts || 0,
                     rcCorrect:         inventory.rcCorrectAnswers || 0,
                     score:             inventory._scoreSnapshot,
                     dinoScore:         inventory.dinoScore || 0,
@@ -8735,6 +8784,126 @@ async function fetchLeaderboard(_auto) {
                     coins:          inventory.coins          || 0,
                     timestamp:      new Date().toISOString()
                 };
+            if (LB_SEASON && inventory.lbSeasonBase && inventory.lbSeasonBase.season === LB_SEASON && inventory.lbSeasonBase.name === inventory.playerName) {
+                myEntry.season = LB_SEASON; myEntry.studyBase = inventory.lbSeasonBase.study || 0;
+                myEntry.score = calcStudyScore(myEntry);
+            }
+            return myEntry;
+        }
+        const FIREBASE_LB_LIVE_URL = FIREBASE_DB_URL + '/leaderboard_live';
+        let _lbLiveOk = null;
+        let _lbBest = null;
+        function lbKey(name){ return String(name || '').replace(/[.$#\[\]\/\u0000-\u001f\u007f]/g, '_').slice(0, 120); }
+        function lbLiveUrl(name){ return FIREBASE_LB_LIVE_URL + '/' + encodeURIComponent(lbKey(name)) + '.json'; }
+        function lbMergeSources(legacyEntries, live){
+            const map = new Map();
+            (legacyEntries || []).forEach(e => { if (e && e.name) map.set(e.name, e); });
+            const liveList = (live && typeof live === 'object') ? Object.values(live) : [];
+            liveList.forEach(e => {
+                if (!e || typeof e !== 'object' || typeof e.name !== 'string') return;
+                const cur = map.get(e.name);
+                if (!cur || String(e.timestamp || '') >= String(cur.timestamp || '')) map.set(e.name, e);
+            });
+            return Array.from(map.values());
+        }
+        async function lbReadAll(){
+            const t = '?_=' + Date.now();
+            const [ra, rb] = await Promise.all([
+                lbFetch(FIREBASE_LB_URL + t, { cache: 'no-store' }),
+                lbFetch(FIREBASE_LB_LIVE_URL + '.json' + t, { cache: 'no-store' }).catch(() => null)
+            ]);
+            if (!ra.ok) throw new Error('讀取失敗 HTTP ' + ra.status);
+            const legacy = await ra.json();
+            let live = null;
+            if (rb && rb.ok) { try { live = await rb.json(); } catch (e) {} }
+            return { entries: lbMergeSources(lbNormaliseEntries(legacy && legacy.entries), live), legacy, live };
+        }
+        async function lbSeedBest(inv){
+            if (_lbBest && _lbBest.name === inv.playerName) return;
+            _lbBest = { name: inv.playerName, dinoScore: 0, shooterScore: 0, lightningScore: 0, flipScore: 0, flipBestTime: 0, act: null };
+            try {
+                const old = (await lbReadAll()).entries.find(e => e.name === inv.playerName);
+                if (old) {
+                    ['dinoScore','shooterScore','lightningScore','flipScore'].forEach(k => _lbBest[k] = old[k] || 0); _lbBest.flipBestTime = old.flipBestTime || 0;
+                    // 只有「同一賽季＋同一個基準」嘅舊紀錄先可作「只升不降」參考（基準重建後視為重新開始）
+                    if (LB_SEASON && old.season === LB_SEASON && inv.lbSeasonBase && old.studyBase === inv.lbSeasonBase.study) { _lbBest.act = {}; LB_ACT_KEYS.forEach(k => _lbBest.act[k] = old[k] || 0); }
+                }
+            } catch (e) {}
+        }
+        function lbApplyBest(entry){
+            ['dinoScore','shooterScore','lightningScore','flipScore'].forEach(k => { entry[k] = Math.max(entry[k] || 0, _lbBest[k] || 0); _lbBest[k] = entry[k]; });
+            const a = entry.flipBestTime || 0, b = _lbBest.flipBestTime || 0;
+            entry.flipBestTime = a > 0 ? (b > 0 ? Math.min(a, b) : a) : b; _lbBest.flipBestTime = entry.flipBestTime;
+            if (LB_SEASON && LB_NEVER_DROP) {
+                LB_ACT_KEYS.forEach(k => { entry[k] = Math.max(entry[k] || 0, (_lbBest.act && _lbBest.act[k]) || 0); });
+                _lbBest.act = {}; LB_ACT_KEYS.forEach(k => _lbBest.act[k] = entry[k]);
+                entry.score = calcStudyScore(entry);
+            }
+        }
+        async function submitLive(inv){
+            await lbSeedBest(inv);
+            const myEntry = lbBuildEntry(inv); lbApplyBest(myEntry);
+            const res = await lbFetch(lbLiveUrl(inv.playerName), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(myEntry) });
+            if (res.status === 400 || res.status === 401 || res.status === 403) {
+                _lbLiveOk = false; window._lbLastError = '新排行榜位置被拒（HTTP ' + res.status + '），已改用舊方式';
+                return { denied: true };
+            }
+            if (!res.ok) throw new Error('上傳失敗 HTTP ' + res.status);
+            _lbLiveOk = true; return { entry: myEntry };
+        }
+        window.lbLivePutEntry = async function(entry){ try { const r = await lbFetch(lbLiveUrl(entry.name), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(entry) }); return r.ok; } catch (e) { return false; } };
+        window.lbLiveDelete   = async function(name){ try { const r = await lbFetch(lbLiveUrl(name), { method: 'DELETE' }); return r.ok; } catch (e) { return false; } };
+        function lbAfterSaved(savedEntry, silent){
+            const status = document.getElementById('lb-status');
+            if (!silent) { status.textContent = `✅ 分數已上傳！你的分數：${savedEntry.score}`; }
+            if (window._lbEntries) {
+                const ci = window._lbEntries.findIndex(e => e.name === savedEntry.name);
+                if (ci >= 0) window._lbEntries[ci] = savedEntry; else window._lbEntries.push(savedEntry);
+            }
+            const lbOpen = !document.getElementById('leaderboard-screen').classList.contains('hidden');
+            if (lbOpen) { if (typeof renderLbTab === 'function') renderLbTab(window._lbEntries || []); setTimeout(fetchLeaderboard, 400); }
+            else if (!silent) { setTimeout(fetchLeaderboard, 400); }
+            window._lastLbSubmit = Date.now(); window._lbLastError = '';
+        }
+        async function submitScore(silent = false, _attempt = 0) {
+            const inventory = lbInventorySnapshot();
+            const status = document.getElementById('lb-status');
+            if (!inventory.playerName) { if (!silent) alert('請先設定冒險者名字！'); return false; }
+            if (!window._cloudSaveVerified) { window._lbLastError = '雲端存檔未驗證，暫不上傳排行榜'; return false; }
+            if (!silent) status.textContent = '⏳ 上傳中...';
+            if (_lbLiveOk !== false) {
+                try {
+                    const r = await submitLive(inventory);
+                    if (!r.denied) { window._lbMode = 'live'; lbAfterSaved(r.entry, silent); return true; }
+                } catch (e) {
+                    window._lbLastError = e.message || String(e);
+                    if (!silent) status.textContent = '❌ 上傳失敗：' + window._lbLastError;
+                    return false;
+                }
+            }
+            window._lbMode = 'legacy';
+            return await submitScoreLegacy(inventory, silent, _attempt);
+        }
+        
+        async function submitScoreLegacy(inventory, silent = false, _attempt = 0) {
+            const status = document.getElementById('lb-status');
+            if (!inventory.playerName) { if (!silent) alert('請先設定冒險者名字！'); return false; }
+            // 只有已由雲端驗證載入嘅存檔先可以更新排行榜，避免舊／空白資料拉低或蓋走分數
+            if (!window._cloudSaveVerified) { window._lbLastError = '雲端存檔未驗證，暫不上傳排行榜'; return false; }
+            if (!silent) status.textContent = '⏳ 上傳中...';
+            try {
+                const { data, etag } = await lbReadBoard();
+                let entries = lbNormaliseEntries(data && data.entries);
+                // 姓名係排行榜身份：只合併同名重複紀錄（保留最新一筆）；唔同姓名一律保留。
+                {
+                    const best = new Map();
+                    entries.forEach(e => {
+                        const k = String(e.name || '');
+                        if (!best.has(k) || String(e.timestamp || '') >= String(best.get(k).timestamp || '')) best.set(k, e);
+                    });
+                    entries = Array.from(best.values());
+                }
+                const myEntry = lbBuildEntry(inventory);
                 const existIdx = entries.findIndex(e => e.name === inventory.playerName);
                 if (existIdx >= 0) {
                     const old = entries[existIdx];
@@ -8791,7 +8960,7 @@ async function fetchLeaderboard(_auto) {
                 const payload = { ...((data && typeof data === 'object' && !Array.isArray(data)) ? data : {}), entries };
                 const { res: putRes, conditional } = await lbWriteBoard(payload, etag);
                 if (putRes.status === 412) {   // 讀取後有其他同學更新過 → 重新讀取再合併
-                    if (_attempt < 7) { await new Promise(r => setTimeout(r, 80 + Math.random() * 250)); return submitScore(silent, _attempt + 1); }
+                    if (_attempt < 7) { await new Promise(r => setTimeout(r, 80 + Math.random() * 250)); return submitScoreLegacy(inventory, silent, _attempt + 1); }
                     throw new Error('多人同時上傳，稍後將自動重試');
                 }
                 if (!putRes.ok) throw new Error('上傳失敗 HTTP ' + putRes.status);
@@ -8813,7 +8982,7 @@ async function fetchLeaderboard(_auto) {
                         const vd = await vr.json();
                         const mine = lbNormaliseEntries(vd && vd.entries).find(e => e.name === inventory.playerName);
                         if (!mine || String(mine.timestamp || '') < String(myEntry.timestamp)) {
-                            if (_attempt < 2) return await submitScore(silent, _attempt + 1);
+                            if (_attempt < 2) return await submitScoreLegacy(inventory, silent, _attempt + 1);
                             throw new Error('紀錄被其他同學同時上傳覆蓋，稍後自動重試');
                         }
                     }
@@ -8826,7 +8995,7 @@ async function fetchLeaderboard(_auto) {
                 return false;
             }
         }
-                // ── Expose core functions to window for cross-closure access ──
+        // ── Expose core functions to window for cross-closure access ──
         window.saveGame     = saveGame;
         window.updateUI     = updateUI;
         window.submitScore  = submitScore;
@@ -9525,10 +9694,7 @@ async function fetchLeaderboard(_auto) {
 
             // Fetch leaderboard
             try {
-                const res = await fetch(FIREBASE_LB_URL);
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const data = await res.json();
-                window._trEntries = (data && data.entries) ? [...data.entries] : [];
+                window._trEntries = [...(await lbReadAll()).entries];
                 window._trEntries.sort((a,b) => (b.score||0) - (a.score||0));
 
                 const list = document.getElementById('teacher-repair-list');
@@ -9607,6 +9773,7 @@ async function fetchLeaderboard(_auto) {
                     body: JSON.stringify({ entries: window._trEntries })
                 });
                 if (!putRes.ok) throw new Error('HTTP ' + putRes.status);
+                e.timestamp = new Date().toISOString(); await window.lbLivePutEntry(e);
                 status.textContent = `✅ ${e.name} 分數已修復為 ${e.score} 分！`;
                 document.getElementById('teacher-repair-edit').style.display = 'none';
                 // Refresh list
@@ -9641,6 +9808,7 @@ async function fetchLeaderboard(_auto) {
                     body: JSON.stringify({ entries: remaining })
                 });
                 if (!putRes.ok) throw new Error('HTTP ' + putRes.status);
+                await window.lbLiveDelete(en.name);
                 window._trEntries = remaining;
                 status.textContent = '✅ 已刪除「' + (en.name || '?') + '」嘅排行榜紀錄';
                 document.getElementById('teacher-repair-edit').style.display = 'none';
@@ -10049,6 +10217,7 @@ async function fetchLeaderboard(_auto) {
             examState.answered = true;
             const optBtns = document.getElementById('exam-options-box').querySelectorAll('button');
             const isCorrect = chosen === correct;
+            window._ewLast = 0;
             if (isCorrect) {
                 examState.correct++;
                 btn.style.background = '#E8F5E9';
@@ -10077,11 +10246,12 @@ async function fetchLeaderboard(_auto) {
                 inventory.fragment   = (inventory.fragment   || 0) + 2;
                 inventory.coins      = (inventory.coins      || 0) + 2;
                 inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers || 0) + 1;
+                window._ewLast = examWeekOnCorrect('exam');
                 gainExp(3, '模擬考試');
                 saveGame(); updateUI();
             }
             const fb = document.getElementById('exam-feedback');
-            fb.textContent = isCorrect ? '✅ 答對了！＋⭐×1  📜×2  🪵×2  🪨×2  🔮×2  🪙×2' : '❌ 答錯了，正確答案是：' + correct;
+            fb.textContent = isCorrect ? '✅ 答對了！＋⭐×1  📜×2  🪵×2  🪨×2  🔮×2  🪙×2' + (window._ewLast ? '  🎓考試週×' + EXAM_WEEK_MULT + ' +' + window._ewLast + '分' : '') : '❌ 答錯了，正確答案是：' + correct;
             fb.style.background = isCorrect ? '#E8F5E9' : '#FFEBEE';
             fb.style.color = isCorrect ? '#1B5E20' : '#B71C1C';
             fb.classList.remove('hidden');
@@ -10110,6 +10280,7 @@ async function fetchLeaderboard(_auto) {
             document.getElementById('exam-result-msg').textContent = msg;
             // Track exam completions for achievement
             inventory.examCompletedCount = (inventory.examCompletedCount || 0) + 1;
+            { const _ewd = examWeekOnCorrect('exam-done'); if (_ewd) { const _em = document.getElementById('exam-result-msg'); if (_em) _em.textContent += '　🎓 考試週×' + EXAM_WEEK_MULT + ' 完成加分 +' + _ewd; } }
             if (inventory.examCompletedCount >= 10) unlockAchievement('ach_exam10');
             // Check perfect score
             if (correct === total && total >= 3) unlockAchievement('ach_exam_perfect');
@@ -10565,6 +10736,7 @@ function addScore(pts) {
         inventory.manuscript  = (inventory.manuscript || 0) + 3;
         inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers || 0) + 1;
         inventory.moShuCorrect = (inventory.moShuCorrect || 0) + 1;
+        window._ewMs = (typeof examWeekOnCorrect === 'function') ? examWeekOnCorrect('moshu', mode === 'dictation' ? dictSet : puzzleSet) : 0;
     }
     const expEl = document.getElementById('ms-exp-gain');
     if (expEl) expEl.textContent = '+' + msSessionExp;
@@ -10578,7 +10750,7 @@ function addScore(pts) {
     } else if (dictBonus > 0) {
         showToast('✅ 答對！✨+' + expGain + ' EXP  ⚡+' + dictBonus + '分（限定加成！）');
     } else {
-        showToast('✅ 答對！✨+' + expGain + ' EXP  💰+5  📜+3');
+        showToast('✅ 答對！✨+' + expGain + ' EXP  💰+5  📜+3' + (window._ewMs ? '  🎓+' + window._ewMs + '分' : ''));
     }
 }
 
@@ -11328,10 +11500,11 @@ window.rcAnswer = function(btn, chosen, correct, hint) {
       inventory.coins = (inventory.coins||0) + 3;
       inventory.totalCorrectAnswers = (inventory.totalCorrectAnswers||0) + 1;
       inventory.rcCorrectAnswers = (inventory.rcCorrectAnswers||0) + 1;  // ✅ FIX B1
+      window._ewRc = (typeof examWeekOnCorrect === 'function') ? examWeekOnCorrect('rc') : 0;
       if (typeof wbOnCorrect === 'function') wbOnCorrect();
     }
     if (typeof saveGame === 'function') saveGame();  // ✅ FIX B1
-    rcToast('✅ 答對！✨+3 EXP  💰+3');
+    rcToast('✅ 答對！✨+3 EXP  💰+3' + (window._ewRc ? '  🎓+' + window._ewRc + '分' : ''));
   } else {
     rcToast('❌ 答錯了！正確答案：' + correct);
   }
