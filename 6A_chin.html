@@ -1713,7 +1713,7 @@
                         <span class="st-emoji">📋</span><span class="st-label">FA温習</span>
                     </button>
                     <button class="subtab-btn" onclick="switchSubTab('exam')">
-                        <span class="st-emoji">📝</span><span class="st-label">考試模式</span>
+                        <span class="st-emoji">📝</span><span class="st-label">考試温習</span>
                     </button>
                     <button class="subtab-btn" onclick="switchSubTab('special')">
                         <span class="st-emoji">🎯</span><span class="st-label">特別關卡</span>
@@ -1807,7 +1807,7 @@
                         </button>
                         <button class="list-action-btn la-exam" onclick="startGame('tsa')">
                             <span class="la-icon">📖</span>
-                            <span class="la-text"><span class="la-title">TSA試卷練習</span><span class="la-sub">考試模式 · 4份試卷 · 88題</span></span>
+                            <span class="la-text"><span class="la-title">TSA試卷練習</span><span class="la-sub">考試温習 · 4份試卷 · 88題</span></span>
                         </button>
                     </div>
                     <div class="subtab-panel" id="subpanel-special">
@@ -6914,9 +6914,20 @@ function checkDailyReset() {
             if (BM_DEDUPE && isCorrect) { _bmTick = true; _bmTickResult = res; Promise.resolve().then(() => { _bmTick = false; }); }
             return res;
         }
+        // 血月保護：打 Boss／弱點Boss／神獸、射擊、彈窗開住時，血月完全凍結（唔觸發、唔倒數、唔斷連對）
+        const BM_COOLDOWN_MS = 15 * 60 * 1000;   // 血月完結後 15 分鐘內唔會再降臨
+        const BM_QUIET_MS    = 60 * 1000;        // 離開戰鬥畫面後 60 秒內唔會降臨
+        let _bmQuietUntil = 0;
+        function _bmBlocked() {
+            const open = id => { const el = document.getElementById(id); return !!(el && !el.classList.contains('hidden') && el.style.display !== 'none'); };
+            const screens = ['boss-combat-screen', 'weak-boss-screen', 'game-shooter', 'boss-select-screen', 'event-modal'];
+            const vm = document.getElementById('victory-modal');
+            if (screens.some(open) || (vm && vm.classList.contains('show'))) { _bmQuietUntil = Date.now() + BM_QUIET_MS; return true; }
+            return false;
+        }
+        function _bmEnd() { inventory.bloodMoonCoolUntil = Date.now() + BM_COOLDOWN_MS; }
         function _handleBloodMoonCore(isCorrect) {
-            const _bcsCheck = document.getElementById('boss-combat-screen');
-            if (_bcsCheck && !_bcsCheck.classList.contains('hidden')) { return false; }
+            if (_bmBlocked()) { return false; }
             if (inventory.bloodMoonActive) {
                 inventory.bloodMoonLeft--;
                 if (isCorrect) {
@@ -6931,16 +6942,16 @@ function checkDailyReset() {
                 }
 
                 if (inventory.bloodMoonStreak >= inventory.bloodMoonTarget) {
-                    inventory.bloodMoonActive = false;
+                    inventory.bloodMoonActive = false; _bmEnd();
                     renderBloodMoonUI();
                     triggerEpicBoss();
                     return true; 
                 } else if (inventory.bloodMoonLeft <= 0) {
-                    inventory.bloodMoonActive = false;
+                    inventory.bloodMoonActive = false; _bmEnd();
                     alert("🌑 血月能量耗盡，天空恢復了正常...");
                 }
             } else {
-                if (isCorrect && inventory.castles >= 1 && Math.random() < 0.02) {
+                if (isCorrect && inventory.castles >= 1 && Date.now() >= (inventory.bloodMoonCoolUntil || 0) && Date.now() >= _bmQuietUntil && Math.random() < 0.02) {
                     inventory.bloodMoonActive = true; playSound('blood_moon');
                     inventory.bloodMoonTarget = Math.floor(Math.random() * 3) + 5; 
                     inventory.bloodMoonStreak = 1;
@@ -8698,7 +8709,10 @@ async function fetchLeaderboard(_auto) {
         function examWeekState(now){ now = now || Date.now(); return now < EXAM_WEEK_FROM ? 'upcoming' : (now < EXAM_WEEK_TO ? 'active' : 'over'); }
         function examWeekOnCorrect(kind, setKey){
             if (examWeekState() !== 'active' || EXAM_WEEK_MULT <= 1) return 0;
-            if (kind === 'mc') { const t = (typeof currentTrainingType === 'string' ? currentTrainingType : '') || ''; if (!(EW_FA_TYPE.test(t) || t === 'tsa')) return 0; }
+            if (kind === 'mc') { const t = (typeof currentTrainingType === 'string' ? currentTrainingType : '') || ''; if (!(EW_FA_TYPE.test(t) || t === 'tsa')) return 0;
+                // 必須真係喺選擇題／重組／TSA 畫面作答先有加分（避免玩完 FA 後打 Boss／野獸仍然計加分）
+                const _onQ = ['game-mc','game-reorder','game-tsa'].some(function(id){ const el = document.getElementById(id); return el && !el.classList.contains('hidden'); });
+                if (!_onQ) return 0; }
             if (kind === 'moshu' && !/^fa/.test(setKey || '')) return 0;
             const extra = Math.round((EXAM_WEEK_PTS[kind] || 0) * (EXAM_WEEK_MULT - 1));
             if (extra <= 0) return 0;
