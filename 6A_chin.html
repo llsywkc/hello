@@ -7176,7 +7176,7 @@ function checkDailyReset() {
         }
 
         window.startBossFight = function(level) {
-            initAudio();
+            _combatReturn = null; initAudio();
             if (!inventory.bossWins) inventory.bossWins = {};
             const b = normalBosses[level];
             if (!b || !b.unlock(inventory)) { alert('🔒 尚未解鎖此關卡！'); return; }
@@ -7189,7 +7189,30 @@ function checkDailyReset() {
             startCombatScreen();
         }
 
+        // ── 打完野獸／傳說／神獸後：返回原本嘅關卡繼續（唔跳返主頁）──
+        let _combatReturn = null;
+        const CR_SCREENS = ['game-mc', 'game-reorder', 'game-tsa', 'game-zici'];
+        function _crCapture() {
+            const cur = CR_SCREENS.find(id => { const el = document.getElementById(id); return el && !el.classList.contains('hidden'); });
+            _combatReturn = cur ? { id: cur, type: currentTrainingType, hist: (window._navHist || []).slice() } : null;
+        }
+        function leaveCombat() {
+            const r = _combatReturn; _combatReturn = null;
+            if (!r || !document.getElementById(r.id)) { goHome(); return; }
+            try { clearInterval(combatTimerInterval); stopContinuousShake(); fxFlipText(false); } catch (e) {}
+            combatFlipText = false; combatAntiHeal = false; combatSlowTime = false; oneHitActive = false; isEnraged = false;
+            document.body.classList.remove('legendary-mode', 'ultimate-warning'); document.body.style.transform = '';
+            const bcs = document.getElementById('boss-combat-screen'); if (bcs) bcs.style.filter = '';
+            document.querySelectorAll('.particle').forEach(el => el.remove());
+            currentTrainingType = r.type;
+            window._navBacking = true; try { hideAll(); } finally { window._navBacking = false; }
+            document.getElementById(r.id).classList.remove('hidden');
+            ['player-tag', 'top-nav', 'exp-bar-wrap'].forEach(id => { const e = document.getElementById(id); if (e) e.classList.remove('hidden'); });
+            window._navHist = r.hist;
+            try { updateUI(); } catch (e) {} try { renderBloodMoonUI(); } catch (e) {} try { scheduleLbSubmit(); } catch (e) {}
+        }
         function startCombat(type, evtData) {
+            _crCapture();
             combatType = type;
             currentTrainingType = 'boss';
             if(type === 'epic') {
@@ -7264,7 +7287,7 @@ function checkDailyReset() {
                 updateUI();
                 alert("💀 你的 HP 歸零了！你被擊敗，並丟失了一半的木材和石頭！");
                 document.body.classList.remove('legendary-mode', 'ultimate-warning');
-                goHome();
+                leaveCombat();
             }
         }
 
@@ -7602,7 +7625,7 @@ function checkDailyReset() {
                                     {icon:'📖', label:'新閃卡解鎖！'}
                                 ],
                                 stats: '⚔️ 答對 ' + combatCorrectCount + ' 題 &nbsp;|&nbsp; 🔥 連勝記錄：' + (inventory.maxStreak||0) + ' &nbsp;|&nbsp; ✨ Lv ' + (inventory.playerLv||1),
-                                onClaim: goHome
+                                onClaim: leaveCombat
                             });
                         } else if(combatType === 'legendary') {
                             let ms = Math.floor(Math.random() * 101) + 100;
@@ -7621,7 +7644,7 @@ function checkDailyReset() {
                                     {icon:'📖', label:'新閃卡解鎖！'}
                                 ],
                                 stats: '⚔️ 答對 ' + combatCorrectCount + ' 題',
-                                onClaim: goHome
+                                onClaim: leaveCombat
                             });
                         } else if (combatType === 'virus') {
                             inventory.wildWins = (inventory.wildWins || 0) + 1;
@@ -7636,7 +7659,7 @@ function checkDailyReset() {
                                     {icon:'📖', label:'新閃卡解鎖！'}
                                 ],
                                 stats: '⚔️ 答對 ' + combatCorrectCount + ' 題',
-                                onClaim: goHome
+                                onClaim: leaveCombat
                             });
                         } else {
                             if (!inventory.bossWins) inventory.bossWins = {};
@@ -7674,7 +7697,7 @@ function checkDailyReset() {
                                         {icon:'✨', label:'EXP +' + (_bossLv<=3?10:_bossLv<=6?20:_bossLv===7?30:_bossLv===8?50:_bossLv<=10?70:100)}
                                     ],
                                     stats: '⚔️ 答對 ' + combatCorrectCount + ' 題 &nbsp;|&nbsp; 🏆 Boss總勝：' + (inventory.totalBossWins||0) + ' 次',
-                                    onClaim: goHome
+                                    onClaim: leaveCombat
                                 });
                             } else {
                                 inventory.gem += 10; inventory.star += 10; inventory.coins += 100;
@@ -7685,7 +7708,7 @@ function checkDailyReset() {
                                     imgSrc: '',
                                     rewards: [{icon:'💎', label:'寶石 ×10'}, {icon:'⭐', label:'星星 ×10'}, {icon:'💰', label:'金幣 ×100'}],
                                     stats: '',
-                                    onClaim: goHome
+                                    onClaim: leaveCombat
                                 });
                             }
                         }
